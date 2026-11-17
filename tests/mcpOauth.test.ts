@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -182,7 +182,7 @@ describe('connectors with OAuth', () => {
   it('signs in, stores the token encrypted, and marks needs-reconnect when refresh fails', async () => {
     const fake = await fakeServer()
     fakes.push(fake)
-    const dataDir = mkdtempSync(join(tmpdir(), 'apex-oauth-'))
+    const dataDir = mkdtempSync(join(tmpdir(), 'atelier-oauth-'))
     const store = new ConnectorStore(dataDir, cipher)
     const notes: string[] = []
     const core = new ConnectorsCore({ store, dataDir, icons: new FaviconCache(dataDir, null), fetchFn: fetch, openSignIn: browser(), loginPath: async () => null, notify: (title) => notes.push(title) })
@@ -208,7 +208,7 @@ describe('connectors with OAuth', () => {
   it('offers sign-in when a server without auth answers 401', async () => {
     const fake = await fakeServer()
     fakes.push(fake)
-    const dataDir = mkdtempSync(join(tmpdir(), 'apex-oauth-'))
+    const dataDir = mkdtempSync(join(tmpdir(), 'atelier-oauth-'))
     const store = new ConnectorStore(dataDir, cipher)
     const core = new ConnectorsCore({ store, dataDir, icons: new FaviconCache(dataDir, null), fetchFn: fetch, openSignIn: browser(), loginPath: async () => null, notify: () => undefined })
     const c = store.save({ name: 'Plain', url: `${fake.base}/mcp`, enabled: true })

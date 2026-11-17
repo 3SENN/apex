@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -43,7 +43,7 @@ function wiring(quick: StarterQuick | undefined) {
   const routines = Object.assign(new EventEmitter(), { list: () => [] })
   const engines = new EventEmitter<{ changed: [EngineStatus] }>()
   const w = {
-    dataDir: mkdtempSync(join(tmpdir(), 'apex-first-week-setup-')),
+    dataDir: mkdtempSync(join(tmpdir(), 'atelier-first-week-setup-')),
     settings,
     companions,
     connectors,

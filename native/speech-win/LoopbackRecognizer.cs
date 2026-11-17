@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex-speech.exe: the other side of a call. WASAPI loopback (CaptureSource
+// atelier-speech.exe: the other side of a call. WASAPI loopback (CaptureSource
 // with loopback: true) captures what the default output plays; the session
 // resamples it to 16 kHz mono and feeds it here, into System.Speech's
 // SpeechRecognitionEngine with a DictationGrammar. That engine runs on this
@@ -13,7 +13,7 @@ using System.Globalization;
 using System.Speech.AudioFormat;
 using System.Speech.Recognition;
 
-namespace Apex.Speech;
+namespace Atelier.Speech;
 
 internal sealed class LoopbackRecognizer : IDisposable
 {

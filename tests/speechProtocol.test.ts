@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,7 +11,7 @@ import { encodeCommand, helperVersionOk, lineSession, parseHelperLine } from '..
 import { speechHelperPath } from '../src/main/speech/helper'
 import type { HelperLine } from '../src/shared/speech'
 
-// apex-speech protocol v2: every line main reads goes through this parser.
+// atelier-speech protocol v2: every line main reads goes through this parser.
 
 describe('parseHelperLine', () => {
   it('reads every v2 line', () => {
@@ -98,16 +98,16 @@ describe('parseHelperLine', () => {
 describe('encodeCommand', () => {
   it('writes one JSON object per line', () => {
     expect(encodeCommand({ cmd: 'hello' })).toBe('{"cmd":"hello"}\n')
-    const start = encodeCommand({ cmd: 'start', session: 's', mode: 'dictation', locale: 'en-US', deviceId: null, contextualStrings: ['Apex'], micGain: 1, systemGain: 2, transcribe: true, levels: false, record: null })
+    const start = encodeCommand({ cmd: 'start', session: 's', mode: 'dictation', locale: 'en-US', deviceId: null, contextualStrings: ['Atelier'], micGain: 1, systemGain: 2, transcribe: true, levels: false, record: null })
     expect(start.endsWith('\n')).toBe(true)
-    expect(JSON.parse(start)).toMatchObject({ cmd: 'start', contextualStrings: ['Apex'], systemGain: 2 })
+    expect(JSON.parse(start)).toMatchObject({ cmd: 'start', contextualStrings: ['Atelier'], systemGain: 2 })
   })
 })
 
 describe('SpeechError over IPC', () => {
   it('round-trips the code and holder through an error message', () => {
     const text = encodeSpeechError(new SpeechError('busy', 'Another recording is already running.', 'meeting'))
-    expect(decodeSpeechError(`Error invoking remote method 'apex:service': Error: ${text}`)).toEqual({ code: 'busy', holder: 'meeting', message: 'Another recording is already running.' })
+    expect(decodeSpeechError(`Error invoking remote method 'atelier:service': Error: ${text}`)).toEqual({ code: 'busy', holder: 'meeting', message: 'Another recording is already running.' })
     expect(decodeSpeechError(encodeSpeechError(new SpeechError('helper-outdated')))).toEqual({ code: 'helper-outdated', message: 'helper-outdated' })
     expect(decodeSpeechError('[speech:nonsense] x')).toBeNull()
     expect(decodeSpeechError('plain failure')).toBeNull()
@@ -180,9 +180,9 @@ describe('helper protocol parity (macOS and Windows)', () => {
 })
 
 describe('speechHelperPath on Windows', () => {
-  it('runs apex-speech.exe from Resources when packaged and from the build folder in development', () => {
-    expect(speechHelperPath({ platform: 'win32', packaged: true, resourcesPath: 'R', appPath: 'A' })).toBe(join('R', 'apex-speech.exe'))
-    expect(speechHelperPath({ platform: 'win32', packaged: false, resourcesPath: 'R', appPath: 'A' })).toBe(join('A', 'native', 'speech-win', 'build', 'apex-speech.exe'))
+  it('runs atelier-speech.exe from Resources when packaged and from the build folder in development', () => {
+    expect(speechHelperPath({ platform: 'win32', packaged: true, resourcesPath: 'R', appPath: 'A' })).toBe(join('R', 'atelier-speech.exe'))
+    expect(speechHelperPath({ platform: 'win32', packaged: false, resourcesPath: 'R', appPath: 'A' })).toBe(join('A', 'native', 'speech-win', 'build', 'atelier-speech.exe'))
     expect(speechHelperPath({ platform: 'linux', packaged: true, resourcesPath: 'R', appPath: 'A' })).toBeNull()
   })
 })

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -17,13 +17,13 @@ import { LAYOUT_SIZES, sizeLabel } from '../smokeLayout/pages'
 import { UI } from '@shared/ipc'
 import type { Tab } from '../tabs'
 
-// The reader's smoke checks (APEX_SMOKE_ONLY=READER): the local article
+// The reader's smoke checks (ATELIER_SMOKE_ONLY=READER): the local article
 // fixture (tests/fixtures/reader) on the smoke server, its images served
 // there too, so nothing leaves the machine. Driven through the chrome's own
 // DOM, the command registry and main's state; read aloud is left to the unit
 // tests, so the run makes no sound.
 
-const fixtures = (): string => process.env.APEX_SMOKE_FIXTURES ?? join(app.getAppPath(), 'tests/fixtures')
+const fixtures = (): string => process.env.ATELIER_SMOKE_FIXTURES ?? join(app.getAppPath(), 'tests/fixtures')
 /** A 1×1 PNG for the article's images. */
 const PIXEL = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=', 'base64')
 const TITLE = 'How Tide Pools Keep Time'

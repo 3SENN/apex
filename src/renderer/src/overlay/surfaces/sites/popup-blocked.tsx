@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -13,7 +13,7 @@ import { noticeTarget } from '../../../pages/errors/logic'
 import type { SurfaceComponentProps, SurfaceModule } from '../../types'
 import './popup-blocked.css'
 
-// The page notice (SS-07): Apex stopped something on this page.
+// The page notice (SS-07): Atelier stopped something on this page.
 // Blocked pop-ups, a blocked frame redirect and blocked automatic downloads
 // offer Allow once and Always for this site; an unresponsive page offers
 // Wait or Reload. It sits at the bottom of its tab's pane, never takes focus

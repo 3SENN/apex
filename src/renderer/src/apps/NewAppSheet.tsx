@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The New app flow: describe the app, and Apex opens a chat with
+// The New app flow: describe the app, and Atelier opens a chat with
 // its own build brief so the companion builds it with build_app; the draft
 // comes back as a preview card to save.
 import { useEffect, useId, useRef, useState, type ReactElement } from 'react'

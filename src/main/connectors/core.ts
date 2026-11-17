@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -31,7 +31,7 @@ import type { ConnectorRuntime, InputValidation, ResolvedConnector } from './run
 import { bearerOf, type ConnectorStore, type StoredConnector } from './store'
 import { validateAgainst } from './validate'
 
-// The connectors engine: health checks and tool lists through Apex's
+// The connectors engine: health checks and tool lists through Atelier's
 // own MCP client, local servers behind OV-09's approval, OAuth sign-in and
 // refresh, record search (CH-08), and the ConnectorRuntime that the chat
 // sessions and local tools build requests with. service.ts turns it into the service
@@ -495,7 +495,7 @@ export class ConnectorsCore {
     const before = this.store.get(id)
     const view = this.#health(id, 'needs-reconnect', detail)
     if (before && before.health !== 'needs-reconnect') {
-      this.#deps.notify(mainT('connectors.notify.reconnectTitle', { name: before.displayName }), mainT('connectors.notify.reconnectBody'), `apex://connectors/${id}`)
+      this.#deps.notify(mainT('connectors.notify.reconnectTitle', { name: before.displayName }), mainT('connectors.notify.reconnectBody'), `atelier://connectors/${id}`)
     }
     return view
   }

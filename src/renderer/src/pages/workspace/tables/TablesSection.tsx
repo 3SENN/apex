@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 // Tables: CSV files imported into local SQLite
 // tables. Their list is a block in Workspace › Files (TablesBlock: import
 // with pick → preview → confirm, search, right-click to export or delete);
-// apex://workspace/tables/<id> is one table (this section): a virtualised
+// atelier://workspace/tables/<id> is one table (this section): a virtualised
 // grid that sorts, rename, export CSV and delete to Recently Deleted, with a
 // back arrow to Files. Companions read them with list_tables and
 // query_table, and change them only with approval.
@@ -27,7 +27,7 @@ import '../../../workspace/workspace.css'
 import '../../../apps/platform.css'
 
 export interface TablesSectionProps {
-  /** apex://workspace/tables/<id> opens that table. */
+  /** atelier://workspace/tables/<id> opens that table. */
   itemId?: string | null
 }
 
@@ -71,7 +71,7 @@ function useTableActions(): { exportCsv(table: TableSummary): Promise<void>; rem
   }
 }
 
-/** One table, apex://workspace/tables/<id>. */
+/** One table, atelier://workspace/tables/<id>. */
 export default function TablesSection({ itemId = null }: TablesSectionProps): ReactElement {
   const tables = useLiveResource(() => call('tables', 'list'), 'tables', (e) => e.items)
   const companions = useCompanions()

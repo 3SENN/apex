@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -18,7 +18,7 @@ import { TokenRegistry } from '../src/main/files/tokens'
 import { Viewer } from '../src/main/files/viewer'
 import { linkFile, linkFolder } from './helpers/links'
 
-// The file viewer (OV-32): confinement to Apex's folders (symlinks included),
+// The file viewer (OV-32): confinement to Atelier's folders (symlinks included),
 // tokens that expire with their tab, kind detection, front matter, and the
 // open, save, rename and delete round trip.
 
@@ -26,8 +26,8 @@ let dir: string
 let outside: string
 
 beforeEach(() => {
-  dir = mkdtempSync(join(tmpdir(), 'apex-viewer-'))
-  outside = mkdtempSync(join(tmpdir(), 'apex-outside-'))
+  dir = mkdtempSync(join(tmpdir(), 'atelier-viewer-'))
+  outside = mkdtempSync(join(tmpdir(), 'atelier-outside-'))
 })
 afterEach(() => {
   rmSync(dir, { recursive: true, force: true })
@@ -112,12 +112,12 @@ describe('tokens', () => {
     expect(tokens.get(first)).toBe(1)
   })
 
-  it('a released token no longer serves apex-file requests', async () => {
+  it('a released token no longer serves atelier-file requests', async () => {
     const lib = new LibraryStore(join(dir, 'library'))
     const v = new Viewer({ dataDir: dir, library: lib })
     const file = lib.addGenerated({ chatId: '11111111-2222-4333-8444-555555555555', companionId: 'c', name: 'a.png', mediaType: 'image/png', bytes: Buffer.from([1, 2, 3, 4]) })
     const doc = await v.open({ kind: 'library', id: file.id }, 't9')
-    expect(doc.url).toMatch(/^apex-file:\/\/[0-9a-f]{32}\/a\.png$/)
+    expect(doc.url).toMatch(/^atelier-file:\/\/[0-9a-f]{32}\/a\.png$/)
     const token = fileTokenOf(doc.url!)!
     expect(v.served(token)?.path).toBe(lib.pathOf(file.id))
     v.releaseOwner('t9')
@@ -176,7 +176,7 @@ describe('kinds and front matter', () => {
     expect(internalTitle(url).crumbs).toEqual(['File', 'ana.md'])
     const lib = fileViewerUrl({ kind: 'library', id: '9b2f3c1e-4d5a-4b6c-8d7e-0f1a2b3c4d5e' }, { name: 'Plan.md' })
     expect(internalTitle(lib).title).toBe('Plan.md')
-    expect(internalTitle('apex://library/files').crumbs).toEqual(['Library', 'Files'])
+    expect(internalTitle('atelier://library/files').crumbs).toEqual(['Library', 'Files'])
   })
 })
 
@@ -256,7 +256,7 @@ describe('Viewer', () => {
   })
 })
 
-describe('apex-file responses', () => {
+describe('atelier-file responses', () => {
   it('parses single byte ranges', () => {
     expect(parseRange(null, 100)).toBeNull()
     expect(parseRange('bytes=0-9', 100)).toEqual({ start: 0, end: 9 })
@@ -271,13 +271,13 @@ describe('apex-file responses', () => {
   it('streams a range with 206, and refuses unknown tokens', async () => {
     const file = join(dir, 'clip.bin')
     writeFileSync(file, Buffer.from('0123456789'))
-    const ranged = serveFile(new Request('apex-file://x/clip', { headers: { range: 'bytes=2-4' } }), { path: file, text: null, mediaType: 'video/mp4' })
+    const ranged = serveFile(new Request('atelier-file://x/clip', { headers: { range: 'bytes=2-4' } }), { path: file, text: null, mediaType: 'video/mp4' })
     expect(ranged.status).toBe(206)
     expect(ranged.headers.get('content-range')).toBe('bytes 2-4/10')
     expect(Buffer.from(await ranged.arrayBuffer()).toString()).toBe('234')
-    expect(serveFile(new Request('apex-file://x/clip'), null).status).toBe(404)
-    expect(serveFile(new Request('apex-file://x/clip', { headers: { range: 'bytes=20-' } }), { path: file, text: null, mediaType: 'video/mp4' }).status).toBe(416)
-    expect(fileTokenOf('apex-file://0123456789abcdef0123456789abcdef/a.png')).toBe('0123456789abcdef0123456789abcdef')
-    expect(fileTokenOf('apex-file://../etc/passwd')).toBeNull()
+    expect(serveFile(new Request('atelier-file://x/clip'), null).status).toBe(404)
+    expect(serveFile(new Request('atelier-file://x/clip', { headers: { range: 'bytes=20-' } }), { path: file, text: null, mediaType: 'video/mp4' }).status).toBe(416)
+    expect(fileTokenOf('atelier-file://0123456789abcdef0123456789abcdef/a.png')).toBe('0123456789abcdef0123456789abcdef')
+    expect(fileTokenOf('atelier-file://../etc/passwd')).toBeNull()
   })
 })

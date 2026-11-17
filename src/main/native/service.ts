@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -34,7 +34,7 @@ export interface NativeDeps {
   notify?(n: AppNotice): void
   /** Electron's powerMonitor; absent in unit tests. */
   power?: PowerEvents
-  /** Where apex_haptics.node may be; resolved on the first tick. */
+  /** Where atelier_haptics.node may be; resolved on the first tick. */
   addonPaths?(): string[]
   platform?: NodeJS.Platform
   /** Replaces the dlopen-backed instance (tests). */
@@ -91,7 +91,7 @@ export function setupNative(deps: NativeDeps): NativeSetup {
         category: 'meetings',
         title: mainT(mac ? 'native.lid.paused' : 'native.lid.pausedSleep'),
         body: mainT(mac ? 'native.lid.pausedBody' : 'native.lid.pausedSleepBody'),
-        target: 'apex://meetings',
+        target: 'atelier://meetings',
       }),
   })
   const run = (what: string, fn: () => LidAction): LidAction => {

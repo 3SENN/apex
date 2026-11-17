@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -176,7 +176,7 @@
     var(--co-base);
 }
 
-/* DS-86: Apex's ambient field (ShapeField) lies under the figure instead of a
+/* DS-86: Atelier's ambient field (ShapeField) lies under the figure instead of a
    dot grid; each preset thumbnail shows one still frame of it. */
 .co-preset__thumb {
   position: relative;
@@ -293,7 +293,7 @@
   box-shadow: none;
 }
 
-/* DS-121: an apex://companion tab is the same card as a page: no border, radius or backdrop. */
+/* DS-121: an atelier://companion tab is the same card as a page: no border, radius or backdrop. */
 .co-card--page {
   inset: 0;
   border: 0;
@@ -1394,7 +1394,7 @@
   }
 }
 
-/* Apex's own Reduce Motion (Appearance) zeroes the --motion-* tokens the
+/* Atelier's own Reduce Motion (Appearance) zeroes the --motion-* tokens the
    others follow; the look editor's own durations need it spelled out. */
 :root[data-motion='reduced'] .co-layer {
   --co-look-grow: 0ms;

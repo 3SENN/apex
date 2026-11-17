@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -43,7 +43,7 @@ import { ChatMigrationError } from '../migrations/runner'
 /** Idle saved sessions kept loaded; older ones are dropped and reloaded from disk on demand. */
 const LOADED_LIMIT = 16
 const DRAFT_LIMIT = 50
-/** Owner value for tabs an MCP client outside Apex (Claude Code, say) drives (ST-60). Chat ids are UUIDs, so it never clashes. */
+/** Owner value for tabs an MCP client outside Atelier (Claude Code, say) drives (ST-60). Chat ids are UUIDs, so it never clashes. */
 const OUTSIDE = 'outside'
 
 /** What agentControl.ts hears from the host (OV-21, OV-22). */
@@ -329,7 +329,7 @@ export class AgentHost implements AgentHostApi {
   }
 
   view(id: string): ChatView {
-    // (SS-09: a damaged chat file, or one a newer Apex
+    // (SS-09: a damaged chat file, or one a newer Atelier
     // saved, opens read-only with a notice. Its session never loads, so send
     // and every other call that changes the chat refuse with the same message.)
     let session: AgentSession
@@ -474,7 +474,7 @@ export class AgentHost implements AgentHostApi {
   }
 
   /**
-   * ST-60: a Claude Code session outside Apex takes a tab. The tab shows the
+   * ST-60: a Claude Code session outside Atelier takes a tab. The tab shows the
    * agent marker (with no chat to open). Throws while one of your chats works in it.
    */
   claimOutside(tabId: string): void {
@@ -588,7 +588,7 @@ export class AgentHost implements AgentHostApi {
     return updated ?? this.#deps.chats.summary(id) ?? null
   }
 
-  /** CH-33: the open tabs this chat acted on since Apex started. */
+  /** CH-33: the open tabs this chat acted on since Atelier started. */
   tabsUsed(id: string): TabUsed[] {
     return [...(this.#used.get(id) ?? [])].flatMap((tabId) => {
       const tab = this.#deps.tabs.find(tabId)

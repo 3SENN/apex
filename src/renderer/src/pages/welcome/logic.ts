@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -38,7 +38,7 @@ export const STEP_TITLE: Record<SetupStepId, string> = {
   get connectors() { return t('firstRun.welcomeLogic.yourApps') },
   get 'import-browser'() { return t('firstRun.welcomeLogic.browserData') },
   get 'import-ai'() { return t('firstRun.welcomeLogic.aiConversations') },
-  get showcase() { return t('firstRun.welcomeLogic.whatApexCanDo') },
+  get showcase() { return t('firstRun.welcomeLogic.whatAtelierCanDo') },
   get favorites() { return t('firstRun.welcomeLogic.favouriteSites') },
   get launch() { return t('firstRun.welcomeLogic.ready') },
 }

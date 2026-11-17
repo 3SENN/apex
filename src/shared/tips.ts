@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -20,13 +20,13 @@ export interface Tip {
   text: string
   /** A feature flag the tip needs on (a key of `features`), if any. */
   needs?: string
-  /** An apex:// address the tip's link opens, if any. */
+  /** An atelier:// address the tip's link opens, if any. */
   link?: { label: string; url: string }
 }
 
 /**
  * The catalogue (CH-29). Every tip is about something
- * Apex ships. A tip about something a chat or a flag can switch off (browser
+ * Atelier ships. A tip about something a chat or a flag can switch off (browser
  * control, memory, web tools, an experiment) names it in `needs` and shows
  * only while it is on.
  */
@@ -36,14 +36,14 @@ export const TIPS: readonly Tip[] = [
   { id: 'work-stop', context: 'chat-working', text: 'Changed your mind? Press Esc or the stop button to end the run. Nothing already done is undone.' },
   { id: 'work-queue', context: 'chat-working', text: 'Type your next message now. It waits in line and goes out when this run ends.' },
   { id: 'work-split', context: 'chat-working', needs: 'browser', text: 'Put the chat beside a page with split view, so you can watch both at once.' },
-  { id: 'work-skill', context: 'chat-working', text: 'Doing this often? Save the chat as a skill and run it again with /name.', link: { label: 'Skills', url: 'apex://skills' } },
-  { id: 'work-routine', context: 'chat-working', text: 'A routine can run a prompt like this on a schedule, while you do something else.', link: { label: 'Routines', url: 'apex://routines' } },
+  { id: 'work-skill', context: 'chat-working', text: 'Doing this often? Save the chat as a skill and run it again with /name.', link: { label: 'Skills', url: 'atelier://skills' } },
+  { id: 'work-routine', context: 'chat-working', text: 'A routine can run a prompt like this on a schedule, while you do something else.', link: { label: 'Routines', url: 'atelier://routines' } },
   { id: 'work-memory', context: 'chat-working', needs: 'memory', text: 'Ask your companion to remember something and it saves a note you can read and edit in Memory.' },
-  { id: 'work-connectors', context: 'chat-working', text: 'Connectors let your companion reach your apps. It asks before it uses one.', link: { label: 'Connectors', url: 'apex://connectors' } },
+  { id: 'work-connectors', context: 'chat-working', text: 'Connectors let your companion reach your apps. It asks before it uses one.', link: { label: 'Connectors', url: 'atelier://connectors' } },
   { id: 'work-voice', context: 'chat-working', text: 'Hold the mic key to dictate instead of typing.' },
   { id: 'work-export', context: 'chat-working', text: 'Any chat can be exported as text, Markdown, HTML or PDF from its menu.' },
-  { id: 'work-meetings', context: 'chat-working', text: `${BRAND_NAME} can take notes in a meeting and turn the transcript into a summary.`, link: { label: 'Meetings', url: 'apex://meetings' } },
-  { id: 'work-workspace', context: 'chat-working', text: 'Files, apps and tables your companion makes are kept together in Workspace.', link: { label: 'Workspace', url: 'apex://workspace' } },
+  { id: 'work-meetings', context: 'chat-working', text: `${BRAND_NAME} can take notes in a meeting and turn the transcript into a summary.`, link: { label: 'Meetings', url: 'atelier://meetings' } },
+  { id: 'work-workspace', context: 'chat-working', text: 'Files, apps and tables your companion makes are kept together in Workspace.', link: { label: 'Workspace', url: 'atelier://workspace' } },
   // While setup waits.
   { id: 'setup-shortcut', context: 'setup-wait', text: 'Press ⌘J any time to talk to your companion.' },
   { id: 'setup-card', context: 'setup-wait', text: 'Click your companion’s picture to open its card. Change its look and name there whenever you like.' },
@@ -54,8 +54,8 @@ export const TIPS: readonly Tip[] = [
   // On the new tab.
   { id: 'tab-ask', context: 'new-tab', text: 'Type a question here to start a chat, or a web address to go straight there.' },
   { id: 'tab-switch', context: 'new-tab', text: 'Use the left and right arrow keys in the empty composer to choose another companion.' },
-  { id: 'tab-guides', context: 'new-tab', text: `New to ${BRAND_NAME}? Guides show what it can do.`, link: { label: 'Open Guides', url: 'apex://guides' } },
-  { id: 'tab-routines', context: 'new-tab', text: 'Routines can bring you a morning digest of the sites you read.', link: { label: 'Routines', url: 'apex://routines' } },
+  { id: 'tab-guides', context: 'new-tab', text: `New to ${BRAND_NAME}? Guides show what it can do.`, link: { label: 'Open Guides', url: 'atelier://guides' } },
+  { id: 'tab-routines', context: 'new-tab', text: 'Routines can bring you a morning digest of the sites you read.', link: { label: 'Routines', url: 'atelier://routines' } },
 ]
 
 /** Tips that fit the context and the features in use, minus dismissed ones. */
@@ -106,12 +106,12 @@ export interface Nudge {
 }
 
 export const NUDGES: readonly Nudge[] = [
-  { id: 'import-data', text: 'Bring your bookmarks and history over from your old browser.', action: { label: 'Import', url: 'apex://settings/import' } },
-  { id: 'connect-app', text: 'Let your companion reach one of your apps. It asks before using it.', action: { label: 'Connect an app', url: 'apex://connectors' } },
-  { id: 'set-up-routine', text: 'A routine can do a job for you every morning.', action: { label: 'Set one up', url: 'apex://routines/new' } },
+  { id: 'import-data', text: 'Bring your bookmarks and history over from your old browser.', action: { label: 'Import', url: 'atelier://settings/import' } },
+  { id: 'connect-app', text: 'Let your companion reach one of your apps. It asks before using it.', action: { label: 'Connect an app', url: 'atelier://connectors' } },
+  { id: 'set-up-routine', text: 'A routine can do a job for you every morning.', action: { label: 'Set one up', url: 'atelier://routines/new' } },
   { id: 'customise-companion', text: 'Make your companion yours: change its look, name or instructions.', action: { label: 'Open its card', kind: 'companion' } },
   { id: 'default-browser', text: `Open links from other apps in ${BRAND_NAME}.`, action: { label: `Make ${BRAND_NAME} the default`, kind: 'default-browser' } },
-  { id: 'try-dictation', text: 'Talk instead of typing: hold the mic key and speak.', action: { label: 'Show me', url: 'apex://guides/meet-your-companion' } },
+  { id: 'try-dictation', text: 'Talk instead of typing: hold the mic key and speak.', action: { label: 'Show me', url: 'atelier://guides/meet-your-companion' } },
 ]
 
 type NudgeView = Pick<FirstWeekView, 'status' | 'snoozedUntil'> & { items: ReadonlyArray<Pick<FirstWeekItem, 'id' | 'done'>> }

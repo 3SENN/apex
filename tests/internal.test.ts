@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -21,8 +21,8 @@ afterEach(() => {
   for (const dir of made.splice(0)) rmSync(dir, { recursive: true, force: true })
 })
 
-function repo(withInternal: boolean, marker = '{ "name": "apex-internal" }'): string {
-  const dir = mkdtempSync(join(tmpdir(), 'apex-internal-'))
+function repo(withInternal: boolean, marker = '{ "name": "atelier-internal" }'): string {
+  const dir = mkdtempSync(join(tmpdir(), 'atelier-internal-'))
   made.push(dir)
   if (withInternal) {
     mkdirSync(join(dir, 'internal'), { recursive: true })
@@ -32,11 +32,11 @@ function repo(withInternal: boolean, marker = '{ "name": "apex-internal" }'): st
 }
 
 describe('builds with and without the internal folder', () => {
-  it('uses internal/ only when its marker is there and APEX_INTERNAL is not 0', () => {
+  it('uses internal/ only when its marker is there and ATELIER_INTERNAL is not 0', () => {
     const withIt = repo(true)
     expect(internalPresent(withIt)).toBe(true)
     expect(isInternal({}, withIt)).toBe(true)
-    expect(isInternal({ APEX_INTERNAL: '0' }, withIt)).toBe(false)
+    expect(isInternal({ ATELIER_INTERNAL: '0' }, withIt)).toBe(false)
     expect(isInternal({}, repo(false))).toBe(false)
     expect(isInternal({}, repo(true, '{ "name": "something-else" }'))).toBe(false)
     expect(isInternal({}, repo(true, 'not json'))).toBe(false)
@@ -45,23 +45,23 @@ describe('builds with and without the internal folder', () => {
   it('points @internal at internal/ or at src/stubs, and says which in the define', () => {
     const withIt = repo(true)
     expect(internalAlias({}, withIt)['@internal']).toBe(join(withIt, 'internal'))
-    expect(internalAlias({ APEX_INTERNAL: '0' }, withIt)['@internal']).toBe(join(withIt, 'src', 'stubs'))
-    expect(internalDefines({}, withIt)).toEqual({ __APEX_INTERNAL__: 'true' })
-    expect(internalDefines({}, repo(false))).toEqual({ __APEX_INTERNAL__: 'false' })
+    expect(internalAlias({ ATELIER_INTERNAL: '0' }, withIt)['@internal']).toBe(join(withIt, 'src', 'stubs'))
+    expect(internalDefines({}, withIt)).toEqual({ __ATELIER_INTERNAL__: 'true' })
+    expect(internalDefines({}, repo(false))).toEqual({ __ATELIER_INTERNAL__: 'false' })
   })
 })
 
 describe('a public release', () => {
   it('takes the engines from the public stubs, though internal/ is there for its release values', () => {
     const withIt = repo(true)
-    const alias = internalAlias({ APEX_PUBLIC_RELEASE: '1' }, withIt)
+    const alias = internalAlias({ ATELIER_PUBLIC_RELEASE: '1' }, withIt)
     expect(alias['@internal/engines']).toBe(join(withIt, 'src', 'stubs', 'engines'))
     expect(alias['@internal']).toBe(join(withIt, 'internal'))
     // The more specific alias comes first, so Vite matches it before the folder's.
     expect(Object.keys(alias)).toEqual(['@internal/engines', '@internal'])
-    expect(areaIncluded('engines', { APEX_PUBLIC_RELEASE: 'true' }, withIt)).toBe(false)
+    expect(areaIncluded('engines', { ATELIER_PUBLIC_RELEASE: 'true' }, withIt)).toBe(false)
     expect(areaIncluded('engines', {}, withIt)).toBe(true)
-    expect(publicRelease({ APEX_PUBLIC_RELEASE: '0' })).toBe(false)
+    expect(publicRelease({ ATELIER_PUBLIC_RELEASE: '0' })).toBe(false)
     // Not a public release: the folder's engines, with no override.
     expect(internalAlias({}, withIt)).toEqual({ '@internal': join(withIt, 'internal') })
   })
@@ -70,7 +70,7 @@ describe('a public release', () => {
     const withIt = repo(true)
     writeFileSync(join(withIt, 'internal', 'build.json'), JSON.stringify({ areas: { engines: { prepackage: ['internal/scripts/stage.mjs'], extraResources: { mac: [{ from: 'vendor/x', to: 'x' }] } } } }))
     expect(internalBuild({}, withIt)).toEqual({ prepackage: ['internal/scripts/stage.mjs'], extraResources: { mac: [{ from: 'vendor/x', to: 'x' }] } })
-    expect(internalBuild({ APEX_PUBLIC_RELEASE: '1' }, withIt)).toEqual({ prepackage: [], extraResources: {} })
+    expect(internalBuild({ ATELIER_PUBLIC_RELEASE: '1' }, withIt)).toEqual({ prepackage: [], extraResources: {} })
     expect(internalBuild({}, repo(false))).toEqual({ prepackage: [], extraResources: {} })
     // electron-builder gets the folder's resources after the yml's own.
     const merged = withExtraResources({ mac: { extraResources: [{ from: 'a', to: 'a' }] } }, { mac: [{ from: 'b', to: 'b' }] })

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@
 // loading and error state, kept live by an app event.
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { AppEvent, Companion } from '@shared/services'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { useLatest } from '../ui'
 import { skeletonHoldLeft } from '../ui/logic/skeleton'
 
@@ -79,7 +79,7 @@ export function useEvent<T extends AppEvent['type']>(type: T, listener: (event: 
   const latest = useLatest(listener)
   useEffect(
     () =>
-      apex.onAppEvent((event) => {
+      atelier.onAppEvent((event) => {
         if (event.type === type) latest.current(event as Extract<AppEvent, { type: T }>)
       }),
     [type],

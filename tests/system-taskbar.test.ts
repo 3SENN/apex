@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -34,7 +34,7 @@ describe('pickOverlay', () => {
 })
 
 describe('shouldFlash', () => {
-  it('flashes only for a new approval while Apex is in the background', () => {
+  it('flashes only for a new approval while Atelier is in the background', () => {
     expect(shouldFlash({ needsYou: 0, unread: 0 }, { needsYou: 1, unread: 0 }, false)).toBe(true)
     expect(shouldFlash({ needsYou: 0, unread: 0 }, { needsYou: 1, unread: 0 }, true)).toBe(false)
     expect(shouldFlash({ needsYou: 2, unread: 0 }, { needsYou: 1, unread: 0 }, false)).toBe(false)

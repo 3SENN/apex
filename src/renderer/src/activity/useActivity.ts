@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@
 // edge and when a pause runs out.
 import { useCallback, useEffect, useState } from 'react'
 import type { ActivitySettings, ActivityStatus } from '@shared/activity'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 
 export interface ActivityStatusState {
   status: ActivityStatus | null
@@ -31,7 +31,7 @@ export function useActivityStatus(): ActivityStatusState {
   }, [])
   useEffect(() => {
     reload()
-    return apex.onAppEvent((event) => {
+    return atelier.onAppEvent((event) => {
       if (event.type === 'activity-status') {
         setStatus(event.status)
         setError(null)
@@ -59,7 +59,7 @@ export function useActivitySettings(onError?: (message: string) => void): Activi
   useEffect(() => {
     reload()
     // A pause or override from the popover changes the settings too.
-    return apex.onAppEvent((event) => {
+    return atelier.onAppEvent((event) => {
       if (event.type === 'activity-status') void call('activity', 'settings').then(setSettings, () => undefined)
     })
   }, [reload])

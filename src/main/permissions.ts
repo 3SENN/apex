@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -78,7 +78,7 @@ export interface PermissionDeps {
   smoke: boolean
   /** The profile's site permission defaults and quiet notification prompts. */
   settings?(): { sitePermissionDefaults?: Partial<Record<SitePermission, 'ask' | 'block'>>; quietNotificationPrompts?: boolean }
-  /** Location Services for Apex, from the speech helper; undefined is unknown, which blocks nothing. */
+  /** Location Services for Atelier, from the speech helper; undefined is unknown, which blocks nothing. */
   systemLocation?(): Promise<Perm | undefined>
   /** The page that opened a popup (popups.ts), so the popup asks through its opener's tab. */
   openerOf?(wc: WebContents): WebContents | null
@@ -326,7 +326,7 @@ export class PermissionController {
     // The screen picker is screen sharing's prompt; this only checks the site isn't blocked.
     if (permission === 'display-capture') return true
 
-    // macOS turned Apex off: allowing the site would not help, even where it already is. Say so once per page, with the way back.
+    // macOS turned Atelier off: allowing the site would not help, even where it already is. Say so once per page, with the way back.
     const system = await this.#systemBlocked(perms)
     if (system.length > 0) {
       const told = system.every((p) => this.#hasActivity(tab.id, key, p, 'blocked-by-macos'))
@@ -603,7 +603,7 @@ export class PermissionController {
     }
   }
 
-  /** Camera, microphone or Location Services that macOS has turned off for Apex: allowing the site would not help. */
+  /** Camera, microphone or Location Services that macOS has turned off for Atelier: allowing the site would not help. */
   async #systemBlocked(perms: readonly SitePermission[]): Promise<SystemBlocked[]> {
     if (process.platform !== 'darwin' || this.#deps.smoke) return []
     const out: SystemBlocked[] = []

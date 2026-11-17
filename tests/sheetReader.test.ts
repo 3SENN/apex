@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import { SHEET_LIMITS } from '@shared/files'
 import { t } from '@shared/i18n/core'
 import { columnIndex, columnName, decodeXml, readDelimited, readSharedStrings, readSheetXml, readXlsx } from '@shared/sheetReader'
 
-// Apex's own sheet reader (OV-32, CH-28): CSV and TSV, and the first sheet of
+// Atelier's own sheet reader (OV-32, CH-28): CSV and TSV, and the first sheet of
 // an XLSX workbook through fflate, always capped at 200 rows by 50 columns.
 
 function grid(rows: number, cols: number, sep = ','): string {

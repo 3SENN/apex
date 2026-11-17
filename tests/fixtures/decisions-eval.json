@@ -1,5 +1,5 @@
 {
-  "about": "Labelled cases for Apex's own quick decisions (docs/decisions.md › Measuring). tests/decisionsEval.test.ts runs them against a real decision model when APEX_DECISIONS_EVAL is set. Add a case whenever a decision goes wrong in real use.",
+  "about": "Labelled cases for Atelier's own quick decisions (docs/decisions.md › Measuring). tests/decisionsEval.test.ts runs them against a real decision model when ATELIER_DECISIONS_EVAL is set. Add a case whenever a decision goes wrong in real use.",
   "needsYou": [
     { "reply": "I found three flights. Which one should I book: the 8:05, the 12:40 or the 18:15?", "expect": true },
     { "reply": "Done! I added the meeting to your calendar for Tuesday at 10. Want me to do anything else?", "expect": false },

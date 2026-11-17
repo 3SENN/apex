@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -217,7 +217,7 @@ interface TabState {
   tabIds: Set<string>
 }
 
-/** Executes browser_toolset_20260801 member calls against Apex tabs. */
+/** Executes browser_toolset_20260801 member calls against Atelier tabs. */
 export class BrowserToolExecutor implements ToolHandler {
   readonly #deps: ExecutorDeps
   /**
@@ -323,7 +323,7 @@ export class BrowserToolExecutor implements ToolHandler {
   }
 
   /**
-   * Opens the tab a navigation that targeted an Apex page runs in. The chrome
+   * Opens the tab a navigation that targeted an Atelier page runs in. The chrome
    * draws those tabs (often the chat the agent is answering in), so loading a
    * site there would replace the page under the user. While the person has
    * the chat open, it keeps its place beside the new tab in split view;
@@ -464,10 +464,10 @@ export class BrowserToolExecutor implements ToolHandler {
   async #navigate(input: MemberInput<'navigate'>, signal: AbortSignal): Promise<ResultBlock[]> {
     const nav = parseAgentNavigation(input.url)
     const target = this.#lookup(input.tab_id)
-    // An artifact tab (sandbox session) is treated like an Apex page: navigation opens beside it.
-    const apexPage = target.internalUrl !== null || target.sandbox !== undefined
-    if (apexPage && nav.kind === 'history') throw new Error(APEX_PAGE_HISTORY)
-    const opened = apexPage ? this.#openBeside(target) : null
+    // An artifact tab (sandbox session) is treated like an Atelier page: navigation opens beside it.
+    const atelierPage = target.internalUrl !== null || target.sandbox !== undefined
+    if (atelierPage && nav.kind === 'history') throw new Error(ATELIER_PAGE_HISTORY)
+    const opened = atelierPage ? this.#openBeside(target) : null
     const tab = opened ?? this.#tab(target.id)
     const wc = tab.view.webContents
     const before = this.#state(tab)
@@ -723,7 +723,7 @@ export class BrowserToolExecutor implements ToolHandler {
   }
 
   #closeTab(input: MemberInput<'close_tab'>): Promise<ResultBlock[]> {
-    // Apex pages (a chat, Settings) belong to the user; the agent's chat may live in one.
+    // Atelier pages (a chat, Settings) belong to the user; the agent's chat may live in one.
     if (this.#lookup(input.tab_id).internalUrl !== null || this.#lookup(input.tab_id).sandbox !== undefined) throw new Error(`${input.tab_id} shows a built-in ${BRAND_NAME} page, which only the user can close.`)
     this.#tab(input.tab_id)
     this.#deps.tabs.close(input.tab_id, { keepOne: false })
@@ -753,12 +753,12 @@ function imageBlock(png: Buffer): BetaImageBlockParam {
 }
 
 const BLANK = `The tab is blank or shows a built-in ${BRAND_NAME} page (not a website). Open a website with navigate: on a built-in page it opens in a new tab, or use new_tab first.`
-const APEX_PAGE_HISTORY = `That tab shows a built-in ${BRAND_NAME} page, which has no web history. Use navigate with an address; it opens in a new tab.`
+const ATELIER_PAGE_HISTORY = `That tab shows a built-in ${BRAND_NAME} page, which has no web history. Use navigate with an address; it opens in a new tab.`
 const COVERED = `${BRAND_NAME} shows reader view or a site warning over this page, so it cannot be seen or clicked. Ask the user to close it, or use another tab.`
 
 function isBlank(tab: Tab): boolean {
-  // An agent-built app (apex-app://) counts as an Apex page; the agent never acts there.
-  // So does an artifact tab (apex-artifact://, or any tab in a sandbox session).
+  // An agent-built app (atelier-app://) counts as an Atelier page; the agent never acts there.
+  // So does an artifact tab (atelier-artifact://, or any tab in a sandbox session).
   // And an extension's own page (chrome-extension://), which only you drive.
   const url = tab.view.webContents.getURL()
   return tab.internalUrl !== null || isBlankUrl(url) || isAppRunUrl(url) || tab.sandbox !== undefined || isArtifactUrl(url) || isExtensionUrl(url)

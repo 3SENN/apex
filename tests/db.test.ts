@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,7 +11,7 @@ import { migrate, openDb, transaction } from '../src/main/db'
 
 const dirs: string[] = []
 const temp = (): string => {
-  const dir = mkdtempSync(join(tmpdir(), 'apex-db-'))
+  const dir = mkdtempSync(join(tmpdir(), 'atelier-db-'))
   dirs.push(dir)
   return dir
 }
@@ -74,7 +74,7 @@ describe('migrate', () => {
     db.close()
   })
 
-  it('refuses a database migrated by a newer Apex', () => {
+  it('refuses a database migrated by a newer Atelier', () => {
     const db = openDb(':memory:')
     migrate(db, 'x', ['CREATE TABLE a (x INTEGER)', 'CREATE TABLE b (x INTEGER)'])
     expect(() => migrate(db, 'x', ['CREATE TABLE a (x INTEGER)'])).toThrow('newer')

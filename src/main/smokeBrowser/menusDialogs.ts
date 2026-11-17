@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,7 +14,7 @@ import type { ShotSpec, SmokeCheck, SmokeContext } from './types'
 
 // The dialogs' smoke checks and light and dark shots: a confirm drawn by the
 // overlay (or the chrome's fallback) with duplicates dropped, a page's own
-// confirm() answered through Apex's dialog, a toast, the task manager, the
+// confirm() answered through Atelier's dialog, a toast, the task manager, the
 // QR card and view source. Pages come from the 127.0.0.1 fixture server only.
 
 function windowOf(): WindowContext {
@@ -73,7 +73,7 @@ const queuedConfirm: SmokeCheck = {
 }
 
 const pageConfirm: SmokeCheck = {
-  name: 'dialogs: a page’s confirm() is asked with Apex’s dialog',
+  name: 'dialogs: a page’s confirm() is asked with Atelier’s dialog',
   async run(ctx) {
     const url = page(ctx, '/menus-dialogs/confirm.html', '<!doctype html><title>Confirm</title><p>Confirm fixture</p>')
     const tab = ctx.tabs.create(url, { activate: true })
@@ -119,7 +119,7 @@ const taskManager: SmokeCheck = {
 }
 
 const viewSource: SmokeCheck = {
-  name: 'view source: apex://view-source shows numbered lines',
+  name: 'view source: atelier://view-source shows numbered lines',
   async run(ctx) {
     const url = page(ctx, '/menus-dialogs/source.html', '<!doctype html><html><head><title>S</title></head><body><div><p>Source fixture</p></div></body></html>')
     ctx.tabs.openInternal(viewSourceUrl(url), { newTab: true })
@@ -191,7 +191,7 @@ export const dialogShots: ShotSpec[] = [
   {
     name: 'dialogs-view-source',
     async run(ctx) {
-      const url = page(ctx, '/menus-dialogs/shot.html', '<!doctype html><html><head><title>Shot</title><!-- a comment --></head><body class="x"><main><h1>Hello</h1><p data-k="v">Apex</p></main></body></html>')
+      const url = page(ctx, '/menus-dialogs/shot.html', '<!doctype html><html><head><title>Shot</title><!-- a comment --></head><body class="x"><main><h1>Hello</h1><p data-k="v">Atelier</p></main></body></html>')
       ctx.tabs.openInternal(viewSourceUrl(url), { newTab: true })
       const opened = ctx.tabs.active()?.id
       await ctx.chrome.until(`return document.querySelectorAll('.vs__line').length > 0`, 8000, 'view source')

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { useEffect, useLayoutEffect, useReducer, useRef, useState, useSyncExtern
 import { MOTION, resolveMotion, type ResolvedMotion } from './logic/motion'
 import { mergePresence, nextLayerState, nextPresenceChange, settlePresence, type LayerState, type PresenceEntry } from './logic/presence'
 
-// The one Reduce Motion switch. The system setting OR Apex's own (Settings ›
+// The one Reduce Motion switch. The system setting OR Atelier's own (Settings ›
 // Appearance) stills every animation. Both end up as <html data-motion> so
 // CSS can follow with one selector: `:root[data-motion='reduced']`.
 
@@ -33,13 +33,13 @@ if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
     systemReduced = e.matches
     publish()
   })
-  // Before the first render: the saved Apex setting.
-  appReduced = Boolean(window.apex?.initial?.settings?.reduceMotion)
+  // Before the first render: the saved Atelier setting.
+  appReduced = Boolean(window.atelier?.initial?.settings?.reduceMotion)
   resolved = resolveMotion(systemReduced, appReduced)
   document.documentElement.dataset.motion = resolved.reduced ? 'reduced' : 'full'
 }
 
-/** Call when the Apex setting changes (App does, from settings events). */
+/** Call when the Atelier setting changes (App does, from settings events). */
 export function applyMotionSetting(reduced: boolean): void {
   appReduced = reduced
   publish()

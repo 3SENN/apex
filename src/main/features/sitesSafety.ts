@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -42,12 +42,12 @@ import type { AppContext, Feature, ServiceParts, SessionInfo, WindowContext } fr
 
 /** A pack's partition (docs/packs.md): its sandbox sets its own dead-end proxy, which the proxy setting never replaces. */
 export function isPackPartition(partition: string): boolean {
-  return /^(persist:apex-pack-|apex-pack-test-)/.test(partition)
+  return /^(persist:atelier-pack-|atelier-pack-test-)/.test(partition)
 }
 
 /** Sandbox partitions are locked down, never browsed: they get the mux but none of the browsing layers. */
 export function isWebPartition(partition: string): boolean {
-  return !/^(apex-preprocess|apex-artifacts)$/.test(partition) && !/^persist:apex-app-/.test(partition) && !isPackPartition(partition)
+  return !/^(atelier-preprocess|atelier-artifacts)$/.test(partition) && !/^persist:atelier-app-/.test(partition) && !isPackPartition(partition)
 }
 
 interface TabEntry {

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -12,12 +12,12 @@ import { STORAGE_SYNC_PREFIX, installStorageSync } from '@shared/extensionStorag
 import { CONTENT_COMPAT_FILE, applyContentCompat, contentCompatSource } from '../src/main/extensions/contentCompat'
 
 // Chrome.storage.sync for extensions. Electron's own fails every call,
-// so Apex keeps sync's data on this computer (as Chrome does with sync off),
+// so Atelier keeps sync's data on this computer (as Chrome does with sync off),
 // inside storage.local under a reserved prefix that storage.local no longer
 // shows. Content scripts of Web Store installs get the same mapping from a
-// prelude Apex puts first in each content_scripts entry.
+// prelude Atelier puts first in each content_scripts entry.
 
-const dir = mkdtempSync(join(tmpdir(), 'apex-storage-sync-'))
+const dir = mkdtempSync(join(tmpdir(), 'atelier-storage-sync-'))
 afterAll(() => rmSync(dir, { recursive: true, force: true }))
 
 type Changes = Record<string, { oldValue?: unknown; newValue?: unknown }>

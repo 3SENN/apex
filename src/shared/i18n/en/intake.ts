@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -42,13 +42,13 @@ export const intake = {
   'intake.error.gone': 'This attachment is gone',
   'intake.error.alreadySent': 'This attachment was already sent',
   'intake.error.notText': 'Only pasted text and text files can be edited',
-  // Names Apex gives attachments that have none of their own.
+  // Names Atelier gives attachments that have none of their own.
   'intake.name.paste': 'Pasted text',
   'intake.name.screenshot': 'Screenshot',
   'intake.name.chat': 'Chat: {title}',
   'intake.name.selection': 'Selection from {title}',
   'intake.name.untitled': 'Untitled',
-  // Text Apex adds around attached content.
+  // Text Atelier adds around attached content.
   'intake.text.source': 'Source: {title} ({url})',
   'intake.text.links': 'Links in the selection:',
   'intake.text.truncated': '[Cut here: the rest was too long to attach.]',

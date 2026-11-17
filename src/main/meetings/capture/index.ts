@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -38,7 +38,7 @@ import { quitSaver } from './quitSave'
 import { CONTINUE_COUNTDOWN_MS, Recorder } from './recorder'
 import { SeenKeys } from './seen'
 import { WidgetVisibility, originInView, widgetWanted, type OriginView } from './widget'
-import { fixScreenBlocked } from '../../voice/apexNav'
+import { fixScreenBlocked } from '../../voice/atelierNav'
 
 // Meeting capture's entry point: meeting detection on `navigated`,
 // the meeting-card queue (MV-09), the recorder, and the recording widget
@@ -72,14 +72,14 @@ export function desktopCallsSupported(): boolean | null {
   return desktopWatcher?.supported() ?? null
 }
 
-/** Apex's own bundle id (electron-builder's appId); its helpers and the speech helper share the prefix. */
+/** Atelier's own bundle id (electron-builder's appId); its helpers and the speech helper share the prefix. */
 const OWN_BUNDLE = BUNDLE_ID
 
 const CALENDAR_POLL_MS = 60_000
 /** The widget's view is also rechecked on this beat while recording, for changes no event reports. */
 const VIEW_POLL_MS = 1500
 
-/** What the smoke checks reach (APEX_SMOKE only). */
+/** What the smoke checks reach (ATELIER_SMOKE only). */
 export interface CaptureSmokeHooks {
   recorder: Recorder
   float: FloatManager
@@ -129,7 +129,7 @@ export function setupMeetingCapture(ctx: AppContext, deps: { broker: SpeechBroke
     callNote = null
   }
 
-  // ── where Apex is ──
+  // ── where Atelier is ──
 
   const focusedWindow = (): WindowContext | null =>
     ctx.windows.all().find((w) => !w.window.isDestroyed() && w.window.isVisible() && !w.window.isMinimized() && w.window.isFocused()) ?? null
@@ -152,7 +152,7 @@ export function setupMeetingCapture(ctx: AppContext, deps: { broker: SpeechBroke
     }
   }
 
-  /** Brings Apex forward with `url` (an apex:// page) in the focused or first window. */
+  /** Brings Atelier forward with `url` (an atelier:// page) in the focused or first window. */
   const openPage = (url: string): void => {
     const win = ctx.windows.focused()
     if (!win || win.window.isDestroyed()) return
@@ -234,7 +234,7 @@ export function setupMeetingCapture(ctx: AppContext, deps: { broker: SpeechBroke
       await recorder.start({ kind: 'meeting', tabId: tabId ?? undefined, url: url ?? undefined, title: entry.payload.title || undefined, ...(entry.payload.audioOnly ? { audioOnly: true } : {}) })
     } catch (err) {
       log.warn('meeting-capture', 'Starting from the meeting card failed', { error: err instanceof Error ? err.message : String(err) })
-      ctx.notify({ category: 'meetings', title: mainT('capture.notify.startFailedTitle'), body: errorText(err), target: 'apex://settings/transcription' })
+      ctx.notify({ category: 'meetings', title: mainT('capture.notify.startFailedTitle'), body: errorText(err), target: 'atelier://settings/transcription' })
     }
   }
 
@@ -260,7 +260,7 @@ export function setupMeetingCapture(ctx: AppContext, deps: { broker: SpeechBroke
       case 'settings':
       case 'setup':
         close()
-        openPage('apex://settings/transcription')
+        openPage('atelier://settings/transcription')
         return
       case 'continue':
         close()
@@ -363,7 +363,7 @@ export function setupMeetingCapture(ctx: AppContext, deps: { broker: SpeechBroke
   // The widget's mic-only icon: ask for Screen Recording, open its pane, or relaunch once it's on.
   cleanups.push(float.handle('recording:fix-screen', async () => void (await fixScreenBlocked())))
   // Its audio-only icon (this Mac couldn't transcribe): Settings › Transcription says why and how.
-  cleanups.push(float.handle('recording:transcription-settings', async () => openPage('apex://settings/transcription')))
+  cleanups.push(float.handle('recording:transcription-settings', async () => openPage('atelier://settings/transcription')))
 
   // Quitting mid-recording saves it first (quitSave.ts). Prepended here, so it runs after the
   // private-chat question (prepended later, in startCore) and before every other listener: the
@@ -403,10 +403,10 @@ export function setupMeetingCapture(ctx: AppContext, deps: { broker: SpeechBroke
           if (arg) openPage(chatUrl(arg))
           break
         case 'view-summary':
-          openPage(`apex://meetings/${wrap.meetingId}`)
+          openPage(`atelier://meetings/${wrap.meetingId}`)
           break
         case 'open-meetings':
-          openPage('apex://meetings')
+          openPage('atelier://meetings')
           break
         case 'dismiss':
           break
@@ -453,7 +453,7 @@ export function setupMeetingCapture(ctx: AppContext, deps: { broker: SpeechBroke
       if (!desktop.calls().some((c) => c.id === call.id)) await recorder.stop()
     } catch (err) {
       log.warn('meeting-capture', 'Taking notes on a desktop call failed', { error: err instanceof Error ? err.message : String(err) })
-      ctx.notify({ category: 'meetings', title: mainT('capture.notify.startFailedTitle'), body: errorText(err), target: 'apex://settings/transcription' })
+      ctx.notify({ category: 'meetings', title: mainT('capture.notify.startFailedTitle'), body: errorText(err), target: 'atelier://settings/transcription' })
     }
   }
 
@@ -466,7 +466,7 @@ export function setupMeetingCapture(ctx: AppContext, deps: { broker: SpeechBroke
     await startFromCard(waiting, false)
   }
 
-  /** The card's twin as a system notification, for when Apex isn't in front (the presenter skips it otherwise). */
+  /** The card's twin as a system notification, for when Atelier isn't in front (the presenter skips it otherwise). */
   const notifyCall = (entry: CardEntry): void => {
     clearCallNote()
     const card = entry.payload
@@ -475,7 +475,7 @@ export function setupMeetingCapture(ctx: AppContext, deps: { broker: SpeechBroke
       category: 'meetings',
       title: mainT(card.audioOnly ? 'capture.card.appPromptAudio' : 'capture.card.appPrompt', { title: card.title }),
       body: card.mode === 'app' ? mainT(card.audioOnly ? 'capture.notify.callAudioBody' : 'capture.notify.callBody') : canRecord ? mainT(cardPermissionBody(card)) : mainT('capture.card.permissionsTitle'),
-      target: canRecord ? {} : { url: 'apex://settings/transcription' },
+      target: canRecord ? {} : { url: 'atelier://settings/transcription' },
       ...(canRecord ? { actions: [card.audioOnly ? ('record' as const) : ('take-notes' as const)] } : {}),
       onAction: (action) => {
         if (action === 'take-notes' || action === 'record') void takeNotes(entry.id).catch((err: unknown) => log.warn('meeting-capture', 'Take notes failed', { error: String(err) }))
@@ -503,7 +503,7 @@ export function setupMeetingCapture(ctx: AppContext, deps: { broker: SpeechBroke
       }
     }
     const permissions = await deps.broker.permissions().catch(() => null)
-    // It may have ended while Apex looked.
+    // It may have ended while Atelier looked.
     if (!desktop.calls().some((c) => c.id === call.id)) return
     const card = appCardFor({
       app: call.app,

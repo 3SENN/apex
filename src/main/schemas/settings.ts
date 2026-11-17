@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -13,7 +13,7 @@ import { chatIdSchema, stepSchema, type SchemaMap } from './types'
 // import, the default browser, notifications access, the Dock icon, About).
 
 const DOCK_ICON_DATA_URL_MAX = 3 * 1024 * 1024
-// Browser ids are Apex's own; profile ids are folder names ('Profile 1') or Firefox's relative paths.
+// Browser ids are Atelier's own; profile ids are folder names ('Profile 1') or Firefox's relative paths.
 const browserId = z.string().regex(/^[a-z][a-z0-9-]{0,31}$/)
 const profileId = z.string().min(1).max(256).regex(/^[A-Za-z0-9 ._\-/]+$/).refine((p) => !p.split('/').includes('..'), 'Not a profile.')
 

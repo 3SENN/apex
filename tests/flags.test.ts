@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -15,7 +15,7 @@ import { createFlags } from '../src/main/flags'
 import { EN } from '../src/shared/i18n/en'
 import { NL } from '../src/shared/i18n/nl'
 
-// ST-57: the apex://flags registry, dependency locking
+// ST-57: the atelier://flags registry, dependency locking
 // and the restart banner.
 
 describe('the catalogue', () => {

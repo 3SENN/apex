@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -16,7 +16,7 @@ import type { FilesApi } from './content'
 // xlsx, docx, pdf), reuses its container between turns, and uses the basic
 // web tools (the dynamic _20260209 ones run code themselves, and two code
 // environments confuse the model). Files the code writes come back as
-// file ids, which Apex downloads into Library › Files. Another engine may
+// file ids, which Atelier downloads into Library › Files. Another engine may
 // run the same ability its own way (AgentBackend in engines/backend.ts).
 
 export const CODE_EXECUTION_BETA = 'code-execution-2025-08-25'

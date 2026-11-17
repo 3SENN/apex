@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -17,7 +17,7 @@ export const FOLDER_FILE_MAX_BYTES = 25 * 1024 * 1024
 const OWNER_ID = /^[A-Za-z0-9-]{1,64}$/
 const NAME_MAX = 120
 
-/** Types Apex can read as text or show as an image or PDF. Other files are listed but view-only. */
+/** Types Atelier can read as text or show as an image or PDF. Other files are listed but view-only. */
 const READABLE = new Set(['.txt', '.md', '.markdown', '.csv', '.tsv', '.json', '.yaml', '.yml', '.xml', '.html', '.htm', '.log', '.pdf', '.png', '.jpg', '.jpeg', '.gif', '.webp'])
 
 export function isReadableFile(name: string): boolean {
@@ -60,7 +60,7 @@ export interface CompanionFilesOptions {
 export class CompanionFiles extends EventEmitter<{ changed: [companionId: string, path: string] }> {
   readonly #root: string
   readonly #trash: ((path: string) => Promise<void>) | undefined
-  /** When set, deletes go to Apex's Recently Deleted instead of the system Trash. */
+  /** When set, deletes go to Atelier's Recently Deleted instead of the system Trash. */
   #recycle: ((companionId: string, path: string) => void) | null = null
 
   constructor(dataDir: string, options: CompanionFilesOptions = {}) {

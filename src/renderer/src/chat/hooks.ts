@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { useSyncExternalStore } from 'react'
 import type { SettingsView, TabsSnapshot } from '@shared/ipc'
 import type { SpendView } from '@shared/pricing'
 import type { AppEvent, ChatSummary, Companion, Routine, Skill } from '@shared/services'
-import { apex, call } from '../api'
+import { atelier, call } from '../api'
 import { onTabsChanged, tabsSnapshot } from '../companion-card/liveTabs'
 
 // Shared, lazily started stores for what every chat surface reads: settings,
@@ -41,14 +41,14 @@ function liveStore<T>(initial: T, start: (set: (value: T) => void) => void): Sto
 }
 
 function onApp<T extends AppEvent['type']>(type: T, listener: (event: Extract<AppEvent, { type: T }>) => void): void {
-  apex.onAppEvent((event) => {
+  atelier.onAppEvent((event) => {
     if (event.type === type) listener(event as Extract<AppEvent, { type: T }>)
   })
 }
 
-const settingsStore = liveStore<SettingsView>(apex.initial.settings, (set) => {
+const settingsStore = liveStore<SettingsView>(atelier.initial.settings, (set) => {
   onApp('settings', (e) => set(e.view))
-  void apex.settings.get().then(set, () => undefined)
+  void atelier.settings.get().then(set, () => undefined)
 })
 
 export interface CompanionList {

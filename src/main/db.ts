@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// SQLite for Apex's stores:
+// SQLite for Atelier's stores:
 // one small wrapper over node:sqlite, the same module importer.ts already
 // uses. `migrate` applies numbered steps once, in order, inside a
 // transaction, and records them per `name`. Only the API common to

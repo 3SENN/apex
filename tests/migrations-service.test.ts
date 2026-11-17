@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -57,7 +57,7 @@ interface Harness {
 }
 
 /** A store with `n` saved chats whose files are then put back to v0. */
-function harness(n: number, dir = mkdtempSync(join(tmpdir(), 'apex-migrations-svc-'))): Harness {
+function harness(n: number, dir = mkdtempSync(join(tmpdir(), 'atelier-migrations-svc-'))): Harness {
   const chats = new ChatStore(dir, 'companion-1')
   for (let i = 1; i <= n; i++) {
     chats.save(content(ID(i)), { created: summary(ID(i), `Chat ${i}`) })
@@ -160,7 +160,7 @@ describe('the background pass', () => {
     expect(readFileSync(h.chats.fileOf(ID(4)), 'utf8')).toBe(newerText)
   })
 
-  it('leaves a store from a newer Apex as it is, and marks a new store current', () => {
+  it('leaves a store from a newer Atelier as it is, and marks a new store current', () => {
     const h = harness(0)
     expect(h.make().start()).toBeNull()
     expect(formatOf(h.dir)).toBe(CHAT_FORMAT_VERSION)
@@ -285,7 +285,7 @@ describe('the notice actions', () => {
 
 describe('the report', () => {
   it('persists across restarts and survives a damaged file', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-report-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-report-'))
     const path = join(dir, 'migrations.json')
     const seen: MigrationReport[] = []
     const store = new MigrationReportStore(path, '2.0.0', (r) => seen.push(r))
@@ -303,7 +303,7 @@ describe('the report', () => {
   })
 
   it('lists newer settings files, and drops them once they read fine', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-report-files-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-report-files-'))
     writeFileSync(join(dir, 'settings.json'), JSON.stringify({ formatVersion: 4 }))
     readVersioned(join(dir, 'settings.json'), 1, (raw) => raw)
     const { migrations, services } = setupMigrations({ chats: new ChatStore(dir, 'companion-1'), dataDir: dir, schedule: () => undefined })
@@ -317,12 +317,12 @@ describe('the report', () => {
 
 describe('the notice view', () => {
   it('opens a newer chat read-only with what can be shown', () => {
-    const error = new ChatMigrationError('newer', 9, 'Saved by a newer Apex.', {
+    const error = new ChatMigrationError('newer', 9, 'Saved by a newer Atelier.', {
       readOnly: { ...content(ID(1)), capabilities: { model: 'claude-opus-6', effort: 'low', browser: true, webTools: true, memory: false, connectorIds: ['c'], engine: 'another-engine' as EngineId } },
       backup: true,
     })
     const view = noticeView({ summary: summary(ID(1), 'Future'), error, seq: 12, effort: 'high' })
-    expect(view.notice).toEqual({ kind: 'newer-format', message: 'Saved by a newer Apex.', backup: true })
+    expect(view.notice).toEqual({ kind: 'newer-format', message: 'Saved by a newer Atelier.', backup: true })
     expect(view.setup).toMatchObject({ model: 'claude-opus-6', effort: 'low', engine: 'another-engine', fixed: true, connectorIds: ['c'] })
     expect(view.log).toHaveLength(1)
     expect(view).toMatchObject({ seq: 12, agentStatus: 'idle', queued: [], tabIds: [] })

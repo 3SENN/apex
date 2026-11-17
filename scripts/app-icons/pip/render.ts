@@ -1,5 +1,5 @@
 /* Copyright (c) 2026 Senne Chin. All rights reserved.
- * Part of the Apex Companion Art: licensed under the Apex Companion Art License
+ * Part of the Atelier Companion Art: licensed under the Atelier Companion Art License
  * (ART-LICENSE.md), not under the Mozilla Public License. */
 
 // The page scripts/app-icons/render-pip.mjs loads in a hidden Electron
@@ -18,7 +18,7 @@ async function presetLook(id: string): Promise<Look> {
   return preset.look
 }
 
-/** The group picture on .apexpack files (docs/packs.md): three presets together, each in its own mood. */
+/** The group picture on .atelierpack files (docs/packs.md): three presets together, each in its own mood. */
 export const GROUP = [
   { id: 'mochi', mood: 'talking' },
   { id: 'pip', mood: 'happy' },
@@ -29,7 +29,7 @@ declare global {
   interface Window {
     __renderGroup?: (size: number) => Promise<{ members: Array<{ id: string; head: string; full: string }>; errors: string[] }>
     __renderPip?: (size: number) => Promise<{ head: string; full: string; errors: string[] }>
-    __apexCompanionStats?: { ready: number; errors: string[] }
+    __atelierCompanionStats?: { ready: number; errors: string[] }
   }
 }
 
@@ -38,7 +38,7 @@ window.__renderPip = async (size: number) => {
   const pip = await presetLook('pip')
   const head = await renderCompanionImage(pip, size, 'happy', { framing: 'face' })
   const full = await renderCompanionImage(pip, size, 'happy', { framing: 'full' })
-  return { head, full, errors: window.__apexCompanionStats?.errors ?? [] }
+  return { head, full, errors: window.__atelierCompanionStats?.errors ?? [] }
 }
 
 window.__renderGroup = async (size: number) => {
@@ -49,5 +49,5 @@ window.__renderGroup = async (size: number) => {
     const head = await renderCompanionImage(look, size, m.mood, { framing: 'face' })
     members.push({ id: m.id, head, full })
   }
-  return { members, errors: window.__apexCompanionStats?.errors ?? [] }
+  return { members, errors: window.__atelierCompanionStats?.errors ?? [] }
 }

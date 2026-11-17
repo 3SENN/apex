@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -94,7 +94,7 @@ export const POPUP_OPTIONS = {
   height: 700,
   autoHideMenuBar: true,
   // nodeIntegrationInSubFrames: session frame preloads (the chrome surface, src/main/chromeSurface.ts) run in the
-  // popup's iframes too, as in a tab's. A popup has no page preload, so nothing else of Apex's goes in.
+  // popup's iframes too, as in a tab's. A popup has no page preload, so nothing else of Atelier's goes in.
   webPreferences: { sandbox: true, contextIsolation: true, nodeIntegration: false, nodeIntegrationInSubFrames: true, webviewTag: false },
 }
 
@@ -171,7 +171,7 @@ export function startCore(deps: CoreDeps): CoreHandle {
 
   // ---- session restore ----
   const sessionPath = join(deps.dataDir, SESSION_FILE)
-  // Windows and Linux: the last window's tabs stay the session after its X quits Apex (keepingLastWindows).
+  // Windows and Linux: the last window's tabs stay the session after its X quits Atelier (keepingLastWindows).
   const writer = new SessionWriter(sessionPath, keepingLastWindows(() => windows.serialize(), process.platform !== 'darwin'))
   let restoring = true
   const scheduleWrite = (): void => {
@@ -546,8 +546,8 @@ export function startCore(deps: CoreDeps): CoreHandle {
       return { action: 'deny' }
     }
     const tab = win.tabs.byWebContents(contents)
-    // A pack's page never opens windows or tabs of its own (docs/packs.md: apex.open is the checked way).
-    if (tab?.sandbox && /^apex-pack:/i.test(contents.getURL())) return { action: 'deny' }
+    // A pack's page never opens windows or tabs of its own (docs/packs.md: atelier.open is the checked way).
+    if (tab?.sandbox && /^atelier-pack:/i.test(contents.getURL())) return { action: 'deny' }
     if (disposition === 'new-window' && (web || url === 'about:blank' || url === '')) {
       if (tab) {
         const answer = consultPopupPolicies({ tab, url, disposition, userGesture: gestures.consume(contents.id), frameOrigin: originOf(details.referrer?.url || contents.getURL()) })
@@ -563,7 +563,7 @@ export function startCore(deps: CoreDeps): CoreHandle {
       const placement = { activate: activate && !agentOutOfSight(win, tab), afterId: tab.id }
       return {
         action: 'allow',
-        // Created as a tab's page is: the page preload, isolation and Apex's dialogs.
+        // Created as a tab's page is: the page preload, isolation and Atelier's dialogs.
         overrideBrowserWindowOptions: { webPreferences: win.tabs.pageWebPreferences() },
         // A tab stays when the tab that opened it closes.
         outlivesOpener: true,

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -44,7 +44,7 @@ export function ActivityStatusPopover({ close }: SurfaceComponentProps<Record<st
   }
   const pause = (choice: PauseChoice): void => void act(() => call('activity', 'pause', choice === 'today' ? 'today' : Date.now() + choice * 60_000), true)
   const openSettings = (): void => {
-    void call('pages', 'open', 'apex://settings/activity')
+    void call('pages', 'open', 'atelier://settings/activity')
     close()
   }
 

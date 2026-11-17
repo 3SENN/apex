@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex://routines/<id> (SK-09): one routine. Its state, when it was made
+// atelier://routines/<id> (SK-09): one routine. Its state, when it was made
 // and changed, the next run, what it does, Run now, Pause or Resume, Edit
 // and Delete, and its run history with links to each run's chat.
 import { useEffect, useState, type ReactElement } from 'react'
@@ -11,7 +11,7 @@ import { ArrowLeft, CalendarClock, Pause, Pencil, Play, Trash2 } from 'lucide-re
 import { SHARED_OWNER } from '@shared/chats'
 import { isPastRoutine, type Routine } from '@shared/routines'
 import { routineUrl } from '@shared/url'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { useT } from '../i18n/useT'
 import { Badge, Button, EmptyState, formatAbsolute, useConfirm, useNow, useToast } from '../ui'
 import { useCompanions, useEvent, useResource } from '../settings/data'
@@ -53,7 +53,7 @@ export function RoutineDetail({ tabId, routineId }: RoutineDetailProps): ReactEl
     const next = e.items.find((r) => r.id === routineId)
     setLoad(next ? { kind: 'ready', routine: next } : { kind: 'missing' })
   })
-  const back = (): void => void apex.nav.go(tabId, 'apex://routines')
+  const back = (): void => void atelier.nav.go(tabId, 'atelier://routines')
   const fail = (err: unknown): void => void toast.show({ tone: 'error', message: errorText(err) })
 
   if (load.kind === 'loading') {
@@ -77,7 +77,7 @@ export function RoutineDetail({ tabId, routineId }: RoutineDetailProps): ReactEl
   const state = r.needsCompanion ? 'needsCompanion' : past ? 'past' : r.enabled ? 'active' : 'paused'
   const companion = r.owner === SHARED_OWNER ? t('skills.routines.shared') : (companions.items?.find((c) => c.id === r.owner)?.name ?? r.owner)
   const skill = r.skillId ? skills.data?.find((s) => s.id === r.skillId) : undefined
-  const edit = (): void => void apex.nav.go(tabId, routineUrl(r.id, true))
+  const edit = (): void => void atelier.nav.go(tabId, routineUrl(r.id, true))
   const runNow = (): void => {
     call('routines', 'runNow', r.id).then(() => toast.show({ message: t('skills.routines.running', { name: r.name }) }), fail)
   }

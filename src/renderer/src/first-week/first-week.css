@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-/* Getting started (apex://first-week). One centred column: a hero banner in
+/* Getting started (atelier://first-week). One centred column: a hero banner in
    the companion's colour, the plan as a two-column grid of cards, and short
    animated guides. Colours are the design tokens plus a few page tokens
    defined below with light-dark(), so both modes are designed here. The
@@ -38,7 +38,7 @@
   --fw-play-bg: light-dark(rgba(255, 255, 255, 0.92), rgba(44, 40, 58, 0.9));
   --fw-play-ink: var(--text-primary);
 
-  /* Apex's card hues, one per item. */
+  /* Atelier's card hues, one per item. */
   --fw-hue-teal: light-dark(#0c8b82, #3cc8b9);
   --fw-hue-green: light-dark(#2a9448, #5ccf7c);
   --fw-hue-amber: light-dark(#bf760a, #f0b443);

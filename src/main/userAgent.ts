@@ -1,16 +1,16 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Apex's browser identity (sign-in compatibility): the User-Agent string and
+// Atelier's browser identity (sign-in compatibility): the User-Agent string and
 // the User-Agent Client Hints exactly as stock Chromium of the same version
 // reports them on this platform, so a site sees one ordinary Chromium
 // everywhere. app.userAgentFallback, every session (languages.ts), the
 // per-tab DevTools override (TabLanguages) and the client hint headers
 // Electron leaves out (clientHints.ts) all read this one module.
 // Nothing here is Chrome-branded beyond what Chromium itself sends: the brands
-// are Chromium's own list (Chromium plus its GREASE brand), never Electron or Apex.
+// are Chromium's own list (Chromium plus its GREASE brand), never Electron or Atelier.
 
 export interface Brand {
   brand: string

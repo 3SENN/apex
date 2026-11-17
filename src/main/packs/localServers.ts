@@ -1,18 +1,18 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex.server (docs/packs.md › A web server of its own): the servers apps
+// atelier.server (docs/packs.md › A web server of its own): the servers apps
 // run, one per app page that started one. A server lives only while that
 // page does: it stops when the page closes, reloads or navigates, when the
 // pack is turned off, when the app calls stop(), when the person presses Stop
-// on Apex's bar over the app, and after a while with nobody using it. What
+// on Atelier's bar over the app, and after a while with nobody using it. What
 // happens on it reaches the page as batches of events on the pack event
 // channel, in order; requests and new sockets go at once, messages within a
 // few milliseconds, so a phone streaming motion at 60 Hz doesn't flood IPC.
 // The port is kept per app (a phone's bookmark keeps working) and the token
-// per app while Apex runs (so phones reconnect after the app reloads); the
+// per app while Atelier runs (so phones reconnect after the app reloads); the
 // person's Stop throws the token away.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { networkInterfaces } from 'node:os'
@@ -26,7 +26,7 @@ import { LocalServer, newServerToken, type AppResponse, type ServedFile } from '
 import { localHostName, serverCertificate, type ServerCertificate } from './localServerCert'
 import { markServing } from './serving'
 
-/** What Apex's bar over the app shows while its server runs. */
+/** What Atelier's bar over the app shows while its server runs. */
 export interface ServerBarView {
   app: string
   lan: boolean
@@ -35,7 +35,7 @@ export interface ServerBarView {
   hint: boolean
 }
 
-/** Apex's own bar over an app whose server runs (trusted UI, not drawn by the app). */
+/** Atelier's own bar over an app whose server runs (trusted UI, not drawn by the app). */
 export interface ServerIndicator {
   show(contents: WebContents, view: ServerBarView, onStop: () => void): void
   update(contents: WebContents, view: ServerBarView): void
@@ -50,7 +50,7 @@ export interface ServerStartOptions {
 }
 
 export interface LocalServersDeps {
-  /** Where the certificate and the kept ports live (Apex's data folder). */
+  /** Where the certificate and the kept ports live (Atelier's data folder). */
   dir: string
   /** A file of the pack (or the draft under test), or null. */
   file(packId: string, mode: PackContext['mode'], path: string): ServedFile | null
@@ -107,7 +107,7 @@ interface KeptState {
 export class LocalServers {
   readonly #deps: LocalServersDeps
   readonly #running = new Map<number, Running>()
-  /** Tokens by app while Apex runs. */
+  /** Tokens by app while Atelier runs. */
   readonly #tokens = new Map<string, string>()
   readonly #starting = new Map<number, Promise<unknown>>()
   readonly #now: () => number
@@ -142,7 +142,7 @@ export class LocalServers {
     let root: string | null = null
     if (asked.root !== undefined) {
       root = safeRelativePath(asked.root)
-      if (!root || root.startsWith('__apex')) throw new Error(`${asked.root} is not a folder of the pack.`)
+      if (!root || root.startsWith('__atelier')) throw new Error(`${asked.root} is not a folder of the pack.`)
       if (!this.#deps.hasFolder(ctx.packId, ctx.mode, root)) throw new Error(`There is no folder ${root} in the pack.`)
     }
     const options = {
@@ -267,7 +267,7 @@ export class LocalServers {
   /** Sends text to sockets ('*' for all of them); how many it went to. */
   send(contentsId: number, ids: readonly string[] | '*', text: string): number {
     const r = this.#running.get(contentsId)
-    if (!r) throw new Error('The server is not running: call apex.server.start() first.')
+    if (!r) throw new Error('The server is not running: call atelier.server.start() first.')
     if (Buffer.byteLength(text) > SERVER_LIMITS.outBytes) throw new Error(`A message is at most ${SERVER_LIMITS.outBytes / 1024} KB.`)
     const to = ids === '*' ? r.server.socketIds() : ids
     let sent = 0

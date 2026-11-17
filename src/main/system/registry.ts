@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { spawnSync } from 'node:child_process'
 import { win32 } from 'node:path'
 import { comspec } from './programs'
 
-// Reading a value from the Windows registry with reg.exe (Apex has no native
+// Reading a value from the Windows registry with reg.exe (Atelier has no native
 // registry module). Its output is in the console's code page, so a path with
 // an ü in it would arrive garbled; the query runs under chcp 65001, which
 // makes it UTF-8. Its labels ("(Default)") are in the system's language, so

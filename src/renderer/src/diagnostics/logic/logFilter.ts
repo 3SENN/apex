@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { LOG_LEVELS, matchesLogQuery, type LogEntry, type LogLevel, type LogQuery } from '@shared/diagnostics'
 
-// apex://logs filters and the list window: the
+// atelier://logs filters and the list window: the
 // query sent to main, live lines filtered the same way main filters, the
 // copy text and the rows a virtualized list draws.
 

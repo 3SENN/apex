@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -16,7 +16,7 @@ import { FILES_SURFACE_MAP } from '../overlay/surfaces/files'
 // surface opens in the overlay host (over the page), or in the chrome
 // itself while that host isn't available.
 
-/** Opens a file in the viewer tab (apex://file). `edit` starts in edit mode; `newTab` never reuses a tab. */
+/** Opens a file in the viewer tab (atelier://file). `edit` starts in edit mode; `newTab` never reuses a tab. */
 export function openViewer(target: ViewerTarget, options: { edit?: boolean; newTab?: boolean; name?: string } = {}): Promise<void> {
   return call('pages', 'open', fileViewerUrl(target, { edit: options.edit, name: options.name }), options.newTab ? { newTab: true } : undefined)
 }

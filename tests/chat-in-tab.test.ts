@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -33,8 +33,8 @@ describe('DS-65 expand plan', () => {
     expect(planExpand({ id: 't1', url: 'about:blank' }, false)).toEqual({ kind: 'navigate', tabId: 't1' })
   })
 
-  it('opens the chat in its own tab beside an Apex page, a destination or no tab', () => {
-    expect(planExpand({ id: 't1', url: 'apex://settings' }, false)).toEqual({ kind: 'open' })
+  it('opens the chat in its own tab beside an Atelier page, a destination or no tab', () => {
+    expect(planExpand({ id: 't1', url: 'atelier://settings' }, false)).toEqual({ kind: 'open' })
     expect(planExpand({ id: 't1', url: 'https://example.com' }, true)).toEqual({ kind: 'open' })
     expect(planExpand(null, false)).toEqual({ kind: 'open' })
   })
@@ -43,7 +43,7 @@ describe('DS-65 expand plan', () => {
     expect(canHoldChat('https://example.com')).toBe(true)
     expect(canHoldChat('file:///Users/you/a.pdf')).toBe(true)
     expect(canHoldChat('')).toBe(false)
-    expect(canHoldChat('apex://chat/c1')).toBe(false)
+    expect(canHoldChat('atelier://chat/c1')).toBe(false)
   })
 })
 
@@ -78,7 +78,7 @@ describe('DS-65 held chats', () => {
     const held = holdIn(holdIn(holdIn(NO_HELD_CHATS, 't1', 'c1'), 't2', 'c2'), 't3', 'c3')
     const tabs = [
       { id: 't1', url: 'https://example.com/next' },
-      { id: 't2', url: 'apex://settings' },
+      { id: 't2', url: 'atelier://settings' },
     ]
     expect([...pruneHeld(held, tabs)]).toEqual([['t1', 'c1']])
     const kept = holdIn(NO_HELD_CHATS, 't1', 'c1')

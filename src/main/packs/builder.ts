@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -79,7 +79,7 @@ function keyCode(key: string): string {
 }
 
 /** Where a world's still is drawn during a test: a page of the kit the draft never ships (its id can't be a pack's own). */
-const STILL_APP = 'apex-world-still'
+const STILL_APP = 'atelier-world-still'
 const STILL_ROOT = '__still'
 const STILL_SIZE = { width: 960, height: 540 }
 const STILL_PAGE = '<!doctype html><html><head><meta charset="utf-8"><title>drawing</title><style>html,body{margin:0;height:100%;overflow:hidden;background:#000}canvas{display:block;width:100vw;height:100vh}</style><script type="module" src="./main.js"></script></head><body><canvas></canvas></body></html>'
@@ -87,7 +87,7 @@ const STILL_PAGE = '<!doctype html><html><head><meta charset="utf-8"><title>draw
 /** The still's script: the world as the editor frames it (its camera, else over the whole of it), drawn once. */
 function stillScript(world: unknown): string {
   return `import * as THREE from 'three'
-import { createWorldView } from 'apex-kit/world.js'
+import { createWorldView } from 'atelier-kit/world.js'
 const doc = ${JSON.stringify(world)}
 try {
   const canvas = document.querySelector('canvas')
@@ -169,7 +169,7 @@ async function worldStills(runtime: PacksRuntime, packId: string, manifest: Pack
  * test_pack's playtest (docs/apps.md › Companions as builders): an app played
  * off-screen in the draft's test sandbox, with the frames a companion looks
  * at, its console errors, its frame times and what it reported with
- * apex.test.ready. The sandbox is the test one: nothing it stores is kept.
+ * atelier.test.ready. The sandbox is the test one: nothing it stores is kept.
  */
 async function playtest(runtime: PacksRuntime, packId: string, manifest: PackManifest, o: { app?: string; width?: number; height?: number; steps?: PlayStep[] }, signal: AbortSignal): Promise<{ report: Record<string, unknown> & { ok: boolean }; images: Array<{ mediaType: 'image/jpeg'; data: string }> }> {
   const app = (manifest.contributes.apps ?? []).find((a) => !o.app || a.id === o.app)
@@ -246,7 +246,7 @@ async function playtest(runtime: PacksRuntime, packId: string, manifest: PackMan
     frames,
     state,
     captures: captures.map((c, i) => `image ${i + 1}: ${c.label}`),
-    ...(state === null ? { hint: 'The app never called apex.test.ready(state); report its state there so the playtest can see what happened.' } : {}),
+    ...(state === null ? { hint: 'The app never called atelier.test.ready(state); report its state there so the playtest can see what happened.' } : {}),
   }
   return { report, images: captures.map((c) => ({ mediaType: 'image/jpeg' as const, data: c.data })) }
 }
@@ -261,7 +261,7 @@ async function openTestPage(app: AppContext, url: string): Promise<{ contents: W
   const front = app.windows.focused()
   const win = front && front.kind === 'normal' ? front : app.windows.all().find((w) => w.kind === 'normal')
   if (!win) return null
-  const ses = electronSession.fromPartition(`apex-pack-testpage-${randomUUID()}`)
+  const ses = electronSession.fromPartition(`atelier-pack-testpage-${randomUUID()}`)
   ses.setPermissionRequestHandler((_wc, _permission, callback) => callback(false))
   ses.setPermissionCheckHandler(() => false)
   ses.on('will-download', (event, item) => {
@@ -298,14 +298,14 @@ export function registerPackBuilderTools(deps: BuilderDeps): void {
     name: 'create_pack',
     group: 'packs',
     description:
-      `Starts a draft ${BRAND_NAME} pack (skills, routine templates, site tweaks, themes, companions, connectors, sandboxed panels, commands, page menu items and agent tools in plain JavaScript) in a folder you then fill with write_pack_file. Its result explains the format and the window.apex API. To change an installed pack, use its id: the draft starts from its files and replaces it when the person installs it. A pack's skills go to every companion; to give yourself a skill of your own, use draft_skill instead.`,
+      `Starts a draft ${BRAND_NAME} pack (skills, routine templates, site tweaks, themes, companions, connectors, sandboxed panels, commands, page menu items and agent tools in plain JavaScript) in a folder you then fill with write_pack_file. Its result explains the format and the window.atelier API. To change an installed pack, use its id: the draft starts from its files and replaces it when the person installs it. A pack's skills go to every companion; to give yourself a skill of your own, use draft_skill instead.`,
     inputSchema: {
       type: 'object',
       properties: {
         id: { type: 'string', description: 'The pack id: 2 to 32 lowercase letters, digits and dashes.' },
         name: { type: 'string', description: 'A short name, up to 80 characters.' },
         description: { type: 'string', description: 'One or two sentences on what it does.' },
-        starter: { type: 'string', enum: [...STARTERS], description: `Start an app from a working example on the ${BRAND_NAME} kit: game-3d (three.js with the person’s companion), game-2d (canvas), tool (apex.ai.stream), story (apex.ai.session with a tool, and the companion’s lines), phone-controller (apex.server on the Wi-Fi: phones scan a QR code and send motion and buttons over a socket) or sorter (apex.ai.decide: typed quick decisions with probabilities, acting only when sure).` },
+        starter: { type: 'string', enum: [...STARTERS], description: `Start an app from a working example on the ${BRAND_NAME} kit: game-3d (three.js with the person’s companion), game-2d (canvas), tool (atelier.ai.stream), story (atelier.ai.session with a tool, and the companion’s lines), phone-controller (atelier.server on the Wi-Fi: phones scan a QR code and send motion and buttons over a socket) or sorter (atelier.ai.decide: typed quick decisions with probabilities, acting only when sure).` },
       },
       required: ['id', 'name', 'description'],
       additionalProperties: false,
@@ -352,7 +352,7 @@ export function registerPackBuilderTools(deps: BuilderDeps): void {
   registerClientTool({
     name: 'write_pack_file',
     group: 'packs',
-    description: 'Writes one file in a draft pack (creating folders as needed), replacing it if it exists. Paths are relative and use letters, digits, dot, dash and underscore, such as "tools/read-price.js" or "apex-pack.json". Drafts only; an installed pack never changes.',
+    description: 'Writes one file in a draft pack (creating folders as needed), replacing it if it exists. Paths are relative and use letters, digits, dot, dash and underscore, such as "tools/read-price.js" or "atelier-pack.json". Drafts only; an installed pack never changes.',
     inputSchema: {
       type: 'object',
       properties: { id: { type: 'string' }, path: { type: 'string' }, content: { type: 'string', description: 'The whole file.' } },
@@ -428,7 +428,7 @@ export function registerPackBuilderTools(deps: BuilderDeps): void {
         playtest: {
           type: 'object',
           description:
-            'Plays an app off-screen in the test sandbox and shows you frames: steps run in order. { wait: ms }, { key: "ArrowRight", holdMs }, { click: [x, y] }, { type: "text" }, { capture: "label" } (at most 8 captures; one is taken at the start and the end without any). Returns console errors, frame times, the states the app reported with apex.test.ready, and the frames as images.',
+            'Plays an app off-screen in the test sandbox and shows you frames: steps run in order. { wait: ms }, { key: "ArrowRight", holdMs }, { click: [x, y] }, { type: "text" }, { capture: "label" } (at most 8 captures; one is taken at the start and the end without any). Returns console errors, frame times, the states the app reported with atelier.test.ready, and the frames as images.',
           properties: {
             app: { type: 'string', description: 'The app id (default: the first app).' },
             width: { type: 'number' },
@@ -532,7 +532,7 @@ export function registerPackBuilderTools(deps: BuilderDeps): void {
             name: p.manifest.name,
             version: p.manifest.version,
             on: p.entry.enabled,
-            comesWithApex: p.firstParty,
+            comesWithAtelier: p.firstParty,
             tools: (p.manifest.contributes.tools ?? []).map((t) => packToolName(p.manifest.id, t.name)),
             problems: [...p.problems, ...runtime.problems(p.manifest.id)],
           })),

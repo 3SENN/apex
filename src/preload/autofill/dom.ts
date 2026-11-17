@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -173,7 +173,7 @@ export function rolesOf(group: Group): Set<FormRole> {
   return roles
 }
 
-/** What a focused field is for within its group, or null when Apex offers nothing there. */
+/** What a focused field is for within its group, or null when Atelier offers nothing there. */
 export function roleForField(kind: FieldKind, group: Group): FormRole | null {
   const roles = rolesOf(group)
   const login = group.role === 'login' || group.role === 'signup' ? group.role : null

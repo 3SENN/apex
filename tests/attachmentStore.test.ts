@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -32,7 +32,7 @@ function images(over: Partial<ImageProcessor> = {}): ImageProcessor {
 }
 
 function setup(host: IntakeHost = {}) {
-  const dataDir = mkdtempSync(join(tmpdir(), 'apex-intake-'))
+  const dataDir = mkdtempSync(join(tmpdir(), 'atelier-intake-'))
   const events: (AttachmentsEvent | ChatContextEvent)[] = []
   let now = 1_000_000_000_000
   const intake = setupIntake({
@@ -85,7 +85,7 @@ describe('adding and preparing', () => {
   })
 
   it('adds picked files from disk, refusing the unreadable ones', async () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-pick-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-pick-'))
     writeFileSync(join(dir, 'a.csv'), 'a,b\n1,2\n')
     writeFileSync(join(dir, 'tool.txt'), executableBytes())
     const { intake } = setup({ pickFiles: async () => [join(dir, 'a.csv'), join(dir, 'tool.txt'), join(dir, 'missing.txt')] })
@@ -170,7 +170,7 @@ describe('text attachments (CH-24)', () => {
 describe('providers (CH-21, CH-25)', () => {
   const tabHost = (internal = false): IntakeHost => ({
     sources: {
-      tab: (tabId) => (tabId === 't1' ? { url: internal ? 'apex://settings' : 'https://site.test/', title: 'Site', favicon: null, internal } : null),
+      tab: (tabId) => (tabId === 't1' ? { url: internal ? 'atelier://settings' : 'https://site.test/', title: 'Site', favicon: null, internal } : null),
       readTab: async () => ({ text: 'page words' }),
       chatTitle: () => 'Earlier',
       chatMarkdown: () => ({ title: 'Earlier', text: '# Earlier chat' }),
@@ -190,7 +190,7 @@ describe('providers (CH-21, CH-25)', () => {
     expect(intake.services.chatContext.list(chat)).toEqual([])
   })
 
-  it('refuses apex:// tabs and closed tabs', async () => {
+  it('refuses atelier:// tabs and closed tabs', async () => {
     const { add, settle } = setup(tabHost(true))
     const chat = randomUUID()
     expect(await settle(chat, add(chat, { type: 'tab', tabId: 't1' }))).toMatchObject({ state: 'failed', error: `${BRAND_NAME} pages can't be attached` })

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -19,7 +19,7 @@ import type { TabRegistry } from './tabRegistry'
 import type { Tab } from './tabs'
 import type { WindowManager } from './windows'
 
-// Screen sharing (OV-14). getDisplayMedia opens Apex's picker over the
+// Screen sharing (OV-14). getDisplayMedia opens Atelier's picker over the
 // requesting tab: tabs of the same profile from every window (most recent
 // first, never one the agent controls), windows and screens with fresh
 // thumbnails, and a tab-audio switch when audio was asked for. Agent tabs

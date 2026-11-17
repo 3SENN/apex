@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -88,7 +88,7 @@ export interface ReplyDetails {
   models: string[]
   usage: TurnUsage
   memoryPaths: string[]
-  /** Turns without saved details (chats from before Apex kept them). */
+  /** Turns without saved details (chats from before Atelier kept them). */
   missing: number
   /** DC-15: the effort the reply ran at, when a quick decision picked it for this message. */
   effort?: Effort

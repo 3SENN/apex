@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import { Mic } from 'lucide-react'
 import { useT } from '../i18n/useT'
 import type { MeetingsFilter } from './logic'
 
-// The Meetings empty state (DS-105): Apex's own still explainer in the
+// The Meetings empty state (DS-105): Atelier's own still explainer in the
 // 416×234 media slot (sound becoming a transcript becoming notes), drawn in
 // tokens so it follows the theme, then a line of help and the start action.
 

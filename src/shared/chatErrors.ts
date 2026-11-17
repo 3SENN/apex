@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -20,7 +20,7 @@ export const CHAT_ERROR_CODES = [
   'refusal',
   'key-missing',
   'key-rejected',
-  /** The provider's own quota or credit; Apex links to the provider's console, never to plans of its own. */
+  /** The provider's own quota or credit; Atelier links to the provider's console, never to plans of its own. */
   'quota',
   'disk-full',
   'other',

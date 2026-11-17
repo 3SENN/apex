@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -22,7 +22,7 @@ import { RoutineRunningDot } from '../RoutineRunningDot'
 import { useMeetingLive } from '../../meetings/status'
 import { ConnectorsBadge } from '../../connectors/SidebarBadge'
 
-// The sidebar's destination rows. Each opens its apex:// page on the
+// The sidebar's destination rows. Each opens its atelier:// page on the
 // window-level destination surface (DS-99), never as a tab; clicking the
 // active one again takes it back to its root view. They activate on
 // pointer-down so they feel instant. Status is only ever a dot or a faint
@@ -49,7 +49,7 @@ export const DESTINATION_INFO: Record<Destination, { readonly label: string; ico
   guides: info('firstRun.guides.title', BookOpen),
   // Library › Files, in the overflow by default.
   files: info('files.page.title', FolderOpen),
-  // AP-02: the packs you added (apex://packs), in the overflow by default.
+  // AP-02: the packs you added (atelier://packs), in the overflow by default.
   packs: info('packs.page.title', Package),
 }
 
@@ -124,7 +124,7 @@ export function Destinations({ options, current, activeTabId, unread, needsInput
 
   const open = (dest: Destination): void => {
     if (current === dest && activeTabId) onReset(activeTabId)
-    void call('pages', 'open', `apex://${dest}`)
+    void call('pages', 'open', `atelier://${dest}`)
   }
 
   // DS-89: an in-window dropdown 4 px under the row: the hidden destinations, a hairline, then the options.
@@ -186,7 +186,7 @@ export function Destinations({ options, current, activeTabId, unread, needsInput
                 pressed.current = null
                 return
               }
-              if (e.metaKey || e.ctrlKey) void call('pages', 'open', `apex://${dest}`, { newTab: true, background: true })
+              if (e.metaKey || e.ctrlKey) void call('pages', 'open', `atelier://${dest}`, { newTab: true, background: true })
               else open(dest)
             }}
             onKeyDown={(e: KeyboardEvent) => {
@@ -194,7 +194,7 @@ export function Destinations({ options, current, activeTabId, unread, needsInput
               if (e.key === 'Enter' || e.key === ' ') pressed.current = null
             }}
             onAuxClick={(e) => {
-              if (e.button === 1) void call('pages', 'open', `apex://${dest}`, { newTab: true, background: true })
+              if (e.button === 1) void call('pages', 'open', `atelier://${dest}`, { newTab: true, background: true })
             }}
             onContextMenu={
               dest === 'chats'
@@ -204,12 +204,12 @@ export function Destinations({ options, current, activeTabId, unread, needsInput
                       { id: 'new-tab', label: t('tabs.destination.openInNewTab') },
                     ]).then((id) => {
                       if (id === 'read') void call('chats', 'markAllRead')
-                      else if (id === 'new-tab') void call('pages', 'open', 'apex://chats', { newTab: true })
+                      else if (id === 'new-tab') void call('pages', 'open', 'atelier://chats', { newTab: true })
                     })
                   }
                 : (e) => {
                     void showContextMenu(e, [{ id: 'new-tab', label: t('tabs.destination.openInNewTab') }]).then((id) => {
-                      if (id === 'new-tab') void call('pages', 'open', `apex://${dest}`, { newTab: true })
+                      if (id === 'new-tab') void call('pages', 'open', `atelier://${dest}`, { newTab: true })
                     })
                   }
             }

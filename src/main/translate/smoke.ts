@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,7 +10,7 @@ import type { SmokeGroup, ShotSpec, SmokeCheck, SmokeContext } from '../smokeBro
 import type { Tab } from '../tabs'
 import { translateSmokeHooks, type TranslateSmokeHooks } from './feature'
 
-// Page translation's smoke checks (APEX_SMOKE_ONLY=translate), on a local
+// Page translation's smoke checks (ATELIER_SMOKE_ONLY=translate), on a local
 // French fixture page with the fake engine (feature.ts swaps it in under
 // smoke, so no helper and no model ever runs): the offer in the pill, the
 // popover's Translate, text and attributes changed in place while code,

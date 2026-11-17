@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import type { TabInfo, TabsSnapshot } from '@shared/ipc'
 import type { Bookmark } from '@shared/services'
 import type { TabGroup } from '@shared/tabs'
-import { apex, call, errorText } from '../../api'
+import { atelier, call, errorText } from '../../api'
 import { t } from '@shared/i18n/core'
 import { isMac, showContextMenu, toast } from '../../ui'
 import type { TextDrop } from './dnd'
@@ -140,7 +140,7 @@ export async function runTabMenu(id: string, options: TabMenuOptions, targets: r
   const each = (fn: (t: TabInfo) => Promise<unknown>): void => void Promise.all(targets.map(fn)).catch(fail(t('tabs.error.tabs')))
   switch (id) {
     case 'new-tab-next':
-      void apex.tabs.create(undefined, { afterId: tab.id })
+      void atelier.tabs.create(undefined, { afterId: tab.id })
       break
     case 'reopen':
       void call('tabs', 'reopenClosed')
@@ -172,7 +172,7 @@ export async function runTabMenu(id: string, options: TabMenuOptions, targets: r
       void call('tabs', 'moveToNewWindow', ids).catch(fail(t('tabs.error.moveWindow')))
       break
     case 'reload':
-      each((x) => apex.nav.reload(x.id))
+      each((x) => atelier.nav.reload(x.id))
       break
     case 'duplicate':
       each((x) => call('tabs', 'duplicate', x.id))
@@ -219,7 +219,7 @@ export async function runTabMenu(id: string, options: TabMenuOptions, targets: r
     }
     case 'close':
       if (targets.length > 1) void call('tabs', 'closeMany', ids)
-      else void apex.tabs.close(tab.id)
+      else void atelier.tabs.close(tab.id)
       break
     case 'close-others':
       void call('tabs', 'closeMany', unpinned(shown.filter((t) => t.id !== tab.id)))
@@ -253,7 +253,7 @@ export function activateTab(tab: TabInfo, snapshot: TabsSnapshot, event: { altKe
     void call('tabs', 'setSelection', toggleSelection(snapshot.selection ?? [], snapshot.activeId, tab.id))
     return
   }
-  void apex.tabs.activate(tab.id)
+  void atelier.tabs.activate(tab.id)
 }
 
 /** The group header's menu; `onRename` puts the header in rename mode. */
@@ -286,9 +286,9 @@ export function runTextDrop(drop: TextDrop, engine: string, rowIds: readonly str
   const url = dropUrl(drop.text, engine)
   if (!url) return
   if (drop.tabId) {
-    void apex.nav.go(drop.tabId, url).catch(fail(t('tabs.error.tabs')))
+    void atelier.nav.go(drop.tabId, url).catch(fail(t('tabs.error.tabs')))
     return
   }
   const before = drop.index > 0 ? rowIds[drop.index - 1] : undefined
-  void apex.tabs.create(url, before ? { afterId: before } : { position: 'top' }).catch(fail(t('tabs.error.tabs')))
+  void atelier.tabs.create(url, before ? { afterId: before } : { position: 'top' }).catch(fail(t('tabs.error.tabs')))
 }

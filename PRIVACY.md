@@ -1,13 +1,13 @@
 # Privacy
 
-Apex runs on your computer. It has no Apex account, no analytics, no telemetry and no Apex server: nothing you do in
-Apex is sent to the Apex project. Besides the sites you visit, the app contacts only the services listed below, and
+Atelier runs on your computer. It has no Atelier account, no analytics, no telemetry and no Atelier server: nothing you do in
+Atelier is sent to the Atelier project. Besides the sites you visit, the app contacts only the services listed below, and
 most of them only when you turn a feature on or use it. Builds with the unofficial branding (Summit) behave the same.
 
-## What Apex keeps on this computer
+## What Atelier keeps on this computer
 
-Everything lives in Apex's data folder (`~/Library/Application Support/Apex` on macOS, `%APPDATA%\Apex` on Windows,
-`~/.config/Apex` on Linux; a build named Summit uses a `Summit` folder):
+Everything lives in Atelier's data folder (`~/Library/Application Support/Atelier` on macOS, `%APPDATA%\Atelier` on Windows,
+`~/.config/Atelier` on Linux; a build named Summit uses a `Summit` folder):
 
 - **Browsing data:** history, bookmarks, open tabs and windows, downloads, site settings and permissions, and each
   profile's cookies, cache and site storage (in Chromium's own storage, one partition per profile).
@@ -23,22 +23,22 @@ Everything lives in Apex's data folder (`~/Library/Application Support/Apex` on 
 Settings › Reset clears your data and settings. Uninstalling the app leaves the data folder; delete it by hand to
 remove everything.
 
-## What Apex contacts, and when
+## What Atelier contacts, and when
 
 | Service | Why | When | What is sent |
 |---|---|---|---|
 | **Your model provider**: Anthropic (`api.anthropic.com`), or your organisation's gateway when a policy sets one | The companion: chats, routines, memory, meeting summaries, quick asks, translation with the companion | When you have added a key and use the companion | Your messages and what the companion needs for them: the page and tab content it reads, attachments, the tools it may use, and your key. Anthropic's SDK adds the OS, architecture and runtime version. Anthropic's privacy policy applies to what it receives |
 | Anthropic's **web search and web fetch** tools | Searching the web and reading pages for the companion | During chats, while web tools are on (the default) | Search queries and addresses, run on Anthropic's side |
 | **Quick-decision providers** you add (Typesafe, OpenRouter, Experiential Labs, OpenAI, or your own server) | Fast decisions, such as what a new-tab entry means | Off unless you add a provider and a key | The short text being decided on, and your key |
-| **Connectors (MCP servers)** you add | Tools for the companion | Only connectors you add | Tool calls and their results, and the sign-in (OAuth) exchange with the connector. Remote connectors that sign in with a token are called by Anthropic on Apex's behalf, so that token goes to Anthropic with the request. Local connectors run on your computer and can reach whatever they are built to |
-| **GitHub releases** (`github.com/3SENN/apex/releases`) | Updates, and the list of versions that are no longer supported | Release builds only: at start, every 4 hours, on wake and when you come back online | Ordinary download requests (the version and file names), no cookies or identifiers |
+| **Connectors (MCP servers)** you add | Tools for the companion | Only connectors you add | Tool calls and their results, and the sign-in (OAuth) exchange with the connector. Remote connectors that sign in with a token are called by Anthropic on Atelier's behalf, so that token goes to Anthropic with the request. Local connectors run on your computer and can reach whatever they are built to |
+| **GitHub releases** (`github.com/3SENN/atelier/releases`) | Updates, and the list of versions that are no longer supported | Release builds only: at start, every 4 hours, on wake and when you come back online | Ordinary download requests (the version and file names), no cookies or identifiers |
 | **Ad and tracker blocker lists** (`raw.githubusercontent.com/ghostery/adblocker`) | The blocker's filter lists | At start, while blocking is on (the default), only when no cached copy exists | Plain downloads |
 | **Cookie-banner lists** (`secure.fanboy.co.nz`, `ublockorigin.github.io`) | Hiding cookie banners | Off unless you choose lists; then checked daily, refreshed weekly | Plain downloads |
 | **Search suggestions** from your search engine (Google, DuckDuckGo, Bing, Ecosia or Brave) | Suggestions while you type in the address bar | Off unless you turn them on | What you type, without cookies |
 | **Your search engine** | Searching from the address bar | When you search | Your query, as an ordinary page visit |
 | **Chrome Web Store** (`clients2.google.com` and Google's download servers) | Installing and updating Chrome extensions, and importing extensions from Chrome | When you install or import one; update checks every 5 hours only while store extensions are installed | Extension ids and versions, and the Chromium version |
 | **Spell-check dictionaries** (Google's servers, as in Chrome) | Spell checking | Windows and Linux, for your languages (macOS uses the system's) | Dictionary downloads |
-| **Pack indexes** (`raw.githubusercontent.com/3SENN/apex-packs`, and any index you add) | Browsing, installing and updating packs | When you open Browse or install a pack; a daily update check for packs installed from an index or with an update address | Plain downloads; a private organisation index also gets its token |
+| **Pack indexes** (`raw.githubusercontent.com/3SENN/atelier-packs`, and any index you add) | Browsing, installing and updating packs | When you open Browse or install a pack; a daily update check for packs installed from an index or with an update address | Plain downloads; a private organisation index also gets its token |
 | **Hosts an installed pack declares** | What the pack does, and its sign-ins | Only packs you install, only to the hosts their review showed you | Whatever the pack sends |
 | **Sites you visit or point at** | Pages, link previews, page attachments, saved web apps, favicons, connector icons | When you browse or use those features | Ordinary requests to that site |
 | **Apple or Microsoft speech services** | Dictation and meeting transcription | When you use them. macOS transcribes on the device when the language allows and downloads speech models from Apple; otherwise audio goes to Apple. Windows dictation can use Microsoft's online speech service | Audio |
@@ -47,18 +47,18 @@ remove everything.
 Extensions you install can contact whatever their permissions allow. Page translation on macOS uses Apple's on-device
 Translation framework; "Translate with your companion" sends the page text to your model provider instead.
 
-## What Apex never does
+## What Atelier never does
 
 - No analytics, usage statistics, telemetry or advertising identifiers.
 - No crash or problem uploads: crash dumps stay local, and **Report a problem** makes a zip on your computer and opens
   an email draft that you can read, change and send yourself.
-- No account, and no data sent to the Apex project.
+- No account, and no data sent to the Atelier project.
 - No user id or profile details added to model requests.
 
-## Servers Apex runs on your computer
+## Servers Atelier runs on your computer
 
 Some features listen for connections on your computer: the sign-in callback for connectors, the local servers packs can
-start (on `127.0.0.1`, or on your Wi-Fi with https when a pack asks and you allow it), and "Let Claude Code use Apex"
+start (on `127.0.0.1`, or on your Wi-Fi with https when a pack asks and you allow it), and "Let Claude Code use Atelier"
 (off by default). They accept connections; they don't send anything out.
 
 ## Questions

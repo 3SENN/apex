@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -37,10 +37,10 @@ export class Chrome {
     return JSON.parse(String(raw)) as T
   }
 
-  /** A service call made through window.apex.invoke, exactly as the UI makes it. Rejections keep main's message. */
+  /** A service call made through window.atelier.invoke, exactly as the UI makes it. Rejections keep main's message. */
   async invoke<T = unknown>(service: string, method: string, ...args: unknown[]): Promise<T> {
     const out = await this.js<{ ok: boolean; v?: T; e?: string }>(
-      `return window.apex.invoke(${JSON.stringify(service)}, ${JSON.stringify(method)}, ...${JSON.stringify(args)}).then((v) => ({ ok: true, v }), (e) => ({ ok: false, e: String((e && e.message) || e) }))`,
+      `return window.atelier.invoke(${JSON.stringify(service)}, ${JSON.stringify(method)}, ...${JSON.stringify(args)}).then((v) => ({ ok: true, v }), (e) => ({ ok: false, e: String((e && e.message) || e) }))`,
     )
     if (!out.ok) throw new Error((out.e ?? 'failed').replace(/^Error invoking remote method '[^']+': (Error: )?/, ''))
     return out.v as T

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,7 +10,7 @@ import type { CommandBarResult } from '@shared/overlay/address'
 import { flattenGroups, type UniversalFilter } from '@shared/omnibox'
 import { chatUrl, isBlankUrl } from '@shared/url'
 import { Lock, Search, Star, TriangleAlert } from 'lucide-react'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { useT } from '../i18n/useT'
 import { anchorFromElement, openSurface } from '../overlay/useSurface'
 import { openSiteInfo } from '../overlay/surfaces/sites/open'
@@ -37,7 +37,7 @@ interface AddressPillProps {
 }
 
 /** Text dropped on the page's ask field after Tab on an empty new tab (DS-110); NewTabPage listens. */
-export const FOCUS_ASK_EVENT = 'apex:focus-ask'
+export const FOCUS_ASK_EVENT = 'atelier:focus-ask'
 
 /** The mounted pill's ⌘D flow, for the bookmarks bar's "Add current page". */
 let currentPillBookmark: (() => void) | null = null
@@ -62,7 +62,7 @@ function barAnchor(el: HTMLElement): { kind: 'window'; rect: { x: number; y: num
 
 /**
  * The address pill, centred on the sheet: a flat neutral field. At rest it
- * shows the host (and the page title when there is a path) or an Apex
+ * shows the host (and the page title when there is a path) or an Atelier
  * breadcrumb. A click, Enter or ⌘L opens the command bar over it in the
  * interactive overlay, so the field turns solid in place and suggestions
  * grow down without hiding the page (SH-35, DS-23). It also carries the
@@ -82,7 +82,7 @@ export const AddressPill = forwardRef<AddressPillHandle, AddressPillProps>(funct
   const [, setTick] = useState(0)
   const url = tab?.url ?? ''
   const parts = pillParts(url, tab?.title ?? '', tab?.crumbs ?? null)
-  const address = parts.kind === 'apex' ? url : fullAddress(url)
+  const address = parts.kind === 'atelier' ? url : fullAddress(url)
   const companion = companions.list.find((c) => c.id === companions.activeId) ?? companions.list[0] ?? null
   const companionName = companion?.name ?? BRAND_NAME
   const web = parts.kind === 'web'
@@ -102,9 +102,9 @@ export const AddressPill = forwardRef<AddressPillHandle, AddressPillProps>(funct
   const ask = (text: string, blank: boolean): void => {
     const tab = latestTab.current
     if (!tab) return
-    void apex.agent.start(text, { companionId: companion?.id || undefined }).then(
+    void atelier.agent.start(text, { companionId: companion?.id || undefined }).then(
       (chatId) => {
-        if (blank) void apex.nav.go(tab.id, chatUrl(chatId))
+        if (blank) void atelier.nav.go(tab.id, chatUrl(chatId))
         else shell.openPanel(chatId)
       },
       (err: unknown) => toast.show({ message: errorText(err), tone: 'error' }),
@@ -135,7 +135,7 @@ export const AddressPill = forwardRef<AddressPillHandle, AddressPillProps>(funct
     if (!tab || !el) return
     const url = tab.url
     const parts = pillParts(url, tab.title, tab.crumbs ?? null)
-    const address = parts.kind === 'apex' ? url : fullAddress(url)
+    const address = parts.kind === 'atelier' ? url : fullAddress(url)
     const blank = isBlankUrl(url)
     const draft = submit === undefined ? await call('omnibox', 'draft', tab.id).catch(() => null) : null
     setEditing(true)
@@ -187,7 +187,7 @@ export const AddressPill = forwardRef<AddressPillHandle, AddressPillProps>(funct
 
   const go = (target: string): void => {
     if (!tab || !target.trim()) return
-    void apex.nav.go(tab.id, target)
+    void atelier.nav.go(tab.id, target)
   }
 
   // A dropped link opens, dropped text searches; both through the command bar's own rules.
@@ -222,7 +222,7 @@ export const AddressPill = forwardRef<AddressPillHandle, AddressPillProps>(funct
       if (pasted) void edit(pasted)
       else toast.show({ message: t('address.bar.empty') })
     } else if (id === 'edit') void edit()
-    else if (id === 'full-urls') void apex.settings.set({ showFullUrls: !showFullUrls })
+    else if (id === 'full-urls') void atelier.settings.set({ showFullUrls: !showFullUrls })
   }
 
   // Site info opens under the pill's site button.
@@ -266,7 +266,7 @@ export const AddressPill = forwardRef<AddressPillHandle, AddressPillProps>(funct
 
   let text: ReactElement
   if (parts.kind === 'blank') text = <span className="pill__placeholder">{t('address.pill.placeholder')}</span>
-  else if (parts.kind === 'apex') {
+  else if (parts.kind === 'atelier') {
     text = (
       <span className="pill__crumbs">
         {(parts.crumbs ?? []).map((crumb, i) => (
@@ -325,7 +325,7 @@ export const AddressPill = forwardRef<AddressPillHandle, AddressPillProps>(funct
       <button
         type="button"
         className="pill__text"
-        aria-label={parts.kind === 'blank' ? t('address.pill.placeholder') : `${t('address.pill.label')}: ${parts.kind === 'apex' ? (parts.crumbs ?? []).join(', ') : address}`}
+        aria-label={parts.kind === 'blank' ? t('address.pill.placeholder') : `${t('address.pill.label')}: ${parts.kind === 'atelier' ? (parts.crumbs ?? []).join(', ') : address}`}
         aria-haspopup="listbox"
         title={web ? address : undefined}
         onClick={() => void edit()}
@@ -335,7 +335,7 @@ export const AddressPill = forwardRef<AddressPillHandle, AddressPillProps>(funct
       {slow && tab && (
         <span className="pill__slow" role="status">
           {t('address.pill.stillLoading')}
-          <button type="button" className="pill__stop" onClick={() => void apex.nav.stop(tab.id)}>
+          <button type="button" className="pill__stop" onClick={() => void atelier.nav.stop(tab.id)}>
             {t('address.pill.stop')}
           </button>
         </span>

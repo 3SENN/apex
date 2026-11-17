@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -12,7 +12,7 @@ import type { AppSummary } from '@shared/apps'
 import type { PackItem } from '@shared/packs'
 import { builtAppRef, packAppRef, packPanelRef, parseAppRef, webAppRef, withMove, withShow, type AppItem, type SidebarAppPin, type SidebarAppShow } from '@shared/sidebarApps'
 import type { WebApp } from '@shared/webApps'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { companionsSnapshot } from '../components/companionData'
 import { t } from '../i18n/useT'
 import { toast } from '../ui'
@@ -71,7 +71,7 @@ export function useAppLibrary(options: { packs?: boolean } = {}): AppItem[] | nu
     void Promise.resolve(call('webApps', 'list')).then((apps) => set({ web: apps.map(webItem) }), () => set({ web: [] }))
     void Promise.resolve(call('apps', 'list')).then((apps) => set({ built: apps.map(builtItem) }), () => set({ built: [] }))
     loadPacks()
-    const off = apex.onAppEvent((event) => {
+    const off = atelier.onAppEvent((event) => {
       if (event.type === 'web-apps') set({ web: event.items.map(webItem) })
       else if (event.type === 'apps') set({ built: event.items.map(builtItem) })
       else if (event.type === 'packs') loadPacks()
@@ -105,7 +105,7 @@ export function openAppItem(item: Pick<AppItem, 'ref'>, options: { inTab?: boole
 }
 
 function savePins(apps: SidebarAppPin[]): void {
-  apex.settings.set({ sidebar: { apps } }).catch((err: unknown) => toast.show({ tone: 'error', message: t('platform.library.couldntSave', { reason: errorText(err) }) }))
+  atelier.settings.set({ sidebar: { apps } }).catch((err: unknown) => toast.show({ tone: 'error', message: t('platform.library.couldntSave', { reason: errorText(err) }) }))
 }
 
 /** Shows one app in the sidebar as a row or an icon, or takes it out. */

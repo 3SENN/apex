@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,7 +10,7 @@
 // StartChrome in chat/StartSurface.tsx; the new tab draws its own Lounge.)
 import type { ReactElement } from 'react'
 import { Coffee, Sofa } from 'lucide-react'
-import { apex, errorText } from '../api'
+import { atelier, errorText } from '../api'
 import { useSettingsView } from '../companion-card/useLoaded'
 import { useT } from '../i18n/useT'
 import { IconButton, cx, toast } from '../ui'
@@ -31,7 +31,7 @@ export function StartKeepAwake({ compact = false }: { compact?: boolean }): Reac
         icon={<Coffee fill={keepAwake ? 'currentColor' : 'none'} />}
         pressed={keepAwake}
         className="nt__round"
-        onClick={() => void apex.settings.set({ keepAwake: !keepAwake }).catch((err: unknown) => toast.show({ message: errorText(err), tone: 'error' }))}
+        onClick={() => void atelier.settings.set({ keepAwake: !keepAwake }).catch((err: unknown) => toast.show({ message: errorText(err), tone: 'error' }))}
       />
     </div>
   )

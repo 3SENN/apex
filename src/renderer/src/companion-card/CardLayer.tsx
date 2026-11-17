@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -16,7 +16,7 @@ import { PageStills, type PageShot } from './Backdrop'
 // dialog: focus moves in, Tab cycles within it, Esc and a click on the
 // washed page close it, and focus goes back to the opener.
 
-/** 'page' is an apex://companion tab: the same card drawn as the whole content area (DS-121). */
+/** 'page' is an atelier://companion tab: the same card drawn as the whole content area (DS-121). */
 export type CardMode = 'float' | 'column' | 'page'
 
 export interface Rect {

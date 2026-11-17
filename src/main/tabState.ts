@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -17,7 +17,7 @@ import { writeAtomic } from './settings'
 /** What order helpers need to know about a tab. */
 export interface OrderTab {
   id: string
-  /** Set when the tab shows apex://chat/<id>: the sidebar shows its chat row instead of a tab row. */
+  /** Set when the tab shows atelier://chat/<id>: the sidebar shows its chat row instead of a tab row. */
   chatId: string | null
 }
 
@@ -124,7 +124,7 @@ export interface PinnedTab {
 
 const pinnedSchema = z.object({ url: z.string().min(1).max(8192), title: z.string().max(1024) })
 
-/** Restorable addresses only: web pages and known Apex pages. */
+/** Restorable addresses only: web pages and known Atelier pages. */
 export function isRestorableUrl(url: string): boolean {
   if (isInternalUrl(url)) return parseInternalUrl(url) !== null
   return /^https?:\/\//i.test(url)

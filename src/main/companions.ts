@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -133,7 +133,7 @@ export class CompanionStore extends EventEmitter<{ changed: [CompanionsState] }>
     super()
     this.#path = join(dataDir, 'companions.json')
     this.#presets = options.presets ?? (() => [])
-    // A companions.json from a newer Apex is copied aside before anything here can rewrite it.
+    // A companions.json from a newer Atelier is copied aside before anything here can rewrite it.
     const raw = readVersioned(this.#path, VERSIONED_FILES.companions, (value) => value).value
     const ids = this.#presetIds()
     if (isObject(raw) && Array.isArray(raw.companions)) {
@@ -212,7 +212,7 @@ export class CompanionStore extends EventEmitter<{ changed: [CompanionsState] }>
     if (input.presetId && !preset) throw new Error('That preset is not available.')
     const ids = this.#presetIds()
     let persona = input.persona ?? preset?.id ?? 'custom'
-    // A persona this Apex doesn't ship (an imported file) has no personality text.
+    // A persona this Atelier doesn't ship (an imported file) has no personality text.
     if (ids.length > 0 && persona !== 'custom' && !ids.includes(persona)) persona = 'custom'
     const profile = sanitizeCompanion(
       { name: input.name ?? preset?.name ?? 'New companion', persona, look: input.look ?? preset?.look, dockIcon: false },
@@ -350,7 +350,7 @@ export class CompanionStore extends EventEmitter<{ changed: [CompanionsState] }>
   }
 }
 
-// ---- .apexcompanion files ----
+// ---- .ateliercompanion files ----
 
 export const scheduleSchema = z.union([
   z.discriminatedUnion('kind', [
@@ -393,7 +393,7 @@ const companionFileSchema = z.object({
   persona: z.string().max(64),
   look: lookSchema,
   instructions: z.string().max(COMPANION_INSTRUCTIONS_MAX * 2).default(''),
-  // A model or effort this Apex doesn't know falls back to the global default.
+  // A model or effort this Atelier doesn't know falls back to the global default.
   model: z.string().max(100).nullable().optional(),
   effort: z.string().max(16).nullable().optional(),
   note: z.string().max(500).optional(),
@@ -404,7 +404,7 @@ const companionFileSchema = z.object({
 
 export const COMPANION_FILE_MAX_BYTES = 8 * 1024 * 1024
 
-/** Parses and validates a .apexcompanion file's text, with errors written for the person importing it. */
+/** Parses and validates a .ateliercompanion file's text, with errors written for the person importing it. */
 export function parseCompanionFile(text: string): CompanionFile {
   if (Buffer.byteLength(text) > COMPANION_FILE_MAX_BYTES) throw new Error('This companion file is too large to import.')
   let raw: unknown

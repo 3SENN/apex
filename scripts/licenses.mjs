@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 // Writes src/renderer/public/licenses.json for Settings › About (ST-56): one
-// entry per package Apex ships ({name, version, license, text}), the native
+// entry per package Atelier ships ({name, version, license, text}), the native
 // helpers' third-party packages included (NATIVE_PACKAGES), and the companion
-// art, which Apex ships under its own licence (ART-LICENSE.md). With a
+// art, which Atelier ships under its own licence (ART-LICENSE.md). With a
 // package-lock.json the shipped set is the lock's
 // production tree, as installed on this machine; without one it walks
 // `dependencies` from package.json. Either way it adds the packages the
@@ -15,7 +15,7 @@
 //
 //   node scripts/licenses.mjs [--out <file>]   write the list
 //   node scripts/licenses.mjs --check          fail when the written list is
-//     stale, malformed, or carries a licence Apex can't ship (release.mjs)
+//     stale, malformed, or carries a licence Atelier can't ship (release.mjs)
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
@@ -35,7 +35,7 @@ const DOTNET_COPYRIGHT = 'Copyright (c) .NET Foundation and Contributors\n\nAll 
  * Third-party code the native helpers compile in (native/): not npm packages
  * of the app, so the lock doesn't list them. Kept here with their licence
  * text, so the list is the same on every machine; tests/release.test.ts checks
- * the versions against native/speech-win/ApexSpeech.csproj and
+ * the versions against native/speech-win/AtelierSpeech.csproj and
  * native/haptics/package.json. The Swift helpers use Apple's frameworks only.
  */
 export const NATIVE_PACKAGES = [
@@ -48,7 +48,7 @@ export const NATIVE_PACKAGES = [
   { name: '.NET Runtime', version: '8.0', license: 'MIT', text: mit(DOTNET_COPYRIGHT, 'The .NET runtime\'s third-party notices: https://github.com/dotnet/runtime/blob/main/THIRD-PARTY-NOTICES.TXT') },
 ]
 /**
- * Apex's own licences besides the MPL: the companion art (ART-LICENSE.md),
+ * Atelier's own licences besides the MPL: the companion art (ART-LICENSE.md),
  * listed with its text so About shows it next to the packages. None when the
  * checkout has no ART-LICENSE.md (a fork with art of its own).
  */
@@ -60,7 +60,7 @@ export function ownLicenses(root) {
     return []
   }
   const version = /^Version (\d+(?:\.\d+)*)\s*$/m.exec(text)?.[1] ?? ''
-  return [{ name: 'Apex Companion Art', version, license: 'LicenseRef-Apex-Companion-Art', text: text.slice(0, MAX_TEXT) }]
+  return [{ name: 'Atelier Companion Art', version, license: 'LicenseRef-Atelier-Companion-Art', text: text.slice(0, MAX_TEXT) }]
 }
 
 const LICENSE_FILE = /^(licen[cs]e|copying)([.-].*)?$/i
@@ -135,7 +135,7 @@ function walk(root, start, seen) {
 const entryFor = (pkg, dir) => ({ name: pkg.name, version: String(pkg.version ?? ''), license: licenseOf(pkg), text: licenseText(dir) })
 
 /**
- * The packages a packaged Apex ships, from package-lock.json (v2 or v3): every
+ * The packages a packaged Atelier ships, from package-lock.json (v2 or v3): every
  * entry that isn't dev-only, linked or extraneous, and (with `root`) is
  * installed, so optional packages for other platforms drop out. Once per name
  * and version, sorted by name.
@@ -159,7 +159,7 @@ const byNameVersion = (a, b) => a.name.localeCompare(b.name) || a.version.locale
  * explicit `roots`) the production tree comes from the lock; otherwise from
  * the roots (package.json's dependencies by default). `extra` packages are
  * walked from node_modules either way, and the `native` helpers' packages and
- * Apex's `own` licences (the companion art's) are added as they are.
+ * Atelier's `own` licences (the companion art's) are added as they are.
  */
 export function collectLicenses(root, { roots, extra = EXTRA_ROOTS, native = NATIVE_PACKAGES, own = ownLicenses(root) } = {}) {
   const seen = new Map()
@@ -206,7 +206,7 @@ const isEntry = (e) => !!e && typeof e === 'object' && typeof e.name === 'string
 
 /**
  * What stops a licence list from shipping (`errors`: a malformed entry, a
- * shipped package it leaves out, a licence Apex can't ship) and what only
+ * shipped package it leaves out, a licence Atelier can't ship) and what only
  * needs a look (`warnings`: no declared licence, or no licence text).
  */
 export function licenseListProblems(list, shipped) {
@@ -222,7 +222,7 @@ export function licenseListProblems(list, shipped) {
     const id = `${e.name}@${e.version}`
     listed.add(id)
     const verdict = licenseVerdict(e.license)
-    if (verdict === 'denied') errors.push(`${id} is ${e.license}, which Apex can't ship`)
+    if (verdict === 'denied') errors.push(`${id} is ${e.license}, which Atelier can't ship`)
     else if (verdict === 'unknown') warnings.push(`${id} declares no licence; check it by hand`)
     else if (!e.text) warnings.push(`${id} (${e.license}) ships no licence text`)
   }

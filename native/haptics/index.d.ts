@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Types for Apex's haptics addon loader (index.js).
+// Types for Atelier's haptics addon loader (index.js).
 
 /** The patterns AppKit's NSHapticFeedbackManager offers. */
 export type HapticPattern = 'alignment' | 'levelChange' | 'generic'
@@ -45,20 +45,20 @@ export interface LoadHapticsOptions {
   exists?: (file: string) => boolean
 }
 
-/** The native module itself, as build/apex_haptics.node exports it. */
+/** The native module itself, as build/atelier_haptics.node exports it. */
 export interface HapticsAddon {
   perform(pattern: HapticPatternInput): boolean
 }
 
 export declare const PATTERNS: readonly HapticPattern[]
-/** The binary's file name: apex_haptics.node. */
+/** The binary's file name: atelier_haptics.node. */
 export declare const BINARY: string
 
 /** Returns the canonical pattern name, or throws a TypeError. */
 export declare function normalisePattern(pattern: unknown): HapticPattern
 /**
- * <resourcesPath>/native/apex_haptics.node (resourcesPath defaults to
- * Electron's process.resourcesPath), then build/apex_haptics.node here.
+ * <resourcesPath>/native/atelier_haptics.node (resourcesPath defaults to
+ * Electron's process.resourcesPath), then build/atelier_haptics.node here.
  */
 export declare function defaultPaths(resourcesPath?: string): string[]
 export declare function createStub(reason: HapticsStubReason, error?: string): Haptics

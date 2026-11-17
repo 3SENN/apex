@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { useEffect, useRef, type ReactElement } from 'react'
 import type { ChatSort, SettingsPatch, SidebarOptions, TabSort } from '@shared/ipc'
 import { DESTINATIONS, type Destination } from '@shared/url'
 import { Clock, LayoutGrid, MessageCircle } from 'lucide-react'
-import { apex, errorText } from '../../api'
+import { atelier, errorText } from '../../api'
 import { CheckRow, SegmentedControl, toast, useLatest } from '../../ui'
 import { DESTINATION_INFO } from './Destinations'
 import { goWorkspace } from '../../workspace/open'
@@ -26,7 +26,7 @@ interface SidebarOptionsPanelProps {
 }
 
 function save(patch: SettingsPatch['sidebar']): void {
-  apex.settings.set({ sidebar: patch }).catch((err: unknown) => toast.show({ message: t('tabs.sidebarOptions.couldnTSave', { value: errorText(err) }), tone: 'error' }))
+  atelier.settings.set({ sidebar: patch }).catch((err: unknown) => toast.show({ message: t('tabs.sidebarOptions.couldnTSave', { value: errorText(err) }), tone: 'error' }))
 }
 
 export function SidebarOptionsPanel({ options, closing = false, onClose }: SidebarOptionsPanelProps): ReactElement {

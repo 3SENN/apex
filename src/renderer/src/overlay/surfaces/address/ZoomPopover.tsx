@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { useEffect, useState, type KeyboardEvent, type ReactElement } from 'react'
 import type { ZoomPopoverProps } from '@shared/overlay/address'
 import { Minus, Plus } from 'lucide-react'
-import { apex, call } from '../../../api'
+import { atelier, call } from '../../../api'
 import { useT } from '../../../i18n/useT'
 import type { SurfaceComponentProps } from '../../types'
 
@@ -24,7 +24,7 @@ export function ZoomPopover({ props, close }: SurfaceComponentProps<ZoomPopoverP
   // ⌘+ and ⌘- while it is open, or Ctrl+wheel, move the value here too.
   useEffect(
     () =>
-      apex.tabs.onChanged((snapshot) => {
+      atelier.tabs.onChanged((snapshot) => {
         const tab = snapshot.tabs.find((x) => x.id === props.tabId)
         if (tab) setPercent(tab.zoomPercent)
       }),

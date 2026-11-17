@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -13,7 +13,7 @@ import { onTabsChanged, tabsSnapshot } from './liveTabs'
 // hides them. So the card first takes a still of each website on show and
 // draws it where the page was, under the wash, which pales and blurs it.
 // Only the content area is washed; the sidebar and toolbar stay sharp.
-// Apex pages are drawn by the chrome itself and need no still.
+// Atelier pages are drawn by the chrome itself and need no still.
 
 /** How long the card waits for stills before it opens anyway. */
 const SNAPSHOT_WAIT_MS = 350

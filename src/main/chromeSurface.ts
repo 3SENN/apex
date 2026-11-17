@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -12,7 +12,7 @@ import type { Session } from 'electron'
 // (tabs set nodeIntegrationInSubFrames); about:blank subframes, where Electron
 // runs none, are filled from the frame that reaches them.
 
-export const CHROME_SURFACE_PRELOAD_ID = 'apex-chrome-surface'
+export const CHROME_SURFACE_PRELOAD_ID = 'atelier-chrome-surface'
 
 type PreloadSession = Pick<Session, 'getPreloadScripts' | 'registerPreloadScript'>
 

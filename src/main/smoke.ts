@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -47,7 +47,7 @@ export function isLocalSmokeHost(host: string): boolean {
   if (h === 'localhost' || h === '::1' || h === '0.0.0.0' || /^127\.\d+\.\d+\.\d+$/.test(h)) return true
   return /\.(test|invalid|localhost|example)$/.test(h)
 }
-if (process.env.APEX_SMOKE === '1' && typeof globalThis.fetch === 'function') {
+if (process.env.ATELIER_SMOKE === '1' && typeof globalThis.fetch === 'function') {
   const realFetch = globalThis.fetch
   globalThis.fetch = ((input: string | URL | Request, init?: RequestInit) => {
     const href = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url
@@ -67,7 +67,7 @@ if (process.env.APEX_SMOKE === '1' && typeof globalThis.fetch === 'function') {
 }
 
 const FIXTURE = `<!doctype html>
-<html><head><title>Apex smoke test</title></head>
+<html><head><title>Atelier smoke test</title></head>
 <body>
 <main>
   <h1>Smoke test</h1>
@@ -127,7 +127,7 @@ async function companionStats(ui: WebContents, timeoutMs: number): Promise<Compa
   const start = Date.now()
   let stats: CompanionStats | null = null
   while (Date.now() - start < timeoutMs) {
-    const raw: unknown = await ui.executeJavaScript('JSON.stringify(window.__apexCompanionStats ?? null)')
+    const raw: unknown = await ui.executeJavaScript('JSON.stringify(window.__atelierCompanionStats ?? null)')
     stats = typeof raw === 'string' ? (JSON.parse(raw) as CompanionStats | null) : null
     if (stats && (stats.ready > 0 || stats.errors.length > 0)) return stats
     await new Promise((r) => setTimeout(r, 200))
@@ -165,7 +165,7 @@ export async function runSmoke(deps: SmokeDeps): Promise<number> {
   const call = (name: string, input: unknown): Promise<ResultBlock[]> => agent.executor.execute(name, input, signal)
   // Each check gets a time limit, so one stuck check fails on its own instead
   // of stalling the whole run; results print as they land.
-  const limitMs = Number(process.env.APEX_SMOKE_CHECK_MS) || 90_000
+  const limitMs = Number(process.env.ATELIER_SMOKE_CHECK_MS) || 90_000
   // A long check (the screenshot tour) passes its own, larger limit.
   const check = async (name: string, fn: () => Promise<string>, ownLimitMs?: number): Promise<void> => {
     let timer: NodeJS.Timeout | undefined
@@ -177,8 +177,8 @@ export async function runSmoke(deps: SmokeDeps): Promise<number> {
       results.push({ name, ok: true, detail: await Promise.race([fn(), timeout]) })
     } catch (err) {
       results.push({ name, ok: false, detail: err instanceof Error ? err.message : String(err) })
-      // APEX_SMOKE_STACK=1 prints where a failing check threw, for chasing a flaky one.
-      if (process.env.APEX_SMOKE_STACK && err instanceof Error) console.log(err.stack)
+      // ATELIER_SMOKE_STACK=1 prints where a failing check threw, for chasing a flaky one.
+      if (process.env.ATELIER_SMOKE_STACK && err instanceof Error) console.log(err.stack)
     } finally {
       clearTimeout(timer)
     }
@@ -196,9 +196,9 @@ export async function runSmoke(deps: SmokeDeps): Promise<number> {
     throw new Error('expected an error, got success')
   }
 
-  // APEX_SMOKE_WINDOW=1024x700 runs in a window that size: a CI runner's screen is small (1024x768), and a check
+  // ATELIER_SMOKE_WINDOW=1024x700 runs in a window that size: a CI runner's screen is small (1024x768), and a check
   // that passes in a big window can fail there.
-  const forced = /^(\d+)x(\d+)$/.exec(process.env.APEX_SMOKE_WINDOW ?? '')
+  const forced = /^(\d+)x(\d+)$/.exec(process.env.ATELIER_SMOKE_WINDOW ?? '')
   const smokeWindow = BrowserWindow.fromWebContents(ui)
   if (forced) smokeWindow?.setContentSize(Number(forced[1]), Number(forced[2]))
   if (smokeWindow) {
@@ -385,16 +385,16 @@ export async function runSmoke(deps: SmokeDeps): Promise<number> {
       await new Promise((r) => setTimeout(r, 200))
       return `${left.width}px | ${right.width}px`
     })
-    await check('the agent cannot act on Apex pages', async () => {
-      tabs.navigate(first.id, 'apex://history')
+    await check('the agent cannot act on Atelier pages', async () => {
+      tabs.navigate(first.id, 'atelier://history')
       const text = textOf(await call('read_page', {}))
       assert(new RegExp(`${BRAND_NAME} page`).test(text), text)
-      // Navigating from an Apex page opens a new tab, so the page (often the chat itself) stays put.
+      // Navigating from an Atelier page opens a new tab, so the page (often the chat itself) stays put.
       const out = await call('navigate', { url: base })
       const state = out.find((b) => b.type === 'browser_state')
       const opened = state?.type === 'browser_state' ? state.state_changes?.find((c) => c.type === 'tab_opened') : undefined
       assert(opened?.type === 'tab_opened', 'navigate did not report a new tab')
-      assert(first.internalUrl !== null, 'navigate replaced the Apex page')
+      assert(first.internalUrl !== null, 'navigate replaced the Atelier page')
       await expectError(() => call('close_tab', { tab_id: first.id }), new RegExp(`${BRAND_NAME} page`))
       await call('close_tab', { tab_id: opened.tab_id })
       tabs.leaveInternal(first.id)
@@ -481,18 +481,18 @@ export async function runSmoke(deps: SmokeDeps): Promise<number> {
     })
     await check('the companion renders in the chrome without errors', async () => {
       const stats = await companionStats(ui, 20_000)
-      assert(stats, 'window.__apexCompanionStats was never set')
+      assert(stats, 'window.__atelierCompanionStats was never set')
       assert(stats.errors.length === 0, `companion errors: ${stats.errors.join('; ')}`)
       assert(stats.ready > 0, 'no companion drew a 3D frame')
       return `${stats.ready} ready, no errors`
     })
     await check('the look editor is the card’s ring: bubbles around the figure open parts, faces and colours', async () => {
       // The old Settings editor address opens the active companion's card with the ring.
-      tabs.openInternal('apex://settings/companion')
+      tabs.openInternal('atelier://settings/companion')
       const bubbles = await chrome.until<number>(`const n = document.querySelectorAll('.co-hero--looking .co-ring__bubble').length; return n > 0 && n`, 20_000, 'the ring of look bubbles')
       const card = tabs.active()
       const lookUrl = card ? tabs.info(card).url : ''
-      assert(card && /^apex:\/\/companion\/[^/]+\/general\/look$/.test(lookUrl), `the look editor opened at ${lookUrl}`)
+      assert(card && /^atelier:\/\/companion\/[^/]+\/general\/look$/.test(lookUrl), `the look editor opened at ${lookUrl}`)
       const open = async (index: number, ready: string, label: string): Promise<number> => {
         await chrome.js(`document.querySelectorAll('.co-ring__bubble')[${index}]?.click(); return true`)
         return chrome.until<number>(`const n = document.querySelectorAll(${JSON.stringify(ready)}).length; return n > 0 && n`, 8000, label)
@@ -509,7 +509,7 @@ export async function runSmoke(deps: SmokeDeps): Promise<number> {
       return `${bubbles} bubbles; ${palettes} colours, ${faces} eyes, ${hats} hats`
     })
     await check('the new-companion sheet shows every preset with a thumbnail', async () => {
-      tabs.openInternal('apex://settings/companions')
+      tabs.openInternal('atelier://settings/companions')
       await chrome.until(`return document.querySelector('.sp-page')`, 5000, 'Settings › Companions')
       await chrome.click(/^New companion$/)
       const presets = await chrome.invoke<CompanionPreset[]>('companion', 'presets')
@@ -539,7 +539,7 @@ export async function runSmoke(deps: SmokeDeps): Promise<number> {
     await runPresenceChecks({ chrome, tabs }, check)
 
     // Optional visual check: every core surface, as it looks on screen.
-    const shotDir = process.env.APEX_SMOKE_SHOTS
+    const shotDir = process.env.ATELIER_SMOKE_SHOTS
     if (shotDir) {
       mkdirSync(shotDir, { recursive: true })
       await check('screenshots of every core surface', async () => {
@@ -556,7 +556,7 @@ export async function runSmoke(deps: SmokeDeps): Promise<number> {
       fixtures.close()
     }
 
-    // ---- getting started (apex://first-week); finishes setup, so it runs last ----
+    // ---- getting started (atelier://first-week); finishes setup, so it runs last ----
     await runFirstWeekChecks({ chrome, tabs, host: deps.host, chats: deps.chats, dir: shotDir ?? null }, check)
   } catch (err) {
     results.push({ name: 'setup', ok: false, detail: err instanceof Error ? err.message : String(err) })

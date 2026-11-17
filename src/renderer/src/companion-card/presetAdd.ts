@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Adding a preset as a companion, shared by the preset detail sheet
-// and the preset gallery and profile (apex://presets[/<id>]). The new
+// and the preset gallery and profile (atelier://presets[/<id>]). The new
 // companion owns the preset's starter skills; starter routines arrive paused
 // for you to review. Also the profile's stat tiles.
 import { useCallback, useState } from 'react'
@@ -12,7 +12,7 @@ import type { Companion } from '@shared/companion'
 import type { PresetDetail } from '@shared/onboarding'
 import { t } from '@shared/i18n/core'
 import { chatUrl } from '@shared/url'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 
 export type PresetAddState = { kind: 'idle' } | { kind: 'preparing' } | { kind: 'added'; companion: Companion } | { kind: 'failed'; message: string }
 
@@ -48,7 +48,7 @@ export function usePresetAdd(onAdded?: (companion: Companion) => void): {
   )
   const startChat = useCallback(async (companion: Companion): Promise<boolean> => {
     try {
-      const chatId = await apex.agent.start(t('galleries.presets.greeting', { name: companion.name }), { companionId: companion.id })
+      const chatId = await atelier.agent.start(t('galleries.presets.greeting', { name: companion.name }), { companionId: companion.id })
       await call('pages', 'open', chatUrl(chatId))
       return true
     } catch (err) {

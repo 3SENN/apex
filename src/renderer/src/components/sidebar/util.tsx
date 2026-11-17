@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -42,7 +42,7 @@ export function agentColorVars(companion: Companion | null): CSSProperties {
   return cssVars({ '--agent-color': `light-dark(${accentTokens(color, 'light').accent}, ${accentTokens(color, 'dark').accent})` })
 }
 
-/** Icons for Apex pages, by apex://<page>. The welcome page, and any Apex page without its own icon, shows Apex's logo (Pip's head). */
+/** Icons for Atelier pages, by atelier://<page>. The welcome page, and any Atelier page without its own icon, shows Atelier's logo (Pip's head). */
 export const PAGE_ICONS: Record<string, LucideIcon> = {
   chats: MessagesSquare,
   chat: MessageSquare,
@@ -57,7 +57,7 @@ export const PAGE_ICONS: Record<string, LucideIcon> = {
   'first-week': ListChecks,
 }
 
-/** A tab's icon: a spinner while loading, the page icon (or Apex's logo) for Apex pages, else the site's favicon. */
+/** A tab's icon: a spinner while loading, the page icon (or Atelier's logo) for Atelier pages, else the site's favicon. */
 export function TabIcon({ tab, size = 16 }: { tab: TabInfo; size?: number }): ReactElement {
   const [broken, setBroken] = useState<string | null>(null)
   if (tab.loading && !parseInternalUrl(tab.url)) return <Spinner size={size - 2} />

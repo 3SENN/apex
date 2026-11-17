@@ -1,15 +1,15 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // chrome.declarativeContent: an extension's page rules. Rules are
-// kept per extension across restarts, as Chrome keeps them. Apex evaluates
+// kept per extension across restarts, as Chrome keeps them. Atelier evaluates
 // the page-URL part of each PageStateMatcher; a rule whose conditions match
 // and whose actions include ShowAction (ShowPageAction is its older name)
 // enables the toolbar action on that tab even when the extension disabled it
 // by default, which is what Chrome does for Manifest V3. CSS conditions need
-// the page's DOM, which Apex doesn't watch, so a condition with css never
+// the page's DOM, which Atelier doesn't watch, so a condition with css never
 // matches; SetIcon and RequestContentScript are kept and reported by
 // getRules but change nothing.
 
@@ -119,7 +119,7 @@ function regexTest(source: string, value: string): boolean {
 
 const isType = (o: Record<string, unknown>, type: string): boolean => o.instanceType === `declarativeContent.${type}`
 
-/** Whether a PageStateMatcher holds for a page Apex can judge by its URL. */
+/** Whether a PageStateMatcher holds for a page Atelier can judge by its URL. */
 export function matcherMatches(condition: Record<string, unknown>, url: string): boolean {
   if (!isType(condition, 'PageStateMatcher')) return false
   if (Array.isArray(condition.css) && condition.css.length > 0) return false

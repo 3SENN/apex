@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import type { Companion } from '@shared/services'
 import type { AgentControlState } from '@shared/services/chat'
 import type { LogItem } from '../agentLog'
-import { apex, call, errorText, useAppEvent } from '../api'
+import { atelier, call, errorText, useAppEvent } from '../api'
 import { t } from '../i18n/useT'
 import { Button, IconButton, cx, toast, usePresenceList } from '../ui'
 import { CompanionAvatar } from './CompanionAvatar'
@@ -102,7 +102,7 @@ export function RequestTray({ chatId, items, companion, name, driving, handoffs 
 
   const allowAll = (): void => {
     driving.claim()
-    for (const id of approvals) void apex.agent.approve(chatId, id, true)
+    for (const id of approvals) void atelier.agent.approve(chatId, id, true)
   }
 
   return (
@@ -159,7 +159,7 @@ function TrayCard({ entry, chatId, companion, name, driving, mirror, onDismiss }
   const item = entry.data as Approval
   const answer = (allowed: boolean): void => {
     driving.claim()
-    void apex.agent.approve(chatId, item.id, allowed)
+    void atelier.agent.approve(chatId, item.id, allowed)
   }
   return (
     <>
@@ -197,7 +197,7 @@ function HandoffCard({ handoff, companion, name, driving, disabled, onDismiss }:
       </div>
       <div className="chat-request__actions">
         <Button size="sm" variant="ghost" disabled={disabled} onClick={onDismiss}>{t('chat.tray.dismiss')}</Button>
-        <Button size="sm" variant="ghost" onClick={() => void apex.tabs.activate(handoff.tabId)}>{t('chat.tray.handoff.show')}</Button>
+        <Button size="sm" variant="ghost" onClick={() => void atelier.tabs.activate(handoff.tabId)}>{t('chat.tray.handoff.show')}</Button>
         <Button size="sm" variant="primary" className="chat-co-button" disabled={disabled} onClick={() => void finish()}>{t(challenge ? 'chat.tray.handoff.done' : 'chat.tray.handoff.handBack')}</Button>
       </div>
     </>

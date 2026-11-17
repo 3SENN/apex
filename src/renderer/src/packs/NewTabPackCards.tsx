@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,7 +10,7 @@
 import { useEffect, useState, type ReactElement } from 'react'
 import { Package } from 'lucide-react'
 import type { PackCardView } from '@shared/packs'
-import { apex, call } from '../api'
+import { atelier, call } from '../api'
 import { useT } from '../i18n/useT'
 import { cx, toast } from '../ui'
 import './packs.css'
@@ -27,7 +27,7 @@ export function NewTabPackCards(): ReactElement | null {
       )
     }
     load()
-    const off = apex.onAppEvent((event) => {
+    const off = atelier.onAppEvent((event) => {
       if (event.type === 'packs') load()
     })
     return () => {

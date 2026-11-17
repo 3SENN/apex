@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { useEffect, useMemo, useState, type CSSProperties, type ReactElement, type ReactNode } from 'react'
 import { Check, Copy } from 'lucide-react'
-import { apex, call } from '../api'
+import { atelier, call } from '../api'
 import { t } from '../i18n/useT'
 import { copyText } from './actions'
 import { cx, toast } from '../ui'
@@ -35,16 +35,16 @@ export function openLink(href: string, e: { metaKey: boolean; ctrlKey: boolean; 
   }
   const web = /^https?:/i.test(href)
   if (e.shiftKey && web) {
-    void call('peek', 'open', href).catch(() => void apex.tabs.create(href).catch(() => undefined))
+    void call('peek', 'open', href).catch(() => void atelier.tabs.create(href).catch(() => undefined))
     return
   }
   if (e.metaKey || e.ctrlKey || !web) {
-    void apex.tabs.create(href, e.metaKey || e.ctrlKey ? { background: true } : undefined).catch(() => undefined)
+    void atelier.tabs.create(href, e.metaKey || e.ctrlKey ? { background: true } : undefined).catch(() => undefined)
     return
   }
   void call('tabs', 'revealUrl', href).then(
-    (shown) => shown || void apex.tabs.create(href).catch(() => undefined),
-    () => void apex.tabs.create(href).catch(() => undefined),
+    (shown) => shown || void atelier.tabs.create(href).catch(() => undefined),
+    () => void atelier.tabs.create(href).catch(() => undefined),
   )
 }
 
@@ -214,7 +214,7 @@ function renderInline(nodes: readonly Inline[], ctx: Ctx): ReactNode[] {
               if (e.button !== 1) return
               e.preventDefault()
               if (tabLink) openLink(node.href, e)
-              else void apex.tabs.create(node.href, { background: true }).catch(() => undefined)
+              else void atelier.tabs.create(node.href, { background: true }).catch(() => undefined)
             }}
           >
             {tabLink && <AppWindow className="md-tab-link__icon" size={13} aria-hidden="true" />}

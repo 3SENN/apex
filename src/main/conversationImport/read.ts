@@ -1,16 +1,16 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Reading picked export files (ON-10): a conversations.json, an Apex .md
+// Reading picked export files (ON-10): a conversations.json, an Atelier .md
 // export, or a .zip holding either (ChatGPT and Claude both ship zips), read
 // with fflate. Oversized files and zip entries are refused.
 import { readFileSync, statSync } from 'node:fs'
 import { basename, extname } from 'node:path'
 import { unzipSync, strFromU8 } from 'fflate'
 import type { ConversationSource } from '@shared/onboarding'
-import { parseApexExport, parseConversationsJson, type ParsedConversation } from './parsers'
+import { parseAtelierExport, parseConversationsJson, type ParsedConversation } from './parsers'
 
 /** A picked file larger than this is refused. */
 export const IMPORT_FILE_MAX = 512 * 1024 * 1024
@@ -19,13 +19,13 @@ export const IMPORT_ENTRY_MAX = 256 * 1024 * 1024
 
 export interface ReadResult {
   conversations: ParsedConversation[]
-  /** Files or entries that held nothing Apex can import. */
+  /** Files or entries that held nothing Atelier can import. */
   unreadable: string[]
 }
 
 function fromText(name: string, text: string, into: ReadResult): void {
   if (/\.md$/i.test(name)) {
-    const parsed = parseApexExport(text)
+    const parsed = parseAtelierExport(text)
     if (parsed) into.conversations.push(parsed)
     else into.unreadable.push(name)
     return
@@ -42,7 +42,7 @@ function fromText(name: string, text: string, into: ReadResult): void {
   into.conversations.push(...conversations)
 }
 
-/** The conversations in a zip's bytes: every conversations.json and Apex .md inside it. */
+/** The conversations in a zip's bytes: every conversations.json and Atelier .md inside it. */
 export function readZip(name: string, bytes: Uint8Array, into: ReadResult = { conversations: [], unreadable: [] }): ReadResult {
   let entries: Record<string, Uint8Array>
   try {
@@ -93,6 +93,6 @@ export function readExportFiles(paths: readonly string[]): ReadResult {
 }
 
 export function sourcesOf(conversations: readonly ParsedConversation[]): ConversationSource[] {
-  const order: ConversationSource[] = ['chatgpt', 'claude', 'apex']
+  const order: ConversationSource[] = ['chatgpt', 'claude', 'atelier']
   return order.filter((s) => conversations.some((c) => c.source === s))
 }

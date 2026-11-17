@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -15,10 +15,10 @@ import type { CardContent } from './hoverCard'
 
 // What each hover card shows (SH-28, SH-07), built when the card opens.
 
-/** The host a card shows: the site without www, the Apex page's name, or New Tab. */
+/** The host a card shows: the site without www, the Atelier page's name, or New Tab. */
 export function cardHost(url: string): string {
   if (isBlankUrl(url)) return t('tabs.card.newTab')
-  if (isInternalUrl(url)) return t('tabs.sidebarCardContent.apex', { title: internalTitle(url).title })
+  if (isInternalUrl(url)) return t('tabs.sidebarCardContent.atelier', { title: internalTitle(url).title })
   try {
     return new URL(url).hostname.replace(/^www\./, '')
   } catch {

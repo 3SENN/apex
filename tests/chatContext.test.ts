@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -15,7 +15,7 @@ import { ContextRegistry, type ContextDeps } from '../src/main/intake/context'
 // page the chat's agent controls.
 
 function setup(over: Partial<ContextDeps> = {}) {
-  const dir = mkdtempSync(join(tmpdir(), 'apex-context-'))
+  const dir = mkdtempSync(join(tmpdir(), 'atelier-context-'))
   const emitted: { chatId: string; pages: ChatContextPage[] }[] = []
   const calls: string[] = []
   let now = 1000

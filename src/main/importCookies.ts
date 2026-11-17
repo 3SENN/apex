@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,7 +14,7 @@ import { mainT } from './i18n/mainT'
 
 // Cookie import (ST-46 opt-in): copy a Chromium profile's Cookies database,
 // decrypt the macOS v10 values with the browser's Safe Storage key from the
-// Keychain, and hand plaintext session cookies to the chosen Apex profile's
+// Keychain, and hand plaintext session cookies to the chosen Atelier profile's
 // session. Values and the key live only in memory and are zeroed after use;
 // nothing here ever logs a cookie value or the key. macOS only — other
 // platforms encrypt cookies differently and are never offered this type.
@@ -228,7 +228,7 @@ export function cookiesFilePath(profileDir: string): string | null {
 
 /** Copies a locked SQLite file (and its sidecars) to a temp dir, reads it, then deletes the copy. */
 function withCookieCopy<T>(file: string, read: (copy: string) => T): T {
-  const dir = mkdtempSync(join(tmpdir(), 'apex-cookies-'))
+  const dir = mkdtempSync(join(tmpdir(), 'atelier-cookies-'))
   const copy = join(dir, 'Cookies')
   try {
     copyFileSync(file, copy)

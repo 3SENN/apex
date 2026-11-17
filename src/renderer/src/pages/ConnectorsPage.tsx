@@ -1,17 +1,17 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex://connectors[/<id>] (SK-13, SK-14): the connectors you added,
-// your own servers and Apex's curated directory, with one search, status and
+// atelier://connectors[/<id>] (SK-13, SK-14): the connectors you added,
+// your own servers and Atelier's curated directory, with one search, status and
 // category filters, and a confirmation banner for ?connect=<id> links. An id
 // opens that connector's detail.
 import { useEffect, useMemo, useState, type ReactElement } from 'react'
 import { ChevronRight, Plug, Plus, SearchX } from 'lucide-react'
 import { CONNECTOR_CATEGORIES, connectFromOf, connectorDetailUrl, connectRequestOf, type ConnectorCategory, type ConnectorV2, type DirectoryEntry } from '@shared/connectors'
 import type { Connector } from '@shared/services'
-import { apex, call } from '../api'
+import { atelier, call } from '../api'
 import { ConnectDialog } from '../connectors/ConnectFlow'
 import { ConnectorDetail, healthDot, healthText } from '../connectors/ConnectorDetail'
 import { ConnectorLogo } from '../connectors/ConnectorLogo'
@@ -28,7 +28,7 @@ import { Button, EmptyState, StatusDot, showMenu, useToast } from '../ui'
 
 export interface ConnectorsPageProps {
   tabId: string
-  /** apex://connectors/<id> opens that connector's detail. */
+  /** atelier://connectors/<id> opens that connector's detail. */
   itemId?: string | null
   /** The page's address, for ?connect=<directoryId>. */
   url?: string
@@ -58,7 +58,7 @@ export function ConnectorsPage({ tabId, itemId = null, url = '' }: ConnectorsPag
   const afterConnect = (c: ConnectorV2): void => {
     setConnecting(null)
     toast.show({ tone: 'success', message: t('connectors.connect.done', { name: c.displayName }) })
-    void apex.nav.go(tabId, connectorDetailUrl(c.id))
+    void atelier.nav.go(tabId, connectorDetailUrl(c.id))
   }
 
   const addServer = async (el: HTMLElement | null, mode?: 'remote' | 'local' | 'json'): Promise<void> => {
@@ -68,7 +68,7 @@ export function ConnectorsPage({ tabId, itemId = null, url = '' }: ConnectorsPag
     toast.show({ tone: 'success', message: result.saved.length === 1 ? t('connectors.add.added', { name: first.name }) : t('connectors.add.imported', { count: result.saved.length }) })
     // Remote servers connect and list their tools now; local ones wait for approval of their command.
     for (const saved of result.saved) if (!saved.local) void call('connectors', 'check', saved.id).catch(() => undefined)
-    void apex.nav.go(tabId, connectorDetailUrl(first.id))
+    void atelier.nav.go(tabId, connectorDetailUrl(first.id))
     // One local server you just typed in: show its exact command now. Imported ones wait on their detail page.
     if (result.saved.length === 1 && first.local) {
       const saved = (await call('connectors', 'list')).find((c: Connector) => c.id === first.id)
@@ -90,7 +90,7 @@ export function ConnectorsPage({ tabId, itemId = null, url = '' }: ConnectorsPag
           icon={<Plug />}
           title={t('connectors.detail.gone')}
           action={
-            <Button variant="secondary" onClick={() => void apex.nav.go(tabId, 'apex://connectors')}>
+            <Button variant="secondary" onClick={() => void atelier.nav.go(tabId, 'atelier://connectors')}>
               {t('connectors.page.back')}
             </Button>
           }
@@ -148,7 +148,7 @@ function Directory({ tabId, url, list, error, onRetry, entries, onConnect, onAdd
   const bannerEntry = banner ? entries.find((e) => e.id === banner) : undefined
   const dismissBanner = (): void => {
     setBanner(null)
-    if (connectRequestOf(url)) void apex.nav.go(tabId, 'apex://connectors')
+    if (connectRequestOf(url)) void atelier.nav.go(tabId, 'atelier://connectors')
   }
 
   const groups = useMemo(() => (list ? directoryGroups(list, entries, filter) : []), [list, entries, filter])
@@ -268,7 +268,7 @@ function Directory({ tabId, url, list, error, onRetry, entries, onConnect, onAdd
                   <TileGrid label={title}>
                     {rows.shown.map((c) => (
                       <div role="listitem" key={c.id}>
-                        <ConnectorTile connector={c} entries={entries} onOpen={() => void apex.nav.go(tabId, connectorDetailUrl(c.id))} />
+                        <ConnectorTile connector={c} entries={entries} onOpen={() => void atelier.nav.go(tabId, connectorDetailUrl(c.id))} />
                       </div>
                     ))}
                   </TileGrid>

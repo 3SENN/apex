@@ -1,15 +1,15 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Tidy memory (ST-48, CO-09): an opt-in nightly pass, off by
-// default. Once a night after `afterHour` (3 by default) while Apex is open,
+// default. Once a night after `afterHour` (3 by default) while Atelier is open,
 // or at the next start when a night was missed, each companion with new
 // chats since its last pass gets one background chat that reads those chats
 // and its notes and rewrites the notes. Every note is kept as a version
 // first. A pass is skipped when no engine is ready, and the rest of the
-// night is skipped after a provider rate limit or quota error; Apex has no
+// night is skipped after a provider rate limit or quota error; Atelier has no
 // quota of its own. With the decision model on for memory (DC-17), new chats
 // it is sure hold nothing lasting are left out, and a night where that is
 // every chat records a skipped pass without a background chat. State lives

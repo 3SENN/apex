@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -13,7 +13,7 @@ import type { ApplePasswordsEvent, ApplePasswordsServices } from './applePasswor
 
 export interface ExtensionPermission {
   id: string
-  /** Plain words ("Read and change your data on all websites"), in Apex's own phrasing. */
+  /** Plain words ("Read and change your data on all websites"), in Atelier's own phrasing. */
   label: string
 }
 
@@ -36,7 +36,7 @@ export interface ExtensionInfo {
   hasPopup: boolean
   badge: { text: string; color: string } | null
   storeUrl: string | null
-  /** Manifest commands; `clash` names the Apex shortcut that kept the key. */
+  /** Manifest commands; `clash` names the Atelier shortcut that kept the key. */
   commands: { name: string; shortcut: string | null; clash: string | null }[]
   /** Its popup is open: an unpinned extension shows a temporary toolbar button meanwhile (SH-65). */
   popupOpen: boolean
@@ -89,7 +89,7 @@ export type ExtensionsEvent =
 
 /** Chrome's 32-character a–p extension ids. */
 export const EXTENSION_ID = /^[a-p]{32}$/
-export const EXTENSIONS_SETTINGS_URL = 'apex://settings/extensions'
+export const EXTENSIONS_SETTINGS_URL = 'atelier://settings/extensions'
 export const WEB_STORE_URL = 'https://chromewebstore.google.com/'
 
 /** Exact Web Store origin check: a prefix match would also trust chromewebstore.google.com.evil.test. */
@@ -226,7 +226,7 @@ export function grantedOptional(ext: Pick<ExtensionInfo, 'optional'>): string[] 
   return ext.optional.filter((p) => p.granted).map((p) => p.id)
 }
 
-/** True when any manifest command lost its key to an Apex shortcut. */
+/** True when any manifest command lost its key to an Atelier shortcut. */
 export function hasClash(ext: Pick<ExtensionInfo, 'commands'>): boolean {
   return ext.commands.some((c) => c.clash !== null)
 }

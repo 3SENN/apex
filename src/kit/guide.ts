@@ -1,17 +1,17 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex-kit/guide.js (docs/apps.md › The cast): the person's companion in a
+// atelier-kit/guide.js (docs/apps.md › The cast): the person's companion in a
 // corner of the app's own page, with a speech bubble, the way the welcome
-// flow has one beside each step. The app decides what it says; Apex's
+// flow has one beside each step. The app decides what it says; Atelier's
 // runtime draws who says it. The app needs a cast in its manifest.
 import * as THREE from 'three'
 import type { CompanionLook, CompanionMood } from '@shared/companion'
 import { character, type KitCharacter } from './character'
 
-interface ApexCast {
+interface AtelierCast {
   cast: { members(): Promise<Array<{ ref: string; name: string; look: CompanionLook }>> }
 }
 
@@ -29,15 +29,15 @@ export interface Guide {
 
 /** Puts the companion in a corner of the page. Rejects when the app has no cast. */
 export async function guide(options: { corner?: 'bottom-right' | 'bottom-left'; size?: number } = {}): Promise<Guide> {
-  const apex = (globalThis as unknown as { apex?: ApexCast }).apex
-  if (!apex) throw new Error('apex-kit/guide.js runs in an app page, where window.apex is available.')
-  const [me] = await apex.cast.members()
+  const atelier = (globalThis as unknown as { atelier?: AtelierCast }).atelier
+  if (!atelier) throw new Error('atelier-kit/guide.js runs in an app page, where window.atelier is available.')
+  const [me] = await atelier.cast.members()
   if (!me) throw new Error('No companion is in this app’s cast. Add "cast" to the app in its manifest.')
   const size = Math.max(96, Math.min(320, options.size ?? 168))
   const left = options.corner === 'bottom-left'
 
   const box = document.createElement('div')
-  box.setAttribute('data-apex-guide', '')
+  box.setAttribute('data-atelier-guide', '')
   Object.assign(box.style, { position: 'fixed', bottom: '12px', [left ? 'left' : 'right']: '12px', width: `${size}px`, zIndex: '2147483000', pointerEvents: 'none', display: 'grid', justifyItems: left ? 'start' : 'end' })
   const bubble = document.createElement('div')
   bubble.setAttribute('role', 'status')

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -124,7 +124,7 @@ export function writeSessionFile(path: string, session: SessionFile): void {
  * by the time quitting saves, that window is gone from what the windows
  * serialize. With `keep`, a session that has windows stays over one that has
  * none: the last window's tabs come back on the next start, as quitting
- * leaves them. (macOS doesn't keep: closing its last window leaves Apex in the
+ * leaves them. (macOS doesn't keep: closing its last window leaves Atelier in the
  * Dock, and a quit after that starts afresh.)
  */
 export function keepingLastWindows(collect: () => SessionFile, keep: boolean): () => SessionFile {

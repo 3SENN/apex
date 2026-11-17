@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,7 +11,7 @@ import type { Bookmark, DownloadInfo, Routine } from '@shared/services'
 import { DESTINATIONS, parseInternalUrl, type Destination } from '@shared/url'
 import { ArrowDown, ArrowUp, LayoutList, Search } from 'lucide-react'
 import { openUniversalSearch } from '../AddressPill'
-import { apex, call, errorText } from '../../api'
+import { atelier, call, errorText } from '../../api'
 import { IconButton, Seam, cx, showContextMenu, toast, useFlip, useLayerPresence, useReducedMotion, MOTION } from '../../ui'
 import { useCompanions, useShell } from '../shellContext'
 import { ChatsSection, startNewChatPage } from './ChatsSection'
@@ -227,7 +227,7 @@ export function Sidebar(props: SidebarProps): ReactElement {
   const closeChats = useCallback(
     (ids: string[]) => {
       for (const id of ids) {
-        for (const tabId of chatTabs(snapshot, id)) void apex.tabs.close(tabId)
+        for (const tabId of chatTabs(snapshot, id)) void atelier.tabs.close(tabId)
         openChats.close(id, chatById.get(id)?.lastActiveAt ?? 0)
       }
     },
@@ -412,13 +412,13 @@ export function Sidebar(props: SidebarProps): ReactElement {
                   manual={options.chatSort === 'manual'}
                   filtering={filtering}
                   focusId={focusId}
-                  onToggleCollapsed={() => void apex.settings.set({ sidebar: { chatsCollapsed: !options.chatsCollapsed } })}
+                  onToggleCollapsed={() => void atelier.settings.set({ sidebar: { chatsCollapsed: !options.chatsCollapsed } })}
                   onNewChat={() => void startNewChatPage(snapshot, activeCompanionId)}
                   onSearch={() => openUniversalSearch('chats')}
                   onClose={closeChats}
                   onClear={clearChats}
                   onReorder={reorderChat}
-                  onRows={(chatRows) => void apex.settings.set({ sidebar: { chatRows } })}
+                  onRows={(chatRows) => void atelier.settings.set({ sidebar: { chatRows } })}
                 />
               )}
               <TabsSection

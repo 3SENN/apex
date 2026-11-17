@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -99,7 +99,7 @@ export function ConnectConnectorCard({ item, chatId }: LogCardProps<'connector-n
         <div className="cx-needed__done">
           <p className="cx-muted">{t('connectors.needed.noEntry', { service: item.service })}</p>
           <span className="cx-row">
-            <Button variant="secondary" size="sm" icon={<Plug />} onClick={() => void call('pages', 'open', 'apex://connectors')}>
+            <Button variant="secondary" size="sm" icon={<Plug />} onClick={() => void call('pages', 'open', 'atelier://connectors')}>
               {t('connectors.needed.openPage')}
             </Button>
             <Button variant="primary" size="sm" icon={<Plus />} onClick={(e) => void addCustom(e.currentTarget)}>

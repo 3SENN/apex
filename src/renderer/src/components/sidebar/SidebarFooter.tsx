@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -71,7 +71,7 @@ export function SidebarFooter({ deps }: { deps: Omit<ShellMenuDeps, 'shell'> }):
       </button>
       {/* Only the API-key engine needs a key; another engine signs in on its own. */}
       {!settings.hasApiKey && !engineHasOwnAccount(settings.engine) && (
-        <button type="button" className="footer-capsule" onClick={() => void call('pages', 'open', 'apex://settings/model')} title={t('tabs.sidebarFooter.yourCompanionNeedsAn')}>
+        <button type="button" className="footer-capsule" onClick={() => void call('pages', 'open', 'atelier://settings/model')} title={t('tabs.sidebarFooter.yourCompanionNeedsAn')}>
           <KeyRound size={12} aria-hidden />
           {t('tabs.sidebarFooter.addApiKey')}
         </button>

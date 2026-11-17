@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The Worlds app's words in the person's language (Apex passes its language
+// The Worlds app's words in the person's language (Atelier passes its language
 // to every page as navigator.language). The English text is the key, so the
 // code stays readable; a word missing here shows in English.
 const NL = {
@@ -121,7 +121,7 @@ const NL = {
 
 const TABLES = { nl: NL }
 
-/** The person's language, as Apex set it ('en' when Apex has no words for it here). */
+/** The person's language, as Atelier set it ('en' when Atelier has no words for it here). */
 export const lang = (() => {
   const code = String(navigator.language || 'en').toLowerCase().split('-')[0]
   return code in TABLES ? code : 'en'

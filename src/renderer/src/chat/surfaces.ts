@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { useCallback, useSyncExternalStore } from 'react'
 import { chatUrl } from '@shared/url'
 import { t } from '@shared/i18n/core'
-import { apex, call } from '../api'
+import { atelier, call } from '../api'
 import { tabsNow, whenTabs } from './hooks'
 import { createDraftSync } from './logic/drafts'
 import { PAGE_SHARE, clampPageShare, heldChatOf, holdIn, parseHeld, planExpand, pruneHeld, releaseTab, serializeHeld, type HeldChats } from './logic/inTab' // DS-65
@@ -100,8 +100,8 @@ export function loadDraft(key: string): Promise<string> {
 // themselves. Collapsing does the reverse: the tab shows only its page again,
 // with the chat back in the panel.
 
-const HELD_KEY = 'apex.chatInTab.held'
-const SHARE_KEY = 'apex.chatInTab.pageShare'
+const HELD_KEY = 'atelier.chatInTab.held'
+const SHARE_KEY = 'atelier.chatInTab.pageShare'
 
 function readStored(storage: () => Storage, key: string): string | null {
   try {
@@ -184,7 +184,7 @@ export async function expandToPage(chatId: string): Promise<string | null> {
   }
   // The new tab has no page to keep: it becomes the chat page itself.
   if (plan.kind === 'navigate') {
-    await apex.nav.go(plan.tabId, chatUrl(chatId))
+    await atelier.nav.go(plan.tabId, chatUrl(chatId))
     return plan.tabId
   }
   await call('pages', 'open', chatUrl(chatId))
@@ -195,7 +195,7 @@ export async function expandToPage(chatId: string): Promise<string | null> {
 export async function collapseToPanel(chatId: string, tabId: string, openPanel: (chatId: string) => void): Promise<void> {
   if (heldChat(tabId) === chatId) {
     releaseChatInTab(tabId)
-    if (tabsNow().activeId !== tabId) await apex.tabs.activate(tabId)
+    if (tabsNow().activeId !== tabId) await atelier.tabs.activate(tabId)
     openPanel(chatId)
     return
   }
@@ -203,9 +203,9 @@ export async function collapseToPanel(chatId: string, tabId: string, openPanel: 
   const split = snapshot.split
   const partner = split && (split.primaryId === tabId ? split.secondaryId : split.secondaryId === tabId ? split.primaryId : null)
   if (split && partner) await call('split', 'close').catch(() => undefined)
-  if (partner && snapshot.tabs.some((t) => t.id === partner)) await apex.tabs.activate(partner)
+  if (partner && snapshot.tabs.some((t) => t.id === partner)) await atelier.tabs.activate(partner)
   openPanel(chatId)
   // CH-30: the panel shows the chat before its tab closes, so main doesn't treat a private chat as ending.
   await call('chats', 'setViewing', 'panel', chatId).catch(() => undefined)
-  await apex.tabs.close(tabId)
+  await atelier.tabs.close(tabId)
 }

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,7 +11,7 @@ import type { ComposerHandle } from '../Composer'
 import { draftAttachments } from '../attachments/drafts'
 import { carriesFiles, dragDepth } from '../logic/drop'
 import { chatUrl } from '@shared/url'
-import { apex, call, errorText } from '../../api'
+import { atelier, call, errorText } from '../../api'
 import { toast } from '../../ui'
 import { setDraftText } from '../surfaces'
 import { pasteAction } from '../logic/paste'
@@ -162,7 +162,7 @@ export function useStartIntake(input: { tabId: string; companionId: string | nul
       const draft = await call('chats', 'create', { companionId })
       if (text.trim()) setDraftText(draft.id, text)
       onHandoff?.()
-      await apex.nav.go(tabId, chatUrl(draft.id))
+      await atelier.nav.go(tabId, chatUrl(draft.id))
       await attach(draft.id)
     } catch (err) {
       toast.show({ message: errorText(err), tone: 'error' })

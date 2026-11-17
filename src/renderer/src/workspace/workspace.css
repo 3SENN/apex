@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 /* The Workspace hub, its sections, version history, folder access and
-   the Space row. Colours come from Apex's tokens; the project palette is
+   the Space row. Colours come from Atelier's tokens; the project palette is
    defined here for light and dark. No entrance motion on the hub;
    the few transitions honour reduced motion. */
 
@@ -16,7 +16,7 @@
   --ws-hit-bg: color-mix(in srgb, var(--status-needs-input) 22%, transparent);
   --ws-hit-text: var(--text-primary);
 
-  /* Project colours: Apex's palette ids, a step lighter in dark mode. */
+  /* Project colours: Atelier's palette ids, a step lighter in dark mode. */
   --ws-project-graphite: light-dark(#6f6a63, #aaa49c);
   --ws-project-berry: light-dark(#b0476d, #e489aa);
   --ws-project-honey: light-dark(#a8730f, #e3b457);

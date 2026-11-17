@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// A small Markdown subset for the guides Apex ships (first-week/guides/*.md):
+// A small Markdown subset for the guides Atelier ships (first-week/guides/*.md):
 // headings, paragraphs, lists, tips (> quotes), bold, italics, code and
-// links to Apex pages. It returns a tree the chrome renders as React
+// links to Atelier pages. It returns a tree the chrome renders as React
 // elements, so guide text never goes through innerHTML.
 
 export type GuideInline =
@@ -13,7 +13,7 @@ export type GuideInline =
   | { type: 'strong'; children: GuideInline[] }
   | { type: 'em'; children: GuideInline[] }
   | { type: 'code'; text: string }
-  /** Only apex:// targets become links; anything else stays as its label. */
+  /** Only atelier:// targets become links; anything else stays as its label. */
   | { type: 'link'; href: string; children: GuideInline[] }
 
 export type GuideBlock =
@@ -131,7 +131,7 @@ export function parseInline(text: string): GuideInline[] {
       if (link) {
         pushText()
         const children = parseInline(link[1]!)
-        if (link[2]!.startsWith('apex://')) out.push({ type: 'link', href: link[2]!, children })
+        if (link[2]!.startsWith('atelier://')) out.push({ type: 'link', href: link[2]!, children })
         else out.push(...children)
         i += link[0].length
         continue

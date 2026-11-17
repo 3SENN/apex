@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -18,7 +18,7 @@ import '../../../workspace/workspace.css'
 // The space switcher, from the Space row at the top of
 // the sidebar: every space of this window with its tab count, the current
 // one checked, then New project…. Drawn in the overlay so it sits over page
-// views in Apex's own menu style; arrow keys move, typing jumps, Esc closes.
+// views in Atelier's own menu style; arrow keys move, typing jumps, Esc closes.
 // It resolves with the row's id and the Space row does the switch, so the
 // toast and the project editor stay where they always were.
 

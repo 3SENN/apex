@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Settings › Agent permissions › Approval mode (ST-12, CH-39): a radio list
-// of Standard, Ask for everything and Don't ask until Apex quits. The last
+// of Standard, Ask for everything and Don't ask until Atelier quits. The last
 // one lives in main's memory only, so it asks for a confirmation with a
 // warning and never reaches Settings; main's `agent-mode` event keeps this
 // list (and the persistent indicator) in step with the effective mode.

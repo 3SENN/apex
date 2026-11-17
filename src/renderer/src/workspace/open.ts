@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@
 import { fileViewerUrl } from '@shared/files'
 import { appRunUrl, workspaceUrl } from '@shared/url'
 import { fileRefName, type FileRef, type SearchHit, type WatchedFolder, type WorkspaceSection } from '@shared/workspace'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { toast } from '../ui'
 import { searchPageUrl, viewerTargetOf } from './logic'
 
@@ -29,7 +29,7 @@ export function goSearch(query: string): void {
 /** Opens a file in the file viewer (apps run in their own tab). */
 export function openFileRef(ref: FileRef, folders: readonly WatchedFolder[], name?: string): void {
   if (ref.kind === 'app') {
-    apex.tabs.create(appRunUrl(ref.appId)).catch(fail)
+    atelier.tabs.create(appRunUrl(ref.appId)).catch(fail)
     return
   }
   const target = viewerTargetOf(ref, folders)
@@ -43,7 +43,7 @@ export function openFileRef(ref: FileRef, folders: readonly WatchedFolder[], nam
 /** Opens a search result where it lives. */
 export function openHit(hit: SearchHit, folders: readonly WatchedFolder[], options: { newTab?: boolean } = {}): void {
   if ((hit.source === 'history' || hit.source === 'bookmarks') && hit.url) {
-    apex.tabs.create(hit.url).catch(fail)
+    atelier.tabs.create(hit.url).catch(fail)
     return
   }
   if (hit.source === 'chats' && hit.url) {

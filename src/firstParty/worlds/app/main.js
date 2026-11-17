@@ -1,14 +1,14 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Worlds (docs/apps.md › Worlds): Apex's world viewer and editor, a kit app
+// Worlds (docs/apps.md › Worlds): Atelier's world viewer and editor, a kit app
 // like any other. Home lists your worlds and the ones packs bring. A world
 // opens to walk around in as your companion: residents talk when you walk up
 // to them, and stepping into a place opens its app with the residents there
 // as its cast. Edit builds a world of your own; Share… saves it as an
-// .apexworld that anyone can open, with their own companions in its open spots.
+// .atelierworld that anyone can open, with their own companions in its open spots.
 import { createEditor } from './editor.js'
 import { t, translatePage } from './i18n.js'
 import { createStage } from './stage.js'
@@ -19,7 +19,7 @@ const $ = (id) => document.getElementById(id)
 const stage = createStage($('view'), $('bubbles'), { onWhere: hint, onTalk: talk, onEnter: enter, onFrame: report })
 let unsaved = false
 const editor = createEditor(stage, $('tools'), {
-  apps: () => apex.worlds.apps().catch(() => []),
+  apps: () => atelier.worlds.apps().catch(() => []),
   onChange: () => {
     unsaved = true
     $('done').disabled = false
@@ -38,7 +38,7 @@ const errorText = (err) => (err && err.message ? err.message : String(err))
 /** The person's companion: who you walk around as. */
 async function myCompanion() {
   try {
-    const [first] = await apex.cast.members()
+    const [first] = await atelier.cast.members()
     return first ? { name: first.name, look: first.look } : null
   } catch {
     return null
@@ -92,7 +92,7 @@ async function showHome() {
   const list = $('world-list')
   let worlds = []
   try {
-    worlds = await apex.worlds.list()
+    worlds = await atelier.worlds.list()
   } catch (err) {
     note('home-note', errorText(err))
   }
@@ -129,7 +129,7 @@ async function showHome() {
           remove.textContent = t('Click again to remove')
           return
         }
-        await apex.worlds.remove(w.ref).catch((err) => note('home-note', errorText(err)))
+        await atelier.worlds.remove(w.ref).catch((err) => note('home-note', errorText(err)))
         void showHome()
       })
       actions.append(remove)
@@ -141,8 +141,8 @@ async function showHome() {
 
 async function copy(ref) {
   try {
-    const { world } = await apex.worlds.get(ref)
-    const saved = await apex.worlds.save({ ...world, name: t('{name} (my copy)', { name: world.name }).slice(0, 80) }, { copy: true })
+    const { world } = await atelier.worlds.get(ref)
+    const saved = await atelier.worlds.save({ ...world, name: t('{name} (my copy)', { name: world.name }).slice(0, 80) }, { copy: true })
     go(saved.ref, 'edit')
   } catch (err) {
     note(screen === 'home' ? 'home-note' : 'stage-note', errorText(err))
@@ -151,7 +151,7 @@ async function copy(ref) {
 
 async function share(ref, where) {
   try {
-    const path = await apex.worlds.share(ref)
+    const path = await atelier.worlds.share(ref)
     if (path) note(where, t('Saved {path}. Anyone who opens it gets the world, with their own companions in its open spots.', { path }))
   } catch (err) {
     note(where, errorText(err))
@@ -160,7 +160,7 @@ async function share(ref, where) {
 
 $('new-world').addEventListener('click', async () => {
   const world = {
-    format: 'apex-world',
+    format: 'atelier-world',
     version: 1,
     id: 'new-world',
     name: t('New world'),
@@ -174,7 +174,7 @@ $('new-world').addEventListener('click', async () => {
     spawn: [16, 12],
   }
   try {
-    const saved = await apex.worlds.save(world, { copy: true })
+    const saved = await atelier.worlds.save(world, { copy: true })
     go(saved.ref, 'edit')
   } catch (err) {
     note('home-note', errorText(err))
@@ -187,7 +187,7 @@ async function open(ref, mode) {
   let data
   opening = 'world'
   try {
-    data = await apex.worlds.get(ref)
+    data = await atelier.worlds.get(ref)
   } catch (err) {
     note('home-note', errorText(err))
     location.hash = ''
@@ -232,7 +232,7 @@ $('edit').addEventListener('click', () => {
 $('share').addEventListener('click', () => void share(current.ref, 'stage-note'))
 $('done').addEventListener('click', async () => {
   try {
-    const saved = await apex.worlds.save(editor.world(), {})
+    const saved = await atelier.worlds.save(editor.world(), {})
     current.world = editor.world()
     unsaved = false
     note('stage-note', '')
@@ -263,7 +263,7 @@ async function talk(person) {
   const who = me?.name ?? t('Someone')
   const situation = place ? t('{who} walks up to say hello at {place}.', { who, place: place.name }) : t('{who} walks up to say hello.', { who })
   try {
-    const line = await apex.worlds.speak(current.ref, person.id, { situation })
+    const line = await atelier.worlds.speak(current.ref, person.id, { situation })
     stage.say(person.id, person.name, line)
   } catch (err) {
     stage.say(person.id, person.name, '…', 3)
@@ -275,21 +275,21 @@ async function talk(person) {
 
 async function enter(place) {
   try {
-    const result = await apex.worlds.enter(current.ref, place.id)
+    const result = await atelier.worlds.enter(current.ref, place.id)
     if (!result.opened) {
       // Browse opens at the app's pack, where the person can review and add it; then they step in again.
       note('stage-note', t('{name} opens an app you don’t have yet. Find it, add it, then step in again.', { name: place.name }))
-      await apex.worlds.find(result.missing.pack)
+      await atelier.worlds.find(result.missing.pack)
     }
   } catch (err) {
     note('stage-note', errorText(err))
   }
 }
 
-/** What the world shows now, for tests (apex.test.ready) and for looking in from outside. */
+/** What the world shows now, for tests (atelier.test.ready) and for looking in from outside. */
 function report() {
   const where = stage.where
-  apex.test?.ready({ screen, world: current?.world.id ?? null, people: stage.people.length, place: where.place?.id ?? null, near: where.near?.id ?? null })
+  atelier.test?.ready({ screen, world: current?.world.id ?? null, people: stage.people.length, place: where.place?.id ?? null, near: where.near?.id ?? null })
 }
 
 window.__worlds = {

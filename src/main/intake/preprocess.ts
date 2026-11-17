@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -13,7 +13,7 @@ import type { ImageProcessor, ImageResult } from './prepare'
 
 // Main's side of the hidden preprocessing renderer: one
 // offscreen, sandboxed window with no preload, in the in-memory partition
-// apex-preprocess, whose every network request is cancelled. Main hands it
+// atelier-preprocess, whose every network request is cancelled. Main hands it
 // bytes through executeJavaScript and gets re-encoded images back, so
 // decoding untrusted images and SVGs never happens in main.
 
@@ -130,7 +130,7 @@ export function createPreprocessor(deps: PreprocessDeps): ImageProcessor {
     })
     const url = deps.devUrl ? `${deps.devUrl}/${PAGE}` : `${APP_ORIGIN}/${PAGE}`
     ready = wc.loadURL(url).then(async () => {
-      const version: unknown = await wc.executeJavaScript('globalThis.apexPreprocess && globalThis.apexPreprocess.version', true)
+      const version: unknown = await wc.executeJavaScript('globalThis.atelierPreprocess && globalThis.atelierPreprocess.version', true)
       if (version !== 1) throw new Error('preprocess page not ready')
       return wc
     })
@@ -152,7 +152,7 @@ export function createPreprocessor(deps: PreprocessDeps): ImageProcessor {
         timer = setTimeout(() => reject(new Error('preprocess timed out')), JOB_TIMEOUT_MS)
       })
       try {
-        return await Promise.race([wc.executeJavaScript(`globalThis.apexPreprocess.${method}(${JSON.stringify(input)})`, true) as Promise<T>, timeout])
+        return await Promise.race([wc.executeJavaScript(`globalThis.atelierPreprocess.${method}(${JSON.stringify(input)})`, true) as Promise<T>, timeout])
       } finally {
         clearTimeout(timer)
       }

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -417,7 +417,7 @@ export class Attachments implements AttachmentStore {
         if (meta.v !== 1 || meta.ref?.id !== name) continue
         const entry: Entry = { meta, job: 0 }
         entries.set(name, entry)
-        // Apex quit while it was preparing: start again from what was saved.
+        // Atelier quit while it was preparing: start again from what was saved.
         if (meta.ref.state === 'preparing') void this.#prepare(chatId, entry)
       } catch {
         // A folder without a readable meta.json is skipped, not fatal.

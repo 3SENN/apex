@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -135,7 +135,7 @@ export const shots: ShotSpec[] = [
   {
     name: 'memory-settings',
     async run(ctx) {
-      ctx.tabs.openInternal('apex://settings/memory')
+      ctx.tabs.openInternal('atelier://settings/memory')
       await ctx.chrome.until(`return document.querySelector('.am-block') && document.querySelector('.am-tidy')`, 8000, 'Settings › Memory')
       await ctx.shot('memory-settings')
     },
@@ -145,7 +145,7 @@ export const shots: ShotSpec[] = [
     async run(ctx) {
       await withActivityOn(ctx, async () => {
         await ctx.chrome.invoke('activity', 'pause', Date.now() + 60 * 60_000)
-        ctx.tabs.openInternal('apex://settings/activity')
+        ctx.tabs.openInternal('atelier://settings/activity')
         await ctx.chrome.until(`return document.querySelector('.am-days, .am-status') && document.querySelector('.am-inspector')`, 8000, 'Settings › Activity memory')
         await ctx.shot('activity-settings')
         await ctx.chrome.js(`document.querySelector('.am-inspector')?.scrollIntoView({ block: 'center' }); return true`)
@@ -176,10 +176,10 @@ export const shots: ShotSpec[] = [
       await new Promise((r) => setTimeout(r, 300))
       ctx.tabs.close(tab.id)
       // The timeline is History's Timeline view now.
-      ctx.tabs.openInternal('apex://history?view=timeline&scope=day')
+      ctx.tabs.openInternal('atelier://history?view=timeline&scope=day')
       await ctx.chrome.until(`return document.querySelector('.tl-cal') && (document.querySelector('.tl-sessions') || document.querySelector('.tl .ui-state'))`, 8000, 'the timeline')
       await ctx.shot('workspace-timeline')
-      for (const t of ctx.tabs.all()) if (t.internalUrl?.startsWith('apex://history')) ctx.tabs.close(t.id)
+      for (const t of ctx.tabs.all()) if (t.internalUrl?.startsWith('atelier://history')) ctx.tabs.close(t.id)
     },
   },
 ]

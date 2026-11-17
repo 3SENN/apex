@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -13,11 +13,11 @@ import type { Tab } from '../tabs'
 import { sitesSmoke } from '../features/sites'
 import { webRequestHooks } from '../webRequest'
 
-// The privacy pack end to end (APEX_SMOKE_ONLY=PRIVACY). Nothing leaves the
+// The privacy pack end to end (ATELIER_SMOKE_ONLY=PRIVACY). Nothing leaves the
 // machine: the "insecure" site is a public-looking name that a smoke-only mux
 // hook answers before any lookup. Its http address goes to the fixture
 // server; its https address goes to a local port nothing listens on, so the
-// upgrade is refused at once and Apex's page appears.
+// upgrade is refused at once and Atelier's page appears.
 // - HTTPS-First: the fixture server (127.0.0.1) is never upgraded; the
 //   insecure site shows "This site doesn't support a secure connection" at its
 //   http address, and Continue to site loads it over http and remembers it.
@@ -28,7 +28,7 @@ import { webRequestHooks } from '../webRequest'
 // - Global Privacy Control: the header and navigator.globalPrivacyControl
 //   agree in the page and in its iframe.
 
-const INSECURE_HOST = 'insecure.apex-smoke.net'
+const INSECURE_HOST = 'insecure.atelier-smoke.net'
 
 async function refusedPort(): Promise<number> {
   const server = createServer()
@@ -159,7 +159,7 @@ const cookieBanners: SmokeCheck = {
       const wc = tab.view.webContents
       const t = tab
       await waitForPage(wc, 'the consent fixture', 10_000, (u) => u.includes('/privacy/consent'))
-      await waitFor(() => wc.getTitle() === 'rejected', 10_000, 'Apex to press the banner’s Reject all')
+      await waitFor(() => wc.getTitle() === 'rejected', 10_000, 'Atelier to press the banner’s Reject all')
       assert((await js<boolean>(wc, 'window.__accepted')) === false, 'Accept all is never pressed')
       assert((await display(wc, '#onetrust-banner-sdk')) === 'none', 'the banner is hidden')
       let summary: PrivacySummary | null = null
@@ -230,7 +230,7 @@ const trustArcPopup: SmokeCheck = {
       tab = ctx.tabs.create(`${ctx.server.http}/privacy/trustarc`, { activate: true })
       const wc = tab.view.webContents
       await waitForPage(wc, 'the TrustArc fixture', 10_000, (u) => u.includes('/privacy/trustarc'))
-      await waitFor(() => wc.getTitle() === 'declined', 10_000, 'Apex to press Decline All in the shadow root')
+      await waitFor(() => wc.getTitle() === 'declined', 10_000, 'Atelier to press Decline All in the shadow root')
       assert((await js<boolean>(wc, 'window.__accepted')) === false, 'Accept All is never pressed')
       assert((await display(wc, '.truste_cm_outerdiv')) === 'none', 'the full-page wrapper is hidden')
       // A real click on the page lands on the page, not on the wrapper.

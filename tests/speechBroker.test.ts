@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -21,7 +21,7 @@ const SETTINGS: TranscriptionSettings = {
   mic: 'built-in',
   locale: null,
   secondaryLocale: null,
-  vocabulary: 'Apex, Pip\nApex',
+  vocabulary: 'Atelier, Pip\nAtelier',
   autoSummarize: true,
   alertCalendar: true,
   alertMeetingSites: true,
@@ -75,7 +75,7 @@ describe('SpeechBroker', () => {
       mode: 'dictation',
       locale: 'en-GB',
       deviceId: 'builtin',
-      contextualStrings: ['Apex', 'Pip'],
+      contextualStrings: ['Atelier', 'Pip'],
       micGain: 4,
       systemGain: 0.5,
       transcribe: true,
@@ -249,7 +249,7 @@ describe('SpeechBroker', () => {
   })
 
   it('cancels: no more events, the recording is thrown away, and the next start waits for the helper', async () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-speech-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-speech-'))
     const record = join(dir, 'audio.m4a')
     const { broker } = setup([
       {
@@ -284,7 +284,7 @@ describe('SpeechBroker', () => {
     const events: SpeechSessionEvent[] = []
     await broker.transcribeFile('/m/audio.m4a', (e) => events.push(e))
     expect(events.map((e) => e.type)).toEqual(['progress', 'final', 'progress', 'stopped'])
-    expect(commands().find((c) => c.cmd === 'transcribe')).toMatchObject({ path: '/m/audio.m4a', locale: 'en-GB', contextualStrings: ['Apex', 'Pip'] })
+    expect(commands().find((c) => c.cmd === 'transcribe')).toMatchObject({ path: '/m/audio.m4a', locale: 'en-GB', contextualStrings: ['Atelier', 'Pip'] })
     expect(broker.status().active).toBeNull()
   })
 
@@ -423,7 +423,7 @@ describe('Screen Recording, asked in context', () => {
   })
 
   it('asks through the helper without opening anything, and keeps the answer across launches', async () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-screen-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-screen-'))
     const file = join(dir, 'speech', 'screen-access.json')
     let main = false
     let helper: 'granted' | 'denied' = 'denied'
@@ -461,7 +461,7 @@ describe('Screen Recording, asked in context', () => {
 
 describe('createMicTest', () => {
   it('records without transcribing, keeps the last test and deletes it', async () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-mictest-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-mictest-'))
     const spawn = createFakeSpeechHelper([
       DEVICES,
       LOCALES,
@@ -483,14 +483,14 @@ describe('createMicTest', () => {
     expect(start).toMatchObject({ mode: 'meeting', transcribe: false, levels: true, record: { path: join(dir, 'test.recording.m4a') } })
     await expect(test.start()).rejects.toMatchObject({ code: 'busy' })
     expect(await test.stop()).toEqual({ durationMs: 3100 })
-    expect(test.info()).toEqual({ exists: true, durationMs: 3100, url: 'apex-media://speech/test' })
+    expect(test.info()).toEqual({ exists: true, durationMs: 3100, url: 'atelier-media://speech/test' })
     expect(existsSync(join(dir, 'test.m4a'))).toBe(true)
     test.remove()
     expect(test.info().exists).toBe(false)
   })
 
   it('records the microphone only without Screen Recording, and fails cleanly without audio', async () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-mictest-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-mictest-'))
     const { broker, lastStart } = setup()
     const test = createMicTest({ broker, dir, systemAudio: async () => false })
     await test.start()

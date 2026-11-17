@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -33,7 +33,7 @@ import { writeAtomic } from '../settings'
 // userData/meetings/<id>/ with meta.json, an append-only transcript.jsonl,
 // summary.json and, when audio was kept, audio.m4a. The in-memory index is
 // rebuilt from the folders at start-up, and a meeting that was still live
-// when Apex quit is recovered there (long meetings, crashes). Its audio
+// when Atelier quit is recovered there (long meetings, crashes). Its audio
 // may still be in the parts the helper writes while recording (hidden
 // `.audio.m4a.<source>.<start>.part.aac` files); those are the recording, and
 // the library has the helper put them back together (recoverable, recovered).
@@ -603,7 +603,7 @@ export class MeetingFileStore extends EventEmitter<{ changed: [id: string]; live
       live: { ...entry.live },
       labels: { ...entry.meta.labels },
       summary: entry.summary,
-      audioUrl: summary.hasAudio ? `apex-media://meeting/${entry.meta.id}/audio` : null,
+      audioUrl: summary.hasAudio ? `atelier-media://meeting/${entry.meta.id}/audio` : null,
       error: entry.meta.error,
       warnings: [...entry.meta.warnings],
     }

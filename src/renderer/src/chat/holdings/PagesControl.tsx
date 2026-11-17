@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,7 +10,7 @@ import { faviconStack } from '@shared/filesLogic'
 import type { TabsSnapshot } from '@shared/ipc'
 import { t } from '@shared/i18n/core'
 import { parseInternalUrl } from '@shared/url'
-import { apex, call, errorText } from '../../api'
+import { atelier, call, errorText } from '../../api'
 import { openFilesSurface } from '../../files/open'
 import { useCompanions } from '../../settings/data'
 import { cx, toast } from '../../ui'
@@ -42,7 +42,7 @@ function usePages(chatId: string): ChatContextPage[] {
       (items) => alive && setPages(items),
       () => undefined,
     )
-    const off = apex.onAppEvent((e) => {
+    const off = atelier.onAppEvent((e) => {
       if (e.type === 'chat-context' && e.chatId === chatId) setPages(e.pages)
     })
     return () => {

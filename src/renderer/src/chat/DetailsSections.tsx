@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -151,7 +151,7 @@ function ConnectorsSection({ model }: DetailsSectionProps): ReactElement {
   return (
     <ul className="chat-details__list">
       <li>
-        <Row icon={<Plug size={14} />} label={names} title={names} trailing={stack} onClick={() => void call('pages', 'open', only ? `apex://connectors/${only.id}` : 'apex://connectors').catch(fail)} />
+        <Row icon={<Plug size={14} />} label={names} title={names} trailing={stack} onClick={() => void call('pages', 'open', only ? `atelier://connectors/${only.id}` : 'atelier://connectors').catch(fail)} />
       </li>
     </ul>
   )

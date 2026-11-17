@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -23,7 +23,7 @@ export function SentAttachments({ items }: { items: readonly AttachmentRef[] }):
       {shown.map((a) =>
         a.kind === 'meeting' && a.sourceId ? (
           <li key={a.id}>
-            <button type="button" className="chat-attach__chip chat-attach__chip--link" onClick={() => void call('pages', 'open', `apex://meetings/${a.sourceId}`)}>
+            <button type="button" className="chat-attach__chip chat-attach__chip--link" onClick={() => void call('pages', 'open', `atelier://meetings/${a.sourceId}`)}>
               <span className="chat-attach__icon" aria-hidden="true"><AudioLines /></span>
               <span className="chat-attach__name" title={a.name}>{a.name || t('meetings.untitled')}</span>
             </button>

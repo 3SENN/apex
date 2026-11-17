@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,7 +14,7 @@ import { registerSecret } from '../src/main/diagnostics/redact'
 // The problem report bundle: a zip written with fflate and read back the same way,
 // with the right entries for each switch combination and no secrets.
 
-const tmp = (): string => mkdtempSync(join(tmpdir(), 'apex-report-'))
+const tmp = (): string => mkdtempSync(join(tmpdir(), 'atelier-report-'))
 
 const json: ReportJson = {
   schema: 1,
@@ -36,7 +36,7 @@ const json: ReportJson = {
 }
 
 function parts(over: Partial<ReportParts> = {}): ReportParts {
-  return { json, description: 'It froze when I opened a tab.', images: [], files: [], chatMarkdown: null, screenshot: null, logs: [{ name: 'apex.log', text: '{"t":1}\n' }], dumps: [], ...over }
+  return { json, description: 'It froze when I opened a tab.', images: [], files: [], chatMarkdown: null, screenshot: null, logs: [{ name: 'atelier.log', text: '{"t":1}\n' }], dumps: [], ...over }
 }
 
 function names(zip: Uint8Array): string[] {
@@ -49,11 +49,11 @@ describe('the report zip', () => {
     const files = unzipSync(zip)
     expect(JSON.parse(strFromU8(files['report.json']!))).toMatchObject({ schema: 1, engineKind: 'api-key' })
     expect(strFromU8(files['description.txt']!)).toBe('It froze when I opened a tab.\n')
-    expect(strFromU8(files['logs/apex.log']!)).toBe('{"t":1}\n')
+    expect(strFromU8(files['logs/atelier.log']!)).toBe('{"t":1}\n')
   })
 
   it('holds only the base parts with every switch off', () => {
-    expect(names(zipReport(reportEntries(parts())))).toEqual(['description.txt', 'logs/apex.log', 'report.json'])
+    expect(names(zipReport(reportEntries(parts())))).toEqual(['description.txt', 'logs/atelier.log', 'report.json'])
   })
 
   it('adds each chosen part', () => {
@@ -71,7 +71,7 @@ describe('the report zip', () => {
       [{ dumps: [{ name: 'a.dmp', path: dumpPath }] }, ['crash/a.dmp']],
     ]
     for (const [over, extra] of combos) {
-      expect(names(zipReport(reportEntries(parts(over))))).toEqual(['description.txt', 'logs/apex.log', 'report.json', ...extra].sort())
+      expect(names(zipReport(reportEntries(parts(over))))).toEqual(['description.txt', 'logs/atelier.log', 'report.json', ...extra].sort())
     }
     const all = unzipSync(zipReport(reportEntries(parts(Object.assign({}, ...combos.map(([o]) => o))))))
     expect(Object.keys(all)).toHaveLength(9)
@@ -91,10 +91,10 @@ describe('the report zip', () => {
   it('redacts the logs again when bundling them', () => {
     const dir = tmp()
     registerSecret('late-registered-token-42')
-    const path = join(dir, 'apex.log')
+    const path = join(dir, 'atelier.log')
     writeFileSync(path, '{"message":"sent late-registered-token-42 to https://a.example/?code=9 with sk-ant-abcdefghijkl"}\n')
-    const logs = reportLogs([{ name: 'apex.log', path, bytes: 120 }])
-    const text = strFromU8(unzipSync(zipReport(reportEntries(parts({ logs }))))['logs/apex.log']!)
+    const logs = reportLogs([{ name: 'atelier.log', path, bytes: 120 }])
+    const text = strFromU8(unzipSync(zipReport(reportEntries(parts({ logs }))))['logs/atelier.log']!)
     expect(text).not.toContain('late-registered-token-42')
     expect(text).not.toContain('sk-ant-')
     expect(text).not.toContain('code=9')
@@ -104,12 +104,12 @@ describe('the report zip', () => {
   it('bundles the newest log files that fit', () => {
     const read = (p: string): string => `${p}\n`
     const files = [
-      { name: 'apex.log', path: 'a', bytes: 60 },
-      { name: 'apex.1.log', path: 'b', bytes: 60 },
-      { name: 'apex.2.log', path: 'c', bytes: 60 },
+      { name: 'atelier.log', path: 'a', bytes: 60 },
+      { name: 'atelier.1.log', path: 'b', bytes: 60 },
+      { name: 'atelier.2.log', path: 'c', bytes: 60 },
     ]
-    expect(reportLogs(files, 130, read).map((l) => l.name)).toEqual(['apex.log', 'apex.1.log'])
+    expect(reportLogs(files, 130, read).map((l) => l.name)).toEqual(['atelier.log', 'atelier.1.log'])
     // The newest file always goes in, cut to its tail if it alone is too big.
-    expect(reportLogs([{ name: 'apex.log', path: 'x'.repeat(50), bytes: 500 }], 10, read)[0]?.text).toHaveLength(10)
+    expect(reportLogs([{ name: 'atelier.log', path: 'x'.repeat(50), bytes: 500 }], 10, read)[0]?.text).toHaveLength(10)
   })
 })

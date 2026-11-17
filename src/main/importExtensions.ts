@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -27,7 +27,7 @@ const CHROME_STORE_UPDATE = /^https:\/\/clients2\.google\.com\/service\/update2\
 /** Built into Chrome-family browsers even when listed as internal. */
 const BUILT_IN = new Set(['ahfgeienlihckogmohjhadlkjgocpleb', 'nmmhkkegccagdldgiimedpiccmgmieda', 'mhjfbmdgcfjbbpaeojofohoefgiehjai', 'neajdppkdcdipfabeoofebfddakdcjhd', 'nkeimhogjdpnpccoofpliimaahmaaome'])
 
-/** One extension's entry in Preferences' extensions.settings, the fields Apex reads. */
+/** One extension's entry in Preferences' extensions.settings, the fields Atelier reads. */
 export interface PrefEntry {
   location?: unknown
   from_webstore?: unknown
@@ -124,7 +124,7 @@ export function extensionName(dir: string | null, manifest: Manifest, id: string
   return id
 }
 
-/** Themes and apps aren't extensions Apex runs. */
+/** Themes and apps aren't extensions Atelier runs. */
 const notAnExtension = (m: Manifest): boolean => m.theme !== undefined || m.app !== undefined
 
 /**
@@ -164,7 +164,7 @@ export function profileExtensions(profileDir: string, manifests?: Map<string, Ma
 }
 
 /**
- * The extensions of a detected browser's profile, marked when this Apex
+ * The extensions of a detected browser's profile, marked when this Atelier
  * profile already has them. `manifests`, when given, collects each one's
  * local manifest (main uses it to say what each can do; it never crosses IPC).
  */
@@ -257,7 +257,7 @@ export function widensAccess(shown: readonly string[] | undefined, store: readon
  * Adds a batch from the store: one confirmation that names each one and
  * what it can do (nothing is fetched before it), then each in turn. One
  * whose store version asks for more than the confirmation showed gets the
- * store's own prompt first. Not on the store, needs what Apex lacks,
+ * store's own prompt first. Not on the store, needs what Atelier lacks,
  * declined or failed are reported and the rest carry on.
  */
 export async function installBatch(io: StoreInstaller, items: readonly BatchItem[], browserName: string | null): Promise<ExtensionImportReport> {

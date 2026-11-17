@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,10 +9,10 @@ import type { OsPlatform } from '@shared/system'
 import { findCommand, isExecutable, killTree, pathDelimiter, pathKey, spawnProgram } from './programs'
 
 // The person's shell, the way a GUI app must ask it: a Dock launch inherits
-// almost no PATH, so Apex asks a login shell (and an interactive one, which
+// almost no PATH, so Atelier asks a login shell (and an interactive one, which
 // reads .zshrc) where a command-line program is and what PATH a terminal
 // has. Windows has no login shell to ask, but a GUI app there inherits the
-// person's whole PATH, so Apex looks along that instead. Used by local MCP
+// person's whole PATH, so Atelier looks along that instead. Used by local MCP
 // servers (connectors), the external MCP server's "Add for me" and engines
 // that run a program on this computer.
 
@@ -23,7 +23,7 @@ export function isExecutableFile(path: string): boolean {
 
 /**
  * Variables a child program must not inherit: ones an agent session in a
- * terminal sets (a program started from Apex would think it is nested in
+ * terminal sets (a program started from Atelier would think it is nested in
  * that session, or reach for an editor's port), and ones that would run
  * Electron as plain Node.
  */
@@ -65,7 +65,7 @@ export interface RunOptions {
   group?: boolean
 }
 
-/** How long a finished process may take to close its pipes before Apex stops waiting. */
+/** How long a finished process may take to close its pipes before Atelier stops waiting. */
 const CLOSE_GRACE_MS = 300
 
 /**
@@ -141,7 +141,7 @@ export function parseLookup(output: string | null, command: string, platform: Os
   return (platform === 'win32' ? win32 : posix).isAbsolute(path) ? path : null
 }
 
-/** Windows' stand-in for the shell probe: `command` along the PATH Apex inherited, which is the one a terminal has. */
+/** Windows' stand-in for the shell probe: `command` along the PATH Atelier inherited, which is the one a terminal has. */
 export function pathProbe(command: string, env: Readonly<Record<string, string | undefined>>, platform: OsPlatform = process.platform, isRunnable?: (path: string) => boolean): ShellProbe {
   const PATH = env[pathKey(env, platform)] ?? ''
   return { lookup: findCommand(command, PATH, { platform, env, ...(isRunnable ? { isExecutable: isRunnable } : {}) }), path: PATH || null }
@@ -181,11 +181,11 @@ export const SHELL_TIMEOUT_MS = 4000
  * Runs a script in the person's shell: a login shell (`-lc`), or an
  * interactive login shell (`-ilc`) that also reads .zshrc and the like.
  * stdin is /dev/null and the shell gets its own process group, so a shell
- * that waits for input or leaves helpers running never holds Apex up; the
+ * that waits for input or leaves helpers running never holds Atelier up; the
  * run ends at `until` (the end marker), its exit or 4 s.
  */
 export async function loginShell(shell: string | undefined, script: string, options: { interactive?: boolean; timeoutMs?: number; until?(stdout: string): boolean; run?: typeof runCommand } = {}): Promise<string | null> {
-  // Windows has no login shell; Apex already has the PATH a terminal there would.
+  // Windows has no login shell; Atelier already has the PATH a terminal there would.
   if (process.platform === 'win32' && !options.run) return null
   const program = shell && isAbsolute(shell) ? shell : '/bin/zsh'
   const env = Object.fromEntries(Object.entries(process.env).filter((e): e is [string, string] => e[1] !== undefined && !STRIPPED_ENV.has(e[0])))
@@ -197,7 +197,7 @@ export async function loginShell(shell: string | undefined, script: string, opti
 }
 
 /** One probe of the person's shell for `command`, login or interactive, with a fresh marker. */
-export async function probeShell(command: string, ask: (script: string, until: (stdout: string) => boolean) => Promise<string | null>, marker = `APEX_${randomUUID().replace(/-/g, '')}`): Promise<ShellProbe | null> {
+export async function probeShell(command: string, ask: (script: string, until: (stdout: string) => boolean) => Promise<string | null>, marker = `ATELIER_${randomUUID().replace(/-/g, '')}`): Promise<ShellProbe | null> {
   const output = await ask(probeScript(marker, command), (stdout) => stdout.split(/\r?\n/).includes(`${marker}:end`))
   return parseProbe(output, marker, command)
 }

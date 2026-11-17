@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -32,7 +32,7 @@ export interface UpdateStatus {
     attempt: number
     retryAt: number | null
   } | null
-  /** This version is below the release feed's supported floor (apex-support.json). */
+  /** This version is below the release feed's supported floor (atelier-support.json). */
   unsupported: { below: string; message: string | null; snoozedUntil: number | null } | null
   disabledReason: UpdateDisabledReason | null
 }
@@ -82,7 +82,7 @@ export function initialUpdateStatus(currentVersion: string): UpdateStatus {
   }
 }
 
-/** The release feed's `apex-support.json`; fetched only when RELEASE.updatesEnabled. */
+/** The release feed's `atelier-support.json`; fetched only when RELEASE.updatesEnabled. */
 export interface SupportFeed {
   schema: 1
   /** `below` is a semver x.y.z: every version under it is unsupported. */

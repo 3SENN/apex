@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -71,7 +71,7 @@ describe('the visits log', () => {
   let dir: string
   let log: VisitsLog
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), 'apex-visits-'))
+    dir = mkdtempSync(join(tmpdir(), 'atelier-visits-'))
     log = new VisitsLog(join(dir, 'visits.sqlite'))
   })
   afterEach(() => {
@@ -80,7 +80,7 @@ describe('the visits log', () => {
   })
 
   it('records websites only, and prunes with history', () => {
-    expect(log.record({ url: 'apex://settings', title: '', at: 1 })).toBeNull()
+    expect(log.record({ url: 'atelier://settings', title: '', at: 1 })).toBeNull()
     const id = log.record({ url: 'https://a.com/x', title: 'A', at: 10 }) as number
     log.record({ url: 'https://a.com/y', title: 'A2', at: 20 })
     log.record({ url: 'https://b.com/', title: 'B', at: 30 })
@@ -96,7 +96,7 @@ describe('the visits log', () => {
 describe('insights (opt-in)', () => {
   let dir: string
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), 'apex-insights-'))
+    dir = mkdtempSync(join(tmpdir(), 'atelier-insights-'))
   })
   afterEach(() => rmSync(dir, { recursive: true, force: true }))
 
@@ -125,7 +125,7 @@ describe('insights (opt-in)', () => {
     const input = { enabled: true, range: { from: 0, to: 10 }, notes: [note], sites: [site] }
     const first = await cache.insights(input)
     expect(first.map((i) => i.kind)).toEqual(['todo', 'routine-idea'])
-    expect(first[1]?.action).toEqual({ label: 'Make a routine', url: 'apex://routines/new' })
+    expect(first[1]?.action).toEqual({ label: 'Make a routine', url: 'atelier://routines/new' })
     expect(await cache.insights(input)).toHaveLength(2)
     expect(calls).toBe(1)
     cache.dismiss(first[0]?.id as string)
@@ -145,7 +145,7 @@ describe('the timeline view (renderer logic)', () => {
     expect(parseTimelineQuery('?scope=week&date=2026-10-20', now)).toEqual({ scope: 'week', day: '2026-10-20' })
     expect(parseTimelineQuery('scope=nope&date=2026-02-31', now)).toEqual({ scope: 'day', day: '2026-10-29' })
     expect(parseTimelineQuery('', now)).toEqual({ scope: 'day', day: '2026-10-29' })
-    expect(timelineUrl('week', '2026-10-20')).toBe('apex://history?view=timeline&scope=week&date=2026-10-20')
+    expect(timelineUrl('week', '2026-10-20')).toBe('atelier://history?view=timeline&scope=week&date=2026-10-20')
   })
 
   it('lives on History: ?view=timeline picks it, and an old Workspace address goes there', () => {
@@ -155,8 +155,8 @@ describe('the timeline view (renderer logic)', () => {
     expect(historyView('')).toBe('list')
     expect(historyView('view=list')).toBe('list')
     expect(parseTimelineQuery('view=timeline&scope=week&date=2026-10-20', now)).toEqual({ scope: 'week', day: '2026-10-20' })
-    expect(timelineRedirect('apex://workspace/timeline?scope=week&date=2026-10-20', now)).toBe('apex://history?view=timeline&scope=week&date=2026-10-20')
-    expect(timelineRedirect('apex://workspace/timeline', now)).toBe('apex://history?view=timeline&scope=day&date=2026-10-29')
+    expect(timelineRedirect('atelier://workspace/timeline?scope=week&date=2026-10-20', now)).toBe('atelier://history?view=timeline&scope=week&date=2026-10-20')
+    expect(timelineRedirect('atelier://workspace/timeline', now)).toBe('atelier://history?view=timeline&scope=day&date=2026-10-29')
   })
 
   it('lays a month out in Monday-first weeks', () => {

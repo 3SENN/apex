@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -17,7 +17,7 @@ vi.mock('electron', () => ({ app: { on: vi.fn() } }))
 // The file logger: JSON lines, rotation and its cap, the per-source rate
 // limit with its "dropped" entry, debug gating and queries.
 
-const tmp = (): string => mkdtempSync(join(tmpdir(), 'apex-logger-'))
+const tmp = (): string => mkdtempSync(join(tmpdir(), 'atelier-logger-'))
 const entry = (t: number, message: string, over: Partial<LogEntry> = {}): LogEntry => ({ t, level: 'info', source: 'main', message, ...over })
 
 function clock(start = 1_000_000): { now: () => number; advance(ms: number): void } {
@@ -55,7 +55,7 @@ describe('FileLogger', () => {
     // The cap: no file passes the limit, and everything kept is at most (keep + 1) files.
     for (const f of logger.files()) expect(statSync(f.path).size).toBeLessThanOrEqual(1000)
     expect(logger.files()).toHaveLength(4)
-    // The newest line is in apex.log; the oldest kept are in the last rotated file.
+    // The newest line is in atelier.log; the oldest kept are in the last rotated file.
     const all = logger.readAll()
     expect(all.at(-1)?.message).toMatch(/^line 199 /)
     expect(all.map((e) => e.t)).toEqual([...all.map((e) => e.t)].sort((a, b) => a - b))

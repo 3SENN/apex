@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,7 +14,7 @@ describe('parseLaunchArgs', () => {
   const windows = { cwd: 'C:\\Users\\me', platform: 'win32' as const }
 
   it('takes http(s) and file URLs, and ignores other schemes', () => {
-    const out = parseLaunchArgs(['/opt/Apex/apex', 'https://example.com/a?b=1', 'http://x.test', 'file:///home/me/a.html', 'javascript:alert(1)', 'mailto:a@b.c', 'ftp://x.test/f'], posix)
+    const out = parseLaunchArgs(['/opt/Atelier/atelier', 'https://example.com/a?b=1', 'http://x.test', 'file:///home/me/a.html', 'javascript:alert(1)', 'mailto:a@b.c', 'ftp://x.test/f'], posix)
     expect(out.urls).toEqual(['https://example.com/a?b=1', 'http://x.test/', 'file:///home/me/a.html'])
     expect(out.companionFiles).toEqual([])
   })
@@ -25,29 +25,29 @@ describe('parseLaunchArgs', () => {
   })
 
   it('notes a login launch', () => {
-    expect(parseLaunchArgs(['apex', '--background'], posix)).toEqual({ urls: [], companionFiles: [], background: true })
+    expect(parseLaunchArgs(['atelier', '--background'], posix)).toEqual({ urls: [], companionFiles: [], background: true })
   })
 
-  it('opens web files as file URLs and sends .apexcompanion files to the import review', () => {
-    const out = parseLaunchArgs(['apex', 'page.html', '/tmp/Pip.APEXCOMPANION', 'notes.txt', 'Downloads/pic.svg'], posix)
+  it('opens web files as file URLs and sends .ateliercompanion files to the import review', () => {
+    const out = parseLaunchArgs(['atelier', 'page.html', '/tmp/Pip.ATELIERCOMPANION', 'notes.txt', 'Downloads/pic.svg'], posix)
     expect(out.urls).toEqual(['file:///home/me/page.html', 'file:///home/me/Downloads/pic.svg'])
-    expect(out.companionFiles).toEqual(['/tmp/Pip.APEXCOMPANION'])
+    expect(out.companionFiles).toEqual(['/tmp/Pip.ATELIERCOMPANION'])
   })
 
   it('handles quoted Windows paths, relative ones and spaces', () => {
-    const out = parseLaunchArgs(['C:\\Program Files\\Apex\\Apex.exe', '"C:\\Users\\me\\My Pages\\a b.html"', 'docs\\c.htm', '"D:\\Pip.apexcompanion"'], windows)
+    const out = parseLaunchArgs(['C:\\Program Files\\Atelier\\Atelier.exe', '"C:\\Users\\me\\My Pages\\a b.html"', 'docs\\c.htm', '"D:\\Pip.ateliercompanion"'], windows)
     expect(out.urls).toEqual(['file:///C:/Users/me/My%20Pages/a%20b.html', 'file:///C:/Users/me/docs/c.htm'])
-    expect(out.companionFiles).toEqual(['D:\\Pip.apexcompanion'])
+    expect(out.companionFiles).toEqual(['D:\\Pip.ateliercompanion'])
   })
 
   it('skips paths that are not files when it can check', () => {
-    const out = parseLaunchArgs(['apex', 'here.html', 'gone.html'], { ...posix, isFile: (p) => p.endsWith('here.html') })
+    const out = parseLaunchArgs(['atelier', 'here.html', 'gone.html'], { ...posix, isFile: (p) => p.endsWith('here.html') })
     expect(out.urls).toEqual(['file:///home/me/here.html'])
   })
 
   it('stops after a sane number of targets', () => {
     const many = Array.from({ length: 50 }, (_, i) => `https://a.test/${i}`)
-    expect(parseLaunchArgs(['apex', ...many], posix).urls).toHaveLength(MAX_LAUNCH_TARGETS)
+    expect(parseLaunchArgs(['atelier', ...many], posix).urls).toHaveLength(MAX_LAUNCH_TARGETS)
   })
 })
 
@@ -83,14 +83,14 @@ describe('where opened links go', () => {
 
 describe('a Windows or Linux cold start', () => {
   it('turns its links into open-url and its companion files into open-file, in order', () => {
-    const targets = parseLaunchArgs(['C:\\Apex\\Apex.exe', '--background', 'https://example.com/', 'C:\\me\\Ada.apexcompanion'], { cwd: 'C:\\me', platform: 'win32', isFile: () => true })
+    const targets = parseLaunchArgs(['C:\\Atelier\\Atelier.exe', '--background', 'https://example.com/', 'C:\\me\\Ada.ateliercompanion'], { cwd: 'C:\\me', platform: 'win32', isFile: () => true })
     expect(firstLaunchEvents(targets)).toEqual([
       { event: 'open-url', value: 'https://example.com/' },
-      { event: 'open-file', value: 'C:\\me\\Ada.apexcompanion' },
+      { event: 'open-file', value: 'C:\\me\\Ada.ateliercompanion' },
     ])
   })
 
   it('has nothing to send for a plain start', () => {
-    expect(firstLaunchEvents(parseLaunchArgs(['/opt/Apex/apex', '--no-sandbox'], { cwd: '/home/me', platform: 'linux' }))).toEqual([])
+    expect(firstLaunchEvents(parseLaunchArgs(['/opt/Atelier/atelier', '--no-sandbox'], { cwd: '/home/me', platform: 'linux' }))).toEqual([])
   })
 })

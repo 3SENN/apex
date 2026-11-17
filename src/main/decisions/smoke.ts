@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -17,7 +17,7 @@ import { needsYou } from './uses'
 import { groupTabsCheck } from './smokeTabs'
 import { effortPerMessageCheck } from './smokeSetup'
 
-// Quick decisions' smoke checks (APEX_SMOKE_ONLY=decisions). Smoke's
+// Quick decisions' smoke checks (ATELIER_SMOKE_ONLY=decisions). Smoke's
 // stand-in model (feature.ts) answers instead of a provider, sure of every
 // first option, so nothing reaches the network: off keeps the rules, a
 // custom server set up turns the decider on and offers its decision models,
@@ -28,14 +28,14 @@ import { effortPerMessageCheck } from './smokeSetup'
 const OWN_SERVER = SMOKE_SERVER
 
 async function openSettingsPage(ctx: SmokeContext, page: 'decisions' | 'model'): Promise<void> {
-  ctx.tabs.openInternal(`apex://settings/${page}`)
-  await waitFor(() => ctx.tabs.snapshot().tabs.some((t) => t.url.startsWith(`apex://settings/${page}`)), 5000, `Settings › ${page}`)
+  ctx.tabs.openInternal(`atelier://settings/${page}`)
+  await waitFor(() => ctx.tabs.snapshot().tabs.some((t) => t.url.startsWith(`atelier://settings/${page}`)), 5000, `Settings › ${page}`)
   await sleep(400)
 }
 const openModelPage = (ctx: SmokeContext): Promise<void> => openSettingsPage(ctx, 'decisions')
 
 const offKeepsRules: SmokeCheck = {
-  name: 'decisions: off keeps Apex’s rules and asks nothing',
+  name: 'decisions: off keeps Atelier’s rules and asks nothing',
   async run(ctx) {
     ctx.settings.update({ decisions: DECISIONS_DEFAULTS })
     const status = await ctx.chrome.invoke<DecisionsStatus>('decisions', 'status')
@@ -211,7 +211,7 @@ const setupFlow: SmokeCheck = {
       await waitFor(
         () => {
           const snap = ctx.tabs.snapshot()
-          return snap.tabs.some((t) => t.id === snap.activeId && t.url.startsWith('apex://settings/decisions'))
+          return snap.tabs.some((t) => t.id === snap.activeId && t.url.startsWith('atelier://settings/decisions'))
         },
         5000,
         'its row opens Quick decisions',

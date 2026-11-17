@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// English strings: the vault, the wallet, apex://passwords and Settings › Passwords and autofill.
+// English strings: the vault, the wallet, atelier://passwords and Settings › Passwords and autofill.
 export const passwords = {
   'passwords.page.title': 'Passwords',
   'passwords.page.description': 'Sign-ins {brand} saved for you. They’re encrypted with your system keychain and stay on this computer.',
@@ -38,7 +38,7 @@ export const passwords = {
   'passwords.error.exists': 'A sign-in with that username is already saved for this site. Edit it instead.',
   'passwords.system.macOnly': 'The Passwords app is only on macOS.',
 
-  // apex://passwords
+  // atelier://passwords
   'passwords.filter': 'Filter passwords',
   'passwords.sort.label': 'Sort',
   'passwords.sort.site': 'By site',
@@ -297,7 +297,7 @@ export const passwords = {
   'passwords.apple.state.ready': 'Ready. Your iCloud Keychain passwords fill on sites.',
   'passwords.apple.state.helperClosed': 'Apple’s helper closed the connection. It may not accept this version of {brand} yet.',
   'passwords.apple.state.helperClosedError': 'Apple’s helper closed the connection ({error}). It may not accept this version of {brand} yet.',
-  'passwords.apple.state.needsSignedApex': 'Needs a signed {brand} with Apple’s browser passkey permission',
+  'passwords.apple.state.needsSignedAtelier': 'Needs a signed {brand} with Apple’s browser passkey permission',
   'passwords.apple.state.icloudOff': 'iCloud Passwords are off on this Mac or need you to sign in again in System Settings.',
   'passwords.apple.badge.ready': 'Ready',
   'passwords.apple.badge.waiting': 'Waiting for code',

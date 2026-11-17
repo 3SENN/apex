@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import type { SchemaMap } from '../schemas/types'
 
 // Argument schemas for Services.files and viewer. main/services.ts
 // spreads them. Paths are only shape-checked here; the viewer confines each
-// one (realpath, symlinks) to Apex's folders or a path granted this session.
+// one (realpath, symlinks) to Atelier's folders or a path granted this session.
 
 const fileId = z.string().uuid()
 const token = z.string().regex(/^[A-Za-z0-9_-]{16,64}$/)

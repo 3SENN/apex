@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import type { ChatSummary } from '@shared/chats'
 import type { TabsSnapshot } from '@shared/ipc'
 import { chatUrl } from '@shared/url'
-import { apex, call, errorText } from '../../api'
+import { atelier, call, errorText } from '../../api'
 import { confirm, toast } from '../../ui'
 import { chatIdOfUrl } from './logic/order'
 import { openExportDialog } from '../../ui/ExportDialog' // CH-36
@@ -26,7 +26,7 @@ export function chatTabs(snapshot: TabsSnapshot, chatId: string): string[] {
 /** Shows the chat: its tab when one is open, otherwise a new tab next to the current one. */
 export function openChatPage(snapshot: TabsSnapshot, chatId: string, { newTab = false, background = false } = {}): void {
   const existing = newTab ? undefined : chatTabs(snapshot, chatId)[0]
-  if (existing) void apex.tabs.activate(existing)
+  if (existing) void atelier.tabs.activate(existing)
   else void call('pages', 'open', chatUrl(chatId), { newTab: true, background })
 }
 
@@ -109,7 +109,7 @@ export async function runChatMenu(id: string, chats: readonly ChatSummary[], { s
         destructive: true,
       })
       if (!ok) return
-      for (const chatId of ids) for (const tabId of chatTabs(snapshot, chatId)) void apex.tabs.close(tabId)
+      for (const chatId of ids) for (const tabId of chatTabs(snapshot, chatId)) void atelier.tabs.close(tabId)
       await call('chats', 'remove', ids).catch(report(t('tabs.sidebarChatActions.couldnTDelete')))
       break
     }

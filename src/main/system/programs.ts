@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,7 +10,7 @@ import type { OsPlatform } from '@shared/system'
 
 // Starting other programs (engines that run on this computer, local MCP servers,
 // native messaging hosts) the same way on every platform. Windows differs in
-// four ways Apex handles here: PATH is split on ';' and a bare name needs one
+// four ways Atelier handles here: PATH is split on ';' and a bare name needs one
 // of PATHEXT's extensions; a .cmd or .bat file (npx, and every CLI npm
 // installs) only runs through cmd.exe; there are no process groups, so a tree
 // is ended with taskkill; and a console program started from a GUI app opens
@@ -218,7 +218,7 @@ export function comspec(env: Readonly<Record<string, string | undefined>> = proc
 
 /**
  * spawn() for another program: batch files through cmd.exe on Windows, and
- * never a console window there (Apex is a GUI app, so a console program would
+ * never a console window there (Atelier is a GUI app, so a console program would
  * open one of its own).
  */
 export function spawnProgram(file: string, args: readonly string[], options: SpawnOptions = {}, how: Pick<LaunchContext, 'openAny'> = {}): ChildProcess {

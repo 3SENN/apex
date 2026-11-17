@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -36,7 +36,7 @@ export interface DefaultBrowserStatus {
   reason: 'dev-build' | 'unsupported' | null
 }
 
-/** Whether the system lets Apex show notifications; 'unknown' where it can't be read. */
+/** Whether the system lets Atelier show notifications; 'unknown' where it can't be read. */
 export type SystemNotificationStatus = 'allowed' | 'denied' | 'unknown'
 
 export interface AboutInfo {
@@ -74,18 +74,18 @@ export interface SettingsServices {
     openClearDialog(): void
   }
   reset: {
-    /** Runs every reset step; `secrets` also deletes the saved key and the password vault. A real run relaunches Apex into the welcome flow. */
+    /** Runs every reset step; `secrets` also deletes the saved key and the password vault. A real run relaunches Atelier into the welcome flow. */
     run(options: { secrets: boolean; dryRun: boolean }): Promise<ResetResult>
     steps(): ResetStepView[]
   }
   browserImport: {
-    /** Browsers on this computer with their profiles; Safari is listed with needsAccess until Apex has Full Disk Access. */
+    /** Browsers on this computer with their profiles; Safari is listed with needsAccess until Atelier has Full Disk Access. */
     browsers(): Promise<ImportBrowser[]>
     /** Imports the chosen types; progress arrives as 'import-progress' events. */
     run(request: ImportRequest): Promise<ImportSummary>
     /** macOS: opens System Settings › Privacy & Security › Full Disk Access. */
     openAccessSettings(): void
-    /** A Chromium profile's Web Store extensions, marked when this Apex profile has them. */
+    /** A Chromium profile's Web Store extensions, marked when this Atelier profile has them. */
     extensions(browserId: string, profileId: string): Promise<ImportableExtension[]>
     /** Adds the picked ones from the Chrome Web Store after one confirmation; reports what was left out. */
     installExtensions(request: ExtensionImportRequest): Promise<ExtensionImportReport>
@@ -94,12 +94,12 @@ export interface SettingsServices {
   }
   defaultBrowser: {
     status(): DefaultBrowserStatus
-    /** Registers Apex for http and https (macOS asks; Windows opens its default-apps settings). */
+    /** Registers Atelier for http and https (macOS asks; Windows opens its default-apps settings). */
     register(): Promise<DefaultBrowserStatus>
   }
   notificationAccess: {
     status(): Promise<SystemNotificationStatus>
-    /** Opens the system's notification settings for Apex. */
+    /** Opens the system's notification settings for Atelier. */
     openSystemSettings(): void
     /** Shows a sample notification, so the person can check sounds and banners. */
     test(): void

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -88,8 +88,8 @@ export class TabNotes {
   }
 }
 
-/** How notes read in a tool result: Apex's own words, marked so the model knows they aren't the page's. */
+/** How notes read in a tool result: Atelier's own words, marked so the model knows they aren't the page's. */
 export function noteBlock(notes: readonly string[]): { type: 'text'; text: string } | null {
   if (notes.length === 0) return null
-  return { type: 'text', text: `<apex_note>\n${notes.join('\n')}\n</apex_note>` }
+  return { type: 'text', text: `<atelier_note>\n${notes.join('\n')}\n</atelier_note>` }
 }

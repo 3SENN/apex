@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,7 +10,7 @@ import { dirname, join, normalize, sep } from 'node:path'
 import { unzipSync } from 'fflate'
 
 // CRX3 packages from the Web Store. electron-chrome-web-store unpacks
-// without checking signatures and with adm-zip (advisories), so Apex does
+// without checking signatures and with adm-zip (advisories), so Atelier does
 // both itself: every key proof must verify, one must be the extension's own
 // key (its id is derived from it), and, for store installs, one must be the
 // Web Store's publisher key. Then fflate unzips into the profile's folder,

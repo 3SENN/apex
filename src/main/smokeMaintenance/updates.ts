@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -105,7 +105,7 @@ const percentOf = (s: UpdateStatus): number => Math.floor((s.progress ?? 0) * 10
 // ── what the chrome shows ──
 
 async function openAbout(ctx: SmokeContext): Promise<void> {
-  ctx.tabs.openInternal('apex://settings/about')
+  ctx.tabs.openInternal('atelier://settings/about')
   await ctx.chrome.until<boolean>(`return Boolean(document.querySelector('#check-updates .about-version'))`, 8000, 'the About page’s version row')
 }
 
@@ -401,14 +401,14 @@ export const checks: SmokeCheck[] = [
       // Try again (About, the pill, the menus) starts afresh and finds the network back.
       f.configure({ failChecks: 0 })
       const back = await ctx.chrome.invoke<UpdateStatus>('updates', 'check')
-      assert(back.phase === 'idle' && back.lastCheck === 'up-to-date', `Try again should find Apex up to date, got ${back.phase}`)
+      assert(back.phase === 'idle' && back.lastCheck === 'up-to-date', `Try again should find Atelier up to date, got ${back.phase}`)
       await pillReads(ctx, null)
     },
   },
   {
     name: 'updates: Restart lists running work; the no-op install meets the 20 s watchdog, and Retry is ready again',
     async run(ctx) {
-      await ctx.chrome.js(`window.__e1Restarting = []; window.__e1Off?.(); window.__e1Off = window.apex.onAppEvent((e) => { if (e.type === 'update-restarting') window.__e1Restarting.push(e.running) }); return true`)
+      await ctx.chrome.js(`window.__e1Restarting = []; window.__e1Off?.(); window.__e1Off = window.atelier.onAppEvent((e) => { if (e.type === 'update-restarting') window.__e1Restarting.push(e.running) }); return true`)
       const { doc, done } = await openRestartCard(ctx)
       const f = fake()
       const version = nextVersion()
@@ -419,7 +419,7 @@ export const checks: SmokeCheck[] = [
       await until((s) => s.phase === 'installing', 'the install to start')
       await gone(doc, '.update-card--restart', 'the restart card to close')
       assert(f.installs === 1, 'quitAndInstall was not called')
-      assert(isQuittingForUpdate(), 'Apex should be quitting for the update')
+      assert(isQuittingForUpdate(), 'Atelier should be quitting for the update')
       const pending = runtime().store.get().pending
       assert(pending?.version === version && pending.attempts === 1, `the pending record is ${JSON.stringify(pending)}`)
       const restarting = await ctx.chrome.until<Array<{ chats: number }>>(`return window.__e1Restarting.length ? window.__e1Restarting : null`, 3000, 'the update-restarting event')

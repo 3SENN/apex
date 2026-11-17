@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// What activity memory never records: Apex's own sensitive categories as
+// What activity memory never records: Atelier's own sensitive categories as
 // small curated domain lists, plus your own sites, matched with subdomains.
 // Also used by the timeline and by the routine and app suggestions.
 
@@ -17,7 +17,7 @@ export interface Exclusions {
 }
 
 /**
- * Apex's curated lists: well-known sites per category, kept small on
+ * Atelier's curated lists: well-known sites per category, kept small on
  * purpose. A listed domain also covers its subdomains. They are a safety
  * net, not a classifier; your own list catches the rest.
  */

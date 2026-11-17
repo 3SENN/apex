@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -19,7 +19,7 @@ export const platform = {
   'platform.suggestion.taskGone': 'That task is no longer offered for this page.',
   'platform.suggestion.chatGone': 'That chat no longer exists. Draft into a new chat instead.',
 
-  // ── Ready-made tasks (Apex's own templates; {name} is the site or app) ──
+  // ── Ready-made tasks (Atelier's own templates; {name} is the site or app) ──
   'platform.task.meetingPrep.title': 'Prepare for my next meeting',
   'platform.task.meetingPrep.prompt': 'Help me prepare for the meeting on this {name} page: list what it is about, who is joining if the page says, and three questions I could bring.',
   'platform.task.summarize.title': 'Summarize this page',
@@ -177,7 +177,7 @@ export const platform = {
   'platform.tables.import.needColumn': 'Column {n} needs a name.',
   'platform.tables.import.confirm': 'Import {count, plural, one {# row} other {# rows}}',
 
-  // ── apex://flags (ST-57) ──
+  // ── atelier://flags (ST-57) ──
   'platform.flags.description': 'Features {brand} is still trying out. They can change or go away in an update.',
   'platform.flags.warning': 'Experiments are less tested than the rest of {brand}. If something misbehaves, set it back to its default.',
   'platform.flags.loading': 'Loading experiments',

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -49,7 +49,7 @@ const USB: AudioInputDevice = { id: 'usb-1', name: 'Desk mic', builtIn: false, i
 
 describe('vocabulary (ST-19)', () => {
   it('splits on newlines and commas, trims, collapses spaces and dedupes case-insensitively', () => {
-    expect(parseVocabulary(' Pip ,\nApex\n\n  quarterly   review ,pip, APEX ')).toEqual(['Pip', 'Apex', 'quarterly review'])
+    expect(parseVocabulary(' Pip ,\nAtelier\n\n  quarterly   review ,pip, ATELIER ')).toEqual(['Pip', 'Atelier', 'quarterly review'])
   })
 
   it('drops terms over the length limit and stops at the term limit', () => {
@@ -68,7 +68,7 @@ describe('vocabulary (ST-19)', () => {
 
   it('counts what the recognizer gets and flags what it skips', () => {
     expect(vocabularyStats('')).toEqual({ chars: 0, terms: 0, tooMany: false, tooLong: false })
-    expect(vocabularyStats('Pip, pip\nApex')).toEqual({ chars: 13, terms: 2, tooMany: false, tooLong: false })
+    expect(vocabularyStats('Pip, pip\nAtelier')).toEqual({ chars: 16, terms: 2, tooMany: false, tooLong: false })
     expect(vocabularyStats(`a\n${'y'.repeat(VOCABULARY_TERM_MAX + 1)}`).tooLong).toBe(true)
     const many = Array.from({ length: VOCABULARY_TERMS_MAX + 1 }, (_, i) => `w${i}`).join('\n')
     const stats = vocabularyStats(many)
@@ -222,7 +222,7 @@ describe('pause and resume (MV-10)', () => {
 describe('error copy (MV-08)', () => {
   const ALL: SpeechErrorCode[] = [...HELPER_ERROR_CODES, 'helper-missing', 'helper-failed', 'helper-outdated', 'unsupported-platform']
 
-  it('has Apex words for every error and warning code', () => {
+  it('has Atelier words for every error and warning code', () => {
     for (const code of [...ALL, 'device-fallback', 'screen-missing', 'interrupted'] as const) {
       expect(SPEECH_NOTICE_CODES).toContain(code)
       const copy = errorCopy(code)

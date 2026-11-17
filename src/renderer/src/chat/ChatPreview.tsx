@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { useMemo, useState, type ReactElement } from 'react'
 import { CheckCheck, Maximize2, SendHorizontal, X } from 'lucide-react'
 import type { ChatSummary } from '@shared/chats'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { useT } from '../i18n/useT'
 import { Button, ErrorState, IconButton, SkeletonRows, Spinner, toast } from '../ui'
 import { previewMessages } from './logic/bulk'
@@ -43,7 +43,7 @@ export function ChatPreview({ chat, companionName, onOpen, onClose }: { chat: Ch
     setSending(true)
     markSent(chat.id)
     try {
-      await apex.agent.send(chat.id, text)
+      await atelier.agent.send(chat.id, text)
       setReply('')
     } catch (err) {
       markSent(chat.id, false)

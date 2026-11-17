@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -22,10 +22,10 @@ import {
 } from '@shared/speech'
 import type { HelperProcess, SpawnHelper } from './helper'
 
-// Stand-ins for the apex-speech helper, for tests and APEX_SMOKE: no
+// Stand-ins for the atelier-speech helper, for tests and ATELIER_SMOKE: no
 // microphone, no prompts, no audio. Voice, meeting capture and the meetings
 // library can run their tests over them without the real broker. Under
-// APEX_SMOKE the app's broker runs over createSmokeSpeechHelper(): scripted
+// ATELIER_SMOKE the app's broker runs over createSmokeSpeechHelper(): scripted
 // levels, and a real one-second .m4a wherever a recording was asked for.
 
 /**
@@ -88,7 +88,7 @@ function defaults(cmd: HelperCommand, session: string): HelperLine[] {
 class FakeHelperProcess extends EventEmitter implements HelperProcess {
   readonly stdin = new PassThrough()
   readonly stdout = new PassThrough()
-  /** Every command Apex wrote, for assertions. */
+  /** Every command Atelier wrote, for assertions. */
   readonly commands: HelperCommand[] = []
   readonly #script: FakeLine[]
   #session = ''
@@ -181,7 +181,7 @@ export const smokeSpeechAssets = {
 
 /**
  * The smoke run's running helper, for lines nothing asked for (desktop
- * calls' `calls` snapshots) and the commands Apex sent it.
+ * calls' `calls` snapshots) and the commands Atelier sent it.
  */
 export const smokeSpeechHelper = {
   process: null as FakeHelperProcess | null,

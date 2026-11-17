@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -13,7 +13,7 @@ import { RotateCcw } from 'lucide-react'
 import { DESKTOP_CALL_APPS, DESKTOP_CALL_APP_IDS } from '@shared/desktopCalls'
 import type { SettingsPatch, SettingsView } from '@shared/ipc'
 import { VOCABULARY_MAX, VOCABULARY_TERMS_MAX, VOCABULARY_TERM_MAX, permissionsComplete, type PermissionKind, type SpeechPermissions, type TranscriptionSettings } from '@shared/speech'
-import { apex, call } from '../../api'
+import { atelier, call } from '../../api'
 import { t } from '../../i18n/useT'
 import { Button, SaveStatus, SkeletonRows, toast, useAutosave } from '../../ui'
 import {
@@ -89,7 +89,7 @@ export function TranscriptionPage({ settings, update }: TranscriptionPageProps):
   // The calendar row lights up as soon as Calendar access is on (and off again when it goes).
   useEvent('calendar', () => void calendar.reload())
   const test = useSpeechSession({ purpose: 'level-test' })
-  // Whether Apex has asked for Screen Recording: main remembers it (macOS only says on or off).
+  // Whether Atelier has asked for Screen Recording: main remembers it (macOS only says on or off).
   const screen = useScreenAccess(available)
   const screenAsked = screen.data !== null && screen.data !== 'not-determined'
   const request = useCallback(
@@ -282,7 +282,7 @@ export function TranscriptionPage({ settings, update }: TranscriptionPageProps):
           </Row>
           {available && <ModelStatus state={assets} name={locale?.name ?? null} />}
           {/* Bilingual meetings: only the macOS helper listens in two languages (the broker asks for one elsewhere). */}
-          {apex.platform === 'darwin' && (
+          {atelier.platform === 'darwin' && (
             <Row title={t('speech.locale.secondary')} description={t('speech.locale.secondaryDescription')} htmlFor="transcription-locale-2">
               <LanguageSelect
                   id="transcription-locale-2"
@@ -422,7 +422,7 @@ export function TranscriptionPage({ settings, update }: TranscriptionPageProps):
   )
 }
 
-/** Apex's own small drawings of the two meeting modes, from tokens: a waveform with transcript lines, or the waveform alone. */
+/** Atelier's own small drawings of the two meeting modes, from tokens: a waveform with transcript lines, or the waveform alone. */
 function MeetingModeArt({ mode }: { mode: 'transcribe' | 'record' }): ReactElement {
   return (
     <span className={`sk-mode-art sk-mode-art--${mode}`}>

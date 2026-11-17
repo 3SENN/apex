@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -16,7 +16,7 @@
 import { BRAND_NAME } from '@shared/branding'
 import { randomUUID } from 'node:crypto'
 import { ipcMain, type IpcMainEvent, type WebContents } from 'electron'
-import { APEX_SERVICES_AVAILABLE, PACK_IPC, PACK_SERVICE_LIMITS, packVersionMeets, type PackEventMessage, type PackManifest, type PackServiceCallMessage } from '@shared/packs'
+import { ATELIER_SERVICES_AVAILABLE, PACK_IPC, PACK_SERVICE_LIMITS, packVersionMeets, type PackEventMessage, type PackManifest, type PackServiceCallMessage } from '@shared/packs'
 
 /** Why a pack that is on waits instead of running. */
 export type WaitReason = { kind: 'service'; name: string } | { kind: 'pack'; id: string; version: string | null } | { kind: 'version'; id: string; want: string; have: string }
@@ -54,7 +54,7 @@ export function resolvePlugins(packs: ReadonlyArray<{ id: string; manifest: Pick
     for (const p of [...candidates.values()]) {
       const reasons: WaitReason[] = []
       for (const name of p.manifest.uses ?? []) {
-        if (APEX_SERVICES_AVAILABLE.includes(name)) continue
+        if (ATELIER_SERVICES_AVAILABLE.includes(name)) continue
         const from = providers.get(name)
         if (!from || from === p.id) reasons.push({ kind: 'service', name })
       }

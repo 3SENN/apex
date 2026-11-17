@@ -1,16 +1,16 @@
 # Changelog
 
-All notable changes to Apex. Versions follow [semantic versioning](https://semver.org/); dates are release dates.
+All notable changes to Atelier. Versions follow [semantic versioning](https://semver.org/); dates are release dates.
 
-## 1.4.5 (2026-11-17) — Apex is open source
+## 1.4.5 (2026-11-17) — Atelier is open source
 
-- **Apex is open source.** The whole browser and its companion are now free and open source. Read the code, build it yourself or help make it better: Settings › About shows where to find it.
+- **Atelier is open source.** The whole browser and its companion are now free and open source. Read the code, build it yourself or help make it better: Settings › About shows where to find it.
 - **Boosts are now Tweaks.** Site tweaks are what boosts used to be, and Hide element is the new name for the zapper. Everything you made keeps working.
 - **Reviews show everything a companion says.** Importing a companion or installing a pack now shows everything it tells the assistant: each skill’s instructions and steps, and each routine’s prompt.
 - **Phone controllers keep up.** A button you let go of on a phone controller always reaches the game, even after a long session.
 - **The side panel has room for its title.** On Windows and Linux, the side panel no longer squeezes its title to make room for window buttons that aren’t there.
-- **Runs on your API key.** Apex’s companion runs on Claude through your own Anthropic API key. If you used Claude Code before, add a key in Settings › Model and key.
-- **Security updates.** The libraries Apex uses for its local servers and connections now include the latest security fixes.
+- **Runs on your API key.** Atelier’s companion runs on Claude through your own Anthropic API key. If you used Claude Code before, add a key in Settings › Model and key.
+- **Security updates.** The libraries Atelier uses for its local servers and connections now include the latest security fixes.
 
 ## 1.4.4 (2026-11-12) — Tab drags stay on your screen
 
@@ -27,25 +27,25 @@ All notable changes to Apex. Versions follow [semantic versioning](https://semve
 
 ## 1.4.1 (2026-11-11) — Quicker calls, and a sidebar that shows when you reach for it
 
-- **Quick decisions, with a model of your own.** Apex makes small calls all day, like whether a reply is waiting on you or whether to search or ask. In Settings › Quick decisions you can let small decision models make them, from the providers you pick, in your order. It stays off until you turn it on.
+- **Quick decisions, with a model of your own.** Atelier makes small calls all day, like whether a reply is waiting on you or whether to search or ask. In Settings › Quick decisions you can let small decision models make them, from the providers you pick, in your order. It stays off until you turn it on.
 - **Group tabs.** Group your tabs by site, or by topic with a decision model, from the tab menu or the command bar. Undo puts them back.
 - **The hidden sidebar shows again.** With the sidebar hidden, moving to the window’s left edge shows it and keeps it there, instead of flickering away.
-- **Sites that ignored every click.** With Hide cookie banners on, sites using TrustArc’s newer cookie popup, like digitalocean.com, took no clicks. Apex now declines that popup and the page works.
-- **PDFs on Linux.** Reading a PDF no longer crashes Apex.
+- **Sites that ignored every click.** With Hide cookie banners on, sites using TrustArc’s newer cookie popup, like digitalocean.com, took no clicks. Atelier now declines that popup and the page works.
+- **PDFs on Linux.** Reading a PDF no longer crashes Atelier.
 
 ## 1.4.0 (2026-11-09) — Apps that run a little server of their own
 
 - **A web server for your apps.** An app can start its own small web server on this computer, or on your Wi-Fi when you allowed that at install, to serve pages to your phone or another computer and talk with them live.
 - **Phones as controllers.** Build from the new Phone controller starter: scan the code with your phone, and its tilt and buttons reach your app as you move.
-- **Always in view, one tap to stop.** While an app shares something, Apex shows a bar over its tab with how many are connected and a Stop button.
+- **Always in view, one tap to stop.** While an app shares something, Atelier shows a bar over its tab with how many are connected and a Stop button.
 
 ## 1.3.4 (2026-11-06) — Steadier, on Mac and Windows
 
 - **Dragging a tab shows it again.** When you drag a tab, a chip with its name follows your pointer again.
 - **Send is never held up.** An attachment could stay on “Preparing…” after it was ready and keep Send waiting. It now shows ready as soon as it is.
 - **Web apps open where they belong.** A web app opens back in the tab it was saved from, never in a private window.
-- **Closing the last window.** Closing Apex’s last window quits Apex, or keeps it in the tray when it runs in the background, and your tabs are back the next time.
-- **Recordings that survive a crash, on Windows too.** If Apex crashes, Windows shuts down or you sign out mid-meeting, the recording is saved, or put back together the next time Apex starts.
+- **Closing the last window.** Closing Atelier’s last window quits Atelier, or keeps it in the tray when it runs in the background, and your tabs are back the next time.
+- **Recordings that survive a crash, on Windows too.** If Atelier crashes, Windows shuts down or you sign out mid-meeting, the recording is saved, or put back together the next time Atelier starts.
 
 ## 1.3.3 (2026-11-06) — Packs and Workspace, made simple
 
@@ -57,18 +57,18 @@ All notable changes to Apex. Versions follow [semantic versioning](https://semve
 ## 1.3.2 (2026-11-06) — Record meetings your way
 
 - **Record audio only.** Settings › Transcription › Meetings: transcribe and take notes, or just record the audio of a meeting, online or in person. You can transcribe a recording later.
-- **A recording, even when Apex can’t transcribe.** With Speech Recognition off, or a language this Mac can’t transcribe, a meeting is recorded as audio instead, and Apex says why.
-- **Recordings that survive a crash.** Quitting mid-meeting saves the recording first. If Apex crashes or your Mac loses power, the recording is put back together the next time Apex starts.
+- **A recording, even when Atelier can’t transcribe.** With Speech Recognition off, or a language this Mac can’t transcribe, a meeting is recorded as audio instead, and Atelier says why.
+- **Recordings that survive a crash.** Quitting mid-meeting saves the recording first. If Atelier crashes or your Mac loses power, the recording is put back together the next time Atelier starts.
 - **One language, unless you pick two.** Meetings listen in one language. For meetings where people switch languages, choose a second one in Settings › Transcription.
 - **Worlds opens again.** A mistake since 1.2.5 kept Worlds from opening. It opens again, and holding Shift runs.
-- **Cards in your language.** Meeting cards, the recording widget and the wrap-up now follow Apex’s language.
+- **Cards in your language.** Meeting cards, the recording widget and the wrap-up now follow Atelier’s language.
 
 ## 1.3.1 (2026-11-05) — Meetings in two languages, and your apps your way
 
 - **Meetings in two languages.** Meetings listen in your second language at the same time, so when someone switches between English and Dutch, each part is written in the language that was spoken. Settings › Transcription picks it from your Mac’s languages.
 - **Every app in one place.** Workspace › Apps lists your saved websites, apps from packs and apps your companions made. Right-click one to keep it in your sidebar as a row or as just its icon.
 - **Packs are easy to find.** Packs is in the sidebar’s More menu, the main menu and the Extensions menu, and Apps has Manage packs.
-- **Apps that look like Apex.** Apps your companions build now use Apex’s own look in light and dark, and your companion checks each one before saying it’s ready.
+- **Apps that look like Atelier.** Apps your companions build now use Atelier’s own look in light and dark, and your companion checks each one before saying it’s ready.
 - **Smaller fixes.** You can select and copy text in chats, Connectors starts in More, and transcribing a recording no longer loses text when the language changes.
 
 ## 1.3.0 (2026-11-05) — A workspace that fits you
@@ -106,9 +106,9 @@ All notable changes to Apex. Versions follow [semantic versioning](https://semve
 
 ## 1.2.0 (2026-11-05) — Apps, games and worlds
 
-- **Apps and games in Apex.** Packs can now hold full apps and games that open in a tab. Find them on Packs › Browse, or open an .apexapp someone sent you. Your companions can play their characters.
+- **Apps and games in Atelier.** Packs can now hold full apps and games that open in a tab. Find them on Packs › Browse, or open an .atelierapp someone sent you. Your companions can play their characters.
 - **Build one with your companion.** Ask for an app or a game in any chat. Your companion builds and tests it with you, and Share… saves it as a file you can send.
-- **Worlds.** Walk around a place as your companion, talk to the people who live there, and step into places that open apps. Build your own and share it as an .apexworld.
+- **Worlds.** Walk around a place as your companion, talk to the people who live there, and step into places that open apps. Build your own and share it as an .atelierworld.
 
 ## 1.1.2 (2026-11-02) — Tab links in chat, and steadier tab drags
 
@@ -126,16 +126,16 @@ All notable changes to Apex. Versions follow [semantic versioning](https://semve
 - **Share what you made.** Share a skill, site tweak, app or companion as a pack, signed with your own key. Updates that ask for more always wait for you.
 - **The agent keeps to its own tab.** While your companion works in a page, you can keep using another tab. It works out of sight and never takes yours.
 
-## 1.0.0 (2026-10-31) — Apex 1.0
+## 1.0.0 (2026-10-31) — Atelier 1.0
 
-- **Pip is the new face of Apex.** The app icon, menu bar and welcome now show Pip, and the welcome flow keeps the companion clear of every word.
+- **Pip is the new face of Atelier.** The app icon, menu bar and welcome now show Pip, and the welcome flow keeps the companion clear of every word.
 - **Search, translate and read.** Search the web from the address bar or a new tab, translate pages on your Mac, and open articles in a calm reader with read aloud.
 - **Sign in like any browser.** Sign-in pages for Google, Microsoft, Apple and others just work, and you can bring your sign-ins over from your old browser.
-- **Meetings in any app.** Apex offers to take notes when a call starts in Zoom, Teams, FaceTime, Slack or a browser tab, with on-device transcription.
+- **Meetings in any app.** Atelier offers to take notes when a call starts in Zoom, Teams, FaceTime, Slack or a browser tab, with on-device transcription.
 
-## 0.1.0 (2026-10-29) — Apex, with your companion beside every tab
+## 0.1.0 (2026-10-29) — Atelier, with your companion beside every tab
 
 - **A companion that works in your tabs.** Ask in the side panel and your companion reads, clicks and types in the pages you already have open, asking first before anything that matters.
 - **Chats that keep going.** Start a chat, switch to something else, and come back when it needs you. Routines run on their own schedule.
-- **Your keys, your computer.** Apex uses your own Anthropic key. Chats, memory and settings stay on this computer.
-- **Updates that wait for you.** Apex downloads updates in the background and restarts only when you say so. Windows and tabs come back afterwards.
+- **Your keys, your computer.** Atelier uses your own Anthropic key. Chats, memory and settings stay on this computer.
+- **Updates that wait for you.** Atelier downloads updates in the background and restarts only when you say so. Windows and tabs come back afterwards.

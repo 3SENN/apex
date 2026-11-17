@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -47,7 +47,7 @@ export const REPLY_TOOL_INPUTS = {
 
 // Definitions as the model sees them, the frozen set per chat, and the
 // runner both engines share: the API-key loop routes calls here, and Claude
-// Code reaches the same tools through Apex's local MCP server.
+// Code reaches the same tools through Atelier's local MCP server.
 
 const REPLY_TOOL_DESCRIPTIONS: Record<ReplyToolName, string> = {
   suggest_next_steps:

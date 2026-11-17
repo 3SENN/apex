@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,7 +10,7 @@ import { cleanTitle, isBookmarkableUrl } from '@shared/bookmarks'
 // Netscape bookmark HTML: the format every browser imports and
 // exports. Export marks the bar the way Chrome does (PERSONAL_TOOLBAR_FOLDER)
 // and Other bookmarks the way Firefox does (UNFILED_BOOKMARKS_FOLDER), so a
-// file Apex wrote comes back into the same roots. Everything is escaped.
+// file Atelier wrote comes back into the same roots. Everything is escaped.
 
 export const BOOKMARKS_HTML_MAX = 20 * 1024 * 1024
 

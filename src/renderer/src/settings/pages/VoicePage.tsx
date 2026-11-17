@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -19,7 +19,7 @@ import {
   type VoiceChord,
   type VoiceTarget,
 } from '@shared/voice'
-import { apex, call, errorText } from '../../api'
+import { atelier, call, errorText } from '../../api'
 import { t, type MessageKey } from '../../i18n/useT'
 import { Button, SegmentedControl, Select } from '../../ui'
 import { isMac } from '../../ui/hooks'
@@ -61,7 +61,7 @@ function useSpeech(): { status: SpeechStatus | null; permissions: SpeechPermissi
   }
   useEffect(() => {
     refresh()
-    const off = apex.onAppEvent((e) => {
+    const off = atelier.onAppEvent((e) => {
       if (e.type === 'speech-status') setStatus(e.status)
       else if (e.type === 'speech-permissions') {
         setPermissions(e.permissions)
@@ -89,7 +89,7 @@ function useShortcutStatus(settings: SettingsView): { registered: boolean; confl
   useEffect(() => {
     const load = (): void => void call('voice', 'shortcutStatus').then(setStatus, () => setStatus(null))
     load()
-    return apex.onAppEvent((e) => {
+    return atelier.onAppEvent((e) => {
       if (e.type === 'voice') load()
     })
   }, [settings.voice.launcher, settings.voice.chord])

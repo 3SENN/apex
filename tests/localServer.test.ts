@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -49,14 +49,14 @@ import { ceilingProblems } from '../src/main/packs/policy'
 import { SERVER_CLIENT_JS } from '../src/main/packs/serverClient'
 import { starterFiles } from '../src/main/packs/starters'
 
-// apex.server (docs/packs.md › A web server of its own): the manifest's
+// atelier.server (docs/packs.md › A web server of its own): the manifest's
 // permission and its review lines, the bridge's checks, the server's checks
 // on every request and socket (peers, Host, token, paths, limits), TLS with
-// Apex's own certificate, and the servers living and dying with their page.
+// Atelier's own certificate, and the servers living and dying with their page.
 
 const dirs: string[] = []
 const tmp = (): string => {
-  const d = mkdtempSync(join(tmpdir(), 'apex-local-server-'))
+  const d = mkdtempSync(join(tmpdir(), 'atelier-local-server-'))
   dirs.push(d)
   return d
 }
@@ -67,7 +67,7 @@ afterEach(async () => {
 })
 
 const appManifest = (server: PackManifest['permissions']['server'], over: Partial<PackManifest> = {}): PackManifest => ({
-  format: 'apex-pack',
+  format: 'atelier-pack',
   manifestVersion: 2,
   id: 'pads',
   name: 'Pads',
@@ -261,7 +261,7 @@ const until = async (check: () => boolean, ms = 3000): Promise<void> => {
 }
 
 describe('the server', () => {
-  it('serves its folder’s files and sends the rest to the page, with Apex’s headers', async () => {
+  it('serves its folder’s files and sends the rest to the page, with Atelier’s headers', async () => {
     const server = serve()
     const port = await server.start()
     const base = `http://127.0.0.1:${port}`
@@ -282,10 +282,10 @@ describe('the server', () => {
     // Another site's page can't make the app act (its Origin gives it away); the server's own pages can.
     expect((await fetch(`${base}/api`, { method: 'POST', headers: { 'content-type': 'text/plain', origin: 'https://evil.example' }, body: 'x' })).status).toBe(403)
     expect((await fetch(`${base}/api`, { method: 'POST', headers: { 'content-type': 'text/plain', origin: base }, body: 'x' })).status).toBe(200)
-    const client = await fetch(`${base}/__apex/client.js`)
+    const client = await fetch(`${base}/__atelier/client.js`)
     expect(client.headers.get('content-type')).toMatch(/javascript/)
     expect(await client.text()).toBe(SERVER_CLIENT_JS)
-    expect((await fetch(`${base}/__apex/other`)).status).toBe(404)
+    expect((await fetch(`${base}/__atelier/other`)).status).toBe(404)
   })
 
   it('answers a page that is too slow with 504, and only its own Host', async () => {
@@ -308,15 +308,15 @@ describe('the server', () => {
     const bare = await fetch(`http://127.0.0.1:${port}/${token}?a=1`, { redirect: 'manual' })
     expect(bare.status).toBe(308)
     expect(bare.headers.get('location')).toBe(`/${token}/?a=1`)
-    await expect(open(`ws://127.0.0.1:${port}/__apex/socket`)).rejects.toThrow(/refused 404/)
-    const ws = await open(`ws://127.0.0.1:${port}/${token}/__apex/socket?name=Sam`)
+    await expect(open(`ws://127.0.0.1:${port}/__atelier/socket`)).rejects.toThrow(/refused 404/)
+    const ws = await open(`ws://127.0.0.1:${port}/${token}/__atelier/socket?name=Sam`)
     ws.close()
   })
 
   it('relays sockets both ways, text only, within the limits', async () => {
     const server = serve({ maxConnections: 2 })
     const port = await server.start()
-    const url = `ws://127.0.0.1:${port}/__apex/socket`
+    const url = `ws://127.0.0.1:${port}/__atelier/socket`
     const a = await open(`${url}?name=Ann`)
     await until(() => server.events.length === 1)
     const id = server.socketIds()[0] as string
@@ -347,7 +347,7 @@ describe('the server', () => {
   it('drops a flood of messages and stops cleanly, closing its sockets', async () => {
     const server = serve()
     const port = await server.start()
-    const ws = await open(`ws://127.0.0.1:${port}/__apex/socket`)
+    const ws = await open(`ws://127.0.0.1:${port}/__atelier/socket`)
     for (let i = 0; i < 600; i++) ws.send(String(i))
     await new Promise((r) => setTimeout(r, 300))
     const messages = server.events.filter((e) => e.startsWith('message')).length
@@ -370,7 +370,7 @@ describe('the server', () => {
   })
 })
 
-describe('on the Wi-Fi: https with Apex’s certificate', () => {
+describe('on the Wi-Fi: https with Atelier’s certificate', () => {
   let cert: ServerCertificate
   beforeAll(async () => {
     cert = await makeServerCertificate(['192.168.1.20'])
@@ -405,7 +405,7 @@ describe('on the Wi-Fi: https with Apex’s certificate', () => {
     const page = await raw(port, '/abcdefghijklmnopqrstuv/', { host: `127.0.0.1:${port}` }, true)
     expect(page.status).toBe(200)
     expect(page.body).toBe('<h1>pad</h1>')
-    const ws = await open(`wss://127.0.0.1:${port}/abcdefghijklmnopqrstuv/__apex/socket`)
+    const ws = await open(`wss://127.0.0.1:${port}/abcdefghijklmnopqrstuv/__atelier/socket`)
     await until(() => server.events.length === 1)
     ws.close()
     await expect(raw(port, '/abcdefghijklmnopqrstuv/', {}, false)).rejects.toThrow()
@@ -475,7 +475,7 @@ describe('the servers apps run', () => {
     expect([res.status, await res.text()]).toEqual([201, 'hello'])
     expect(() => servers.respond(page.id, req.id, {})).toThrow(/no longer waiting/)
 
-    const ws = await open(`${(status.url as string).replace('http', 'ws')}__apex/socket?name=Sam`)
+    const ws = await open(`${(status.url as string).replace('http', 'ws')}__atelier/socket?name=Sam`)
     for (let i = 0; i < 5; i++) ws.send(`{"n":${i}}`)
     await until(() => page.sent.filter((e) => e.type === 'message').length === 5)
     const join = page.sent.find((e) => e.type === 'connection') as Extract<ServerEvent, { type: 'connection' }>
@@ -507,7 +507,7 @@ describe('the servers apps run', () => {
     expect(servers.list()).toEqual([])
   })
 
-  it('shares on the Wi-Fi with a QR code, says once that macOS will ask, and keeps its port and token while Apex runs', async () => {
+  it('shares on the Wi-Fi with a QR code, says once that macOS will ask, and keeps its port and token while Atelier runs', async () => {
     const dir = tmp()
     const cert = await makeServerCertificate(['127.0.0.1'])
     const bar: Array<[string, ServerBarView]> = []
@@ -574,8 +574,8 @@ describe('the helper for served pages and the starter', () => {
       const parsed = spawnSync(process.execPath, ['--check', join(dir, name)], { encoding: 'utf8' })
       expect(parsed.status, `${path}: ${parsed.stderr}`).toBe(0)
     }
-    expect(made.get('phone/index.html')!.toString()).toContain('<script src="__apex/client.js"></script>')
-    expect(made.get('app/main.js')!.toString()).toContain("apex.server.start({ lan: true, root: 'phone' })")
+    expect(made.get('phone/index.html')!.toString()).toContain('<script src="__atelier/client.js"></script>')
+    expect(made.get('app/main.js')!.toString()).toContain("atelier.server.start({ lan: true, root: 'phone' })")
   })
 
   it('the phone keeps motion and pad moves under 90 a second, so every button release gets through', () => {
@@ -609,7 +609,7 @@ describe('the helper for served pages and the starter', () => {
       performance: { now: () => clock },
       screen: {},
       DeviceMotionEvent: function DeviceMotionEvent() {},
-      apexServer: { connect: () => ({ send: (m: unknown) => sent.push(JSON.parse(JSON.stringify(m))), onOpen: () => undefined, onClose: () => undefined, onMessage: () => undefined }) },
+      atelierServer: { connect: () => ({ send: (m: unknown) => sent.push(JSON.parse(JSON.stringify(m))), onOpen: () => undefined, onClose: () => undefined, onMessage: () => undefined }) },
       addEventListener: (type: string, fn: Handler) => onWindow.set(type, fn),
     }
     page.window = page

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -27,7 +27,7 @@ export type EngineSettings = {
 } & ExtraEngineSettings
 
 export interface ExtraEnginesDeps {
-  /** Apex's data folder. */
+  /** Atelier's data folder. */
   dataDir: string
   home: string
   env: NodeJS.ProcessEnv
@@ -47,7 +47,7 @@ export interface ExtraEnginesDeps {
   pickFile(options: { title: string; message: string; defaultPath: string }): Promise<string | null>
   /** Sends a chat's last message again (after an engine fixed what stopped it). */
   retry(chatId: string): void
-  /** One chat's tools on Apex's local MCP server (started on demand): its URL and bearer token. */
+  /** One chat's tools on Atelier's local MCP server (started on demand): its URL and bearer token. */
   endpoint(chatId: string): Promise<{ url: string; token: string }>
   /** What an engine shows changed; the status is read again. */
   changed(): void

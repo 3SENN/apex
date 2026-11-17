@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -23,7 +23,7 @@ import {
   visibleRange,
 } from '../src/renderer/src/diagnostics/logic/logFilter'
 
-// The diagnostics renderer logic: apex://logs filters, live lines, the virtualized
+// The diagnostics renderer logic: atelier://logs filters, live lines, the virtualized
 // window and keyboard selection, and the problem report's
 // draft limits and size line (OV-30).
 
@@ -184,7 +184,7 @@ describe('the problem report draft', () => {
     expect(isSaveAndEmailKey({ ...key, ctrlKey: true }, false)).toBe(true)
     expect(isSaveAndEmailKey({ ...key, metaKey: true, shiftKey: true }, true)).toBe(false)
     expect(isSaveAndEmailKey(key, true)).toBe(false)
-    expect(baseName('/Users/me/Downloads/Apex problem report 2026-10-29 14.03.zip')).toBe('Apex problem report 2026-10-29 14.03.zip')
+    expect(baseName('/Users/me/Downloads/Atelier problem report 2026-10-29 14.03.zip')).toBe('Atelier problem report 2026-10-29 14.03.zip')
     expect(baseName('C:\\Users\\me\\a.zip')).toBe('a.zip')
   })
 })

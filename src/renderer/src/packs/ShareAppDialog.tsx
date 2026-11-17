@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 // Share… for an app pack (docs/apps.md › Sharing), shaped like a
 // companion's Export…: a note for whoever gets it and a share image, made
 // from a still of the app drawn off-screen in its own sandbox. Both go inside
-// the .apexapp (beside the signed files, so the review shows them as from
+// the .atelierapp (beside the signed files, so the review shows them as from
 // whoever shared it), and the image is saved next to the file too.
 import { useEffect, useId, useState, type ReactElement } from 'react'
 import { FileDown } from 'lucide-react'

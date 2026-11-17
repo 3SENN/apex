@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -179,7 +179,7 @@ function BubbleArt({ id, look, assets }: { id: RingCategoryId; look: CompanionLo
   )
 }
 
-// Apex's own small glyphs, filled from the --ring-* colours on the ring.
+// Atelier's own small glyphs, filled from the --ring-* colours on the ring.
 const head = <circle cx="12" cy="11" r="6.5" fill="var(--ring-skin)" />
 const GLYPHS: Record<RingCategoryId, ReactElement> = {
   colours: (

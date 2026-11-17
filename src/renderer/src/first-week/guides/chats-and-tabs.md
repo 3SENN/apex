@@ -14,7 +14,7 @@ There are three easy ways in:
 
 Every chat appears in the sidebar under its companion's face. The face shows how the chat is doing: working, waiting for you, finished, or stuck. Chats that finished while you were elsewhere stay marked until you look at them.
 
-Open [All chats](apex://chats) to search everything you've asked, pin the ones you come back to, and archive the rest.
+Open [All chats](atelier://chats) to search everything you've asked, pin the ones you come back to, and archive the rest.
 
 ## Tabs the chat opens
 

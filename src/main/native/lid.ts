@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,9 +9,9 @@ import type { HelperLine } from '@shared/speech'
 
 // The lid pause: closing the lid (or sleeping) pauses a meeting
 // recording through the recorder's pause('lid'); opening it (or waking)
-// resumes only a pause Apex made, so a pause the person made stays.
+// resumes only a pause Atelier made, so a pause the person made stays.
 
-/** The pure policy. Resuming ignores `enabled`: a pause Apex made is always undone. */
+/** The pure policy. Resuming ignores `enabled`: a pause Atelier made is always undone. */
 export function lidPolicy(event: LidPolicyEvent, recording: LidRecordingState, pausedBy: LidPausedBy, enabled: boolean): LidAction {
   if (event === 'lid-closed' || event === 'suspend') return enabled && recording === 'recording' ? 'pause' : 'none'
   return recording === 'paused' && pausedBy === 'lid' ? 'resume' : 'none'

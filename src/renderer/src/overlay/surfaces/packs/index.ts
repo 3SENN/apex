@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import type { SurfaceMap, SurfaceModule } from '../../types'
 import { ServerBar } from './ServerBar'
 import './server-bar.css'
 
-// Packs' surface: Apex's bar over an app whose web server runs (apex.server).
+// Packs' surface: Atelier's bar over an app whose web server runs (atelier.server).
 // Like the sharing bar: at the top of the app's pane, never in the way of a
 // click elsewhere, hidden while another tab shows and back with the app's.
 

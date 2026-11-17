@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { useEffect, useState, type ReactElement } from 'react'
 import { Mic, SearchX, Square } from 'lucide-react'
 import { decodeSpeechError } from '@shared/speech'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { useT } from '../i18n/useT'
 import { DestinationFrame } from '../settings/destinations/common'
 import { ListFrame, PageHeader, SearchField } from '../settings/kit'
@@ -18,7 +18,7 @@ import { useCaptureStatus, useMeetingList } from './hooks'
 import { clock, kindFor, type MeetingsFilter } from './logic'
 import './meetings.css'
 
-// apex://meetings (MV-12, DS-105): the header with the start pill, the
+// atelier://meetings (MV-12, DS-105): the header with the start pill, the
 // Meetings/Recordings segments and search, the live row while a recording
 // runs, then the rows. Loading, empty and no-results states are designed.
 // A start that fails says why with its fix (the right System Settings pane,
@@ -67,7 +67,7 @@ export function MeetingList({ tabId, initialFilter, initialQuery }: MeetingListP
         return
       }
       const copy = copyForError(err)
-      const action = startFixAction(copy, { retry: () => void start(), openTranscription: () => void apex.nav.go(tabId, 'apex://settings/transcription') })
+      const action = startFixAction(copy, { retry: () => void start(), openTranscription: () => void atelier.nav.go(tabId, 'atelier://settings/transcription') })
       toast.show({ message: copy.message, tone: copy.tone === 'error' ? 'error' : 'info', ...(action ? { action } : {}) })
     } finally {
       setStarting(false)
@@ -165,7 +165,7 @@ function LiveRow({ title, meetingId, startedAt, elapsedMs, paused, stopping, tab
   return (
     <div className="mt-live" role="group" aria-label={t('meetings.live.label')}>
       <span className="mt-live__dot" aria-hidden="true" data-paused={paused || undefined} />
-      <button type="button" className="mt-live__main" onClick={() => void apex.nav.go(tabId, `apex://meetings/${meetingId}`)}>
+      <button type="button" className="mt-live__main" onClick={() => void atelier.nav.go(tabId, `atelier://meetings/${meetingId}`)}>
         <span className="mt-live__title">{title ?? t('meetings.live.untitled')}</span>
         <span className="mt-live__meta">
           {stopping ? t('meetings.live.finishing') : paused ? t('meetings.live.paused') : t('meetings.live.recording')} · <span className="mt-tabular">{clock(shown)}</span>

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -18,7 +18,7 @@ export type ImportType = (typeof IMPORT_TYPES)[number]
 export type ImportBrowserKind = 'chromium' | 'firefox' | 'safari'
 
 /**
- * The types each kind of browser always keeps in a form Apex can read.
+ * The types each kind of browser always keeps in a form Atelier can read.
  * 'cookies' is left out here on purpose: it depends on the platform (macOS
  * only) and is appended by detectBrowsers, so it never shows elsewhere.
  */
@@ -43,7 +43,7 @@ export interface ImportBrowser {
   kind: ImportBrowserKind
   profiles: ImportProfile[]
   types: readonly ImportType[]
-  /** macOS keeps Safari's files behind Full Disk Access; true until Apex is allowed. */
+  /** macOS keeps Safari's files behind Full Disk Access; true until Atelier is allowed. */
   needsAccess: boolean
   /** Chromium browsers: its Web Store extensions can be listed and added again here (ST-46 X). */
   extensions?: boolean
@@ -87,7 +87,7 @@ export function importOutcome(requested: readonly ImportType[], counts: ImportCo
 }
 
 // ── Extensions from another browser (ST-46 X) ──
-// Chromium browsers keep their extensions' ids in the profile; Apex lists
+// Chromium browsers keep their extensions' ids in the profile; Atelier lists
 // them and adds the chosen ones again from the Chrome Web Store, through the
 // same verified install path as the store's own Add button.
 
@@ -101,9 +101,9 @@ export interface ImportableExtension {
   version: string
   /** On in that browser (an extension it turned off starts unticked). */
   enabled: boolean
-  /** From the Chrome Web Store, so Apex can fetch it; false for other stores and side-loaded ones. */
+  /** From the Chrome Web Store, so Atelier can fetch it; false for other stores and side-loaded ones. */
   onStore: boolean
-  /** Already in this Apex profile. */
+  /** Already in this Atelier profile. */
   installed: boolean
 }
 

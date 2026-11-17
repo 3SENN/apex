@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import type { SpeechBroker, SpeechSession, SpeechSessionEvent } from '@shared/speech'
 
-// Under APEX_SMOKE the fake speech helper hears nothing, so the voice smoke
+// Under ATELIER_SMOKE the fake speech helper hears nothing, so the voice smoke
 // checks queue the words a hold or the launcher "says" here. Only voice's own
 // sessions (voice-command and launcher) are wrapped; meetings and dictation
 // elsewhere see the broker unchanged.

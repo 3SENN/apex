@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -13,9 +13,9 @@ import { leaveStateOf } from './pageDialogs'
 import type { Tab } from './tabs'
 
 // "Leave this page?" (will-prevent-unload). Electron cancels the
-// unload unless the handler prevents it synchronously, so Apex lets it
+// unload unless the handler prevents it synchronously, so Atelier lets it
 // cancel, asks with its styled dialog, and on Leave replays what you were
-// doing with a one-shot skip. Apex's own navigations are recorded by
+// doing with a one-shot skip. Atelier's own navigations are recorded by
 // wrapping the tab's navigation methods; the page's own ones arrive from
 // its preload (pageDialogs.ts).
 

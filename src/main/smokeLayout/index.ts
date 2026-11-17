@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -21,14 +21,14 @@ import { COLLECT_SCRIPT, SETTLE_SCRIPT } from './collect'
 import { LAYOUT_SIZES, layoutPages, sizeLabel, type LayoutPage } from './pages'
 import { SMOKE_SERVER } from '../decisions/smokeServer'
 
-// The layout audit (APEX_SMOKE_ONLY=layout): every apex:// page and Settings
+// The layout audit (ATELIER_SMOKE_ONLY=layout): every atelier:// page and Settings
 // page, every setup step, the new-tab page, a chat page and a chat in the side panel, at
 // 900, 1280, 1470 and 1920 wide and at 1280 with the panel open. Each one is
-// checked in the chrome's DOM (check.ts) and, with APEX_SMOKE_SHOTS, shot
+// checked in the chrome's DOM (check.ts) and, with ATELIER_SMOKE_SHOTS, shot
 // into <shots>/layout/ with the findings in <shots>/layout-report.json.
-// The check fails on any finding unless APEX_LAYOUT_REPORT_ONLY=1.
-// APEX_LAYOUT_PAGES=<regex> narrows the pages (for checking one fix);
-// APEX_LAYOUT_SNAPSHOTS=1 also keeps each page's box snapshot (layout/*.json).
+// The check fails on any finding unless ATELIER_LAYOUT_REPORT_ONLY=1.
+// ATELIER_LAYOUT_PAGES=<regex> narrows the pages (for checking one fix);
+// ATELIER_LAYOUT_SNAPSHOTS=1 also keeps each page's box snapshot (layout/*.json).
 
 export interface LayoutReportRow extends LayoutIssue {
   page: string
@@ -105,8 +105,8 @@ function serial(run: () => Promise<void>): Promise<void> {
 }
 
 async function setUp(ctx: SmokeContext): Promise<void> {
-  const dir = process.env.APEX_SMOKE_SHOTS
-  const only = process.env.APEX_LAYOUT_PAGES ? new RegExp(process.env.APEX_LAYOUT_PAGES) : null
+  const dir = process.env.ATELIER_SMOKE_SHOTS
+  const only = process.env.ATELIER_LAYOUT_PAGES ? new RegExp(process.env.ATELIER_LAYOUT_PAGES) : null
   const window = BrowserWindow.fromWebContents(ctx.chrome.ui)
   assert(window, 'no browser window')
   if (dir) mkdirSync(join(dir, 'layout'), { recursive: true })
@@ -142,8 +142,8 @@ async function setUp(ctx: SmokeContext): Promise<void> {
     },
     rows: [],
     dir,
-    theme: process.env.APEX_SMOKE_THEME === 'dark' ? 'dark' : 'light',
-    keep: process.env.APEX_LAYOUT_SNAPSHOTS === '1',
+    theme: process.env.ATELIER_SMOKE_THEME === 'dark' ? 'dark' : 'light',
+    keep: process.env.ATELIER_LAYOUT_SNAPSHOTS === '1',
   }
 }
 
@@ -196,7 +196,7 @@ async function finish(ctx: SmokeContext): Promise<void> {
   }
   const rows = a.rows
   console.log(`layout: ${rows.length} findings over ${a.pages.length} pages x ${LAYOUT_SIZES.length} sizes (${a.theme})${a.dir ? `, report in ${join(a.dir, 'layout-report.json')}` : ''}`)
-  if (rows.length > 0 && process.env.APEX_LAYOUT_REPORT_ONLY !== '1') {
+  if (rows.length > 0 && process.env.ATELIER_LAYOUT_REPORT_ONLY !== '1') {
     const shown = rows.slice(0, 20).map(formatRow).join('\n')
     throw new Error(`${rows.length} layout findings:\n${shown}${rows.length > 20 ? `\n... and ${rows.length - 20} more` : ''}`)
   }

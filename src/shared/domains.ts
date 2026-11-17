@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { getDomain } from 'tldts'
 import { POPULAR_DOMAINS } from './data/popular-domains'
 
-// How Apex shows a site's name: the host without www, its
+// How Atelier shows a site's name: the host without www, its
 // registrable domain (public suffix list via tldts) for highlighting, and
 // lookalike protection. An internationalised host shows in its own script
 // unless a label mixes scripts or its letters only resemble a popular

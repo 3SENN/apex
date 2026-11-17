@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,7 +11,7 @@ import type { ThemeState } from '@shared/theme'
 // applies them. main.tsx does that before the first render and keeps it live,
 // so components read <html data-theme> or use useTheme().
 
-let current: ThemeState = window.apex.initial.theme
+let current: ThemeState = window.atelier.initial.theme
 
 let switching = 0
 
@@ -44,7 +44,7 @@ export function useTheme(): ThemeState {
   const [theme, setTheme] = useState(current)
   useEffect(() => {
     setTheme(current)
-    return window.apex.onAppEvent((event) => {
+    return window.atelier.onAppEvent((event) => {
       if (event.type === 'theme') setTheme(event.theme)
     })
   }, [])

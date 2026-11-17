@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 // Preload for the browser chrome only. Web pages never receive this bridge;
 // main also rejects UI channels from any sender other than the chrome.
 import { contextBridge, ipcRenderer, webUtils, type IpcRendererEvent } from 'electron'
-import type { ApexApi } from '@shared/api'
+import type { AtelierApi } from '@shared/api'
 import type { ChatAgentEvent } from '@shared/chats'
 import { UI, type InitialState } from '@shared/ipc'
 import type { UiRole } from '@shared/overlay'
@@ -48,7 +48,7 @@ function subscribe<T>(channel: string, listener: (payload: T) => void): () => vo
   }
 }
 
-const api: ApexApi = {
+const api: AtelierApi = {
   tabs: {
     create: (url, options) => ipcRenderer.invoke(UI.tabsCreate, url, options),
     close: (tabId) => ipcRenderer.invoke(UI.tabsClose, tabId),
@@ -118,4 +118,4 @@ const api: ApexApi = {
   initial: ipcRenderer.sendSync(UI.initialState) as InitialState,
 }
 
-contextBridge.exposeInMainWorld('apex', api)
+contextBridge.exposeInMainWorld('atelier', api)

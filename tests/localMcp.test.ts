@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -25,7 +25,7 @@ afterEach(async () => {
 })
 
 function setup(): { core: ConnectorsCore; store: ConnectorStore } {
-  const dataDir = mkdtempSync(join(tmpdir(), 'apex-local-mcp-'))
+  const dataDir = mkdtempSync(join(tmpdir(), 'atelier-local-mcp-'))
   const store = new ConnectorStore(dataDir, cipher)
   const core = new ConnectorsCore({
     store,
@@ -112,7 +112,7 @@ describe('local MCP servers', () => {
   it('stops idle servers and finds bare commands on PATH only', async () => {
     let now = 0
     const states: string[] = []
-    const servers = new LocalServers({ root: mkdtempSync(join(tmpdir(), 'apex-idle-')), loginPath: async () => null, home: tmpdir(), onState: (_id, s) => states.push(s.state), now: () => now })
+    const servers = new LocalServers({ root: mkdtempSync(join(tmpdir(), 'atelier-idle-')), loginPath: async () => null, home: tmpdir(), onState: (_id, s) => states.push(s.state), now: () => now })
     cleanups.push(() => servers.stopAll())
     const session = await servers.session({ id: 'x', command: process.execPath, args: [FIXTURE], cwd: null, env: {}, secrets: [] })
     expect((await session.listTools()).length).toBe(3)

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -31,9 +31,9 @@ for (const [file, entries] of Object.entries(en.files)) {
 const EN = merged(en.files)
 const NL = merged(nl.files)
 
-// The branding's names (branding/*/branding.json) never appear in a message, nor do Apex's characters (TRADEMARKS.md;
+// The branding's names (branding/*/branding.json) never appear in a message, nor do Atelier's characters (TRADEMARKS.md;
 // Sage is also a colour, so the colour pickers keep it).
-const NAMES = /\b(Apex|Summit|Pip|Juniper|Bolt|Mochi|Pepper)\b/
+const NAMES = /\b(Atelier|Summit|Pip|Juniper|Bolt|Mochi|Pepper)\b/
 for (const [lang, catalogue] of [['en', EN], ['nl', NL]]) {
   for (const [key, text] of Object.entries(catalogue)) if (NAMES.test(text)) errors.push(`${lang} ${key} writes "${NAMES.exec(text)[1]}"; use {brand} for the app's name, and no character's name`)
 }

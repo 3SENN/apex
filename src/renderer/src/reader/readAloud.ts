@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,8 +14,8 @@ import { pickVoice, resumeOffset, speechQueue, wordRange, type QueueState, type 
 
 /** Elements that read as one utterance each. */
 const BLOCKS = 'h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, figcaption, pre, caption, th, td, summary, [data-reader-block]'
-const WORD = 'apex-reader-word'
-const LINE = 'apex-reader-line'
+const WORD = 'atelier-reader-word'
+const LINE = 'atelier-reader-line'
 
 interface Segment {
   node: Text
@@ -139,7 +139,7 @@ export class ReadAloud {
   stop(): void {
     const status = this.#state.status
     this.#generation++
-    // Only our own speech: anything else Apex is saying keeps going.
+    // Only our own speech: anything else Atelier is saying keeps going.
     if (status === 'playing') this.#cancel()
     this.#clear()
     if (status !== 'idle') this.#set(speechQueue.stop())

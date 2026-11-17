@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { effectiveReadAloudModifier, type ReadAloudModifier, type VoiceChord } from '@shared/voice'
 
-// The hold-to-talk chord. Apex sees the keys only through
+// The hold-to-talk chord. Atelier sees the keys only through
 // the input interceptor on its own webContents, never system-wide. A press
 // that lasts HOLD_MS (auto-repeat ignored) starts a turn and its key-up ends
 // it; a shorter tap types what the chord would have typed. The read-aloud

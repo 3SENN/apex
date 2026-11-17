@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import type { ReactElement } from 'react'
 import { AppWindow, AudioLines, Database, FileSpreadsheet, FileText, Globe, ImageIcon, MessageSquare, Quote, ScrollText, Sparkles } from 'lucide-react'
 import type { AttachmentKind } from '@shared/attachments'
 
-// One glyph per attachment kind, for chips and menu rows (Apex's own set).
+// One glyph per attachment kind, for chips and menu rows (Atelier's own set).
 
 export function KindIcon({ kind }: { kind: AttachmentKind }): ReactElement {
   switch (kind) {

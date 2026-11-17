@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -184,9 +184,9 @@ export const core = {
   'core.inlineRename.rename': 'Wijzig naam',
   'core.internalPage.goToAllChats': 'Ga naar Alle chats',
   'core.internalPage.theAddressMayBe': 'Het adres is misschien verkeerd getypt, of de pagina is verplaatst.',
-  'core.internalPage.thisApexPageDoesn': 'Deze {brand}-pagina bestaat niet',
+  'core.internalPage.thisAtelierPageDoesn': 'Deze {brand}-pagina bestaat niet',
   'core.mainIndex.allow': 'Sta toe',
-  'core.mainIndex.apexCompanion': '{brand}-companion',
+  'core.mainIndex.atelierCompanion': '{brand}-companion',
   'core.mainIndex.dontAllow': 'Sta niet toe',
   'core.mainIndex.onClaudeCodeIs': 'Op {origin}. Claude Code werkt van buiten {brand}, dus {brand} vraagt het eerst bij alles wat iets koopt, verstuurt, plaatst, verwijdert of indient.',
   'core.mainIndex.skill': 'Skill',

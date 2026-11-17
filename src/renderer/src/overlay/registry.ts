@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -29,7 +29,7 @@ import { UPDATES_SURFACE_MAP } from './surfaces/updates'
 import { MEDIA_SURFACE_MAP } from './surfaces/media'
 // ── translate surface map ── (TR-11)
 import { TRANSLATE_SURFACE_MAP } from './surfaces/translate'
-// ── packs surface map ── (apex.server's bar)
+// ── packs surface map ── (atelier.server's bar)
 import { PACKS_SURFACE_MAP } from './surfaces/packs'
 
 // Every domain's surface map, merged. An id that two maps

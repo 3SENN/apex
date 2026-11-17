@@ -1,13 +1,13 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// build_app: the agent hands Apex one self-contained HTML
-// file; Apex checks it (inline only, at most 2 MB), stores it as a draft
+// build_app: the agent hands Atelier one self-contained HTML
+// file; Atelier checks it (inline only, at most 2 MB), stores it as a draft
 // version and puts an app-built card in the chat, where you preview it and
 // Save. It never waits on you, so it works in any chat but a private one
-// (an app outlives the chat). APP-UI: the model builds with Apex UI (the
+// (an app outlives the chat). APP-UI: the model builds with Atelier UI (the
 // design notes ride in the description), and the result shows it the draft
 // in light and dark with the design problems the check found.
 import { BRAND_NAME } from '@shared/branding'

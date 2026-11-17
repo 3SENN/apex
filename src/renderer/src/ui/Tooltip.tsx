@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { useEffect, useRef, type RefObject } from 'react'
-import { apex } from '../api'
+import { atelier } from '../api'
 import { anchorFromElement } from '../overlay/useSurface'
 import { nextTooltipDelay, tooltipTarget } from './logic/tooltip'
 
@@ -43,7 +43,7 @@ function tooltipAnchor(el: HTMLElement): ReturnType<typeof anchorFromElement> {
 
 function hideOpen(owner?: object): void {
   if (!openTip || (owner && openTip.owner !== owner)) return
-  if (openTip.instanceId) apex.overlay.close(openTip.instanceId)
+  if (openTip.instanceId) atelier.overlay.close(openTip.instanceId)
   openTip = null
   lastHiddenAt = Date.now()
 }
@@ -67,13 +67,13 @@ export function useTooltip(ref: RefObject<HTMLElement | null>, options: TooltipO
       el.title = latest.current.label
     }
     // A renderer without the overlay API at all (a float window) goes native at once.
-    if (!apex.overlay) native()
+    if (!atelier.overlay) native()
 
     const show = (): void => {
       timer = null
       const { label, shortcutId, side } = latest.current
       if (fallback || !label || !el.isConnected) return
-      const overlay = apex.overlay
+      const overlay = atelier.overlay
       if (!overlay) return native()
       hideOpen()
       const tip = { instanceId: null as string | null, owner }
@@ -127,6 +127,6 @@ export function useTooltip(ref: RefObject<HTMLElement | null>, options: TooltipO
     const el = ref.current
     if (el?.title) el.title = options.label
     const tip = openTip
-    if (tip?.instanceId && tip.owner === ownerRef.current) apex.overlay.update(tip.instanceId, { label: options.label, shortcutId: options.shortcutId ?? null, side: options.side ?? 'bottom' })
+    if (tip?.instanceId && tip.owner === ownerRef.current) atelier.overlay.update(tip.instanceId, { label: options.label, shortcutId: options.shortcutId ?? null, side: options.side ?? 'bottom' })
   }, [options.label, options.shortcutId, options.side])
 }

@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex://packs (docs/packs.md): your packs as cards that say what each one is
+// atelier://packs (docs/packs.md): your packs as cards that say what each one is
 // (an app, a game, a world, skills, a look, a companion, tools), filtered by
 // type and opened in a sheet with what it brings and what it may do; the
 // packs a companion is still building, above them; and Browse, the community
@@ -36,7 +36,7 @@ export interface PacksPageProps {
   url: string
 }
 
-/** "Game · Comes with Apex", "App · By Senne": what a pack is and who made it. */
+/** "Game · Comes with Atelier", "App · By Senne": what a pack is and who made it. */
 export function packByline(p: PackSummary): string {
   const by = p.source.kind === 'first-party' ? t('packs.badge.firstParty') : p.author ? t('packs.browse.by', { author: p.author }) : p.builtBy ? t('packs.drafts.builtBy', { name: p.builtBy }) : null
   return [t(`packs.kind.one.${packKind(p)}`), by].filter(Boolean).join(' · ')

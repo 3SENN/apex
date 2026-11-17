@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // The plugin model's agent tools (docs/apps.md › Inspect, Services):
-// apex_inspect gives a building companion the live catalog (what window.apex
+// atelier_inspect gives a building companion the live catalog (what window.atelier
 // offers, the surfaces, the services and events of the packs running now,
 // the limits), so it writes against what exists, the way the harness's
 // cordis_inspect does. use_app lets a companion find and call the services
@@ -13,9 +13,9 @@
 import { BRAND_NAME } from '@shared/branding'
 import { z } from 'zod'
 import {
-  APEX_EVENTS,
-  APEX_SERVICE_NAMES,
-  APEX_SERVICES_AVAILABLE,
+  ATELIER_EVENTS,
+  ATELIER_SERVICE_NAMES,
+  ATELIER_SERVICES_AVAILABLE,
   APP_PACK_LIMITS,
   PACK_API,
   PACK_LIMITS,
@@ -45,12 +45,12 @@ const words = (text: string): string[] => text.toLowerCase().split(/[^a-z0-9]+/)
 /** The live catalog, or the parts asked for. */
 export function inspectCatalog(deps: AgentToolDeps, parts: readonly Part[] = PARTS): Record<string, unknown> {
   const running = deps.runtime.runningManifests()
-  const out: Record<string, unknown> = { format: 'apex-inspect', manifestVersion: PACK_MANIFEST_VERSION }
+  const out: Record<string, unknown> = { format: 'atelier-inspect', manifestVersion: PACK_MANIFEST_VERSION }
   if (parts.includes('api')) out.api = PACK_API.map(({ call, needs, status }) => ({ call, needs, status }))
   if (parts.includes('surfaces')) out.surfaces = PACK_SURFACES
   if (parts.includes('services')) {
     out.services = {
-      apex: APEX_SERVICE_NAMES.map((name) => ({ name, status: APEX_SERVICES_AVAILABLE.includes(name) ? 'available' : 'planned' })),
+      atelier: ATELIER_SERVICE_NAMES.map((name) => ({ name, status: ATELIER_SERVICES_AVAILABLE.includes(name) ? 'available' : 'planned' })),
       packs: running.flatMap((p) =>
         (p.manifest.provides ?? []).map((svc) => ({
           service: svc.service,
@@ -64,7 +64,7 @@ export function inspectCatalog(deps: AgentToolDeps, parts: readonly Part[] = PAR
       ),
     }
   }
-  if (parts.includes('events')) out.events = { apex: APEX_EVENTS, packs: running.flatMap((p) => (p.manifest.events?.emits ?? []).map((e) => `${p.id}/${e}`)) }
+  if (parts.includes('events')) out.events = { atelier: ATELIER_EVENTS, packs: running.flatMap((p) => (p.manifest.events?.emits ?? []).map((e) => `${p.id}/${e}`)) }
   if (parts.includes('limits'))
     out.limits = {
       pack: { files: PACK_LIMITS.files, fileBytes: PACK_LIMITS.fileBytes, packBytes: PACK_LIMITS.packBytes, reviewedCodeBytes: 1024 * 1024, minifiedLine: PACK_LIMITS.minifiedLine },
@@ -81,14 +81,14 @@ export function inspectCatalog(deps: AgentToolDeps, parts: readonly Part[] = PAR
 export function inspectDirectory(deps: AgentToolDeps): Record<string, unknown> {
   const running = deps.runtime.runningManifests()
   return {
-    format: 'apex-inspect-directory',
+    format: 'atelier-inspect-directory',
     api: PACK_API.filter((e) => e.status === 'available').map((e) => e.call.split('(')[0]),
     planned: PACK_API.filter((e) => e.status === 'planned').map((e) => e.call.split('(')[0]),
     surfaces: PACK_SURFACES.map((s) => s.id),
-    services: [...APEX_SERVICE_NAMES.filter((n) => APEX_SERVICES_AVAILABLE.includes(n)), ...running.flatMap((p) => (p.manifest.provides ?? []).map((s) => s.service))],
-    events: [...APEX_EVENTS, ...running.flatMap((p) => (p.manifest.events?.emits ?? []).map((e) => `${p.id}/${e}`))],
+    services: [...ATELIER_SERVICE_NAMES.filter((n) => ATELIER_SERVICES_AVAILABLE.includes(n)), ...running.flatMap((p) => (p.manifest.provides ?? []).map((s) => s.service))],
+    events: [...ATELIER_EVENTS, ...running.flatMap((p) => (p.manifest.events?.emits ?? []).map((e) => `${p.id}/${e}`))],
     guide: GUIDE_TOPICS,
-    next: 'apex_inspect with query (words such as "auth" or "apex.connectors.call") gives the exact entries; guide gives one part of the build guide.',
+    next: 'atelier_inspect with query (words such as "auth" or "atelier.connectors.call") gives the exact entries; guide gives one part of the build guide.',
   }
 }
 
@@ -99,14 +99,14 @@ export function inspectQuery(deps: AgentToolDeps, query: string): Record<string,
     const hay = words(texts.filter(Boolean).join(' '))
     return want.length > 0 && want.every((w) => hay.some((h) => h.startsWith(w)))
   }
-  const catalog = inspectCatalog(deps) as { services: { apex: Array<{ name: string; status: string }>; packs: Array<{ service: string; description: string; methods: Record<string, { description?: string }> }> }; events: { apex: readonly string[]; packs: string[] } }
+  const catalog = inspectCatalog(deps) as { services: { atelier: Array<{ name: string; status: string }>; packs: Array<{ service: string; description: string; methods: Record<string, { description?: string }> }> }; events: { atelier: readonly string[]; packs: string[] } }
   return {
-    format: 'apex-inspect-query',
+    format: 'atelier-inspect-query',
     query,
     api: PACK_API.filter((e) => hit(e.call, e.op ?? '', e.needs)).map(({ call, needs, status }) => ({ call, needs, status })),
     surfaces: PACK_SURFACES.filter((s) => hit(s.id, s.entry, s.via)),
-    services: [...catalog.services.apex.filter((s) => hit(s.name)), ...catalog.services.packs.filter((s) => hit(s.service, s.description, ...Object.entries(s.methods).flatMap(([m, spec]) => [m, spec.description])))],
-    events: [...catalog.events.apex, ...catalog.events.packs].filter((e) => hit(e)),
+    services: [...catalog.services.atelier.filter((s) => hit(s.name)), ...catalog.services.packs.filter((s) => hit(s.service, s.description, ...Object.entries(s.methods).flatMap(([m, spec]) => [m, spec.description])))],
+    events: [...catalog.events.atelier, ...catalog.events.packs].filter((e) => hit(e)),
   }
 }
 
@@ -142,14 +142,14 @@ const building = (setup: ToolSetup): boolean => !setup.private && !setup.routine
 const creating = (setup: ToolSetup): boolean => building(setup) && setup.creator === true
 
 /** What the builder tools are, for creator_mode's description. */
-export const BUILDER_TOOL_NAMES = ['create_pack', 'write_pack_file', 'read_pack_file', 'test_pack', 'propose_pack', 'list_packs', 'apex_inspect'] as const
+export const BUILDER_TOOL_NAMES = ['create_pack', 'write_pack_file', 'read_pack_file', 'test_pack', 'propose_pack', 'list_packs', 'atelier_inspect'] as const
 
 export function registerPackAgentTools(deps: AgentToolDeps): void {
   registerClientTool({
-    name: 'apex_inspect',
+    name: 'atelier_inspect',
     group: 'packs',
     description:
-      `Reads what ${BRAND_NAME} offers packs and apps right now: every window.apex call and what it needs (available or planned), the surfaces packs fill, ${BRAND_NAME}’s own services, the services and events of the packs that are running, and the limits. Call it before writing pack or app code, and build only on what it lists as available. Two steps keep it short: list: true gives a directory of names, then query (words such as "auth" or "connectors call") gives the exact entries. what gives whole parts. With guide, it returns one part of the build guide instead (apps, kit, cast, ai, servers, local-server, worlds, services, files, assets, notifications, sharing): read the parts the request needs.`,
+      `Reads what ${BRAND_NAME} offers packs and apps right now: every window.atelier call and what it needs (available or planned), the surfaces packs fill, ${BRAND_NAME}’s own services, the services and events of the packs that are running, and the limits. Call it before writing pack or app code, and build only on what it lists as available. Two steps keep it short: list: true gives a directory of names, then query (words such as "auth" or "connectors call") gives the exact entries. what gives whole parts. With guide, it returns one part of the build guide instead (apps, kit, cast, ai, servers, local-server, worlds, services, files, assets, notifications, sharing): read the parts the request needs.`,
     inputSchema: {
       type: 'object',
       properties: {

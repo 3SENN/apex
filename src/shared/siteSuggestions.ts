@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Site suggestions (OV-23). On a site
-// with a matching connector or app link, Apex offers to connect or one to
+// with a matching connector or app link, Atelier offers to connect or one to
 // three ready-made tasks from its own templates. Off by default.
 import type { AppSummary, AppsService } from './apps'
 import type { CalendarService, CalendarStatus } from './calendar'

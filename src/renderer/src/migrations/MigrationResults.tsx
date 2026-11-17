@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -16,7 +16,7 @@ import './migrations.css'
 
 // About › Data updates (part of ST-56, SS-09): "142 chats updated on
 // 28 Oct", or "All your chats are up to date". Chats that couldn't be
-// updated are listed with Open and Retry all; chats and files a newer Apex
+// updated are listed with Open and Retry all; chats and files a newer Atelier
 // saved are listed too, so a downgrade is never silent.
 
 const CHAT_ID = /^[0-9a-f-]{36}$/

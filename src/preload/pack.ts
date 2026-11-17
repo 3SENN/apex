@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// window.apex in a pack's pages and tool host (docs/packs.md › The sandbox and
+// window.atelier in a pack's pages and tool host (docs/packs.md › The sandbox and
 // the bridge). A session frame preload on each pack's partition; sandboxed,
 // so it requires nothing but electron. It holds no power of its own: every
 // call goes to main as one op, and main checks the sender, the pack and the
@@ -15,7 +15,7 @@ import { SERVER_EVENT_BATCH, type ServerEvent, type ServerRequestInfo, type Serv
 
 type ToolHandler = (name: string, input: unknown, ctx: PackToolCallMessage['ctx']) => unknown
 
-const info = location.protocol === 'apex-pack:' && window.top === window ? (ipcRenderer.sendSync(PACK_IPC.info) as { id: string; name: string; version: string; env?: Record<string, string> } | null) : null
+const info = location.protocol === 'atelier-pack:' && window.top === window ? (ipcRenderer.sendSync(PACK_IPC.info) as { id: string; name: string; version: string; env?: Record<string, string> } | null) : null
 
 async function call(op: string, ...args: unknown[]): Promise<unknown> {
   const reply = (await ipcRenderer.invoke(PACK_IPC.bridge, { op, args })) as PackBridgeReply | undefined
@@ -72,11 +72,11 @@ ipcRenderer.on(PACK_IPC.aiChunk, (_event, message: { streamId: string; text?: st
   try {
     if (typeof message.text === 'string') stream.onText?.(message.text)
   } catch (err) {
-    void call('log', `An apex.ai.stream onText threw: ${text(err)}`).catch(() => undefined)
+    void call('log', `An atelier.ai.stream onText threw: ${text(err)}`).catch(() => undefined)
   }
 })
 
-// ---- apex.server: the app page's own web server (docs/packs.md › A web server of its own) ----
+// ---- atelier.server: the app page's own web server (docs/packs.md › A web server of its own) ----
 
 type ServerMessageFn = (value: unknown, text: string) => void
 interface ServerSocketEntry {
@@ -103,7 +103,7 @@ const safely = (what: string, fn: () => void): void => {
   try {
     fn()
   } catch (err) {
-    void call('log', `An apex.server ${what} handler threw: ${text(err)}`).catch(() => undefined)
+    void call('log', `An atelier.server ${what} handler threw: ${text(err)}`).catch(() => undefined)
   }
 }
 
@@ -128,8 +128,8 @@ function answerOf(out: unknown): { status: number; headers: Record<string, strin
 function answerRequest(req: ServerRequestInfo): void {
   const reply = (answer: { status: number; headers: Record<string, string>; body: string }): void =>
     void call('server.respond', req.id, answer).catch((err: unknown) => {
-      // An answer Apex refused (a header it doesn't take, too large) still ends the request.
-      void call('log', `apex.server.onRequest's answer for ${req.method} ${req.path} was refused: ${text(err)}`).catch(() => undefined)
+      // An answer Atelier refused (a header it doesn't take, too large) still ends the request.
+      void call('log', `atelier.server.onRequest's answer for ${req.method} ${req.path} was refused: ${text(err)}`).catch(() => undefined)
       void call('server.respond', req.id, { status: 500, headers: {}, body: 'The app’s answer could not be sent.' }).catch(() => undefined)
     })
   const handler = requestHandler
@@ -139,7 +139,7 @@ function answerRequest(req: ServerRequestInfo): void {
     .then(() => handler(shown))
     .then((out) => reply(answerOf(out)))
     .catch((err: unknown) => {
-      void call('log', `apex.server.onRequest threw for ${req.method} ${req.path}: ${text(err)}`).catch(() => undefined)
+      void call('log', `atelier.server.onRequest threw for ${req.method} ${req.path}: ${text(err)}`).catch(() => undefined)
       reply({ status: 500, headers: {}, body: 'The app could not answer.' })
     })
 }
@@ -223,12 +223,12 @@ if (info) {
   void webFrame.executeJavaScript(
     "for (const name of ['RTCPeerConnection', 'webkitRTCPeerConnection', 'RTCDataChannel', 'RTCIceCandidate', 'RTCSessionDescription']) { try { delete window[name] } catch {} ; try { Object.defineProperty(window, name, { value: undefined, configurable: false, writable: false }) } catch {} }",
   )
-  contextBridge.exposeInMainWorld('apex', {
+  contextBridge.exposeInMainWorld('atelier', {
     pack: Object.freeze({ id: info.id, name: info.name, version: info.version }),
     /** Public values from the manifest's env (a linked folder's .env overrides them while you develop). Never keys: those are secrets. */
     env: Object.freeze({ ...(info.env ?? {}) }),
     secrets: {
-      /** Whether each of the manifest's secrets has a value: { NAME: true | false }. Never the values: Apex adds them to requests to their hosts. */
+      /** Whether each of the manifest's secrets has a value: { NAME: true | false }. Never the values: Atelier adds them to requests to their hosts. */
       status: () => call('secrets.status'),
       /** Opens the pack's page so the person can enter a key; resolves to { set } once they save it (or { set: false } after a while). */
       request: (id: string) => call('secrets.request', id),
@@ -245,11 +245,11 @@ if (info) {
       tools: (ref: string) => call('connectors.tools', ref),
       /** Runs a tool: { text, data (its structured result, or null), isError }. */
       call: (ref: string, tool: string, input?: unknown) => call('connectors.call', ref, tool, input ?? {}),
-      /** Opens Apex's Connectors at this one, so the person can connect it. */
+      /** Opens Atelier's Connectors at this one, so the person can connect it. */
       connect: (ref: string) => call('connectors.connect', ref),
     },
     /**
-     * The manifest's sign-ins: Apex runs them in a tab, keeps the tokens and
+     * The manifest's sign-ins: Atelier runs them in a tab, keeps the tokens and
      * sends the access token on requests to each sign-in's hosts. Your code
      * never sees a token; status says who is signed in.
      */
@@ -283,7 +283,7 @@ if (info) {
     },
     notify: (n: { title: string; body?: string }) => call('notify', n),
     notifications: {
-      /** Sets a notification for later (`at`: ms since the epoch); the same id replaces it. Fires while Apex runs, even with the app closed. */
+      /** Sets a notification for later (`at`: ms since the epoch); the same id replaces it. Fires while Atelier runs, even with the app closed. */
       schedule: (n: { id: string; at: number; title: string; body?: string }) => call('notify.schedule', n),
       cancel: (id: string) => call('notify.cancel', id),
       list: () => call('notify.list'),
@@ -296,7 +296,7 @@ if (info) {
       call: (service: string, method: string, input?: unknown) => call('services.call', service, method, input ?? {}),
       /** Serves one of the pack's services from this page while it is open: an object of async methods. */
       provide: (service: string, handlers: ServiceHandlers) => {
-        if (!handlers || typeof handlers !== 'object') throw new Error('apex.services.provide takes a service name and an object of methods.')
+        if (!handlers || typeof handlers !== 'object') throw new Error('atelier.services.provide takes a service name and an object of methods.')
         services.set(service, { ...handlers })
         return call('services.provide', [...services.keys()])
       },
@@ -304,7 +304,7 @@ if (info) {
     events: {
       /** Hears an event listed in the manifest's events.on; returns a function that stops listening. */
       on: (name: string, fn: (data: unknown, name: string) => void) => {
-        if (typeof fn !== 'function') throw new Error('apex.events.on takes an event name and a function.')
+        if (typeof fn !== 'function') throw new Error('atelier.events.on takes an event name and a function.')
         const set = listeners.get(name) ?? new Set()
         set.add(fn)
         listeners.set(name, set)
@@ -386,7 +386,7 @@ if (info) {
       members: () => call('cast.members'),
       /** Asks the person who plays (up to the app's cast.max); resolves to the new members. */
       pick: (options?: { max?: number; title?: string }) => call('cast.pick', options ?? {}),
-      /** One line a member says about what just happened, in character, written by Apex from its personality. */
+      /** One line a member says about what just happened, in character, written by Atelier from its personality. */
       speak: (ref: string, options: { situation: string; mood?: string }) => call('cast.speak', ref, options),
     },
     files: {
@@ -401,13 +401,13 @@ if (info) {
       write: (path: string, data: string | Uint8Array) => call('files.write', path, data),
       /** Copies files of the person's own into the app's private space: { files } (paths for ownUrl). */
       own: (options?: { accept?: string[]; multiple?: boolean; folder?: boolean; note?: string }) => call('files.own', options ?? {}),
-      ownUrl: (path: string) => `${location.origin}/__apex/own/${String(path).split('/').map(encodeURIComponent).join('/')}`,
+      ownUrl: (path: string) => `${location.origin}/__atelier/own/${String(path).split('/').map(encodeURIComponent).join('/')}`,
     },
     assets: {
       /** What fills one of this app's asset slots now: { pack, packName, set, setName }, or null for the app's own files. */
       active: (slot: string) => call('assets.active', slot),
       /** Where to read one of a slot's files: the chosen asset pack's, else the app's own (its slot's layout). */
-      url: (slot: string, path: string) => `${location.origin}/__apex/assets/${encodeURIComponent(slot)}/${String(path).split('/').map(encodeURIComponent).join('/')}`,
+      url: (slot: string, path: string) => `${location.origin}/__atelier/assets/${encodeURIComponent(slot)}/${String(path).split('/').map(encodeURIComponent).join('/')}`,
     },
     world: {
       /** Where this app was opened from: { world, place, cast } when a world's place opened it, else null. */
@@ -429,7 +429,7 @@ if (info) {
       speak: (ref: string, residentId: string, options: { situation: string; mood?: string }) => call('worlds.speak', ref, residentId, options),
       /** Opens Browse at a pack: what a place opens, when the person doesn't have it. */
       find: (packId: string) => call('worlds.find', packId),
-      /** Saves one of your worlds as an .apexworld to share; the path, or null when cancelled. */
+      /** Saves one of your worlds as an .atelierworld to share; the path, or null when cancelled. */
       share: (ref: string) => call('worlds.share', ref),
     },
     permissions: {
@@ -437,7 +437,7 @@ if (info) {
       request: (asked: { sites?: string[]; network?: string[]; notifications?: boolean; model?: boolean; clipboard?: boolean }) => call('permissions.request', asked ?? {}),
     },
     /**
-     * A small web server of the app's own, run by Apex (permissions.server):
+     * A small web server of the app's own, run by Atelier (permissions.server):
      * files from one of the pack's folders, requests the page answers, and
      * sockets from the pages it serves (phones as controllers, a second
      * screen, local multiplayer). It lives as long as this page.
@@ -449,7 +449,7 @@ if (info) {
       status: () => call('server.status'),
       /** Answers requests no file in root answers: return text, { status, headers, body } or a value sent as JSON. */
       onRequest: (handler: (req: Omit<ServerRequestInfo, 'id'>) => unknown) => {
-        if (typeof handler !== 'function') throw new Error('apex.server.onRequest takes a function.')
+        if (typeof handler !== 'function') throw new Error('atelier.server.onRequest takes a function.')
         requestHandler = handler
         return () => {
           if (requestHandler === handler) requestHandler = null
@@ -457,13 +457,13 @@ if (info) {
       },
       /** A served page opened a socket: { id, query, remote, send(data), close(code), onMessage(fn), onClose(fn) }. */
       onConnection: (fn: (socket: Record<string, unknown>) => void) => {
-        if (typeof fn !== 'function') throw new Error('apex.server.onConnection takes a function.')
+        if (typeof fn !== 'function') throw new Error('atelier.server.onConnection takes a function.')
         connectionHandlers.add(fn)
         return () => connectionHandlers.delete(fn)
       },
-      /** The server stopped: 'stopped' (your stop()), 'person' (Stop on Apex's bar), 'idle', or 'closed'. */
+      /** The server stopped: 'stopped' (your stop()), 'person' (Stop on Atelier's bar), 'idle', or 'closed'. */
       onStop: (fn: (reason: ServerStopReason) => void) => {
-        if (typeof fn !== 'function') throw new Error('apex.server.onStop takes a function.')
+        if (typeof fn !== 'function') throw new Error('atelier.server.onStop takes a function.')
         stopHandlers.add(fn)
         return () => stopHandlers.delete(fn)
       },
@@ -478,7 +478,7 @@ if (info) {
     },
     tools: {
       serve: (handler: ToolHandler) => {
-        if (typeof handler !== 'function') throw new Error('apex.tools.serve takes a function.')
+        if (typeof handler !== 'function') throw new Error('atelier.tools.serve takes a function.')
         toolHandler = handler
         ipcRenderer.send(PACK_IPC.toolReady)
       },

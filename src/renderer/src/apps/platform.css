@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-/* The platform surfaces: apps, tables, apex://flags, the Calendar card, the
+/* The platform surfaces: apps, tables, atelier://flags, the Calendar card, the
    open-in-app chip and site suggestions. Tokens only, so light and dark
    both follow the theme; motion collapses under reduced motion. */
 
@@ -107,7 +107,7 @@
 .pl-sample th, .pl-sample td { padding: 4px 8px; border-bottom: var(--hairline) solid var(--border-subtle); text-align: left; white-space: nowrap; max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
 .pl-sample th { position: sticky; top: 0; background: var(--bg-subtle); color: var(--text-secondary); }
 
-/* ── apex://flags ── */
+/* ── atelier://flags ── */
 .pl-flags { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; border: var(--hairline) solid var(--border-subtle); border-radius: var(--radius-card); background: var(--bg-card); overflow: clip; }
 .pl-flag { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 24px; align-items: center; padding: 16px 18px; border-bottom: var(--hairline) solid var(--border-subtle); }
 .pl-flag:last-child { border-bottom: 0; }

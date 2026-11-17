@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { useEffect, useMemo, useSyncExternalStore, type ReactElement } from 'react'
 import type { OverlayTier } from '@shared/overlay'
 import { EMPTY_RECT, clipRect, unionRect } from '@shared/overlayLayout'
-import { apex } from '../api'
+import { atelier } from '../api'
 import { surfaceModule } from './registry'
 import { SurfaceFrame } from './host/SurfaceFrame'
 import { hostedSnapshot, startHostedStore, subscribeHosted } from './host/store'
@@ -37,7 +37,7 @@ export function OverlayApp({ tier }: { tier: OverlayTier }): ReactElement {
       const top = open.sort((a, b) => layerRank(b.message.surface) - layerRank(a.message.surface) || b.seq - a.seq)[0]
       if (!top) return
       e.preventDefault()
-      apex.overlay.dismiss(top.message.instanceId, 'escape')
+      atelier.overlay.dismiss(top.message.instanceId, 'escape')
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)

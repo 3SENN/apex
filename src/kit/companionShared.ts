@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,4 +8,4 @@
 // the companion art inside the app's own origin. scripts/kit/build.mjs aliases
 // '@shared/companion' to this file; an explicit export wins over `export *`.
 export * from '../shared/companion'
-export const COMPANION_ASSET_BASE = '/__apex/kit/1/companion/'
+export const COMPANION_ASSET_BASE = '/__atelier/kit/1/companion/'

@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The Lounge: Apex's new-tab floor (DS-75, DS-76). A pure simulation of the
+// The Lounge: Atelier's new-tab floor (DS-75, DS-76). A pure simulation of the
 // companions standing on it: idle life (turns, strolls, wanders, naps),
 // gatherings that swap topic bubbles, hops when clicked, and pick-up, throw
 // and landing physics. No DOM, deterministic with a seeded rng, so it is

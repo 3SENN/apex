@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Importing past AI conversations (ON-10, CH-31): pick one or more exports
-// (a conversations.json, the .zip it comes in, or Apex .md exports), see a
+// (a conversations.json, the .zip it comes in, or Atelier .md exports), see a
 // preview with counts, then import in the background with progress. The
 // chats open read-only; memory can be built from them afterwards.
 // The scene: the exports flowing into the companion, and its memory.
@@ -21,7 +21,7 @@ import { BackButton, type StepProps } from './WelcomeFlow'
 import { StepFrame, StepScene, type SceneTile } from './StepFrame'
 import { useT, t } from '../../i18n/useT'
 
-const SOURCE_LABEL: Record<ConversationSource, string> = { chatgpt: 'ChatGPT', claude: 'Claude', get apex() { return t('firstRun.welcomeAiImport.apexExports') } }
+const SOURCE_LABEL: Record<ConversationSource, string> = { chatgpt: 'ChatGPT', claude: 'Claude', get atelier() { return t('firstRun.welcomeAiImport.atelierExports') } }
 
 function listSources(sources: readonly ConversationSource[]): string {
   const names = sources.map((s) => SOURCE_LABEL[s])
@@ -74,7 +74,7 @@ export function AiImportStep({ companion, next, back, ready }: StepProps): React
   const tiles: SceneTile[] = [
     { id: 'chatgpt', text: SOURCE_LABEL.chatgpt, on: sources.includes('chatgpt'), badge: done && sources.includes('chatgpt') ? 'check' : undefined },
     { id: 'claude', text: SOURCE_LABEL.claude, on: sources.includes('claude'), badge: done && sources.includes('claude') ? 'check' : undefined },
-    { id: 'files', icon: <FileText />, on: sources.includes('apex') },
+    { id: 'files', icon: <FileText />, on: sources.includes('atelier') },
     { id: 'memory', icon: <Brain />, on: buildMemory && (done || phase.kind === 'importing'), current: buildMemory && phase.kind === 'importing' },
   ]
   return (

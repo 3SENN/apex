@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -62,7 +62,7 @@ describe('page caps and reasons', () => {
 
 describe('workerPdfReader', () => {
   it('ends a worker that hangs after the timeout', async () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-pdf-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-pdf-'))
     const script = join(dir, 'hang.cjs')
     writeFileSync(script, "require('node:worker_threads').parentPort.on('message', () => {})\n")
     const result = await workerPdfReader(() => script, 200).read(buildPdf(1), 600)

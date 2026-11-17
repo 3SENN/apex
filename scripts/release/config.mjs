@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -46,8 +46,8 @@ function website(value) {
 }
 
 // ---------------------------------------------------------------------------
-// The private values file: official builds keep their identity (APEX_TEAM_ID,
-// APEX_SIGN_IDENTITY, APPLE_KEYCHAIN_PROFILE and the like) in the gitignored
+// The private values file: official builds keep their identity (ATELIER_TEAM_ID,
+// ATELIER_SIGN_IDENTITY, APPLE_KEYCHAIN_PROFILE and the like) in the gitignored
 // internal/ folder, so the public code carries none of it.
 
 /** Where the maintainer's private values live. Optional: without it, the environment alone decides. */
@@ -78,7 +78,7 @@ export function parseReleaseEnv(source, file = 'release.env') {
 /**
  * Lays `file` (internal/release.env) under `env`, process.env by default: each
  * of its variables that `env` doesn't have yet is added, so a real environment
- * variable always wins, even an empty one (`APEX_SIGN_IDENTITY= npm run
+ * variable always wins, even an empty one (`ATELIER_SIGN_IDENTITY= npm run
  * package` builds unsigned). No file, no change. Returns the names it added,
  * never their values.
  */
@@ -99,8 +99,8 @@ export function loadReleaseEnv(env = process.env, { file = RELEASE_ENV, read = r
  */
 export function signingPlan(env, platform) {
   if (platform === 'darwin') {
-    // APEX_SIGN_IDENTITY and CSC_NAME name a keychain identity (by SHA-1 or name; identity.mjs resolves it).
-    const identity = present(env, 'APEX_SIGN_IDENTITY') || present(env, 'CSC_NAME') ? 'name' : present(env, 'CSC_LINK') ? 'certificate' : null
+    // ATELIER_SIGN_IDENTITY and CSC_NAME name a keychain identity (by SHA-1 or name; identity.mjs resolves it).
+    const identity = present(env, 'ATELIER_SIGN_IDENTITY') || present(env, 'CSC_NAME') ? 'name' : present(env, 'CSC_LINK') ? 'certificate' : null
     const notarize = !identity
       ? null
       : present(env, 'APPLE_API_KEY', 'APPLE_API_KEY_ID', 'APPLE_API_ISSUER')
@@ -114,7 +114,7 @@ export function signingPlan(env, platform) {
     return { platform, identity, notarize }
   }
   if (platform === 'win32') {
-    const azure = present(env, 'AZURE_TENANT_ID', 'AZURE_CLIENT_ID', 'AZURE_CLIENT_SECRET', 'APEX_AZURE_ENDPOINT', 'APEX_AZURE_ACCOUNT', 'APEX_AZURE_CERT_PROFILE', 'APEX_AZURE_PUBLISHER')
+    const azure = present(env, 'AZURE_TENANT_ID', 'AZURE_CLIENT_ID', 'AZURE_CLIENT_SECRET', 'ATELIER_AZURE_ENDPOINT', 'ATELIER_AZURE_ACCOUNT', 'ATELIER_AZURE_CERT_PROFILE', 'ATELIER_AZURE_PUBLISHER')
     const identity = azure ? 'azure' : present(env, 'WIN_CSC_LINK') || present(env, 'CSC_LINK') ? 'certificate' : null
     return { platform, identity, notarize: null }
   }
@@ -123,27 +123,27 @@ export function signingPlan(env, platform) {
 
 /** The whole release configuration for one build on one platform. */
 export function releaseSettings(env = process.env, platform = process.platform) {
-  const channel = CHANNELS.find((c) => c === text(env, 'APEX_CHANNEL')) ?? 'dev'
-  const publicRelease = flag(text(env, 'APEX_PUBLIC_RELEASE'))
-  const owner = text(env, 'APEX_RELEASE_OWNER')
-  const name = text(env, 'APEX_RELEASE_REPO')
+  const channel = CHANNELS.find((c) => c === text(env, 'ATELIER_CHANNEL')) ?? 'dev'
+  const publicRelease = flag(text(env, 'ATELIER_PUBLIC_RELEASE'))
+  const owner = text(env, 'ATELIER_RELEASE_OWNER')
+  const name = text(env, 'ATELIER_RELEASE_REPO')
   const repo = REPO_PART.test(owner) && REPO_PART.test(name) ? { owner, name } : null
   const signing = signingPlan(env, platform)
   // Squirrel.Mac and Windows only install signed updates; an AppImage needs no
   // signature (a deb can't self-update at all, which the update machine reports at runtime).
   const canInstallUpdates = platform === 'linux' || signing.identity !== null
-  const email = text(env, 'APEX_SUPPORT_EMAIL')
+  const email = text(env, 'ATELIER_SUPPORT_EMAIL')
   return {
     channel,
     // A public build offers only the API key engine: scripts/internal.mjs leaves
     // the internal folder's engines out of it.
     publicRelease,
-    updatesEnabled: repo !== null && channel !== 'dev' && canInstallUpdates && text(env, 'APEX_UPDATES') !== '0',
+    updatesEnabled: repo !== null && channel !== 'dev' && canInstallUpdates && text(env, 'ATELIER_UPDATES') !== '0',
     supportEmail: EMAIL.test(email) ? email : '',
-    website: website(text(env, 'APEX_WEBSITE')),
+    website: website(text(env, 'ATELIER_WEBSITE')),
     repo,
     signing,
-    // The app id (bundle.mjs): com.sennechin.apex unless APEX_BUNDLE_ID says otherwise.
+    // The app id (bundle.mjs): com.sennechin.atelier unless ATELIER_BUNDLE_ID says otherwise.
     bundleId: bundleIdFrom(env),
   }
 }
@@ -151,13 +151,13 @@ export function releaseSettings(env = process.env, platform = process.platform) 
 /** electron-vite `define` entries: string literals, read by src/shared/release.ts. */
 export function viteDefines(settings) {
   return {
-    __APEX_CHANNEL__: JSON.stringify(settings.channel),
-    __APEX_PUBLIC_RELEASE__: JSON.stringify(settings.publicRelease ? '1' : '0'),
-    __APEX_UPDATES__: JSON.stringify(settings.updatesEnabled ? '1' : '0'),
-    __APEX_SUPPORT_EMAIL__: JSON.stringify(settings.supportEmail),
-    __APEX_WEBSITE__: JSON.stringify(settings.website),
-    __APEX_RELEASE_REPO__: JSON.stringify(settings.repo ? `${settings.repo.owner}/${settings.repo.name}` : ''),
-    __APEX_BUNDLE_ID__: JSON.stringify(settings.bundleId),
+    __ATELIER_CHANNEL__: JSON.stringify(settings.channel),
+    __ATELIER_PUBLIC_RELEASE__: JSON.stringify(settings.publicRelease ? '1' : '0'),
+    __ATELIER_UPDATES__: JSON.stringify(settings.updatesEnabled ? '1' : '0'),
+    __ATELIER_SUPPORT_EMAIL__: JSON.stringify(settings.supportEmail),
+    __ATELIER_WEBSITE__: JSON.stringify(settings.website),
+    __ATELIER_RELEASE_REPO__: JSON.stringify(settings.repo ? `${settings.repo.owner}/${settings.repo.name}` : ''),
+    __ATELIER_BUNDLE_ID__: JSON.stringify(settings.bundleId),
   }
 }
 
@@ -174,14 +174,14 @@ export function builderOverrides(settings, env = process.env) {
   const { identity, platform } = settings.signing
   // '' lets electron-builder pick the certificate CSC_LINK imports. A name is
   // resolved to one SHA-1 by electron-builder.config.mjs (identity.mjs).
-  if (platform === 'darwin' && identity) config.mac = { identity: text(env, 'APEX_SIGN_IDENTITY') || text(env, 'CSC_NAME') }
+  if (platform === 'darwin' && identity) config.mac = { identity: text(env, 'ATELIER_SIGN_IDENTITY') || text(env, 'CSC_NAME') }
   if (platform === 'win32' && identity === 'azure') {
     config.win = {
       azureSignOptions: {
-        publisherName: text(env, 'APEX_AZURE_PUBLISHER'),
-        endpoint: text(env, 'APEX_AZURE_ENDPOINT'),
-        codeSigningAccountName: text(env, 'APEX_AZURE_ACCOUNT'),
-        certificateProfileName: text(env, 'APEX_AZURE_CERT_PROFILE'),
+        publisherName: text(env, 'ATELIER_AZURE_PUBLISHER'),
+        endpoint: text(env, 'ATELIER_AZURE_ENDPOINT'),
+        codeSigningAccountName: text(env, 'ATELIER_AZURE_ACCOUNT'),
+        certificateProfileName: text(env, 'ATELIER_AZURE_CERT_PROFILE'),
       },
     }
   }
@@ -191,9 +191,9 @@ export function builderOverrides(settings, env = process.env) {
 /** The environment for the build tools: the release's choices, and no accidental signing. */
 export function buildEnv(settings, env = process.env) {
   const out = { ...env }
-  out.APEX_CHANNEL = settings.channel
-  out.APEX_PUBLIC_RELEASE = settings.publicRelease ? '1' : '0'
-  if (!settings.updatesEnabled) out.APEX_UPDATES = '0'
+  out.ATELIER_CHANNEL = settings.channel
+  out.ATELIER_PUBLIC_RELEASE = settings.publicRelease ? '1' : '0'
+  if (!settings.updatesEnabled) out.ATELIER_UPDATES = '0'
   if (!settings.signing.identity) out.CSC_IDENTITY_AUTO_DISCOVERY = 'false'
   delete out.ELECTRON_RUN_AS_NODE
   return out
@@ -204,7 +204,7 @@ export function versionProblem(version, channel) {
   const m = SEMVER.exec(version ?? '')
   if (!m) return `package.json's version "${version}" is not x.y.z`
   const pre = m[4] ?? null
-  if (channel === 'dev') return 'a dev build is never released: set APEX_CHANNEL to beta or stable'
+  if (channel === 'dev') return 'a dev build is never released: set ATELIER_CHANNEL to beta or stable'
   if (channel === 'stable' && pre) return `a stable release can't carry a pre-release tag (${version})`
   if (channel === 'beta' && !/^beta\.\d+$/.test(pre ?? '')) return `a beta release needs a version like ${m[1]}.${m[2]}.${m[3]}-beta.1 (got ${version})`
   return null
@@ -213,8 +213,8 @@ export function versionProblem(version, channel) {
 /**
  * Why a release (anything release.mjs builds without --package-only, and so
  * every publish) can't be made under `env`'s branding, or null when it can.
- * Only official builds are released: they carry the Apex marks, which only the
- * Apex project ships (TRADEMARKS.md), and a release with the unofficial
+ * Only official builds are released: they carry the Atelier marks, which only the
+ * Atelier project ships (TRADEMARKS.md), and a release with the unofficial
  * branding would put Summit on the update feed official builds read. A
  * branding switch that isn't 1 or 0 is a problem too, never read as either.
  */
@@ -224,7 +224,7 @@ export function versionProblem(version, channel) {
  * the updater off.
  */
 export function releaseFeedProblem(settings) {
-  if (settings.repo && !settings.publicRelease) return 'a build with an update feed (APEX_RELEASE_OWNER/APEX_RELEASE_REPO) must be a public release: set APEX_PUBLIC_RELEASE=1'
+  if (settings.repo && !settings.publicRelease) return 'a build with an update feed (ATELIER_RELEASE_OWNER/ATELIER_RELEASE_REPO) must be a public release: set ATELIER_PUBLIC_RELEASE=1'
   return null
 }
 
@@ -236,7 +236,7 @@ export function releaseBrandingProblem(env = process.env, repo = REPO) {
     return err instanceof Error ? err.message : String(err)
   }
   if (official) return null
-  return `releases are made with the official branding only, and this build is ${describeBranding(env, repo)}. Official releases set APEX_OFFICIAL_BRANDING=1 (docs/release.md); to build an installer of your own, use --package-only or npm run package`
+  return `releases are made with the official branding only, and this build is ${describeBranding(env, repo)}. Official releases set ATELIER_OFFICIAL_BRANDING=1 (docs/release.md); to build an installer of your own, use --package-only or npm run package`
 }
 
 /** The versions src/shared/whatsNew.ts has entries for, read from its source. */

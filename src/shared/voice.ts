@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -99,7 +99,7 @@ export interface LauncherPayload {
   error: VoiceErrorCode | null
   /** The screenshot could not be taken: Screen Recording is off (the chip offers to allow it). */
   screenshotBlocked: boolean
-  /** It is on in System Settings but needs Apex to restart (the chip offers Relaunch Apex). */
+  /** It is on in System Settings but needs Atelier to restart (the chip offers Relaunch Atelier). */
   screenshotRelaunch: boolean
   chord: VoiceChord
   sounds: boolean

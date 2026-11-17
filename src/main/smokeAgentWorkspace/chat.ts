@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -23,7 +23,7 @@ function imported(ctx: SmokeContext, title: string): ChatSummary {
   return ctx.chats.importTranscript({
     title,
     companionId: ctx.chats.list()[0]?.companionId ?? 'default',
-    imported: { source: 'apex', originalTitle: title, originalCreatedAt: Date.UTC(2026, 0, 2), importedAt: 0 },
+    imported: { source: 'atelier', originalTitle: title, originalCreatedAt: Date.UTC(2026, 0, 2), importedAt: 0 },
     messages: [
       { role: 'user', text: 'Which beaches near Lisbon are quiet in May?', at: Date.UTC(2026, 0, 2, 9) },
       { role: 'assistant', text: 'Try **Praia da Ursa** and Adraga; both are calm on weekdays.', at: Date.UTC(2026, 0, 2, 9, 1) },
@@ -109,7 +109,7 @@ export const shots: ShotSpec[] = [
       const a = imported(ctx, 'Smoke chat select one')
       const b = imported(ctx, 'Smoke chat select two')
       try {
-        ctx.tabs.openInternal('apex://chats')
+        ctx.tabs.openInternal('atelier://chats')
         await ctx.chrome.until(`return document.querySelector('.chats-row')`, 8000, 'All chats')
         // DS-101: selection lives in the page's more menu.
         await ctx.chrome.js(`document.querySelector('.chats-page__more')?.click(); return true`)
@@ -129,7 +129,7 @@ export const shots: ShotSpec[] = [
   {
     name: 'sounds-card',
     async run(ctx) {
-      ctx.tabs.openInternal('apex://settings/notifications')
+      ctx.tabs.openInternal('atelier://settings/notifications')
       await ctx.chrome.until(`return document.querySelector('.cd-sounds__cues')`, 8000, 'the chat sounds card')
       await ctx.shot('sounds-card')
     },

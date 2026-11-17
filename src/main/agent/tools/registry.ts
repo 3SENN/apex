@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // The client-tool registry. Tools the
-// agent calls that Apex runs itself, on any engine: the API-key loop
+// agent calls that Atelier runs itself, on any engine: the API-key loop
 // lists them in `tools`, and an engine that runs the model elsewhere reaches
 // the same ones through the local MCP tools server with the same JSON Schemas. A chat
 // freezes the chosen names in ChatCapabilities.clientTools at its first

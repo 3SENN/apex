@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -27,7 +27,7 @@ import {
 } from 'lucide-react'
 import { PROVIDER_CONSOLE_URL } from '@shared/chatErrors'
 import type { LogItem } from '../agentLog'
-import { apex, call, errorText, useAppEvent } from '../api'
+import { atelier, call, errorText, useAppEvent } from '../api'
 import { t } from '../i18n/useT'
 import { Button, Spinner, cx, toast, useNow } from '../ui'
 import { detailsText, errorCard, PICK_MODEL_EVENT, retrySecondsLeft, shouldAutoRetry, type ErrorAction, type ErrorIcon } from './logic/errors'
@@ -249,13 +249,13 @@ export function ErrorCard({ chatId, item, name, last, arrivedAt, driving, online
       case 'settings':
       case 'model':
       case 'engine':
-        void call('pages', 'open', 'apex://settings/model')
+        void call('pages', 'open', 'atelier://settings/model')
         break
       case 'new-chat':
         onNewChat()
         break
       case 'console':
-        void apex.tabs.create(PROVIDER_CONSOLE_URL).catch(() => undefined)
+        void atelier.tabs.create(PROVIDER_CONSOLE_URL).catch(() => undefined)
         break
       case 'engine-step':
         step?.run()
@@ -268,7 +268,7 @@ export function ErrorCard({ chatId, item, name, last, arrivedAt, driving, online
     }
   }
 
-  // After a step that handed over to something outside Apex (Terminal), Retry looks again first.
+  // After a step that handed over to something outside Atelier (Terminal), Retry looks again first.
   const manual = step?.manual === true
   const base = [card.action, card.secondary].filter((a): a is Exclude<ErrorAction, 'none'> => a !== null && a !== 'none' && (a !== 'retry' || last) && (a !== 'engine-step' || step !== null))
   const actions = manual && last && !base.includes('retry') ? [...base, 'retry' as const] : base

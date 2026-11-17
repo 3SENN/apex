@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import type { PageTweakMessage, PickerStrings } from '@shared/tweaks'
 import { describeNode, selectorFor, type SelectorNode } from '@shared/tweaksSelector'
 
 // The picker (TWK-02): picking elements on the page to hide, started from
-// site info or apex://tweaks. A full-window layer in a closed shadow root
+// site info or atelier://tweaks. A full-window layer in a closed shadow root
 // takes the pointer while it is up, so the page sees no hovers or clicks, and
 // finds what is under the pointer with elementsFromPoint (frames and shadow
 // hosts included). Click or Enter hides the outlined element; ↑ and ↓ widen
@@ -92,7 +92,7 @@ function shadowStyle(root: ShadowRoot): void {
 
 export function startPicker(strings: PickerStrings, deps: PickerDeps): Picker {
   const previousFocus = document.activeElement as HTMLElement | null
-  const host = document.createElement('apex-tweak-picker')
+  const host = document.createElement('atelier-tweak-picker')
   host.setAttribute('style', 'all: initial !important; display: block !important; position: fixed !important; inset: 0 !important; z-index: 2147483647 !important;')
   const root = host.attachShadow({ mode: 'closed' })
   shadowStyle(root)

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -87,7 +87,7 @@ interface Setup {
 }
 
 function setup(patch: Partial<DownloadDeps> = {}, prefs: { downloadDir: string | null; askWhereToSave: boolean } = { downloadDir: null, askWhereToSave: false }): Setup {
-  const root = mkdtempSync(join(tmpdir(), 'apex-dl-'))
+  const root = mkdtempSync(join(tmpdir(), 'atelier-dl-'))
   const dir = join(root, 'Downloads')
   mkdirSync(dir)
   const session = new FakeSession()
@@ -244,7 +244,7 @@ describe('download manager', () => {
   })
 
   it('uses a chosen folder that exists, and picks a free name there', () => {
-    const chosen = mkdtempSync(join(tmpdir(), 'apex-dl-chosen-'))
+    const chosen = mkdtempSync(join(tmpdir(), 'atelier-dl-chosen-'))
     writeFileSync(join(chosen, 'a.txt'), 'x')
     const { manager, session } = setup({}, { downloadDir: chosen, askWhereToSave: false })
     expect(manager.folder()).toMatchObject({ path: chosen, custom: true, missing: false })
@@ -289,7 +289,7 @@ describe('download manager', () => {
     expect(manager.list()).toEqual([])
   })
 
-  it('notifies about a finished download only when Apex is not in front', async () => {
+  it('notifies about a finished download only when Atelier is not in front', async () => {
     const focused = setup({ appFocused: () => true })
     const a = new FakeItem('a.txt', 1)
     focused.session.start(a)

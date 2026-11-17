@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The getting-started plan (apex://first-week): its record's contract and the
+// The getting-started plan (atelier://first-week): its record's contract and the
 // pure rules for what the page shows. Main keeps the record
 // (src/main/firstWeek.ts); the chrome renders the view
 // (src/renderer/src/first-week/).
@@ -11,7 +11,7 @@
 import { BRAND_NAME } from './branding'
 import { t, type MessageKey } from './i18n/core'
 
-/** The record's file format. A file with a higher version comes from a newer Apex and is reset with a notice. */
+/** The record's file format. A file with a higher version comes from a newer Atelier and is reset with a notice. */
 export const FIRST_WEEK_VERSION = 1
 
 /** The page shows this many cards before "Show more". */
@@ -32,7 +32,7 @@ export type FirstWeekGlyph = (typeof FIRST_WEEK_GLYPHS)[number]
 /** Glyphs a generated starter may pick (the rest belong to the automatic items). */
 export const STARTER_GLYPHS = ['compass', 'pen', 'search', 'calendar', 'list', 'lightbulb', 'mail', 'cart', 'book', 'chart', 'globe', 'sparkles'] as const satisfies readonly FirstWeekGlyph[]
 
-/** Apex's card hues; the chrome defines each as a light and dark token. */
+/** Atelier's card hues; the chrome defines each as a light and dark token. */
 export const FIRST_WEEK_HUES = ['teal', 'green', 'amber', 'blue', 'violet', 'rose', 'coral', 'sky', 'lime', 'indigo'] as const
 export type FirstWeekHue = (typeof FIRST_WEEK_HUES)[number]
 
@@ -51,7 +51,7 @@ export interface StarterChat {
 export const AUTO_ITEMS = ['import-data', 'default-browser', 'connect-app', 'customise-companion', 'set-up-routine', 'try-dictation', 'record-meeting', 'build-artifact', 'search-web'] as const
 export type AutoItemId = (typeof AUTO_ITEMS)[number]
 
-/** What Apex can observe for the automatic items. */
+/** What Atelier can observe for the automatic items. */
 export type FirstWeekSignals = Record<AutoItemId, boolean>
 
 /** Signals that stay done once seen. Default browser is checked live on every refresh, since it can be changed back. */
@@ -62,7 +62,7 @@ export const DICTATION_AVAILABLE = true
 
 export type FirstWeekAction =
   | { kind: 'chat'; prompt: string }
-  /** An apex:// page; `companion` opens the active companion's card. */
+  /** An atelier:// page; `companion` opens the active companion's card. */
   | { kind: 'page'; url: string }
   | { kind: 'companion' }
   | { kind: 'default-browser' }
@@ -112,7 +112,7 @@ export interface FirstWeekView {
   snoozedUntil: number | null
   dismissAllAt: number | null
   canDismissAll: boolean
-  /** Starters are being written from what Apex knows; curated ones show meanwhile. */
+  /** Starters are being written from what Atelier knows; curated ones show meanwhile. */
   personalizing: boolean
   startersSource: 'personal' | 'curated' | null
   hiddenReason: FirstWeekHideReason | null
@@ -128,7 +128,7 @@ export interface FirstWeekGuide {
   minutes: number
 }
 
-/** Apex's own short guides, shipped as Markdown in the chrome (first-week/guides/<id>.md). */
+/** Atelier's own short guides, shipped as Markdown in the chrome (first-week/guides/<id>.md). */
 export const FIRST_WEEK_GUIDES: readonly FirstWeekGuide[] = [
   { id: 'meet-your-companion', title: 'Meet your companion', summary: 'What your companion can do, how to ask, and how to make it look like yours.', minutes: 2 },
   { id: 'chats-and-tabs', title: 'Chats and tabs', summary: 'Start a chat from anywhere, keep it beside a page, and find it again later.', minutes: 3 },
@@ -161,7 +161,7 @@ export function firstWeekGuideSummary(id: string): string | null {
 }
 
 export function guideUrl(id: string): string {
-  return `apex://first-week/${id}`
+  return `atelier://first-week/${id}`
 }
 
 // ---- rules ----
@@ -189,15 +189,15 @@ interface AutoDefinition {
 
 /** The automatic items. */
 export const AUTO_DEFINITIONS: Record<AutoItemId, AutoDefinition> = {
-  'import-data': { id: 'import-data', title: 'Bring your bookmarks', description: 'Import bookmarks and history from the browser you use now', glyph: 'import', hue: 'sky', action: { kind: 'page', url: 'apex://settings/import' } },
+  'import-data': { id: 'import-data', title: 'Bring your bookmarks', description: 'Import bookmarks and history from the browser you use now', glyph: 'import', hue: 'sky', action: { kind: 'page', url: 'atelier://settings/import' } },
   'default-browser': { id: 'default-browser', title: `Make ${BRAND_NAME} your browser`, description: 'Open links from other apps here, with your companion close by', glyph: 'browser', hue: 'indigo', action: { kind: 'default-browser' } },
-  'connect-app': { id: 'connect-app', title: 'Connect an app', description: 'Let your companion use your calendar, notes or files when you ask', glyph: 'plug', hue: 'green', action: { kind: 'page', url: 'apex://connectors' } },
+  'connect-app': { id: 'connect-app', title: 'Connect an app', description: 'Let your companion use your calendar, notes or files when you ask', glyph: 'plug', hue: 'green', action: { kind: 'page', url: 'atelier://connectors' } },
   'customise-companion': { id: 'customise-companion', title: 'Make your companion yours', description: 'Change its look, name or the way it works for you', glyph: 'palette', hue: 'rose', action: { kind: 'companion' } },
-  'set-up-routine': { id: 'set-up-routine', title: 'Set up a routine', description: 'Have a chat run on a schedule, like a morning briefing', glyph: 'clock', hue: 'amber', action: { kind: 'page', url: 'apex://routines' } },
-  'try-dictation': { id: 'try-dictation', title: 'Talk instead of typing', description: 'Dictate a message to your companion', glyph: 'mic', hue: 'violet', action: { kind: 'page', url: 'apex://settings/general' } },
+  'set-up-routine': { id: 'set-up-routine', title: 'Set up a routine', description: 'Have a chat run on a schedule, like a morning briefing', glyph: 'clock', hue: 'amber', action: { kind: 'page', url: 'atelier://routines' } },
+  'try-dictation': { id: 'try-dictation', title: 'Talk instead of typing', description: 'Dictate a message to your companion', glyph: 'mic', hue: 'violet', action: { kind: 'page', url: 'atelier://settings/general' } },
   // ON-13: the items that arrived with their features (meeting transcription, artifacts).
-  'record-meeting': { id: 'record-meeting', title: 'Keep notes of a meeting', description: 'Record a call and get a transcript with a short summary', glyph: 'wave', hue: 'teal', action: { kind: 'page', url: 'apex://meetings' } },
-  'build-artifact': { id: 'build-artifact', title: 'Make something together', description: 'Ask your companion for a small app, chart or page you can keep', glyph: 'shapes', hue: 'coral', action: { kind: 'page', url: 'apex://library/files' } },
+  'record-meeting': { id: 'record-meeting', title: 'Keep notes of a meeting', description: 'Record a call and get a transcript with a short summary', glyph: 'wave', hue: 'teal', action: { kind: 'page', url: 'atelier://meetings' } },
+  'build-artifact': { id: 'build-artifact', title: 'Make something together', description: 'Ask your companion for a small app, chart or page you can keep', glyph: 'shapes', hue: 'coral', action: { kind: 'page', url: 'atelier://library/files' } },
   // NT-01: ticks the first time a new tab searches the web or goes to a typed site.
   'search-web': { id: 'search-web', title: 'Search the web from a new tab', description: 'Switch the new tab to your search engine, or type a site to go there', glyph: 'search', hue: 'blue', action: { kind: 'web-search' } },
 }

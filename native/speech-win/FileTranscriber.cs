@@ -1,16 +1,16 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex-speech.exe: `transcribe` (a saved recording or an imported file). Media
+// atelier-speech.exe: `transcribe` (a saved recording or an imported file). Media
 // Foundation decodes it (m4a, mp3, wav, …), it is resampled to 16 kHz mono
 // and read by System.Speech on this PC. Lines match the macOS helper:
 // `progress` as it goes, `final`s (source mic), then progress 1 and `stopped`.
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 
-namespace Apex.Speech;
+namespace Atelier.Speech;
 
 internal static class FileTranscriber
 {

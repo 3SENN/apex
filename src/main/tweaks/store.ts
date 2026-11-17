@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -33,7 +33,7 @@ export const TWEAKS_FILE = 'tweaks.json'
 /**
  * Compatibility: the file's name before the rename. A profile without
  * tweaks.json yet reads this one once and writes tweaks.json from it at
- * once; the old file stays as it was, so an older Apex still finds it.
+ * once; the old file stays as it was, so an older Atelier still finds it.
  */
 export const LEGACY_TWEAKS_FILE = 'boosts.json' // compatibility: read once, never written
 
@@ -224,7 +224,7 @@ export class TweakStore extends EventEmitter<{ changed: [TweaksState] }> {
     return b
   }
 
-  /** A stored or imported tweak as Apex keeps it, or null when its host can't have one. */
+  /** A stored or imported tweak as Atelier keeps it, or null when its host can't have one. */
   #clean(input: ImportedTweak, id: string, jsEnabled: boolean): Tweak | null {
     const host = normalizeTweakHost(input.host)
     if (!host || !tweakHostAllowed(host)) return null

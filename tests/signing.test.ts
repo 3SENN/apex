@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -54,14 +54,14 @@ const FIND_IDENTITY = `  1) ${OLD} "${NAME}"
   3) ${CURRENT} "${NAME}"
      3 valid identities found`
 const IDENTITIES = parseIdentities(FIND_IDENTITY)
-const tmp = (): string => mkdtempSync(join(tmpdir(), 'apex-signing-'))
+const tmp = (): string => mkdtempSync(join(tmpdir(), 'atelier-signing-'))
 
-/** A Developer ID profile for com.sennechin.apex that grants everything the passkeys mode claims. */
+/** A Developer ID profile for com.sennechin.atelier that grants everything the passkeys mode claims. */
 const goodProfile = (over: Partial<ProfileFacts> = {}, entitlements: Record<string, unknown> = {}): ProfileFacts => ({
-  name: 'Apex Developer ID',
+  name: 'Atelier Developer ID',
   teamIds: [TEAM],
   entitlements: {
-    'com.apple.application-identifier': `${TEAM}.com.sennechin.apex`,
+    'com.apple.application-identifier': `${TEAM}.com.sennechin.atelier`,
     'com.apple.developer.team-identifier': TEAM,
     [BROWSER_PASSKEY_ENTITLEMENT]: true,
     'keychain-access-groups': [`${TEAM}.*`],
@@ -75,36 +75,36 @@ const goodProfile = (over: Partial<ProfileFacts> = {}, entitlements: Record<stri
 })
 
 describe('the app id', () => {
-  it('is the branding\'s (com.sennechin.apex when official) unless APEX_BUNDLE_ID says otherwise, everywhere', () => {
-    const official = { APEX_OFFICIAL_BRANDING: '1' }
-    expect(DEFAULT_BUNDLE_ID).toBe('com.sennechin.apex')
+  it('is the branding\'s (com.sennechin.atelier when official) unless ATELIER_BUNDLE_ID says otherwise, everywhere', () => {
+    const official = { ATELIER_OFFICIAL_BRANDING: '1' }
+    expect(DEFAULT_BUNDLE_ID).toBe('com.sennechin.atelier')
     expect(RUNTIME_DEFAULT_BUNDLE_ID).toBe(loadBranding().bundleId)
-    expect(BUNDLE_ID).toBe(RUNTIME_DEFAULT_BUNDLE_ID) // no __APEX_BUNDLE_ID__ under vitest
-    expect(bundleIdFrom(official)).toBe('com.sennechin.apex')
-    expect(bundleIdFrom({ APEX_BUNDLE_ID: ' com.example.apex ' })).toBe('com.example.apex')
-    expect(() => bundleIdFrom({ APEX_BUNDLE_ID: 'com.example.*' })).toThrow(/not a bundle id/)
-    expect(releaseSettings({ APEX_BUNDLE_ID: 'com.example.apex' }, 'darwin').bundleId).toBe('com.example.apex')
-    expect(viteDefines(releaseSettings(official, 'darwin')).__APEX_BUNDLE_ID__).toBe('"com.sennechin.apex"')
-    expect(baseConfig().appId).toBe('com.sennechin.apex')
+    expect(BUNDLE_ID).toBe(RUNTIME_DEFAULT_BUNDLE_ID) // no __ATELIER_BUNDLE_ID__ under vitest
+    expect(bundleIdFrom(official)).toBe('com.sennechin.atelier')
+    expect(bundleIdFrom({ ATELIER_BUNDLE_ID: ' com.example.atelier ' })).toBe('com.example.atelier')
+    expect(() => bundleIdFrom({ ATELIER_BUNDLE_ID: 'com.example.*' })).toThrow(/not a bundle id/)
+    expect(releaseSettings({ ATELIER_BUNDLE_ID: 'com.example.atelier' }, 'darwin').bundleId).toBe('com.example.atelier')
+    expect(viteDefines(releaseSettings(official, 'darwin')).__ATELIER_BUNDLE_ID__).toBe('"com.sennechin.atelier"')
+    expect(baseConfig().appId).toBe('com.sennechin.atelier')
   })
 
-  it('has no default team: APEX_TEAM_ID or nothing, checked when set', () => {
+  it('has no default team: ATELIER_TEAM_ID or nothing, checked when set', () => {
     expect(Object.keys(bundle)).not.toContain('DEFAULT_TEAM_ID')
     expect(teamIdFrom({})).toBeNull()
-    expect(teamIdFrom({ APEX_TEAM_ID: ' ' })).toBeNull()
-    expect(teamIdFrom({ APEX_TEAM_ID: ` ${TEAM} ` })).toBe(TEAM)
-    expect(() => teamIdFrom({ APEX_TEAM_ID: 'short' })).toThrow(/Team ID/)
-    expect(requireTeamId({ APEX_TEAM_ID: TEAM }, 'This')).toBe(TEAM)
-    expect(() => requireTeamId({}, 'The thing')).toThrow(/^The thing needs your Apple Team ID: set APEX_TEAM_ID/)
+    expect(teamIdFrom({ ATELIER_TEAM_ID: ' ' })).toBeNull()
+    expect(teamIdFrom({ ATELIER_TEAM_ID: ` ${TEAM} ` })).toBe(TEAM)
+    expect(() => teamIdFrom({ ATELIER_TEAM_ID: 'short' })).toThrow(/Team ID/)
+    expect(requireTeamId({ ATELIER_TEAM_ID: TEAM }, 'This')).toBe(TEAM)
+    expect(() => requireTeamId({}, 'The thing')).toThrow(/^The thing needs your Apple Team ID: set ATELIER_TEAM_ID/)
   })
 
   it('names the native helpers under it', () => {
     for (const helper of ['speech', 'calendar', 'translate']) {
       const plist = join(REPO, 'native', helper, 'Info.plist')
-      expect(readFileSync(plist, 'utf8')).toContain(`<string>com.sennechin.apex.${helper}</string>`)
-      expect(helperInfoPlist(plist, tmp(), helper, { APEX_OFFICIAL_BRANDING: '1' })).toBe(plist)
-      const copy = helperInfoPlist(plist, tmp(), helper, { APEX_OFFICIAL_BRANDING: '1', APEX_BUNDLE_ID: 'com.example.apex' })
-      expect(readFileSync(copy, 'utf8')).toContain(`<string>com.example.apex.${helper}</string>`)
+      expect(readFileSync(plist, 'utf8')).toContain(`<string>com.sennechin.atelier.${helper}</string>`)
+      expect(helperInfoPlist(plist, tmp(), helper, { ATELIER_OFFICIAL_BRANDING: '1' })).toBe(plist)
+      const copy = helperInfoPlist(plist, tmp(), helper, { ATELIER_OFFICIAL_BRANDING: '1', ATELIER_BUNDLE_ID: 'com.example.atelier' })
+      expect(readFileSync(copy, 'utf8')).toContain(`<string>com.example.atelier.${helper}</string>`)
     }
     expect(() => withBundleIdentifier('<plist/>', 'x.y')).toThrow(/CFBundleIdentifier/)
   })
@@ -115,8 +115,8 @@ describe('the signing identity', () => {
     expect(IDENTITIES.map((i) => i.hash)).toEqual([OLD, DEV, CURRENT])
     expect(resolveIdentity('Example Developer (ABCDE12345)', IDENTITIES, { preferred: CURRENT }).hash).toBe(CURRENT)
     expect(resolveIdentity(NAME, IDENTITIES, { preferred: CURRENT.toLowerCase() }).hash).toBe(CURRENT)
-    expect(() => resolveIdentity(NAME, IDENTITIES)).toThrow(`"${NAME}" is ambiguous: 2 identities carry it (${OLD}, ${CURRENT}). Set APEX_SIGN_IDENTITY`)
-    expect(() => resolveIdentity(NAME, IDENTITIES, { preferred: 'F'.repeat(40) })).toThrow(/ambiguous.*APEX_SIGN_IDENTITY/)
+    expect(() => resolveIdentity(NAME, IDENTITIES)).toThrow(`"${NAME}" is ambiguous: 2 identities carry it (${OLD}, ${CURRENT}). Set ATELIER_SIGN_IDENTITY`)
+    expect(() => resolveIdentity(NAME, IDENTITIES, { preferred: 'F'.repeat(40) })).toThrow(/ambiguous.*ATELIER_SIGN_IDENTITY/)
     // A name only one identity carries needs no preference.
     expect(resolveIdentity(NAME, IDENTITIES.filter((i) => i.hash !== OLD)).hash).toBe(CURRENT)
   })
@@ -128,33 +128,33 @@ describe('the signing identity', () => {
     expect(() => resolveIdentity('Nobody (ZZZZZZZZZZ)', IDENTITIES)).toThrow(/no "Developer ID Application: Nobody/)
   })
 
-  it('has no preferred certificate of its own: only APEX_SIGN_IDENTITY, when it is a hash', () => {
+  it('has no preferred certificate of its own: only ATELIER_SIGN_IDENTITY, when it is a hash', () => {
     expect(Object.keys(identity)).not.toContain('DEFAULT_SIGN_IDENTITY')
     expect(preferredIdentity({})).toBe('')
-    expect(preferredIdentity({ APEX_SIGN_IDENTITY: ` ${CURRENT.toLowerCase()} ` })).toBe(CURRENT)
-    expect(preferredIdentity({ APEX_SIGN_IDENTITY: NAME })).toBe('')
+    expect(preferredIdentity({ ATELIER_SIGN_IDENTITY: ` ${CURRENT.toLowerCase()} ` })).toBe(CURRENT)
+    expect(preferredIdentity({ ATELIER_SIGN_IDENTITY: NAME })).toBe('')
     expect(preferredIdentity({ CSC_NAME: CURRENT })).toBe('')
   })
 
-  it('reads APEX_SIGN_IDENTITY, then CSC_NAME, and nothing when neither is set', () => {
+  it('reads ATELIER_SIGN_IDENTITY, then CSC_NAME, and nothing when neither is set', () => {
     expect(signingIdentity({}, { identities: IDENTITIES })).toBeNull()
-    expect(signingIdentity({ APEX_SIGN_IDENTITY: CURRENT }, { identities: IDENTITIES })).toBe(CURRENT)
-    expect(signingIdentity({ APEX_SIGN_IDENTITY: CURRENT, CSC_NAME: NAME }, { identities: IDENTITIES })).toBe(CURRENT)
-    expect(signingIdentity({ APEX_SIGN_IDENTITY: OLD, CSC_NAME: NAME }, { identities: IDENTITIES })).toBe(OLD)
+    expect(signingIdentity({ ATELIER_SIGN_IDENTITY: CURRENT }, { identities: IDENTITIES })).toBe(CURRENT)
+    expect(signingIdentity({ ATELIER_SIGN_IDENTITY: CURRENT, CSC_NAME: NAME }, { identities: IDENTITIES })).toBe(CURRENT)
+    expect(signingIdentity({ ATELIER_SIGN_IDENTITY: OLD, CSC_NAME: NAME }, { identities: IDENTITIES })).toBe(OLD)
     expect(() => signingIdentity({ CSC_NAME: 'Example Developer (ABCDE12345)' }, { identities: IDENTITIES })).toThrow(/ambiguous/)
-    expect(() => signingIdentity({ APEX_SIGN_IDENTITY: NAME }, { identities: IDENTITIES })).toThrow(/ambiguous/)
+    expect(() => signingIdentity({ ATELIER_SIGN_IDENTITY: NAME }, { identities: IDENTITIES })).toThrow(/ambiguous/)
     expect(signingIdentity({ CSC_NAME: NAME }, { identities: IDENTITIES, preferred: CURRENT })).toBe(CURRENT)
   })
 })
 
 describe('signing modes', () => {
-  const ID = { APEX_SIGN_IDENTITY: CURRENT }
+  const ID = { ATELIER_SIGN_IDENTITY: CURRENT }
   it('picks unsigned by default, Developer ID with an identity, and passkeys with a profile', () => {
     expect(signingMode({})).toBe('unsigned')
     expect(signingMode(ID)).toBe('developer-id')
     expect(signingMode({ CSC_LINK: 'x' })).toBe('developer-id')
-    expect(signingMode({ ...ID, APEX_PROVISIONING_PROFILE: '/p.provisionprofile' })).toBe('developer-id-passkeys')
-    expect(() => signingMode({ APEX_PROVISIONING_PROFILE: '/p.provisionprofile' })).toThrow(/no Developer ID identity/)
+    expect(signingMode({ ...ID, ATELIER_PROVISIONING_PROFILE: '/p.provisionprofile' })).toBe('developer-id-passkeys')
+    expect(() => signingMode({ ATELIER_PROVISIONING_PROFILE: '/p.provisionprofile' })).toThrow(/no Developer ID identity/)
   })
 
   it('notarizes with an API key, an Apple ID or a notarytool keychain profile', () => {
@@ -176,15 +176,15 @@ describe('signing modes', () => {
 
   it('adds the browser passkey keys only in the passkeys mode', () => {
     const base = { 'com.apple.security.cs.allow-jit': true }
-    const opts = { base, teamId: TEAM, bundleId: 'com.sennechin.apex' }
+    const opts = { base, teamId: TEAM, bundleId: 'com.sennechin.atelier' }
     expect(entitlementsFor('unsigned', opts)).toEqual(base)
     expect(entitlementsFor('developer-id', opts)).toEqual(base)
     expect(entitlementsFor('developer-id-passkeys', opts)).toEqual({
       ...base,
       [BROWSER_PASSKEY_ENTITLEMENT]: true,
-      'com.apple.application-identifier': `${TEAM}.com.sennechin.apex`,
+      'com.apple.application-identifier': `${TEAM}.com.sennechin.atelier`,
       'com.apple.developer.team-identifier': TEAM,
-      'keychain-access-groups': [`${TEAM}.com.sennechin.apex.webauthn`],
+      'keychain-access-groups': [`${TEAM}.com.sennechin.atelier.webauthn`],
     })
     expect(entitlementsFor('developer-id-passkeys', { ...opts, keychainGroup: false })).not.toHaveProperty('keychain-access-groups')
     expect(() => entitlementsFor('unsigned', { ...opts, base: { [BROWSER_PASSKEY_ENTITLEMENT]: true } })).toThrow(/Restricted entitlements need a provisioning profile/)
@@ -194,18 +194,18 @@ describe('signing modes', () => {
 })
 
 describe('the provisioning profile preflight', () => {
-  const opts = { teamId: TEAM, bundleId: 'com.sennechin.apex', now: new Date('2026-10-31T00:00:00Z') }
+  const opts = { teamId: TEAM, bundleId: 'com.sennechin.atelier', now: new Date('2026-10-31T00:00:00Z') }
   it('passes a Developer ID profile that grants the entitlement, the team and the bundle id', () => {
     expect(profileProblems(goodProfile(), opts)).toEqual([])
-    expect(profileAllowsKeychainGroup(goodProfile(), `${TEAM}.com.sennechin.apex.webauthn`)).toBe(true)
-    expect(profileAllowsKeychainGroup(goodProfile({}, { 'keychain-access-groups': undefined }), `${TEAM}.com.sennechin.apex.webauthn`)).toBe(false)
+    expect(profileAllowsKeychainGroup(goodProfile(), `${TEAM}.com.sennechin.atelier.webauthn`)).toBe(true)
+    expect(profileAllowsKeychainGroup(goodProfile({}, { 'keychain-access-groups': undefined }), `${TEAM}.com.sennechin.atelier.webauthn`)).toBe(false)
   })
 
   it('names each thing a profile is missing', () => {
     const one = (facts: ProfileFacts): string => profileProblems(facts, opts).join('\n')
     expect(one(goodProfile({}, { [BROWSER_PASSKEY_ENTITLEMENT]: undefined }))).toMatch(/doesn't grant com\.apple\.developer\.web-browser\.public-key-credential/)
     expect(one(goodProfile({ teamIds: ['ZZZZZ99999'] }, { 'com.apple.developer.team-identifier': 'ZZZZZ99999' }))).toMatch(/belongs to team ZZZZZ99999, not ABCDE12345/)
-    expect(one(goodProfile({}, { 'com.apple.application-identifier': `${TEAM}.com.apex.browser` }))).toMatch(/is for "ABCDE12345\.com\.apex\.browser", not ABCDE12345\.com\.sennechin\.apex/)
+    expect(one(goodProfile({}, { 'com.apple.application-identifier': `${TEAM}.com.atelier.browser` }))).toMatch(/is for "ABCDE12345\.com\.atelier\.browser", not ABCDE12345\.com\.sennechin\.atelier/)
     expect(one(goodProfile({}, { 'com.apple.application-identifier': `${TEAM}.*` }))).toMatch(/wildcard profile/)
     expect(one(goodProfile({ expires: '2025-01-01T00:00:00Z' }))).toMatch(/expired on 2025-01-01/)
     expect(one(goodProfile({ allDevices: false, devices: true }))).toMatch(/development profile/)
@@ -215,9 +215,9 @@ describe('the provisioning profile preflight', () => {
   it.runIf(process.platform === 'darwin')('decodes a profile’s fields with plutil, data and dates included', () => {
     const xml = `<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
-<key>Name</key><string>Apex Developer ID</string>
+<key>Name</key><string>Atelier Developer ID</string>
 <key>DeveloperCertificates</key><array><data>AAEC</data></array>
-<key>Entitlements</key><dict><key>com.apple.application-identifier</key><string>${TEAM}.com.sennechin.apex</string><key>com.apple.developer.team-identifier</key><string>${TEAM}</string><key>${BROWSER_PASSKEY_ENTITLEMENT}</key><true/><key>keychain-access-groups</key><array><string>${TEAM}.*</string></array></dict>
+<key>Entitlements</key><dict><key>com.apple.application-identifier</key><string>${TEAM}.com.sennechin.atelier</string><key>com.apple.developer.team-identifier</key><string>${TEAM}</string><key>${BROWSER_PASSKEY_ENTITLEMENT}</key><true/><key>keychain-access-groups</key><array><string>${TEAM}.*</string></array></dict>
 <key>ExpirationDate</key><date>2031-01-01T00:00:00Z</date>
 <key>Platform</key><array><string>OSX</string></array>
 <key>ProvisionsAllDevices</key><true/>
@@ -227,7 +227,7 @@ describe('the provisioning profile preflight', () => {
     writeFileSync(file, 'cms')
     const run = ((cmd: string, args: string[], options: object) => (cmd === 'security' ? xml : execFileSync(cmd, args, options))) as typeof execFileSync
     const facts = decodeProfile(file, run)
-    expect(facts).toMatchObject({ name: 'Apex Developer ID', teamIds: [TEAM], platforms: ['OSX'], allDevices: true, devices: false })
+    expect(facts).toMatchObject({ name: 'Atelier Developer ID', teamIds: [TEAM], platforms: ['OSX'], allDevices: true, devices: false })
     expect(facts.expires).toMatch(/^2031-01-01/)
     expect(profileProblems(facts, opts)).toEqual([])
     expect(() => decodeProfile(join(tmp(), 'missing.provisionprofile'))).toThrow(/doesn't exist/)
@@ -235,21 +235,21 @@ describe('the provisioning profile preflight', () => {
 
   it('stops the build with every problem listed', () => {
     const decode = (): ProfileFacts => goodProfile({ teamIds: [] }, { [BROWSER_PASSKEY_ENTITLEMENT]: false })
-    expect(() => preflightProfile('/x.provisionprofile', { ...opts, decode })).toThrow(/can't sign Apex with browser passkeys:\n {2}- .*team[\s\S]*- .*doesn't grant/)
+    expect(() => preflightProfile('/x.provisionprofile', { ...opts, decode })).toThrow(/can't sign Atelier with browser passkeys:\n {2}- .*team[\s\S]*- .*doesn't grant/)
   })
 })
 
 describe('electron-builder’s assembled config', () => {
   const logger = new DebugLogger(false)
-  const ID = { APEX_SIGN_IDENTITY: CURRENT }
-  const PASSKEYS = { ...ID, APEX_TEAM_ID: TEAM }
+  const ID = { ATELIER_SIGN_IDENTITY: CURRENT }
+  const PASSKEYS = { ...ID, ATELIER_TEAM_ID: TEAM }
   // Without the private internal/ folder's resources, so these checks see electron-builder.yml as it is.
   const build = (env: Record<string, string>, extra: { decode?: () => ProfileFacts; out?: string; log?: (m: string) => void } = {}): Record<string, any> =>
-    builderConfig({ APEX_INTERNAL: '0', APEX_OFFICIAL_BRANDING: '1', ...env }, { platform: 'darwin', identities: IDENTITIES, out: extra.out ?? join(tmp(), 'ents.plist'), ...(extra.decode ? { decode: extra.decode } : {}), ...(extra.log ? { log: extra.log } : {}) })
+    builderConfig({ ATELIER_INTERNAL: '0', ATELIER_OFFICIAL_BRANDING: '1', ...env }, { platform: 'darwin', identities: IDENTITIES, out: extra.out ?? join(tmp(), 'ents.plist'), ...(extra.decode ? { decode: extra.decode } : {}), ...(extra.log ? { log: extra.log } : {}) })
 
   it('builds unsigned by default: no identity, no notarization, no restricted keys', async () => {
     const config = build({})
-    expect(config.appId).toBe('com.sennechin.apex')
+    expect(config.appId).toBe('com.sennechin.atelier')
     expect(config.mac.identity).toBeNull()
     expect(config.mac.notarize).toBe(false)
     expect(config.mac.entitlements).toBe('build/entitlements.mac.plist')
@@ -263,7 +263,7 @@ describe('electron-builder’s assembled config', () => {
   it('signs Developer ID with the resolved hash, the hardened runtime and a signed dmg, with no team needed', async () => {
     const notes: string[] = []
     const config = build({ ...ID }, { log: (m) => notes.push(m) })
-    expect(notes).toEqual([`developer-id for com.sennechin.apex, identity ${CURRENT}, notarization off`])
+    expect(notes).toEqual([`developer-id for com.sennechin.atelier, identity ${CURRENT}, notarization off`])
     expect(config.mac.identity).toBe(CURRENT)
     expect(config.mac.hardenedRuntime).toBe(true)
     expect(config.mac.notarize).toBe(false)
@@ -272,47 +272,47 @@ describe('electron-builder’s assembled config', () => {
     expect(build({}).mac.sign).toBeUndefined()
     expect(build({ ...ID, APPLE_KEYCHAIN_PROFILE: 'example-notary' }).mac.notarize).toBe(true)
     // A name two keychain identities carry, with no SHA-1 to prefer, stops the build.
-    expect(() => build({ APEX_SIGN_IDENTITY: 'Example Developer (ABCDE12345)' })).toThrow(/ambiguous: 2 identities carry it/)
+    expect(() => build({ ATELIER_SIGN_IDENTITY: 'Example Developer (ABCDE12345)' })).toThrow(/ambiguous: 2 identities carry it/)
     // CSC_LINK's own certificate is found by electron-builder in its temporary keychain.
     expect(build({ CSC_LINK: 'base64', CSC_KEY_PASSWORD: 'p' }).mac.identity).toBe('')
-    expect(build({ ...ID, APEX_BUNDLE_ID: 'com.example.apex' }).appId).toBe('com.example.apex')
+    expect(build({ ...ID, ATELIER_BUNDLE_ID: 'com.example.atelier' }).appId).toBe('com.example.atelier')
     await validateConfiguration(config as Configuration, logger)
   })
 
   it('embeds the profile and signs with the generated passkeys entitlements', async () => {
     const out = join(tmp(), 'generated', 'ents.plist')
-    const config = build({ ...PASSKEYS, APEX_PROVISIONING_PROFILE: '/profiles/apex.provisionprofile' }, { decode: () => goodProfile(), out })
-    expect(config.mac.provisioningProfile).toBe('/profiles/apex.provisionprofile')
+    const config = build({ ...PASSKEYS, ATELIER_PROVISIONING_PROFILE: '/profiles/atelier.provisionprofile' }, { decode: () => goodProfile(), out })
+    expect(config.mac.provisioningProfile).toBe('/profiles/atelier.provisionprofile')
     expect(config.mac.entitlements).toBe(out)
     expect(config.mac.entitlementsInherit).toBe('build/entitlements.mac.inherit.plist')
     const ents = readEntitlements(readFileSync(out, 'utf8'))
     expect(ents[BROWSER_PASSKEY_ENTITLEMENT]).toBe(true)
-    expect(ents['com.apple.application-identifier']).toBe(`${TEAM}.com.sennechin.apex`)
-    expect(ents['keychain-access-groups']).toEqual([`${TEAM}.com.sennechin.apex.webauthn`])
+    expect(ents['com.apple.application-identifier']).toBe(`${TEAM}.com.sennechin.atelier`)
+    expect(ents['keychain-access-groups']).toEqual([`${TEAM}.com.sennechin.atelier.webauthn`])
     expect(ents['com.apple.security.cs.allow-jit']).toBe(true)
     await validateConfiguration(config as Configuration, logger)
   })
 
-  it('refuses the passkeys mode without APEX_TEAM_ID, before anything is written', () => {
+  it('refuses the passkeys mode without ATELIER_TEAM_ID, before anything is written', () => {
     const out = join(tmp(), 'never.plist')
-    expect(() => build({ ...ID, APEX_PROVISIONING_PROFILE: '/p' }, { decode: () => goodProfile(), out })).toThrow(/passkeys signing mode .* needs your Apple Team ID: set APEX_TEAM_ID/)
+    expect(() => build({ ...ID, ATELIER_PROVISIONING_PROFILE: '/p' }, { decode: () => goodProfile(), out })).toThrow(/passkeys signing mode .* needs your Apple Team ID: set ATELIER_TEAM_ID/)
     expect(existsSync(out)).toBe(false)
   })
 
   it('drops only the Touch ID keychain group when the profile doesn’t allow it, and refuses a bad profile', () => {
     const out = join(tmp(), 'ents.plist')
     const notes: string[] = []
-    macSigningConfig({ ...PASSKEYS, APEX_OFFICIAL_BRANDING: '1', APEX_PROVISIONING_PROFILE: '/p' }, { out, decode: () => goodProfile({}, { 'keychain-access-groups': undefined }), log: (m) => notes.push(m) })
+    macSigningConfig({ ...PASSKEYS, ATELIER_OFFICIAL_BRANDING: '1', ATELIER_PROVISIONING_PROFILE: '/p' }, { out, decode: () => goodProfile({}, { 'keychain-access-groups': undefined }), log: (m) => notes.push(m) })
     expect(readEntitlements(readFileSync(out, 'utf8'))).not.toHaveProperty('keychain-access-groups')
     expect(notes.join()).toMatch(/Touch ID passkeys stay off/)
     const bad = join(tmp(), 'never.plist')
-    expect(() => build({ ...PASSKEYS, APEX_PROVISIONING_PROFILE: '/p' }, { decode: () => goodProfile({}, { [BROWSER_PASSKEY_ENTITLEMENT]: undefined }), out: bad })).toThrow(/doesn't grant/)
+    expect(() => build({ ...PASSKEYS, ATELIER_PROVISIONING_PROFILE: '/p' }, { decode: () => goodProfile({}, { [BROWSER_PASSKEY_ENTITLEMENT]: undefined }), out: bad })).toThrow(/doesn't grant/)
     expect(existsSync(bad)).toBe(false)
   })
 
   it('leaves other platforms’ configs without mac signing changes', () => {
-    const config = builderConfig({ ...ID, APEX_OFFICIAL_BRANDING: '1', APEX_PROVISIONING_PROFILE: '/p' }, { platform: 'linux' })
-    expect(config.appId).toBe('com.sennechin.apex')
+    const config = builderConfig({ ...ID, ATELIER_OFFICIAL_BRANDING: '1', ATELIER_PROVISIONING_PROFILE: '/p' }, { platform: 'linux' })
+    expect(config.appId).toBe('com.sennechin.atelier')
     expect(config.mac.identity).toBeNull()
     expect(mergeConfig({ a: [1], b: { c: 1 } }, { a: [2], b: { d: 2 } })).toEqual({ a: [2], b: { c: 1, d: 2 } })
   })
@@ -369,7 +369,7 @@ describe('scripts/release/asc.mjs', () => {
   const base = (fetch: FetchLike, argv: string[] = [], written: Array<[string, Buffer]> = []) => ({
     argv,
     // The official app id and name, whichever branding this run has.
-    env: { ...KEY, APEX_TEAM_ID: TEAM, APEX_OFFICIAL_BRANDING: '1' } as Record<string, string>,
+    env: { ...KEY, ATELIER_TEAM_ID: TEAM, ATELIER_OFFICIAL_BRANDING: '1' } as Record<string, string>,
     fetch,
     readFile: () => pem,
     exists: () => true,
@@ -387,9 +387,9 @@ describe('scripts/release/asc.mjs', () => {
     expect(() => keyFrom({ ...KEY, APPLE_API_ISSUER: ' ' }, () => true)).toThrow(/APPLE_API_ISSUER/)
   })
 
-  it('needs APEX_TEAM_ID, and sends nothing without it', async () => {
+  it('needs ATELIER_TEAM_ID, and sends nothing without it', async () => {
     const api = fakeAsc({ certificates: CERTS })
-    await expect(runAsc({ ...base(api.fetch), env: { ...KEY } })).rejects.toThrow(/asc\.mjs .*needs your Apple Team ID: set APEX_TEAM_ID/)
+    await expect(runAsc({ ...base(api.fetch), env: { ...KEY } })).rejects.toThrow(/asc\.mjs .*needs your Apple Team ID: set ATELIER_TEAM_ID/)
     expect(api.calls).toEqual([])
   })
 
@@ -409,10 +409,10 @@ describe('scripts/release/asc.mjs', () => {
     expect(api.calls.every((c) => c.method === 'GET')).toBe(true)
     expect(api.calls[0]?.auth).toMatch(/^Bearer [\w-]+\.[\w-]+\.[\w-]+$/)
     expect(result.plan).toEqual([
-      'register the App ID com.sennechin.apex ("Apex", macOS)',
-      'enable ASSOCIATED_DOMAINS on com.sennechin.apex',
-      'create the Developer ID profile "Apex Developer ID com.sennechin.apex" for com.sennechin.apex',
-      expect.stringMatching(/^write the profile to .*com\.sennechin\.apex\.provisionprofile$/),
+      'register the App ID com.sennechin.atelier ("Atelier", macOS)',
+      'enable ASSOCIATED_DOMAINS on com.sennechin.atelier',
+      'create the Developer ID profile "Atelier Developer ID com.sennechin.atelier" for com.sennechin.atelier',
+      expect.stringMatching(/^write the profile to .*com\.sennechin\.atelier\.provisionprofile$/),
     ])
     expect(api.state.bundleIds).toEqual([])
   })
@@ -422,16 +422,16 @@ describe('scripts/release/asc.mjs', () => {
     const written: Array<[string, Buffer]> = []
     const result = await runAsc({ ...base(api.fetch, ['--apply', '--certificate', 'new', '--capability', 'ASSOCIATED_DOMAINS'], written) })
     expect(result.applied).toBe(true)
-    expect(api.state.bundleIds[0]?.attributes).toEqual({ identifier: 'com.sennechin.apex', name: 'Apex', platform: 'MAC_OS' })
+    expect(api.state.bundleIds[0]?.attributes).toEqual({ identifier: 'com.sennechin.atelier', name: 'Atelier', platform: 'MAC_OS' })
     expect(api.state.capabilities).toEqual(['ASSOCIATED_DOMAINS'])
     const made = api.calls.find((c) => c.method === 'POST' && c.path === '/v1/profiles')!.body.data
-    expect(made.attributes).toEqual({ name: 'Apex Developer ID com.sennechin.apex', profileType: 'MAC_APP_DIRECT' })
+    expect(made.attributes).toEqual({ name: 'Atelier Developer ID com.sennechin.atelier', profileType: 'MAC_APP_DIRECT' })
     expect(made.relationships).toEqual({ bundleId: { data: { type: 'bundleIds', id: 'B1' } }, certificates: { data: [{ type: 'certificates', id: 'new' }] } })
     expect(written.map(([, d]) => d.toString())).toEqual(['fresh profile'])
   })
 
   it('reuses what exists, and remakes the profile only with --recreate', async () => {
-    const seed = { bundleIds: [{ id: 'B0', attributes: { identifier: 'com.sennechin.apex', platform: 'MAC_OS' } }], certificates: [CERTS[1]!], profiles: [{ id: 'P1', attributes: { name: 'Apex Developer ID com.sennechin.apex', profileContent: der('old profile') } }] }
+    const seed = { bundleIds: [{ id: 'B0', attributes: { identifier: 'com.sennechin.atelier', platform: 'MAC_OS' } }], certificates: [CERTS[1]!], profiles: [{ id: 'P1', attributes: { name: 'Atelier Developer ID com.sennechin.atelier', profileContent: der('old profile') } }] }
     const keep = fakeAsc(seed)
     const written: Array<[string, Buffer]> = []
     await runAsc({ ...base(keep.fetch, ['--apply'], written) })
@@ -446,10 +446,10 @@ describe('scripts/release/asc.mjs', () => {
     const hash = certificateHash(der('new cert'))
     expect(pickCertificate(CERTS, { id: null, hash }).id).toBe('new')
     expect(() => pickCertificate(CERTS, { id: null, hash: 'F'.repeat(40) })).toThrow(/pass --certificate/)
-    expect(() => pickCertificate(CERTS, { id: null, hash: '' })).toThrow(/APEX_SIGN_IDENTITY names no SHA-1 to pick one: pass --certificate/)
-    // APEX_SIGN_IDENTITY, as a hash, picks it without --certificate.
+    expect(() => pickCertificate(CERTS, { id: null, hash: '' })).toThrow(/ATELIER_SIGN_IDENTITY names no SHA-1 to pick one: pass --certificate/)
+    // ATELIER_SIGN_IDENTITY, as a hash, picks it without --certificate.
     const api = fakeAsc({ certificates: CERTS })
-    await runAsc({ ...base(api.fetch, ['--apply']), env: { ...KEY, APEX_TEAM_ID: TEAM, APEX_SIGN_IDENTITY: hash.toLowerCase() } })
+    await runAsc({ ...base(api.fetch, ['--apply']), env: { ...KEY, ATELIER_TEAM_ID: TEAM, ATELIER_SIGN_IDENTITY: hash.toLowerCase() } })
     expect(api.calls.find((c) => c.method === 'POST' && c.path === '/v1/profiles')!.body.data.relationships.certificates).toEqual({ data: [{ type: 'certificates', id: 'new' }] })
     expect(pickCertificate([CERTS[0]!], { id: null, hash: 'F'.repeat(40) }).id).toBe('old')
     expect(() => pickCertificate([], { id: null, hash })).toThrow(/no Developer ID Application certificate/)
@@ -516,8 +516,8 @@ describe('the app reads its own signature', () => {
   const ENTS = `<?xml version="1.0"?><plist version="1.0"><dict><key>${BROWSER_PASSKEY_ENTITLEMENT}</key><true/></dict></plist>`
 
   it('finds the team, identifier and entitlements in the embedded signature', () => {
-    const sig = readCodeSignature(machO({ team: TEAM, identifier: 'com.sennechin.apex', entitlements: ENTS }), 'arm64')
-    expect(sig).toEqual({ identifier: 'com.sennechin.apex', teamId: TEAM, entitlements: ENTS })
+    const sig = readCodeSignature(machO({ team: TEAM, identifier: 'com.sennechin.atelier', entitlements: ENTS }), 'arm64')
+    expect(sig).toEqual({ identifier: 'com.sennechin.atelier', teamId: TEAM, entitlements: ENTS })
     expect(signedAsBrowser(sig)).toBe(true)
   })
 
@@ -525,7 +525,7 @@ describe('the app reads its own signature', () => {
     const adhoc = readCodeSignature(machO({ identifier: 'Electron', entitlements: ENTS }), 'arm64')
     expect(adhoc).toEqual({ identifier: 'Electron', teamId: null, entitlements: ENTS })
     expect(signedAsBrowser(adhoc)).toBe(false)
-    expect(signedAsBrowser(readCodeSignature(machO({ team: TEAM, identifier: 'com.sennechin.apex' }), 'arm64'))).toBe(false)
+    expect(signedAsBrowser(readCodeSignature(machO({ team: TEAM, identifier: 'com.sennechin.atelier' }), 'arm64'))).toBe(false)
     expect(grantsBrowserPasskeys(ENTS.replace('<true/>', '<false/>'))).toBe(false)
     expect(readCodeSignature(Buffer.from('not a binary'), 'arm64')).toBeNull()
     expect(signedAsBrowser(null)).toBe(false)
@@ -561,8 +561,8 @@ describe('the release scripts write nothing secret or personal', () => {
 
 describe('internal/release.env', () => {
   const FILE = `# The maintainer's signing identity. Never committed.
-APEX_TEAM_ID=${TEAM}
-export APEX_SIGN_IDENTITY="${CURRENT}"
+ATELIER_TEAM_ID=${TEAM}
+export ATELIER_SIGN_IDENTITY="${CURRENT}"
 
 APPLE_KEYCHAIN_PROFILE=example-notary   # a notarytool profile
 `
@@ -578,44 +578,44 @@ APPLE_KEYCHAIN_PROFILE=example-notary   # a notarytool profile
   })
 
   it('reads KEY=VALUE lines, # comments, quotes and an optional export', () => {
-    expect(parseReleaseEnv(FILE)).toEqual({ APEX_TEAM_ID: TEAM, APEX_SIGN_IDENTITY: CURRENT, APPLE_KEYCHAIN_PROFILE: 'example-notary' })
+    expect(parseReleaseEnv(FILE)).toEqual({ ATELIER_TEAM_ID: TEAM, ATELIER_SIGN_IDENTITY: CURRENT, APPLE_KEYCHAIN_PROFILE: 'example-notary' })
     expect(parseReleaseEnv("A='x # y'\nB=\n")).toEqual({ A: 'x # y', B: '' })
-    expect(() => parseReleaseEnv('APEX_TEAM_ID\n', 'internal/release.env')).toThrow("internal/release.env:1 isn't a KEY=VALUE line")
+    expect(() => parseReleaseEnv('ATELIER_TEAM_ID\n', 'internal/release.env')).toThrow("internal/release.env:1 isn't a KEY=VALUE line")
   })
 
   it('goes under the environment: a variable that is set wins, even empty', () => {
     const file = write(FILE)
-    const env: Record<string, string | undefined> = { APEX_TEAM_ID: 'ZZZZZ99999', APEX_SIGN_IDENTITY: '', APPLE_KEYCHAIN_PROFILE: undefined }
+    const env: Record<string, string | undefined> = { ATELIER_TEAM_ID: 'ZZZZZ99999', ATELIER_SIGN_IDENTITY: '', APPLE_KEYCHAIN_PROFILE: undefined }
     expect(loadReleaseEnv(env, { file })).toEqual(['APPLE_KEYCHAIN_PROFILE'])
-    expect(env).toEqual({ APEX_TEAM_ID: 'ZZZZZ99999', APEX_SIGN_IDENTITY: '', APPLE_KEYCHAIN_PROFILE: 'example-notary' })
+    expect(env).toEqual({ ATELIER_TEAM_ID: 'ZZZZZ99999', ATELIER_SIGN_IDENTITY: '', APPLE_KEYCHAIN_PROFILE: 'example-notary' })
     // Loading again changes nothing.
     expect(loadReleaseEnv(env, { file })).toEqual([])
   })
 
   it('changes nothing when there is no file', () => {
-    const env = { APEX_CHANNEL: 'beta' }
+    const env = { ATELIER_CHANNEL: 'beta' }
     expect(loadReleaseEnv(env, { file: join(tmp(), 'internal', 'release.env') })).toEqual([])
-    expect(env).toEqual({ APEX_CHANNEL: 'beta' })
+    expect(env).toEqual({ ATELIER_CHANNEL: 'beta' })
   })
 
   it('gives the build its team, preferred identity and notarization', () => {
     const env: Record<string, string> = { CSC_NAME: NAME }
-    expect(loadReleaseEnv(env, { file: write(FILE) })).toEqual(['APEX_TEAM_ID', 'APEX_SIGN_IDENTITY', 'APPLE_KEYCHAIN_PROFILE'])
+    expect(loadReleaseEnv(env, { file: write(FILE) })).toEqual(['ATELIER_TEAM_ID', 'ATELIER_SIGN_IDENTITY', 'APPLE_KEYCHAIN_PROFILE'])
     expect(teamIdFrom(env)).toBe(TEAM)
     expect(preferredIdentity(env)).toBe(CURRENT)
     // The ambiguous name in CSC_NAME is never the one used: the file's hash is.
     expect(signingIdentity(env, { identities: IDENTITIES })).toBe(CURRENT)
     const out = join(tmp(), 'ents.plist')
-    const config = builderConfig({ ...env, APEX_OFFICIAL_BRANDING: '1', APEX_PROVISIONING_PROFILE: '/p' }, { platform: 'darwin', identities: IDENTITIES, out, decode: () => goodProfile() })
+    const config = builderConfig({ ...env, ATELIER_OFFICIAL_BRANDING: '1', ATELIER_PROVISIONING_PROFILE: '/p' }, { platform: 'darwin', identities: IDENTITIES, out, decode: () => goodProfile() })
     expect(config.mac).toMatchObject({ identity: CURRENT, notarize: true, entitlements: out })
-    expect(readEntitlements(readFileSync(out, 'utf8'))['com.apple.application-identifier']).toBe(`${TEAM}.com.sennechin.apex`)
+    expect(readEntitlements(readFileSync(out, 'utf8'))['com.apple.application-identifier']).toBe(`${TEAM}.com.sennechin.atelier`)
   })
 })
 
 describe('verify.mjs’s entitlement check', () => {
   it('fails restricted keys without their profile, and a passkeys build without the keys', async () => {
     const { entitlementProblems } = await import('../scripts/release/checks.mjs')
-    const appId = `${TEAM}.com.sennechin.apex`
+    const appId = `${TEAM}.com.sennechin.atelier`
     const passkeys = { 'com.apple.security.cs.allow-jit': true, [BROWSER_PASSKEY_ENTITLEMENT]: true, 'com.apple.application-identifier': appId }
     expect(entitlementProblems({}, { mode: 'unsigned', embeddedProfile: false, appId })).toEqual([])
     expect(entitlementProblems({ 'com.apple.security.cs.allow-jit': true }, { mode: 'developer-id', embeddedProfile: false, appId })).toEqual([])
@@ -626,9 +626,9 @@ describe('verify.mjs’s entitlement check', () => {
       `the app isn't signed with ${BROWSER_PASSKEY_ENTITLEMENT}`,
       `com.apple.application-identifier is null, not ${appId}`,
     ])
-    // Without APEX_TEAM_ID the app id can't be known: verify.mjs says so instead of guessing a team.
+    // Without ATELIER_TEAM_ID the app id can't be known: verify.mjs says so instead of guessing a team.
     expect(entitlementProblems(passkeys, { mode: 'developer-id-passkeys', embeddedProfile: true, appId: null })).toEqual([
-      "com.apple.application-identifier can't be checked without your Apple Team ID: set APEX_TEAM_ID",
+      "com.apple.application-identifier can't be checked without your Apple Team ID: set ATELIER_TEAM_ID",
     ])
     expect(entitlementProblems({}, { mode: 'developer-id', embeddedProfile: false, appId: null })).toEqual([])
   })

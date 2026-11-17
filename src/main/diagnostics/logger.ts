@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,13 +8,13 @@ import { join } from 'node:path'
 import { pageLogEntries, type LogEntry, type LogPage, type LogQuery } from '@shared/diagnostics'
 
 // The file logger behind the logging facade in
-// src/main/log.ts. Entries are JSON lines in <dir>/apex.log, rotated at
-// 2 MB into apex.1.log … apex.5.log. Writes are buffered and flushed on a
+// src/main/log.ts. Entries are JSON lines in <dir>/atelier.log, rotated at
+// 2 MB into atelier.1.log … atelier.5.log. Writes are buffered and flushed on a
 // short timer, and synchronously on quit, on a crash and on uncaught errors.
 // Each source is held to 100 entries a second; the excess becomes one
 // "N messages dropped" entry. Pure Node: nothing here needs Electron.
 
-export const LOG_FILE = 'apex.log'
+export const LOG_FILE = 'atelier.log'
 export const LOG_ROTATE_BYTES = 2 * 1024 * 1024
 export const LOG_KEEP = 5
 export const LOG_RATE_PER_SECOND = 100
@@ -23,12 +23,12 @@ const FLUSH_MS = 400
 const PENDING_MAX = 5000
 
 export interface LoggerOptions {
-  /** Rotate when apex.log would pass this size. */
+  /** Rotate when atelier.log would pass this size. */
   maxBytes?: number
-  /** Rotated files kept (apex.1.log … apex.<keep>.log). */
+  /** Rotated files kept (atelier.1.log … atelier.<keep>.log). */
   keep?: number
   ratePerSecond?: number
-  /** Debug entries are written only with APEX_DEBUG=1. */
+  /** Debug entries are written only with ATELIER_DEBUG=1. */
   debug?: boolean
   now?: () => number
   /** Tests flush by hand. */
@@ -192,7 +192,7 @@ export class FileLogger {
     this.#size = 0
   }
 
-  /** The log files that exist, newest first (apex.log, apex.1.log, …). */
+  /** The log files that exist, newest first (atelier.log, atelier.1.log, …). */
   files(): Array<{ name: string; path: string; bytes: number }> {
     const dir = this.#dir
     if (!dir) return []
@@ -229,7 +229,7 @@ export class FileLogger {
     return { ...page, totalBytes: files.reduce((sum, f) => sum + f.bytes, 0), files: files.length }
   }
 
-  /** Empties apex.log and removes the rotated files. */
+  /** Empties atelier.log and removes the rotated files. */
   clear(): void {
     this.#pending = []
     const dir = this.#dir
@@ -241,7 +241,7 @@ export class FileLogger {
 }
 
 export function rotatedName(i: number): string {
-  return `apex.${i}.log`
+  return `atelier.${i}.log`
 }
 
 function fileSize(path: string): number {
@@ -271,4 +271,4 @@ export function parseLine(line: string): LogEntry | null {
 }
 
 /** The app's one logger; early.ts (or the smoke run's setup) points it at userData/logs. */
-export const logger = new FileLogger({ debug: process.env.APEX_DEBUG === '1' || process.env.APEX_LOG_DEBUG === '1' })
+export const logger = new FileLogger({ debug: process.env.ATELIER_DEBUG === '1' || process.env.ATELIER_LOG_DEBUG === '1' })

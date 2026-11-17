@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,8 +11,8 @@ import { mainT } from './i18n/mainT'
 
 // Starter chats for the getting-started page. On any engine (the API key or
 // another the build offers), one small model call through QuickModel writes them from
-// what Apex already knows about you; with no engine ready, or when the call
-// fails, Apex's curated list is used. The result is cached in the first-week
+// what Atelier already knows about you; with no engine ready, or when the call
+// fails, Atelier's curated list is used. The result is cached in the first-week
 // record, so this runs at most once per setup.
 
 /** The starter call needs QuickModel's readiness check and json(); tests pass a fake. */
@@ -43,7 +43,7 @@ export interface StarterContext {
 
 type CuratedStarter = Omit<StarterChat, 'id' | 'hue'>
 
-/** Apex's own starters, used without a key or when generation fails. */
+/** Atelier's own starters, used without a key or when generation fails. */
 const CURATED: readonly CuratedStarter[] = [
   { get title() { return mainT('firstRun.mainFirstWeekStarters.planAWeekendOuting') }, get description() { return mainT('firstRun.mainFirstWeekStarters.aFewIdeasNearby') }, glyph: 'compass', get prompt() { return mainT('firstRun.mainFirstWeekStarters.helpMePlanA') } },
   { get title() { return mainT('firstRun.mainFirstWeekStarters.sumUpMyOpen') }, get description() { return mainT('firstRun.mainFirstWeekStarters.twoLinesOnEach') }, glyph: 'book', get prompt() { return mainT('firstRun.mainFirstWeekStarters.lookAtTheTabs') } },
@@ -76,7 +76,7 @@ const clip = (text: string, max: number): string => {
   return flat.length > max ? `${flat.slice(0, max - 1).trimEnd()}…` : flat
 }
 
-/** The context block: only what is already in Apex, trimmed short. */
+/** The context block: only what is already in Atelier, trimmed short. */
 export function starterContextText(context: StarterContext): string {
   const parts: string[] = []
   if (context.userName.trim()) parts.push(`<name>${clip(context.userName, 40)}</name>`)

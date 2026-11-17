@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -20,7 +20,7 @@ const CHAT = '11111111-1111-4111-8111-111111111111'
 const ref = (over: Partial<AttachmentRef>): AttachmentRef => ({ id: 'a', kind: 'paste', name: 'Pasted text', state: 'ready', error: null, size: 5, mediaType: 'text/plain', thumbnail: null, ...over })
 
 function deps(over: Partial<ChatFilesDeps> = {}): { deps: ChatFilesDeps; folder: string } {
-  const folder = mkdtempSync(join(tmpdir(), 'apex-chatfiles-'))
+  const folder = mkdtempSync(join(tmpdir(), 'atelier-chatfiles-'))
   writeFileSync(join(folder, 'original'), Buffer.from([0x89, 0x50, 0x4e, 0x47]))
   const messages = [
     { role: 'user', content: 'hi' },

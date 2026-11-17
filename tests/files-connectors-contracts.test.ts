@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -53,7 +53,7 @@ describe('service schemas cover every method', () => {
   // The real services start empty, refuse attachment ids they never
   // issued and show an unknown library file as missing.
   it('real services start empty and refuse unknown ids', async () => {
-    const dataDir = mkdtempSync(join(tmpdir(), 'apex-contracts-'))
+    const dataDir = mkdtempSync(join(tmpdir(), 'atelier-contracts-'))
     try {
       const intake = setupIntake({ dataDir, broadcast: () => {} })
       expect(intake.services.attachments.list(CHAT)).toEqual([])
@@ -92,16 +92,16 @@ describe('shared helpers', () => {
   it('viewer addresses round-trip and reject junk', () => {
     const target: ViewerTarget = { kind: 'memory', owner: 'shared', path: '/memories/über notes.md' }
     const url = fileViewerUrl(target, { edit: true })
-    expect(url.startsWith('apex://file?src=')).toBe(true)
+    expect(url.startsWith('atelier://file?src=')).toBe(true)
     expect(parseFileViewerUrl(url)).toEqual({ target, edit: true })
     expect(viewerTargetSchema.safeParse(parseFileViewerUrl(url)?.target).success).toBe(true)
-    expect(parseFileViewerUrl('apex://file?src=%%%')).toBeNull()
+    expect(parseFileViewerUrl('atelier://file?src=%%%')).toBeNull()
     expect(viewerTargetSchema.safeParse({ kind: 'local', path: 'relative/path' }).success).toBe(false)
   })
 
   it('connect deep links and the exact Web Store origin', () => {
     expect(connectRequestOf(connectorConnectUrl('linear'))).toBe('linear')
-    expect(connectRequestOf('apex://connectors?connect=../x')).toBeNull()
+    expect(connectRequestOf('atelier://connectors?connect=../x')).toBeNull()
     expect(isWebStoreUrl('https://chromewebstore.google.com/detail/x')).toBe(true)
     expect(isWebStoreUrl('https://chromewebstore.google.com.evil.test/')).toBe(false)
   })
@@ -112,8 +112,8 @@ describe('shared helpers', () => {
     expect(isLongPaste('short\ntext')).toBe(false)
     const ref = (state: AttachmentRef['state']): AttachmentRef => ({ id: UUID, kind: 'text', name: 'a', state, error: null, size: 1, mediaType: 'text/plain', thumbnail: null })
     expect(attachmentsReady([ref('ready'), ref('preparing')])).toBe(false)
-    expect(profilePartition('default')).toBe('persist:apex-web')
-    expect(profilePartition('abcd1234')).toBe('persist:apex-profile-abcd1234')
+    expect(profilePartition('default')).toBe('persist:atelier-web')
+    expect(profilePartition('abcd1234')).toBe('persist:atelier-profile-abcd1234')
     expect(defaultProfile('moss').isDefault).toBe(true)
   })
 

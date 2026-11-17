@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import type { OrderEntry } from '@shared/ipc'
 import { GROUP_COLORS, GROUP_NAME_MAX, type GroupColor, type TabGroup } from '@shared/tabs'
 import type { SavedGroup } from '@shared/windows'
 
-// Tab groups (SH-23, SH-24): a name, one of Apex's own colours and a
+// Tab groups (SH-23, SH-24): a name, one of Atelier's own colours and a
 // collapsed flag, held per window and saved with its session. Pure apart
 // from the store's own state, so the rules are unit-tested without Electron.
 

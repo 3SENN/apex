@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,7 +11,7 @@ import { MAIN_MENU_SPECIAL } from '@shared/menuBase'
 import { formatUsd, gaugeFraction } from '@shared/pricing'
 import { ACCENT_HUES, type AccentChoice, type ThemePreference } from '@shared/theme'
 import type { LayoutMode } from '@shared/ipc'
-import { apex, call } from '../../../../api'
+import { atelier, call } from '../../../../api'
 import { t } from '../../../../i18n/useT'
 import { cx } from '../../../../ui/logic/format'
 import { CascadeMenu, MenuScrim, Popover, fromMenuModel, inChromeHost, unionBox, type Box, type KitItem } from '../../../kit'
@@ -43,7 +43,7 @@ export function MainMenu({ instanceId, props, anchor, anchorRect, resolve, close
   /** In place: a settings change shows at once and main's next model confirms it. */
   const setSetting = useCallback((patch: Partial<Pick<MainMenuModel, 'theme' | 'layout' | 'adblock'>> & { accent?: AccentChoice }) => {
     setModel((m) => ({ ...m, ...patch }))
-    void apex.settings.set(patch).then(refresh, refresh)
+    void atelier.settings.set(patch).then(refresh, refresh)
   }, [refresh])
 
   const runInPlace = useCallback((id: string) => {

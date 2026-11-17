@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The apex-app:// sandbox. Each app runs in its own
-// persistent partition, persist:apex-app-<id>, which only ever serves that
+// The atelier-app:// sandbox. Each app runs in its own
+// persistent partition, persist:atelier-app-<id>, which only ever serves that
 // app's HTML with a strict CSP. Defence in depth, because agent-built HTML
 // is untrusted:
 //   - the CSP allows inline code and data URLs only, no network;
@@ -12,10 +12,10 @@
 //     through webRequest.lockdown (enforced once the mux is installed);
 //   - every permission and download is denied;
 //   - the view is sandboxed with no preload; navigation and window.open are
-//     blocked; the agent never acts there (browserTool treats it as an Apex page).
-// Every page is served with Apex UI first in its <head> (ui.ts, APP-UI).
+//     blocked; the agent never acts there (browserTool treats it as an Atelier page).
+// Every page is served with Atelier UI first in its <head> (ui.ts, APP-UI).
 import { session as electronSession, type Session, type WebContents, type WebPreferences } from 'electron'
-import { APEX_APP_PARTITION_PREFIX, APEX_APP_SCHEME, APP_CSP, parseAppUrl } from '@shared/apps'
+import { ATELIER_APP_PARTITION_PREFIX, ATELIER_APP_SCHEME, APP_CSP, parseAppUrl } from '@shared/apps'
 import { log } from '../log'
 import { permissionPolicy } from '../permissionPolicy'
 import type { SessionInfo } from '../features/types'
@@ -37,7 +37,7 @@ export function appResponseHeaders(): Record<string, string> {
   }
 }
 
-/** What an apex-app request inside app `appId`'s partition gets back, with `style` (Apex UI) in its head. Anything outside that one app is a 404. */
+/** What an atelier-app request inside app `appId`'s partition gets back, with `style` (Atelier UI) in its head. Anything outside that one app is a 404. */
 export function serveApp(store: Pick<AppStore, 'html'>, appId: string, url: string, style: (appId: string) => string = () => ''): Response {
   const target = parseAppUrl(url)
   if (!target || target.appId !== appId) return new Response('Not found', { status: 404 })
@@ -68,10 +68,10 @@ export function createAppSandbox(store: AppStore, installSession: () => ((sessio
   const sessionFor = (appId: string): Session => {
     const existing = sessions.get(appId)
     if (existing) return existing
-    if (!parseAppUrl(`${APEX_APP_SCHEME}://${appId}/`)) throw new Error('This app no longer exists.')
-    const partition = `${APEX_APP_PARTITION_PREFIX}${appId}`
+    if (!parseAppUrl(`${ATELIER_APP_SCHEME}://${appId}/`)) throw new Error('This app no longer exists.')
+    const partition = `${ATELIER_APP_PARTITION_PREFIX}${appId}`
     const ses = electronSession.fromPartition(partition)
-    ses.protocol.handle(APEX_APP_SCHEME, (request) => serveApp(store, appId, request.url, style))
+    ses.protocol.handle(ATELIER_APP_SCHEME, (request) => serveApp(store, appId, request.url, style))
     // The network is not part of an app. Each scheme refuses before anything leaves the machine.
     for (const scheme of ['http', 'https', 'ws', 'wss', 'file']) {
       try {

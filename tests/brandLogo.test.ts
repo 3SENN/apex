@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -17,16 +17,16 @@ import { parseWordmark } from '../src/renderer/src/brand/wordmark'
 const REPO = resolve(__dirname, '..')
 
 describe('the logo', () => {
-  it('is the Apex wordmark, word and sprout, in the official branding', () => {
+  it('is the Atelier wordmark, word and sprout, in the official branding', () => {
     const official = readBranding('official')
     expect(official.logo).toBe('renderer/logo.svg')
     const mark = parseWordmark(readFileSync(join(official.dir, official.logo!), 'utf8'))
     expect(mark).not.toBeNull()
-    expect(mark!.width / mark!.height).toBeCloseTo(5043 / 2480, 3)
-    expect(mark!.paths.map((p) => p.className)).toEqual(['apex-logo__word', 'apex-logo__sprout'])
+    expect(mark!.width / mark!.height).toBeCloseTo(6230 / 2480, 3)
+    expect(mark!.paths.map((p) => p.className)).toEqual(['atelier-logo__word', 'atelier-logo__sprout'])
   })
 
-  it('is the name beside the plain mark in the unofficial branding, with nothing of Apex\'s', () => {
+  it('is the name beside the plain mark in the unofficial branding, with nothing of Atelier\'s', () => {
     const unofficial = readBranding('unofficial')
     expect(unofficial.logo).toBeNull()
     expect(existsSync(join(unofficial.dir, 'renderer', 'logo.svg'))).toBe(false)
@@ -48,7 +48,7 @@ describe('the logo', () => {
 })
 
 describe('BrandLogo in the branding this run was built with', () => {
-  it('draws the wordmark for Apex, or the mark with the name in the UI font', async () => {
+  it('draws the wordmark for Atelier, or the mark with the name in the UI font', async () => {
     // Loaded by path so the node project's typecheck leaves the renderer's JSX alone.
     const file = '../src/renderer/src/brand/BrandLogo.tsx'
     const { BrandLogo, BrandMark } = (await import(/* @vite-ignore */ file)) as Record<'BrandLogo' | 'BrandMark', FunctionComponent<{ size?: number }>>
@@ -58,12 +58,12 @@ describe('BrandLogo in the branding this run was built with', () => {
     const logo = renderToStaticMarkup(createElement(BrandLogo, { size: 32 }))
     expect(logo).toContain(`aria-label="${BRANDING.name}"`)
     if (BRANDING.wordmark) {
-      expect(logo).toMatch(/^<svg[^>]*viewBox="0 0 5043 2480"/)
-      expect(logo).toContain('class="apex-logo__sprout"')
+      expect(logo).toMatch(/^<svg[^>]*viewBox="0 0 6230 2480"/)
+      expect(logo).toContain('class="atelier-logo__sprout"')
     } else {
       expect(logo).not.toContain('<path')
-      expect(logo).toContain(`<span class="apex-logo__name" aria-hidden="true">${BRANDING.name}</span>`)
+      expect(logo).toContain(`<span class="atelier-logo__name" aria-hidden="true">${BRANDING.name}</span>`)
     }
-    expect(renderToStaticMarkup(createElement(BrandMark, { size: 24 }))).toMatch(/<img[^>]*class="apex-pip-mark"/)
+    expect(renderToStaticMarkup(createElement(BrandMark, { size: 24 }))).toMatch(/<img[^>]*class="atelier-pip-mark"/)
   })
 })

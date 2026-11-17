@@ -1,5 +1,5 @@
 /* Copyright (c) 2026 Senne Chin. All rights reserved.
- * Part of the Apex Companion Art: licensed under the Apex Companion Art License
+ * Part of the Atelier Companion Art: licensed under the Atelier Companion Art License
  * (ART-LICENSE.md), not under the Mozilla Public License. */
 
 // The six heads. Each is a signed distance field around the neck point,

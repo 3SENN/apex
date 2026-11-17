@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -59,7 +59,7 @@ describe('this Mac’s permission rows: status → action', () => {
     }
   })
 
-  it('Screen Recording: Allow until Apex asked, then System Settings, and Relaunch for a grant Apex sees only after restarting', () => {
+  it('Screen Recording: Allow until Atelier asked, then System Settings, and Relaunch for a grant Atelier sees only after restarting', () => {
     expect(systemPermissionRow('screen', input())).toMatchObject({ state: 'not-determined', action: 'allow' })
     expect(systemPermissionRow('screen', input({ screenAsked: true }))).toMatchObject({ state: 'denied', action: 'open-settings' })
     expect(systemPermissionRow('screen', input({}, { screen: { app: 'denied', helper: 'granted' } }))).toMatchObject({ state: 'relaunch', action: 'relaunch' })
@@ -80,7 +80,7 @@ describe('this Mac’s permission rows: status → action', () => {
     expect(systemPermissionRow('location', input({}, { location: 'denied' }))).toMatchObject({ state: 'denied', action: 'open-settings' })
   })
 
-  it('Notifications can’t be read: unknown with a link, unless Apex saw them fail', () => {
+  it('Notifications can’t be read: unknown with a link, unless Atelier saw them fail', () => {
     expect(systemPermissionRow('notifications', input())).toMatchObject({ state: 'unknown', action: 'open-settings' })
     expect(systemPermissionRow('notifications', input({}, { notifications: 'denied' }))).toMatchObject({ state: 'denied', action: 'open-settings' })
   })
@@ -141,10 +141,10 @@ describe('website permissions by kind', () => {
     expect(withDefault(undefined, 'midi', 'block')).toEqual({ midi: 'block' })
   })
 
-  it('lives under Privacy at apex://settings/access, and other pages link to a row there', () => {
+  it('lives under Privacy at atelier://settings/access, and other pages link to a row there', () => {
     expect(resolveSettingsSection('access')).toMatchObject({ page: 'privacy', view: 'access', redirect: null })
-    expect(permissionsUrl()).toBe('apex://settings/access')
-    expect(permissionsUrl('mac-microphone')).toBe('apex://settings/access?highlight=mac-microphone')
+    expect(permissionsUrl()).toBe('atelier://settings/access')
+    expect(permissionsUrl('mac-microphone')).toBe('atelier://settings/access?highlight=mac-microphone')
   })
 })
 
@@ -248,7 +248,7 @@ describe('the systemPermissions service', () => {
   })
 
   it('reads Full Disk Access from Safari’s folder', () => {
-    const home = mkdtempSync(join(tmpdir(), 'apex-fda-'))
+    const home = mkdtempSync(join(tmpdir(), 'atelier-fda-'))
     expect(fullDiskAccess(home)).toBe('unknown')
     mkdirSync(join(home, 'Library', 'Safari'), { recursive: true })
     expect(fullDiskAccess(home)).toBe('granted')

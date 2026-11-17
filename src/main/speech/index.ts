@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -32,7 +32,7 @@ import { createMicTest } from './micTest'
 import { createScreenAccess, screenPromptFile, setScreenAccess } from './screenAccess'
 
 // The speech domain's entry point: the protocol v2 broker over
-// the apex-speech helper (the scripted fake under APEX_SMOKE, so the smoke
+// the atelier-speech helper (the scripted fake under ATELIER_SMOKE, so the smoke
 // run never records or prompts), the permission report that drives the
 // getting-started signal, and the speech and transcription services.
 
@@ -65,9 +65,9 @@ function tagged<A extends unknown[], R>(fn: (...args: A) => R): (...args: A) => 
 
 function createLink(ctx: AppContext): HelperLink {
   const link = ctx.smoke
-    ? new HelperLink({ path: 'apex-speech (smoke)', assumeExists: true, spawn: createSmokeSpeechHelper(fakeM4a), handshakeMs: 2_000 })
+    ? new HelperLink({ path: 'atelier-speech (smoke)', assumeExists: true, spawn: createSmokeSpeechHelper(fakeM4a), handshakeMs: 2_000 })
     : new HelperLink({ path: speechHelperPath({ platform: process.platform, packaged: app.isPackaged, resourcesPath: process.resourcesPath, appPath: appRoot() }) })
-  // DG-02: every helper exit goes to the diagnostics log, flagged when Apex didn't ask for it.
+  // DG-02: every helper exit goes to the diagnostics log, flagged when Atelier didn't ask for it.
   link.on('exit', (code, expected) => captureSpeechExit(code, expected))
   return link
 }
@@ -153,7 +153,7 @@ export function setupSpeech(ctx: AppContext): SpeechSetup {
       permissions: tagged(() => broker.permissions()),
       request: tagged((kind) => broker.request(kind)),
       openPrivacySettings: (kind) => {
-        // The smoke run never leaves Apex.
+        // The smoke run never leaves Atelier.
         if (ctx.smoke) return
         const pane = process.platform === 'darwin' ? PRIVACY_PANES[kind] : process.platform === 'win32' ? WINDOWS_PRIVACY_PANES[kind] : null
         if (pane) void shell.openExternal(pane)

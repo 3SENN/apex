@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,7 +11,7 @@ import type { LookBinding } from '../pages/CompanionEditor'
 import { SHUFFLE_STYLES, type ShuffleStyle } from './logic/shuffle'
 
 // DS-43's look toolbar as one piece: a 40 px hairline pill holding undo and
-// redo, a divider, and Apex's four shuffle styles as one-shot pills. The
+// redo, a divider, and Atelier's four shuffle styles as one-shot pills. The
 // Settings look editor uses it in place of the old studio side column (the
 // shuffle-style segments, the Shuffle button and the preview-mood select).
 

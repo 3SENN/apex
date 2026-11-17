@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,19 +8,19 @@
 // which and how: right-click one here or in Workspace › Apps to show it as a
 // row, as an icon or not at all, and drag to reorder (dropped on the strip it
 // becomes an icon, on a row a row). A pack app starts as a row when its pack
-// asks, and its row shows the status the app sets (apex.status.set). A
+// asks, and its row shows the status the app sets (atelier.status.set). A
 // private window keeps no pack rows. Icons are images only.
 import { useRef, useState, type DragEvent, type MouseEvent, type ReactElement } from 'react'
 import { Package, PanelRight } from 'lucide-react'
 import { showOf, sidebarLayout, type AppItem, type SidebarAppPin, type SidebarAppShow } from '@shared/sidebarApps'
-import { apex } from '../api'
+import { atelier } from '../api'
 import { useT } from '../i18n/useT'
 import { cx, showContextMenu } from '../ui'
 import { goWorkspace } from '../workspace/open'
 import { chosenShow, moveApp, openAppItem, setAppShow, sidebarMenuItems, useAppLibrary } from './library'
 import './sidebarApps.css'
 
-const DRAG_TYPE = 'application/x-apex-app'
+const DRAG_TYPE = 'application/x-atelier-app'
 
 /** An app's logo: its own image, else a glyph for a pack's, else its initial. */
 export function AppLogo({ item, size = 16 }: { item: Pick<AppItem, 'icon' | 'kind' | 'name'>; size?: number }): ReactElement {
@@ -37,7 +37,7 @@ export function AppLogo({ item, size = 16 }: { item: Pick<AppItem, 'icon' | 'kin
 
 export function SidebarApps({ pins }: { pins: SidebarAppPin[] }): ReactElement | null {
   const t = useT()
-  const items = useAppLibrary({ packs: apex.initial.window.kind !== 'private' })
+  const items = useAppLibrary({ packs: atelier.initial.window.kind !== 'private' })
   const dragging = useRef<string | null>(null)
   const [drop, setDrop] = useState<{ ref: string | null; show: SidebarAppShow } | null>(null)
   if (!items) return null

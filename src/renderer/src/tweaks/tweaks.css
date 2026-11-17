@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-/* Tweaks (TWK-04, TWK-05): apex://tweaks and the Tweaks section of site info. Tokens only, so light and dark follow the theme. */
+/* Tweaks (TWK-04, TWK-05): atelier://tweaks and the Tweaks section of site info. Tokens only, so light and dark follow the theme. */
 
 /* ── page ── */
 .twk-scroll { flex: 1 1 auto; min-width: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; }

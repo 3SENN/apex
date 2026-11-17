@@ -1,5 +1,5 @@
 /* Copyright (c) 2026 Senne Chin. All rights reserved.
- * Part of the Apex Companion Art: licensed under the Apex Companion Art License
+ * Part of the Atelier Companion Art: licensed under the Atelier Companion Art License
  * (ART-LICENSE.md), not under the Mozilla Public License. */
 
 // Builds glTF documents with glTF-Transform and writes them compressed
@@ -20,7 +20,7 @@ const r6 = (v) => {
 export class GltfBuilder {
   constructor(sceneName) {
     this.doc = new Document().setLogger(new Logger(Logger.Verbosity.WARN))
-    this.doc.getRoot().getAsset().generator = 'Apex companion generator'
+    this.doc.getRoot().getAsset().generator = 'Atelier companion generator'
     this.buffer = this.doc.createBuffer()
     this.scene = this.doc.createScene(sceneName)
     this.doc.getRoot().setDefaultScene(this.scene)

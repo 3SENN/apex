@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -165,7 +165,7 @@ describe('companion manifest', () => {
       readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(join(dir, e.name)) : [relative(ROOT, join(dir, e.name)).split(sep).join('/')]))
     // Besides them, only the licence notice the art travels with (ART-LICENSE.md).
     expect(sorted(walk(ROOT))).toEqual(sorted([...referenced, 'LICENSE.md']))
-    expect(readFileSync(join(ROOT, 'LICENSE.md'), 'utf8')).toMatch(/Apex Companion Art License/)
+    expect(readFileSync(join(ROOT, 'LICENSE.md'), 'utf8')).toMatch(/Atelier Companion Art License/)
   })
 
   it('gives every face part every variant, and eyes their pupils', () => {
@@ -470,7 +470,7 @@ describe('companion configs', () => {
     expect(presets).toHaveLength(6)
     expect(new Set(presets.map((p) => p.id)).size).toBe(6)
     expect(presets[0]?.id).toBe('pip')
-    // Official Apex's default look is Pip's (the unofficial branding has a neutral companion of its own).
+    // Official Atelier's default look is Pip's (the unofficial branding has a neutral companion of its own).
     if (BRANDING.official) expect(presets[0]?.look).toEqual(DEFAULT_LOOK)
     for (const p of presets) {
       expect(p.id).toMatch(/^[a-z0-9][a-z0-9-]*$/)

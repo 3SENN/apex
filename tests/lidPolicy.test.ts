@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -47,7 +47,7 @@ describe('lidPolicy', () => {
     expect(lidPolicy('suspend', 'recording', null, false)).toBe('none')
   })
 
-  it('resumes only a pause Apex made, even if the setting was turned off meanwhile', () => {
+  it('resumes only a pause Atelier made, even if the setting was turned off meanwhile', () => {
     expect(lidPolicy('lid-opened', 'paused', 'lid', true)).toBe('resume')
     expect(lidPolicy('resume', 'paused', 'lid', false)).toBe('resume')
     expect(lidPolicy('lid-opened', 'paused', 'user', true)).toBe('none')

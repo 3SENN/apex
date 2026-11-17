@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -15,7 +15,7 @@ import type { VaultCipher } from './vault'
 // is copied, encrypted, into the profile's data folder and read back from
 // there, so the preview, remap and confirm never touch the user's file
 // again. Copies are deleted after confirm, cancel or quit, and the whole
-// folder is cleared at start-up in case Apex crashed mid-import.
+// folder is cleared at start-up in case Atelier crashed mid-import.
 
 export const IMPORT_DIR = join('passwords', 'import-tmp')
 

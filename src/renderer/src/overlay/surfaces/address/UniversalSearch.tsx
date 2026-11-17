@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -15,7 +15,7 @@ import { rowIcon } from './CommandBar'
 import { groupLabel, highlight } from './rows'
 
 // Universal search: a centred palette over every window's tabs and
-// chats, Apex pages and commands. ↑↓ move, ⌘↑ and ⌘↓ jump between groups,
+// chats, Atelier pages and commands. ↑↓ move, ⌘↑ and ⌘↓ jump between groups,
 // Home and End go to the ends, Enter opens (switching to a tab focuses its
 // window), Esc closes. The chips narrow it to one kind.
 // DS-90 geometry: a ~20 px input with the shortcut hint at its right, 24 px

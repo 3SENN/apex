@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex://passwords (ST-05): saved sign-ins behind Touch ID. Locked on
+// atelier://passwords (ST-05): saved sign-ins behind Touch ID. Locked on
 // arrival; unlocking keeps it open for five minutes (main relocks it, also on
 // lock-screen and sleep). Unlocked: filter, ?site=<host>, sort, rows with
 // reveal and copy, an editor with Generate, delete after confirmation, and
@@ -12,7 +12,7 @@ import { useEffect, useMemo, useState, type ReactElement } from 'react'
 import { Copy, Ellipsis, Eye, EyeOff, KeyRound, LockKeyhole, Pencil, Plus, Trash2, Upload, X } from 'lucide-react'
 import { internalQuery } from '@shared/url'
 import { siteOfOrigin, type CredentialView, type PasswordsStatus } from '@shared/passwords'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { DestinationFrame, ListState } from '../settings/destinations/common'
 import { useEvent, useResource } from '../settings/data'
 import { ListFrame, PageHeader, SearchField } from '../settings/kit'
@@ -186,7 +186,7 @@ function UnlockedList({ status, site, tabId, onImport }: { status: PasswordsStat
     void showMenu(menu, anchor).then((id) => {
       if (id === 'copy-user') void copyUsername(c)
       else if (id === 'copy-password') void copyPassword(c)
-      else if (id === 'open') void apex.tabs.create(c.origin, { afterId: tabId })
+      else if (id === 'open') void atelier.tabs.create(c.origin, { afterId: tabId })
       else if (id === 'edit') setEditing(c)
       else if (id === 'delete') void remove(c)
     })
@@ -197,7 +197,7 @@ function UnlockedList({ status, site, tabId, onImport }: { status: PasswordsStat
       if (id === 'csv' || id === 'system') onImport(id)
     })
   }
-  const clearSite = (): void => void apex.nav.go(tabId, 'apex://passwords')
+  const clearSite = (): void => void atelier.nav.go(tabId, 'atelier://passwords')
 
   return (
     <>

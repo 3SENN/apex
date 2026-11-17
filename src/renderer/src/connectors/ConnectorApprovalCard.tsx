@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { useId, useMemo, useState, type ClipboardEvent, type KeyboardEvent, type
 import { Braces, CircleCheck, CircleX, ListChecks, X } from 'lucide-react'
 import { humanizeToolName } from '@shared/connectors'
 import type { LogItem } from '../agentLog'
-import { apex, errorText } from '../api'
+import { atelier, errorText } from '../api'
 import type { RequestCardProps } from '../chat/requestCards'
 import type { LogCardProps } from '../chat/cards/registry'
 import { useT } from '../i18n/useT'
@@ -87,7 +87,7 @@ export function ConnectorApprovalCard({ request, chatId, done }: RequestCardProp
     setBusy(true)
     setFailure(null)
     try {
-      await apex.agent.approveConnector(chatId, item.id, response)
+      await atelier.agent.approveConnector(chatId, item.id, response)
       done(response)
     } catch (err) {
       setFailure(errorText(err))

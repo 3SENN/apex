@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -47,7 +47,7 @@ function openable(url: string): boolean {
   return /^(https?|file):/i.test(url) || isBlankUrl(url) || isInternalUrl(url)
 }
 
-/** NT-01: a new tab (blank, no apex:// page): the start surface the chrome draws. */
+/** NT-01: a new tab (blank, no atelier:// page): the start surface the chrome draws. */
 function isBlankTab(tab: Tab): boolean {
   return tab.internalUrl === null && isBlankUrl(tab.view.webContents.getURL())
 }
@@ -181,7 +181,7 @@ function createAddressFeature(): Feature {
       const folder = store.createFolder('bar', mainT('address.bookmarks.allTabsFolder', { date: new Date().toLocaleDateString() }))
       for (const t of pages) store.add({ url: t.view.webContents.getURL(), title: t.view.webContents.getTitle(), favicon: t.favicon, parentId: folder.id })
     })
-    // ⌘+, ⌘- and ⌘0: per-site page zoom on websites; Apex pages scale the interface instead (interface zoom, uiZoom).
+    // ⌘+, ⌘- and ⌘0: per-site page zoom on websites; Atelier pages scale the interface instead (interface zoom, uiZoom).
     const zoomBy = (win: WindowContext | null, delta: 1 | -1 | 0): void => {
       const tab = win?.tabs.active() ?? null
       if (!tab || !win) return
@@ -197,7 +197,7 @@ function createAddressFeature(): Feature {
     register('zoom-out', (win) => zoomBy(win, -1))
     register('zoom-reset', (win) => zoomBy(win, 0))
     register('actual-size', (win) => zoomBy(win, 0))
-    register('open-bookmarks', (win) => win?.tabs.openInternal('apex://bookmarks'))
+    register('open-bookmarks', (win) => win?.tabs.openInternal('atelier://bookmarks'))
     register('toggle-bookmarks-bar', () => {
       app.settings.update({ bookmarksBar: app.settings.get().bookmarksBar === 'always' ? 'never' : 'always' })
     })
@@ -342,7 +342,7 @@ function createAddressFeature(): Feature {
       const dataDir = ctx?.dataDir
       let store: ZoomStore
       if (info.private || !info.partition.startsWith('persist:') || !dataDir) store = new ZoomStore(null)
-      else if (info.partition === 'persist:apex-web') store = ZoomStore.forDataDir(dataDir)
+      else if (info.partition === 'persist:atelier-web') store = ZoomStore.forDataDir(dataDir)
       else store = new ZoomStore(join(dataDir, `zoom-${info.partition.slice('persist:'.length).replace(/[^a-z0-9-]/gi, '_')}.json`))
       zoomStores.set(session, store)
     },

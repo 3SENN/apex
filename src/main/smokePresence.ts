@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -85,7 +85,7 @@ export async function runPresenceChecks({ chrome, tabs }: PresenceDeps, check: C
 
   // One empty chat, opened as a page in its own tab, for the next two checks.
   const draft = await chrome.invoke<ChatSummary>('chats', 'create', {})
-  const tab = tabs.create(`apex://chat/${draft.id}`)
+  const tab = tabs.create(`atelier://chat/${draft.id}`)
   const standing = `document.querySelector('.chat-view--page.chat-view--empty .chat-empty__companion')`
 
   await check('an empty chat page has its companion standing, waiting (CO-20)', async () => {

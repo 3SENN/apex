@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { createReadStream, statSync } from 'node:fs'
 import { Readable } from 'node:stream'
 import { FILE_SCHEME } from '@shared/files'
 
-// apex-file://<token>/<name>: the viewer's images, PDFs and media,
+// atelier-file://<token>/<name>: the viewer's images, PDFs and media,
 // streamed with range requests so audio and video can seek. Only a live
 // viewer token opens anything; the response can't run script or reach out.
 
@@ -19,9 +19,9 @@ export interface ServedFile {
   mediaType: string
 }
 
-/** The token in an apex-file URL, or null. Standard schemes lowercase the host, so tokens are lowercase hex. */
+/** The token in an atelier-file URL, or null. Standard schemes lowercase the host, so tokens are lowercase hex. */
 export function fileTokenOf(url: string): string | null {
-  const m = /^apex-file:\/\/([0-9a-f]{32})(?:\/|$)/.exec(url)
+  const m = /^atelier-file:\/\/([0-9a-f]{32})(?:\/|$)/.exec(url)
   return m?.[1] ?? null
 }
 
@@ -56,7 +56,7 @@ function headers(mediaType: string, extra: Record<string, string> = {}): Record<
   }
 }
 
-/** Answers one apex-file request from what the token serves. */
+/** Answers one atelier-file request from what the token serves. */
 export function serveFile(request: Request, served: ServedFile | null): Response {
   if (!served) return new Response('Not found', { status: 404 })
   if (served.text !== null && !served.path) {

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,7 +14,7 @@
 // The page preload asks main for the rules at document start: the generated
 // CSS and the custom CSS go in with webFrame.insertCSS, the script runs in an
 // isolated world of its own (it shares the DOM, never the page's JavaScript).
-// Tweaks never run on account sign-in pages (signInHosts.ts) or apex:// pages.
+// Tweaks never run on account sign-in pages (signInHosts.ts) or atelier:// pages.
 // This module is pure: main (src/main/tweaks), the preload and the chrome share it.
 import { BRAND_NAME } from './branding'
 import { isSignInHost, isSignInUrl } from './signInHosts'
@@ -23,7 +23,7 @@ import { ACCENT_HUES, type AccentHue } from './theme'
 export const TWEAK_FONTS = ['default', 'sans', 'serif', 'mono', 'rounded'] as const
 export type TweakFont = (typeof TWEAK_FONTS)[number]
 
-/** The wash and accent presets: Apex's own accent hues. */
+/** The wash and accent presets: Atelier's own accent hues. */
 export const TWEAK_COLORS = ACCENT_HUES.map((h) => h.id) as AccentHue[]
 export type TweakColor = AccentHue
 
@@ -70,7 +70,7 @@ export interface TweaksState {
 
 export type TweakPatch = Partial<Pick<Tweak, 'enabled' | 'subdomains' | 'css' | 'js' | 'jsEnabled'>> & { style?: Partial<TweakStyle> }
 
-/** Why tweaks can't run on a page: an Apex page, an account sign-in page, or not a web page at all. */
+/** Why tweaks can't run on a page: an Atelier page, an account sign-in page, or not a web page at all. */
 export type TweakBlock = 'internal' | 'sign-in' | 'not-web'
 
 export interface TweakTabInfo {
@@ -104,7 +104,7 @@ export const TWEAK_LIMITS = {
 
 export const DEFAULT_TWEAK_STYLE: TweakStyle = { font: 'default', tint: null, accent: null, focus: false }
 
-export const TWEAK_EXPORT_FORMAT = 'apex-tweaks'
+export const TWEAK_EXPORT_FORMAT = 'atelier-tweaks'
 export const TWEAK_EXPORT_VERSION = 1
 
 export interface TweaksServices {
@@ -187,7 +187,7 @@ export function normalizeTweakHost(input: string): string | null {
 
 /** Why tweaks can't run on this URL, or null when they can. */
 export function tweakBlock(url: string): TweakBlock | null {
-  if (/^apex:/i.test(url)) return 'internal'
+  if (/^atelier:/i.test(url)) return 'internal'
   if (!/^https?:\/\//i.test(url)) return 'not-web'
   if (isSignInUrl(url)) return 'sign-in'
   return null
@@ -240,7 +240,7 @@ export function rulesFor(state: TweaksState, url: string): PageTweakRules | null
 
 /** A script wrapped so one that throws doesn't stop the next, with a name for the console. */
 export function wrapScript(host: string, js: string): string {
-  return `(() => {\ntry {\n${stripNul(js)}\n} catch (err) { console.error('${BRAND_NAME} tweak for ${host.replace(/[^a-z0-9.\-[\]:]/g, '')} failed', err) }\n})()\n//# sourceURL=apex-tweak://${encodeURIComponent(host)}/tweak.js`
+  return `(() => {\ntry {\n${stripNul(js)}\n} catch (err) { console.error('${BRAND_NAME} tweak for ${host.replace(/[^a-z0-9.\-[\]:]/g, '')} failed', err) }\n})()\n//# sourceURL=atelier-tweak://${encodeURIComponent(host)}/tweak.js`
 }
 
 // ---- generated CSS ----
@@ -410,7 +410,7 @@ export function tweakParts(tweak: Pick<Tweak, 'hidden' | 'style' | 'css' | 'js' 
   }
 }
 
-/** apex://tweaks, opened on one site's tweak when given. */
+/** atelier://tweaks, opened on one site's tweak when given. */
 export function tweaksUrl(host?: string | null): string {
-  return host ? `apex://tweaks?site=${encodeURIComponent(host)}` : 'apex://tweaks'
+  return host ? `atelier://tweaks?site=${encodeURIComponent(host)}` : 'atelier://tweaks'
 }

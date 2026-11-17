@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -90,7 +90,7 @@ export class PageErrorTracker {
     return this.#set({ unresponsive: false })
   }
 
-  /** The tab moved to an apex:// page or the new tab, where nothing failed. */
+  /** The tab moved to an atelier:// page or the new tab, where nothing failed. */
   clear(): boolean {
     return this.#set({ ...NO_PAGE_ERROR })
   }

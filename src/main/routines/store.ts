@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -24,7 +24,7 @@ const isObject = (v: unknown): v is Record<string, unknown> => typeof v === 'obj
 const str = (v: unknown): v is string => typeof v === 'string'
 const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null)
 
-/** What the store asks the rest of Apex; bound by the feature, permissive until then (and in tests). */
+/** What the store asks the rest of Atelier; bound by the feature, permissive until then (and in tests). */
 export interface RoutineLookups {
   companionExists(id: string): boolean
   /** Why a chat can't take appended runs, or null when it can. */

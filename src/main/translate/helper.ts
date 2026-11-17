@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -15,7 +15,7 @@ import { log } from '../log'
 // The on-device translation helper's main side (TR-05). native/translate is a
 // small Swift program on Apple's Translation and NaturalLanguage frameworks;
 // it starts on first use, answers JSON lines (one reply per request id), and
-// is stopped after a quiet spell. Tests and smoke point APEX_TRANSLATE_HELPER
+// is stopped after a quiet spell. Tests and smoke point ATELIER_TRANSLATE_HELPER
 // at a script, or pass a spawner of their own. Every line it prints is
 // checked here; anything else is dropped.
 
@@ -55,14 +55,14 @@ const isScript = (path: string): boolean => /\.(m?js|cjs)$/.test(path)
 
 export function translateHelperPath(o: { packaged: boolean; resourcesPath: string; appPath: string; platform?: NodeJS.Platform; env?: NodeJS.ProcessEnv }): string | null {
   const env = o.env ?? process.env
-  const override = env.APEX_TRANSLATE_HELPER
+  const override = env.ATELIER_TRANSLATE_HELPER
   if (override) {
     // A fused build can't run a script as Node; only a smoke run that lends its own Node may.
-    if (o.packaged && isScript(override) && !(env.APEX_SMOKE === '1' && env.APEX_SMOKE_NODE)) return null
+    if (o.packaged && isScript(override) && !(env.ATELIER_SMOKE === '1' && env.ATELIER_SMOKE_NODE)) return null
     return existsSync(override) ? override : null
   }
   if ((o.platform ?? process.platform) !== 'darwin') return null
-  const path = o.packaged ? join(o.resourcesPath, 'apex-translate') : join(o.appPath, 'native', 'translate', 'build', 'apex-translate')
+  const path = o.packaged ? join(o.resourcesPath, 'atelier-translate') : join(o.appPath, 'native', 'translate', 'build', 'atelier-translate')
   return existsSync(path) ? path : null
 }
 
@@ -78,7 +78,7 @@ export type HelperSpawner = (helper: string) => HelperProcess
 /** The real process: a binary, or (tests' fake) a script under this process's Node. */
 export const spawnHelper: HelperSpawner = (helper) => {
   if (isScript(helper)) {
-    const node = process.env.APEX_SMOKE === '1' ? process.env.APEX_SMOKE_NODE : undefined
+    const node = process.env.ATELIER_SMOKE === '1' ? process.env.ATELIER_SMOKE_NODE : undefined
     if (node) return spawn(node, [helper], { stdio: ['pipe', 'pipe', 'ignore'] })
     return spawn(process.execPath, [helper], { stdio: ['pipe', 'pipe', 'ignore'], env: { ...process.env, ELECTRON_RUN_AS_NODE: '1' } })
   }
@@ -88,7 +88,7 @@ export const spawnHelper: HelperSpawner = (helper) => {
 const TIMEOUT_MS = { status: 8000, translate: 45_000, detect: 5000 } as const
 const IDLE_MS = 5 * 60_000
 const STATUS_TTL_MS = 15_000
-/** Crashes in a row before the helper counts as unavailable until Apex restarts. */
+/** Crashes in a row before the helper counts as unavailable until Atelier restarts. */
 const CRASHES_MAX = 3
 
 interface Pending {

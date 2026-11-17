@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -18,7 +18,7 @@ import { startPicker, type Picker } from './picker'
 // (shared/tweaks.ts hiddenCss). Scripts run in an isolated
 // world of their own (TWEAK_WORLD_ID): the page's DOM, none of its JavaScript
 // and none of this preload's. page.ts installs this only off sign-in pages;
-// main answers nothing there or on apex:// pages anyway.
+// main answers nothing there or on atelier:// pages anyway.
 
 export function installTweaks(): void {
   if (!/^https?:$/.test(location.protocol)) return

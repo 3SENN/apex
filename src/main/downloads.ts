@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -43,7 +43,7 @@ export function uniqueFileName(filename: string, taken: (name: string) => boolea
  * save dialog: a hidden name beside it, so moving it into place is a rename.
  */
 export function heldFileName(filename: string, id: string): string {
-  return `.${filename}.${id.slice(0, 8)}.apexdownload`
+  return `.${filename}.${id.slice(0, 8)}.atelierdownload`
 }
 
 // Defaults for the speed, danger and attribution fields
@@ -73,7 +73,7 @@ export interface DownloadDeps {
   classify(input: DownloadClassifyInput): DownloadDanger
   broadcast(event: DownloadStartedEvent): void
   notify(spec: NotifySpec): void
-  /** Whether an Apex window has focus; finished-download notices only go out when none does. */
+  /** Whether an Atelier window has focus; finished-download notices only go out when none does. */
   appFocused(): boolean
   saveDialog(windowId: number | null, defaultPath: string): Promise<string | null>
   folderDialog(defaultPath: string): Promise<string | null>
@@ -490,7 +490,7 @@ export class DownloadManager extends EventEmitter<{ changed: [DownloadInfo[]]; s
       const danger = mainT(info.danger === 'dangerous' ? 'downloads.agent.dangerous' : 'downloads.agent.uncommon')
       this.emit('stateChange', { type: 'download_failed', download_id: info.id, url: info.url, error: mainT('downloads.agent.held', { danger }) })
       if (!this.#deps.appFocused()) {
-        this.#deps.notify({ category: 'downloads', title: mainT('downloads.notify.review'), body: mainT('downloads.notify.reviewBody', { name: info.filename }), target: { url: 'apex://downloads' } })
+        this.#deps.notify({ category: 'downloads', title: mainT('downloads.notify.review'), body: mainT('downloads.notify.reviewBody', { name: info.filename }), target: { url: 'atelier://downloads' } })
       }
     } else {
       await this.#settle(entry)
@@ -525,7 +525,7 @@ export class DownloadManager extends EventEmitter<{ changed: [DownloadInfo[]]; s
     }
     this.emit('stateChange', { type: 'download_completed', download_id: info.id, url: info.url, path: info.path, size_bytes: info.receivedBytes })
     if (!this.#deps.appFocused()) {
-      this.#deps.notify({ category: 'downloads', title: mainT('downloads.notify.done'), body: info.filename, target: { url: 'apex://downloads', ...(info.tabId ? { tabId: info.tabId } : {}) } })
+      this.#deps.notify({ category: 'downloads', title: mainT('downloads.notify.done'), body: info.filename, target: { url: 'atelier://downloads', ...(info.tabId ? { tabId: info.tabId } : {}) } })
     }
     this.#persist()
     this.#notify(true)
@@ -591,7 +591,7 @@ export function downloadOrigin(ctx: Pick<AppContext, 'tabsRegistry' | 'windows' 
   if (!source || source.isDestroyed()) return { tabId: null, byAgent: false, windowId: null }
   const tab = ctx.tabsRegistry.byWebContents(source.id)
   const win = ctx.windows.fromWebContents(source.id)
-  // A tab with no chat id is held by Claude Code outside Apex (ST-60): that is an agent too.
+  // A tab with no chat id is held by Claude Code outside Atelier (ST-60): that is an agent too.
   const byAgent = tab ? tab.agentControlled && (tab.agentChatId === null || ctx.agent.isRunning(tab.agentChatId)) : false
   return { tabId: tab?.id ?? null, byAgent, windowId: win?.id ?? null }
 }

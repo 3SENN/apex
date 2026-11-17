@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -77,7 +77,7 @@ afterEach(() => setDecider(null))
 
 describe('Group tabs: what may move', () => {
   it('takes only ungrouped, unpinned web tabs, and only the given ones when asked', () => {
-    const tabs = [tab('a', 'https://a.com'), tab('p', 'https://a.com', 'p', { pinned: true }), tab('g', 'https://a.com', 'g', { groupId: 'g1' }), tab('n', 'apex://newtab'), tab('b', 'about:blank'), tab('c', 'http://c.com')]
+    const tabs = [tab('a', 'https://a.com'), tab('p', 'https://a.com', 'p', { pinned: true }), tab('g', 'https://a.com', 'g', { groupId: 'g1' }), tab('n', 'atelier://newtab'), tab('b', 'about:blank'), tab('c', 'http://c.com')]
     expect(groupCandidates(tabs).map((t) => t.id)).toEqual(['a', 'c'])
     expect(groupCandidates(tabs, ['c', 'p']).map((t) => t.id)).toEqual(['c'])
   })
@@ -223,7 +223,7 @@ describe('Group tabs: the menus', () => {
   const info = (t: GroupableTab): TabInfo => ({ ...t, favicon: null, loading: false, canGoBack: false, canGoForward: false, crumbs: null }) as unknown as TabInfo
 
   it('is offered when two tabs could share a group, or one could join a named group', () => {
-    const one = [info(tab('a', 'https://a.com')), info(tab('n', 'apex://newtab'))]
+    const one = [info(tab('a', 'https://a.com')), info(tab('n', 'atelier://newtab'))]
     expect(canAutoGroup(one, [])).toBe(false)
     expect(canAutoGroup(one, [{ id: 'g', name: 'Mail', color: 'berry', collapsed: false }])).toBe(true)
     expect(canAutoGroup([...one, info(tab('b', 'https://b.com'))], [])).toBe(true)

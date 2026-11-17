@@ -1,10 +1,10 @@
 /* Copyright (c) 2026 Senne Chin. All rights reserved.
- * Part of the Apex Companion Art: licensed under the Apex Companion Art License
+ * Part of the Atelier Companion Art: licensed under the Atelier Companion Art License
  * (ART-LICENSE.md), not under the Mozilla Public License. */
 
 // Electron main for scripts/app-icons/render-pip.mjs. Opens the built render
 // page in a hidden window, asks it for Pip's head and full body at the size
-// given (and the .apexpack group picture's members), and writes them as PNGs. Serves only local files, from a private
+// given (and the .atelierpack group picture's members), and writes them as PNGs. Serves only local files, from a private
 // scheme; every other request is refused, so nothing leaves the machine.
 //   electron main.mjs <built page dir> <companion assets dir> <out dir> <size>
 import { app, BrowserWindow, protocol, session } from 'electron'
@@ -82,7 +82,7 @@ app.whenReady().then(async () => {
       if (typeof url !== 'string' || !url.startsWith('data:image/png;base64,')) return fail(`no ${name} image`)
       await writeFile(join(outDir, `pip-${name}.png`), Buffer.from(url.slice('data:image/png;base64,'.length), 'base64'))
     }
-    // The group picture for .apexpack documents: each member's whole figure and floating head.
+    // The group picture for .atelierpack documents: each member's whole figure and floating head.
     const group = await win.webContents.executeJavaScript(`window.__renderGroup(${JSON.stringify(size)}).then((r) => r, (e) => ({ error: String(e) }))`)
     if (group.error) return fail(`the group render failed: ${group.error}`)
     if (group.errors.length) return fail(`the companion renderer reported: ${group.errors.join('; ')}`)

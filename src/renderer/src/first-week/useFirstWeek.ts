@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,7 +10,7 @@ import { call, useAppEvent } from '../api'
 /**
  * The getting-started view, kept live. It reloads when the window regains
  * focus or the page becomes visible, so the default-browser check (which can
- * change outside Apex) reruns on every return to the page.
+ * change outside Atelier) reruns on every return to the page.
  */
 export function useFirstWeek(): [FirstWeekView | null, (view: FirstWeekView) => void, Error | null] {
   const [view, setView] = useState<FirstWeekView | null>(null)

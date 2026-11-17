@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -137,7 +137,7 @@ export const chatTools = {
   'chatTools.imported.transcript': 'Ga verder met het volledige transcript',
   'chatTools.imported.source.chatgpt': 'ChatGPT',
   'chatTools.imported.source.claude': 'Claude',
-  'chatTools.imported.source.apex': 'een {brand}-export',
+  'chatTools.imported.source.atelier': 'een {brand}-export',
   'chatTools.child.label': 'Subtaak van ‘{title}’',
   'chatTools.child.open': 'Open de hoofdchat',
   'chatTools.dontAsk.text': 'Niets vragen staat aan: companions handelen zonder om goedkeuring te vragen.',

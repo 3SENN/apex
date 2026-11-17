@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -460,7 +460,7 @@
   user-select: text;
 }
 
-/* Apex's tail: a small rounded nub tucked under the bottom-right corner. */
+/* Atelier's tail: a small rounded nub tucked under the bottom-right corner. */
 .chat-msg__bubble::after {
   content: '';
   position: absolute;
@@ -2385,7 +2385,7 @@
   }
 }
 
-/* ---- Reduce Motion: the system setting or Apex's own ---- */
+/* ---- Reduce Motion: the system setting or Atelier's own ---- */
 
 @media (prefers-reduced-motion: reduce) {
   .chat-sweep,

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -30,7 +30,7 @@ import { STARTER_MODEL, STARTERS_SCHEMA, curatedStarters, generateStarters, pars
 import { EngineUnavailableError, createQuickModel, quickJsonSchema, type QuickClient, type QuickCreateParams } from '../src/main/agent/quick'
 
 const DAY = 86_400_000
-const tempDir = (): string => mkdtempSync(join(tmpdir(), 'apex-first-week-'))
+const tempDir = (): string => mkdtempSync(join(tmpdir(), 'atelier-first-week-'))
 const noSignals: FirstWeekSignals = { 'import-data': false, 'default-browser': false, 'connect-app': false, 'customise-companion': false, 'set-up-routine': false, 'try-dictation': false, 'record-meeting': false, 'build-artifact': false, 'search-web': false }
 
 function starters(n: number): StarterChat[] {
@@ -104,7 +104,7 @@ describe('first-week rules', () => {
     expect(items.find((i) => i.id === 's1')?.action).toEqual({ kind: 'chat', prompt: 'Prompt 1' })
     expect(items.find((i) => i.id === 'default-browser')?.action).toEqual({ kind: 'default-browser' })
     expect(items.find((i) => i.id === 'customise-companion')?.action).toEqual({ kind: 'companion' })
-    expect(items.find((i) => i.id === 'import-data')?.action).toEqual({ kind: 'page', url: 'apex://settings/import' })
+    expect(items.find((i) => i.id === 'import-data')?.action).toEqual({ kind: 'page', url: 'atelier://settings/import' })
   })
 
   it('puts unfinished cards first, keeping their order', () => {
@@ -184,7 +184,7 @@ describe('first-week store', () => {
     expect(h.store.acknowledge().status).toBe('ready')
   })
 
-  it('resets a file from a newer Apex and an unreadable one', () => {
+  it('resets a file from a newer Atelier and an unreadable one', () => {
     expect(readRecord(JSON.stringify({ version: FIRST_WEEK_VERSION + 1 })).notice).toMatch(/newer version/)
     expect(readRecord('{not json').notice).toMatch(/couldn’t be read/)
     expect(readRecord(null)).toEqual({ record: null, notice: null })
@@ -426,12 +426,12 @@ describe('starter chats', () => {
 
 describe('first-week routes', () => {
   it('parses the page and its guides, with tab titles', () => {
-    expect(parseInternalUrl('apex://first-week')).toMatchObject({ page: 'first-week', section: null })
-    expect(parseInternalUrl('apex://first-week/meet-your-companion')).toMatchObject({ page: 'first-week', section: 'meet-your-companion' })
-    expect(parseInternalUrl('apex://first-week/a/b')).toBeNull()
-    expect(internalTitle('apex://first-week')).toEqual({ title: 'Getting started', crumbs: ['Getting started'] })
-    expect(internalTitle('apex://first-week/chats-and-tabs')).toEqual({ title: 'Chats and tabs', crumbs: ['Getting started', 'Chats and tabs'] })
-    expect(internalTitle('apex://first-week/unknown').crumbs).toEqual(['Getting started'])
+    expect(parseInternalUrl('atelier://first-week')).toMatchObject({ page: 'first-week', section: null })
+    expect(parseInternalUrl('atelier://first-week/meet-your-companion')).toMatchObject({ page: 'first-week', section: 'meet-your-companion' })
+    expect(parseInternalUrl('atelier://first-week/a/b')).toBeNull()
+    expect(internalTitle('atelier://first-week')).toEqual({ title: 'Getting started', crumbs: ['Getting started'] })
+    expect(internalTitle('atelier://first-week/chats-and-tabs')).toEqual({ title: 'Chats and tabs', crumbs: ['Getting started', 'Chats and tabs'] })
+    expect(internalTitle('atelier://first-week/unknown').crumbs).toEqual(['Getting started'])
   })
 
   it('has four guides with unique ids', () => {

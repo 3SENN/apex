@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,8 +6,8 @@
 // Settings › Model and key: which engine powers the companions (ST-58) when
 // the build offers more than the API key, those engines' own sections
 // (`@internal/engines/renderer`), and letting Claude Code, or another MCP
-// client, outside Apex use its browser tools (ST-60). There are no plans,
-// credits or quotas in Apex: this status takes their place.
+// client, outside Atelier use its browser tools (ST-60). There are no plans,
+// credits or quotas in Atelier: this status takes their place.
 import { useRef, useState, type KeyboardEvent, type ReactElement } from 'react'
 import { Check, Copy, KeyRound, ShieldCheck, SquareTerminal, Unplug } from 'lucide-react'
 import { ENGINE_UI } from '@internal/engines/renderer'
@@ -107,7 +107,7 @@ export function EngineChoice({ status, value, onChange }: { status: EngineStatus
   )
 }
 
-/** ST-60: the opt-in switch, the command to add Apex to Claude Code, its tabs and revoke. */
+/** ST-60: the opt-in switch, the command to add Atelier to Claude Code, its tabs and revoke. */
 export function OutsideAccessCard({ status, settings, update }: PageProps & { status: EngineStatus | null }): ReactElement {
   const t = useT()
   const confirm = useConfirm()
@@ -137,7 +137,7 @@ export function OutsideAccessCard({ status, settings, update }: PageProps & { st
   const revoke = async (): Promise<void> => {
     const ok = await confirm({
       title: t('settings.modelAndKey.revokeAccessForClaude'),
-      message: t('settings.modelAndKey.apexMakesANew'),
+      message: t('settings.modelAndKey.atelierMakesANew'),
       confirmLabel: t('settings.modelAndKey.revoke'),
       destructive: true,
     })
@@ -165,9 +165,9 @@ export function OutsideAccessCard({ status, settings, update }: PageProps & { st
       )}
       {settings.externalAccess && external?.enabled && (
         <>
-          <Row title={t('settings.modelAndKey.addApexToClaude')} description={external.added ? t('settings.modelAndKey.addedNewClaudeCode') : t('settings.modelAndKey.runThisOnceIn')} stack>
+          <Row title={t('settings.modelAndKey.addAtelierToClaude')} description={external.added ? t('settings.modelAndKey.addedNewClaudeCode') : t('settings.modelAndKey.runThisOnceIn')} stack>
             <div className="mk-command">
-              <code className="mk-command__text">{external.command ?? t('settings.modelAndKey.startingApexSLocal')}</code>
+              <code className="mk-command__text">{external.command ?? t('settings.modelAndKey.startingAtelierSLocal')}</code>
               <div className="sp-field__row">
                 <Button size="sm" variant="secondary" icon={<Copy />} disabled={!external.command} onClick={() => void copy()}>
                   {t('settings.modelAndKey.copyCommand')}

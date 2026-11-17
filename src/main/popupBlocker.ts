@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { getDomain } from 'tldts'
 import type { SiteToggle } from '@shared/sites'
 
 // The pop-up and redirect blocker. Electron has no pop-up
-// blocker of its own and window.open carries no gesture flag, so Apex keeps
+// blocker of its own and window.open carries no gesture flag, so Atelier keeps
 // each tab's last real input (a click, key or tap) and treats it like
 // Chromium's transient activation: it lasts a few seconds and one pop-up
 // uses it up. A script pop-up without one is blocked unless the site is

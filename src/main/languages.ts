@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -76,7 +76,7 @@ export function applySessionLanguages(session: Session, list: readonly string[])
     session.setUserAgent(browserUserAgent(), expandLanguageList(list).join(','))
     if (process.platform !== 'darwin') {
       // Chromium downloads the dictionaries from Google's CDN, as Chrome does; a smoke run stays on this machine.
-      if (process.env.APEX_SMOKE === '1') session.setSpellCheckerDictionaryDownloadURL('http://127.0.0.1:9/')
+      if (process.env.ATELIER_SMOKE === '1') session.setSpellCheckerDictionaryDownloadURL('http://127.0.0.1:9/')
       const dictionaries = spellcheckLanguages(list, session.availableSpellCheckerLanguages)
       if (dictionaries.length > 0) session.setSpellCheckerLanguages(dictionaries)
     }

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { chatDateGroup, type ChatDateGroup } from '@shared/chats'
 import { t } from '@shared/i18n/core'
 
 // Memory notes and companion files in the card: deep-link ids, grouping and
-// filtering. Paths contain slashes and dots, which apex:// item ids don't
+// filtering. Paths contain slashes and dots, which atelier:// item ids don't
 // allow, so links carry them base64url-encoded.
 
 const ITEM_MAX = 128
@@ -31,7 +31,7 @@ function fromBase64Url(id: string): string | null {
   }
 }
 
-/** The apex://companion/<id>/<section>/<item> id for a path, or null when the path is too long to link. */
+/** The atelier://companion/<id>/<section>/<item> id for a path, or null when the path is too long to link. */
 export function pathToItem(path: string): string | null {
   if (!path) return null
   const id = toBase64Url(path)

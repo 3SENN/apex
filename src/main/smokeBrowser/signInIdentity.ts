@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -17,14 +17,14 @@ import type { SmokeCheck, SmokeContext } from './types'
 // Sign-in compatibility mode, end to end on the smoke server, with
 // Experiments' "Google sign-in: present as Firefox" turned on for the check
 // (off, Google presents Chrome: chromeSurface.ts checks that): a page under a
-// test host that signInHosts.ts counts as Google's sign-in (APEX_SMOKE_SIGNIN_HOSTS,
+// test host that signInHosts.ts counts as Google's sign-in (ATELIER_SMOKE_SIGNIN_HOSTS,
 // set for smoke runs in index.ts; *.localhost resolves to this machine) gets
 // Firefox's User-Agent on every request and in navigator, with no client hints;
 // reached typed, through a redirect, by a link and in a popup. The tab is
 // Chromium again on the next page, and a second tab never changes.
-// APEX_SMOKE_SIGNIN_MODE_OUT=<file> writes what was measured as JSON.
+// ATELIER_SMOKE_SIGNIN_MODE_OUT=<file> writes what was measured as JSON.
 
-/** The test sign-in host (index.ts maps it to Google under APEX_SMOKE). */
+/** The test sign-in host (index.ts maps it to Google under ATELIER_SMOKE). */
 export const SMOKE_SIGNIN_HOST = 'accounts.google.localhost'
 
 interface Seen {
@@ -132,7 +132,7 @@ function closeTab(tabs: { find(id: string): Tab | undefined; close(id: string): 
   if (tab && tabs.find(tab.id) && !tab.view.webContents.isDestroyed()) tabs.close(tab.id)
 }
 
-/** Runs `body` with the experiment on, through the setting (as apex://flags sets it), and back after. */
+/** Runs `body` with the experiment on, through the setting (as atelier://flags sets it), and back after. */
 async function withFirefoxExperiment<T>(ctx: SmokeContext, body: () => Promise<T>): Promise<T> {
   const before = ctx.settings.get().flags ?? {}
   ctx.settings.update({ flags: { ...before, [GOOGLE_FIREFOX_FLAG]: 'on' } })
@@ -147,7 +147,7 @@ async function run(ctx: SmokeContext): Promise<string> {
   const port = new URL(ctx.server.http).port
   const normal = ctx.server.http
   const signIn = `http://${SMOKE_SIGNIN_HOST}:${port}`
-  assert(signInIdentityFor(`${signIn}/`) === 'firefox', `${SMOKE_SIGNIN_HOST} is not a Google sign-in host here (APEX_SMOKE_SIGNIN_HOSTS=${process.env.APEX_SMOKE_SIGNIN_HOSTS ?? ''})`)
+  assert(signInIdentityFor(`${signIn}/`) === 'firefox', `${SMOKE_SIGNIN_HOST} is not a Google sign-in host here (ATELIER_SMOKE_SIGNIN_HOSTS=${process.env.ATELIER_SMOKE_SIGNIN_HOSTS ?? ''})`)
   seen.clear()
   routes(ctx, signIn)
   const p = problems()
@@ -214,7 +214,7 @@ async function run(ctx: SmokeContext): Promise<string> {
     closeTab(ctx.tabs, tab)
     closeTab(ctx.tabs, other)
   }
-  const out = process.env.APEX_SMOKE_SIGNIN_MODE_OUT
+  const out = process.env.ATELIER_SMOKE_SIGNIN_MODE_OUT
   if (out) (await import('node:fs')).writeFileSync(out, JSON.stringify({ reports, requests: Object.fromEntries(seen) }, null, 2))
   assert(p.list.length === 0, `${p.list.length} sign-in identity problem(s): ${p.list.slice(0, 5).join('; ')}`)
   return `Firefox on ${Object.keys(reports).filter((k) => reports[k]?.ua === firefoxUserAgent()).join(', ')}; Chromium elsewhere`

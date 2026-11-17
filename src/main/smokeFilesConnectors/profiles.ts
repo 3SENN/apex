@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -20,7 +20,7 @@ function assert(ok: unknown, message: string): asserts ok {
   if (!ok) throw new Error(message)
 }
 
-const temp = (): string => mkdtempSync(join(tmpdir(), 'apex-smoke-c7-'))
+const temp = (): string => mkdtempSync(join(tmpdir(), 'atelier-smoke-c7-'))
 
 export const checks: SmokeCheck[] = [
   {
@@ -58,9 +58,9 @@ export const checks: SmokeCheck[] = [
       const a = session.fromPartition(profilePartition(`smoke${Date.now().toString(36)}a`))
       const b = session.fromPartition(profilePartition(`smoke${Date.now().toString(36)}b`))
       try {
-        await a.cookies.set({ url: 'http://127.0.0.1/', name: 'apex-profile', value: 'work' })
-        const own = await a.cookies.get({ name: 'apex-profile' })
-        const other = await b.cookies.get({ name: 'apex-profile' })
+        await a.cookies.set({ url: 'http://127.0.0.1/', name: 'atelier-profile', value: 'work' })
+        const own = await a.cookies.get({ name: 'atelier-profile' })
+        const other = await b.cookies.get({ name: 'atelier-profile' })
         assert(own.length === 1, 'the cookie was not stored in its profile')
         assert(other.length === 0, 'a cookie crossed into another profile')
       } finally {

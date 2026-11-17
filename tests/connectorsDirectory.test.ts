@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -15,7 +15,7 @@ import { ConnectorStore } from '../src/main/connectors/store'
 import entries from '../src/main/connectors/directory.json'
 import { directoryGroups, filterConnectors, type ConnectorRow, type DirectoryFilter } from '../src/renderer/src/connectors/logic/directory'
 
-// The curated directory stays valid (unique ids, https only, Apex's
+// The curated directory stays valid (unique ids, https only, Atelier's
 // categories), favicons fall back to the generic icons, and the page's
 // grouping and filters (SK-13).
 
@@ -41,12 +41,12 @@ describe('the connector directory', () => {
 
   it('round-trips the deep link', () => {
     expect(connectRequestOf(connectorConnectUrl('linear'))).toBe('linear')
-    expect(connectRequestOf('apex://connectors?connect=../etc')).toBeNull()
+    expect(connectRequestOf('atelier://connectors?connect=../etc')).toBeNull()
   })
 })
 
 describe('favicons', () => {
-  const dir = (): string => mkdtempSync(join(tmpdir(), 'apex-icons-'))
+  const dir = (): string => mkdtempSync(join(tmpdir(), 'atelier-icons-'))
   const image: IconFetch = async () => ({ ok: true, contentType: 'image/png', body: new Uint8Array([1, 2, 3]).buffer })
 
   it('fall back to the generic icon when off, failing or not an image', async () => {
@@ -55,7 +55,7 @@ describe('favicons', () => {
     expect(await new FaviconCache(dir(), async () => ({ ok: true, contentType: 'text/html', body: new ArrayBuffer(4) })).get('linear.app')).toBeNull()
   })
 
-  it('cache hits on disk, and only fetch sites Apex knows', async () => {
+  it('cache hits on disk, and only fetch sites Atelier knows', async () => {
     const d = dir()
     let calls = 0
     const counting: IconFetch = async (url, signal) => {

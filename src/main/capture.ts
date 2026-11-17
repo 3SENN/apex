@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,11 +8,11 @@ import { NO_CAPTURE, type CaptureKind, type CaptureState } from '@shared/sites'
 
 // What each tab is capturing, for TabInfo.capture, the tab
 // icons the tab strip draws and the sharing bar. Main's own record is the floor: a kind
-// is on from the moment Apex grants it until the page navigates, closes or
+// is on from the moment Atelier grants it until the page navigates, closes or
 // the person stops it. The page trackers (preload/page/capture.ts, one per
 // document in every frame) then narrow it to the tracks still live, so a call
 // that ends in a single-page app clears its icon. Narrowing fails visible: a
-// kind goes off only once the trackers have seen every capture Apex granted
+// kind goes off only once the trackers have seen every capture Atelier granted
 // and saw each of its tracks (clones too) end. A capture no tracker saw (a
 // frame without one, an API it doesn't wrap) keeps the icon on, and Stop
 // reloads the page to end it. No Electron here, so it is unit-tested.
@@ -44,7 +44,7 @@ interface DocCapture {
 
 interface TabCapture {
   granted: CaptureState
-  /** Captures Apex granted per kind since the kind last turned on. */
+  /** Captures Atelier granted per kind since the kind last turned on. */
   grants: CaptureCounts
   /** What the trackers had seen when each kind last turned on; only later sightings answer for its grants. */
   base: CaptureCounts
@@ -67,7 +67,7 @@ export class CaptureTracker extends EventEmitter<{ changed: [tabId: string] }> {
     return entry
   }
 
-  /** Apex granted these kinds to the tab (a camera or microphone answer, or a source chosen in the screen picker). */
+  /** Atelier granted these kinds to the tab (a camera or microphone answer, or a source chosen in the screen picker). */
   grant(tabId: string, kinds: readonly CaptureKind[], sharedTabId: string | null = null): void {
     const entry = this.#entry(tabId)
     for (const kind of kinds) {

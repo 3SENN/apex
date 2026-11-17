@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -251,7 +251,7 @@ describe('seen meetings', () => {
   })
 
   it('persists keys, but keeps private windows’ keys in memory only', () => {
-    dir = mkdtempSync(join(tmpdir(), 'apex-seen-'))
+    dir = mkdtempSync(join(tmpdir(), 'atelier-seen-'))
     const path = join(dir, 'meeting-cards.json')
     const now = 1_800_000_000_000
     const seen = new SeenKeys(path, now)

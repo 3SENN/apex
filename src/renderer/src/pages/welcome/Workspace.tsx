@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@
 // row to show or hide it; Chats always stays), your week as tiles (a routine
 // for each thing you do on a rhythm; tap to leave one out), and the apps to
 // connect next as their icons. "Set it up" applies the rows and the routines
-// left on; "Keep Apex as it is" changes nothing (your profile stays for your
+// left on; "Keep Atelier as it is" changes nothing (your profile stays for your
 // companions either way). Without a profile the step moves straight on.
 import { useEffect, useState, type ReactElement } from 'react'
 import { Check, Sparkles } from 'lucide-react'

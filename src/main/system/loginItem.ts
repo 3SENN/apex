@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -23,7 +23,7 @@ export interface RawLoginItem {
   launchItems?: Array<{ enabled: boolean }>
 }
 
-/** The pure mapping from the OS's answer to Apex's states. */
+/** The pure mapping from the OS's answer to Atelier's states. */
 export function loginItemStateFrom(platform: OsPlatform, raw: RawLoginItem): LoginItemState {
   if (platform === 'darwin') {
     switch (raw.status) {
@@ -133,7 +133,7 @@ export class FakeLoginItem implements LoginItemBackend {
   }
 }
 
-/** Unpackaged runs: the row explains it works once Apex is installed. */
+/** Unpackaged runs: the row explains it works once Atelier is installed. */
 export const unpackagedLoginItem: LoginItemBackend = {
   read: () => UNSUPPORTED_LOGIN_ITEM,
   write: () => UNSUPPORTED_LOGIN_ITEM,

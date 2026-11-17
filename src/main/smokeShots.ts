@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -19,9 +19,9 @@ import type { BookmarkStore, ConnectorStore, RoutineStore, SkillStore } from './
 import type { Tab, TabManager } from './tabs'
 import type { ChromeWindow } from './window'
 
-// The visual tour (APEX_SMOKE_SHOTS=<dir>): every core surface, captured
+// The visual tour (ATELIER_SMOKE_SHOTS=<dir>): every core surface, captured
 // as it looks on screen, so both themes can be reviewed by eye. Run it once
-// per theme with APEX_SMOKE_THEME=light|dark.
+// per theme with ATELIER_SMOKE_THEME=light|dark.
 
 export interface ShotDeps {
   chrome: Chrome
@@ -147,7 +147,7 @@ function seed({ skills, routines, connectors, history, bookmarks, base }: ShotDe
   routines.save({ name: 'Price watch', prompt: 'Check whether the headphones on my list dropped in price.', schedule: { kind: 'interval', hours: 6 }, enabled: false, owner: ownerId })
   connectors.save({ name: 'Team notes', url: 'https://notes.example.com/mcp', enabled: true })
   connectors.save({ name: 'Calendar', url: 'https://calendar.example.com/mcp', enabled: false })
-  history.record(base, 'Apex smoke test')
+  history.record(base, 'Atelier smoke test')
   history.record(`${base}second`, 'Second page')
   history.record('https://example.com/', 'Example Domain')
   if (!bookmarks.findByUrl(base)) bookmarks.toggle(base, 'Smoke test')
@@ -206,7 +206,7 @@ export async function captureTour(deps: ShotDeps): Promise<string[]> {
   settings.update({ layout: 'sidebar' })
   await chrome.until(`return document.querySelector('.app--sidebar')`, 3000, 'the sidebar layout')
 
-  // ---- Apex pages, in one tab; destinations on the window-level surface over it (DS-99) ----
+  // ---- Atelier pages, in one tab; destinations on the window-level surface over it (DS-99) ----
   const page = tabs.create('about:blank')
   const open = async (url: string, ready: string, name: string, wait = 500): Promise<void> => {
     if (isDestinationUrl(url)) {
@@ -227,16 +227,16 @@ export async function captureTour(deps: ShotDeps): Promise<string[]> {
   tabs.navigate(page.id, `${deps.base}second`)
   await chrome.until(`return document.querySelector('.pill__detail')?.textContent === 'Second page'`, 6000, 'the pill to show the page title')
   await shootToolbar('address-pill-website')
-  if (baseState.picnicChatId) await open(`apex://chat/${baseState.picnicChatId}`, '.chat-log', 'chat-page', 700)
-  if (baseState.runningChatId) await open(`apex://chat/${baseState.runningChatId}`, '.chat-log', 'chat-working', 500)
-  await open('apex://chats', '.chats-page', 'all-chats')
-  await open('apex://skills', '.sp-page', 'skills')
-  await open('apex://routines', '.sp-page', 'routines')
-  await open('apex://connectors', '.sp-page', 'connectors')
-  await open('apex://settings/you', '.sp-page', 'settings-you')
-  await open('apex://settings/appearance', '.sp-page', 'settings-appearance')
-  await shootToolbar('address-pill-apex', 100)
-  await open('apex://settings/companions', '.sp-page', 'settings-companions', 700)
+  if (baseState.picnicChatId) await open(`atelier://chat/${baseState.picnicChatId}`, '.chat-log', 'chat-page', 700)
+  if (baseState.runningChatId) await open(`atelier://chat/${baseState.runningChatId}`, '.chat-log', 'chat-working', 500)
+  await open('atelier://chats', '.chats-page', 'all-chats')
+  await open('atelier://skills', '.sp-page', 'skills')
+  await open('atelier://routines', '.sp-page', 'routines')
+  await open('atelier://connectors', '.sp-page', 'connectors')
+  await open('atelier://settings/you', '.sp-page', 'settings-you')
+  await open('atelier://settings/appearance', '.sp-page', 'settings-appearance')
+  await shootToolbar('address-pill-atelier', 100)
+  await open('atelier://settings/companions', '.sp-page', 'settings-companions', 700)
 
   // The new-companion sheet, from Settings › Companions.
   await chrome.click(/^New companion$/)
@@ -246,24 +246,24 @@ export async function captureTour(deps: ShotDeps): Promise<string[]> {
   await chrome.until(`return !document.querySelector('.co-preset')`, 3000, 'the sheet to close')
 
   // A look is changed on the card: the ring of bubbles around the figure, and the option card a bubble opens.
-  await open(`apex://companion/${activeId}/general/look`, '.co-ring__bubble', 'companion-editor', 2000)
+  await open(`atelier://companion/${activeId}/general/look`, '.co-ring__bubble', 'companion-editor', 2000)
   await chrome.js(`document.querySelectorAll('.co-ring__bubble')[2]?.click(); return true`)
   await chrome.until(`return document.querySelector('.co-ring-card .co-ring-tile')`, 6000, 'the eyes options')
   await shoot('companion-look', 600)
   await chrome.js(`document.querySelector('.co-hero__look')?.click(); return true`)
 
   // A confirmation: History › Clear all.
-  await open('apex://history', '.sp-page', 'history')
+  await open('atelier://history', '.sp-page', 'history')
   await chrome.click(/^Clear (all|history)/)
   const confirmDoc = await docWith(chrome, '[role="alertdialog"], [role="dialog"]', 5000, 'the confirmation')
   await shoot('confirm-dialog', 400)
   await confirmDoc.escape()
   await confirmDoc.until(`return !document.querySelector('[role="alertdialog"], [role="dialog"]')`, 3000, 'the confirmation to close').catch(() => undefined)
-  await open('apex://bookmarks', '.sp-page', 'bookmarks')
-  await open('apex://downloads', '.sp-page', 'downloads')
+  await open('atelier://bookmarks', '.sp-page', 'bookmarks')
+  await open('atelier://downloads', '.sp-page', 'downloads')
 
-  // ---- the companion card, opened as an apex://companion tab (the toolbar has no avatar any more, DS-24) ----
-  tabs.navigate(first.id, `apex://companion/${activeId}/general`)
+  // ---- the companion card, opened as an atelier://companion tab (the toolbar has no avatar any more, DS-24) ----
+  tabs.navigate(first.id, `atelier://companion/${activeId}/general`)
   tabs.activate(first.id)
   await sleep(300)
   await chrome.until(`return document.querySelector('.co-card')`, 6000, 'the companion card')
@@ -278,8 +278,8 @@ export async function captureTour(deps: ShotDeps): Promise<string[]> {
   if (!(await chrome.js<boolean>(`return Boolean(document.querySelector('.co-card'))`))) throw new Error('Esc closed the companion tab')
   tabs.navigate(first.id, 'about:blank')
   await chrome.until(`return !document.querySelector('.co-card')`, 3000, 'the card to close')
-  // The same card as an apex://companion tab, on another section.
-  tabs.navigate(page.id, `apex://companion/${activeId}/models`)
+  // The same card as an atelier://companion tab, on another section.
+  tabs.navigate(page.id, `atelier://companion/${activeId}/models`)
   tabs.activate(page.id)
   await chrome.until(`return document.querySelector('.co-card')`, 6000, 'the companion card tab')
   await shoot('companion-card-models', 1200)
@@ -291,7 +291,7 @@ export async function captureTour(deps: ShotDeps): Promise<string[]> {
   if (baseState.picnicChatId) {
     const face = '.chat-log .chat-reply__face .chat-avatar--button'
     tabs.leaveRail()
-    tabs.navigate(page.id, `apex://chat/${baseState.picnicChatId}`)
+    tabs.navigate(page.id, `atelier://chat/${baseState.picnicChatId}`)
     tabs.activate(page.id)
     await chrome.until(`return document.querySelector(${JSON.stringify(face)})`, 6000, 'a reply face')
     await chrome.js(`document.querySelector(${JSON.stringify(face)})?.click(); return true`)
@@ -352,7 +352,7 @@ export async function captureTour(deps: ShotDeps): Promise<string[]> {
   tabs.activate(page.id)
 
   // ---- the welcome flow ----
-  await open('apex://welcome', '.welcome', 'welcome', 1500)
+  await open('atelier://welcome', '.welcome', 'welcome', 1500)
   await chrome.click(/^Get started$/).catch(() => undefined)
   await shoot('welcome-companion', 2500)
 

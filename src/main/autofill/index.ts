@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -189,7 +189,7 @@ export function setupAutofill(ctx: AppContext, deps: { vault: VaultApi; wallet: 
       if (isSecretPage(tab.internalUrl)) return resizeToEdge(blankLike(view), opts?.maxEdge)
       const wc = tab.view.webContents
       if (tab.internalUrl || isBlankUrl(wc.getURL())) {
-        // Apex draws these in the chrome, so its content area is captured; no page fields there.
+        // Atelier draws these in the chrome, so its content area is captured; no page fields there.
         const bounds = win.tabs.contentBounds()
         const zoom = win.chrome.getZoomFactor() || 1
         const image = await win.chrome.capturePage({ x: Math.round(bounds.x / zoom), y: Math.round(bounds.y / zoom), width: Math.round(bounds.width / zoom), height: Math.round(bounds.height / zoom) })

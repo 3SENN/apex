@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -105,7 +105,7 @@ async function translated<T>(shared: boolean, run: () => Promise<T>): Promise<T>
 }
 
 export interface MemoryGuards {
-  /** Before a note is overwritten from an editor or by Apex, with its current text. */
+  /** Before a note is overwritten from an editor or by Atelier, with its current text. */
   beforeWrite?(owner: Owner, path: string, previous: string): void
   /** Before a note or folder is deleted from an editor. */
   beforeRemove?(owner: Owner, path: string): void
@@ -197,7 +197,7 @@ export class MemoryService extends EventEmitter<{ changed: [owner: Owner, path: 
     this.#guards = guards
   }
 
-  /** Writes a note. `author` is 'agent' for notes Apex writes for a companion (hourly activity notes). */
+  /** Writes a note. `author` is 'agent' for notes Atelier writes for a companion (hourly activity notes). */
   write(path: string, text: string, owner: Owner = SHARED_OWNER, author: Author = 'you'): void {
     if (Buffer.byteLength(text) > MAX_FILE_BYTES) throw new Error('Memory files are limited to 256 KB.')
     const target = this.#resolve(path, owner)

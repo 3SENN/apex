@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -30,7 +30,7 @@ import { OwnWorlds, checkWorld, fillSpots, guestRef, guestSystem, residentsAt, w
 
 const dirs: string[] = []
 const tmp = (): string => {
-  const d = mkdtempSync(join(tmpdir(), 'apex-worlds-test-'))
+  const d = mkdtempSync(join(tmpdir(), 'atelier-worlds-test-'))
   dirs.push(d)
   return d
 }
@@ -97,7 +97,7 @@ describe('the world format', () => {
     expect(residentSpot(w, { at: [3, 12] })).toEqual([3, 12])
     expect(worldApps(w)).toEqual([{ pack: 'quiz', app: 'main' }])
     expect(parseWorldRef('own:town')).toEqual({ kind: 'own', id: 'town' })
-    expect(parseWorldRef('pack:apex-worlds/worlds/harbour-town.json')).toEqual({ kind: 'pack', packId: 'apex-worlds', path: 'worlds/harbour-town.json' })
+    expect(parseWorldRef('pack:atelier-worlds/worlds/harbour-town.json')).toEqual({ kind: 'pack', packId: 'atelier-worlds', path: 'worlds/harbour-town.json' })
     expect(parseWorldRef('file:///etc/passwd')).toBeNull()
   })
 })
@@ -154,7 +154,7 @@ describe('your own worlds', () => {
 describe('worlds in packs', () => {
   const pack = (m: Partial<PackManifest>, files: Record<string, string>): PackFiles =>
     new Map([
-      [PACK_MANIFEST_FILE, Buffer.from(JSON.stringify({ format: 'apex-pack', manifestVersion: 2, id: 'harbour', name: 'Harbour', version: '1.0.0', description: 'A world.', contributes: {}, permissions: { ...NO_PACK_PERMISSIONS }, ...m }))],
+      [PACK_MANIFEST_FILE, Buffer.from(JSON.stringify({ format: 'atelier-pack', manifestVersion: 2, id: 'harbour', name: 'Harbour', version: '1.0.0', description: 'A world.', contributes: {}, permissions: { ...NO_PACK_PERMISSIONS }, ...m }))],
       ...Object.entries(files).map(([p, d]) => [p, Buffer.from(d)] as [string, Buffer]),
     ])
 
@@ -163,7 +163,7 @@ describe('worlds in packs', () => {
     expect(ok.ok ? '' : ok.problems.join('\n')).toBe('')
     const own = validatePack(pack({ contributes: { worlds: ['worlds/town.json'] } }, { 'worlds/town.json': JSON.stringify(town({ places: [{ id: 'hall', name: 'Hall', area: [10, 1, 16, 5], opens: { pack: 'harbour', app: 'game' } }], residents: [] })) }))
     expect(own.ok ? '' : own.problems.join('\n')).toMatch(/opens game, which is not one of this pack's apps/)
-    const broken = validatePack(pack({ contributes: { worlds: ['worlds/town.json'] } }, { 'worlds/town.json': '{"format":"apex-world"' }))
+    const broken = validatePack(pack({ contributes: { worlds: ['worlds/town.json'] } }, { 'worlds/town.json': '{"format":"atelier-world"' }))
     expect(broken.ok ? '' : broken.problems.join('\n')).toMatch(/not valid JSON/)
     const v1 = validatePack(pack({ manifestVersion: 1, contributes: { worlds: ['worlds/town.json'] } }, { 'worlds/town.json': JSON.stringify(town()) }))
     expect(v1.ok ? '' : v1.problems.join('\n')).toMatch(/worlds need "manifestVersion": 2/)
@@ -173,7 +173,7 @@ describe('worlds in packs', () => {
     const lines = describePackPermissions({ contributes: { worlds: ['a.json', 'b.json'], apps: [{ id: 'main', name: 'Viewer', root: 'app', entry: 'index.html', build: 'kit', kind: 'tool' }] }, permissions: { ...NO_PACK_PERMISSIONS, worlds: true } })
     expect(lines.find((l) => l.kind === 'worlds')).toMatchObject({ key: 'packs.perm.worlds', vars: { count: 2 } })
     expect(lines.find((l) => l.kind === 'worldAccess')?.level).toBe('notice')
-    expect(isPackArchiveName('Harbour town.apexworld')).toBe(true)
+    expect(isPackArchiveName('Harbour town.atelierworld')).toBe(true)
   })
 
   it('ships the first-party Worlds pack valid, with its world', () => {
@@ -190,7 +190,7 @@ describe('the bridge', () => {
   const ctx = (permissions: Partial<PackManifest['permissions']>, mode: PackContext['mode'] = 'installed'): PackContext => ({
     packId: 'viewer',
     mode,
-    manifest: { format: 'apex-pack', manifestVersion: 2, id: 'viewer', name: 'Viewer', version: '1.0.0', description: '', contributes: {}, permissions: { ...NO_PACK_PERMISSIONS, ...permissions } },
+    manifest: { format: 'atelier-pack', manifestVersion: 2, id: 'viewer', name: 'Viewer', version: '1.0.0', description: '', contributes: {}, permissions: { ...NO_PACK_PERMISSIONS, ...permissions } },
   })
 
   function bridge() {
@@ -217,7 +217,7 @@ describe('the bridge', () => {
   }
   const sender = { id: 1 } as never
 
-  it('lets any app read where it was opened from, and only a pack with the worlds permission use apex.worlds', async () => {
+  it('lets any app read where it was opened from, and only a pack with the worlds permission use atelier.worlds', async () => {
     const { b, calls } = bridge()
     expect(await b.run(sender, ctx({}), 'world.context', [])).toEqual({ place: { id: 'hall' } })
     await expect(b.run(sender, ctx({}), 'worlds.list', [])).rejects.toThrow(/no worlds permission/)

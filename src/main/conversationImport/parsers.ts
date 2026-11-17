@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,10 +6,10 @@
 // Parsers for conversation exports from other assistants (CH-31, ON-10):
 // ChatGPT's conversations.json (a mapping tree; the shown branch is the one
 // that ends at `current_node`), Claude's conversations.json (`chat_messages`,
-// with attachments), and Apex's own Markdown chat exports. Everything here is
+// with attachments), and Atelier's own Markdown chat exports. Everything here is
 // pure; reading files and zips is in ./read.ts.
 import type { ConversationSource } from '@shared/onboarding'
-import { parseApexChatMarkdown } from '@shared/exportFormat'
+import { parseAtelierChatMarkdown } from '@shared/exportFormat'
 
 export interface ParsedConversation {
   source: ConversationSource
@@ -151,12 +151,12 @@ export function parseClaudeConversation(raw: unknown): ParsedConversation | null
   return { source: 'claude', title: str(raw.name).trim() || UNTITLED, createdAt: toMillis(raw.created_at), messages }
 }
 
-// ── Apex ──
+// ── Atelier ──
 
-export function parseApexExport(text: string): ParsedConversation | null {
-  const parsed = parseApexChatMarkdown(text)
+export function parseAtelierExport(text: string): ParsedConversation | null {
+  const parsed = parseAtelierChatMarkdown(text)
   if (!parsed) return null
-  return { source: 'apex', title: parsed.title.trim() || UNTITLED, createdAt: parsed.createdAt, messages: parsed.messages.filter((m) => m.text.trim()) }
+  return { source: 'atelier', title: parsed.title.trim() || UNTITLED, createdAt: parsed.createdAt, messages: parsed.messages.filter((m) => m.text.trim()) }
 }
 
 // ── Detection ──

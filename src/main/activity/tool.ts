@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // search_activity: lets a companion search your
-// own activity memory, the pages and hourly notes Apex kept on this device.
+// own activity memory, the pages and hourly notes Atelier kept on this device.
 // Offered only while activity memory is on and never in a private chat; the
 // chat's add-context switch (CH-21) turns it off for that chat, checked on
 // every call so the switch works before and after the first message.

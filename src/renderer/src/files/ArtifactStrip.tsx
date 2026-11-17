@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,10 +14,10 @@ import { IconButton, toast } from '../ui'
 import { openViewer } from './open'
 import './files.css'
 
-// The artifact tab's header strip: while an apex-artifact:// tab is
+// The artifact tab's header strip: while an atelier-artifact:// tab is
 // active the toolbar shows that it is a sandboxed artifact, its file name,
 // Open file (the viewer) and Show in Finder. The artifact itself has no
-// preload and can't reach Apex, so the strip lives in the chrome.
+// preload and can't reach Atelier, so the strip lives in the chrome.
 
 const fail = (err: unknown): void => void toast.show({ tone: 'error', message: errorText(err) })
 

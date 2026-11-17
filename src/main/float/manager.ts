@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -15,23 +15,23 @@ import { clampSize, clampToWorkArea, pickDisplay, placeFloat, rememberPosition, 
 // The four always-on-top floats. Each kind has one window, made on
 // first open and hidden (never destroyed) on close, so reopening is instant
 // and Electron never sees "the last window closed". Placement follows the
-// cursor's display or Apex's, and is redone whenever the displays change.
+// cursor's display or Atelier's, and is redone whenever the displays change.
 
 export interface FloatManagerDeps {
   /** Path of the built float preload (out/preload/float.js). */
   preload: string
-  /** The float page's address for a kind (app://apex/float.html?kind=…, or the dev server). */
+  /** The float page's address for a kind (app://atelier/float.html?kind=…, or the dev server). */
   url(kind: FloatKind): string
   theme(): ThemeState
   companion(): Companion | null
   reduceMotion(): boolean
   /** The app language main speaks now. */
   language(): FloatLanguage
-  /** The focused (or last) Apex browser window, for HUD placement. */
-  apexWindow(): BrowserWindow | null
+  /** The focused (or last) Atelier browser window, for HUD placement. */
+  atelierWindow(): BrowserWindow | null
   /** Runs a feature service method through its SERVICE_SCHEMAS tuple. */
   callService(service: string, method: string, args: unknown[]): Promise<unknown>
-  /** APEX_SMOKE: the meeting card shows after 300 ms instead of 3 s. */
+  /** ATELIER_SMOKE: the meeting card shows after 300 ms instead of 3 s. */
   smoke: boolean
   /** The macOS prevent-activation and canHide calls; null until the addon ships. */
   shim?: FloatNativeShim | null
@@ -67,7 +67,7 @@ export class FloatManager extends EventEmitter<{ closed: [kind: FloatKind]; acti
   #started = false
   #disposed = false
   #destroying = false
-  /** Apex's own screen captures under way with the floats hidden for them (no content protection). */
+  /** Atelier's own screen captures under way with the floats hidden for them (no content protection). */
   #capturing = 0
   readonly #hiddenForCapture = new Set<FloatKind>()
 
@@ -164,7 +164,7 @@ export class FloatManager extends EventEmitter<{ closed: [kind: FloatKind]; acti
   }
 
   /**
-   * Runs one of Apex's own screen captures with every float out of it. Content
+   * Runs one of Atelier's own screen captures with every float out of it. Content
    * protection does that on macOS and Windows; without it (Linux) the shown
    * floats hide for the capture and come back after it, and one about to show
    * waits for it. Other apps' screenshots still see them there.
@@ -263,9 +263,9 @@ export class FloatManager extends EventEmitter<{ closed: [kind: FloatKind]; acti
       },
     })
     window.setAlwaysOnTop(true, 'floating', spec.level)
-    // Without skipTransformProcessType this hides Apex's Dock icon for good.
+    // Without skipTransformProcessType this hides Atelier's Dock icon for good.
     window.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true, skipTransformProcessType: true })
-    // Floats never appear in screenshots or screen shares, their own included (Linux: keepOutOf, Apex's own only).
+    // Floats never appear in screenshots or screen shares, their own included (Linux: keepOutOf, Atelier's own only).
     window.setContentProtection(true)
     const shim = this.#deps.shim
     if (shim) {
@@ -324,10 +324,10 @@ export class FloatManager extends EventEmitter<{ closed: [kind: FloatKind]; acti
   #display(kind: FloatKind, slot: Slot): DisplayLike {
     const spec = FLOAT_SPECS[kind]
     const which = slot.placement.display ?? spec.placement.display
-    const apex = this.#deps.apexWindow()
+    const atelier = this.#deps.atelierWindow()
     const preferred =
-      which === 'apex' && apex && !apex.isDestroyed()
-        ? screen.getDisplayMatching(apex.getBounds())
+      which === 'atelier' && atelier && !atelier.isDestroyed()
+        ? screen.getDisplayMatching(atelier.getBounds())
         : screen.getDisplayNearestPoint(screen.getCursorScreenPoint())
     const remembered = slot.placement.remembered ?? this.#remembered.get(kind) ?? null
     return pickDisplay(screen.getAllDisplays(), preferred, remembered)

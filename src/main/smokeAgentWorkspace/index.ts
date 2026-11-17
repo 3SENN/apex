@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -15,9 +15,9 @@ import * as workspace from './workspace'
 
 // The agent and workspace smoke group's checks and screenshot specs: the
 // workspace, the agent tools, memory, skills and routines, apps, chat tools and
-// setup (APEX_SMOKE_ONLY=AGENT-WORKSPACE runs only these). No
+// setup (ATELIER_SMOKE_ONLY=AGENT-WORKSPACE runs only these). No
 // request leaves the machine: scripted model turns go through the offline
-// client's registerScenario, the calendar uses a fake helper, and apex-app
+// client's registerScenario, the calendar uses a fake helper, and atelier-app
 // partitions are checked to make no network request.
 
 // Run order: workspace (db, versions, trash) and the agent core first,

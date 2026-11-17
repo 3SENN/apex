@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Getting packs from elsewhere (docs/packs.md › Sharing): an .apexpack from a
+// Getting packs from elsewhere (docs/packs.md › Sharing): an .atelierpack from a
 // link, a community index (an https JSON file listing packs with their
 // SHA-256), and update checks against a pack's updateUrl. Downloads are https
 // (http only on this computer), follow at most five redirects, and stop at
@@ -18,7 +18,7 @@ export class PackDownloadError extends Error {}
 const DOWNLOAD_MAX = APP_PACK_LIMITS.packBytes + 1024 * 1024
 const TIMEOUT_MS = 30_000
 
-/** Whether Apex fetches this address for a pack or an index. */
+/** Whether Atelier fetches this address for a pack or an index. */
 export function downloadAllowed(url: string): boolean {
   try {
     const u = new URL(url)
@@ -91,7 +91,7 @@ const indexSchema = z.object({
   format: z.literal(PACK_INDEX_FORMAT),
   name: z.string().max(80).optional(),
   packs: z.array(z.unknown()).max(2_000),
-  /** Ids the index no longer offers: Apex hides them, offers no updates, and shows a notice on installed copies. */
+  /** Ids the index no longer offers: Atelier hides them, offers no updates, and shows a notice on installed copies. */
   withdrawn: z.array(z.unknown()).max(2_000).optional(),
 })
 

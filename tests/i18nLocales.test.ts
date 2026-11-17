@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -26,7 +26,7 @@ describe('app languages', () => {
     expect(primarySubtag('*')).toBe('')
   })
 
-  it('negotiates the first preferred language Apex has', () => {
+  it('negotiates the first preferred language Atelier has', () => {
     expect(negotiate(['nl-NL', 'en-US'])).toBe('nl')
     expect(negotiate(['de-DE', 'nl-BE', 'en'])).toBe('nl')
     expect(negotiate(['fr-FR', 'en-GB', 'nl'])).toBe('en')

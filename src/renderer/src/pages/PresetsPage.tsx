@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The preset companion gallery (apex://presets) and a preset's
-// profile (apex://presets/<id>). The gallery is a three-column grid of cards,
+// The preset companion gallery (atelier://presets) and a preset's
+// profile (atelier://presets/<id>). The gallery is a three-column grid of cards,
 // each washed in the preset's own colour with its figure standing in it, the
 // name, a description, an add pill and a profile link. The profile has a
 // sticky card on the left (figure, add pill, the apps it can work in) and
@@ -17,7 +17,7 @@ import type { CompanionPreset } from '@shared/companion'
 import type { MessageKey } from '@shared/i18n/en'
 import type { PresetDetail } from '@shared/onboarding'
 import { companionUrl, presetUrl } from '@shared/url'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { scheduleText } from '../chat/cards/AgentToolCards'
 import { Companion as CompanionFigure } from '../companion'
 import { PresetReview } from '../companion-card/PresetReview'
@@ -57,7 +57,7 @@ export default function PresetsPage({ tabId, presetId }: PresetsPageProps): Reac
     const timer = setTimeout(() => setWaited(true), EMPTY_GRACE_MS)
     return () => clearTimeout(timer)
   }, [])
-  const go = (id: string | null): void => void apex.nav.go(tabId, presetUrl(id))
+  const go = (id: string | null): void => void atelier.nav.go(tabId, presetUrl(id))
 
   if (presets.length === 0) {
     return (
@@ -243,7 +243,7 @@ function PresetProfile({ preset, onBack }: { preset: CompanionPreset; onBack(): 
             </li>
             {connectors !== null && apps.length === 0 && (
               <li>
-                <button type="button" className="ps-chip ps-chip--action" onClick={() => void call('pages', 'open', 'apex://connectors')}>
+                <button type="button" className="ps-chip ps-chip--action" onClick={() => void call('pages', 'open', 'atelier://connectors')}>
                   <Plug aria-hidden />
                   {td('galleries.presets.connect')}
                 </button>

@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Keeps the search index in step with Apex's stores. A background build
+// Keeps the search index in step with Atelier's stores. A background build
 // walks every source and indexes what changed since last time (stamps make
 // it incremental), reporting progress as IndexState; after that, store
 // events touch single items or whole sources, debounced. Private chats and
@@ -206,7 +206,7 @@ export function chatSource(chats: { list(): ChatSummary[]; summary(id: string): 
       const id = key.slice('chat:'.length)
       const c = chats.summary(id)
       if (!c || !indexable(c)) return null
-      return { key, source: 'chats', title: c.title || 'Untitled chat', body: chats.searchText(id), url: `apex://chat/${id}`, ref: null, at: c.lastActiveAt, profile: null, stamp: `${c.updatedAt}:${c.title}` }
+      return { key, source: 'chats', title: c.title || 'Untitled chat', body: chats.searchText(id), url: `atelier://chat/${id}`, ref: null, at: c.lastActiveAt, profile: null, stamp: `${c.updatedAt}:${c.title}` }
     },
   }
 }

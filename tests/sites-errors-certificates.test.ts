@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -27,16 +27,16 @@ describe('certificate details', () => {
   it('describes the fixture certificate with validity in milliseconds', () => {
     const validStart = Date.parse(x509.validFrom) / 1000
     const validExpiry = Date.parse(x509.validTo) / 1000
-    const d = certificateDetails({ subjectName: 'Apex smoke fixture', issuerName: 'Apex smoke fixture', validStart, validExpiry, fingerprint: electronFingerprint }, 'TLS 1.3')
+    const d = certificateDetails({ subjectName: 'Atelier smoke fixture', issuerName: 'Atelier smoke fixture', validStart, validExpiry, fingerprint: electronFingerprint }, 'TLS 1.3')
     expect(d).toEqual({
-      subject: 'Apex smoke fixture',
-      issuer: 'Apex smoke fixture',
+      subject: 'Atelier smoke fixture',
+      issuer: 'Atelier smoke fixture',
       validFrom: validStart * 1000,
       validTo: validExpiry * 1000,
       protocol: 'TLS 1.3',
       sha256: x509.fingerprint256,
     })
-    expect(x509.subject).toContain('Apex smoke fixture')
+    expect(x509.subject).toContain('Atelier smoke fixture')
   })
 
   it('falls back to the common names', () => {

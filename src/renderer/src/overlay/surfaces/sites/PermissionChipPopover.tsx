@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,7 +14,7 @@ import { useInputGuard } from './useInputGuard'
 
 // The popover under an address bar permission chip. A quiet notification
 // request (held back so it wouldn't interrupt) is answered here with Allow or
-// Don't allow; a permission macOS has turned off for Apex says so and offers
+// Don't allow; a permission macOS has turned off for Atelier says so and offers
 // the System Settings pane and a reload. It resolves with what the person
 // chose; the chip in the chrome acts on it. Like the prompt, nothing is
 // focused to start with and the answers wait out the input delay.

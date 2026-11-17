@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import type { ChatSummary } from '@shared/chats'
 import { edgeCues, type EdgeCue } from './logic/cues'
 import { closeChat, initialOpenChats, openChat, parseOpenChats, reopenChats, reorderChat, syncOpenChats, type OpenChatsState } from './logic/openChats'
 import { stableOrder } from './logic/order'
-import { apex, call } from '../../api'
+import { atelier, call } from '../../api'
 
 /** After this long without pointer movement over the sidebar, held rows may reshuffle. */
 export const STILL_MS = 10_000
@@ -56,7 +56,7 @@ export function useStableIds(live: readonly string[], held: boolean): string[] {
   return next
 }
 
-const OPEN_CHATS_KEY = 'apex.sidebar.openChats'
+const OPEN_CHATS_KEY = 'atelier.sidebar.openChats'
 
 function loadOpenChats(): OpenChatsState {
   try {
@@ -145,7 +145,7 @@ export function usePointerInside(ref: RefObject<HTMLElement | null>): boolean {
       report(null)
     }
     // Main saw the pointer leave: the DOM missed it, so drop the state without telling main back.
-    const off = apex.onAppEvent((event) => {
+    const off = atelier.onAppEvent((event) => {
       if (event.type !== 'sidebar-pointer' || event.inside) return
       armed = null
       setInside(false)

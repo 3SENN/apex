@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // The routine editor sheet (SK-07): create or edit a routine over
-// the page that opened it (apex://routines/new, …/<id>/edit, proposal
+// the page that opened it (atelier://routines/new, …/<id>/edit, proposal
 // cards, suggestions and guides). It reads as one sentence: when, this
 // companion, does that. Each missing field says what it needs, and a save
 // over a newer version offers to load it instead (changed-elsewhere).

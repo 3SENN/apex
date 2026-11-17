@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import { acceptLanguageHeader, expandLanguageList } from '@shared/languages'
 import { isSignInHost, isSignInUrl } from '@shared/signInHosts'
 import { brandList, browserIdentity, chromeMajor, greaseBrand, highEntropyHint, HIGH_ENTROPY_HINTS, lowEntropyHints, reducedUserAgent, userAgentMetadata } from '../src/main/userAgent'
 
-// Sign-in compatibility: Apex reports exactly what stock Chromium of its
+// Sign-in compatibility: Atelier reports exactly what stock Chromium of its
 // version reports (the reduced UA, Chromium's brand list and GREASE, the
 // client hint header values, Chromium's Accept-Language expansion).
 
@@ -19,7 +19,7 @@ describe('the reduced User-Agent', () => {
     expect(reducedUserAgent('156.0.8078.49', 'darwin')).toBe('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36')
     expect(reducedUserAgent('156.0.8078.49', 'win32')).toBe('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36')
     expect(reducedUserAgent('156.0.8078.49', 'linux')).toContain('(X11; Linux x86_64)')
-    expect(mac.userAgent).not.toMatch(/electron|apex/i)
+    expect(mac.userAgent).not.toMatch(/electron|atelier/i)
     expect(chromeMajor('156.0.8078.49')).toBe(156)
     expect(chromeMajor('nonsense')).toBe(0)
   })
@@ -38,7 +38,7 @@ describe("Chromium's brands", () => {
     expect(brandList('156.0.8078.49')).toEqual([{ brand: 'Not:A-Brand', version: '8' }, { brand: 'Chromium', version: '156' }])
     expect(brandList('157.0.1.2')[0]).toEqual({ brand: 'Chromium', version: '157' })
     expect(brandList('156.0.8078.49', true)).toEqual([{ brand: 'Not:A-Brand', version: '8.0.0.0' }, { brand: 'Chromium', version: '156.0.8078.49' }])
-    expect(JSON.stringify(brandList('156.0.8078.49'))).not.toMatch(/electron|apex|google/i)
+    expect(JSON.stringify(brandList('156.0.8078.49'))).not.toMatch(/electron|atelier|google/i)
   })
 
   it('reports macOS on Apple silicon like Chromium does', () => {

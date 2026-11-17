@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -135,7 +135,7 @@ describe('session.json', () => {
     expect(writes).toEqual([1, 2])
   })
 
-  it('keeps the last window’s tabs after its X quits Apex on Windows and Linux, and not on macOS', () => {
+  it('keeps the last window’s tabs after its X quits Atelier on Windows and Linux, and not on macOS', () => {
     const open = { version: 1 as const, windows: [savedWindow()] }
     const gone = { version: 1 as const, windows: [] }
     let now: typeof open | typeof gone = open
@@ -144,11 +144,11 @@ describe('session.json', () => {
     expect(windows()).toBe(open)
     now = gone
     expect(windows()).toBe(open)
-    // A window opened later (background mode's Open Apex) is the session from then on.
+    // A window opened later (background mode's Open Atelier) is the session from then on.
     const later = { version: 1 as const, windows: [savedWindow({ name: 'Later' })] }
     now = later
     expect(windows()).toBe(later)
-    // macOS: closing the last window leaves Apex in the Dock, and quitting after that starts afresh.
+    // macOS: closing the last window leaves Atelier in the Dock, and quitting after that starts afresh.
     now = open
     const mac = keepingLastWindows(() => now, false)
     expect(mac()).toBe(open)

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -13,8 +13,8 @@ import type { QueryStates } from '@shared/permissions'
 // sites then never ask at all. Main sends this frame's states (QUERY_NAMES in
 // shared/permissions.ts: 'prompt' for never asked) at document start and again
 // when an answer changes; in the page's world, query keeps returning
-// Chromium's own PermissionStatus, whose state reads Apex's answer and whose
-// change event fires when it moves. Names Apex doesn't decide stay Chromium's.
+// Chromium's own PermissionStatus, whose state reads Atelier's answer and whose
+// change event fires when it moves. Names Atelier doesn't decide stay Chromium's.
 // Every frame gets it, except on the account sign-in pages (signInHosts.ts),
 // whose world stays Chromium's.
 
@@ -40,7 +40,7 @@ export function override(bridge: Bridge): void {
   const has = (o: object, k: string): boolean => Object.prototype.hasOwnProperty.call(o, k)
 
   let current: QueryStates = bridge.states()
-  /** Statuses query handed out for names Apex decides, and the name each is for. */
+  /** Statuses query handed out for names Atelier decides, and the name each is for. */
   const named = new WeakMap<object, string>()
   const handedOut = new Set<{ deref(): object | undefined }>()
 

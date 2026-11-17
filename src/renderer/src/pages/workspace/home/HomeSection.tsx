@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The Workspace hub's Home: the newest files Apex knows, projects
+// The Workspace hub's Home: the newest files Atelier knows, projects
 // and apps, each with a way to see them all under its tab. With nothing in
 // any of them, one empty state offers the three ways to start. Search
 // everything is the hub's own field, above the tabs.
@@ -12,7 +12,7 @@ import { AppWindow, Brain, File, FolderPlus, LayoutGrid, Plus } from 'lucide-rea
 import type { AppSummary } from '@shared/apps'
 import { appRunUrl } from '@shared/url'
 import type { SearchHit, WorkspaceSection } from '@shared/workspace'
-import { apex, call } from '../../../api'
+import { atelier, call } from '../../../api'
 import { NewAppSheet } from '../../../apps/NewAppSheet'
 import { useT } from '../../../i18n/useT'
 import { useEvent, useResource, type Resource } from '../../../settings/data'
@@ -134,7 +134,7 @@ export default function HomeSection(): ReactElement {
               }
               render={(items: AppSummary[]) =>
                 newest(items).map((a) => (
-                  <button key={a.id} type="button" className="ws-tile" onClick={() => apex.tabs.create(appRunUrl(a.id)).catch(fail)}>
+                  <button key={a.id} type="button" className="ws-tile" onClick={() => atelier.tabs.create(appRunUrl(a.id)).catch(fail)}>
                     <span className="ws-tile__title">
                       <AppWindow aria-hidden />
                       {a.name}

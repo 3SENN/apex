@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -57,10 +57,10 @@ describe('settings index (ST-05)', () => {
   })
 
   it('links a row with ?highlight and a page without', () => {
-    expect(settingsRowUrl({ page: 'privacy', anchor: 'clear-cache' })).toBe('apex://settings/privacy?highlight=clear-cache')
-    expect(settingsRowUrl({ page: 'storage', anchor: '' })).toBe('apex://settings/storage')
-    expect(settingsQuery('apex://settings/import?browser=chrome&highlight=import-browser')).toMatchObject({ browser: 'chrome', highlight: 'import-browser', clear: false })
-    expect(settingsQuery('apex://settings/privacy?clear=1&highlight=<x>')).toMatchObject({ clear: true, highlight: null })
+    expect(settingsRowUrl({ page: 'privacy', anchor: 'clear-cache' })).toBe('atelier://settings/privacy?highlight=clear-cache')
+    expect(settingsRowUrl({ page: 'storage', anchor: '' })).toBe('atelier://settings/storage')
+    expect(settingsQuery('atelier://settings/import?browser=chrome&highlight=import-browser')).toMatchObject({ browser: 'chrome', highlight: 'import-browser', clear: false })
+    expect(settingsQuery('atelier://settings/privacy?clear=1&highlight=<x>')).toMatchObject({ clear: true, highlight: null })
   })
 })
 
@@ -128,9 +128,9 @@ describe('reset dialog (ST-55)', () => {
     expect(resetPlan(steps, true).map((s) => s.id)).toEqual(['stop', 'settings', 'api-key'])
   })
   it('needs the phrase typed, ignoring case and outer spaces', () => {
-    expect(resetPhraseMatches('  Reset   apex ', 'reset Apex')).toBe(true)
-    expect(resetPhraseMatches('reset', 'reset Apex')).toBe(false)
-    expect(resetPhraseMatches('', 'reset Apex')).toBe(false)
+    expect(resetPhraseMatches('  Reset   atelier ', 'reset Atelier')).toBe(true)
+    expect(resetPhraseMatches('reset', 'reset Atelier')).toBe(false)
+    expect(resetPhraseMatches('', 'reset Atelier')).toBe(false)
   })
 })
 

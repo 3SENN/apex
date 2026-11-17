@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex-kit/world.js (docs/apps.md › Worlds): a world file as a three.js
+// atelier-kit/world.js (docs/apps.md › Worlds): a world file as a three.js
 // scene. The ground is one mesh of coloured tiles on an earth base, so the
-// world reads as a diorama; props come from apex-kit/props.js; places get an
+// world reads as a diorama; props come from atelier-kit/props.js; places get an
 // outline and a floating name; the sky sets the background, the fog and the
 // light. Scene units are tiles: x runs 0..width, z runs 0..depth, y is up.
 // The app adds `root` and `lights` to its scene, sets `scene.background` and

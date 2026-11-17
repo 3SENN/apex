@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -49,7 +49,7 @@
 }
 
 /* A narrow pill keeps only the first chip (the most pressing); site info still lists the rest. */
-@container apex-address (max-width: 300px) {
+@container atelier-address (max-width: 300px) {
   .pill__perm + .pill__perm {
     display: none;
   }

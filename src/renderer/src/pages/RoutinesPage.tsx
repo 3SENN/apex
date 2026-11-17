@@ -1,21 +1,21 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex://routines (SK-05): routines and past runs. Filters by status,
+// atelier://routines (SK-05): routines and past runs. Filters by status,
 // companion and schedule type, search, and sort by name or next run. Rows
 // run now, pause or resume, edit, delete and open the last result; a
 // routine whose companion was deleted asks you to pick one. Finished
 // one-off tasks sit under Past, and suggested routines follow the list.
-// apex://routines/<id> is the detail page; /new and /<id>/edit open the
+// atelier://routines/<id> is the detail page; /new and /<id>/edit open the
 // editor sheet over the page.
 import { useMemo, useState, type MouseEvent, type ReactElement } from 'react'
 import { CalendarClock, MoreHorizontal, Play, Plus } from 'lucide-react'
 import { SHARED_OWNER } from '@shared/chats'
 import { ROUTINE_SCHEDULE_KINDS, filterRoutines, type Routine, type RoutineDraft, type RoutineFilter, type RoutineScheduleKind } from '@shared/routines'
 import { chatUrl, internalQuery, parseInternalUrl, routineUrl } from '@shared/url'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { useRunningRoutines } from '../components/routineRunning'
 import './routinesRunning.css'
 import { useT } from '../i18n/useT'
@@ -36,7 +36,7 @@ type Sort = 'next-run' | 'name'
 
 export interface RoutinesPageProps {
   tabId: string
-  /** apex://routines/<id> is the detail page; 'new' opens the editor. */
+  /** atelier://routines/<id> is the detail page; 'new' opens the editor. */
   itemId?: string | null
   /** The whole address, for /<id>/edit and ?view=runs. */
   url?: string
@@ -49,7 +49,7 @@ export function RoutinesPage({ tabId, itemId = null, url = '' }: RoutinesPagePro
     return (
       <>
         <RoutineDetail key={itemId} tabId={tabId} routineId={itemId} />
-        {editing && <RoutineEditorSheet routineId={itemId} onClose={() => void apex.nav.go(tabId, routineUrl(itemId))} />}
+        {editing && <RoutineEditorSheet routineId={itemId} onClose={() => void atelier.nav.go(tabId, routineUrl(itemId))} />}
       </>
     )
   }
@@ -67,13 +67,13 @@ function RoutinesList({ tabId, creating, startView }: { tabId: string; creating:
   const running = useRunningRoutines()
   const companions = useCompanions()
   const runs = useRuns(null)
-  const [storedView, setView] = useLocalPreference<View>('apex.routines.view', 'routines', ['routines', 'runs'])
+  const [storedView, setView] = useLocalPreference<View>('atelier.routines.view', 'routines', ['routines', 'runs'])
   const view = startView ?? storedView
   const [query, setQuery] = useState('')
   const [status, setStatus] = useState<Status>('all')
   const [companionId, setCompanionId] = useState('')
   const [kind, setKind] = useState<RoutineScheduleKind | ''>('')
-  const [sort, setSort] = useLocalPreference<Sort>('apex.routines.sortD', 'next-run', ['next-run', 'name'])
+  const [sort, setSort] = useLocalPreference<Sort>('atelier.routines.sortD', 'next-run', ['next-run', 'name'])
   const [sheet, setSheet] = useState<{ routineId?: string; draft?: RoutineDraft } | null>(null)
   const names = new Map((companions.items ?? []).map((c) => [c.id, c.name]))
   const all = routines.data ?? []
@@ -93,11 +93,11 @@ function RoutinesList({ tabId, creating, startView }: { tabId: string; creating:
   const fail = (err: unknown): void => void toast.show({ tone: 'error', message: errorText(err) })
   const pickView = (next: View): void => {
     setView(next)
-    if (startView) void apex.nav.go(tabId, 'apex://routines')
+    if (startView) void atelier.nav.go(tabId, 'atelier://routines')
   }
   const newRoutine = (): void => setSheet({})
   const edit = (r: Routine): void => setSheet({ routineId: r.id })
-  const details = (r: Routine): void => void apex.nav.go(tabId, routineUrl(r.id))
+  const details = (r: Routine): void => void atelier.nav.go(tabId, routineUrl(r.id))
   const runNow = (r: Routine): void => {
     call('routines', 'runNow', r.id).then(() => toast.show({ message: t('skills.routines.running', { name: r.name }), action: { label: t('skills.routines.viewRuns'), onAction: () => pickView('runs') } }), fail)
   }
@@ -149,7 +149,7 @@ function RoutinesList({ tabId, creating, startView }: { tabId: string; creating:
   }
   const closeSheet = (): void => {
     setSheet(null)
-    if (creating) void apex.nav.go(tabId, 'apex://routines')
+    if (creating) void atelier.nav.go(tabId, 'atelier://routines')
   }
   const row = (r: Routine): ReactElement => (
     <RoutineRow

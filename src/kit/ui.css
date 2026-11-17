@@ -1,21 +1,21 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-/* Apex UI for apps (apex-kit/ui.css, APP-UI): the browser's own tokens,
+/* Atelier UI for apps (atelier-kit/ui.css, APP-UI): the browser's own tokens,
    base type and a small set of components, so an app a companion builds
-   looks like the rest of Apex. Apex puts it first in every build_app app as
+   looks like the rest of Atelier. Atelier puts it first in every build_app app as
    it's served (with the owning companion's accent); pack apps link
-   /__apex/kit/1/apex-kit/ui.css. Everything sits in cascade layers, so the
+   /__atelier/kit/1/atelier-kit/ui.css. Everything sits in cascade layers, so the
    app's own CSS always wins without !important.
 
    Token values match src/renderer/src/styles.css (tests/appUi.test.ts keeps
    them in step); the font face is added by scripts/kit/build.mjs. */
 
-@layer apex.tokens, apex.base, apex.components;
+@layer atelier.tokens, atelier.base, atelier.components;
 
-@layer apex.tokens {
+@layer atelier.tokens {
   :root {
     color-scheme: light dark;
 
@@ -146,7 +146,7 @@
   }
 }
 
-@layer apex.base {
+@layer atelier.base {
   html {
     -webkit-text-size-adjust: 100%;
   }
@@ -250,7 +250,7 @@
   }
 }
 
-@layer apex.components {
+@layer atelier.components {
   /* ---- the page ---- */
 
   .ax-app {

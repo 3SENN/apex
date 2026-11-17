@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -56,7 +56,7 @@ export function blankLike(size: Size): NativeImage {
   return nativeImage.createFromBitmap(bitmap, { width, height })
 }
 
-/** Apex pages that can show a revealed password: never captured. */
+/** Atelier pages that can show a revealed password: never captured. */
 export function isSecretPage(internalUrl: string | null): boolean {
   if (!internalUrl) return false
   const route = parseInternalUrl(internalUrl)

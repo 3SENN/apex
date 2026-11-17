@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -42,7 +42,7 @@ const keychainCipher: VaultCipher = {
 }
 
 /**
- * APEX_SMOKE only, on a throwaway data folder: a reversible scramble so the
+ * ATELIER_SMOKE only, on a throwaway data folder: a reversible scramble so the
  * smoke run never asks the real keychain for access. Never used otherwise.
  */
 const smokeCipher: VaultCipher = {
@@ -158,7 +158,7 @@ export function setupPasswords(ctx: AppContext, deps: { broker: SpeechBroker }):
     build: () => [{ id: 'open-passwords', label: mainT('passwords.menu.entry'), commandId: 'open-passwords', icon: 'key-round' }],
   })
   const unregisterCommand = ctx.commands.register('open-passwords', (win) => {
-    win?.tabs.openInternal('apex://passwords', { newTab: true })
+    win?.tabs.openInternal('atelier://passwords', { newTab: true })
   })
   // ST-55: Reset wipes the vault and wallet, only with the secrets box ticked.
   const unregisterReset = registerResetStep({
@@ -197,7 +197,7 @@ export function setupPasswords(ctx: AppContext, deps: { broker: SpeechBroker }):
   }
 }
 
-/** Off macOS: an Apex confirm dialog, or the native one until the overlay dialogs land. */
+/** Off macOS: an Atelier confirm dialog, or the native one until the overlay dialogs land. */
 async function confirmIdentity(ctx: AppContext, reason: string): Promise<boolean> {
   const win = ctx.windows.focused()
   if (!win) throw new Error('No window to ask in')

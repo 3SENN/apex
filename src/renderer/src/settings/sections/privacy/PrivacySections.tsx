@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,7 +14,7 @@ import type { SettingsPageProps } from '../../pageTypes'
 // Settings › Privacy's tracking and clear-on-exit sections,
 // rendered by the Privacy page. Third-party cookie blocking and Global
 // Privacy Control apply to the next request (main's webRequest mux reads
-// them live); clear on exit runs when Apex quits.
+// them live); clear on exit runs when Atelier quits.
 
 type ClearKey = 'cookies' | 'cache' | 'history'
 

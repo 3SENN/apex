@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -240,7 +240,7 @@ export const memory = {
   'memory.activity.statusLabel': 'Activity memory: {state}',
   'memory.activity.chatSwitch': 'Activity memory',
   'memory.activity.chatSwitchHint': 'Let this chat search what you browsed',
-  'memory.activity.thumbnailsOff': 'Thumbnails are off. Turn on “Activity memory thumbnails” in apex://flags to keep them.',
+  'memory.activity.thumbnailsOff': 'Thumbnails are off. Turn on “Activity memory thumbnails” in atelier://flags to keep them.',
 
   'memory.timeline.title': 'Timeline',
   'memory.timeline.description': 'Your browsing by day, from this profile. Excluded sites never show.',

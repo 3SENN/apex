@@ -1,14 +1,14 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { useEffect, useRef, useState, useSyncExternalStore, type RefObject } from 'react'
-import { apex } from '../api'
+import { atelier } from '../api'
 import { useMotion } from './motion'
 
-// The floats' page has no window.apex (it shares this module with the chrome), so it reads the user agent.
-export const isMac = (apex.platform ?? (/Mac/.test(navigator.userAgent) ? 'darwin' : '')) === 'darwin'
+// The floats' page has no window.atelier (it shares this module with the chrome), so it reads the user agent.
+export const isMac = (atelier.platform ?? (/Mac/.test(navigator.userAgent) ? 'darwin' : '')) === 'darwin'
 
 /** A ref that always holds the latest value, for callbacks used in effects. */
 export function useLatest<T>(value: T): RefObject<T> {
@@ -29,7 +29,7 @@ export function useMediaQuery(query: string): boolean {
   return matches
 }
 
-/** True when the system's or Apex's own Reduce Motion is on (see ui/motion.ts). */
+/** True when the system's or Atelier's own Reduce Motion is on (see ui/motion.ts). */
 export function useReducedMotion(): boolean {
   return useMotion().reduced
 }

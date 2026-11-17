@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -105,7 +105,7 @@ describe('the mic-blocked fix', () => {
     expect(blockedKind(null, 'speech')).toBe('speech')
   })
 
-  it('asks when macOS never has (Apex is not in the pane yet), opens the pane after a refusal, and retries once both are on', () => {
+  it('asks when macOS never has (Atelier is not in the pane yet), opens the pane after a refusal, and retries once both are on', () => {
     expect(micFix({ microphone: 'not-determined', speech: 'not-determined' }, 'microphone')).toEqual({ kind: 'microphone', action: 'ask' })
     expect(micFix({ microphone: 'granted', speech: 'not-determined' }, 'microphone')).toEqual({ kind: 'speech', action: 'ask' })
     expect(micFix({ microphone: 'denied', speech: 'granted' }, 'speech')).toEqual({ kind: 'microphone', action: 'open' })

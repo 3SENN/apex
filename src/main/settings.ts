@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -47,7 +47,7 @@ function leavesOf(prefix: string): string[] {
 const shapeOf = (prefix: string): Record<string, z.ZodType> => Object.fromEntries(leavesOf(prefix).map((k) => [k.slice(prefix.length), DEFS[k]!.schema]))
 const defaultsOf = (prefix: string): Record<string, unknown> => Object.fromEntries(leavesOf(prefix).map((k) => [k.slice(prefix.length), structuredClone(DEFS[k]!.default)]))
 
-/** The engines Apex ships (the whole Settings › Search catalogue); settings.searchEngine may also name a custom engine. */
+/** The engines Atelier ships (the whole Settings › Search catalogue); settings.searchEngine may also name a custom engine. */
 export const BUILT_IN_ENGINES: readonly string[] = BUILT_IN_ENGINE_IDS
 
 const DEFAULT_SIDEBAR = { ...defaultsOf(SIDEBAR), destinations: defaultsOf(DESTINATION) } as unknown as SidebarOptions
@@ -337,7 +337,7 @@ export class SettingsStore extends EventEmitter<{ changed: [next: Settings, prev
 
   #read(path: string): Settings {
     try {
-      // A file from a newer Apex is copied aside before the field-by-field fallback reads it.
+      // A file from a newer Atelier is copied aside before the field-by-field fallback reads it.
       return readVersioned(path, VERSIONED_FILES.settings, migrateSettings).value ?? structuredClone(DEFAULT_SETTINGS)
     } catch {
       return structuredClone(DEFAULT_SETTINGS)
@@ -346,7 +346,7 @@ export class SettingsStore extends EventEmitter<{ changed: [next: Settings, prev
 
   /**
    * settings.json: the app keys, plus a copy of the default profile's keys
-   * so an older Apex that predates profiles still finds its theme and search
+   * so an older Atelier that predates profiles still finds its theme and search
    * engine. This build reads those from the profile file.
    */
   #writeApp(): void {
@@ -355,7 +355,7 @@ export class SettingsStore extends EventEmitter<{ changed: [next: Settings, prev
 
   #write(path: string, values: Partial<Settings>): void {
     mkdirSync(dirname(path), { recursive: true })
-    // The format marker lets an older Apex spot a newer file and keep a copy.
+    // The format marker lets an older Atelier spot a newer file and keep a copy.
     writeAtomic(path, JSON.stringify({ ...values, formatVersion: VERSIONED_FILES.settings }, null, 2))
   }
 
@@ -384,7 +384,7 @@ export class SettingsStore extends EventEmitter<{ changed: [next: Settings, prev
     if (existed) {
       try {
         this.#write(profilePath, pick(legacy, PROFILE_KEYS))
-        // A newer Apex's file stays as it is (its copy is aside); ours is rewritten in this build's format.
+        // A newer Atelier's file stays as it is (its copy is aside); ours is rewritten in this build's format.
         if (!newer) this.#writeApp()
       } catch {
         // A read-only data folder: the moved values still apply in memory.

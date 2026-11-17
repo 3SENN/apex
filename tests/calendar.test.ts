@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -20,7 +20,7 @@ import { clientTool, resetClientToolsForTests, type ClientToolContext, type Tool
 // main side, run against the fake helper in tests/fixtures/calendar.
 
 const FAKE = resolve('tests/fixtures/calendar/fake-helper.mjs')
-const ENV_KEYS = ['APEX_FAKE_CALENDAR_EVENTS', 'APEX_FAKE_CALENDAR_REMINDERS', 'APEX_FAKE_CALENDAR_GRANT', 'APEX_FAKE_CALENDAR_FAIL'] as const
+const ENV_KEYS = ['ATELIER_FAKE_CALENDAR_EVENTS', 'ATELIER_FAKE_CALENDAR_REMINDERS', 'ATELIER_FAKE_CALENDAR_GRANT', 'ATELIER_FAKE_CALENDAR_FAIL'] as const
 
 let dir: string
 let sources: Array<CalendarSource | null>
@@ -42,7 +42,7 @@ function make(over: Partial<CalendarDeps> = {}): CalendarService {
 }
 
 beforeEach(() => {
-  dir = mkdtempSync(join(tmpdir(), 'apex-calendar-'))
+  dir = mkdtempSync(join(tmpdir(), 'atelier-calendar-'))
   sources = []
   broadcasts = []
   opened = []
@@ -68,17 +68,17 @@ describe('the helper protocol', () => {
   })
 
   it('finds the helper: an override, then the packaged or dev build, never off macOS', () => {
-    expect(calendarHelperPath({ packaged: false, resourcesPath: '/r', appPath: '/a', env: { APEX_CALENDAR_HELPER: FAKE } })).toBe(FAKE)
-    expect(calendarHelperPath({ packaged: false, resourcesPath: '/r', appPath: '/a', env: { APEX_CALENDAR_HELPER: '/missing/helper' } })).toBeNull()
+    expect(calendarHelperPath({ packaged: false, resourcesPath: '/r', appPath: '/a', env: { ATELIER_CALENDAR_HELPER: FAKE } })).toBe(FAKE)
+    expect(calendarHelperPath({ packaged: false, resourcesPath: '/r', appPath: '/a', env: { ATELIER_CALENDAR_HELPER: '/missing/helper' } })).toBeNull()
     expect(calendarHelperPath({ packaged: true, resourcesPath: '/r', appPath: '/a', platform: 'linux', env: {} })).toBeNull()
     expect(calendarHelperPath({ packaged: true, resourcesPath: '/nowhere', appPath: '/a', platform: 'darwin', env: {} })).toBeNull()
   })
 
   it('never points a packaged (fused) app at a script helper unless smoke lends it a Node', () => {
-    // Launching the fused binary on a script starts a whole second Apex instead of running it.
-    expect(calendarHelperPath({ packaged: true, resourcesPath: '/r', appPath: '/a', env: { APEX_CALENDAR_HELPER: FAKE } })).toBeNull()
-    expect(calendarHelperPath({ packaged: true, resourcesPath: '/r', appPath: '/a', env: { APEX_CALENDAR_HELPER: FAKE, APEX_SMOKE: '1' } })).toBeNull()
-    expect(calendarHelperPath({ packaged: true, resourcesPath: '/r', appPath: '/a', env: { APEX_CALENDAR_HELPER: FAKE, APEX_SMOKE: '1', APEX_SMOKE_NODE: '/usr/bin/node' } })).toBe(FAKE)
+    // Launching the fused binary on a script starts a whole second Atelier instead of running it.
+    expect(calendarHelperPath({ packaged: true, resourcesPath: '/r', appPath: '/a', env: { ATELIER_CALENDAR_HELPER: FAKE } })).toBeNull()
+    expect(calendarHelperPath({ packaged: true, resourcesPath: '/r', appPath: '/a', env: { ATELIER_CALENDAR_HELPER: FAKE, ATELIER_SMOKE: '1' } })).toBeNull()
+    expect(calendarHelperPath({ packaged: true, resourcesPath: '/r', appPath: '/a', env: { ATELIER_CALENDAR_HELPER: FAKE, ATELIER_SMOKE: '1', ATELIER_SMOKE_NODE: '/usr/bin/node' } })).toBe(FAKE)
   })
 })
 
@@ -138,18 +138,18 @@ describe('CalendarService', () => {
   })
 
   it('switches a kind on when macOS grants the request, and not when it denies', async () => {
-    process.env.APEX_FAKE_CALENDAR_EVENTS = 'not-determined'
-    process.env.APEX_FAKE_CALENDAR_REMINDERS = 'not-determined'
+    process.env.ATELIER_FAKE_CALENDAR_EVENTS = 'not-determined'
+    process.env.ATELIER_FAKE_CALENDAR_REMINDERS = 'not-determined'
     const service = make()
     const denied = await service.requestAccess('reminders')
     expect(denied).toMatchObject({ reminders: 'denied', enabled: { reminders: false } })
-    process.env.APEX_FAKE_CALENDAR_GRANT = '1'
+    process.env.ATELIER_FAKE_CALENDAR_GRANT = '1'
     const granted = await service.requestAccess('events')
     expect(granted).toMatchObject({ events: 'granted', enabled: { events: true } })
   })
 
   it('keeps the last known permissions when the helper fails, and opens the right Privacy pane', async () => {
-    process.env.APEX_FAKE_CALENDAR_FAIL = '1'
+    process.env.ATELIER_FAKE_CALENDAR_FAIL = '1'
     const service = make()
     expect((await service.status()).events).toBe('not-determined')
     service.openPrivacySettings('reminders')
@@ -182,7 +182,7 @@ describe('the calendar tools', () => {
   const setup = { workspace: { calendar: true } } as unknown as ToolSetup
 
   beforeAll(() => {
-    dir = mkdtempSync(join(tmpdir(), 'apex-calendar-tools-'))
+    dir = mkdtempSync(join(tmpdir(), 'atelier-calendar-tools-'))
     sources = []
     broadcasts = []
     service = new CalendarService({ dataDir: dir, helper: () => FAKE, broadcast: () => undefined, openExternal: () => undefined, setSource: () => undefined })

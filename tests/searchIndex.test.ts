@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -47,7 +47,7 @@ function world(now = 100 * DAY) {
   const history: Array<{ url: string; title: string; lastVisit: number }> = []
   const bookmarks: Array<{ id: string; url: string; title: string; createdAt: number }> = []
   const index = new SearchIndex(openDb(':memory:'), () => now)
-  const base = realpathSync(mkdtempSync(join(tmpdir(), 'apex-search-')))
+  const base = realpathSync(mkdtempSync(join(tmpdir(), 'atelier-search-')))
   dirs.push(base)
   const folders = new FolderStore({ db: openDb(':memory:') })
   const indexer = new Indexer({
@@ -98,7 +98,7 @@ describe('search everything', () => {
     w.folders.grant({ path: join(w.base, 'Notes'), mode: 'read', scope: 'all-chats' })
     await w.indexer.build()
     expect(w.indexer.state()).toMatchObject({ building: false, done: 6, total: 6 })
-    expect(w.index.query('ryokan').hits[0]).toMatchObject({ source: 'chats', title: 'Planning the Kyoto trip', url: 'apex://chat/c1' })
+    expect(w.index.query('ryokan').hits[0]).toMatchObject({ source: 'chats', title: 'Planning the Kyoto trip', url: 'atelier://chat/c1' })
     expect(w.index.query('ryokan').hits[0]?.snippet).toContain(`${HIT_OPEN}ryokan`)
     expect(w.index.query('trains').hits[0]).toMatchObject({ source: 'memory', ref: { kind: 'memory', owner: 'pip', path: '/memories/travel.md' } })
     expect(w.index.query('sourdough').hits[0]).toMatchObject({ source: 'history', url: 'https://www.example.com/sourdough' })

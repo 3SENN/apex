@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,7 +14,7 @@ import { writeAtomic } from '../settings'
 import type { MeetingFileStore } from './store'
 
 // The after-meeting summary (ST-20, MV-12): one QuickModel call on the
-// person's own engine with an Apex-written prompt. Long transcripts are cut
+// person's own engine with an Atelier-written prompt. Long transcripts are cut
 // into chunks, summarised one by one and then merged. With no engine ready
 // the meeting waits in a persisted queue and is summarised once one is.
 
@@ -66,7 +66,7 @@ export function chunkLines(lines: readonly string[], max = CHUNK_CHARS): string[
   return chunks
 }
 
-// Apex's own prompt, in the companion's voice: warm, plain and short.
+// Atelier's own prompt, in the companion's voice: warm, plain and short.
 export const SUMMARY_SYSTEM = [
   `You are the person’s companion in the ${BRAND_NAME} browser, writing notes about a meeting or recording they just had.`,
   'Write the way a thoughtful friend would jot them down for them: warm, plain and brief, in the language the transcript is in (when it mixes two, the one most of it is in; quote the other language as it was said).',

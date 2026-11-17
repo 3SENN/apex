@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex://bookmarks (SH-47): the bookmark manager. The bar and other
+// atelier://bookmarks (SH-47): the bookmark manager. The bar and other
 // roots and their folders, with breadcrumbs; search across everything;
 // rename in place; new folders; delete with Undo (a folder with links asks
 // first); drag to reorder or onto a folder; and Netscape HTML import and
@@ -12,7 +12,7 @@ import { useMemo, useState, type DragEvent, type MouseEvent, type ReactElement }
 import { Bookmark as BookmarkIcon, ChevronRight, Download, ExternalLink, FolderClosed, FolderPlus, Pencil, Trash2, Upload } from 'lucide-react'
 import { flattenLinks, linksIn, locate, dropPlace, dropTarget, type BookmarkFolder, type BookmarkItem, type BookmarkTree, type DropPlace } from '@shared/bookmarks'
 import { matchRanges } from '@shared/omnibox'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { useT, type T } from '../i18n/useT'
 import { Button, EmptyState, IconButton, InlineRename, cx, showContextMenu, useConfirm, useToast } from '../ui'
 import { useBookmarkTree, openAllIn } from '../components/bars/BookmarksBar'
@@ -21,7 +21,7 @@ import { ListFrame, PageHeader, SearchField } from '../settings/kit'
 import { siteInitial } from '../settings/logic/collections'
 import { openFrom } from './HistoryPage'
 
-const DRAG_TYPE = 'application/x-apex-bookmark'
+const DRAG_TYPE = 'application/x-atelier-bookmark'
 
 /** The folders from a root down to `id`, for the breadcrumbs. */
 export function folderPath(tree: BookmarkTree, id: string): BookmarkFolder[] {
@@ -154,8 +154,8 @@ export function BookmarksPage({ tabId }: { tabId: string }): ReactElement {
       { id: 'rename', label: t('address.bookmarks.rename') },
       { id: 'delete', label: t('address.bookmarks.delete'), danger: true },
     ]).then((id) => {
-      if (id === 'open' && link) void apex.nav.go(tabId, item.url)
-      else if (id === 'new-tab' && link) void apex.tabs.create(item.url, { afterId: tabId })
+      if (id === 'open' && link) void atelier.nav.go(tabId, item.url)
+      else if (id === 'new-tab' && link) void atelier.tabs.create(item.url, { afterId: tabId })
       else if ((id === 'window' || id === 'private') && link) void call('windows', 'open', id === 'private' ? 'private' : 'normal', { url: item.url }).catch(fail)
       else if (id === 'open-folder') {
         setQuery('')
@@ -285,7 +285,7 @@ export function BookmarksPage({ tabId }: { tabId: string }): ReactElement {
                   </button>
                 )}
                 <div className="sp-item__actions sp-item__actions--reveal">
-                  {item.kind === 'bookmark' && <IconButton size="sm" label={t('address.bookmarks.openNewTab')} icon={<ExternalLink />} onClick={() => void apex.tabs.create(item.url, { afterId: tabId })} />}
+                  {item.kind === 'bookmark' && <IconButton size="sm" label={t('address.bookmarks.openNewTab')} icon={<ExternalLink />} onClick={() => void atelier.tabs.create(item.url, { afterId: tabId })} />}
                   <IconButton size="sm" label={t('address.bookmarks.rename')} icon={<Pencil />} onClick={() => setRenaming(item.id)} />
                   <IconButton size="sm" tone="danger" label={t('address.bookmarks.delete')} icon={<Trash2 />} onClick={() => void remove(item)} />
                 </div>

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -18,7 +18,7 @@ import { browserToolSpecs, errorResult, toMcpResult } from './tools'
 import type { McpRoute } from './server'
 
 // ST-60: an opt-in route that lets a Claude Code session in your terminal or
-// editor use Apex's browser tools. It has its own secret, kept encrypted and
+// editor use Atelier's browser tools. It has its own secret, kept encrypted and
 // stable across launches so the command you add keeps working until you
 // revoke it (which makes a new secret). Its tabs carry the agent marker, it
 // only touches the tabs you allow, and consequential actions always ask.
@@ -38,7 +38,7 @@ export interface OutsideDeps {
   dir: string
   box: SecretBox
   executor: Pick<ExecutorDeps, 'tabs' | 'bridge'>
-  /** Asks you in Apex; resolves false when you decline or the request goes away. */
+  /** Asks you in Atelier; resolves false when you decline or the request goes away. */
   approve(description: string, origin: string, signal: AbortSignal): Promise<boolean>
   /** Marks the tab as driven from outside; throws while one of your chats drives it. */
   claim(tabId: string): void
@@ -51,7 +51,7 @@ export interface OutsideDeps {
 
 interface SavedState {
   port: number | null
-  /** Fingerprint of the secret and URL last added through Apex. */
+  /** Fingerprint of the secret and URL last added through Atelier. */
   added: string | null
 }
 
@@ -155,7 +155,7 @@ export class OutsideAccess {
     return this.#loadSecret(true) !== null
   }
 
-  /** Whether Apex added its entry before (so replacing it is safe). */
+  /** Whether Atelier added its entry before (so replacing it is safe). */
   get addedBefore(): boolean {
     return this.#state.added !== null
   }
@@ -230,7 +230,7 @@ export class OutsideAccess {
   }
 }
 
-/** `claude mcp add` for Apex's outside route, quoted for the terminal (Command Prompt on Windows). */
+/** `claude mcp add` for Atelier's outside route, quoted for the terminal (Command Prompt on Windows). */
 export function addCommand(cli: string, url: string, secret: string, platform: NodeJS.Platform = process.platform): string {
   return [shellQuote(cli, platform), 'mcp', 'add', '--transport', 'http', '--scope', 'user', MCP_SERVER_NAME, url, '--header', shellQuote(`Authorization: Bearer ${secret}`, platform)].join(' ')
 }

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent, 
 import { Ellipsis, MessageSquarePlus, MessagesSquare, Pin, Search, SearchX, X } from 'lucide-react'
 import type { ChatSummary, Companion } from '@shared/services'
 import { chatUrl } from '@shared/url'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import '../chat/chat.css'
 import { bulkMenu, chatMenu, deleteChats, runChatAction } from '../chat/actions'
 import { newDraftChat } from '../chat/ChatView'
@@ -34,7 +34,7 @@ const PAGE_SIZE = 60
 
 type Result = { phase: 'loading' } | { phase: 'failed'; error: string } | { phase: 'ready'; items: ChatSummary[]; more: boolean }
 
-/** apex://chats: every chat, grouped by date with pinned ones on top, with search, filters and bulk actions. */
+/** atelier://chats: every chat, grouped by date with pinned ones on top, with search, filters and bulk actions. */
 // The tab id is part of the mount contract; the page needs no tab-specific state yet.
 export function AllChatsPage(_props: { tabId: string }): ReactElement {
   const [filters, setFilters] = useState<ChatFilters>(DEFAULT_FILTERS)
@@ -95,7 +95,7 @@ export function AllChatsPage(_props: { tabId: string }): ReactElement {
   // Any chat change can move rows between groups and filters; ask again.
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | null = null
-    const off = apex.onAppEvent((event) => {
+    const off = atelier.onAppEvent((event) => {
       if (event.type !== 'chats') return
       if (timer) clearTimeout(timer)
       timer = setTimeout(load, 150)

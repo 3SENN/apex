@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -26,7 +26,7 @@ import type { AppContext, Feature, WindowContext } from './types'
 // and the main menu's entry (SH-58, SH-54), answers permission requests from
 // extension pages, and routes manifest command keys.
 
-const PROFILE_PARTITION = /^persist:apex-profile-([a-z0-9]{8,32})$/
+const PROFILE_PARTITION = /^persist:atelier-profile-([a-z0-9]{8,32})$/
 
 /** The profile a persistent partition belongs to, or null for any other session. */
 export function profileOfPartition(partition: string): string | null {
@@ -97,7 +97,7 @@ export function createExtensionsFeature(): Feature {
   const openTab = (profileId: string, url: string, opts: { active?: boolean } = {}): number | null => {
     const win = windowOf(profileId)
     if (!win) return null
-    if (url.startsWith('apex://')) {
+    if (url.startsWith('atelier://')) {
       win.tabs.openInternal(url, { newTab: true })
       return null
     }
@@ -236,7 +236,7 @@ export function createExtensionsFeature(): Feature {
         onChanged: () => menus.invalidate(),
         contents: (tabId) => allContents.fromId(tabId) ?? null,
         frameById: (processId, routingId) => asNavFrame(webFrameMain.fromId(processId, routingId)),
-        // What chrome.privacy reports while no extension holds a setting: Apex's own switches.
+        // What chrome.privacy reports while no extension holds a setting: Atelier's own switches.
         browserSetting: (_profileId, key) => {
           const a = appCtx.settings.get().autofill
           if (key === 'services.passwordSavingEnabled') return a.offerSave
@@ -330,7 +330,7 @@ export function createExtensionsFeature(): Feature {
         if (extensions && !wc.isDestroyed()) extensions.host.tabReplaced(profileOf(wc), old.id, wc.id)
       })
 
-      // chrome.windows events: created now, removed when it closes, and focus moving between windows (or away from Apex).
+      // chrome.windows events: created now, removed when it closes, and focus moving between windows (or away from Atelier).
       const windowProfile = (): string | null => {
         if (profileId === null && !win.chrome.isDestroyed()) profileId = profileOf(win.chrome)
         return profileId
@@ -347,7 +347,7 @@ export function createExtensionsFeature(): Feature {
         windowEvent('windows.onRemoved', win.id)
       })
       win.window.on('blur', () => {
-        // Focus going to another Apex window reports that window instead; leaving Apex reports WINDOW_ID_NONE.
+        // Focus going to another Atelier window reports that window instead; leaving Atelier reports WINDOW_ID_NONE.
         setTimeout(() => {
           if (!ctx?.windows.all().some((w) => !w.window.isDestroyed() && w.window.isFocused())) windowEvent('windows.onFocusChanged', -1)
         }, 0)

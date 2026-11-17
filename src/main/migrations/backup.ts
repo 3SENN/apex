@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,7 +10,7 @@ import { writeAtomic } from '../settings'
 
 // Originals of migrated chats, in chats/.backup/<id>.v<from>.json (SS-09).
 // The first migration of a version writes it and later ones never touch it,
-// so the backup is always the file exactly as the older Apex left it.
+// so the backup is always the file exactly as the older Atelier left it.
 
 export const BACKUP_DIR = '.backup'
 
@@ -45,7 +45,7 @@ export function findBackup(backupDir: string, id: string): { path: string; versi
   return best
 }
 
-/** Keeps the file a restore replaces (damaged, or saved by a newer Apex) beside the backups, so a restore never loses anything. */
+/** Keeps the file a restore replaces (damaged, or saved by a newer Atelier) beside the backups, so a restore never loses anything. */
 export function keepReplaced(backupDir: string, id: string, file: string, now: number): string | null {
   if (!existsSync(file)) return null
   mkdirSync(backupDir, { recursive: true })

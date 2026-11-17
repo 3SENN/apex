@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -232,7 +232,7 @@ export const memory = {
   'memory.activity.statusLabel': 'Activiteitsgeheugen: {state}',
   'memory.activity.chatSwitch': 'Activiteitsgeheugen',
   'memory.activity.chatSwitchHint': 'Laat deze chat zoeken in wat je hebt bekeken',
-  'memory.activity.thumbnailsOff': 'Miniaturen staan uit. Zet ‘Miniaturen voor activiteitsgeheugen’ aan in apex://flags om ze te bewaren.',
+  'memory.activity.thumbnailsOff': 'Miniaturen staan uit. Zet ‘Miniaturen voor activiteitsgeheugen’ aan in atelier://flags om ze te bewaren.',
   'memory.timeline.title': 'Tijdlijn',
   'memory.timeline.description': 'Wat je per dag hebt bekeken, in dit profiel. Uitgesloten websites verschijnen nooit.',
   'memory.timeline.scope': 'Periode',

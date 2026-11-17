@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,7 +11,7 @@
 import { Fragment, useEffect, useId, useState, type ReactElement } from 'react'
 import { CircleCheck, Globe, Import, Info } from 'lucide-react'
 import type { ImportBrowser, ImportProgress, ImportSummary, ImportType } from '@shared/browserImport'
-import { apex, call } from '../../api'
+import { atelier, call } from '../../api'
 import { useT } from '../../i18n/useT'
 import { Button, CheckRow, EmptyState, ErrorState, Select, SkeletonRows, Spinner, useAsyncAction } from '../../ui'
 import { useEvent, useResource } from '../data'
@@ -134,7 +134,7 @@ export function ImportSection({ compact = false, browser: wanted = null }: Impor
               <Select id={profileSelect} value={profileId ?? ''} disabled={busy} options={chosen.profiles.map((p) => ({ value: p.id, label: p.name }))} onChange={setProfileId} />
             </Row>
           )}
-          {/* ST-46: the Apex profile the import goes into. */}
+          {/* ST-46: the Atelier profile the import goes into. */}
           <ImportTargetRow disabled={busy} />
         </Card>
 
@@ -143,7 +143,7 @@ export function ImportSection({ compact = false, browser: wanted = null }: Impor
             tone="warning"
             action={
               <span className="sp-import__access">
-                {apex.platform === 'darwin' && (
+                {atelier.platform === 'darwin' && (
                   <Button size="sm" variant="secondary" onClick={() => void call('browserImport', 'openAccessSettings')}>
                     {t('settings.import.access.open')}
                   </Button>

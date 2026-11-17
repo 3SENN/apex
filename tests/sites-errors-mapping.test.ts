@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,7 +11,7 @@ import { ACTION_LABEL, displayHostOf, errorCopy, noticeTarget, originOf, reconne
 // The whole English catalogue: the privacy pack's HTTPS-First page keeps its copy in its own fragment.
 import { EN as strings } from '../src/shared/i18n/en'
 
-// Failed-load codes to Apex's own error pages (SS-07), the per-tab page
+// Failed-load codes to Atelier's own error pages (SS-07), the per-tab page
 // state and what each page says and offers.
 
 const online = { online: true, blockedBy: null }
@@ -47,7 +47,7 @@ describe('classifyLoadFailure', () => {
     expect(classifyLoadFailure(-310, { online: false })).toBe('too-many-redirects')
   })
 
-  it('names why Apex itself refused the page', () => {
+  it('names why Atelier itself refused the page', () => {
     expect(classifyLoadFailure(-20, { online: true, blockedBy: 'dangerous' })).toBe('dangerous-site')
     expect(classifyLoadFailure(-20, { online: true, blockedBy: 'adblock' })).toBe('blocked-by-adblock')
     expect(classifyLoadFailure(-27, { online: true, blockedBy: 'adblock' })).toBe('blocked-by-adblock')

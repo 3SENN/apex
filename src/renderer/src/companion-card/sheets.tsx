@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import { createRoot, type Root } from 'react-dom/client'
 import { FileUp, Palette, Shuffle } from 'lucide-react'
 import { COMPANION_FILE_EXTENSION, COMPANION_NAME_MAX, DEFAULT_PROFILE, skillReviewText, type Companion, type CompanionImportPreview, type CompanionPreset } from '@shared/companion'
 import { chatUrl, companionLookUrl, presetUrl } from '@shared/url'
-import { apex, call, errorText, formatBytes } from '../api'
+import { atelier, call, errorText, formatBytes } from '../api'
 import { Companion as CompanionFigure } from '../companion'
 import { useCompanionAssets, useCompanions, usePresets } from '../components/companionData'
 import { PresetGallery, shuffledLook, useDraftLook } from '../pages/CompanionEditor'
@@ -68,7 +68,7 @@ export function reviewCompanionImport(preview: CompanionImportPreview, options: 
   show({ kind: 'import', preview, onCreated: options.onCreated })
 }
 
-/** Asks for a .apexcompanion file, then shows the review sheet. */
+/** Asks for a .ateliercompanion file, then shows the review sheet. */
 export async function openCompanionImport(options: { onCreated?(companion: Companion): void } = {}): Promise<void> {
   try {
     const preview = await call('companions', 'pickImport')
@@ -90,7 +90,7 @@ export async function reviewCompanionText(text: string): Promise<void> {
 const FILE_MAX_BYTES = 8 * 1024 * 1024
 const EXTENSION = `.${COMPANION_FILE_EXTENSION}`
 
-/** The first .apexcompanion file in a drop, if any. */
+/** The first .ateliercompanion file in a drop, if any. */
 export function companionFileIn(data: DataTransfer | null): File | null {
   if (!data) return null
   for (const file of Array.from(data.files)) if (file.name.toLowerCase().endsWith(EXTENSION)) return file
@@ -112,7 +112,7 @@ let installed = false
 function installImport(): void {
   if (installed) return
   installed = true
-  apex.onAppEvent((event) => {
+  atelier.onAppEvent((event) => {
     if (event.type === 'companion-import') reviewCompanionImport(event.preview)
     else if (event.type === 'companion-import-error') show({ kind: 'import-error', message: event.message })
   })
@@ -175,7 +175,7 @@ export function CompanionSheets(): ReactElement | null {
 /**
  * DS-79: the celebration in the sheet once a companion is added (created or
  * imported). The sheet stays open on the newcomer: it waves hello while a
- * ring and a few of Apex's sparkles rise around it, then you start a chat
+ * ring and a few of Atelier's sparkles rise around it, then you start a chat
  * with it or close. Under Reduce Motion it simply stands there, happy.
  */
 function WelcomeSheet({ companion, onClose }: { companion: Companion; onClose(): void }): ReactElement {
@@ -494,7 +494,7 @@ function ImportErrorDialog({ message, onClose }: { message: string; onClose(): v
   )
 }
 
-/** Opens the preset gallery (apex://presets) from the new-companion sheet. */
+/** Opens the preset gallery (atelier://presets) from the new-companion sheet. */
 function PresetsLink({ onOpen }: { onOpen(): void }) {
   const tr = useT()
   return (

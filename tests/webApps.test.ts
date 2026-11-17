@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -18,7 +18,7 @@ const app = (url: string, patch: Partial<WebApp> = {}): WebApp => ({ id: url, na
 describe('web app addresses (WA-01)', () => {
   it('keys websites without their fragment and refuses anything else', () => {
     expect(webAppKey('https://mail.google.com/mail/u/0/#inbox')).toBe('https://mail.google.com/mail/u/0/')
-    expect(webAppKey('apex://workspace')).toBeNull()
+    expect(webAppKey('atelier://workspace')).toBeNull()
     expect(webAppKey('file:///tmp/a.html')).toBeNull()
     expect(webAppKey('not a url')).toBeNull()
   })
@@ -53,7 +53,7 @@ describe('suggesting sites to save', () => {
       { url: 'https://mail.google.com/mail/u/0/', title: 'Inbox - Gmail', visits: 20, visitTimes: recent(20) },
       { url: 'https://old.example.com/', title: 'Old', visits: 50, visitTimes: [NOW - 60 * DAY] },
       { url: 'https://rare.example.com/', title: 'Rare', visits: 2, visitTimes: recent(2) },
-      { url: 'apex://workspace', title: 'Workspace', visits: 90 },
+      { url: 'atelier://workspace', title: 'Workspace', visits: 90 },
     ]
     const saved = [app('https://mail.google.com/mail/u/0/')]
     const out = suggestWebApps(history, saved, NOW, ['www.google.com'])
@@ -94,7 +94,7 @@ describe('which tab is an app’s tab', () => {
 })
 
 describe('WebAppStore', () => {
-  const dir = (): string => mkdtempSync(join(tmpdir(), 'apex-web-apps-'))
+  const dir = (): string => mkdtempSync(join(tmpdir(), 'atelier-web-apps-'))
 
   it('saves, renames, opens and removes apps, and keeps them across launches', () => {
     const d = dir()
@@ -115,7 +115,7 @@ describe('WebAppStore', () => {
 
   it('refuses addresses that aren’t websites and drops oversized icons', () => {
     const store = new WebAppStore(dir())
-    expect(() => store.add({ name: 'Workspace', url: 'apex://workspace', icon: null })).toThrow()
+    expect(() => store.add({ name: 'Workspace', url: 'atelier://workspace', icon: null })).toThrow()
     expect(store.add({ name: 'Big', url: 'https://big.example.com/', icon: 'x'.repeat(WEB_APP_LIMITS.icon * 2 + 1) }).icon).toBeNull()
   })
 

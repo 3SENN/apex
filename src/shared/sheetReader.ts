@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Apex's own spreadsheet reader for previews: CSV and TSV through the
+// Atelier's own spreadsheet reader for previews: CSV and TSV through the
 // shared parser, and the first sheet of an XLSX workbook through
 // fflate plus a small reader for the sheet XML. Read-only and capped at
 // SHEET_LIMITS, so a huge or hostile file never turns into a huge preview.

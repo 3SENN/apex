@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -64,11 +64,11 @@ describe('tweak hosts and where tweaks run', () => {
     expect(normalizeTweakHost('')).toBeNull()
     expect(normalizeTweakHost('not a host!')).toBeNull()
     expect(pageTweakHost('https://www.example.com/a')).toBe('example.com')
-    expect(pageTweakHost('apex://tweaks')).toBeNull()
+    expect(pageTweakHost('atelier://tweaks')).toBeNull()
   })
 
   it(`never runs on sign-in pages or ${BRAND_NAME} pages`, () => {
-    expect(tweakBlock('apex://settings')).toBe('internal')
+    expect(tweakBlock('atelier://settings')).toBe('internal')
     expect(tweakBlock('file:///tmp/a.html')).toBe('not-web')
     expect(tweakBlock('https://accounts.google.com/signin')).toBe('sign-in')
     expect(tweakBlock('https://github.com/login')).toBe('sign-in')
@@ -232,14 +232,14 @@ describe('tweak export and import files', () => {
     expect(text).not.toContain('"id"')
     const parsed = parseTweakExport(text)
     expect(parsed).toEqual([{ host: 'example.com', subdomains: false, enabled: true, hidden: [{ selector: '#ad', label: 'ad' }], style: { ...DEFAULT_TWEAK_STYLE, tint: 'fern' }, css: '', js: 'x()' }])
-    expect(exportName([b])).toBe('example.com.apex-tweak.json')
-    expect(exportName([b, b])).toBe('apex-tweaks.json')
+    expect(exportName([b])).toBe('example.com.atelier-tweak.json')
+    expect(exportName([b, b])).toBe('atelier-tweaks.json')
   })
 
   it('refuses files that are not tweaks', () => {
     expect(() => parseTweakExport('not json')).toThrow()
     expect(() => parseTweakExport(JSON.stringify({ format: 'something-else', version: 1, tweaks: [] }))).toThrow()
-    expect(() => parseTweakExport(JSON.stringify({ format: 'apex-tweaks', version: 1, tweaks: [{ host: 'a.com', style: { font: 'comic' } }] }))).toThrow()
+    expect(() => parseTweakExport(JSON.stringify({ format: 'atelier-tweaks', version: 1, tweaks: [{ host: 'a.com', style: { font: 'comic' } }] }))).toThrow()
     expect(() => parseTweakExport('x'.repeat(5_000_000))).toThrow()
   })
 })
@@ -269,7 +269,7 @@ describe('files from before the rename', () => {
   })
 
   it('imports files exported before the rename', () => {
-    const old = { format: 'apex-boosts', version: 1, boosts: [{ host: 'example.com', zaps: [{ selector: '#ad', label: 'ad' }], css: 'a{}' }] } // compatibility: an old export
+    const old = { format: 'atelier-boosts', version: 1, boosts: [{ host: 'example.com', zaps: [{ selector: '#ad', label: 'ad' }], css: 'a{}' }] } // compatibility: an old export
     expect(parseTweakExport(JSON.stringify(old))).toEqual([{ host: 'example.com', subdomains: false, enabled: true, hidden: [{ selector: '#ad', label: 'ad' }], style: {}, css: 'a{}', js: '' }])
   })
 })

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -12,7 +12,7 @@ import { DEFAULT_SETTINGS, SettingsStore } from '../src/main/settings'
 // The first launch with profiles moves profile keys out of an older settings.json
 // into the default profile's file, field by field (ST-06).
 
-const tempDir = (): string => mkdtempSync(join(tmpdir(), 'apex-profile-migration-'))
+const tempDir = (): string => mkdtempSync(join(tmpdir(), 'atelier-profile-migration-'))
 const read = (path: string): Record<string, unknown> => JSON.parse(readFileSync(path, 'utf8')) as Record<string, unknown>
 
 const AB_SETTINGS = {
@@ -46,7 +46,7 @@ describe('profile settings migration', () => {
     for (const key of ['model', 'uiZoom', 'voice', 'onboarded', 'fontSize']) expect(profile).not.toHaveProperty(key)
     expect(app).toMatchObject({ model: 'claude-sonnet-5-5', uiZoom: 0.9, onboarded: true, fontSize: DEFAULT_SETTINGS.fontSize })
     expect((app.voice as { holdToTalk: boolean }).holdToTalk).toBe(true)
-    // settings.json keeps a copy of the default profile's values for an older Apex; this build never reads it back.
+    // settings.json keeps a copy of the default profile's values for an older Atelier; this build never reads it back.
     expect(app).toMatchObject({ theme: 'dark', profileHue: 'moss' })
     // Nothing changes for the person: the same values, read through either file.
     expect(store.get()).toMatchObject({ theme: 'dark', model: 'claude-sonnet-5-5', layout: 'horizontal', profileHue: 'moss' })
@@ -59,7 +59,7 @@ describe('profile settings migration', () => {
     const dir = tempDir()
     writeFileSync(join(dir, 'settings.json'), JSON.stringify(AB_SETTINGS))
     new SettingsStore(dir).update({ theme: 'light' })
-    // A stray profile key in settings.json (an older Apex wrote it) no longer wins.
+    // A stray profile key in settings.json (an older Atelier wrote it) no longer wins.
     writeFileSync(join(dir, 'settings.json'), JSON.stringify({ ...read(join(dir, 'settings.json')), theme: 'dark' }))
     expect(new SettingsStore(dir).get().theme).toBe('light')
   })

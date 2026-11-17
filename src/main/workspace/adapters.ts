@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // The main-side workspace adapters other features call. Every
-// Apex-initiated write or delete of a text file snapshots a version first
+// Atelier-initiated write or delete of a text file snapshots a version first
 // (skill files, memory notes and tidy folders); every delete that should be
 // restorable goes through trash.put (skills, memory files, projects, apps
 // and tables, and the file viewer's onDelete). The workspace feature binds
@@ -64,7 +64,7 @@ export function bindWorkspace(binding: WorkspaceBinding | null): void {
 }
 
 export const versions = {
-  /** Must run before every Apex-initiated write or delete of a text file. */
+  /** Must run before every Atelier-initiated write or delete of a text file. */
   snapshot(ref: FileRef, text: string | Buffer, label: FileVersion['label']): void {
     bound?.snapshot(ref, text, label)
   },

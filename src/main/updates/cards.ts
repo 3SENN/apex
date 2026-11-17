@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -21,7 +21,7 @@ import type { WhatsNewCard } from './whatsNew'
 export interface UpdateCards {
   askRestart(running: UpdateRestartRunning, version: string | null): Promise<'now' | 'when-idle' | null>
   askUnsupported(below: string, message: string | null): Promise<'update' | 'later' | null>
-  /** True once the person closed the card (✕, Got it or Esc); false when it couldn't open or Apex took it away (its window closed, a quit). */
+  /** True once the person closed the card (✕, Got it or Esc); false when it couldn't open or Atelier took it away (its window closed, a quit). */
   showWhatsNew(card: WhatsNewCard, win?: WindowContext | null): Promise<boolean>
 }
 
@@ -95,7 +95,7 @@ export function createUpdateCards(deps: { focused(): WindowContext | null; smoke
       if (!usable(win)) return false
       const result = await open(win, 'whats-new', { entry: card.entry, since: card.since })
       if (!result) return false
-      // The card's buttons resolve 'done'; Esc outside them is the overlay's 'escape'. Any other dismissal was Apex's.
+      // The card's buttons resolve 'done'; Esc outside them is the overlay's 'escape'. Any other dismissal was Atelier's.
       return 'value' in result ? valueOf<'whats-new'>(result, ['done']) === 'done' : result.dismissed === 'escape'
     },
   }

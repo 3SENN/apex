@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -84,7 +84,7 @@ export function useSpeechPermissions({ poll = false, enabled = true }: { poll?: 
 }
 
 /**
- * Screen Recording as main tracks it (whether Apex has asked, and whether a
+ * Screen Recording as main tracks it (whether Atelier has asked, and whether a
  * grant waits for a relaunch); looked at again on each permission report and
  * when the window comes back (from System Settings).
  */

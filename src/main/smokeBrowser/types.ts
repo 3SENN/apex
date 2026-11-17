@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -15,7 +15,7 @@ import type { TabManager } from '../tabs'
 // smokeVoicePasswords/, smokeFilesConnectors/, smokeAgentWorkspace/, smokeMaintenance/,
 // smokeLayout/, smokeMedia/) or a feature's smoke.ts, with one file per area
 // exporting `checks` and `shots`; smokeGroups.ts runs them in order, and
-// APEX_SMOKE_ONLY=BROWSER,MAINTENANCE runs a subset.
+// ATELIER_SMOKE_ONLY=BROWSER,MAINTENANCE runs a subset.
 
 export interface SmokeContext {
   chrome: Chrome
@@ -26,7 +26,7 @@ export interface SmokeContext {
   settings: SettingsStore
   chats: ChatStore
   server: SmokeServer
-  /** Saves a screenshot of the window under APEX_SMOKE_SHOTS as <name>-<theme>.png; a no-op without it. */
+  /** Saves a screenshot of the window under ATELIER_SMOKE_SHOTS as <name>-<theme>.png; a no-op without it. */
   shot(name: string): Promise<void>
 }
 
@@ -41,7 +41,7 @@ export interface ShotSpec {
 }
 
 export interface SmokeGroup {
-  /** The name APEX_SMOKE_ONLY takes (any case) and the prefix of each check's name in the output. */
+  /** The name ATELIER_SMOKE_ONLY takes (any case) and the prefix of each check's name in the output. */
   group:
     | /* tabs, address bar, menus, settings, sites, the chat panel, sign-in (src/main/smokeBrowser) */ 'BROWSER'
     | /* speech, voice, meetings, passwords and autofill (src/main/smokeVoicePasswords) */ 'VOICE-PASSWORDS'

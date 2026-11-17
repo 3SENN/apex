@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-// A tiny MCP server over stdio for Apex's tests and smoke: JSON-RPC
+// A tiny MCP server over stdio for Atelier's tests and smoke: JSON-RPC
 // lines on stdin/stdout, no dependencies. Tools: echo (read-only), add, and
-// create_note (needs a confirm in Apex); resources: two notes for # search.
+// create_note (needs a confirm in Atelier); resources: two notes for # search.
 // It logs one stderr line that includes FIXTURE_SECRET, so masking is tested.
 import { createInterface } from 'node:readline'
 
@@ -49,7 +49,7 @@ rl.on('line', (line) => {
   const fail = (code, message) => send({ jsonrpc: '2.0', id: msg.id, error: { code, message } })
   switch (msg.method) {
     case 'initialize':
-      return reply({ protocolVersion: msg.params?.protocolVersion ?? '2025-06-18', capabilities: { tools: {}, resources: {} }, serverInfo: { name: 'apex-fixture', version: '1.0.0' } })
+      return reply({ protocolVersion: msg.params?.protocolVersion ?? '2025-06-18', capabilities: { tools: {}, resources: {} }, serverInfo: { name: 'atelier-fixture', version: '1.0.0' } })
     case 'ping':
       return reply({})
     case 'tools/list':

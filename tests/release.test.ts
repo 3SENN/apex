@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -82,12 +82,12 @@ const AZURE: Env = {
   AZURE_TENANT_ID: 't',
   AZURE_CLIENT_ID: 'c',
   AZURE_CLIENT_SECRET: 's',
-  APEX_AZURE_ENDPOINT: 'https://weu.codesigning.azure.net',
-  APEX_AZURE_ACCOUNT: 'account',
-  APEX_AZURE_CERT_PROFILE: 'profile',
-  APEX_AZURE_PUBLISHER: 'Publisher',
+  ATELIER_AZURE_ENDPOINT: 'https://weu.codesigning.azure.net',
+  ATELIER_AZURE_ACCOUNT: 'account',
+  ATELIER_AZURE_CERT_PROFILE: 'profile',
+  ATELIER_AZURE_PUBLISHER: 'Publisher',
 }
-const PUBLISH: Env = { APEX_CHANNEL: 'stable', APEX_RELEASE_OWNER: 'someone', APEX_RELEASE_REPO: 'apex' }
+const PUBLISH: Env = { ATELIER_CHANNEL: 'stable', ATELIER_RELEASE_OWNER: 'someone', ATELIER_RELEASE_REPO: 'atelier' }
 
 /** RELEASE as the app would read it, after the defines went through electron-vite. */
 function appRelease(env: Env, platform: string) {
@@ -95,12 +95,12 @@ function appRelease(env: Env, platform: string) {
   const v = (k: string): string => JSON.parse(d[k]!) as string
   return {
     release: releaseFrom({
-      channel: v('__APEX_CHANNEL__'),
-      publicRelease: v('__APEX_PUBLIC_RELEASE__'),
-      updates: v('__APEX_UPDATES__'),
-      supportEmail: v('__APEX_SUPPORT_EMAIL__'),
-      website: v('__APEX_WEBSITE__'),
-      repo: v('__APEX_RELEASE_REPO__'),
+      channel: v('__ATELIER_CHANNEL__'),
+      publicRelease: v('__ATELIER_PUBLIC_RELEASE__'),
+      updates: v('__ATELIER_UPDATES__'),
+      supportEmail: v('__ATELIER_SUPPORT_EMAIL__'),
+      website: v('__ATELIER_WEBSITE__'),
+      repo: v('__ATELIER_RELEASE_REPO__'),
     }),
   }
 }
@@ -108,8 +108,8 @@ function appRelease(env: Env, platform: string) {
 describe('release settings from env', () => {
   it('defaults to a safe dev build', () => {
     // The official branding, stated, so the result doesn't depend on whether this checkout has internal/.
-    const OFFICIAL = { APEX_OFFICIAL_BRANDING: '1' }
-    expect(releaseSettings({ APEX_OFFICIAL_BRANDING: '0' }, 'darwin').bundleId).toBe('dev.summit.browser')
+    const OFFICIAL = { ATELIER_OFFICIAL_BRANDING: '1' }
+    expect(releaseSettings({ ATELIER_OFFICIAL_BRANDING: '0' }, 'darwin').bundleId).toBe('dev.summit.browser')
     const s = releaseSettings(OFFICIAL, 'darwin')
     expect(s).toEqual({
       channel: 'dev',
@@ -119,49 +119,49 @@ describe('release settings from env', () => {
       website: '',
       repo: null,
       signing: { platform: 'darwin', identity: null, notarize: null },
-      bundleId: 'com.sennechin.apex',
+      bundleId: 'com.sennechin.atelier',
     })
     expect(appRelease(OFFICIAL, 'darwin').release).toEqual(RELEASE)
   })
 
   it('round-trips through the defines into RELEASE', () => {
-    const env = { ...PUBLISH, ...SIGNED_MAC, APEX_SUPPORT_EMAIL: 'help@example.org', APEX_WEBSITE: 'https://example.org/apex' }
+    const env = { ...PUBLISH, ...SIGNED_MAC, ATELIER_SUPPORT_EMAIL: 'help@example.org', ATELIER_WEBSITE: 'https://example.org/atelier' }
     expect(appRelease(env, 'darwin').release).toEqual({
       channel: 'stable',
       publicRelease: false,
       updatesEnabled: true,
       supportEmail: 'help@example.org',
-      website: 'https://example.org/apex',
-      repo: { owner: 'someone', name: 'apex' },
+      website: 'https://example.org/atelier',
+      repo: { owner: 'someone', name: 'atelier' },
     })
   })
 
   it('marks a public release, which the build tools see too (tests/internal.test.ts: only the API key engine)', () => {
-    expect(appRelease({ APEX_PUBLIC_RELEASE: '1' }, 'darwin').release.publicRelease).toBe(true)
-    expect(appRelease({ APEX_PUBLIC_RELEASE: 'true' }, 'linux').release.publicRelease).toBe(true)
+    expect(appRelease({ ATELIER_PUBLIC_RELEASE: '1' }, 'darwin').release.publicRelease).toBe(true)
+    expect(appRelease({ ATELIER_PUBLIC_RELEASE: 'true' }, 'linux').release.publicRelease).toBe(true)
     expect(appRelease({}, 'darwin').release.publicRelease).toBe(false)
-    expect(buildEnv(releaseSettings({ APEX_PUBLIC_RELEASE: '1' }, 'darwin'), { APEX_PUBLIC_RELEASE: '1' }).APEX_PUBLIC_RELEASE).toBe('1')
+    expect(buildEnv(releaseSettings({ ATELIER_PUBLIC_RELEASE: '1' }, 'darwin'), { ATELIER_PUBLIC_RELEASE: '1' }).ATELIER_PUBLIC_RELEASE).toBe('1')
   })
 
   it('turns updates on only with a publish target, a release channel and a signature', () => {
     expect(releaseSettings({ ...PUBLISH, ...SIGNED_MAC }, 'darwin').updatesEnabled).toBe(true)
     expect(releaseSettings({ ...PUBLISH }, 'darwin').updatesEnabled).toBe(false)
-    expect(releaseSettings({ ...SIGNED_MAC, APEX_CHANNEL: 'stable' }, 'darwin').updatesEnabled).toBe(false)
-    expect(releaseSettings({ ...PUBLISH, ...SIGNED_MAC, APEX_CHANNEL: 'dev' }, 'darwin').updatesEnabled).toBe(false)
-    expect(releaseSettings({ ...PUBLISH, ...SIGNED_MAC, APEX_UPDATES: '0' }, 'darwin').updatesEnabled).toBe(false)
+    expect(releaseSettings({ ...SIGNED_MAC, ATELIER_CHANNEL: 'stable' }, 'darwin').updatesEnabled).toBe(false)
+    expect(releaseSettings({ ...PUBLISH, ...SIGNED_MAC, ATELIER_CHANNEL: 'dev' }, 'darwin').updatesEnabled).toBe(false)
+    expect(releaseSettings({ ...PUBLISH, ...SIGNED_MAC, ATELIER_UPDATES: '0' }, 'darwin').updatesEnabled).toBe(false)
     expect(releaseSettings({ ...PUBLISH, ...AZURE }, 'win32').updatesEnabled).toBe(true)
     expect(releaseSettings({ ...PUBLISH }, 'win32').updatesEnabled).toBe(false)
     // An AppImage updates without code signing.
     expect(releaseSettings({ ...PUBLISH }, 'linux').updatesEnabled).toBe(true)
-    expect(releaseSettings({ ...PUBLISH, APEX_RELEASE_OWNER: 'bad owner' }, 'linux').repo).toBeNull()
+    expect(releaseSettings({ ...PUBLISH, ATELIER_RELEASE_OWNER: 'bad owner' }, 'linux').repo).toBeNull()
   })
 
   it('keeps only a plausible email and an https website', () => {
-    expect(releaseSettings({ APEX_SUPPORT_EMAIL: 'not an email' }, 'darwin').supportEmail).toBe('')
-    expect(releaseSettings({ APEX_SUPPORT_EMAIL: ' a@b.co ' }, 'darwin').supportEmail).toBe('a@b.co')
-    expect(releaseSettings({ APEX_WEBSITE: 'http://example.org' }, 'darwin').website).toBe('')
-    expect(releaseSettings({ APEX_WEBSITE: 'javascript:alert(1)' }, 'darwin').website).toBe('')
-    expect(releaseSettings({ APEX_WEBSITE: 'https://example.org' }, 'darwin').website).toBe('https://example.org/')
+    expect(releaseSettings({ ATELIER_SUPPORT_EMAIL: 'not an email' }, 'darwin').supportEmail).toBe('')
+    expect(releaseSettings({ ATELIER_SUPPORT_EMAIL: ' a@b.co ' }, 'darwin').supportEmail).toBe('a@b.co')
+    expect(releaseSettings({ ATELIER_WEBSITE: 'http://example.org' }, 'darwin').website).toBe('')
+    expect(releaseSettings({ ATELIER_WEBSITE: 'javascript:alert(1)' }, 'darwin').website).toBe('')
+    expect(releaseSettings({ ATELIER_WEBSITE: 'https://example.org' }, 'darwin').website).toBe('https://example.org/')
   })
 
   it('names where signing credentials come from, never the identity', () => {
@@ -171,7 +171,7 @@ describe('release settings from env', () => {
     // Notarization needs a signature first.
     expect(releaseSettings({ APPLE_API_KEY: 'k', APPLE_API_KEY_ID: 'i', APPLE_API_ISSUER: 's' }, 'darwin').signing.notarize).toBeNull()
     expect(releaseSettings(AZURE, 'win32').signing.identity).toBe('azure')
-    expect(releaseSettings({ ...AZURE, APEX_AZURE_PUBLISHER: '' }, 'win32').signing.identity).toBeNull()
+    expect(releaseSettings({ ...AZURE, ATELIER_AZURE_PUBLISHER: '' }, 'win32').signing.identity).toBeNull()
     expect(releaseSettings({ WIN_CSC_LINK: 'x' }, 'win32').signing.identity).toBe('certificate')
     expect(releaseSettings(SIGNED_MAC, 'linux').signing.identity).toBeNull()
   })
@@ -179,7 +179,7 @@ describe('release settings from env', () => {
   it('lays publish and signing over the yml only when env asks', () => {
     expect(builderOverrides(releaseSettings({}, 'darwin'), {})).toEqual({})
     const mac = builderOverrides(releaseSettings({ ...PUBLISH, ...SIGNED_MAC }, 'darwin'), { ...PUBLISH, ...SIGNED_MAC })
-    expect(mac).toEqual({ publish: { provider: 'github', owner: 'someone', repo: 'apex', releaseType: 'draft' }, mac: { identity: '' } })
+    expect(mac).toEqual({ publish: { provider: 'github', owner: 'someone', repo: 'atelier', releaseType: 'draft' }, mac: { identity: '' } })
     expect(builderOverrides(releaseSettings({ CSC_NAME: 'Someone' }, 'darwin'), { CSC_NAME: 'Someone' }).mac).toEqual({ identity: 'Someone' })
     expect(builderOverrides(releaseSettings(AZURE, 'win32'), AZURE).win?.azureSignOptions).toEqual({
       publisherName: 'Publisher',
@@ -238,7 +238,7 @@ describe('electron-builder.yml', () => {
     expect(config.publish).toMatchObject({ provider: 'github', releaseType: 'draft' })
     expect(config.publish).not.toHaveProperty('owner')
     for (const f of ['.github/workflows/release.yml', '.github/workflows/ci.yml', 'scripts/release/config.mjs']) {
-      expect(read(f)).not.toMatch(/Developer ID Application:|\b[A-Z0-9]{10}\.com\.apex|ghp_[A-Za-z0-9]/)
+      expect(read(f)).not.toMatch(/Developer ID Application:|\b[A-Z0-9]{10}\.com\.atelier|ghp_[A-Za-z0-9]/)
     }
   })
 
@@ -261,11 +261,11 @@ describe('electron-builder.yml', () => {
     const config = await load()
     // Sources built at release time, and the script that writes each one.
     const producers: Record<string, string> = {
-      'native/speech/build/apex-speech': 'scripts/build-speech-helper.mjs',
-      'native/speech-win/build/apex-speech.exe': 'scripts/build-speech-helper.mjs',
-      'native/haptics/build/apex_haptics.node': 'scripts/build-native.mjs',
-      'native/calendar/build/apex-calendar': 'scripts/build-calendar-helper.mjs',
-      'native/translate/build/apex-translate': 'scripts/build-translate-helper.mjs',
+      'native/speech/build/atelier-speech': 'scripts/build-speech-helper.mjs',
+      'native/speech-win/build/atelier-speech.exe': 'scripts/build-speech-helper.mjs',
+      'native/haptics/build/atelier_haptics.node': 'scripts/build-native.mjs',
+      'native/calendar/build/atelier-calendar': 'scripts/build-calendar-helper.mjs',
+      'native/translate/build/atelier-translate': 'scripts/build-translate-helper.mjs',
     }
     const entries = [config.extraResources, config.mac?.extraResources, config.win?.extraResources, config.linux?.extraResources]
       .flat()
@@ -279,8 +279,8 @@ describe('electron-builder.yml', () => {
       if (script === 'scripts/build-calendar-helper.mjs' && !existsSync(join(REPO, script))) continue
       expect(existsSync(join(REPO, script!)), script).toBe(true)
     }
-    expect(read('scripts/build-native.mjs')).toContain("'apex_haptics.node'")
-    expect(read('scripts/build-speech-helper.mjs')).toContain("'apex-speech'")
+    expect(read('scripts/build-native.mjs')).toContain("'atelier_haptics.node'")
+    expect(read('scripts/build-speech-helper.mjs')).toContain("'atelier-speech'")
   })
 
   it('compiles the Icon Composer icon after packing and keeps the .icns', async () => {
@@ -288,13 +288,13 @@ describe('electron-builder.yml', () => {
     expect(config.afterPack).toBe('./scripts/release/afterPack.mjs')
     expect(existsSync(join(REPO, 'scripts/release/afterPack.mjs'))).toBe(true)
     expect(config.mac!.icon).toBe('branding/official/icon.icns')
-    expect(existsSync(join(REPO, 'branding/official/Apex.icon/icon.json'))).toBe(true)
+    expect(existsSync(join(REPO, 'branding/official/Atelier.icon/icon.json'))).toBe(true)
     // The official branding compiles its Icon Composer document; the unofficial one has none and keeps icon.icns.
-    expect(iconComposer(readBranding('official'))).toEqual({ dir: join(REPO, 'branding/official/Apex.icon'), name: 'Apex' })
+    expect(iconComposer(readBranding('official'))).toEqual({ dir: join(REPO, 'branding/official/Atelier.icon'), name: 'Atelier' })
     expect(iconComposer(readBranding('unofficial'))).toBeNull()
   })
 
-  it('installs per user on Windows and registers Apex as a browser, cleaned up on uninstall', async () => {
+  it('installs per user on Windows and registers Atelier as a browser, cleaned up on uninstall', async () => {
     const config = await load()
     expect(config.nsis).toMatchObject({ oneClick: false, perMachine: false, allowToChangeInstallationDirectory: true, include: 'build/installer.nsh' })
     // GitHub renames assets with spaces, which would break latest.yml's link.
@@ -302,12 +302,12 @@ describe('electron-builder.yml', () => {
     expect((config.win!.target as Array<{ arch: string[] }>)[0]!.arch.sort()).toEqual(['arm64', 'x64'])
     const nsh = read('build/installer.nsh')
     expect(nsh).toContain('$isForceCurrentInstall "1"')
-    for (const s of ['StartMenuInternet', 'URLAssociations" "http"', 'URLAssociations" "https"', 'FileAssociations" ".html"', '.apexcompanion', 'FileAssociations" ".apexpack"', 'FileAssociations" ".apexapp"', 'FileAssociations" ".apexworld"']) expect(nsh).toContain(s)
+    for (const s of ['StartMenuInternet', 'URLAssociations" "http"', 'URLAssociations" "https"', 'FileAssociations" ".html"', '.ateliercompanion', 'FileAssociations" ".atelierpack"', 'FileAssociations" ".atelierapp"', 'FileAssociations" ".atelierworld"']) expect(nsh).toContain(s)
     // Apps and worlds are packs: the uninstaller takes their keys away too.
-    for (const ext of ['.apexapp', '.apexworld']) expect(nsh.slice(nsh.indexOf('!macro customUnInstall'))).toContain(`Software\\Classes\\${ext}`)
+    for (const ext of ['.atelierapp', '.atelierworld']) expect(nsh.slice(nsh.indexOf('!macro customUnInstall'))).toContain(`Software\\Classes\\${ext}`)
     const uninstall = nsh.slice(nsh.indexOf('!macro customUnInstall'))
-    for (const s of ['RegisteredApplications', '${APEX_CAPS}', '${APEX_HTML}', '${APEX_URL}', '${APEX_COMPANION}', '${isUpdated}']) expect(uninstall).toContain(s)
-    // Windows never takes the .html default; it only adds Apex to "Open with".
+    for (const s of ['RegisteredApplications', '${ATELIER_CAPS}', '${ATELIER_HTML}', '${ATELIER_URL}', '${ATELIER_COMPANION}', '${isUpdated}']) expect(uninstall).toContain(s)
+    // Windows never takes the .html default; it only adds Atelier to "Open with".
     expect(nsh).not.toMatch(/Classes\\\.html" ""/)
   })
 
@@ -316,8 +316,8 @@ describe('electron-builder.yml', () => {
     expect((linux.target as Array<{ target: string }>).map((t) => t.target)).toEqual(['AppImage', 'deb'])
     expect(linux.category).toBe('Network')
     expect(linux.mimeTypes).toContain('text/html')
-    expect(linux.fileAssociations).toEqual([expect.objectContaining({ mimeType: 'application/x-apexcompanion' }), expect.objectContaining({ mimeType: 'application/x-apexpack' }), expect.objectContaining({ mimeType: 'application/x-apexapp' }), expect.objectContaining({ mimeType: 'application/x-apexworld' })])
-    expect(linux.desktop).toEqual({ entry: { StartupWMClass: 'Apex' } })
+    expect(linux.fileAssociations).toEqual([expect.objectContaining({ mimeType: 'application/x-ateliercompanion' }), expect.objectContaining({ mimeType: 'application/x-atelierpack' }), expect.objectContaining({ mimeType: 'application/x-atelierapp' }), expect.objectContaining({ mimeType: 'application/x-atelierworld' })])
+    expect(linux.desktop).toEqual({ entry: { StartupWMClass: 'Atelier' } })
     // The unofficial branding's window class is its own name.
     expect(brandedConfig({ linux }, readBranding('unofficial')).linux.desktop).toEqual({ entry: { StartupWMClass: 'Summit' } })
     expect((await load()).deb!.depends).toEqual(expect.arrayContaining(['libnotify4', 'libsecret-1-0', 'libayatana-appindicator3-1']))
@@ -351,11 +351,11 @@ describe('packaged-app checks', () => {
 
   it('checks Info.plist for usage strings, schemes, documents and a matching icon', () => {
     const good: Record<string, unknown> = {
-      ...Object.fromEntries(MAC_USAGE_KEYS.map((k) => [k, 'Apex uses this for something you asked.'])),
+      ...Object.fromEntries(MAC_USAGE_KEYS.map((k) => [k, 'Atelier uses this for something you asked.'])),
       CFBundleURLTypes: [{ CFBundleURLSchemes: ['http', 'https'] }],
-      CFBundleDocumentTypes: [{ CFBundleTypeExtensions: ['apexcompanion'] }, { CFBundleTypeExtensions: ['apexpack'] }, { CFBundleTypeExtensions: ['html', 'htm'] }],
+      CFBundleDocumentTypes: [{ CFBundleTypeExtensions: ['ateliercompanion'] }, { CFBundleTypeExtensions: ['atelierpack'] }, { CFBundleTypeExtensions: ['html', 'htm'] }],
       CFBundleIconFile: 'icon.icns',
-      CFBundleIconName: 'Apex',
+      CFBundleIconName: 'Atelier',
     }
     expect(plistProblems(good, { assetCatalog: true })).toEqual([])
     expect(plistProblems(good, { assetCatalog: false })).toEqual(['CFBundleIconName is set without an Assets.car'])
@@ -364,33 +364,33 @@ describe('packaged-app checks', () => {
       'Info.plist has no NSCameraUsageDescription',
       "Info.plist doesn't claim the http scheme",
       "Info.plist doesn't claim the https scheme",
-      'Assets.car is there but CFBundleIconName is null, not "Apex"',
+      'Assets.car is there but CFBundleIconName is null, not "Atelier"',
     ])
   })
 
   it('checks each native helper: signed like the app, with its own usage strings', () => {
-    const xml = '<?xml version="1.0"?><plist><dict><key>CFBundleIdentifier</key><string>com.x.speech</string><key>NSMicrophoneUsageDescription</key><string>Apex listens when you dictate.</string></dict></plist>'
+    const xml = '<?xml version="1.0"?><plist><dict><key>CFBundleIdentifier</key><string>com.x.speech</string><key>NSMicrophoneUsageDescription</key><string>Atelier listens when you dictate.</string></dict></plist>'
     const hex = [...Buffer.from(xml)].map((b) => b.toString(16).padStart(2, '0'))
     const lines = (at: number): string[] => Array.from({ length: Math.ceil(hex.length / 16) }, (_, i) => `${(at + i * 16).toString(16).padStart(16, '0')}\t${hex.slice(i * 16, i * 16 + 16).join(' ')} `)
     // A universal binary prints the section once per slice.
     expect(infoPlistFromOtool([...lines(0x1000), ...lines(0x2000)].join('\n'))).toBe(xml)
     expect(infoPlistFromOtool('')).toBeNull()
-    expect(plistStrings(xml)).toEqual({ CFBundleIdentifier: 'com.x.speech', NSMicrophoneUsageDescription: 'Apex listens when you dictate.' })
+    expect(plistStrings(xml)).toEqual({ CFBundleIdentifier: 'com.x.speech', NSMicrophoneUsageDescription: 'Atelier listens when you dictate.' })
 
     expect(codesignDetails('CodeDirectory v=20500 size=1 flags=0x10000(runtime) hashes=1\nSignature size=9000\nTeamIdentifier=ABCDE12345\n')).toEqual({ runtime: true, team: 'ABCDE12345', adhoc: false })
     expect(codesignDetails('CodeDirectory v=20400 flags=0x2(adhoc) hashes=1\nSignature=adhoc\nTeamIdentifier=not set\n')).toEqual({ runtime: false, team: null, adhoc: true })
 
-    const speech = MAC_HELPERS.find((h) => h.path === 'apex-speech')!
+    const speech = MAC_HELPERS.find((h) => h.path === 'atelier-speech')!
     const signed = { runtime: true, team: 'ABCDE12345', adhoc: false }
-    const ok = { plist: xml.replace('<key>NSMicrophoneUsageDescription', '<key>NSSpeechRecognitionUsageDescription</key><string>Apex turns speech into text.</string><key>NSMicrophoneUsageDescription'), bundleId: 'com.x', verify: { ok: true, error: '' }, details: signed, signed: true, appTeam: 'ABCDE12345' }
+    const ok = { plist: xml.replace('<key>NSMicrophoneUsageDescription', '<key>NSSpeechRecognitionUsageDescription</key><string>Atelier turns speech into text.</string><key>NSMicrophoneUsageDescription'), bundleId: 'com.x', verify: { ok: true, error: '' }, details: signed, signed: true, appTeam: 'ABCDE12345' }
     expect(helperProblems(speech, ok)).toEqual([])
-    expect(helperProblems(speech, { ...ok, plist: xml })).toEqual(["apex-speech's Info.plist has no NSSpeechRecognitionUsageDescription"])
-    expect(helperProblems(speech, { ...ok, bundleId: 'com.y' })).toEqual(["apex-speech's CFBundleIdentifier is \"com.x.speech\", not com.y.speech"])
-    expect(helperProblems(speech, { ...ok, plist: null })).toEqual(["apex-speech has no embedded Info.plist, so macOS can't say why it asks"])
+    expect(helperProblems(speech, { ...ok, plist: xml })).toEqual(["atelier-speech's Info.plist has no NSSpeechRecognitionUsageDescription"])
+    expect(helperProblems(speech, { ...ok, bundleId: 'com.y' })).toEqual(["atelier-speech's CFBundleIdentifier is \"com.x.speech\", not com.y.speech"])
+    expect(helperProblems(speech, { ...ok, plist: null })).toEqual(["atelier-speech has no embedded Info.plist, so macOS can't say why it asks"])
     expect(helperProblems(speech, { ...ok, verify: { ok: false, error: 'invalid signature' }, details: { runtime: false, team: 'OTHER', adhoc: false } })).toEqual([
-      'apex-speech: codesign --verify failed: invalid signature',
-      'apex-speech is signed without the hardened runtime',
-      "apex-speech is signed by team OTHER, not the app's ABCDE12345",
+      'atelier-speech: codesign --verify failed: invalid signature',
+      'atelier-speech is signed without the hardened runtime',
+      "atelier-speech is signed by team OTHER, not the app's ABCDE12345",
     ])
     // An ad hoc build only has to verify.
     expect(helperProblems(speech, { ...ok, signed: false, appTeam: null, details: { runtime: false, team: null, adhoc: true } })).toEqual([])
@@ -398,9 +398,9 @@ describe('packaged-app checks', () => {
     // The helpers' own Info.plists (embedded at build time) carry what the checks ask for.
     for (const h of MAC_HELPERS) {
       const source = read(`native/${h.helper}/Info.plist`)
-      expect(helperProblems(h, { ...ok, plist: source, bundleId: 'com.sennechin.apex' }), h.path).toEqual([])
+      expect(helperProblems(h, { ...ok, plist: source, bundleId: 'com.sennechin.atelier' }), h.path).toEqual([])
     }
-    expect(expectedResources('darwin').optional.map((o) => o.path)).toEqual(expect.arrayContaining(['apex-calendar', 'apex-translate']))
+    expect(expectedResources('darwin').optional.map((o) => o.path)).toEqual(expect.arrayContaining(['atelier-calendar', 'atelier-translate']))
   })
 
   it('expects the runtime resources the app reads', () => {
@@ -446,7 +446,7 @@ describe('release assets', () => {
   it('writes SHA256SUMS in sha256sum format', () => {
     const a = 'a'.repeat(64)
     const b = 'b'.repeat(64)
-    expect(checksumLines([{ name: 'Apex-1.0.0.zip', sha256: b }, { name: 'Apex-1.0.0.dmg', sha256: a }])).toBe(`${a}  Apex-1.0.0.dmg\n${b}  Apex-1.0.0.zip\n`)
+    expect(checksumLines([{ name: 'Atelier-1.0.0.zip', sha256: b }, { name: 'Atelier-1.0.0.dmg', sha256: a }])).toBe(`${a}  Atelier-1.0.0.dmg\n${b}  Atelier-1.0.0.zip\n`)
     expect(() => checksumLines([{ name: 'x', sha256: 'nope' }])).toThrow(/bad sha256/)
     expect(() => checksumLines([{ name: 'x\ny', sha256: a }])).toThrow(/bad file name/)
   })
@@ -465,7 +465,7 @@ describe('release assets', () => {
 })
 
 describe('the licence list', () => {
-  const temp = (): string => mkdtempSync(join(tmpdir(), 'apex-licences-'))
+  const temp = (): string => mkdtempSync(join(tmpdir(), 'atelier-licences-'))
   const put = (dir: string, json: Record<string, unknown>, licence?: string): void => {
     mkdirSync(dir, { recursive: true })
     writeFileSync(join(dir, 'package.json'), JSON.stringify(json))
@@ -510,7 +510,7 @@ describe('the licence list', () => {
       expect(entry.text, entry.name).toMatch(/Permission is hereby granted/)
     }
     // Every NuGet package the Windows speech helper references (NAudio.Wasapi brings NAudio.Core), and the .NET runtime it bundles.
-    const csproj = read('native/speech-win/ApexSpeech.csproj')
+    const csproj = read('native/speech-win/AtelierSpeech.csproj')
     const references = [...csproj.matchAll(/<PackageReference Include="([^"]+)" Version="([^"]+)"/g)].map((m) => [m[1]!, m[2]!] as const)
     expect(references.length).toBeGreaterThan(0)
     for (const [name, version] of references) expect(listed.get(name)?.version, name).toBe(version)
@@ -527,14 +527,14 @@ describe('the licence list', () => {
 
   it('lists the companion art under its own licence, with its text, beside the MPL code', () => {
     const own = ownLicenses(REPO)
-    expect(own).toEqual([{ name: 'Apex Companion Art', version: '1.1', license: 'LicenseRef-Apex-Companion-Art', text: read('ART-LICENSE.md') }])
+    expect(own).toEqual([{ name: 'Atelier Companion Art', version: '1.1', license: 'LicenseRef-Atelier-Companion-Art', text: read('ART-LICENSE.md') }])
     expect(licenseVerdict(own[0]!.license)).toBe('ok')
     // A checkout without ART-LICENSE.md (a fork with art of its own) lists none.
     expect(ownLicenses(join(REPO, 'tests'))).toEqual([])
     const committed = JSON.parse(read('src/renderer/public/licenses.json')) as LicenseEntry[]
-    expect(committed.find((e) => e.name === 'Apex Companion Art')).toEqual(own[0])
+    expect(committed.find((e) => e.name === 'Atelier Companion Art')).toEqual(own[0])
     const pkg = JSON.parse(read('package.json')) as { license: string }
-    expect(pkg.license).toBe('MPL-2.0 AND LicenseRef-Apex-Companion-Art')
+    expect(pkg.license).toBe('MPL-2.0 AND LicenseRef-Atelier-Companion-Art')
   })
 
   it('refuses copyleft and patron licences, and flags undeclared ones', () => {
@@ -547,7 +547,7 @@ describe('the licence list', () => {
       [{ name: 'a', version: '1.0.0' }, { name: 'f', version: '2.0.0' }],
     )
     expect(errors).toEqual([
-      "b@1.0.0 is GPL-3.0, which Apex can't ship",
+      "b@1.0.0 is GPL-3.0, which Atelier can't ship",
       expect.stringMatching(/^licenses.json has a malformed entry/),
       'licenses.json leaves out f@2.0.0',
     ])
@@ -574,11 +574,11 @@ describe('the licence list', () => {
 
 describe('publishing', () => {
   it('releases and publishes only the official branding', () => {
-    expect(releaseBrandingProblem({ APEX_OFFICIAL_BRANDING: '1' })).toBeNull()
-    expect(releaseBrandingProblem({ APEX_OFFICIAL_BRANDING: '0' })).toMatch(/official branding only.*Summit.*APEX_OFFICIAL_BRANDING=1/)
+    expect(releaseBrandingProblem({ ATELIER_OFFICIAL_BRANDING: '1' })).toBeNull()
+    expect(releaseBrandingProblem({ ATELIER_OFFICIAL_BRANDING: '0' })).toMatch(/official branding only.*Summit.*ATELIER_OFFICIAL_BRANDING=1/)
     // Unset, it resolves the way the build does: without the internal folder, unofficial.
-    expect(releaseBrandingProblem({ APEX_INTERNAL: '0' })).toMatch(/official branding only/)
-    expect(releaseBrandingProblem({ APEX_OFFICIAL_BRANDING: 'yes' })).toMatch(/APEX_OFFICIAL_BRANDING is "yes"/)
+    expect(releaseBrandingProblem({ ATELIER_INTERNAL: '0' })).toMatch(/official branding only/)
+    expect(releaseBrandingProblem({ ATELIER_OFFICIAL_BRANDING: 'yes' })).toMatch(/ATELIER_OFFICIAL_BRANDING is "yes"/)
     // release.mjs asks first, before anything else in its preflight (a release and every publish; --package-only skips the preflight).
     const source = readFileSync(join(REPO, 'scripts/release/release.mjs'), 'utf8')
     const preflight = source.slice(source.indexOf('function preflight('), source.indexOf('function describe('))
@@ -592,51 +592,51 @@ describe('publishing', () => {
       env: Record<string, string>
       jobs: Record<string, { if?: string }>
     }
-    expect(workflow.env.APEX_OFFICIAL_BRANDING).toBe("${{ github.repository == '3SENN/apex' && '1' || '0' }}")
+    expect(workflow.env.ATELIER_OFFICIAL_BRANDING).toBe("${{ github.repository == '3SENN/atelier' && '1' || '0' }}")
     expect(Object.keys(workflow.jobs).length).toBeGreaterThan(0)
-    for (const [name, job] of Object.entries(workflow.jobs)) expect(job.if, name).toBe("github.repository == '3SENN/apex'")
+    for (const [name, job] of Object.entries(workflow.jobs)) expect(job.if, name).toBe("github.repository == '3SENN/atelier'")
   })
 
   it('uploads installers, blockmaps and update feeds, never names GitHub would rename', () => {
-    const dist = ['Apex-1.0.0-arm64.dmg', 'Apex-1.0.0-arm64.dmg.blockmap', 'Apex-1.0.0-arm64-mac.zip', 'latest-mac.yml', 'beta-mac.yml', 'latest.yml', 'latest-linux.yml', 'Apex-Setup-1.0.0.exe', 'Apex-1.0.0.AppImage', 'apexbrowser_1.0.0_amd64.deb', 'builder-debug.yml', 'builder-effective-config.yaml', 'SHA256SUMS', 'apex-support.json', 'mac-arm64']
-    expect(uploadsFrom(dist)).toEqual(['Apex-1.0.0-arm64-mac.zip', 'Apex-1.0.0-arm64.dmg', 'Apex-1.0.0-arm64.dmg.blockmap', 'Apex-1.0.0.AppImage', 'Apex-Setup-1.0.0.exe', 'apexbrowser_1.0.0_amd64.deb', 'beta-mac.yml', 'latest-linux.yml', 'latest-mac.yml', 'latest.yml'])
-    expect(() => uploadsFrom(['Apex Setup 1.0.0.exe'])).toThrow(/spaces/)
+    const dist = ['Atelier-1.0.0-arm64.dmg', 'Atelier-1.0.0-arm64.dmg.blockmap', 'Atelier-1.0.0-arm64-mac.zip', 'latest-mac.yml', 'beta-mac.yml', 'latest.yml', 'latest-linux.yml', 'Atelier-Setup-1.0.0.exe', 'Atelier-1.0.0.AppImage', 'atelierbrowser_1.0.0_amd64.deb', 'builder-debug.yml', 'builder-effective-config.yaml', 'SHA256SUMS', 'atelier-support.json', 'mac-arm64']
+    expect(uploadsFrom(dist)).toEqual(['Atelier-1.0.0-arm64-mac.zip', 'Atelier-1.0.0-arm64.dmg', 'Atelier-1.0.0-arm64.dmg.blockmap', 'Atelier-1.0.0.AppImage', 'Atelier-Setup-1.0.0.exe', 'atelierbrowser_1.0.0_amd64.deb', 'beta-mac.yml', 'latest-linux.yml', 'latest-mac.yml', 'latest.yml'])
+    expect(() => uploadsFrom(['Atelier Setup 1.0.0.exe'])).toThrow(/spaces/)
   })
 
   it('takes only this version’s files from a dist/ that still has earlier builds', () => {
-    const dist = ['Apex-1.1.2.dmg', 'Apex-1.1.2-arm64.dmg', 'Apex-1.2.1.dmg', 'Apex-1.2.1-arm64.dmg', 'Apex-1.2.1-arm64.dmg.blockmap', 'Apex-1.2.1-arm64-mac.zip', 'Apex-1.2.10-arm64.dmg', 'Apex-1.2.1-beta.1-arm64.dmg', 'Apex-Setup-1.2.1.exe', 'apexbrowser_1.2.1_amd64.deb', 'latest-mac.yml', 'mac-arm64']
-    expect(ofVersion(dist, '1.2.1')).toEqual(['Apex-1.2.1.dmg', 'Apex-1.2.1-arm64.dmg', 'Apex-1.2.1-arm64.dmg.blockmap', 'Apex-1.2.1-arm64-mac.zip', 'Apex-Setup-1.2.1.exe', 'apexbrowser_1.2.1_amd64.deb', 'latest-mac.yml', 'mac-arm64'])
-    expect(ofVersion(dist, '1.2.1-beta.1')).toEqual(['Apex-1.2.1-beta.1-arm64.dmg', 'latest-mac.yml', 'mac-arm64'])
+    const dist = ['Atelier-1.1.2.dmg', 'Atelier-1.1.2-arm64.dmg', 'Atelier-1.2.1.dmg', 'Atelier-1.2.1-arm64.dmg', 'Atelier-1.2.1-arm64.dmg.blockmap', 'Atelier-1.2.1-arm64-mac.zip', 'Atelier-1.2.10-arm64.dmg', 'Atelier-1.2.1-beta.1-arm64.dmg', 'Atelier-Setup-1.2.1.exe', 'atelierbrowser_1.2.1_amd64.deb', 'latest-mac.yml', 'mac-arm64']
+    expect(ofVersion(dist, '1.2.1')).toEqual(['Atelier-1.2.1.dmg', 'Atelier-1.2.1-arm64.dmg', 'Atelier-1.2.1-arm64.dmg.blockmap', 'Atelier-1.2.1-arm64-mac.zip', 'Atelier-Setup-1.2.1.exe', 'atelierbrowser_1.2.1_amd64.deb', 'latest-mac.yml', 'mac-arm64'])
+    expect(ofVersion(dist, '1.2.1-beta.1')).toEqual(['Atelier-1.2.1-beta.1-arm64.dmg', 'latest-mac.yml', 'mac-arm64'])
   })
 
   it('rewrites a stapled dmg’s hash in the macOS feed and leaves the zip alone', () => {
     const yml = [
       'version: 1.0.0',
       'files:',
-      '  - url: Apex-1.0.0-arm64-mac.zip',
+      '  - url: Atelier-1.0.0-arm64-mac.zip',
       '    sha512: ZIP==',
       '    size: 10',
-      '  - url: Apex-1.0.0-arm64.dmg',
+      '  - url: Atelier-1.0.0-arm64.dmg',
       '    sha512: OLD==',
       '    size: 20',
-      'path: Apex-1.0.0-arm64-mac.zip',
+      'path: Atelier-1.0.0-arm64-mac.zip',
       'sha512: ZIP==',
       "releaseDate: '2026-10-29T00:00:00.000Z'",
       '',
     ].join('\n')
-    const out = refreshFeed(yml, [{ name: 'Apex-1.0.0-arm64.dmg', sha512: 'NEW==', size: 21 }])
+    const out = refreshFeed(yml, [{ name: 'Atelier-1.0.0-arm64.dmg', sha512: 'NEW==', size: 21 }])
     expect(out).toBe(yml.replace('OLD==', 'NEW==').replace('size: 20', 'size: 21'))
-    expect(refreshFeed(yml, [{ name: 'Apex-1.0.0-arm64-mac.zip', sha512: 'Z2==', size: 11 }]).match(/Z2==/g)).toHaveLength(2)
+    expect(refreshFeed(yml, [{ name: 'Atelier-1.0.0-arm64-mac.zip', sha512: 'Z2==', size: 11 }]).match(/Z2==/g)).toHaveLength(2)
   })
 
   it('verifies every arch electron-builder built, this machine’s first', () => {
-    const dist = mkdtempSync(join(tmpdir(), 'apex-dist-'))
-    // Named after the branding the build uses (Apex.app, or Summit.app).
+    const dist = mkdtempSync(join(tmpdir(), 'atelier-dist-'))
+    // Named after the branding the build uses (Atelier.app, or Summit.app).
     const name = loadBranding().name
     for (const dir of ['mac', 'mac-arm64']) mkdirSync(join(dist, dir, `${name}.app`), { recursive: true })
     expect(packagedApps({ dist, platform: 'darwin', arch: 'arm64' }).map((a) => a.arch)).toEqual(['arm64', 'x64'])
     expect(packagedApps({ dist, platform: 'darwin', arch: 'x64' })[0]!.executable).toBe(join(dist, 'mac', `${name}.app`, 'Contents', 'MacOS', name))
-    expect(packagedApps({ dist, platform: 'darwin', arch: 'x64', productName: name === 'Apex' ? 'Summit' : 'Apex' })).toEqual([])
+    expect(packagedApps({ dist, platform: 'darwin', arch: 'x64', productName: name === 'Atelier' ? 'Summit' : 'Atelier' })).toEqual([])
     expect(packagedApps({ dist, platform: 'win32', arch: 'x64' })).toEqual([])
   })
 })
@@ -644,7 +644,7 @@ describe('publishing', () => {
 describe('releases with an update feed', () => {
   it('must be public releases, so private engines never reach other people', () => {
     const repo = { owner: 'example', name: 'browser' }
-    expect(releaseFeedProblem({ repo, publicRelease: false })).toMatch(/APEX_PUBLIC_RELEASE=1/)
+    expect(releaseFeedProblem({ repo, publicRelease: false })).toMatch(/ATELIER_PUBLIC_RELEASE=1/)
     expect(releaseFeedProblem({ repo, publicRelease: true })).toBeNull()
     expect(releaseFeedProblem({ repo: null, publicRelease: false })).toBeNull()
   })

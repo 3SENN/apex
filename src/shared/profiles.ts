@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -21,7 +21,7 @@ export interface Profile {
   name: string
   hue: ProfileHue
   createdAt: number
-  /** 'persist:apex-web' for the default profile, 'persist:apex-profile-<id>' for the rest. */
+  /** 'persist:atelier-web' for the default profile, 'persist:atelier-profile-<id>' for the rest. */
   partition: string
   isDefault: boolean
 }
@@ -54,14 +54,14 @@ export interface ProfilesServices {
 export type ProfilesEvent = { type: 'profiles'; items: Profile[]; currentId: string }
 
 export const DEFAULT_PROFILE_ID = 'default'
-export const DEFAULT_PROFILE_PARTITION = 'persist:apex-web'
+export const DEFAULT_PROFILE_PARTITION = 'persist:atelier-web'
 export const PROFILE_ID = /^[a-z0-9]{8,32}$/
 export const PROFILE_NAME_MAX = 40
-export const PROFILES_SETTINGS_URL = 'apex://settings/profiles'
+export const PROFILES_SETTINGS_URL = 'atelier://settings/profiles'
 
 /** The persistent partition a profile's session lives in. */
 export function profilePartition(id: string): string {
-  return id === DEFAULT_PROFILE_ID ? DEFAULT_PROFILE_PARTITION : `persist:apex-profile-${id}`
+  return id === DEFAULT_PROFILE_ID ? DEFAULT_PROFILE_PARTITION : `persist:atelier-profile-${id}`
 }
 
 /**
@@ -90,7 +90,7 @@ export type ProfileDeleteBlock = 'last' | 'default'
 
 /**
  * Why a profile can't be deleted, or null. The last profile always stays, and
- * so does the default one: its data folder is Apex's own, which also holds
+ * so does the default one: its data folder is Atelier's own, which also holds
  * the shared companions, chats and library.
  */
 export function profileDeleteBlock(id: string, profiles: readonly Pick<Profile, 'id'>[]): ProfileDeleteBlock | null {

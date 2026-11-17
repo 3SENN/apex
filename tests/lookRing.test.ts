@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -20,7 +20,7 @@ import {
 } from '../src/renderer/src/companion-card/logic/lookRing'
 
 describe('look ring (DS-118)', () => {
-  it('has eight categories, four on each arc, in the Apex mapping', () => {
+  it('has eight categories, four on each arc, in the Atelier mapping', () => {
     expect(RING_CATEGORIES.map((c) => c.id)).toEqual(['colours', 'shape', 'eyes', 'mouth', 'brows', 'hat', 'hair', 'accessories'])
     expect(RING_CATEGORIES.filter((c) => c.side === 'left')).toHaveLength(4)
     expect(BUBBLE_SIZE).toBe(46)

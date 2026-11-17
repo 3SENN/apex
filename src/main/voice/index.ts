@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -20,9 +20,9 @@ import { smokeVoiceBroker } from './smokeSpeech'
 import { VoiceTurns, type KeyContext } from './turns'
 
 // Voice's entry point: the hold-to-talk chord through the core input
-// interceptor on every Apex webContents, the turns and the HUD, the quick-ask
-// launcher and its opt-in global shortcut (registered only while no Apex
-// window has focus, never under APEX_SMOKE).
+// interceptor on every Atelier webContents, the turns and the HUD, the quick-ask
+// launcher and its opt-in global shortcut (registered only while no Atelier
+// window has focus, never under ATELIER_SMOKE).
 
 /** Above the core's own interceptors: the chord must be seen before any page or shortcut. */
 const INTERCEPT_PRIORITY = 100
@@ -113,7 +113,7 @@ export function setupVoice(ctx: AppContext, deps: VoiceDeps): VoiceSetup {
   const isLauncherWindow = (id: number): boolean => ctx.float.window('launcher')?.webContents.id === id
   const removeInterceptor = shortcuts.addInputInterceptor(
     (input, wc, win) => {
-      // Esc in any Apex surface stops a reply being read aloud.
+      // Esc in any Atelier surface stops a reply being read aloud.
       if (input.type === 'keyDown' && input.key === 'Escape' && turns.stopSpeech()) return 'handled'
       // The launcher handles its own key (QuickAsk); a hold there would fight it.
       if (isLauncherWindow(wc.id)) return 'pass'
@@ -134,12 +134,12 @@ export function setupVoice(ctx: AppContext, deps: VoiceDeps): VoiceSetup {
       const v = ctx.settings.get().voice
       return { on: v.launcher, accelerator: chordAccelerator(v.chord) }
     },
-    apexFocused: () => BrowserWindow.getFocusedWindow() !== null,
+    atelierFocused: () => BrowserWindow.getFocusedWindow() !== null,
     onPress: () => launcher.toggle(),
     smoke: ctx.smoke,
     onChange: () => rt.changed(),
   })
-  // Focus moves between Apex windows blur one and focus the next: decide once both have run.
+  // Focus moves between Atelier windows blur one and focus the next: decide once both have run.
   let pending: NodeJS.Immediate | null = null
   const reconcile = (): void => {
     if (pending) return
@@ -158,7 +158,7 @@ export function setupVoice(ctx: AppContext, deps: VoiceDeps): VoiceSetup {
     const a = next.voice
     const b = previous.voice
     if (a.launcher !== b.launcher || a.chord !== b.chord) {
-      // Turning the switch on while in Apex tries the keys once, so Settings can show a conflict straight away.
+      // Turning the switch on while in Atelier tries the keys once, so Settings can show a conflict straight away.
       if (a.launcher) shortcut.probe()
       else shortcut.reconcile()
     }

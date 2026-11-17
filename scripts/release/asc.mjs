@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
-// App Store Connect API helper for Apex's App ID and Developer ID profile
+// App Store Connect API helper for Atelier's App ID and Developer ID profile
 // (docs/release.md, "Browser passkeys and iCloud Passwords"). It talks to
 // https://api.appstoreconnect.apple.com with the person's own API key and
 // never runs without it: APPLE_API_KEY (the .p8 path), APPLE_API_KEY_ID and
@@ -13,16 +13,16 @@
 //   node scripts/release/asc.mjs --apply      registers the bundle id, adds capabilities, makes the profile
 //
 // Options:
-//   --bundle-id <id>       default APEX_BUNDLE_ID, else com.sennechin.apex
-//   --name <name>          the App ID's name in the portal (default "Apex")
+//   --bundle-id <id>       default ATELIER_BUNDLE_ID, else com.sennechin.atelier
+//   --name <name>          the App ID's name in the portal (default "Atelier")
 //   --capability <TYPE>    a capabilityType to enable on the App ID (repeatable; none by default)
 //   --certificate <id>     the Developer ID Application certificate's API id; by default the one whose
-//                          SHA-1 is APEX_SIGN_IDENTITY (when a hash), or the account's only one
-//   --profile-name <name>  default "Apex Developer ID <bundle id>"
+//                          SHA-1 is ATELIER_SIGN_IDENTITY (when a hash), or the account's only one
+//   --profile-name <name>  default "Atelier Developer ID <bundle id>"
 //   --out <path>           where the profile is written (default build/generated/<bundle id>.provisionprofile)
 //   --recreate             delete a profile of that name first and make a new one (needed after a capability change)
 //
-// It needs APEX_TEAM_ID (the profile is checked against your team). Like the
+// It needs ATELIER_TEAM_ID (the profile is checked against your team). Like the
 // other release scripts, it reads internal/release.env under the environment
 // when that file exists (config.mjs).
 //
@@ -140,7 +140,7 @@ export function pickCertificate(certs, { id, hash }) {
   if (byHash) return byHash
   if (certs.length === 1) return certs[0]
   if (!certs.length) throw new AscError('the account has no Developer ID Application certificate. Create one first (docs/release.md)')
-  const which = hash ? `and none is ${hash}` : 'and APEX_SIGN_IDENTITY names no SHA-1 to pick one'
+  const which = hash ? `and none is ${hash}` : 'and ATELIER_SIGN_IDENTITY names no SHA-1 to pick one'
   throw new AscError(
     `several Developer ID Application certificates, ${which}: pass --certificate <id> (${certs.map((c) => `${c.id}, expires ${String(c.attributes?.expirationDate ?? '?').slice(0, 10)}`).join('; ')})`,
   )
@@ -152,10 +152,10 @@ export function pickCertificate(certs, { id, hash }) {
  */
 export async function runAsc({ argv = [], env = process.env, fetch: doFetch, readFile = readFileSync, exists = existsSync, write = writeFileSync, log = console.log, now = Date.now(), decode = process.platform === 'darwin' ? decodeProfile : null, repo = REPO } = {}) {
   const opts = parseArgs(argv)
-  // The App ID's name: --name, else the branding's (Apex for official builds).
+  // The App ID's name: --name, else the branding's (Atelier for official builds).
   opts.name ??= loadBranding(env).name
   const key = keyFrom(env, exists)
-  const bundleId = bundleIdFrom(opts.bundleId ? { APEX_BUNDLE_ID: opts.bundleId } : env)
+  const bundleId = bundleIdFrom(opts.bundleId ? { ATELIER_BUNDLE_ID: opts.bundleId } : env)
   const teamId = requireTeamId(env, 'asc.mjs (it checks the profile against your team; nothing was sent)')
   const token = makeToken({ privateKey: createPrivateKey(readFile(key.keyPath)), keyId: key.keyId, issuer: key.issuer, now })
   const api = createClient({ token, fetch: doFetch })
@@ -192,7 +192,7 @@ export async function runAsc({ argv = [], env = process.env, fetch: doFetch, rea
   log(`the profile names the certificate ${cert.id} (${cert.attributes?.displayName ?? cert.attributes?.name ?? 'Developer ID Application'}, expires ${String(cert.attributes?.expirationDate ?? '?').slice(0, 10)})`)
 
   // 4. The Developer ID profile (MAC_APP_DIRECT).
-  const profileName = opts.profileName ?? `Apex Developer ID ${bundleId}`
+  const profileName = opts.profileName ?? `Atelier Developer ID ${bundleId}`
   const listed = (await api.get(`/v1/profiles?${query({ 'filter[name]': profileName, 'filter[profileType]': 'MAC_APP_DIRECT', limit: 200 })}`))?.data ?? []
   let profile = listed.find((p) => p.attributes?.name === profileName) ?? null
   if (profile && opts.recreate) {
@@ -234,7 +234,7 @@ export async function runAsc({ argv = [], env = process.env, fetch: doFetch, rea
     if (problems.length) log(`the profile can't sign a passkeys build yet:\n${problems.map((p) => `  - ${p}`).join('\n')}`)
     else log('the profile grants the browser passkey entitlement')
   }
-  log(`export APEX_PROVISIONING_PROFILE="${out}"`)
+  log(`export ATELIER_PROVISIONING_PROFILE="${out}"`)
   return { plan, applied: true, out, problems }
 }
 

@@ -1,18 +1,18 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex://skills[/<id>] (SK-01): saved instructions you call with /name, in
+// atelier://skills[/<id>] (SK-01): saved instructions you call with /name, in
 // three groups (yours, companions', built-in), with search, sort and
-// filters, cards with Run, and create and import. apex://skills/<id> (and
+// filters, cards with Run, and create and import. atelier://skills/<id> (and
 // /new) opens the skill as a page; ?tab= picks the group and ?file= a file.
 import { useMemo, useState, type ReactElement } from 'react'
 import { Copy, MoreHorizontal, Play, Plus, Upload, WandSparkles } from 'lucide-react'
 import { SHARED_OWNER } from '@shared/chats'
 import { filterSkills, skillSegment, type Skill, type SkillFilter } from '@shared/skills'
 import { chatUrl, internalQuery, skillUrl } from '@shared/url'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { useT } from '../i18n/useT'
 import { Badge, Button, ErrorState, IconButton, RelativeTime, SkeletonRows, showMenu, useConfirm, useToast } from '../ui'
 import { ExportDialog } from '../ui/ExportDialog'
@@ -32,7 +32,7 @@ const WITHIN: readonly UpdatedWithin[] = ['any', 'week', 'month', 'year']
 
 export interface SkillsPageProps {
   tabId: string
-  /** apex://skills/<id> opens that skill; 'new' starts one. */
+  /** atelier://skills/<id> opens that skill; 'new' starts one. */
   itemId?: string | null
   /** The whole address, for ?tab= and ?file=. */
   url?: string
@@ -51,10 +51,10 @@ function SkillsList({ tabId, url }: { tabId: string; url: string }): ReactElemen
   useEvent('skills', (e) => skills.set(e.items))
   const companions = useCompanions()
   const tab = internalQuery(url, 'tab')
-  const [stored, setSegment] = useLocalPreference<Segment>('apex.skills.segment', 'yours', SEGMENTS)
+  const [stored, setSegment] = useLocalPreference<Segment>('atelier.skills.segment', 'yours', SEGMENTS)
   const segment: Segment = tab && (SEGMENTS as readonly string[]).includes(tab) ? (tab as Segment) : stored
   const [query, setQuery] = useState('')
-  const [sort, setSort] = useLocalPreference<Sort>('apex.skills.sortD', 'recent-use', SORTS)
+  const [sort, setSort] = useLocalPreference<Sort>('atelier.skills.sortD', 'recent-use', SORTS)
   const [owner, setOwner] = useState<string>('')
   const [within, setWithin] = useState<UpdatedWithin>('any')
   const [exporting, setExporting] = useState<Skill | null>(null)
@@ -75,10 +75,10 @@ function SkillsList({ tabId, url }: { tabId: string; url: string }): ReactElemen
   const fail = (err: unknown): void => void toast.show({ tone: 'error', message: errorText(err) })
   const pickSegment = (next: Segment): void => {
     setSegment(next)
-    if (tab) void apex.nav.go(tabId, 'apex://skills')
+    if (tab) void atelier.nav.go(tabId, 'atelier://skills')
   }
-  const open = (s: Skill): void => void apex.nav.go(tabId, skillUrl(s.id))
-  const newSkill = (): void => void apex.nav.go(tabId, 'apex://skills/new')
+  const open = (s: Skill): void => void atelier.nav.go(tabId, skillUrl(s.id))
+  const newSkill = (): void => void atelier.nav.go(tabId, 'atelier://skills/new')
   const importSkill = (): void => {
     call('skills', 'importFile').then((s) => {
       if (!s) return

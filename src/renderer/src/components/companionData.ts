@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { useEffect, useState, useSyncExternalStore } from 'react'
 import type { Companion, CompanionPreset } from '@shared/companion'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { loadCompanionAssets, type CompanionAssets } from '../companion'
 
 // ---- the companion list ----
@@ -34,7 +34,7 @@ function setCompanionsState(next: CompanionsState): void {
 function startCompanions(): void {
   if (companionsStarted) return
   companionsStarted = true
-  apex.onAppEvent((event) => {
+  atelier.onAppEvent((event) => {
     if (event.type !== 'companions') return
     companionsVersion++
     setCompanionsState({ items: event.items, activeId: event.activeId, status: 'ready', error: null })

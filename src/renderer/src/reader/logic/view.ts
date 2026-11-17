@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -32,7 +32,7 @@ export interface ReaderLook {
 
 const MEASURE: Record<ReaderWidth, number> = { narrow: 30, medium: 36, wide: 44 }
 
-/** 'auto' takes Apex's own mode; the others are fixed. */
+/** 'auto' takes Atelier's own mode; the others are fixed. */
 export function readerSurface(theme: ReaderTheme, app: 'light' | 'dark'): ReaderSurface {
   return theme === 'auto' ? app : theme
 }

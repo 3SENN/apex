@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -21,7 +21,7 @@ import { FileMeetingSummarizer } from './summarize'
 
 // The meetings library's entry point: the store under
 // userData/meetings, the summarizer on ctx.quick, the resolver chats use for
-// attached meetings, the apex-media handler, the `meeting-recordings`
+// attached meetings, the atelier-media handler, the `meeting-recordings`
 // storage category and the `meetings` service. Changes reach the chrome as
 // `meetings` (the list) and `meeting-live` (one meeting's new lines).
 
@@ -33,14 +33,14 @@ export interface MeetingsLibrarySetup {
   dispose(): void
 }
 
-/** How often the queued summaries check for an engine (another engine can sign in without any Apex event). */
+/** How often the queued summaries check for an engine (another engine can sign in without any Atelier event). */
 const PENDING_RETRY_MS = 5 * 60_000
 /** How long a discussion waits for a transcript that is still being finished. */
 const DISCUSS_WAIT_MS = 120_000
 
 let current: { store: MeetingFileStore; summarizer: FileMeetingSummarizer; recoverLeft(): Promise<void> } | null = null
 
-// Smoke hook: the next path a save dialog returns under APEX_SMOKE, so an export never waits on a real dialog.
+// Smoke hook: the next path a save dialog returns under ATELIER_SMOKE, so an export never waits on a real dialog.
 const smokeSaves: string[] = []
 export const smokeMeetings = {
   queueSave(path: string): void {
@@ -95,7 +95,7 @@ export function setupMeetingsLibrary(ctx: AppContext, deps: { broker: SpeechBrok
   store.load(summarizer.pending())
   const resolver = createMeetingResolver(store)
 
-  // Recordings a session never finished (Apex crashed, was force quit or lost power mid-meeting):
+  // Recordings a session never finished (Atelier crashed, was force quit or lost power mid-meeting):
   // the helper puts the parts it left back together, one meeting at a time. Parts it can't use
   // stay for the next start.
   const recoverLeft = async (): Promise<void> => {
@@ -144,7 +144,7 @@ export function setupMeetingsLibrary(ctx: AppContext, deps: { broker: SpeechBrok
   retry.unref?.()
   const startTimer = setTimeout(() => void summarizer.flush(), 4000)
 
-  // Apex-media on the default session, which the chrome, its overlays and the floats share.
+  // Atelier-media on the default session, which the chrome, its overlays and the floats share.
   const unhandleMedia = handleMediaProtocol(session.defaultSession, ctx.dataDir)
 
   // ST-53: meeting recordings in the Storage overview.

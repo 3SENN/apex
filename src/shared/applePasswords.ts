@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Apple Passwords (iCloud Keychain) in Apex, macOS only: Apple's own
+// Apple Passwords (iCloud Keychain) in Atelier, macOS only: Apple's own
 // "iCloud Passwords" extension, always downloaded from the Chrome Web Store
-// through Apex's verified install path (never bundled), talking to Apple's
+// through Atelier's verified install path (never bundled), talking to Apple's
 // helper (macOS 14+ installs it for Chrome at HELPER_MANIFEST_PATH). The
 // status below is read from what the extension and its native port expose:
 // the helper's manifest and binary, whether the extension runs, its toolbar
@@ -13,7 +13,7 @@
 
 export const APPLE_PASSWORDS_EXTENSION_ID = 'pejdijmoenmkgeppbflobdenhhabjlaj'
 export const APPLE_PASSWORDS_HOST = 'com.apple.passwordmanager'
-/** Where macOS installs the helper's manifest for Chrome (Apex reads Chrome's folder, read-only). */
+/** Where macOS installs the helper's manifest for Chrome (Atelier reads Chrome's folder, read-only). */
 export const HELPER_MANIFEST_PATH = '/Library/Google/Chrome/NativeMessagingHosts/com.apple.passwordmanager.json'
 
 export type ApplePasswordsState =
@@ -38,24 +38,24 @@ export type ApplePasswordsState =
   /** The helper says iCloud Passwords are off on this Mac, or need you to sign in again. */
   | 'icloud-off'
   /**
-   * macOS refused to start the helper for Apex: it only runs under a browser
+   * macOS refused to start the helper for Atelier: it only runs under a browser
    * signed with Apple's browser passkey entitlement (or one Apple lists).
    * Seen as the helper killed at exec, or gone at once without a word.
    */
-  | 'needs-signed-apex'
+  | 'needs-signed-atelier'
 
 export interface ApplePasswordsStatus {
   state: ApplePasswordsState
   /** The extension is installed in this profile (on or off). */
   installed: boolean
   enabled: boolean
-  /** Apex's own password offers and save prompts are stepping aside right now. */
-  apexStepsAside: boolean
+  /** Atelier's own password offers and save prompts are stepping aside right now. */
+  atelierStepsAside: boolean
   /** Another password extension (not Apple's) controls password saving, by name; null when none. */
   otherController: string | null
   /** The helper's last error on the port, as plain words; null when none. */
   error: string | null
-  /** This Apex is signed with Apple's browser passkey entitlement, so macOS lets it start the helper. */
+  /** This Atelier is signed with Apple's browser passkey entitlement, so macOS lets it start the helper. */
   signedAsBrowser: boolean
 }
 
@@ -75,7 +75,7 @@ export interface ApplePasswordsServices {
 
 export type ApplePasswordsEvent = { type: 'apple-passwords'; status: ApplePasswordsStatus }
 
-/** What the status is computed from. Every field is something Apex observed, nothing guessed. */
+/** What the status is computed from. Every field is something Atelier observed, nothing guessed. */
 export interface ApplePasswordsInputs {
   mac: boolean
   installing: boolean
@@ -83,7 +83,7 @@ export interface ApplePasswordsInputs {
   extension: { installed: boolean; enabled: boolean; running: boolean }
   /** The open native port to the helper, or the last one when none is open. */
   port: { open: boolean; replied: boolean; closedWithError: string | null; launchRefused?: boolean } | null
-  /** Apex is signed with the browser passkey entitlement (main/codeSignature.ts). */
+  /** Atelier is signed with the browser passkey entitlement (main/codeSignature.ts). */
   signedAsBrowser?: boolean
   /** The path the extension last set for its toolbar icon (chrome.action.setIcon), or null. */
   iconPath: string | null
@@ -126,7 +126,7 @@ export function iconSaysPaired(path: string | null): boolean | null {
   return null
 }
 
-/** The card's state from what Apex observed. */
+/** The card's state from what Atelier observed. */
 export function applePasswordsState(i: ApplePasswordsInputs): ApplePasswordsState {
   if (!i.mac) return 'unavailable'
   if (i.installing) return 'installing'
@@ -138,8 +138,8 @@ export function applePasswordsState(i: ApplePasswordsInputs): ApplePasswordsStat
   if (i.lastHelperCmd === CMD_PASSWORDS_DISABLED || i.lastHelperCmd === CMD_RELOGIN_NEEDED) return 'icloud-off'
   if (!i.port) return 'starting'
   // The extension reconnects by itself a moment after a drop; a port that stays closed means the helper ended it.
-  // Refused at launch means macOS wants a signed Apex; once Apex is signed with the entitlement, a closed port is the helper's own doing.
-  if (!i.port.open) return i.port.launchRefused && !i.signedAsBrowser ? 'needs-signed-apex' : 'helper-closed'
+  // Refused at launch means macOS wants a signed Atelier; once Atelier is signed with the entitlement, a closed port is the helper's own doing.
+  if (!i.port.open) return i.port.launchRefused && !i.signedAsBrowser ? 'needs-signed-atelier' : 'helper-closed'
   if (!i.port.replied) return 'starting'
   if (paired === true) return 'ready'
   return i.codeRequested ? 'waiting-for-code' : 'not-paired'

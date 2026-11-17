@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -19,7 +19,7 @@ export const CHAT_ZOOM = { min: 0.3, max: 2 } as const
 
 const clamp = (n: number, min: number, max: number, fallback: number): number => (Number.isFinite(n) ? Math.min(max, Math.max(min, n)) : fallback)
 
-/** The type ramp for an interface text size: every step moves with the base (13 is Apex's default). */
+/** The type ramp for an interface text size: every step moves with the base (13 is Atelier's default). */
 export function typeScale(fontSize: number): Record<string, string> {
   const delta = Math.round(clamp(fontSize, FONT_SIZE.min, FONT_SIZE.max, FONT_SIZE.default)) - FONT_SIZE.default
   return {

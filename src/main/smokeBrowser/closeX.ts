@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -19,7 +19,7 @@ import type { ShotSpec, SmokeCheck, SmokeContext } from './types'
 type Rect = { x: number; y: number; width: number; height: number }
 type Point = { x: number; y: number }
 
-const chatPage = (id: string): string => `apex://chat/${id}`
+const chatPage = (id: string): string => `atelier://chat/${id}`
 
 function route(ctx: SmokeContext, path: string, title: string): string {
   ctx.server.route(path, (_req, res) => {

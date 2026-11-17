@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -61,7 +61,7 @@ describe('your profile', () => {
     expect(matchApps(['GitHub', 'github'], DIRECTORY)).toEqual(['github'])
   })
 
-  it('offers a habit as a routine on its days, with its skill only when Apex has it', () => {
+  it('offers a habit as a routine on its days, with its skill only when Atelier has it', () => {
     expect(habitRoutine(weekly, CTX)).toEqual({ name: 'Plan the week', prompt: weekly.prompt, schedule: { kind: 'daily', time: '09:00', days: [1] }, companionId: 'companion-1', timeZone: 'Europe/Amsterdam', skillId: 'weekly-review' })
     expect(habitRoutine({ ...weekly, skill: 'made-up', days: [5, 1, 5] }, CTX)).not.toHaveProperty('skillId')
     expect(habitRoutine({ ...weekly, days: [5, 1, 5] }, CTX).schedule).toEqual({ kind: 'daily', time: '09:00', days: [1, 5] })

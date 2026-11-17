@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -125,7 +125,7 @@ export class CompanionPresets {
     const { presets, rejected } = parsePresets(raw)
     if (rejected > 0) console.warn(`Ignored ${rejected} invalid companion preset(s) in ${this.#path}.`)
     // The presets the branding offers: its own companion first, if it has one that is a valid preset, and none it
-    // leaves out (the unofficial branding offers its neutral companion and none of Apex's six; src/shared/branding.ts).
+    // leaves out (the unofficial branding offers its neutral companion and none of Atelier's six; src/shared/branding.ts).
     const own = BRANDING.ownPreset
     const ownValid = own !== null && presetSchema.safeParse(own).success
     if (own && !ownValid) console.warn(`Ignored the branding's own companion "${own.id}": it is not a valid preset.`)

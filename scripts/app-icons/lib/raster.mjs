@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// A small, deterministic rasterizer for Apex's icon art.
+// A small, deterministic rasterizer for Atelier's icon art.
 //
 // Coverage is computed per pixel from many horizontal sub-rows, each with
 // exact span coverage in x, so edges are smooth at every size without any

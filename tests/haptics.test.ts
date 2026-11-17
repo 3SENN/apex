@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -23,7 +23,7 @@ function fakeAddon(result: boolean | Error = true) {
         return result
       },
     },
-    path: '/x/apex_haptics.node',
+    path: '/x/atelier_haptics.node',
   }
   return { calls, load }
 }
@@ -85,9 +85,9 @@ describe('loadHapticsAddon', () => {
 
 describe('hapticsAddonPaths', () => {
   it('uses Resources/native when packaged and the build folder in development', () => {
-    const o = { resourcesPath: '/App/Contents/Resources', appPath: '/src/apex' }
-    expect(hapticsAddonPaths({ ...o, packaged: true })).toEqual([join('/App/Contents/Resources/native/apex_haptics.node')])
-    expect(hapticsAddonPaths({ ...o, packaged: false })).toEqual([join('/src/apex/native/haptics/build/apex_haptics.node')])
+    const o = { resourcesPath: '/App/Contents/Resources', appPath: '/src/atelier' }
+    expect(hapticsAddonPaths({ ...o, packaged: true })).toEqual([join('/App/Contents/Resources/native/atelier_haptics.node')])
+    expect(hapticsAddonPaths({ ...o, packaged: false })).toEqual([join('/src/atelier/native/haptics/build/atelier_haptics.node')])
   })
 })
 
@@ -166,7 +166,7 @@ describe('the haptics service', () => {
 
   it('resolves without the addon, off macOS and with the setting off', () => {
     for (const [platform, on] of [['darwin', true], ['darwin', false], ['win32', true], ['linux', true]] as const) {
-      const native = setupNative({ settings: settings(on), broker, recorder, platform, addonPaths: () => ['/nowhere/apex_haptics.node'] })
+      const native = setupNative({ settings: settings(on), broker, recorder, platform, addonPaths: () => ['/nowhere/atelier_haptics.node'] })
       expect(native.services.haptics.perform('alignment')).toBeUndefined()
       native.dispose()
     }

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -44,13 +44,13 @@ export interface FloatInitial {
   theme: ThemeState
   payload: unknown
   companion: Companion | null
-  /** Apex's own Reduce Motion setting (the system setting is read by the renderer). */
+  /** Atelier's own Reduce Motion setting (the system setting is read by the renderer). */
   reduceMotion: boolean
   language: FloatLanguage
 }
 
-/** What the float preload exposes as `window.apexFloat`. */
-export interface ApexFloatApi {
+/** What the float preload exposes as `window.atelierFloat`. */
+export interface AtelierFloatApi {
   kind: FloatKind
   initial: FloatInitial
   /** process.platform: a float words things as the system does (no Mac on Windows). */
@@ -62,7 +62,7 @@ export interface ApexFloatApi {
 }
 
 export type FloatAnchor = 'bottom-center' | 'bottom-right' | 'right-edge'
-export type FloatDisplay = 'cursor' | 'apex'
+export type FloatDisplay = 'cursor' | 'atelier'
 
 export interface Placement {
   display?: FloatDisplay
@@ -96,7 +96,7 @@ export const FLOAT_SPECS: Record<FloatKind, FloatSpec> = {
   },
   'voice-hud': {
     focusable: false, movable: false, width: 420, height: 140, max: { width: 420, height: 480 },
-    placement: { display: 'apex', anchor: 'bottom-center', margin: 48 }, level: 2, survivesHide: true, showDelayMs: 0,
+    placement: { display: 'atelier', anchor: 'bottom-center', margin: 48 }, level: 2, survivesHide: true, showDelayMs: 0,
   },
   'meeting-card': {
     focusable: false, movable: false, width: 360, height: 150, max: { width: 360, height: 320 },

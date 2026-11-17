@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,18 +8,18 @@ import { z } from 'zod'
 // Quick decisions (DC-01 to DC-12, docs/decisions.md): an optional decision
 // model that answers typed questions about a piece of text (yes or no, one of
 // a few options, or a level on a short scale) with probabilities, in about a
-// tenth of a second and without writing any text. Apex keeps its own rules as
+// tenth of a second and without writing any text. Atelier keeps its own rules as
 // the answer: a decision model only takes over a decision when you turned it
 // on in Settings › Quick decisions, it is sure enough and it answers in time.
 //
 // Providers speak one of two requests: TypeSafe's System One (Jev, Jev on
 // OpenRouter, gateways such as Experiential Labs, and self-hosted servers such
 // as the open Kev models) or OpenAI's Decisions (GPT-6 Luna, directly or
-// through a gateway). The client turns one into the other, so Apex's questions
+// through a gateway). The client turns one into the other, so Atelier's questions
 // and readers are the same for both; only the address, key and model id
 // differ. Nothing is fixed to one provider or one model: you connect any of
 // the providers below (each with its own key) and any servers of your own,
-// Apex lists the decision models each one offers, and you pick the ones to
+// Atelier lists the decision models each one offers, and you pick the ones to
 // use, in order. The first answers; when it fails, is busy or hits its rate
 // limit, the next one does. Adding a provider is an entry in
 // PROVIDER_DEFAULTS and its name and description in the decisions strings.
@@ -122,7 +122,7 @@ export function dialectOf(model: string, url: string): DecisionDialect {
 }
 
 /**
- * The decisions Apex can hand to a decision model. Each keeps its own rule
+ * The decisions Atelier can hand to a decision model. Each keeps its own rule
  * when the model is off, unsure, slow or unreachable; 'labeling' is the
  * companion's label_items tool, which the companion judges itself without it.
  * 'effort' and 'memory' send your messages and whole chats, so they start off
@@ -131,17 +131,17 @@ export function dialectOf(model: string, url: string): DecisionDialect {
 export const DECISION_USES = ['needsYou', 'dictation', 'agentClicks', 'searchOrAsk', 'voiceTarget', 'setup', 'labeling', 'effort', 'skills', 'memory', 'tabs'] as const
 export type DecisionUse = (typeof DECISION_USES)[number]
 
-/** Model calls that are not one of Apex's own decisions: routine conditions and packs. Both run on your Claude engine when no decision model is on. */
+/** Model calls that are not one of Atelier's own decisions: routine conditions and packs. Both run on your Claude engine when no decision model is on. */
 export type DecisionCaller = DecisionUse | 'routine' | 'pack'
 
 export interface DecisionsSettings {
-  /** The master switch: off, Apex's own rules decide, whatever is set up below. */
+  /** The master switch: off, Atelier's own rules decide, whatever is set up below. */
   on: boolean
   /** The models to use, first choice first; when one fails, is busy or hits its rate limit, the next answers. */
   models: DecisionModelRef[]
   /** Your own servers, each a provider of its own. */
   servers: DecisionServer[]
-  /** 'use': the model's answer wins when it is sure. 'compare': Apex keeps its rules and only notes where the model would have decided otherwise. */
+  /** 'use': the model's answer wins when it is sure. 'compare': Atelier keeps its rules and only notes where the model would have decided otherwise. */
   mode: 'use' | 'compare'
   uses: Record<DecisionUse, boolean>
 }
@@ -214,7 +214,7 @@ export function sameModel(a: DecisionModelRef, b: DecisionModelRef): boolean {
  * Models that take a per-message effort (DC-15): an effort-only system message
  * in the history (beta), which keeps the prompt cache, where changing the
  * request's own effort would write the whole conversation to the cache again.
- * Other models keep the chat's effort. Haiku 5.5 has no effort setting in Apex.
+ * Other models keep the chat's effort. Haiku 5.5 has no effort setting in Atelier.
  */
 const PER_MESSAGE_EFFORT_MODELS: ReadonlySet<string> = new Set(['claude-fable-5-1', 'claude-mythos-5-1', 'claude-opus-5-5', 'claude-opus-5', 'claude-sonnet-5-5'])
 
@@ -269,7 +269,7 @@ export interface DecisionResult {
   inputTokens: number
 }
 
-/** Limits Apex holds every request to (TypeSafe allows more; these keep calls fast and cheap). */
+/** Limits Atelier holds every request to (TypeSafe allows more; these keep calls fast and cheap). */
 export const DECISION_LIMITS = {
   questions: 20,
   choices: 64,
@@ -362,7 +362,7 @@ export interface DecisionModelStatus extends DecisionModelRef {
   lastModel: string | null
   lastMs: number | null
   lastError: DecisionErrorCode | null
-  /** After its provider's rate limit, the next model (or Apex's rules) answers until this time (ms since 1970). */
+  /** After its provider's rate limit, the next model (or Atelier's rules) answers until this time (ms since 1970). */
   pausedUntil: number | null
   /** What the provider said when it paused (its plan or credit limit, say), cut short and redacted. */
   pausedReason: string | null
@@ -378,7 +378,7 @@ export interface DecisionsStatus {
   ready: boolean
   /** Your models in order, with how each is doing. */
   models: DecisionModelStatus[]
-  /** Decisions answered by a model since start-up, and how many of those differed from Apex's rule. */
+  /** Decisions answered by a model since start-up, and how many of those differed from Atelier's rule. */
   answered: number
   differed: number
 }
@@ -411,11 +411,11 @@ export interface DecisionCatalog {
   failed: boolean
 }
 
-/** One place where the model and Apex's rule disagreed, kept on this computer only (never for private windows). */
+/** One place where the model and Atelier's rule disagreed, kept on this computer only (never for private windows). */
 export interface DecisionComparison {
   at: number
   use: DecisionCaller
-  /** What Apex's rule decided and what the model decided, as short labels. */
+  /** What Atelier's rule decided and what the model decided, as short labels. */
   rule: string
   model: string
   /** The model's probability for its own answer. */

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -16,7 +16,7 @@ export interface NavPage {
   title: string
 }
 
-/** A nav row that opens another Apex page (Connectors is a destination of its own). */
+/** A nav row that opens another Atelier page (Connectors is a destination of its own). */
 export interface NavLink {
   kind: 'link'
   id: string
@@ -74,7 +74,7 @@ export const PLATFORM_PAGES: Partial<Record<SettingsPageId, readonly string[]>> 
 }
 
 /** Connectors is a destination of its own; its row's title is read when the nav is built, so it follows the app language. */
-const CONNECTORS_LINK = { kind: 'link', id: 'connectors', url: 'apex://connectors' } as const
+const CONNECTORS_LINK = { kind: 'link', id: 'connectors', url: 'atelier://connectors' } as const
 
 // Top to bottom, as the settings spec groups them (feature-spec, Settings).
 const GROUPS: ReadonlyArray<{ id: string; label: MessageKey | null; entries: ReadonlyArray<SettingsPageId | typeof CONNECTORS_LINK> }> = [
@@ -117,7 +117,7 @@ export const DEFAULT_PAGE: SettingsPageId = 'you'
 // Sub-views a page can show from its own address. 'companion' is the old
 // single-companion editor address: it now opens the active companion's look
 // editor under Companions. Alias parents show another page
-// inside a nav page: apex://settings/sites is the site settings, under Privacy.
+// inside a nav page: atelier://settings/sites is the site settings, under Privacy.
 const SUB_VIEWS: Record<string, { page: SettingsPageId; view: string }> = {
   companion: { page: 'companions', view: 'look' },
   ...Object.fromEntries(Object.entries(SETTINGS_ALIAS_PARENTS).map(([view, page]) => [view, { page: page as SettingsPageId, view }])),
@@ -127,12 +127,12 @@ export interface ResolvedSection {
   page: SettingsPageId
   /** A sub-view of the page, or null for its main view. */
   view: string | null
-  /** When set, the address should be rewritten to apex://settings/<redirect>. */
+  /** When set, the address should be rewritten to atelier://settings/<redirect>. */
   redirect: string | null
 }
 
 /**
- * Maps apex://settings/<section> to the page that shows it. Aliases and old
+ * Maps atelier://settings/<section> to the page that shows it. Aliases and old
  * names rewrite to the page that now holds the setting; unknown and
  * not-yet-built pages fall back to the default page with no error. Either way
  * the address is rewritten so the nav, breadcrumb and back button agree.
@@ -167,7 +167,7 @@ export interface SettingsQuery {
 
 const SAFE_VALUE = /^[A-Za-z0-9_.:-]{1,64}$/
 
-/** Reads the query of an apex://settings address; unsafe values are dropped. */
+/** Reads the query of an atelier://settings address; unsafe values are dropped. */
 export function settingsQuery(url: string | null | undefined): SettingsQuery {
   const at = url ? url.indexOf('?') : -1
   const raw = url && at >= 0 ? url.slice(at + 1).split('#')[0] ?? '' : ''

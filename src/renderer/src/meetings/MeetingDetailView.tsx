@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { useRef, useState, type ReactElement } from 'react'
 import { ArrowLeft, AudioLines, Ellipsis, FileQuestion, MessageSquarePlus, Mic, Square } from 'lucide-react'
 import type { MeetingDetail } from '@shared/meetings'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { useT } from '../i18n/useT'
 import { isWindows } from '../system/platform'
 import { DestinationFrame } from '../settings/destinations/common'
@@ -20,7 +20,7 @@ import { useCaptureStatus, useMeetingDetail } from './hooks'
 import { clock, rowActions, statusBadge, transcribeLabel } from './logic'
 import './meetings.css'
 
-// apex://meetings/<id> (MV-13): the notes card, the transcript as labelled
+// atelier://meetings/<id> (MV-13): the notes card, the transcript as labelled
 // bubbles, the audio player when audio was kept, a live banner with captions
 // while transcription runs, and "Ask about this meeting", which
 // opens a chat with the meeting attached. A meeting recorded as audio only
@@ -29,7 +29,7 @@ import './meetings.css'
 export function MeetingDetailView({ tabId, meetingId }: { tabId: string; meetingId: string }): ReactElement {
   const t = useT()
   const { meeting, error, gone, reload } = useMeetingDetail(meetingId)
-  const back = (): void => void apex.nav.go(tabId, 'apex://meetings')
+  const back = (): void => void atelier.nav.go(tabId, 'atelier://meetings')
 
   if (gone || (error && !meeting && /no longer exists/i.test(error))) {
     return (

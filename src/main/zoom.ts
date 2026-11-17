@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import { writeAtomic } from './settings'
 
 // Page zoom (SH-45): 10% steps from 25% to 500%, remembered per
 // host in zoom.json and applied to every tab on that host. Private sessions
-// keep it in memory only. Apex pages never come here: their keys go to
+// keep it in memory only. Atelier pages never come here: their keys go to
 // the interface zoom (uiZoom.ts).
 
 export const ZOOM_MIN = 25

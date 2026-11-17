@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -264,7 +264,7 @@ export const SERVICE_SCHEMAS: { [S in ServiceName]: { [M in keyof Services[S]]: 
     view: z.tuple([]),
   },
   pages: {
-    open: z.tuple([z.string().startsWith('apex://').max(512), z.object({ newTab: z.boolean().optional(), background: z.boolean().optional() }).strict().optional()]),
+    open: z.tuple([z.string().startsWith('atelier://').max(512), z.object({ newTab: z.boolean().optional(), background: z.boolean().optional() }).strict().optional()]),
     snapshot: z.tuple([tabId]),
   },
   menu: {

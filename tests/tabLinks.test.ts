@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -38,14 +38,14 @@ describe('tab links in chat', () => {
     const reg = new TabRegistry()
     reg.add(fakeTab('t1', 'https://example.com/flights'), 1)
     reg.add(fakeTab('t2', 'about:blank'), 1)
-    reg.add(fakeTab('t3', '', 'apex://routines'), 1)
+    reg.add(fakeTab('t3', '', 'atelier://routines'), 1)
     expect(reg.closedTab('t1')).toBeUndefined()
     reg.remove('t1', { private: true })
     reg.remove('t2')
     reg.remove('t3')
     expect(reg.closedTab('t1')).toEqual({ url: 'https://example.com/flights', private: true })
     expect(reg.closedTab('t2')).toBeUndefined()
-    expect(reg.closedTab('t3')).toEqual({ url: 'apex://routines', private: false })
+    expect(reg.closedTab('t3')).toEqual({ url: 'atelier://routines', private: false })
   })
 
   it('asks the companion to link tabs by id when it works in the browser', () => {

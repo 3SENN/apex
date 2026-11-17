@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -129,7 +129,7 @@ export function engineSessionOf(raw: unknown): EngineSession | null {
 export const INTERRUPTED = `Not executed: ${BRAND_NAME} closed before this step finished.`
 
 /**
- * A chat saved between an assistant's tool calls and their results (Apex quit
+ * A chat saved between an assistant's tool calls and their results (Atelier quit
  * or crashed during a step or an approval) ends on unanswered tool_use
  * blocks, which the API rejects on every later request. Answers each one with
  * an error result so the history is valid again. Returns the messages
@@ -436,7 +436,7 @@ export class ChatStore extends EventEmitter<{ changed: [ChatSummary[]]; removed:
   /**
    * Brings the chat's file up to CHAT_FORMAT_VERSION (backup first) and
    * emits `migration` when it changed or couldn't. Throws ChatMigrationError
-   * for a damaged file or one a newer Apex saved; a missing file gives no record.
+   * for a damaged file or one a newer Atelier saved; a missing file gives no record.
    */
   upgradeFile(id: string): ChatFileResult {
     const result = upgradeChatFile({ id, file: this.fileOf(id), backupDir: join(this.#dir, BACKUP_DIR), title: this.summary(id)?.title ?? '' })

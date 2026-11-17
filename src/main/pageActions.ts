@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -48,7 +48,7 @@ export function createPageActions(win: WindowContext): PageActions {
   const tabOf = (tabId?: string): Tab | null => (tabId ? (win.tabs.find(tabId) ?? null) : win.tabs.active())
   const urlOf = (tab: Tab): string => tab.internalUrl ?? (tab.view.webContents.isDestroyed() ? '' : tab.view.webContents.getURL())
   const titleOf = (tab: Tab): string => win.tabs.info(tab).title
-  /** A web page Apex can act on: not an apex:// page drawn by the chrome. */
+  /** A web page Atelier can act on: not an atelier:// page drawn by the chrome. */
   const webTab = (tabId?: string): Tab | null => {
     const tab = tabOf(tabId)
     if (!tab || win.tabs.isChromeDrawn(tab) || tab.view.webContents.isDestroyed()) return null
@@ -57,7 +57,7 @@ export function createPageActions(win: WindowContext): PageActions {
   const toast = (text: string, kind: 'success' | 'error' | 'info' = 'success', tabId?: string, detail?: string): void => {
     void toasts.show(win, { kind, text, ...(detail ? { detail } : {}), ...(tabId ? { tabId } : {}) })
   }
-  const notHere = (tabId?: string): void => toast(mainT('menus.pageAction.notOnApexPage'), 'error', tabId)
+  const notHere = (tabId?: string): void => toast(mainT('menus.pageAction.notOnAtelierPage'), 'error', tabId)
   const saved = (path: string, text: string, tabId?: string): void => {
     void toasts.show(win, { kind: 'success', text, detail: path, action: { id: 'reveal', label: mainT('menus.pageAction.showInFolder') }, ...(tabId ? { tabId } : {}) }).then((outcome) => {
       if (outcome === 'action') shell.showItemInFolder(path)
@@ -100,7 +100,7 @@ export function createPageActions(win: WindowContext): PageActions {
       const tab = tabOf(tabId)
       if (!tab) return
       try {
-        // An apex:// page is drawn by the chrome: capture its part of the window.
+        // An atelier:// page is drawn by the chrome: capture its part of the window.
         const image = win.tabs.isChromeDrawn(tab) ? await win.chrome.capturePage(win.tabs.contentBounds()) : await tab.view.webContents.capturePage()
         if (image.isEmpty()) throw new Error('empty capture')
         await copyImage(image)
@@ -226,7 +226,7 @@ function qrImage(url: string): NativeImage {
 
 /**
  * What developer tools act on: the chrome itself when it draws the active
- * tab (apex:// pages, a destination) or when asked for, else the page.
+ * tab (atelier:// pages, a destination) or when asked for, else the page.
  */
 function devtoolsTarget(win: WindowContext, chrome: boolean): WebContents | null {
   if (chrome) return win.chrome.isDestroyed() ? null : win.chrome

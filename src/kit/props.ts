@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex-kit/props.js (docs/apps.md › The kit, Worlds): the kit's props, made
+// atelier-kit/props.js (docs/apps.md › The kit, Worlds): the kit's props, made
 // from simple rounded shapes in the companions' soft, bright style, so a world
 // built from them looks like the companions' own. A prop stands on y = 0 at
 // its own middle; one unit is a tile, about the height of a companion. Colours

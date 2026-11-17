@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -61,7 +61,7 @@ export function classifyApiError(err: unknown, hasKey: boolean): ChatError {
     if (QUOTA.test(detail)) return quota(detail)
     return { code: 'rate-limited', message: mainT('chat.mainErrors.theAnthropicApiRate'), retryAfterMs: retryAfterMs(err.headers) ?? DEFAULT_RETRY_MS }
   }
-  if (err instanceof Anthropic.APIConnectionError) return { code: 'offline', message: mainT('chat.mainErrors.apexCouldnTReach') }
+  if (err instanceof Anthropic.APIConnectionError) return { code: 'offline', message: mainT('chat.mainErrors.atelierCouldnTReach') }
   if (err instanceof Anthropic.APIError) {
     const status = err.status ?? 0
     if (status === 529 || OVERLOADED.test(detail)) {
@@ -91,5 +91,5 @@ function quota(detail: string): ChatError {
 export function classifySaveError(err: unknown): ChatError {
   const code = (err as { code?: unknown } | null)?.code
   if (code === 'ENOSPC' || code === 'EDQUOT') return { code: 'disk-full', message: mainT('chat.mainErrors.yourDiskIsFull') }
-  return { code: 'other', message: mainT('chat.mainErrors.apexCouldnTSave', { value: errorMessage(err) }) }
+  return { code: 'other', message: mainT('chat.mainErrors.atelierCouldnTSave', { value: errorMessage(err) }) }
 }

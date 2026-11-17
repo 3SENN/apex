@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -15,7 +15,7 @@ import { crossSiteFixtures } from './fixtures'
 
 // The voice and passwords smoke group's checks and screenshot specs: speech,
 // passwords, autofill, meetings, meeting capture and voice
-// (APEX_SMOKE_ONLY=VOICE-PASSWORDS runs only these). Under APEX_SMOKE the
+// (ATELIER_SMOKE_ONLY=VOICE-PASSWORDS runs only these). Under ATELIER_SMOKE the
 // speech helper is the fake one, the authenticator says 'ok', the global
 // launcher shortcut is never registered and the meeting card waits 300 ms.
 

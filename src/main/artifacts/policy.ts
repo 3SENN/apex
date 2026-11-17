@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -21,7 +21,7 @@ export const ARTIFACT_CSP = [
   "frame-ancestors 'none'",
 ].join('; ')
 
-/** webRequest.lockdown's allow function for the apex-artifacts partition: every other request is cancelled. */
+/** webRequest.lockdown's allow function for the atelier-artifacts partition: every other request is cancelled. */
 export function artifactRequestAllowed(d: { url: string; resourceType: string }): boolean {
   return d.url.startsWith(`${ARTIFACT_SCHEME}://`) || d.url.startsWith('data:') || d.url.startsWith('blob:')
 }
@@ -52,7 +52,7 @@ export interface ArtifactDocument {
   contentType: string
 }
 
-/** What an apex-artifact:// request returns for a Library file, or null when that kind can't be an artifact. */
+/** What an atelier-artifact:// request returns for a Library file, or null when that kind can't be an artifact. */
 export function artifactDocument(file: { name: string; mediaType: string }, content: string): ArtifactDocument | null {
   const title = file.name.replace(/\.[^.]+$/, '') || file.name
   if (file.mediaType === 'text/html') return { body: withTitle(content, title), contentType: 'text/html; charset=utf-8' }

@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Projects (SH-64), apex://workspace/projects[/<id>]: a
-// project keeps a name, a colour from Apex's palette, a description, the
+// Projects (SH-64), atelier://workspace/projects[/<id>]: a
+// project keeps a name, a colour from Atelier's palette, a description, the
 // instructions every new chat in it starts with, its chats and its files.
 // The list searches and opens; a project's page lists its chats and files
 // with add and remove, starts a chat in it, edits and deletes it (to

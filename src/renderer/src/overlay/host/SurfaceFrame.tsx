@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactElement } from 'react'
 import type { OverlayTier, Rect } from '@shared/overlay'
 import { EMPTY_RECT, exitDuration, placeSurface, zIndexFor } from '@shared/overlayLayout'
-import { apex } from '../../api'
+import { atelier } from '../../api'
 import { useMotion } from '../../ui/motion'
 import { surfaceModule } from '../registry'
 import type { SurfaceComponentProps, SurfaceModule } from '../types'
@@ -36,12 +36,12 @@ export function SurfaceFrame({ item, tier }: { item: HostedInstance; tier: Overl
   useEffect(() => {
     if (module && parsed?.success) return
     console.error(`Overlay surface ${message.surface} ${module ? 'got invalid props' : 'is not registered'}.`, parsed && !parsed.success ? parsed.error.issues : '')
-    apex.overlay.dismiss(id, 'closed')
+    atelier.overlay.dismiss(id, 'closed')
     removeHosted(id)
   }, [module, parsed, id, message.surface])
 
   useEffect(() => {
-    if (policy) apex.overlay.mounted(id, policy)
+    if (policy) atelier.overlay.mounted(id, policy)
   }, [id, policy])
 
   // Natural size of fixed surfaces; fill surfaces take their area.
@@ -70,7 +70,7 @@ export function SurfaceFrame({ item, tier }: { item: HostedInstance; tier: Overl
 
   useEffect(() => {
     setHostedRect(id, rect)
-    apex.overlay.reportBounds(id, rect ?? EMPTY_RECT)
+    atelier.overlay.reportBounds(id, rect ?? EMPTY_RECT)
   }, [id, rect])
 
   // Focus moves in for focus surfaces; main focused this renderer's view.
@@ -99,9 +99,9 @@ export function SurfaceFrame({ item, tier }: { item: HostedInstance; tier: Overl
     props: parsed.data,
     anchor: message.anchor,
     windowId: message.windowId,
-    resolve: (value) => apex.overlay.resolve(id, value),
-    close: () => apex.overlay.dismiss(id, 'closed'),
-    reportBounds: (r) => apex.overlay.reportBounds(id, r),
+    resolve: (value) => atelier.overlay.resolve(id, value),
+    close: () => atelier.overlay.dismiss(id, 'closed'),
+    reportBounds: (r) => atelier.overlay.reportBounds(id, r),
     exiting,
     anchorRect: message.rect ?? null,
     viewport,

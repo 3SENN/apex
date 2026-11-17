@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { useSyncExternalStore } from 'react'
 import { ATTACHMENT_LIMITS, type AttachmentRef, type AttachmentSource, type RefAttachment } from '@shared/attachments'
 import { t } from '@shared/i18n/core'
-import { apex, call, errorText } from '../../api'
+import { atelier, call, errorText } from '../../api'
 import { toast } from '../../ui'
 import { preflightFiles, type FileRejection } from '../logic/drop'
 import { withReplyRef } from '../logic/intake'
@@ -83,7 +83,7 @@ function upsert(key: string, ref: AttachmentRef): void {
 function listen(): void {
   if (listening) return
   listening = true
-  apex.onAppEvent((event) => {
+  atelier.onAppEvent((event) => {
     if (event.type === 'attachments') setItems(event.draftKey, event.items)
   })
 }

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -63,7 +63,7 @@ export function bootLanguage(dataDir: string, system: readonly string[] = prefer
   const language = resolveAppLanguage(appLanguage, system)
   const lang = chromiumLang(language, system)
   launchLanguage = language
-  applyLanguage({ appLanguage, flags: readFlags(dataDir) }, system, process.env.APEX_PSEUDO_LOCALE === '1')
+  applyLanguage({ appLanguage, flags: readFlags(dataDir) }, system, process.env.ATELIER_PSEUDO_LOCALE === '1')
   try {
     app.commandLine.appendSwitch('lang', lang)
   } catch {
@@ -72,7 +72,7 @@ export function bootLanguage(dataDir: string, system: readonly string[] = prefer
   return { language, lang }
 }
 
-if (process.env.APEX_SMOKE === '1') {
+if (process.env.ATELIER_SMOKE === '1') {
   try {
     app.commandLine.appendSwitch('lang', 'en-US')
   } catch {

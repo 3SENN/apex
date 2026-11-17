@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex-calendar: Apex's read-only Calendar and Reminders helper.
+// atelier-calendar: Atelier's read-only Calendar and Reminders helper.
 // One command per run, answered in JSON lines on stdout (src/main/calendar.ts
 // parses them with zod; unknown lines are ignored):
 //
@@ -167,7 +167,7 @@ func watch() -> Never {
   NotificationCenter.default.addObserver(forName: .EKEventStoreChanged, object: store, queue: .main) { _ in
     emit(["type": "changed"])
   }
-  // Apex stops this run by ending the process; a closed pipe ends it too.
+  // Atelier stops this run by ending the process; a closed pipe ends it too.
   signal(SIGPIPE, SIG_DFL)
   RunLoop.main.run()
   exit(0)

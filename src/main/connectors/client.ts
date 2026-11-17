@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,7 +11,7 @@ import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js'
 import { JSONRPCMessageSchema, type JSONRPCMessage } from '@modelcontextprotocol/sdk/types.js'
 import type { BetaToolResultBlockParam } from '@anthropic-ai/sdk/resources/beta/messages/messages'
 
-// Apex's own MCP client: streamable HTTP for localhost, private and
+// Atelier's own MCP client: streamable HTTP for localhost, private and
 // custom-header servers (and for listing any server's tools), and stdio for
 // local commands over a process the LocalServers manager spawned. Results are
 // turned into Messages API tool-result content, capped.

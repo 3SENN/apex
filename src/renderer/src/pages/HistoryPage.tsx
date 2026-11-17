@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex://history: the pages you visited, grouped by day and searchable, in the
+// atelier://history: the pages you visited, grouped by day and searchable, in the
 // same frame as the other destination pages. Rows open here, ⌘-click and a
 // middle click open in the background, and ✕ removes a page from history
 // (and from the command bar's suggestions). With the timeline flag on, List
@@ -16,7 +16,7 @@ import { isFlagOn } from '@shared/flags'
 import type { HistoryItem } from '@shared/services'
 import { displayHost } from '@shared/domains'
 import { historyView, timelineUrl } from '../activity/logic'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { useSettingsView } from '../companion-card/useLoaded'
 import { useT } from '../i18n/useT'
 import { Button, EmptyState, IconButton, RelativeTime, SegmentedControl, SkeletonRows, showContextMenu, useConfirm, useToast } from '../ui'
@@ -40,8 +40,8 @@ function SiteIcon({ url, title }: { url: string; title?: string }): ReactElement
 /** ⌘-click and a middle click open in a background tab; ⇧⌘ in front; a plain click opens here. */
 export function openFrom(e: MouseEvent, tabId: string, url: string): void {
   const mod = e.metaKey || e.ctrlKey
-  if (mod || e.button === 1) void apex.tabs.create(url, { background: !(mod && e.shiftKey), afterId: tabId })
-  else void apex.nav.go(tabId, url)
+  if (mod || e.button === 1) void atelier.tabs.create(url, { background: !(mod && e.shiftKey), afterId: tabId })
+  else void atelier.nav.go(tabId, url)
 }
 
 export function HistoryPage({ tabId, url = '' }: { tabId: string; url?: string }): ReactElement {
@@ -70,7 +70,7 @@ function ViewSwitch({ tabId, view }: { tabId: string; view: 'list' | 'timeline' 
       label={t('address.page.historyView')}
       size="sm"
       value={view}
-      onChange={(next) => void apex.nav.go(tabId, next === 'timeline' ? timelineUrl('day', localDayKey(Date.now())) : 'apex://history')}
+      onChange={(next) => void atelier.nav.go(tabId, next === 'timeline' ? timelineUrl('day', localDayKey(Date.now())) : 'atelier://history')}
       options={[
         { value: 'list', label: t('address.page.historyList') },
         { value: 'timeline', label: t('address.page.historyTimeline') },
@@ -152,9 +152,9 @@ function HistoryList({ tabId, timelineOn }: { tabId: string; timelineOn: boolean
                       { id: 'sep', label: '', type: 'separator' },
                       { id: 'remove', label: t('address.page.removeFromHistory') },
                     ]).then((id) => {
-                      if (id === 'open') void apex.nav.go(tabId, h.url)
-                      else if (id === 'new-tab') void apex.tabs.create(h.url, { afterId: tabId })
-                      else if (id === 'background') void apex.tabs.create(h.url, { afterId: tabId, background: true })
+                      if (id === 'open') void atelier.nav.go(tabId, h.url)
+                      else if (id === 'new-tab') void atelier.tabs.create(h.url, { afterId: tabId })
+                      else if (id === 'background') void atelier.tabs.create(h.url, { afterId: tabId, background: true })
                       else if (id === 'remove') void remove(h.url)
                     })
                   }

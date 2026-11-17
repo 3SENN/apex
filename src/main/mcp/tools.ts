@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -89,7 +89,7 @@ export function qualified(names: readonly string[]): string[] {
   return names.map((name) => `mcp__${MCP_SERVER_NAME}__${name}`)
 }
 
-/** The member a qualified name refers to, or null for tools that aren't Apex's. */
+/** The member a qualified name refers to, or null for tools that aren't Atelier's. */
 export function unqualified(name: string): string | null {
   const prefix = `mcp__${MCP_SERVER_NAME}__`
   return name.startsWith(prefix) ? name.slice(prefix.length) : null

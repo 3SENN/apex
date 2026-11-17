@@ -1,26 +1,26 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Apex's two brandings, as Firefox has them (TRADEMARKS.md; docs/architecture.md › Branding):
+// Atelier's two brandings, as Firefox has them (TRADEMARKS.md; docs/architecture.md › Branding):
 //
-//   branding/official/     Apex: the name, logo, icons and Pip, the default companion
+//   branding/official/     Atelier: the name, logo, icons and Pip, the default companion
 //   branding/unofficial/   Summit: a plain name, plain icons and a neutral companion of its own
-//                          (companion.json); it offers none of Apex's six characters
+//                          (companion.json); it offers none of Atelier's six characters
 //
-// The official files that depict an Apex character are Apex Companion Art
+// The official files that depict an Atelier character are Atelier Companion Art
 // (ART-LICENSE.md; branding/official/LICENSE.md), the rest of both folders is
-// MPL-2.0, and neither licence grants rights to the Apex trademarks, so builds
+// MPL-2.0, and neither licence grants rights to the Atelier trademarks, so builds
 // from source use the unofficial branding unless official branding is switched on:
 //
-//   APEX_OFFICIAL_BRANDING=1   the official branding (official Apex builds; the release workflow sets it)
-//   APEX_OFFICIAL_BRANDING=0   the unofficial branding
+//   ATELIER_OFFICIAL_BRANDING=1   the official branding (official Atelier builds; the release workflow sets it)
+//   ATELIER_OFFICIAL_BRANDING=0   the unofficial branding
 //   unset                      official when the private internal/ folder is in use (the maintainer's
 //                              checkout; scripts/internal.mjs), unofficial otherwise
 //
 // One place decides it for everything that names or draws the app:
-// electron.vite.config.ts (the __APEX_BRANDING__ define and the `@branding`
+// electron.vite.config.ts (the __ATELIER_BRANDING__ define and the `@branding`
 // alias), electron-builder's config (productName, appId, icons, installer
 // art), scripts/dev-branding.mjs (the dev bundle's name and icon), the native
 // helpers' Info.plists and vitest.config.ts.
@@ -47,15 +47,15 @@ const BUNDLE_ID = /^[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)+$/
 const PRESET_ID = /^[a-z0-9][a-z0-9-]*$/
 
 /**
- * Whether a build uses the official branding: APEX_OFFICIAL_BRANDING when it
+ * Whether a build uses the official branding: ATELIER_OFFICIAL_BRANDING when it
  * is set (1/true or 0/false), else whether the internal folder is in use. Any
  * other value is an error, never silently read as either.
  */
 export function officialBranding(env = process.env, repo = REPO) {
-  const value = typeof env.APEX_OFFICIAL_BRANDING === 'string' ? env.APEX_OFFICIAL_BRANDING.trim().toLowerCase() : ''
+  const value = typeof env.ATELIER_OFFICIAL_BRANDING === 'string' ? env.ATELIER_OFFICIAL_BRANDING.trim().toLowerCase() : ''
   if (value === '1' || value === 'true') return true
   if (value === '0' || value === 'false') return false
-  if (value) throw new Error(`APEX_OFFICIAL_BRANDING is "${env.APEX_OFFICIAL_BRANDING}"; use 1 for the official branding or 0 for the unofficial one`)
+  if (value) throw new Error(`ATELIER_OFFICIAL_BRANDING is "${env.ATELIER_OFFICIAL_BRANDING}"; use 1 for the official branding or 0 for the unofficial one`)
   return isInternal(env, repo)
 }
 
@@ -180,7 +180,7 @@ export function runtimeBranding(env = process.env, repo = REPO) {
 
 /** The electron-vite and vitest define. */
 export function brandingDefines(env = process.env, repo = REPO) {
-  return { __APEX_BRANDING__: JSON.stringify(runtimeBranding(env, repo)) }
+  return { __ATELIER_BRANDING__: JSON.stringify(runtimeBranding(env, repo)) }
 }
 
 /** The Vite alias for `@branding` (an object to spread into `resolve.alias`): the active branding's folder. */
@@ -191,7 +191,7 @@ export function brandingAlias(env = process.env, repo = REPO) {
 /** A one-line description, for scripts that print it. */
 export function describeBranding(env = process.env, repo = REPO) {
   const branding = loadBranding(env, repo)
-  const why = typeof env.APEX_OFFICIAL_BRANDING === 'string' && env.APEX_OFFICIAL_BRANDING.trim() !== '' ? 'APEX_OFFICIAL_BRANDING' : isInternal(env, repo) ? 'the internal/ folder is here' : 'no internal/ folder'
+  const why = typeof env.ATELIER_OFFICIAL_BRANDING === 'string' && env.ATELIER_OFFICIAL_BRANDING.trim() !== '' ? 'ATELIER_OFFICIAL_BRANDING' : isInternal(env, repo) ? 'the internal/ folder is here' : 'no internal/ folder'
   return `${branding.name} (the ${branding.id} branding; ${why})`
 }
 

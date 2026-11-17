@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -25,14 +25,14 @@ import { ProfileStore, newProfileId } from '../src/main/profiles/store'
 import { folderBytes, sumSummaries } from '../src/main/profiles/summary'
 import { clearWindowProfile, setWindowProfile } from '../src/main/profiles/windowProfiles'
 
-const tempDir = (): string => mkdtempSync(join(tmpdir(), 'apex-profiles-'))
+const tempDir = (): string => mkdtempSync(join(tmpdir(), 'atelier-profiles-'))
 let ids = 0
 const nextId = (): string => `prof${String(++ids).padStart(4, '0')}`
 
 describe('profile rules', () => {
   it('names partitions and ids safely', () => {
-    expect(profilePartition('default')).toBe('persist:apex-web')
-    expect(profilePartition('a1b2c3d4e5f6')).toBe('persist:apex-profile-a1b2c3d4e5f6')
+    expect(profilePartition('default')).toBe('persist:atelier-web')
+    expect(profilePartition('a1b2c3d4e5f6')).toBe('persist:atelier-profile-a1b2c3d4e5f6')
     for (let i = 0; i < 20; i++) expect(newProfileId()).toMatch(PROFILE_ID)
   })
 
@@ -63,9 +63,9 @@ describe('ProfileStore', () => {
   it('always has the default profile and keeps created ones', () => {
     const dir = tempDir()
     const store = new ProfileStore(dir, { defaultHue: 'tide', newId: nextId, now: () => 5 })
-    expect(store.list()).toMatchObject([{ id: 'default', name: 'Personal', hue: 'tide', isDefault: true, partition: 'persist:apex-web' }])
+    expect(store.list()).toMatchObject([{ id: 'default', name: 'Personal', hue: 'tide', isDefault: true, partition: 'persist:atelier-web' }])
     const work = store.create({ name: ' Work ', hue: 'moss' })
-    expect(work).toMatchObject({ name: 'Work', hue: 'moss', createdAt: 5, isDefault: false, partition: `persist:apex-profile-${work.id}` })
+    expect(work).toMatchObject({ name: 'Work', hue: 'moss', createdAt: 5, isDefault: false, partition: `persist:atelier-profile-${work.id}` })
     expect(() => store.create({ name: 'work', hue: 'sun' })).toThrow(/already has that name/)
     expect(() => store.rename(work.id, '')).toThrow(/needs a name/)
     store.rename(work.id, 'Office')
@@ -179,7 +179,7 @@ describe('setupProfiles', () => {
     const ses = profiles.manager.sessionFor(work.id)
     expect(profiles.manager.sessionFor(work.id)).toBe(ses)
     expect(install).toHaveBeenCalledTimes(1)
-    expect(install.mock.calls[0]?.[1]).toEqual({ private: false, partition: `persist:apex-profile-${work.id}` })
+    expect(install.mock.calls[0]?.[1]).toEqual({ private: false, partition: `persist:atelier-profile-${work.id}` })
     expect(created).toHaveBeenCalledWith(ses, expect.objectContaining({ id: work.id }))
     expect(() => profiles.manager.sessionFor('nope1234')).toThrow(/no longer exists/)
   })
@@ -191,7 +191,7 @@ describe('setupProfiles', () => {
     setWindowProfile(41, work.id)
     mkdirSync(profiles.manager.dataDir(work.id), { recursive: true })
     writeFileSync(join(profiles.manager.dataDir(work.id), 'history.json'), JSON.stringify([{ url: 'a' }, { url: 'b' }, { url: 'c' }]))
-    const site = join(dir, 'Partitions', `apex-profile-${work.id}`)
+    const site = join(dir, 'Partitions', `atelier-profile-${work.id}`)
     mkdirSync(site, { recursive: true })
     writeFileSync(join(site, 'Cookies'), 'x'.repeat(1000))
     profiles.manager.addSummarySource(() => ({ logins: 4 }))
@@ -216,7 +216,7 @@ describe('setupProfiles', () => {
     await profiles.services.profiles.remove(work.id, 'Work')
     expect(stopped).toEqual(['chat-1'])
     expect(removing).toHaveBeenCalledWith(work.id)
-    const ses = sessions.get(`persist:apex-profile-${work.id}`)!
+    const ses = sessions.get(`persist:atelier-profile-${work.id}`)!
     expect(ses.clearStorageData).toHaveBeenCalled()
     expect(existsSync(join(dir, 'profiles', work.id))).toBe(false)
     expect(profiles.services.profiles.list().map((p) => p.id)).toEqual(['default'])
@@ -244,8 +244,8 @@ describe('setupProfiles', () => {
 
 describe('profile menus', () => {
   const list: Profile[] = [
-    { id: 'default', name: 'Personal', hue: 'stone', createdAt: 0, partition: 'persist:apex-web', isDefault: true },
-    { id: 'work1234', name: 'Work', hue: 'moss', createdAt: 1, partition: 'persist:apex-profile-work1234', isDefault: false },
+    { id: 'default', name: 'Personal', hue: 'stone', createdAt: 0, partition: 'persist:atelier-web', isDefault: true },
+    { id: 'work1234', name: 'Work', hue: 'moss', createdAt: 1, partition: 'persist:atelier-profile-work1234', isDefault: false },
   ]
 
   it('builds the main menu profile block', () => {
@@ -274,7 +274,7 @@ describe('profile menus', () => {
 
   it('sums summaries and sizes folders', () => {
     expect(sumSummaries([{ tabs: 2 }, { tabs: -1, logins: Number.NaN }, { logins: 3 }])).toMatchObject({ tabs: 2, logins: 3 })
-    expect(folderBytes(join(tmpdir(), 'apex-does-not-exist'))).toBe(0)
+    expect(folderBytes(join(tmpdir(), 'atelier-does-not-exist'))).toBe(0)
   })
 })
 

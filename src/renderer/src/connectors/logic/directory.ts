@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { CONNECTOR_CATEGORIES, type ConnectorCategory, type ConnectorHealth, type ConnectorV2, type DirectoryEntry } from '@shared/connectors'
 
 // The connectors page's grouping and filters (SK-13): Connected
-// (directory accounts), Your servers (custom), then the directory by Apex's
+// (directory accounts), Your servers (custom), then the directory by Atelier's
 // categories without what is already connected. One search covers all of it.
 
 export type StatusFilter = 'all' | 'connected' | 'attention' | 'off' | 'available'

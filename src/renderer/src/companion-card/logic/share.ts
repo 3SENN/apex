@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { mixHex } from '@shared/companionLogic'
 import { contrastRatio } from '@shared/accent'
 
 // Layout and colours for the share image saved next to an exported
-// .apexcompanion file. The image is a file, not chrome, so its colours come
+// .ateliercompanion file. The image is a file, not chrome, so its colours come
 // from the companion's own look rather than the theme tokens.
 
 export const SHARE_SIZE = { width: 1200, height: 630 } as const

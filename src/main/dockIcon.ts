@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,7 +11,7 @@ import { dockIconImage, resetDockIcon, setDockIcon } from './companion'
 import { log } from './log'
 import { writeAtomic } from './settings'
 
-// The Dock icon choice (ST-09): Apex's standard icon or one companion,
+// The Dock icon choice (ST-09): Atelier's standard icon or one companion,
 // saved as settings.dockIcon. Older versions kept a per-companion `dockIcon` flag; the
 // flag now mirrors the choice (true on the chosen companion only), so the
 // card's "Show in the Dock" switch and Settings › Dock icon stay in step.

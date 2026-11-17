@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -98,7 +98,7 @@ export function blockedKind(p: Pick<SpeechPermissions, 'microphone' | 'speech'> 
 }
 
 /**
- * Mic-blocked's fix: 'ask' when macOS never asked (Apex isn't in that pane
+ * Mic-blocked's fix: 'ask' when macOS never asked (Atelier isn't in that pane
  * yet, so the prompt comes first), 'retry' when both are allowed again,
  * else 'open' the pane for the one that's off.
  */
@@ -109,7 +109,7 @@ export function micFix(p: Pick<SpeechPermissions, 'microphone' | 'speech'> | nul
 }
 
 export interface CompanionContext {
-  /** The active tab shows apex://chat/<id>. */
+  /** The active tab shows atelier://chat/<id>. */
   chatPage: string | null
   /** The chat the last voice command went to. */
   lastVoiceChat: string | null

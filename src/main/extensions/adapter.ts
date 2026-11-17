@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,9 +6,9 @@
 import type { Session } from 'electron'
 import { NATIVE_APIS } from './compat'
 
-// The seam between Apex's extensions layer and the runtime that loads them
+// The seam between Atelier's extensions layer and the runtime that loads them
 // (a day-one decision). Today it is Electron 45's own
-// session.extensions plus Apex's preload shims; electron-chrome-extensions
+// session.extensions plus Atelier's preload shims; electron-chrome-extensions
 // (MIT from 4.10.0, pinnable from 2026-11-08) can replace it by
 // implementing this interface and widening `apis`. Nothing else in
 // src/main/extensions touches session.extensions directly.
@@ -64,11 +64,11 @@ export const nativeAdapter: ExtensionsAdapter = {
   },
   installPreloads(session, paths) {
     const existing = new Set(session.getPreloadScripts().map((p) => p.id))
-    if (!existing.has('apex-extension-worker')) session.registerPreloadScript({ id: 'apex-extension-worker', type: 'service-worker', filePath: paths.worker })
+    if (!existing.has('atelier-extension-worker')) session.registerPreloadScript({ id: 'atelier-extension-worker', type: 'service-worker', filePath: paths.worker })
     // Only extension pages and the Web Store run the frame preload; every other page never sees it.
-    if (!existing.has('apex-extension-frame')) {
+    if (!existing.has('atelier-extension-frame')) {
       // Globs match the whole URL for any scheme; the preload re-checks the exact origin itself.
-      session.registerPreloadScript({ id: 'apex-extension-frame', type: 'frame', filePath: paths.frame, includeGlobs: ['chrome-extension://*', 'https://chromewebstore.google.com/*'] })
+      session.registerPreloadScript({ id: 'atelier-extension-frame', type: 'frame', filePath: paths.frame, includeGlobs: ['chrome-extension://*', 'https://chromewebstore.google.com/*'] })
     }
   },
 }

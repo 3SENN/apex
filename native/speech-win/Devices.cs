@@ -1,15 +1,15 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex-speech.exe: microphones (WASAPI capture endpoints) and the languages
+// atelier-speech.exe: microphones (WASAPI capture endpoints) and the languages
 // Windows can dictate in.
 using System.Globalization;
 using NAudio.CoreAudioApi;
 using Windows.Media.SpeechRecognition;
 
-namespace Apex.Speech;
+namespace Atelier.Speech;
 
 internal static class Devices
 {

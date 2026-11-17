@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -22,7 +22,7 @@ afterEach(() => {
 })
 
 function setup() {
-  const base = realpathSync(mkdtempSync(join(tmpdir(), 'apex-folders-')))
+  const base = realpathSync(mkdtempSync(join(tmpdir(), 'atelier-folders-')))
   dirs.push(base)
   const root = join(base, 'Projects')
   const outside = join(base, 'Secret')
@@ -77,7 +77,7 @@ describe('folder grants', () => {
     expect(s.store.list()).toEqual([])
   })
 
-  it('refuses files, missing paths, the disk root and Apex’s own data', () => {
+  it('refuses files, missing paths, the disk root and Atelier’s own data', () => {
     const s = setup()
     mkdirSync(join(s.base, 'AppData'))
     expect(() => s.store.grant({ path: join(s.root, 'docs', 'plan.md'), mode: 'read', scope: 'all-chats' })).toThrow('not a file')
@@ -241,8 +241,8 @@ describe('the Files section and the + menu', () => {
     const rows = rootRows(labels, [], { label: 'Folder…', detail: 'Let this chat read a folder' })
     expect(rows.map((r) => r.id).slice(0, 3)).toEqual(['files', 'folder', 'sep-attach'])
     expect(rows[1]).toMatchObject({ kind: 'item', label: 'Folder…', detail: 'Let this chat read a folder' })
-    expect(searchPageUrl(' oak worktop ')).toBe('apex://workspace/search?q=oak%20worktop')
-    expect(searchPageUrl('')).toBe('apex://workspace/search')
+    expect(searchPageUrl(' oak worktop ')).toBe('atelier://workspace/search?q=oak%20worktop')
+    expect(searchPageUrl('')).toBe('atelier://workspace/search')
   })
 
   it('the hub has four tabs: Tables shows under Files, Search, Recently deleted and the old Timeline under none', () => {

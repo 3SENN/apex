@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // One session at a time (dictation, a meeting, the level test), named by the
-// id Apex gives it. Every source runs through the same pipeline: canonical
+// id Atelier gives it. Every source runs through the same pipeline: canonical
 // format, gain, levels, recognition and the recording part. Pausing drops
 // audio, so segment times and the recording's length leave the pause out.
 
@@ -208,7 +208,7 @@ final class CaptureSession {
         return completion(false)
       }
       guard let second = o.secondaryLocale else { return listen(mic: mic, system: made["system"], engine: engine, completion) }
-      // Bilingual: the second language hears the same audio; Apex keeps what fits for each stretch.
+      // Bilingual: the second language hears the same audio; Atelier keeps what fits for each stretch.
       Engines.make(session: o.session, locale: second, contextualStrings: o.contextualStrings, sources: sources, dictation: !o.meeting, queue: queue) { [self] other, _ in
         let both = { (source: String, first: SourceRecognizer?) -> SourceRecognizer? in
           guard let first else { return nil }
@@ -389,7 +389,7 @@ final class CaptureSession {
 
 /// Runs commands one at a time and holds the one session.
 final class Controller {
-  let queue = DispatchQueue(label: "com.sennechin.apex.speech.control")
+  let queue = DispatchQueue(label: "com.sennechin.atelier.speech.control")
   private var session: CaptureSession?
   private var starting = false
   private var stopAfterStart = false
@@ -496,7 +496,7 @@ final class Controller {
       return
     }
     let strings = Array(((json["contextualStrings"] as? [String]) ?? []).prefix(100))
-    // Bilingual: the file is heard once per language, and Apex keeps what fits for each stretch.
+    // Bilingual: the file is heard once per language, and Atelier keeps what fits for each stretch.
     let second = (json["secondaryLocale"] as? String).flatMap { $0.isEmpty || $0 == locale ? nil : $0 }
     let url = URL(fileURLWithPath: path)
     let job = FileTranscriber(session: id, url: url, locale: locale, contextualStrings: strings, queue: queue, share: (0, second == nil ? 1 : 0.5), last: second == nil)
@@ -515,7 +515,7 @@ final class Controller {
     }
   }
 
-  /// A recording a session never finished (Apex crashed or was force quit,
+  /// A recording a session never finished (Atelier crashed or was force quit,
   /// or its merge failed): merges the parts left beside `path` into it.
   /// Runs beside any session; the parts belong to no running one.
   private func recover(_ json: [String: Any]) {
@@ -546,7 +546,7 @@ final class Controller {
     }
   }
 
-  /// Apex went away: finish what is running (briefly), then exit.
+  /// Atelier went away: finish what is running (briefly), then exit.
   func shutdown(_ done: @escaping () -> Void) {
     queue.async { [self] in
       var finished = false

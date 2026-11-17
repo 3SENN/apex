@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -13,7 +13,7 @@ import { WindowManager } from '../src/main/windows'
 // CH-30: closing a tab or window that holds a private chat with content
 // asks first; an empty one closes quietly. Fakes only: no Electron, no model.
 
-const chatTab = (id: string, chatId: string, windowId = 1): OpenTab => ({ id, internalUrl: `apex://chat/${chatId}`, windowId })
+const chatTab = (id: string, chatId: string, windowId = 1): OpenTab => ({ id, internalUrl: `atelier://chat/${chatId}`, windowId })
 const webTab = (id: string, windowId = 1): OpenTab => ({ id, internalUrl: null, windowId })
 
 function setup(opts: { tabs: OpenTab[]; states: Record<string, 'content' | 'empty'>; viewing?: ViewingEntry[]; answer?: boolean }) {
@@ -238,7 +238,7 @@ function fakeWindow(id: number, kind: WindowContext['kind'], urls: string[]) {
     getTitle: () => `Window ${id}`,
     getNormalBounds: () => ({ x: 0, y: 0, width: 1200, height: 800 }),
   })
-  const tabs = urls.map((url, i) => ({ id: `${id}-${i}`, pinned: false, internalUrl: url.startsWith('apex://') ? url : null, view: { webContents: { isDestroyed: () => true } } }))
+  const tabs = urls.map((url, i) => ({ id: `${id}-${i}`, pinned: false, internalUrl: url.startsWith('atelier://') ? url : null, view: { webContents: { isDestroyed: () => true } } }))
   const info = (t: (typeof tabs)[number]) => ({ id: t.id, url: urls[Number(t.id.split('-')[1])] ?? '', title: 'T', pinned: false, groupId: null })
   const tabsEmitter = Object.assign(new EventEmitter(), {
     all: () => tabs,
@@ -270,7 +270,7 @@ describe('reopening closed tabs (⇧⌘T) leaves out private chats', () => {
   it('skips a closed private chat tab, keeps other chats and websites', () => {
     const wm = new WindowManager()
     wm.setEphemeral(ephemeral)
-    const a = fakeWindow(1, 'normal', ['https://a.test/', 'apex://chat/secret', 'apex://chat/normal'])
+    const a = fakeWindow(1, 'normal', ['https://a.test/', 'atelier://chat/secret', 'atelier://chat/normal'])
     wm.add(a.win)
     for (const tab of a.tabs) a.tabsEmitter.emit('closed', tab)
     expect(wm.recentlyClosed().map((e) => (e.kind === 'chat' ? e.chatId : e.kind === 'tab' ? e.url : e.kind))).toEqual(['normal', 'https://a.test/'])
@@ -279,7 +279,7 @@ describe('reopening closed tabs (⇧⌘T) leaves out private chats', () => {
   it('a closed window comes back without its private chat tab, and so does the saved session', () => {
     const wm = new WindowManager()
     wm.setEphemeral(ephemeral)
-    const a = fakeWindow(1, 'normal', ['apex://chat/secret', 'https://a.test/'])
+    const a = fakeWindow(1, 'normal', ['atelier://chat/secret', 'https://a.test/'])
     wm.add(a.win)
     wm.add(fakeWindow(2, 'normal', ['https://b.test/']).win)
     expect(wm.serializeWindow(a.win)?.tabs.map((t) => t.url)).toEqual(['https://a.test/'])
@@ -290,7 +290,7 @@ describe('reopening closed tabs (⇧⌘T) leaves out private chats', () => {
   it('a popped-out private chat window is not remembered', () => {
     const wm = new WindowManager()
     wm.setEphemeral(ephemeral)
-    const chat = fakeWindow(3, 'chat', ['apex://chat/secret'])
+    const chat = fakeWindow(3, 'chat', ['atelier://chat/secret'])
     wm.add(chat.win)
     wm.add(fakeWindow(1, 'normal', ['https://a.test/']).win)
     chat.window.emit('close', { preventDefault: () => undefined })
@@ -300,7 +300,7 @@ describe('reopening closed tabs (⇧⌘T) leaves out private chats', () => {
   it('the tab strip’s own reopen stack skips them too', () => {
     const stack = new ClosedTabStack()
     stack.setSkip(ephemeral)
-    stack.push({ url: 'apex://chat/secret', title: 'Private', pinned: false, index: 0 })
+    stack.push({ url: 'atelier://chat/secret', title: 'Private', pinned: false, index: 0 })
     stack.push({ url: 'https://a.test/', title: 'A', pinned: false, index: 1 })
     expect(stack.size).toBe(1)
     expect(stack.pop()?.url).toBe('https://a.test/')

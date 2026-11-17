@@ -1,17 +1,17 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Contract for the workspace: Search everything, watched folders, version
 // history (OV-33), Recently Deleted, projects (SH-64), spaces and the hub at
-// apex://workspace.
+// atelier://workspace.
 import type { ViewerTarget } from './files'
 import type { TabsSnapshot } from './ipc'
 import type { MenuItemSpec } from './menu'
 import type { Owner } from './services'
 
-/** Any file Apex can version, trash or hand to the agent. `library` ids are LibraryFileRef ids. */
+/** Any file Atelier can version, trash or hand to the agent. `library` ids are LibraryFileRef ids. */
 export type FileRef =
   | { kind: 'folder'; folderId: string; path: string }
   | { kind: 'companion'; companionId: string; path: string }
@@ -74,7 +74,7 @@ export function fileRefName(ref: FileRef): string {
 }
 
 /**
- * Files Apex reads as text: indexing, the folder tools and write_file. Up to
+ * Files Atelier reads as text: indexing, the folder tools and write_file. Up to
  * TEXT_FILE_MAX_BYTES; anything else is listed but never read or written.
  */
 export const TEXT_EXTENSIONS: ReadonlySet<string> = new Set([
@@ -179,7 +179,7 @@ export interface IndexState {
   updatedAt: number | null
 }
 
-/** Project colours: Apex's palette ids (the tab-group colours), drawn from tokens in light and dark. */
+/** Project colours: Atelier's palette ids (the tab-group colours), drawn from tokens in light and dark. */
 export const PROJECT_COLORS = ['graphite', 'berry', 'honey', 'fern', 'lagoon', 'iris', 'coral', 'sage'] as const
 export type ProjectColor = (typeof PROJECT_COLORS)[number]
 export const PROJECT_NAME_MAX = 80
@@ -189,7 +189,7 @@ export const PROJECT_CONTEXT_MAX = 10
 export interface Project {
   id: string
   name: string
-  /** A palette token id from Apex's project colours, never a raw hex. */
+  /** A palette token id from Atelier's project colours, never a raw hex. */
   color: string
   description: string
   instructions: string
@@ -261,7 +261,7 @@ export interface TrashItem {
 /** Recently Deleted keeps items for 30 days. */
 export const TRASH_RETENTION_DAYS = 30
 
-/** Sections of apex://workspace (its addresses; timeline only redirects to History). */
+/** Sections of atelier://workspace (its addresses; timeline only redirects to History). */
 export const WORKSPACE_SECTIONS = ['home', 'projects', 'files', 'apps', 'tables', 'timeline', 'trash', 'search'] as const
 export type WorkspaceSection = (typeof WORKSPACE_SECTIONS)[number]
 
@@ -463,10 +463,10 @@ export function pruneSelection(selected: ReadonlySet<string>, shown: readonly st
   return new Set([...selected].filter((id) => keep.has(id)))
 }
 
-/** apex://workspace/search with its query. */
+/** atelier://workspace/search with its query. */
 export function searchPageUrl(query: string): string {
   const q = query.trim()
-  return q ? `apex://workspace/search?q=${encodeURIComponent(q)}` : 'apex://workspace/search'
+  return q ? `atelier://workspace/search?q=${encodeURIComponent(q)}` : 'atelier://workspace/search'
 }
 
 /** The space the Space row names: the active one, or "no project". */

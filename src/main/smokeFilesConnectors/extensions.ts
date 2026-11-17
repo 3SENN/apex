@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -20,13 +20,13 @@ function assert(ok: unknown, message: string): asserts ok {
   if (!ok) throw new Error(message)
 }
 
-// A packaged run has no tests/ inside its asar: smoke-packaged.mjs points APEX_SMOKE_FIXTURES at the repo's.
-const fixture = (name: string): string => join(process.env.APEX_SMOKE_FIXTURES ?? join(app.getAppPath(), 'tests/fixtures'), 'extensions', name)
+// A packaged run has no tests/ inside its asar: smoke-packaged.mjs points ATELIER_SMOKE_FIXTURES at the repo's.
+const fixture = (name: string): string => join(process.env.ATELIER_SMOKE_FIXTURES ?? join(app.getAppPath(), 'tests/fixtures'), 'extensions', name)
 
 /** A fresh profile id and persistent session for one check (extensions refuse in-memory sessions). */
 function scratchProfile(): { id: string; session: Electron.Session } {
   const id = `smokeext${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`
-  return { id, session: session.fromPartition(`persist:apex-smoke-${id}`) }
+  return { id, session: session.fromPartition(`persist:atelier-smoke-${id}`) }
 }
 
 function extensions() {

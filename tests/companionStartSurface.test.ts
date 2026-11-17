@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import { arrivalDelays, ARRIVAL_MS, buildIdeaPages, buildInbox, clampPage, IDEAS
 const sources = (over: Partial<IdeaSources> = {}): IdeaSources => ({ companionName: 'Pip', skills: [], routines: [], tabs: [], dismissed: new Set(), ...over })
 
 describe('ideas card (DS-109)', () => {
-  it('starts with Apex’s own starters, four rows a page', () => {
+  it('starts with Atelier’s own starters, four rows a page', () => {
     const pages = buildIdeaPages(sources())
     expect(pages.length).toBeGreaterThanOrEqual(2)
     for (const page of pages) expect(page.ideas.length).toBeLessThanOrEqual(IDEAS_PER_PAGE)
@@ -23,7 +23,7 @@ describe('ideas card (DS-109)', () => {
         tabs: [
           { id: 't1', title: 'Weather in Ghent', url: 'https://weather.example/ghent' },
           { id: 't2', title: 'Trains', url: 'https://trains.example' },
-          { id: 't3', title: 'Settings', url: 'apex://settings' },
+          { id: 't3', title: 'Settings', url: 'atelier://settings' },
         ],
         skills: [{ id: 's1', name: 'recap', description: '' }],
         routines: [{ id: 'r1', name: 'Morning news', prompt: 'Three headlines', enabled: true }],
@@ -34,7 +34,7 @@ describe('ideas card (DS-109)', () => {
     expect(tabs.ideas.every((i) => i.oneShot)).toBe(true)
     const skills = pages.find((p) => p.id === 'skills')!
     expect(skills.ideas[0]).toMatchObject({ label: '/recap', oneShot: false })
-    expect(skills.seeAll?.url).toBe('apex://skills')
+    expect(skills.seeAll?.url).toBe('atelier://skills')
     expect(pages.find((p) => p.id === 'routines')!.ideas[0]).toMatchObject({ prompt: 'Three headlines', oneShot: true })
   })
 

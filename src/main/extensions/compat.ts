@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -22,7 +22,7 @@ export interface Compat {
 const ALWAYS_FINE = new Set(['activeTab', 'background', 'unlimitedStorage', 'clipboardRead', 'clipboardWrite', 'geolocation', 'webRequestBlocking', 'declarativeNetRequestWithHostAccess', 'declarativeNetRequestFeedback'])
 
 /**
- * What Electron 45's own session.extensions provides, plus Apex's shims
+ * What Electron 45's own session.extensions provides, plus Atelier's shims
  * (action, commands, context menus, native messaging, permissions, privacy,
  * declarativeContent, webNavigation, windows, storage.sync and tabs.create
  * through the service-worker and frame preloads).
@@ -38,14 +38,14 @@ export const NATIVE_APIS: ReadonlySet<string> = new Set([
   'offscreen',
   'declarativeNetRequest',
   'webRequest',
-  // Apex shims.
+  // Atelier shims.
   'action',
   'commands',
   'nativeMessaging',
   'permissions',
   // Items show in the page's context menu; clicks reach contextMenus.onClicked.
   'contextMenus',
-  // Password saving can be held by an extension; address and card autofill stay Apex's (not controllable).
+  // Password saving can be held by an extension; address and card autofill stay Atelier's (not controllable).
   'privacy',
   // Page rules: URL conditions are evaluated, ShowAction turns the action on.
   'declarativeContent',
@@ -54,7 +54,7 @@ export const NATIVE_APIS: ReadonlySet<string> = new Set([
   'windows',
 ])
 
-/** Manifest keys that need browser UI Apex doesn't draw. */
+/** Manifest keys that need browser UI Atelier doesn't draw. */
 const UNSUPPORTED_KEYS: Array<[keyof Manifest, string]> = [
   ['side_panel', 'sidePanel'],
   ['devtools_page', 'devtools'],

@@ -1,19 +1,19 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The JSON-lines protocol Apex speaks with this helper (version 2; the
+// The JSON-lines protocol Atelier speaks with this helper (version 2; the
 // TypeScript side is src/shared/speech.ts and
 // src/main/speech/protocol.ts). One command per line on stdin, one event per
-// line on stdout. Apex ignores lines it doesn't know, so a new event type
+// line on stdout. Atelier ignores lines it doesn't know, so a new event type
 // needs no version bump; a changed meaning does.
 
 import Foundation
 
 let protocolVersion = 2
 
-/// Stable error codes Apex maps to its own copy (HelperErrorCode).
+/// Stable error codes Atelier maps to its own copy (HelperErrorCode).
 enum HelperError: String {
   case micDenied = "mic-denied"
   case speechDenied = "speech-denied"
@@ -105,7 +105,7 @@ func speechLocale(_ id: String) -> Locale {
   Locale(identifier: id.replacingOccurrences(of: "-", with: "_"))
 }
 
-/// BCP-47 with a hyphen, as Apex stores it.
+/// BCP-47 with a hyphen, as Atelier stores it.
 func bcp47(_ identifier: String) -> String {
   identifier.replacingOccurrences(of: "_", with: "-")
 }

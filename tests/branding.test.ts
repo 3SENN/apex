@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -15,7 +15,7 @@ import { builderConfig } from '../scripts/release/builderConfig.mjs'
 import { setCatalogue } from '../src/shared/i18n/core'
 import { trademarkLine } from '../src/renderer/src/updates/logic/licenses'
 
-// The person sees the app's name (Apex, or Summit for the unofficial
+// The person sees the app's name (Atelier, or Summit for the unofficial
 // branding; scripts/branding.mjs), never "Electron": the bundle names, the
 // About panel, Settings › About and every string in the catalogues.
 
@@ -27,11 +27,11 @@ describe('the branding names the app', () => {
     expect(APP_NAME).toBe(BRANDING.name)
     expect(APP_NAME).toBe(loadBranding().name)
     // package.json and the yml are written for the official branding; the packaged config swaps in the active one.
-    expect(pkg.productName).toBe('Apex')
-    expect(readFileSync(resolve(root, 'electron-builder.yml'), 'utf8')).toMatch(/^productName: Apex$/m)
+    expect(pkg.productName).toBe('Atelier')
+    expect(readFileSync(resolve(root, 'electron-builder.yml'), 'utf8')).toMatch(/^productName: Atelier$/m)
     for (const official of ['1', '0']) {
-      const config = builderConfig({ APEX_OFFICIAL_BRANDING: official, APEX_INTERNAL: '0' }, { platform: 'linux' })
-      const name = official === '1' ? 'Apex' : 'Summit'
+      const config = builderConfig({ ATELIER_OFFICIAL_BRANDING: official, ATELIER_INTERNAL: '0' }, { platform: 'linux' })
+      const name = official === '1' ? 'Atelier' : 'Summit'
       expect(config.productName).toBe(name)
       expect(config.extraMetadata).toMatchObject({ productName: name })
       expect(config.extraMetadata.description).toMatch(new RegExp(`^${name}, the browser`))
@@ -67,8 +67,8 @@ describe('the branding names the app', () => {
   it('with its copyright, publisher and trademark line, as Brave and Firefox do', () => {
     const official = readBranding('official')
     const unofficial = readBranding('unofficial')
-    for (const branding of [official, unofficial]) expect(branding.copyright).toBe('Copyright © 2026 The Apex Authors')
-    // Only the official branding claims marks; Summit is a placeholder, not an Apex trademark.
+    for (const branding of [official, unofficial]) expect(branding.copyright).toBe('Copyright © 2026 The Atelier Authors')
+    // Only the official branding claims marks; Summit is a placeholder, not an Atelier trademark.
     expect(official.trademarkInfo).toBe('{brand}, the {brand} logo and sprout mark, and the {brand} characters are trademarks of Chinnovations.')
     expect(unofficial.trademarkInfo).toBe('')
     expect(official.publisher).toBeTruthy()
@@ -78,10 +78,10 @@ describe('the branding names the app', () => {
     expect(brandingProblems({ ...official, publisher: ' ' })).toContain('publisher must be a name of 1 to 80 characters')
     // electron-builder takes the copyright (Info.plist, the Windows file properties), the publisher and the Windows trademark line.
     for (const [flag, branding] of [['1', official], ['0', unofficial]] as const) {
-      const config = builderConfig({ APEX_OFFICIAL_BRANDING: flag, APEX_INTERNAL: '0' }, { platform: 'linux' })
+      const config = builderConfig({ ATELIER_OFFICIAL_BRANDING: flag, ATELIER_INTERNAL: '0' }, { platform: 'linux' })
       expect(config.copyright).toBe(branding.copyright)
       expect(config.extraMetadata.author).toBe(branding.publisher)
-      if (branding.trademarkInfo) expect(config.win.legalTrademarks).toBe('Apex, the Apex logo and sprout mark, and the Apex characters are trademarks of Chinnovations.')
+      if (branding.trademarkInfo) expect(config.win.legalTrademarks).toBe('Atelier, the Atelier logo and sprout mark, and the Atelier characters are trademarks of Chinnovations.')
       else expect(config.win.legalTrademarks).toBeUndefined()
     }
   })

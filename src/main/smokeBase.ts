@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -69,8 +69,8 @@ export async function runBaseChecks(deps: BaseCheckDeps, check: Check): Promise<
   const summary = (id: string): ChatSummary | undefined => chats.summary(id)
   const settled = (id: string): boolean => !host.isRunning(id) && ['finished', 'error', 'idle'].includes(summary(id)?.status ?? '')
 
-  await check('settings saved by an older Apex are migrated', async () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-smoke-settings-'))
+  await check('settings saved by an older Atelier are migrated', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-smoke-settings-'))
     writeFileSync(join(dir, 'settings.json'), JSON.stringify({ showBookmarksBar: false, layout: 'ribbon', sidebarWidth: 9999, theme: 'dark', onboarded: true }))
     const migrated = new SettingsStore(dir).get()
     assert(migrated.bookmarksBar === 'never', `bookmarksBar is ${migrated.bookmarksBar}`)
@@ -133,7 +133,7 @@ export async function runBaseChecks(deps: BaseCheckDeps, check: Check): Promise<
     await chrome.type('.nt-composer__field', 'Plan a picnic for Saturday')
     await chrome.click(/^Send$/, `document.querySelector('.nt-composer')`)
     // The same tab becomes the chat page, and the reply arrives there.
-    await waitFor(() => /^apex:\/\/chat\//.test(tab.internalUrl ?? ''), 10_000, 'the tab to become the chat page')
+    await waitFor(() => /^atelier:\/\/chat\//.test(tab.internalUrl ?? ''), 10_000, 'the tab to become the chat page')
     await chrome.until(
       `const view = document.querySelector('.chat-view--page'); return view && view.textContent.includes('Plan a picnic for Saturday') && view.textContent.includes('Should I check the weather') && 'ok'`,
       10_000,
@@ -141,7 +141,7 @@ export async function runBaseChecks(deps: BaseCheckDeps, check: Check): Promise<
     )
     const id = chats.list().find((c) => c.title.startsWith('Plan a picnic'))?.id
     assert(id, 'the chat was not saved')
-    assert(tab.internalUrl === `apex://chat/${id}`, `the tab shows ${tab.internalUrl}`)
+    assert(tab.internalUrl === `atelier://chat/${id}`, `the tab shows ${tab.internalUrl}`)
     assert(tabs.activeId() === tab.id, 'another tab took focus')
     await waitFor(() => settled(id), 5000, 'the chat to finish')
     state.picnicChatId = id
@@ -199,7 +199,7 @@ export async function runBaseChecks(deps: BaseCheckDeps, check: Check): Promise<
     const before = tabs.all().length
     const active = tabs.activeId()
     assert(active, 'no active tab')
-    tabs.openInternal('apex://chats')
+    tabs.openInternal('atelier://chats')
     const shown = await chrome.until<{ activeRows: number; dest: string }>(
       `const page = document.querySelector('.pane--rail .chats-page')
        const dest = document.querySelector('.sidebar .dest-row.side-row--active')
@@ -209,7 +209,7 @@ export async function runBaseChecks(deps: BaseCheckDeps, check: Check): Promise<
       'All chats on the destination surface',
     )
     assert(tabs.all().length === before, `opening All chats changed the tab count (${before} → ${tabs.all().length})`)
-    assert(tabs.activeId() === active && tabs.snapshot().rail?.url === 'apex://chats', 'the rail is not set')
+    assert(tabs.activeId() === active && tabs.snapshot().rail?.url === 'atelier://chats', 'the rail is not set')
     assert(shown.activeRows === 0, `${shown.activeRows} tab or chat rows are still active`)
     tabs.activate(active)
     await chrome.until(`return !document.querySelector('.pane--rail')`, 4000, 'the tab to come back')

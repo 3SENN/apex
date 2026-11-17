@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -27,7 +27,7 @@ const CHAT = '11111111-2222-4333-8444-555555555555'
 
 /** A stand-alone files service over a temp folder, its deletions going to a local bin. */
 function standalone(): { dir: string; files: ReturnType<typeof setupFiles>; events: FilesEvent[] } {
-  const dir = mkdtempSync(join(tmpdir(), 'apex-smoke-c4-'))
+  const dir = mkdtempSync(join(tmpdir(), 'atelier-smoke-c4-'))
   const bin = join(dir, '.trash')
   const events: FilesEvent[] = []
   const files = setupFiles({
@@ -54,7 +54,7 @@ export const checks: SmokeCheck[] = [
         assert(inTab.state === 'ready' && inTab.previewable === 'image' && inTab.url, 'the viewer did not open the image')
         const look = await files.services.viewer.open({ kind: 'library', id: ref.id })
         const served = serveFile(new Request(look.url as string), files.documents.served(fileTokenOf(look.url as string) as string))
-        assert(served.status === 200 && served.headers.get('content-type') === 'image/png', 'apex-file did not serve the image')
+        assert(served.status === 200 && served.headers.get('content-type') === 'image/png', 'atelier-file did not serve the image')
         files.services.viewer.release(look.token)
         assert(files.documents.served(look.token) === null, 'a released quick look token still serves')
         files.documents.releaseOwner('t-smoke')
@@ -85,7 +85,7 @@ export const checks: SmokeCheck[] = [
     name: 'files: the viewer edits, renames and deletes a memory file; missing and outside files are refused',
     async run() {
       const { dir, files } = standalone()
-      const outside = mkdtempSync(join(tmpdir(), 'apex-smoke-c4-out-'))
+      const outside = mkdtempSync(join(tmpdir(), 'atelier-smoke-c4-out-'))
       try {
         const memories = join(dir, 'memory', 'memories')
         mkdirSync(memories, { recursive: true })
@@ -117,7 +117,7 @@ export const checks: SmokeCheck[] = [
           () => false,
           () => true,
         )
-        assert(refused, 'a symlink out of Apex’s folders was opened')
+        assert(refused, 'a symlink out of Atelier’s folders was opened')
         const local = await files.services.viewer.open({ kind: 'local', path: join(outside, 'secret.txt') }).then(
           () => false,
           () => true,

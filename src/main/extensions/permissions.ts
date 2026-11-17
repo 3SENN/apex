@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import { mainT } from '../i18n/mainT'
 import { permissionLists, type Manifest } from './manifest'
 
 // What an extension can do, in plain words (OV-16, ST-40). Each permission
-// that matters to a person maps to Apex's own phrase; quiet ones (storage,
+// that matters to a person maps to Atelier's own phrase; quiet ones (storage,
 // alarms, menus…) map to null and show nothing. Host patterns collapse into
 // one site-access line, so the prompt can say "needs nothing extra" when
 // nothing is left.
@@ -89,7 +89,7 @@ export function hostLabel(pattern: string): string {
   return host || pattern
 }
 
-/** The phrase for one API permission: its own, null for a quiet one, or a generic line for one Apex doesn't know. */
+/** The phrase for one API permission: its own, null for a quiet one, or a generic line for one Atelier doesn't know. */
 export function phraseFor(permission: string): string | null {
   if (Object.hasOwn(PHRASES, permission)) {
     const key = PHRASES[permission]

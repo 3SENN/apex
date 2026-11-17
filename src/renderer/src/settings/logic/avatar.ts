@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -21,7 +21,7 @@ const DATA_URL = /^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/]+={0,2}$/
 export function avatarFileError(file: { type: string; size: number; name?: string }): string | null {
   const type = file.type.toLowerCase()
   if (!type.startsWith('image/') || type === 'image/svg+xml') return t('settings.avatar.thatFileIsnT')
-  if (!SOURCE_TYPES.has(type)) return t('settings.avatar.apexCanTRead')
+  if (!SOURCE_TYPES.has(type)) return t('settings.avatar.atelierCanTRead')
   if (file.size > AVATAR_FILE_MAX) return t('settings.avatar.thatPictureIsOver', { value: Math.round(AVATAR_FILE_MAX / 1024 / 1024) })
   if (file.size === 0) return t('settings.avatar.thatFileIsEmpty')
   return null

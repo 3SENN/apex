@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -29,7 +29,7 @@ import { PasswordsPage } from './PasswordsPage'
 import { MeetingsPage } from './MeetingsPage'
 import { TweaksPage } from './TweaksPage' // TWK-05
 import { PacksPage } from './PacksPage' // docs/packs.md
-// The remaining apex:// pages; an address without one shows NotFound.
+// The remaining atelier:// pages; an address without one shows NotFound.
 import { ViewSourcePage } from './ViewSourcePage'
 import { FileViewerPage } from './FileViewerPage'
 import { FilesPage } from './FilesPage'
@@ -52,10 +52,10 @@ function NotFound(): ReactElement {
     <div className="page page--center">
       <EmptyState
         icon={<FileQuestion />}
-        title={t('core.internalPage.thisApexPageDoesn')}
+        title={t('core.internalPage.thisAtelierPageDoesn')}
         description={t('core.internalPage.theAddressMayBe')}
         action={
-          <Button variant="secondary" onClick={() => void call('pages', 'open', 'apex://chats')}>
+          <Button variant="secondary" onClick={() => void call('pages', 'open', 'atelier://chats')}>
             {t('core.internalPage.goToAllChats')}
           </Button>
         }
@@ -65,7 +65,7 @@ function NotFound(): ReactElement {
 }
 
 /**
- * Renders an apex:// page drawn by the chrome. apex://companion/... has no
+ * Renders an atelier:// page drawn by the chrome. atelier://companion/... has no
  * page of its own: App floats the companion card over the content instead.
  * Library addresses never arrive here; main rewrites them to destinations.
  */
@@ -107,14 +107,14 @@ function InternalRoute({ url, tabId, settings, companion, isMac, onSettings }: I
       return <FirstWeekPage tabId={tabId} section={route.section} />
     case 'logs':
       return <LogsPage tabId={tabId} />
-    // Apex://workspace[/<section>[/<id>]]
+    // Atelier://workspace[/<section>[/<id>]]
     case 'workspace':
       return <WorkspacePage tabId={tabId} section={(route.section as WorkspaceSection | null) ?? null} itemId={route.id} url={url} />
     case 'flags':
       return <FlagsPage tabId={tabId} />
     case 'guides':
       return <GuidesPage tabId={tabId} guideId={route.id} />
-    // ── presets route ── (apex://presets[/<id>])
+    // ── presets route ── (atelier://presets[/<id>])
     case 'presets':
       return <PresetsPage tabId={tabId} presetId={route.id} />
     case 'view-source':
@@ -123,10 +123,10 @@ function InternalRoute({ url, tabId, settings, companion, isMac, onSettings }: I
       return <PasswordsPage tabId={tabId} url={url} />
     case 'meetings':
       return <MeetingsPage tabId={tabId} url={url} meetingId={route.id} />
-    // ── tweaks route ── (TWK-05: apex://tweaks[?site=<host>])
+    // ── tweaks route ── (TWK-05: atelier://tweaks[?site=<host>])
     case 'tweaks':
       return <TweaksPage tabId={tabId} url={url} />
-    // ── packs route ── (docs/packs.md: apex://packs[?pack=|?draft=|?tab=|?install=])
+    // ── packs route ── (docs/packs.md: atelier://packs[?pack=|?draft=|?tab=|?install=])
     case 'packs':
       return <PacksPage tabId={tabId} url={url} />
     // The viewer, and Library › Files

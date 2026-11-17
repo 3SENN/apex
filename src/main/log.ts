@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // The log facade. Every entry is redacted, handed to the onEntry
 // listeners and written by the rotating file logger
-// (diagnostics/logger.ts, userData/logs/apex.log); callers only ever see
+// (diagnostics/logger.ts, userData/logs/atelier.log); callers only ever see
 // this small API.
 
 import type { LogData, LogEntry, LogLevel } from '@shared/diagnostics'
@@ -27,7 +27,7 @@ export function isEchoing(): boolean {
   return echoing
 }
 
-const echoDebug = process.env.APEX_DEBUG === '1' || process.env.APEX_LOG_DEBUG === '1'
+const echoDebug = process.env.ATELIER_DEBUG === '1' || process.env.ATELIER_LOG_DEBUG === '1'
 
 function write(level: LogLevel, source: string, message: string, data?: LogData): void {
   const text = message.length > LOG_MESSAGE_MAX ? `${message.slice(0, LOG_MESSAGE_MAX)}…` : message

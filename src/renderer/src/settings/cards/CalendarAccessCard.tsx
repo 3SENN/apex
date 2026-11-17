@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // The Calendar and Reminders access card, mounted
 // on the Agent permissions page under "This Mac". Each kind has its own
-// switch in Apex and its own macOS permission; companions read a kind only
+// switch in Atelier and its own macOS permission; companions read a kind only
 // when both say yes, and never change anything. Without the helper (another
 // platform, or a build without it) the card says so.
 import { useEffect, useState, type ReactElement } from 'react'

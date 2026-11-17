@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { useEffect, useId, useRef, useState, type CSSProperties, type ReactEleme
 import { AppWindow, Brain, CalendarClock, Copy, Cpu, Eye, EyeOff, Folder, MessageSquarePlus, RotateCcw, Trash2, UserRound, UserRoundX, WandSparkles, X } from 'lucide-react'
 import type { Companion } from '@shared/companion'
 import { COMPANION_LOOK_ITEM, chatUrl, companionUrl } from '@shared/url'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { companionsSnapshot, reloadCompanions, useCompanions, type CompanionsState } from '../components/companionData'
 import { usePageStills } from '../companion-card/Backdrop'
 import { tabsSnapshot } from '../companion-card/liveTabs'
@@ -40,9 +40,9 @@ export interface CompanionCardProps {
   companionId: string
   /** A tab: general, skills, routines, files, memory or models. Unknown values open General. */
   section: string | null
-  /** One skill or routine id, or an encoded file or note path, from apex://companion/<id>/<section>/<item>. */
+  /** One skill or routine id, or an encoded file or note path, from atelier://companion/<id>/<section>/<item>. */
   item?: string | null
-  /** An apex://companion tab: the card fills the content area as a page, and close closes the tab (DS-121). */
+  /** An atelier://companion tab: the card fills the content area as a page, and close closes the tab (DS-121). */
   asPage?: boolean
   onClose(): void
 }
@@ -58,7 +58,7 @@ const SECTION_ICONS: Record<CardSection, ReactElement> = {
 }
 
 /** The remembered width, as a share of the content area, so it suits any window size. */
-const WIDTH_KEY = 'apex.companionCard.share'
+const WIDTH_KEY = 'atelier.companionCard.share'
 
 function readShare(): number | null {
   try {
@@ -91,7 +91,7 @@ export function CompanionCard({ companionId, section, item = null, asPage = fals
   const state = useCompanions()
   const registry = useCardSaveRegistry()
   const [currentId, setCurrentId] = useState(companionId)
-  // apex://companion/<id>/general/look opens with the look editor on.
+  // atelier://companion/<id>/general/look opens with the look editor on.
   const lookAsked = item === COMPANION_LOOK_ITEM
   const [tab, setTab] = useState<CardSection>(() => normalizeSection(section))
   const [focusItem, setFocusItem] = useState<string | null>(lookAsked ? null : item)
@@ -147,9 +147,9 @@ export function CompanionCard({ companionId, section, item = null, asPage = fals
     if (!asPage) return
     const snap = tabsSnapshot()
     const tab = snap.tabs.find((t) => t.id === snap.activeId)
-    if (!tab?.url.startsWith('apex://companion')) return
+    if (!tab?.url.startsWith('atelier://companion')) return
     const url = companionUrl(id, next === 'general' ? null : next)
-    if (tab.url !== url) void apex.nav.go(tab.id, url).catch(() => undefined)
+    if (tab.url !== url) void atelier.nav.go(tab.id, url).catch(() => undefined)
   }
   const switchTo = async (id: string): Promise<void> => {
     await registry.flushAll()
@@ -294,7 +294,7 @@ interface CardBodyProps {
   onLook(open: boolean): void
   onTab(tab: CardSection): void
   onSwitch(id: string): void
-  /** Opens an Apex page in a tab and closes the card. */
+  /** Opens an Atelier page in a tab and closes the card. */
   onLeave(url: string): void
   onClose(): void
 }
@@ -320,7 +320,7 @@ function CardBody({ companion, state, registry, titleId, tab, focusItem, width, 
   )
   const isActive = state.activeId === companion.id
   const lastVisible = isLastVisible(state.items, companion.id)
-  const isMac = apex.platform === 'darwin'
+  const isMac = atelier.platform === 'darwin'
   const idPrefix = `co-${companion.id}`
 
   useEffect(() => registry.setBusy(busy), [busy, registry])

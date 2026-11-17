@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { useEffect, useState, type ReactElement } from 'react'
 import type { SharingBarProps } from '@shared/overlay/sites'
 import type { SitePermission } from '@shared/sites'
-import { apex, call } from '../../../api'
+import { atelier, call } from '../../../api'
 import { useT } from '../../../i18n/useT'
 import { Button } from '../../../ui'
 import type { SurfaceComponentProps } from '../../types'
@@ -27,7 +27,7 @@ export function SharingBar({ props, close }: SurfaceComponentProps<SharingBarPro
 
   useEffect(
     () =>
-      apex.onAppEvent((event) => {
+      atelier.onAppEvent((event) => {
         if (event.type !== 'capture' || event.tabId !== props.tabId) return
         setCapture(event.capture)
         setSharedTab(event.sharedTab)

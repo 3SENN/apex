@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -141,9 +141,9 @@ const companion: SmokeCheck = {
           if (CONTENT_PROTECTION) {
             assert(hudWin.isContentProtected(), 'the HUD is kept out of screen captures')
           } else {
-            // Linux has no content protection: Apex's own screen captures hide the floats while they run.
+            // Linux has no content protection: Atelier's own screen captures hide the floats while they run.
             const shownDuring = await p.float.keepOutOf(async () => hudWin.isVisible())
-            assert(!shownDuring, 'the HUD hides while Apex captures the screen (no content protection here)')
+            assert(!shownDuring, 'the HUD hides while Atelier captures the screen (no content protection here)')
             await waitFor(() => hudWin.isVisible(), 2000, 'the HUD to come back after the capture')
           }
           assert(process.platform !== 'darwin' || hudWin.isVisibleOnAllWorkspaces(), 'the HUD shows on every Space')
@@ -231,7 +231,7 @@ const launcher: SmokeCheck = {
   name: 'voice: the quick-ask launcher listens, shows the text and sends a new chat',
   async run(ctx) {
     const p = probe()
-    const chatTabs = (): number => ctx.tabs.all().filter((t) => (t.internalUrl ?? '').startsWith('apex://chat/')).length
+    const chatTabs = (): number => ctx.tabs.all().filter((t) => (t.internalUrl ?? '').startsWith('atelier://chat/')).length
     const chatsBefore = chatTabs()
     const before = ctx.settings.get().voice
     ctx.settings.update({ voice: { sounds: false, launcherScreenshot: false } })

@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Running pack tools (docs/packs.md › Tools). Each pack with tools gets one
-// hidden window in its own sandbox, loading Apex's tool host page, which
-// imports the pack's tool modules and serves calls through apex.tools.serve.
+// hidden window in its own sandbox, loading Atelier's tool host page, which
+// imports the pack's tool modules and serves calls through atelier.tools.serve.
 // Calls to one pack run one at a time, so "the page" a call reads is always
 // that call's; each times out after a minute, and an idle host closes after
 // five. A host that crashes fails its calls and starts afresh on the next.

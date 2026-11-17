@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperti
 import { Coffee, Pencil, Sofa, UserPlus } from 'lucide-react'
 import type { Companion as CompanionRecord } from '@shared/companion'
 import type { ChromeCommand, TabInfo } from '@shared/ipc'
-import { apex, errorText } from '../api'
+import { atelier, errorText } from '../api'
 import { Bubble, Companion, CompanionStill, companionImage, signalPresence, useCaretGaze } from '../companion'
 import { heroTint } from '../companion-card/logic/cardColors'
 import { pickerSlots, slotIndexOf, stepSlot } from '../companion-card/logic/cycle'
@@ -59,8 +59,8 @@ const OPENING_MS = 4000
 /** Favicons of the sites in your tabs, for the floor's topic bubbles. */
 function useFavicons(): string[] {
   const pick = (tabs: readonly TabInfo[]): string[] => [...new Set(tabs.filter((t) => t.favicon && /^https?:/.test(t.url)).map((t) => t.favicon as string))].slice(0, 6)
-  const [favicons, setFavicons] = useState<string[]>(() => pick(apex.initial.tabs.tabs))
-  useEffect(() => apex.tabs.onChanged((snapshot) => setFavicons(pick(snapshot.tabs))), [])
+  const [favicons, setFavicons] = useState<string[]>(() => pick(atelier.initial.tabs.tabs))
+  useEffect(() => atelier.tabs.onChanged((snapshot) => setFavicons(pick(snapshot.tabs))), [])
   return favicons
 }
 
@@ -122,7 +122,7 @@ export function NewTabPage({ tabId, onAsk }: NewTabPageProps) {
       if (detail && detail.tabId === tabId) focusAsk(detail.text)
     }
     window.addEventListener(FOCUS_ASK_EVENT, onEvent)
-    const off = apex.onCommand((command) => {
+    const off = atelier.onCommand((command) => {
       if ((command as ChromeCommand) === 'focus-ask') focusAsk(null)
     })
     return () => {
@@ -137,7 +137,7 @@ export function NewTabPage({ tabId, onAsk }: NewTabPageProps) {
   const flightEl = useRef<HTMLDivElement>(null)
   const avoid = useMemo(() => [composer, perch, below], [])
   const flights = useRef(0)
-  const userName = apex.initial.settings.userName?.trim() ?? ''
+  const userName = atelier.initial.settings.userName?.trim() ?? ''
 
   const slots = pickerSlots(items)
   const visible = items.filter((c) => !c.hidden)
@@ -428,7 +428,7 @@ export function NewTabPage({ tabId, onAsk }: NewTabPageProps) {
   )
 }
 
-/** Apex's arrival cue: a light ring spreads under the feet and a short column of sparkles rises. */
+/** Atelier's arrival cue: a light ring spreads under the feet and a short column of sparkles rises. */
 function ArrivalRing({ tint }: { tint: string }) {
   if (motionReduced()) return null
   return (

@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Tab groups and tab state shared by main and the chrome. The
-// colour names are Apex's own; their tokens (--group-<color>-fill, -text and
+// colour names are Atelier's own; their tokens (--group-<color>-fill, -text and
 // -ring) are defined for light and dark in styles.css.
 
 export const GROUP_COLORS = ['graphite', 'berry', 'honey', 'fern', 'lagoon', 'iris', 'coral', 'sage'] as const

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -143,7 +143,7 @@ describe('QuickModel effort and structured output', () => {
 
 })
 
-describe('QuickModel for apps (docs/apps.md › Apex as the AI engine)', () => {
+describe('QuickModel for apps (docs/apps.md › Atelier as the AI engine)', () => {
   it('runs a conversation with the caller’s tools until the model answers', async () => {
     const requests: unknown[] = []
     const replies = [

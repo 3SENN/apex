@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The packs that come with Apex (docs/packs.md › First-party packs). The
+// The packs that come with Atelier (docs/packs.md › First-party packs). The
 // built-in skills pack holds no files of its own: its switch shows or hides
 // the built-in skills. The example pack is a small, readable pack with a
 // skill, a panel, a command, a page menu item and a tool, off by default; it
@@ -45,24 +45,24 @@ page's main point in one sentence. If the page can't be read, say why.
 `
 
 const TOOL = `// The reading_time tool: counts the words on the open page.
-// apex.page.text() only works on sites the pack lists in permissions.sites.
+// atelier.page.text() only works on sites the pack lists in permissions.sites.
 
 const WORDS_PER_MINUTE = 230
 
 export async function run(input, ctx) {
-  const page = await apex.page.info()
+  const page = await atelier.page.info()
   if (!page) return 'There is no page open on a site this pack can read.'
-  const text = await apex.page.text()
+  const text = await atelier.page.text()
   const words = text.split(/\\s+/).filter(Boolean).length
   const minutes = Math.max(1, Math.round(words / WORDS_PER_MINUTE))
-  apex.log('Counted', words, 'words on', page.host)
+  atelier.log('Counted', words, 'words on', page.host)
   return { title: page.title, url: page.url, words, minutes }
 }
 `
 
 const CARD = `// The new tab card: the last pages the panel counted. ${BRAND_NAME} draws the lines.
 export async function run() {
-  const items = (await apex.storage.get('history')) ?? []
+  const items = (await atelier.storage.get('history')) ?? []
   if (items.length === 0) return 'Count a Wikipedia article in the panel to see it here.'
   return items.slice(0, 3).map((item) => item.title + ': ' + item.minutes + ' min')
 }
@@ -107,7 +107,7 @@ const status = document.getElementById('status')
 const list = document.getElementById('history')
 
 async function showHistory() {
-  const items = (await apex.storage.get('history')) ?? []
+  const items = (await atelier.storage.get('history')) ?? []
   list.replaceChildren(...items.map((item) => {
     const li = document.createElement('li')
     li.textContent = item.title + ': ' + item.minutes + ' min (' + item.words + ' words)'
@@ -116,16 +116,16 @@ async function showHistory() {
 }
 
 document.getElementById('count').addEventListener('click', async () => {
-  const page = await apex.page.info()
+  const page = await atelier.page.info()
   if (!page) {
     status.textContent = 'This pack can only read Wikipedia articles. Open one in another tab first.'
     return
   }
-  const words = (await apex.page.text()).split(/\\s+/).filter(Boolean).length
+  const words = (await atelier.page.text()).split(/\\s+/).filter(Boolean).length
   const minutes = Math.max(1, Math.round(words / 230))
   status.textContent = page.title + ' takes about ' + minutes + ' min to read.'
-  const items = (await apex.storage.get('history')) ?? []
-  await apex.storage.set('history', [{ title: page.title, words, minutes }, ...items].slice(0, 10))
+  const items = (await atelier.storage.get('history')) ?? []
+  await atelier.storage.set('history', [{ title: page.title, words, minutes }, ...items].slice(0, 10))
   await showHistory()
 })
 

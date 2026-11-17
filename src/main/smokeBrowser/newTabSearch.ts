@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -165,8 +165,8 @@ async function withSmokeEngine(ctx: SmokeContext, patch: { newTabMode: 'companio
   const before = ctx.settings.get()
   route(ctx, '/nt-search', 'New tab search results')
   ctx.settings.update({
-    customSearchEngines: [...before.customSearchEngines.filter((e) => e.id !== 'apex-smoke'), { id: 'apex-smoke', name: 'Smoke Search', template: `${base}/nt-search?q=%s` }],
-    searchEngine: 'apex-smoke',
+    customSearchEngines: [...before.customSearchEngines.filter((e) => e.id !== 'atelier-smoke'), { id: 'atelier-smoke', name: 'Smoke Search', template: `${base}/nt-search?q=%s` }],
+    searchEngine: 'atelier-smoke',
     searchEngineChosen: patch.searchEngineChosen ?? true,
     newTabMode: patch.newTabMode,
   })
@@ -186,13 +186,13 @@ const webModeSearch: SmokeCheck = {
         tab = await newTab(ctx, 'web')
         const empty = await composer(ctx)
         assert(empty.placeholder.includes('Smoke Search'), `the placeholder names the engine (got ${JSON.stringify(empty.placeholder)})`)
-        await typeKeys(ctx.chrome.ui, 'apex web query')
+        await typeKeys(ctx.chrome.ui, 'atelier web query')
         const typed = await until(ctx, 'the Search row first', (s) => s.rows[0]?.title === 'Search Smoke Search')
-        assert(typed.rows[0]?.key === '↵' && typed.rows[0]?.sub === 'apex web query', `Enter searches what was typed (rows: ${JSON.stringify(typed.rows)})`)
+        assert(typed.rows[0]?.key === '↵' && typed.rows[0]?.sub === 'atelier web query', `Enter searches what was typed (rows: ${JSON.stringify(typed.rows)})`)
         assert(typed.rows[1]?.title.startsWith('Ask ') && typed.rows[1]?.key === '⌥↵', `asking the companion is on ⌥Enter (rows: ${JSON.stringify(typed.rows)})`)
         assert(typed.send === 'Search Smoke Search', `the send button searches (got ${JSON.stringify(typed.send)})`)
         await press(ctx.chrome.ui, 'Return')
-        await loads(tab, `${base}/nt-search?q=apex%20web%20query`, 'the new tab to search the default engine')
+        await loads(tab, `${base}/nt-search?q=atelier%20web%20query`, 'the new tab to search the default engine')
         assert(ctx.tabs.activeId() === tab.id, 'the search runs in the same tab')
         // NT-01: the getting-started item ticks on the first search from a new tab.
         const view = await ctx.chrome.invoke<FirstWeekView>('firstWeek', 'view')
@@ -227,13 +227,13 @@ const companionModeKeys: SmokeCheck = {
         // Words: Enter would ask; ⌥Enter searches the default engine instead.
         const second = await newTab(ctx, 'companion')
         made.push(second)
-        await typeKeys(ctx.chrome.ui, 'apex alt query')
+        await typeKeys(ctx.chrome.ui, 'atelier alt query')
         const words = await until(ctx, 'the Ask row first', (s) => s.rows[0]?.title.startsWith('Ask ') === true)
         assert(words.rows[1]?.title === 'Search Smoke Search' && words.rows[1]?.key === '⌥↵', `Search is the ⌥Enter row (rows: ${JSON.stringify(words.rows)})`)
         await press(ctx.chrome.ui, 'Return', ['alt'])
-        await loads(second, `${base}/nt-search?q=apex%20alt%20query`, '⌥Enter to search the default engine')
+        await loads(second, `${base}/nt-search?q=atelier%20alt%20query`, '⌥Enter to search the default engine')
         assert(ctx.tabs.activeId() === second.id, '⌥Enter searches in the same tab')
-        assert(!second.internalUrl?.startsWith('apex://chat/'), '⌥Enter did not start a chat')
+        assert(!second.internalUrl?.startsWith('atelier://chat/'), '⌥Enter did not start a chat')
       } finally {
         for (const t of made) closeTab(ctx, t)
       }
@@ -289,7 +289,7 @@ const switchAndChoice: SmokeCheck = {
         await press(ctx.chrome.ui, 'Escape')
         await until(ctx, 'Esc to close the choice', (s) => !s.choosing)
         await waitFor(() => ctx.settings.get().searchEngineChosen === true, 3000, 'the choice to be marked made')
-        assert(ctx.settings.get().searchEngine === 'apex-smoke', 'Esc keeps the engine')
+        assert(ctx.settings.get().searchEngine === 'atelier-smoke', 'Esc keeps the engine')
         // Once made, the choice is not offered again.
         await clickOn(ctx.chrome, '.nt-mode__option[data-mode="companion"]')
         await waitFor(() => ctx.settings.get().newTabMode === 'companion', 3000, 'companion mode to be saved')

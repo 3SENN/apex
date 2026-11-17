@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -20,7 +20,7 @@ const PRESETS: CompanionPreset[] = [
 ]
 const presets = (): CompanionPreset[] => PRESETS
 
-function store(dir = mkdtempSync(join(tmpdir(), 'apex-companions-'))): { dir: string; companions: CompanionStore } {
+function store(dir = mkdtempSync(join(tmpdir(), 'atelier-companions-'))): { dir: string; companions: CompanionStore } {
   return { dir, companions: new CompanionStore(dir, { presets }) }
 }
 
@@ -35,7 +35,7 @@ describe('companion names', () => {
 
 describe('companion list', () => {
   it('migrates the single profile into the first companion with a stable id', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-companions-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-companions-'))
     writeFileSync(join(dir, 'companion.json'), JSON.stringify({ name: 'Juno', persona: 'nova', look: DEFAULT_LOOK, dockIcon: true }))
     const { companions } = store(dir)
     expect(companions.list()).toEqual([expect.objectContaining({ id: FIRST_COMPANION_ID, name: 'Juno', persona: 'nova', dockIcon: true, hidden: false, instructions: '', model: null, effort: null })])
@@ -55,7 +55,7 @@ describe('companion list', () => {
     expect(companions.activeId()).toBe(nova.id)
     const blank = companions.create({ name: '  Rex  ', look: { ...DEFAULT_LOOK, rig: 'C' } })
     expect(blank).toMatchObject({ name: 'Rex', persona: 'custom', look: { rig: 'C' } })
-    // A persona this Apex doesn't ship becomes custom.
+    // A persona this Atelier doesn't ship becomes custom.
     expect(companions.create({ name: 'Imp', persona: 'pirate' }).persona).toBe('custom')
     expect(() => companions.create({ presetId: 'ghost' })).toThrow('That preset is not available.')
   })
@@ -96,7 +96,7 @@ describe('companion list', () => {
   })
 
   it('repairs a file whose active companion is gone or everyone is hidden', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-companions-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-companions-'))
     writeFileSync(join(dir, 'companions.json'), JSON.stringify({ version: 1, activeId: 'gone', companions: [{ id: 'a', name: 'A', hidden: true }, { id: '../evil', name: 'B' }] }))
     const { companions } = store(dir)
     expect(companions.list().map((c) => [c.id, c.hidden])).toEqual([['a', false]])
@@ -105,13 +105,13 @@ describe('companion list', () => {
 })
 
 describe('companion files', () => {
-  const base = { format: 'apex-companion', version: 1, name: 'Nova', persona: 'nova', look: DEFAULT_LOOK, instructions: 'Be brief.', model: null, effort: null }
+  const base = { format: 'atelier-companion', version: 1, name: 'Nova', persona: 'nova', look: DEFAULT_LOOK, instructions: 'Be brief.', model: null, effort: null }
 
   it('round-trip a companion with its extras', () => {
     const { companions } = store()
     const nova = companions.update(FIRST_COMPANION_ID, { instructions: 'Be brief.', model: 'claude-haiku-5-5', effort: 'medium' })
     const file = companionFile(nova, { note: ' Made for you ', skills: [{ name: 'recap', description: 'd', instructions: 'Recap my day.' }] }, new Date(0))
-    expect(file).toMatchObject({ format: 'apex-companion', version: COMPANION_FILE_VERSION, exportedAt: '1970-01-01T00:00:00.000Z', note: 'Made for you' })
+    expect(file).toMatchObject({ format: 'atelier-companion', version: COMPANION_FILE_VERSION, exportedAt: '1970-01-01T00:00:00.000Z', note: 'Made for you' })
     expect(parseCompanionFile(JSON.stringify(file))).toMatchObject({ name: DEFAULT_PROFILE.name, instructions: 'Be brief.', model: 'claude-haiku-5-5', effort: 'medium', skills: [{ name: 'recap' }] })
   })
 
@@ -132,7 +132,7 @@ describe('companion files', () => {
 
 describe('companion service', () => {
   function setup() {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-companion-service-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-companion-service-'))
     const companions = new CompanionStore(dir, { presets })
     const skills = new SkillStore(dir)
     const routines = new RoutineStore(dir)

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,13 +10,13 @@ import { join } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Localization in main: early.ts's settings.json read and lang switch, and setupI18n's
-// live switch, menu rebuild, missing-key log and APEX_PSEUDO_LOCALE marker.
+// live switch, menu rebuild, missing-key log and ATELIER_PSEUDO_LOCALE marker.
 
 const appended: Array<[string, string]> = []
 vi.mock('electron', () => ({
   app: {
     getPreferredSystemLanguages: () => ['en-GB'],
-    getPath: () => join(tmpdir(), 'apex-i18n-none'),
+    getPath: () => join(tmpdir(), 'atelier-i18n-none'),
     commandLine: { appendSwitch: (name: string, value: string) => appended.push([name, value]) },
   },
 }))
@@ -65,7 +65,7 @@ class FakeSettings extends EventEmitter {
 }
 
 function dir(): string {
-  return mkdtempSync(join(tmpdir(), 'apex-i18n-'))
+  return mkdtempSync(join(tmpdir(), 'atelier-i18n-'))
 }
 
 beforeEach(() => {
@@ -145,10 +145,10 @@ describe('setupI18n', () => {
     handle.dispose()
   })
 
-  it('APEX_PSEUDO_LOCALE=1 turns the flag on for one launch, and the next launch restores it', () => {
+  it('ATELIER_PSEUDO_LOCALE=1 turns the flag on for one launch, and the next launch restores it', () => {
     const d = dir()
     const settings = new FakeSettings({ flags: { 'pseudo-locale': 'off' } })
-    const first = setupI18n({ settings: settings as never, menus: { invalidate: () => undefined }, dataDir: d, env: { APEX_PSEUDO_LOCALE: '1' } })
+    const first = setupI18n({ settings: settings as never, menus: { invalidate: () => undefined }, dataDir: d, env: { ATELIER_PSEUDO_LOCALE: '1' } })
     expect(settings.value.flags['pseudo-locale']).toBe('on')
     expect(core.pseudoActive()).toBe(true)
     expect(existsSync(join(d, 'pseudo-locale-env.json'))).toBe(true)
@@ -163,7 +163,7 @@ describe('setupI18n', () => {
 
   it('without a data folder the variable still brackets main', () => {
     const settings = new FakeSettings()
-    const handle = setupI18n({ settings: settings as never, menus: { invalidate: () => undefined }, env: { APEX_PSEUDO_LOCALE: '1' } })
+    const handle = setupI18n({ settings: settings as never, menus: { invalidate: () => undefined }, env: { ATELIER_PSEUDO_LOCALE: '1' } })
     expect(core.pseudoActive()).toBe(true)
     handle.dispose()
   })

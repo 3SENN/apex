@@ -1,15 +1,15 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex.server in the real app (APEX_SMOKE_ONLY=PACKS, docs/packs.md › A web
+// atelier.server in the real app (ATELIER_SMOKE_ONLY=PACKS, docs/packs.md › A web
 // server of its own): an app that may share on the Wi-Fi starts its server,
 // which serves its phone folder and its page's routes on this computer, and
-// over TLS with Apex's certificate on the "Wi-Fi" (127.0.0.1 in a smoke run,
+// over TLS with Atelier's certificate on the "Wi-Fi" (127.0.0.1 in a smoke run,
 // which never leaves the machine). A fake phone (a Node WebSocket client)
 // joins with the token and sends frames the app's page hears in order and
-// answers; a wrong token gets nothing. Apex's bar sits at the top of the
+// answers; a wrong token gets nothing. Atelier's bar sits at the top of the
 // app's pane at a real size, counts the phone, and its Stop ends the server.
 // An app without lan can't share on the Wi-Fi, and closing the app's tab
 // stops its server.
@@ -51,7 +51,7 @@ const js = <T>(wc: WebContents, code: string): Promise<T> => wc.executeJavaScrip
 
 /** The app's page: hears sockets and requests, answers a ping, and keeps what it heard in order. */
 const APP_SCRIPT = `window.__heard = []
-apex.server.onConnection((socket) => {
+atelier.server.onConnection((socket) => {
   __heard.push('join:' + socket.query.name + ':' + socket.remote)
   socket.onMessage((value, text) => {
     __heard.push('message:' + text)
@@ -59,14 +59,14 @@ apex.server.onConnection((socket) => {
   })
   socket.onClose((code) => __heard.push('close:' + code))
 })
-apex.server.onRequest((req) => (req.path === '/api/score' ? { body: { score: 7, team: req.query.team || null } } : null))
-apex.server.onStop((reason) => __heard.push('stop:' + reason))
+atelier.server.onRequest((req) => (req.path === '/api/score' ? { body: { score: 7, team: req.query.team || null } } : null))
+atelier.server.onStop((reason) => __heard.push('stop:' + reason))
 document.title = 'ready'
 `
 
 function fixture(id: string, lan: boolean): PackFiles {
   const manifest: PackManifest = {
-    format: 'apex-pack',
+    format: 'atelier-pack',
     manifestVersion: 2,
     id,
     name: lan ? 'Smoke pads' : 'Smoke local pads',
@@ -83,7 +83,7 @@ function fixture(id: string, lan: boolean): PackFiles {
   ])
 }
 
-/** A request over TLS that accepts Apex's self-signed certificate, as a phone does once. */
+/** A request over TLS that accepts Atelier's self-signed certificate, as a phone does once. */
 function tlsGet(url: string): Promise<{ status: number; body: string; fingerprint: string }> {
   return new Promise((resolve, reject) => {
     const req = httpsRequest(url, { rejectUnauthorized: false, agent: false }, (res) => {
@@ -120,7 +120,7 @@ async function barRect(contentsId: number): Promise<{ bar: { x: number; y: numbe
   await waitFor(() => {
     shown = running.serverBar.shown(contentsId)
     return Boolean(shown?.instanceId)
-  }, 5_000, 'Apex’s bar over the app')
+  }, 5_000, 'Atelier’s bar over the app')
   const { win } = shown as unknown as NonNullable<ReturnType<typeof running.serverBar.shown>>
   const wc = win.overlay.tierWebContents('interactive')
   assert(wc, 'the overlay view is missing')
@@ -144,7 +144,7 @@ export async function serverWorks(ctx: SmokeContext): Promise<void> {
   const running = packsRuntime()
   assert(running, 'packs are not running')
   const { service, runtime } = running
-  const author = new AuthorKey(mkdtempSync(join(tmpdir(), 'apex-smoke-author-')), { encrypt: (b) => b, decrypt: (b) => b })
+  const author = new AuthorKey(mkdtempSync(join(tmpdir(), 'atelier-smoke-author-')), { encrypt: (b) => b, decrypt: (b) => b })
   const install = (files: PackFiles): void => {
     const review = service.reviewArchive(encodeArchive(files, author.sign(packHash(files))), { kind: 'file' })
     assert(review.problems.length === 0, `the server app has problems: ${review.problems.join('; ')}`)
@@ -159,7 +159,7 @@ export async function serverWorks(ctx: SmokeContext): Promise<void> {
       return Boolean(tab)
     }, 5_000, `the ${id} tab`)
     const wc = (tab as Tab).view.webContents
-    await waitForPage(wc, `the ${id} app`, 10_000, (at) => at.startsWith(`apex-pack://${id}/`))
+    await waitForPage(wc, `the ${id} app`, 10_000, (at) => at.startsWith(`atelier-pack://${id}/`))
     await waitFor(() => js<boolean>(wc, 'document.title === "ready"').catch(() => false), 10_000, `the ${id} app to be ready`)
     return tab as Tab
   }
@@ -180,7 +180,7 @@ export async function serverWorks(ctx: SmokeContext): Promise<void> {
     const heard = (): Promise<string[]> => js<string[]>(wc, 'window.__heard')
 
     // On this computer: plain HTTP on 127.0.0.1, the phone folder and the page's route, the token required.
-    const local = await js<PackServerStatus>(wc, "apex.server.start({ root: 'phone' })")
+    const local = await js<PackServerStatus>(wc, "atelier.server.start({ root: 'phone' })")
     assert(local.running && local.url?.startsWith('http://127.0.0.1:') && local.lanUrl === null && local.qr === null, `the local server: ${JSON.stringify(local)}`)
     const base = local.url as string
     const page = await fetch(base)
@@ -192,8 +192,8 @@ export async function serverWorks(ctx: SmokeContext): Promise<void> {
     let bar = await barRect(wc.id)
     assert(/runs a web server on this computer/.test(bar.bar.text), `the bar says: ${bar.bar.text}`)
 
-    // On the "Wi-Fi": HTTPS with Apex's certificate, and a phone that joins, moves, presses and is answered.
-    const lan = await js<PackServerStatus>(wc, "apex.server.start({ lan: true, root: 'phone' })")
+    // On the "Wi-Fi": HTTPS with Atelier's certificate, and a phone that joins, moves, presses and is answered.
+    const lan = await js<PackServerStatus>(wc, "atelier.server.start({ lan: true, root: 'phone' })")
     assert(lan.running && lan.lan && lan.lanUrl?.startsWith('https://127.0.0.1:') && lan.qr?.startsWith('data:image/svg+xml'), `the Wi-Fi server: ${JSON.stringify({ ...lan, qr: lan.qr?.slice(0, 30) })}`)
     const lanBase = lan.lanUrl as string
     const tls = await tlsGet(lanBase)
@@ -201,13 +201,13 @@ export async function serverWorks(ctx: SmokeContext): Promise<void> {
     const wrong = await tlsGet(`https://127.0.0.1:${lan.port}/AAAAAAAAAAAAAAAAAAAAAA/`)
     assert(wrong.status === 404, `a wrong token over TLS got ${wrong.status}`)
     let refused = ''
-    await phone(`wss://127.0.0.1:${lan.port}/AAAAAAAAAAAAAAAAAAAAAA/__apex/socket`).then(
+    await phone(`wss://127.0.0.1:${lan.port}/AAAAAAAAAAAAAAAAAAAAAA/__atelier/socket`).then(
       (p) => p.ws.close(),
       (err: Error) => (refused = err.message),
     )
     assert(/404/.test(refused), `a socket with a wrong token: ${refused || 'joined'}`)
     const before = (await heard()).length
-    const fake = await phone(`${lanBase.replace('https:', 'wss:')}__apex/socket?name=Phone`)
+    const fake = await phone(`${lanBase.replace('https:', 'wss:')}__atelier/socket?name=Phone`)
     phones.push(fake.ws)
     const frames = ['{"t":"motion","b":12.5,"g":-3,"rx":40}', '{"t":"button","b":"a","down":true}', '{"t":"button","b":"a","down":false}', '{"t":"ping","n":1}']
     for (const f of frames) fake.ws.send(f)
@@ -218,7 +218,7 @@ export async function serverWorks(ctx: SmokeContext): Promise<void> {
     const want = ['join:Phone:local', ...frames.map((f) => `message:${f}`)]
     assert(JSON.stringify(order) === JSON.stringify(want), `the page heard ${JSON.stringify(order)}`)
 
-    // Apex's bar: at the top of the app's pane, a real size, centred, counting the phone.
+    // Atelier's bar: at the top of the app's pane, a real size, centred, counting the phone.
     await waitFor(async () => /1 connected/.test((await barRect(wc.id)).bar.text), 5_000, 'the bar to count the phone')
     bar = await barRect(wc.id)
     const { bar: b, pane } = bar
@@ -245,9 +245,9 @@ export async function serverWorks(ctx: SmokeContext): Promise<void> {
     const other = await open(SERVER_LOCAL_PACK_ID)
     tabs.push(other)
     const otherWc = other.view.webContents
-    const denied = await js<string>(otherWc, "apex.server.start({ lan: true }).then(() => 'started', (err) => err.message)")
+    const denied = await js<string>(otherWc, "atelier.server.start({ lan: true }).then(() => 'started', (err) => err.message)")
     assert(/only serve this computer/.test(denied), `an app without lan on the Wi-Fi: ${denied}`)
-    const mine = await js<PackServerStatus>(otherWc, 'apex.server.start({})')
+    const mine = await js<PackServerStatus>(otherWc, 'atelier.server.start({})')
     assert(mine.running && mine.url?.startsWith('http://127.0.0.1:'), `the local-only server: ${JSON.stringify(mine)}`)
     assert(runtime.servers.list().some((s) => s.packId === SERVER_LOCAL_PACK_ID && !s.lan), 'the local-only server is not listed')
     ctx.tabs.close(other.id)

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -42,7 +42,7 @@ import { STARTERS, starterFiles } from '../src/main/packs/starters'
 
 const dirs: string[] = []
 const tmp = (): string => {
-  const d = mkdtempSync(join(tmpdir(), 'apex-pack-apps-test-'))
+  const d = mkdtempSync(join(tmpdir(), 'atelier-pack-apps-test-'))
   dirs.push(d)
   return d
 }
@@ -53,7 +53,7 @@ afterEach(() => {
 const game = (over: Partial<PackApp> = {}): PackApp => ({ id: 'main', name: 'Café', root: 'app', entry: 'index.html', build: 'bundled', kind: 'game', ...over })
 
 const manifest = (apps: PackApp[] = [game()], over: Partial<PackManifest> = {}): PackManifest => ({
-  format: 'apex-pack',
+  format: 'atelier-pack',
   manifestVersion: 2,
   id: 'cafe',
   name: 'Café',
@@ -125,7 +125,7 @@ describe('apps in the manifest', () => {
   it('lets an app’s folder hold asset names, and nothing that breaks a path or an address', () => {
     expect(isPackAssetPath('app/recipes/000-bangers & mash.png')).toBe(true)
     expect(isPackAssetPath("app/fonts/A Love of Thunder (v2).ttf")).toBe(true)
-    for (const bad of ['app/a#b.png', 'app/50%.png', 'app/why?.png', 'app/ lead.png', 'app/trail.png ', 'app/dot.', 'app/CON.txt', 'app/nul', 'app/a:b', 'app/../x', '__apex/x', 'app/a\\b']) expect(isPackAssetPath(bad), bad).toBe(false)
+    for (const bad of ['app/a#b.png', 'app/50%.png', 'app/why?.png', 'app/ lead.png', 'app/trail.png ', 'app/dot.', 'app/CON.txt', 'app/nul', 'app/a:b', 'app/../x', '__atelier/x', 'app/a\\b']) expect(isPackAssetPath(bad), bad).toBe(false)
     expect(isPackFilePath('app/a b.png', ['app'])).toBe(true)
     expect(isPackFilePath('docs/a b.png', ['app'])).toBe(false)
     const m = manifest()
@@ -140,8 +140,8 @@ describe('apps in the manifest', () => {
     expect(packAppAt(apps, 'app/index.html')?.id).toBe('main')
     expect(packAppAt(apps, 'tools-app/a/b.js')?.id).toBe('tool')
     expect(packAppAt(apps, 'application.js')).toBeNull()
-    expect(isPackArchiveName('Café-1.0.0.APEXAPP')).toBe(true)
-    expect(isPackArchiveName('x.apexpack')).toBe(true)
+    expect(isPackArchiveName('Café-1.0.0.ATELIERAPP')).toBe(true)
+    expect(isPackArchiveName('x.atelierpack')).toBe(true)
     expect(isPackArchiveName('x.zip')).toBe(false)
   })
 })
@@ -167,7 +167,7 @@ describe('the limits a pack with an app gets', () => {
   })
 })
 
-describe('what Share… adds to an .apexapp', () => {
+describe('what Share… adds to an .atelierapp', () => {
   const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', 'base64')
   const files = pack(manifest(), { 'app/index.html': PAGE })
 
@@ -176,12 +176,12 @@ describe('what Share… adds to an .apexapp', () => {
     const decoded = decodeArchive(archive)
     expect(decoded.shared).toEqual({ note: 'Try the night shift.', image: PNG })
     expect(packHash(decoded.files)).toBe(packHash(files))
-    expect(decoded.files.has('__apex/share.json')).toBe(false)
+    expect(decoded.files.has('__atelier/share.json')).toBe(false)
   })
 
   it('drops an image that isn’t a PNG, and a share file that doesn’t parse', async () => {
     const { zipSync } = await import('fflate')
-    const forged = Buffer.from(zipSync({ ...Object.fromEntries([...files].map(([p, d]) => [p, new Uint8Array(d)])), '__apex/share.png': new TextEncoder().encode('<svg onload=alert(1)>'), '__apex/share.json': new TextEncoder().encode('{"note": 5}') }))
+    const forged = Buffer.from(zipSync({ ...Object.fromEntries([...files].map(([p, d]) => [p, new Uint8Array(d)])), '__atelier/share.png': new TextEncoder().encode('<svg onload=alert(1)>'), '__atelier/share.json': new TextEncoder().encode('{"note": 5}') }))
     expect(decodeArchive(forged).shared).toEqual({ note: null, image: null })
     expect(decodeArchive(encodeArchive(files, null)).shared).toEqual({ note: null, image: null })
   })
@@ -198,15 +198,15 @@ describe('serving an app', () => {
 
   it('serves an app’s folder with the app CSP and everything else with the pack CSP', async () => {
     const src = source({ 'app/index.html': PAGE, 'panel.html': PAGE })
-    const app = await servePack(src, 'cafe', 'apex-pack://cafe/app/index.html')
+    const app = await servePack(src, 'cafe', 'atelier-pack://cafe/app/index.html')
     expect(app.headers.get('content-security-policy')).toBe(PACK_APP_CSP)
     expect(PACK_APP_CSP).toMatch(/worker-src 'self' blob:/)
     expect(PACK_APP_CSP).toMatch(/'wasm-unsafe-eval'/)
     expect(PACK_APP_CSP).toMatch(/default-src 'none'/)
     expect(PACK_APP_CSP).not.toMatch(/https?:/)
-    const panel = await servePack(src, 'cafe', 'apex-pack://cafe/panel.html')
+    const panel = await servePack(src, 'cafe', 'atelier-pack://cafe/panel.html')
     expect(panel.headers.get('content-security-policy')).toBe(PACK_CSP)
-    expect((await servePack(src, 'cafe', 'apex-pack://other/app/index.html')).status).toBe(404)
+    expect((await servePack(src, 'cafe', 'atelier-pack://other/app/index.html')).status).toBe(404)
   })
 
   it('reads big files from disk, with byte ranges for media', async () => {
@@ -215,16 +215,16 @@ describe('serving an app', () => {
     const { writeFileSync } = await import('node:fs')
     writeFileSync(file, '0123456789')
     const src = source({}, { 'app/song.mp3': file })
-    const whole = await servePack(src, 'cafe', 'apex-pack://cafe/app/song.mp3')
+    const whole = await servePack(src, 'cafe', 'atelier-pack://cafe/app/song.mp3')
     expect(whole.status).toBe(200)
     expect(whole.headers.get('content-type')).toBe('audio/mpeg')
     expect(await whole.text()).toBe('0123456789')
-    const part = await servePack(src, 'cafe', 'apex-pack://cafe/app/song.mp3', 'installed', 'bytes=2-5')
+    const part = await servePack(src, 'cafe', 'atelier-pack://cafe/app/song.mp3', 'installed', 'bytes=2-5')
     expect(part.status).toBe(206)
     expect(part.headers.get('content-range')).toBe('bytes 2-5/10')
     expect(await part.text()).toBe('2345')
-    expect((await servePack(src, 'cafe', 'apex-pack://cafe/app/song.mp3', 'installed', 'bytes=20-')).status).toBe(416)
-    expect((await servePack(src, 'cafe', 'apex-pack://cafe/app/gone.mp3')).status).toBe(404)
+    expect((await servePack(src, 'cafe', 'atelier-pack://cafe/app/song.mp3', 'installed', 'bytes=20-')).status).toBe(416)
+    expect((await servePack(src, 'cafe', 'atelier-pack://cafe/app/gone.mp3')).status).toBe(404)
   })
 
   it('streams a big file, whole or one span of it', async () => {
@@ -235,10 +235,10 @@ describe('serving an app', () => {
     for (let i = 0; i < data.length; i++) data[i] = i % 251
     writeFileSync(file, data)
     const src = source({}, { 'app/video.webm': file })
-    const whole = await servePack(src, 'cafe', 'apex-pack://cafe/app/video.webm')
+    const whole = await servePack(src, 'cafe', 'atelier-pack://cafe/app/video.webm')
     expect(whole.headers.get('content-length')).toBe(String(data.length))
     expect(Buffer.from(await whole.arrayBuffer()).equals(data)).toBe(true)
-    const part = await servePack(src, 'cafe', 'apex-pack://cafe/app/video.webm', 'installed', 'bytes=300000-400000')
+    const part = await servePack(src, 'cafe', 'atelier-pack://cafe/app/video.webm', 'installed', 'bytes=300000-400000')
     expect(part.status).toBe(206)
     expect(part.headers.get('content-range')).toBe(`bytes 300000-400000/${data.length}`)
     expect(Buffer.from(await part.arrayBuffer()).equals(data.subarray(300000, 400001))).toBe(true)
@@ -303,7 +303,7 @@ describe('what build tools expect', () => {
   it('isolates an app that asks, and lists eval on its review', async () => {
     const isolated = [game({ isolated: true, eval: true })]
     const src: PackFileSource = { file: (_i, p) => (p === 'app/index.html' ? Buffer.from('<script>1</script>') : null), appAt: (_i, p) => packAppAt(isolated, p), toolHost: () => null }
-    const res = await servePack(src, 'cafe', 'apex-pack://cafe/app/index.html')
+    const res = await servePack(src, 'cafe', 'atelier-pack://cafe/app/index.html')
     expect(res.headers.get('cross-origin-embedder-policy')).toBe('require-corp')
     expect(res.headers.get('content-security-policy')).toMatch(/'unsafe-eval' 'sha256-/)
     expect(describePackPermissions(manifest(isolated)).find((l) => l.kind === 'eval')).toMatchObject({ level: 'notice' })
@@ -392,16 +392,16 @@ describe('asset slots and asset packs', () => {
     expect(parseAssetPath(packAssetPath('art', 'signs/a b.png'))).toEqual({ slot: 'art', path: 'signs/a b.png' })
     expect(parseAssetPath('app/x.png')).toBeNull()
     const src: PackFileSource = { file: () => null, appAt: () => null, asset: (_p, slot, path) => (slot === 'art' && path === 'a.svg' ? { data: Buffer.from('<svg/>'), disk: null } : null), toolHost: () => null }
-    const res = await servePack(src, 'cafe', 'apex-pack://cafe/__apex/assets/art/a.svg')
+    const res = await servePack(src, 'cafe', 'atelier-pack://cafe/__atelier/assets/art/a.svg')
     expect(res.status).toBe(200)
     expect(res.headers.get('content-security-policy')).toMatch(/sandbox/)
-    expect((await servePack(src, 'cafe', 'apex-pack://cafe/__apex/assets/art/missing.svg')).status).toBe(404)
+    expect((await servePack(src, 'cafe', 'atelier-pack://cafe/__atelier/assets/art/missing.svg')).status).toBe(404)
   })
 })
 
 describe('the kit', () => {
   it('puts the import map first in a kit app’s head, where its hash is allowed', () => {
-    const map = '{"imports":{"three":"/__apex/kit/1/three/build/three.module.js"}}'
+    const map = '{"imports":{"three":"/__atelier/kit/1/three/build/three.module.js"}}'
     const html = withImportMap('<!doctype html><html><head><title>x</title><script type="module" src="./m.js"></script></head></html>', map)
     expect(html).toMatch(/<head><script type="importmap">\{"imports"/)
     expect(html.indexOf('importmap')).toBeLessThan(html.indexOf('./m.js'))
@@ -411,7 +411,7 @@ describe('the kit', () => {
     expect(inlineScriptHashes(html)).toContain(createHash('sha256').update(map).digest('base64'))
   })
 
-  it('takes only a kit this Apex has', () => {
+  it('takes only a kit this Atelier has', () => {
     expect(problems(pack(manifest([game({ build: 'kit', kit: 1 })]), { 'app/index.html': PAGE, 'app/main.js': 'export {}\n' }))).toBe('')
     expect(problems(pack(manifest([game({ build: 'kit', kit: 7 })]), { 'app/index.html': PAGE, 'app/main.js': 'export {}\n' }))).toMatch(/kit 7 isn't here/)
   })
@@ -421,10 +421,10 @@ describe('the kit', () => {
     const { writeFileSync } = await import('node:fs')
     writeFileSync(join(dir, 'three.js'), 'export const REVISION = "186"')
     const src: PackFileSource = { file: () => null, appAt: () => null, kit: (p) => (p === '1/three/build/three.module.js' ? join(dir, 'three.js') : null), toolHost: () => null }
-    const res = await servePack(src, 'cafe', 'apex-pack://cafe/__apex/kit/1/three/build/three.module.js')
+    const res = await servePack(src, 'cafe', 'atelier-pack://cafe/__atelier/kit/1/three/build/three.module.js')
     expect(res.status).toBe(200)
     expect(res.headers.get('content-type')).toMatch(/javascript/)
-    expect((await servePack(src, 'cafe', 'apex-pack://cafe/__apex/kit/1/../../secret')).status).toBe(404)
+    expect((await servePack(src, 'cafe', 'atelier-pack://cafe/__atelier/kit/1/../../secret')).status).toBe(404)
   })
 })
 
@@ -435,7 +435,7 @@ describe('starters for apps a companion builds', () => {
       const check = validatePack(files)
       expect(check.ok ? [] : check.problems, starter).toEqual([])
       const main = files.get('app/main.js')?.toString() ?? ''
-      expect(main, starter).toContain('apex.test?.ready(')
+      expect(main, starter).toContain('atelier.test?.ready(')
     }
   })
 })

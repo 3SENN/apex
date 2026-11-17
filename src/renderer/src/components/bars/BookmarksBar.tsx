@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import type { BookmarkFolderResult } from '@shared/overlay/address'
 import type { Bookmark } from '@shared/services'
 import { dropPlace, dropTarget, linksIn, locate, type BookmarkFolder, type BookmarkItem, type BookmarkTree, type DropPlace } from '@shared/bookmarks'
 import { ChevronsRight, FolderClosed, Globe } from 'lucide-react'
-import { apex, call, errorText, useAppEvent } from '../../api'
+import { atelier, call, errorText, useAppEvent } from '../../api'
 import { useT } from '../../i18n/useT'
 import { pressAnchor } from '../../overlay/kit'
 import { anchorFromElement, openSurface } from '../../overlay/useSurface'
@@ -28,7 +28,7 @@ import { copyText } from '../sidebar/util'
 // item goes behind the overflow button (barLayout), short ones stay whole,
 // and only a title that is actually cut fades out.
 
-const DRAG_TYPE = 'application/x-apex-bookmark'
+const DRAG_TYPE = 'application/x-atelier-bookmark'
 
 function BookmarkIcon({ src }: { src: string | null | undefined }): ReactElement {
   const [failed, setFailed] = useState(false)
@@ -47,8 +47,8 @@ export function useBookmarkTree(): BookmarkTree | null {
 }
 
 export function openBookmark(url: string, disposition: Disposition, activeTabId: string | null): void {
-  if (disposition === 'here' && activeTabId) void apex.nav.go(activeTabId, url)
-  else void apex.tabs.create(url, { afterId: activeTabId ?? undefined, background: disposition !== 'foreground' })
+  if (disposition === 'here' && activeTabId) void atelier.nav.go(activeTabId, url)
+  else void atelier.tabs.create(url, { afterId: activeTabId ?? undefined, background: disposition !== 'foreground' })
 }
 
 /** "Open all": the folder's links as tabs after the active one, optionally as a new group. */
@@ -148,7 +148,7 @@ export function BookmarksBar({ activeTabId }: { bookmarks?: Bookmark[]; activeTa
   const contextMenu = async (e: MouseEvent, item: BookmarkItem | null): Promise<void> => {
     e.preventDefault()
     e.stopPropagation()
-    const settings = apex.initial.settings
+    const settings = atelier.initial.settings
     const mode = settings.bookmarksBar
     const spec: MenuItemSpec[] = []
     if (item?.kind === 'bookmark') {
@@ -214,7 +214,7 @@ export function BookmarksBar({ activeTabId }: { bookmarks?: Bookmark[]; activeTa
             const [first, ...rest] = linksIn(item)
             if (first) {
               await call('windows', 'open', 'normal', { url: first.url })
-              for (const link of rest) void apex.tabs.create(link.url, { background: true })
+              for (const link of rest) void atelier.tabs.create(link.url, { background: true })
             }
           }
           break
@@ -240,12 +240,12 @@ export function BookmarksBar({ activeTabId }: { bookmarks?: Bookmark[]; activeTa
           break
         }
         case 'manage':
-          void call('pages', 'open', 'apex://bookmarks')
+          void call('pages', 'open', 'atelier://bookmarks')
           break
         case 'bar-always':
         case 'bar-newtab':
         case 'bar-never':
-          void apex.settings.set({ bookmarksBar: chosen === 'bar-always' ? 'always' : chosen === 'bar-newtab' ? 'newtab' : 'never' })
+          void atelier.settings.set({ bookmarksBar: chosen === 'bar-always' ? 'always' : chosen === 'bar-newtab' ? 'newtab' : 'never' })
           break
       }
     } catch (err) {

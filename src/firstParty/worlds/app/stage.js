@@ -1,17 +1,17 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The world on screen: the scene apex-kit/world.js builds from a world file,
-// you and the residents as companions (apex-kit/character.js), walking with
+// The world on screen: the scene atelier-kit/world.js builds from a world file,
+// you and the residents as companions (atelier-kit/character.js), walking with
 // the keys or by clicking (running with Shift, or to a spot far away), the
 // camera that follows you, and speech bubbles.
 // The editor (editor.js) uses the same stage with the camera let loose.
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
-import { character } from 'apex-kit/character.js'
-import { createWorldView } from 'apex-kit/world.js'
+import { character } from 'atelier-kit/character.js'
+import { createWorldView } from 'atelier-kit/world.js'
 
 /** World units a second: walking, and running (Shift, or a click far away). */
 const WALK_SPEED = 2.4

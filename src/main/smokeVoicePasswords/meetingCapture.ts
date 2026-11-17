@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -37,7 +37,7 @@ async function meetingPage(ctx: SmokeContext): Promise<string> {
 
 function hooks(): CaptureSmokeHooks {
   const h = captureSmokeHooks()
-  assert(h, 'meeting capture is running under APEX_SMOKE')
+  assert(h, 'meeting capture is running under ATELIER_SMOKE')
   return h
 }
 
@@ -120,7 +120,7 @@ const recordFlow: SmokeCheck = {
 }
 
 // Desktop calls: the fake helper's `calls` snapshots stand in for Zoom; nothing real is watched or recorded.
-// Zoom's pid can never be one of Apex's own processes, which the watcher leaves out: a small one can be, on a
+// Zoom's pid can never be one of Atelier's own processes, which the watcher leaves out: a small one can be, on a
 // fresh CI Mac whose pids start low (4242 failed there now and then). 4194307 is above the largest pid macOS
 // (99999) and Linux (2^22) hand out, and Windows pids are multiples of 4.
 const ZOOM_PID = 4_194_307
@@ -137,7 +137,7 @@ const desktopCall: SmokeCheck = {
     const h = hooks()
     try {
       assert(h.calls.supported() === true, 'the helper reported whether calls can be watched')
-      assert(!app.getAppMetrics().some((m) => m.pid === ZOOM_PID) && process.pid !== ZOOM_PID, 'the stand-in Zoom pid is one of Apex’s own')
+      assert(!app.getAppMetrics().some((m) => m.pid === ZOOM_PID) && process.pid !== ZOOM_PID, 'the stand-in Zoom pid is one of Atelier’s own')
       smokeSpeechHelper.push({ type: 'calls', ...zoomCall(true) })
       await waitFor(() => h.card()?.payload.mode === 'app', 5000, 'the desktop call card')
       const card = h.card()
@@ -178,9 +178,9 @@ export const checks: SmokeCheck[] = [cardOnce, recordFlow, desktopCall]
 // ── screenshot tour: the floats are their own windows, so each is captured from its own page ──
 
 async function floatShot(h: CaptureSmokeHooks, kind: 'meeting-card' | 'recording', name: string): Promise<void> {
-  const dir = process.env.APEX_SMOKE_SHOTS
+  const dir = process.env.ATELIER_SMOKE_SHOTS
   if (!dir) return
-  const theme = process.env.APEX_SMOKE_THEME === 'dark' ? 'dark' : 'light'
+  const theme = process.env.ATELIER_SMOKE_THEME === 'dark' ? 'dark' : 'light'
   await waitFor(() => h.float.window(kind)?.isVisible() === true, 5000, `the ${kind} float`)
   await sleep(350)
   const win = h.float.window(kind)

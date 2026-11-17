@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -24,7 +24,7 @@ import { log } from './log'
 //   chooser for discoverable credentials. Calls only a passkey sheet could
 //   answer, when there is none, are refused in the page (shared/webauthnPolicy.ts).
 
-/** Chromium features Apex turns off for sign-in flows. FedCm: the IdentityCredential API (verified against Chromium 156 in the sign-in smoke). */
+/** Chromium features Atelier turns off for sign-in flows. FedCm: the IdentityCredential API (verified against Chromium 156 in the sign-in smoke). */
 export const DISABLED_FEATURES = ['FedCm'] as const
 
 /** A --disable-features value with `add` merged in: existing names kept, none twice. */
@@ -60,7 +60,7 @@ export function storageAccessAnswer(permission: string, origin: string | null, b
 
 // ── Platform passkeys (app.configureWebAuthn) ──
 //
-// What Electron 45 offers, and what Apex uses (docs/release.md, "Browser
+// What Electron 45 offers, and what Atelier uses (docs/release.md, "Browser
 // passkeys and iCloud Passwords"):
 // - touchID: Electron's own Secure Enclave authenticator. Device-bound
 //   passkeys, never synced, kept under the keychain group
@@ -68,8 +68,8 @@ export function storageAccessAnswer(permission: string, origin: string | null, b
 // - platformPasskeys: Apple's ASAuthorizationController, the system passkey
 //   sheet (iCloud Keychain and any credential provider extension, synced).
 //   Electron's docs gate it on associated domains, which no sign-in provider
-//   lists Apex in. With com.apple.developer.web-browser.public-key-credential,
-//   macOS treats Apex as a web browser and serves any relying party, as for
+//   lists Atelier in. With com.apple.developer.web-browser.public-key-credential,
+//   macOS treats Atelier as a web browser and serves any relying party, as for
 //   Chrome. Electron notes: no cross-origin iframes, no prf or largeBlob, and
 //   clientDataJSON names https://<rpId> as the origin.
 // - Chromium's own iCloud Keychain authenticator (device/fido/mac/

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import type { TaskKind, TaskRow } from '@shared/dialogs'
 import type { WindowContext } from './features/types'
 import { mainT } from './i18n/mainT'
 
-// The task manager: every Apex process with its memory and CPU, by
+// The task manager: every Atelier process with its memory and CPU, by
 // what it serves: the browser itself, the GPU, each window's chrome and
 // overlay views, and each tab. Only a tab can be ended; the crash page
 // then offers a reload. The rows are built by a pure function so the
@@ -89,7 +89,7 @@ function viewSamples(windows: readonly WindowContext[]): ViewSample[] {
         title: mainT('menus.taskManager.tab', { title: win.tabs.info(tab).title || wc.getURL() }),
         icon: tab.favicon,
         pid: pidOf(wc),
-        // An apex:// page is drawn by the chrome; its hidden view has nothing to end.
+        // An atelier:// page is drawn by the chrome; its hidden view has nothing to end.
         canEnd: !internal && !wc.isCrashed(),
       })
     }

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -33,7 +33,7 @@ afterEach(async () => {
 })
 
 const manifest = (over: Partial<PackManifest> = {}): PackManifest => ({
-  format: 'apex-pack',
+  format: 'atelier-pack',
   manifestVersion: 2,
   id: 'tickets',
   name: 'Tickets',
@@ -91,7 +91,7 @@ describe('the manifest: permissions.connectors', () => {
 describe('the connectors an app uses', () => {
   const cipher: SecretCipher = { available: () => true, encrypt: (t) => Buffer.from(t), decrypt: (b) => b.toString() }
   function setup(): { core: ConnectorsCore; store: ConnectorStore } {
-    const dataDir = mkdtempSync(join(tmpdir(), 'apex-pack-connectors-'))
+    const dataDir = mkdtempSync(join(tmpdir(), 'atelier-pack-connectors-'))
     const store = new ConnectorStore(dataDir, cipher)
     const core = new ConnectorsCore({ store, dataDir, icons: new FaviconCache(dataDir, null), fetchFn: () => Promise.reject(new Error('no network in tests')), openSignIn: () => () => undefined, loginPath: async () => null, notify: () => undefined })
     cleanups.push(() => core.dispose())

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -19,7 +19,7 @@ function run(args, env = {}) {
   const result = spawnSync(process.execPath, [script, ...args], {
     encoding: 'utf8',
     // ELECTRON_RUN_AS_NODE keeps this working when the suite runs inside Electron.
-    env: { ...process.env, APEX_NATIVE_ARCH: '', ...env, ELECTRON_RUN_AS_NODE: '1' },
+    env: { ...process.env, ATELIER_NATIVE_ARCH: '', ...env, ELECTRON_RUN_AS_NODE: '1' },
     timeout: 30_000,
   })
   return { code: result.status, out: `${result.stdout}${result.stderr}` }
@@ -48,8 +48,8 @@ test('an unknown --arch fails before building', { skip: onMac ? false : 'macOS o
   }
 })
 
-test('APEX_NATIVE_ARCH is validated the same way', { skip: onMac ? false : 'macOS only' }, () => {
-  const { code, out } = run([], { APEX_NATIVE_ARCH: 'sparc' })
+test('ATELIER_NATIVE_ARCH is validated the same way', { skip: onMac ? false : 'macOS only' }, () => {
+  const { code, out } = run([], { ATELIER_NATIVE_ARCH: 'sparc' })
   assert.equal(code, 1)
   assert.match(out, /got sparc/)
 })

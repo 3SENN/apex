@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,8 +7,8 @@
 // settings, the tracking and clear-on-exit sections, history, and the two
 // website-data actions. Each clear asks first, spins while it runs and ends
 // with a toast; ⇧⌘⌫ (or ?clear=1) opens the full clear-browsing-data dialog.
-// apex://settings/sites shows the site settings inside this page, and
-// apex://settings/access every permission (this Mac's and the websites').
+// atelier://settings/sites shows the site settings inside this page, and
+// atelier://settings/access every permission (this Mac's and the websites').
 import { useEffect, useState, type ReactElement, type ReactNode } from 'react'
 import { ArrowLeft, Cookie, Eraser, History, ShieldCheck, SlidersHorizontal, Trash2 } from 'lucide-react'
 import type { ClearDataRequest } from '@shared/services/settings'
@@ -26,7 +26,7 @@ import { SiteSettingsPage } from './SiteSettingsPage'
 import { PermissionsHubPage } from '../permissions/PermissionsHubPage'
 
 export interface PrivacyPageProps extends SettingsPageProps {
-  /** 'sites' for apex://settings/sites, 'access' for apex://settings/access; null for the page itself. */
+  /** 'sites' for atelier://settings/sites, 'access' for atelier://settings/access; null for the page itself. */
   view: string | null
   /** ?clear=1: open the clear-browsing-data dialog on arrival. */
   openClear: boolean

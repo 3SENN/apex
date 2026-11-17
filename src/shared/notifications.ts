@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@
 // passwords features produce `meetings` and `passwords`.
 import type { MessageKey } from './i18n/en'
 
-export const NOTIFICATION_CATEGORIES = ['needs-you', 'chat-updates', 'routine-results', 'meetings', 'downloads', 'passwords', /* packs (docs/packs.md): apex.notify */ 'packs'] as const
+export const NOTIFICATION_CATEGORIES = ['needs-you', 'chat-updates', 'routine-results', 'meetings', 'downloads', 'passwords', /* packs (docs/packs.md): atelier.notify */ 'packs'] as const
 
 export type NotificationCategory = (typeof NOTIFICATION_CATEGORIES)[number]
 
@@ -39,7 +39,7 @@ export interface NotifySpec {
   target: NotificationTarget
   actions?: NotificationAction[]
   sticky?: boolean
-  /** No system sound: Apex's own chat sounds (NS-03) play instead, or a quiet routine result. */
+  /** No system sound: Atelier's own chat sounds (NS-03) play instead, or a quiet routine result. */
   silent?: boolean
   onAction?(action: string): void
 }

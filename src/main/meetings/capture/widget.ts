@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import type { CaptureState } from '@shared/meetingCapture'
 
 // When the recording widget shows (MV-10): only while a recording runs and
 // the place it started from is out of view (its tab inactive or hidden, its
-// window minimised or unfocused, Apex hidden), after a short debounce so a
+// window minimised or unfocused, Atelier hidden), after a short debounce so a
 // quick look at another tab doesn't flash it. The wrap-up (MV-11) stays
 // until it is dismissed.
 
@@ -24,14 +24,14 @@ export function widgetWanted(s: { state: CaptureState; originInView: boolean; wr
 /** The window state that decides whether a recording's origin is in view. */
 export interface OriginView {
   appHidden: boolean
-  /** The focused, visible, unminimised Apex window, if any. */
+  /** The focused, visible, unminimised Atelier window, if any. */
   window: {
     activeTabId: string | null
     /** The tabs on screen in a split, both sides. */
     splitTabIds: readonly string[]
     /** A destination shown over the active tab (DS-99), or null. */
     railUrl: string | null
-    /** The active tab's apex:// page, when it shows one. */
+    /** The active tab's atelier:// page, when it shows one. */
     activeInternalUrl: string | null
     hasTab(id: string): boolean
   } | null

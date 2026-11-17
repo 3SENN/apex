@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -30,7 +30,7 @@ function native(): NativeSmokeHooks {
 
 function capture(): CaptureSmokeHooks {
   const h = captureSmokeHooks()
-  assert(h, 'meeting capture is running under APEX_SMOKE')
+  assert(h, 'meeting capture is running under ATELIER_SMOKE')
   return h
 }
 
@@ -129,7 +129,7 @@ export const checks: SmokeCheck[] = [
 ]
 
 async function showRow(ctx: SmokeContext, page: string, anchor: string): Promise<void> {
-  ctx.tabs.openInternal(`apex://settings/${page}`)
+  ctx.tabs.openInternal(`atelier://settings/${page}`)
   await ctx.chrome.until<boolean>(`return Boolean(document.querySelector('[data-settings-anchor="${anchor}"] [role="switch"]'))`, 8000, `the ${anchor} row`)
   await ctx.chrome.js(`document.querySelector('[data-settings-anchor="${anchor}"]').scrollIntoView({ block: 'center' })`)
   await sleep(300)
@@ -167,10 +167,10 @@ export const shots: ShotSpec[] = [
   {
     name: 'e6 widget paused by the lid',
     async run() {
-      const dir = process.env.APEX_SMOKE_SHOTS
+      const dir = process.env.ATELIER_SMOKE_SHOTS
       if (!dir) return
       const h = capture()
-      const theme = process.env.APEX_SMOKE_THEME === 'dark' ? 'dark' : 'light'
+      const theme = process.env.ATELIER_SMOKE_THEME === 'dark' ? 'dark' : 'light'
       h.float.open('recording', { status: LID_PAUSED, wrapUp: null })
       try {
         await waitFor(() => h.float.window('recording')?.isVisible() === true, 5000, 'the recording widget')

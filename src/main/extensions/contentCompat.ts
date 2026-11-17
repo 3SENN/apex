@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,15 +8,15 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { installStorageSync } from '@shared/extensionStorageSync'
 
-// The content-script prelude. Apex's preloads reach an extension's
+// The content-script prelude. Atelier's preloads reach an extension's
 // worker and pages, but not its content scripts, which run in a world of
-// their own. For Web Store installs (Apex's own copy of the package) Apex
+// their own. For Web Store installs (Atelier's own copy of the package) Atelier
 // adds one small script ahead of each content_scripts entry's own files,
 // so content scripts get the same chrome.storage.sync as the rest of the
 // extension. A developer's unpacked folder is never written to.
 
 /** Not under "_": Chromium refuses extension files whose names start with an underscore. */
-export const CONTENT_COMPAT_FILE = 'apex-compat/content.js'
+export const CONTENT_COMPAT_FILE = 'atelier-compat/content.js'
 
 export function contentCompatSource(): string {
   return `// Added by ${BRAND_NAME}: chrome.storage.sync for content scripts (see ${BRAND_NAME}'s extension notes).\n;(${installStorageSync.toString()})();\n`
@@ -34,7 +34,7 @@ export function applyContentCompat(dir: string): boolean {
   const target = join(dir, CONTENT_COMPAT_FILE)
   const source = contentCompatSource()
   if (entries.some((e) => Array.isArray(e.js) && e.js.length > 0)) {
-    mkdirSync(join(dir, 'apex-compat'), { recursive: true })
+    mkdirSync(join(dir, 'atelier-compat'), { recursive: true })
     if (!existsSync(target) || readFileSync(target, 'utf8') !== source) writeFileSync(target, source)
   }
   let changed = false

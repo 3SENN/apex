@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,10 +7,10 @@ import { describe, expect, it, vi } from 'vitest'
 import type { SurfaceId, SurfacePolicy } from '@shared/overlay'
 import { OverlayState, defaultPolicy, isTransient, isWindowModal } from '../src/main/overlayState'
 
-// The renderer modules read window.apex when they load.
+// The renderer modules read window.atelier when they load.
 vi.hoisted(() => {
   const g = globalThis as { window?: unknown }
-  g.window ??= { apex: { invoke: () => Promise.resolve(), onAppEvent: () => () => undefined, overlay: {}, initial: {} } }
+  g.window ??= { atelier: { invoke: () => Promise.resolve(), onAppEvent: () => () => undefined, overlay: {}, initial: {} } }
 })
 
 // The update surfaces are renderer code (TSX), outside the node project's type graph, so they load by a computed path.

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -65,10 +65,10 @@ describe('refused everywhere', () => {
     expect(refused(`SELECT LOAD_EXTENSION ('evil')`)).toMatch(/load_extension/)
   })
 
-  it('refuses transactions, triggers and Apex bookkeeping', () => {
+  it('refuses transactions, triggers and Atelier bookkeeping', () => {
     expect(refused('BEGIN')).toMatch(/BEGIN/)
     expect(refused('CREATE TRIGGER t AFTER INSERT ON s BEGIN SELECT 1; END')).toBeTruthy()
-    expect(refused('SELECT * FROM _apex_tables')).toMatch(/bookkeeping/)
+    expect(refused('SELECT * FROM _atelier_tables')).toMatch(/bookkeeping/)
     expect(refused('DELETE FROM sqlite_master')).toMatch(/SQLite/)
   })
 

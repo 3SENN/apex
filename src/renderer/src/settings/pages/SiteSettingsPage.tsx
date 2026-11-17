@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Settings › Privacy › Site settings (SH-37; the apex://settings/sites
+// Settings › Privacy › Site settings (SH-37; the atelier://settings/sites
 // alias): the sites with their own settings (permissions, granted devices and
 // switches, each editable, with Reset), a searchable cookies and site data
 // list with Clear, and the cookie exceptions (always allow or always block).
@@ -11,7 +11,7 @@ import { useEffect, useId, useMemo, useState, type FormEvent, type ReactElement 
 import { Cookie, Globe } from 'lucide-react'
 import { decisionOptions } from '@shared/permissions'
 import { SITE_PERMISSIONS, type SiteDataEntry, type SiteSettingsEntry, type SiteSettingsPatch } from '@shared/sites'
-import { apex, call, errorText } from '../../api'
+import { atelier, call, errorText } from '../../api'
 import { useT } from '../../i18n/useT'
 import { Badge, Button, EmptyState, Select, Switch, confirm, useToast } from '../../ui'
 import { cookieExceptions, filterData, filterSites, hostOf, parseSiteInput, switchPatch, switchStates, type SwitchKey } from '../../overlay/surfaces/sites/logic'
@@ -34,7 +34,7 @@ export function SiteSettingsPage({ settings }: SettingsPageProps): ReactElement 
   const data = useResource(() => call('sites', 'dataList'))
 
   // Site info, another window or a prompt changed a site: the list follows.
-  useEffect(() => apex.onAppEvent((event) => void (event.type === 'site-settings' && sites.reload())), [sites.reload])
+  useEffect(() => atelier.onAppEvent((event) => void (event.type === 'site-settings' && sites.reload())), [sites.reload])
 
   const globals = { adblock: settings.adblock, popupBlocking: settings.popupBlocking !== false }
   return (

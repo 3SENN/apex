@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex://library/files: the reports, generated files and
+// atelier://library/files: the reports, generated files and
 // artifacts companions made, grouped by kind. Segments pick a kind; the
 // filter button narrows by companion and chat and sorts; search matches
 // names. A card opens the file in the viewer (Space looks at it in quick
@@ -14,7 +14,7 @@ import type { ChatSummary, Companion } from '@shared/services'
 import type { FilePreviewable, LibraryFileKind, LibraryFileRef } from '@shared/files'
 import { kindLabelKey, previewableOf } from '@shared/fileKinds'
 import { LIBRARY_SORTS, LIBRARY_VIEW_DEFAULT, chatsWithFiles, filterLibrary, groupLibrary, type LibrarySort, type LibraryView } from '@shared/filesLogic'
-import { apex, call, errorText, formatBytes } from '../api'
+import { atelier, call, errorText, formatBytes } from '../api'
 import { RenameDialog, openQuickLook, openViewer } from '../files'
 import { libraryCompanionIds } from '../files/libraryCompanions'
 import '../files/files.css'
@@ -87,7 +87,7 @@ export function FilesPage({ url }: FilesPageProps): ReactElement {
     if (linkedCompanion) setCompanionId(linkedCompanion)
   }, [linkedCompanion])
   const [chatId, setChatId] = useState('all')
-  const [sort, setSort] = useLocalPreference<LibrarySort>('apex.files.sort', 'newest', LIBRARY_SORTS)
+  const [sort, setSort] = useLocalPreference<LibrarySort>('atelier.files.sort', 'newest', LIBRARY_SORTS)
   const [chats, setChats] = useState<ChatSummary[] | null>(null)
   const [renaming, setRenaming] = useState<LibraryFileRef | null>(null)
   const confirm = useConfirm()
@@ -215,7 +215,7 @@ export function FilesPage({ url }: FilesPageProps): ReactElement {
   const openDropped = async (files: readonly File[]): Promise<void> => {
     for (const file of files) {
       try {
-        const path = apex.pathForFile?.(file) ?? null
+        const path = atelier.pathForFile?.(file) ?? null
         const target = path ? await call('viewer', 'grantDropped', path) : null
         if (target) await openViewer(target, { newTab: true })
         else toast.show({ tone: 'error', message: t('files.page.dropUnreadable', { name: file.name }) })
@@ -279,7 +279,7 @@ export function FilesPage({ url }: FilesPageProps): ReactElement {
               title={t('files.page.empty.title')}
               description={t('files.page.empty.description')}
               action={
-                <Button variant="primary" onClick={() => void call('pages', 'open', 'apex://chats').catch(fail)}>
+                <Button variant="primary" onClick={() => void call('pages', 'open', 'atelier://chats').catch(fail)}>
                   {t('files.page.empty.chat')}
                 </Button>
               }

@@ -1,12 +1,12 @@
-// A fake apex-calendar for tests and smoke: the same
+// A fake atelier-calendar for tests and smoke: the same
 // JSON-lines protocol as native/calendar/main.swift, with no EventKit.
-// APEX_CALENDAR_HELPER points at this file; CalendarService runs it under
+// ATELIER_CALENDAR_HELPER points at this file; CalendarService runs it under
 // Node. The state comes from the environment:
-//   APEX_FAKE_CALENDAR_EVENTS     the events permission (default granted)
-//   APEX_FAKE_CALENDAR_REMINDERS  the reminders permission (default granted)
-//   APEX_FAKE_CALENDAR_GRANT      "1": a request grants; otherwise it denies
-//   APEX_FAKE_CALENDAR_FIXTURE    the items file (default items.json next to this one)
-//   APEX_FAKE_CALENDAR_FAIL       "1": every command prints an error line
+//   ATELIER_FAKE_CALENDAR_EVENTS     the events permission (default granted)
+//   ATELIER_FAKE_CALENDAR_REMINDERS  the reminders permission (default granted)
+//   ATELIER_FAKE_CALENDAR_GRANT      "1": a request grants; otherwise it denies
+//   ATELIER_FAKE_CALENDAR_FIXTURE    the items file (default items.json next to this one)
+//   ATELIER_FAKE_CALENDAR_FAIL       "1": every command prints an error line
 // Times in the fixture are minutes from now (startsInMin, endsInMin, dueInMin).
 import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -16,15 +16,15 @@ const env = process.env
 const print = (line) => process.stdout.write(JSON.stringify(line) + '\n')
 const [command, ...args] = process.argv.slice(2)
 
-if (env.APEX_FAKE_CALENDAR_FAIL === '1') {
+if (env.ATELIER_FAKE_CALENDAR_FAIL === '1') {
   print({ type: 'error', message: 'The fake helper was told to fail.' })
   process.exit(1)
 }
 
-let events = env.APEX_FAKE_CALENDAR_EVENTS ?? 'granted'
-let reminders = env.APEX_FAKE_CALENDAR_REMINDERS ?? 'granted'
+let events = env.ATELIER_FAKE_CALENDAR_EVENTS ?? 'granted'
+let reminders = env.ATELIER_FAKE_CALENDAR_REMINDERS ?? 'granted'
 const status = () => print({ type: 'status', events, reminders })
-const fixture = JSON.parse(readFileSync(env.APEX_FAKE_CALENDAR_FIXTURE ?? join(dirname(fileURLToPath(import.meta.url)), 'items.json'), 'utf8'))
+const fixture = JSON.parse(readFileSync(env.ATELIER_FAKE_CALENDAR_FIXTURE ?? join(dirname(fileURLToPath(import.meta.url)), 'items.json'), 'utf8'))
 const at = (min) => Date.now() + min * 60_000
 const flag = (name) => {
   const i = args.indexOf(name)
@@ -36,7 +36,7 @@ switch (command) {
     status()
     break
   case 'request': {
-    const outcome = env.APEX_FAKE_CALENDAR_GRANT === '1' ? 'granted' : 'denied'
+    const outcome = env.ATELIER_FAKE_CALENDAR_GRANT === '1' ? 'granted' : 'denied'
     if (args[0] === 'events') events = outcome
     else if (args[0] === 'reminders') reminders = outcome
     else {
@@ -53,7 +53,7 @@ switch (command) {
     }
     const from = flag('--from')
     const to = flag('--to')
-    // A line Apex must ignore, to prove junk never breaks the parse.
+    // A line Atelier must ignore, to prove junk never breaks the parse.
     process.stdout.write('not json\n')
     for (const e of fixture.events) {
       const startsAt = e.allDay ? new Date(new Date().toDateString()).getTime() : at(e.startsInMin)

@@ -1,13 +1,13 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Preload for Apex's floating windows (launcher, voice HUD, meeting card,
-// recording widget). Sandboxed: it exposes only `window.apexFloat`, and main
+// Preload for Atelier's floating windows (launcher, voice HUD, meeting card,
+// recording widget). Sandboxed: it exposes only `window.atelierFloat`, and main
 // checks every call against the kind's own window and method list.
 import { contextBridge, ipcRenderer, type IpcRendererEvent } from 'electron'
-import { FLOAT, type ApexFloatApi, type FloatEvent, type FloatInitial, type FloatKind } from '@shared/float'
+import { FLOAT, type AtelierFloatApi, type FloatEvent, type FloatInitial, type FloatKind } from '@shared/float'
 
 const boot = ipcRenderer.sendSync(FLOAT.ready) as { kind: FloatKind; initial: FloatInitial } | null
 
@@ -30,7 +30,7 @@ ipcRenderer.on(FLOAT.event, (_event: IpcRendererEvent, payload: FloatEvent) => {
 })
 
 if (boot) {
-  const api: ApexFloatApi = {
+  const api: AtelierFloatApi = {
     kind: boot.kind,
     initial: boot.initial,
     platform: process.platform,
@@ -45,5 +45,5 @@ if (boot) {
     requestSize: (size) => ipcRenderer.send(FLOAT.resize, { width: size.width, height: size.height }),
     close: () => ipcRenderer.send(FLOAT.close),
   }
-  contextBridge.exposeInMainWorld('apexFloat', api)
+  contextBridge.exposeInMainWorld('atelierFloat', api)
 }

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -111,7 +111,7 @@ describe('password popup gating (OV-26)', () => {
     expect(hint?.surface).toBe('password-import-hint')
     hint?.settle({ instanceId: hint.id, value: 'import' })
     await flush()
-    expect(h.opened).toContain('apex://settings/passwords')
+    expect(h.opened).toContain('atelier://settings/passwords')
     expect(h.settings.importHintDismissed).toBe(true)
   })
 })
@@ -141,7 +141,7 @@ describe('picks and the stillness rule (OV-25)', () => {
     h.vault.add(cred('1', 'https://shop.example', 'robin'), 'pw')
     await openLogin(h)
     expect(await h.controller.pick(h.controller.popupId ?? '', 'manage')).toBe('filled')
-    expect(h.opened).toEqual(['apex://passwords?site=shop.example'])
+    expect(h.opened).toEqual(['atelier://passwords?site=shop.example'])
   })
 
   it('drives the popup with the arrow keys, Return and Esc from the page', async () => {
@@ -265,13 +265,13 @@ describe('save offers (OV-27, ST-34)', () => {
     expect(h.notices).toHaveLength(0)
   })
 
-  it('sends a passwords notification when Apex is not in view', async () => {
+  it('sends a passwords notification when Atelier is not in view', async () => {
     const h = harness()
     h.tab.inView = false
     submitLogin(h)
     expect(h.notices[0]).toMatchObject({ category: 'passwords' })
     await h.controller.respondOffer(h.controller.offerId ?? '', 'save')
-    expect(h.notices.at(-1)).toMatchObject({ category: 'passwords', target: 'apex://passwords?site=shop.example' })
+    expect(h.notices.at(-1)).toMatchObject({ category: 'passwords', target: 'atelier://passwords?site=shop.example' })
   })
 
   it('never offers on agent tabs, never-save sites or with offers off, and marks an unchanged login used', () => {
@@ -454,7 +454,7 @@ describe('cards and addresses (OV-29)', () => {
 })
 
 describe('rows', () => {
-  it('parses only Apex row ids', () => {
+  it('parses only Atelier row ids', () => {
     expect(parseRowId('l:abc')).toEqual({ kind: 'login', recordId: 'abc' })
     expect(parseRowId('c:1')).toEqual({ kind: 'card', recordId: '1' })
     expect(parseRowId('x:1')).toBeNull()

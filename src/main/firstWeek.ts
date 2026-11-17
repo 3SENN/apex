@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -31,7 +31,7 @@ import { mainT } from './i18n/mainT'
 
 // The getting-started record (userData/first-week.json): created when setup
 // finishes, versioned and schema-checked on every load. A file that can't be
-// used (unreadable, invalid, or from a newer Apex) is kept aside as
+// used (unreadable, invalid, or from a newer Atelier) is kept aside as
 // first-week.invalid.json and started over, and the page says so once.
 
 export const ITEM_ID = new RegExp(`^(s[1-${STARTERS_MAX}]|${AUTO_ITEMS.join('|')})$`)
@@ -255,7 +255,7 @@ export class FirstWeekStore extends EventEmitter<{ changed: [FirstWeekView] }> {
     return open
   }
 
-  /** A completion Apex observed elsewhere (an import that brought something over). */
+  /** A completion Atelier observed elsewhere (an import that brought something over). */
   signal(id: AutoItemId): void {
     const record = this.#ensure()
     if (!record || Object.hasOwn(record.completed, id)) return

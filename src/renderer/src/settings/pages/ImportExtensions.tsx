@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 // The extensions part of Settings › Import and the welcome step (ST-46 X):
 // an "Extensions" choice beside bookmarks and history that, when ticked,
 // lists the chosen Chromium profile's Web Store extensions as a checklist.
-// Ones that aren't on the Chrome Web Store, or are already in Apex, show
+// Ones that aren't on the Chrome Web Store, or are already in Atelier, show
 // but can't be picked. Main adds the picks after one confirmation and the
 // report says what came over and what was left out.
 import { useEffect, useMemo, useRef, type ReactElement } from 'react'

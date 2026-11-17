@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,7 +11,7 @@ import { Button } from '../../../ui'
 import type { SurfaceComponentProps } from '../../types'
 
 // The server bar (docs/packs.md › A web server of its own): while an app's
-// web server runs, Apex says so over the app, where the app can't draw over
+// web server runs, Atelier says so over the app, where the app can't draw over
 // it: shared on the Wi-Fi or on this computer only, how many are connected,
 // and Stop. The first time on the Wi-Fi on a Mac it adds that macOS will ask
 // about incoming connections. Main updates it as sockets come and go.

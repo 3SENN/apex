@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,7 +11,7 @@ import * as clear from './clear' // Clear in the sidebar's Your tabs and Chats h
 import * as sidebarReveal from './sidebarReveal' // SH-04: the hidden sidebar floats out at the left edge
 import * as closeX from './closeX' // a real press on the rows' close X
 import * as core from './core'
-import * as identity from './identity' // sign-in compatibility: what sites see of Apex
+import * as identity from './identity' // sign-in compatibility: what sites see of Atelier
 import * as menus from './menus'
 import * as newTabSearch from './newTabSearch' // NT-01
 import * as settings from './settings'
@@ -23,7 +23,7 @@ import type { SmokeGroup, ShotSpec, SmokeCheck } from './types'
 
 export type { SmokeGroup, ShotSpec, SmokeCheck, SmokeContext } from './types'
 
-// The browser smoke group's checks (APEX_SMOKE_ONLY=BROWSER), in their run order.
+// The browser smoke group's checks (ATELIER_SMOKE_ONLY=BROWSER), in their run order.
 const PARTS = [core, settings, menus, address, addressInput, newTabSearch, tabs, tabDrag, sites, chat, chatTabs, identity, signInCompat, closeX, clear, sidebarReveal]
 
 export const checks: SmokeCheck[] = PARTS.flatMap((l) => l.checks)

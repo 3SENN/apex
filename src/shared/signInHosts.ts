@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Account sign-in pages, by provider. Each provider names the pages its
-// sign-in runs on and the browser identity Apex presents there:
-// - 'chromium': Apex's normal identity, stock desktop Chrome: the reduced
+// sign-in runs on and the browser identity Atelier presents there:
+// - 'chromium': Atelier's normal identity, stock desktop Chrome: the reduced
 //   Chrome User-Agent with matching client hints (userAgent.ts,
 //   clientHints.ts) and a filled-in window.chrome (preload/chromeSurfaceWorld.ts).
 //   Every provider uses it, Google included: what Google's "This browser or
@@ -15,7 +15,7 @@
 //   Firefox" switches Google to it (overrideSignInIdentity), should Google
 //   start refusing the Chrome identity. A Firefox User-Agent on Chromium
 //   contradicts navigator.userAgentData and Chrome-only APIs.
-// On every sign-in page, whatever its identity, Apex keeps the page as the
+// On every sign-in page, whatever its identity, Atelier keeps the page as the
 // engine makes it: no DevTools attachment for standing overrides (cdp.ts) and
 // none of the page preload's main-world parts (preload/page.ts). The chrome
 // surface is the one exception, as stock Chrome has it there. The agent still
@@ -127,7 +127,7 @@ const pathMatches = (rule: SignInPages, path: string): boolean => {
 }
 
 // ---- smoke-only extra hosts ----
-// APEX_SMOKE_SIGNIN_HOSTS="<host>=<provider>,..." (read only under APEX_SMOKE=1)
+// ATELIER_SMOKE_SIGNIN_HOSTS="<host>=<provider>,..." (read only under ATELIER_SMOKE=1)
 // adds whole hosts to a provider, on http too: the smoke fixture server is
 // plain http on this machine (src/main/smokeBrowser/signInIdentity.ts). Main and
 // the page preload both read it, so a smoke page there is a sign-in page
@@ -149,7 +149,7 @@ let testHosts = new Map<string, SignInProvider>()
 
 function smokeHosts(): Map<string, SignInProvider> {
   const env = envOf()
-  const raw = env?.APEX_SMOKE === '1' ? env.APEX_SMOKE_SIGNIN_HOSTS : undefined
+  const raw = env?.ATELIER_SMOKE === '1' ? env.ATELIER_SMOKE_SIGNIN_HOSTS : undefined
   if (raw === testRaw) return testHosts
   testRaw = raw
   testHosts = new Map()
@@ -202,7 +202,7 @@ export function isSignInHost(hostname: string): boolean {
 }
 
 // ---- identity overrides ----
-// A provider's identity can be switched while Apex runs (Experiments, through
+// A provider's identity can be switched while Atelier runs (Experiments, through
 // src/main/signInIdentity.ts followIdentityExperiments); main is the only reader.
 
 const overrides = new Map<SignInProviderId, SignInIdentity>()
@@ -218,7 +218,7 @@ export function providerIdentity(provider: SignInProvider): SignInIdentity {
   return overrides.get(provider.id) ?? provider.identity
 }
 
-/** The identity Apex presents on a URL: its sign-in provider's, 'chromium' everywhere else. */
+/** The identity Atelier presents on a URL: its sign-in provider's, 'chromium' everywhere else. */
 export function signInIdentityFor(url: string): SignInIdentity {
   const provider = signInProviderFor(url)
   return provider ? providerIdentity(provider) : 'chromium'

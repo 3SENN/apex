@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,14 +10,14 @@ import type { OAuthSecret } from '../connectors/store'
 import type { PackAppConfig } from './policy'
 import type { PackSecrets } from './secrets'
 
-// Sign-ins an app runs through Apex (docs/apps.md › Apps for organisations):
+// Sign-ins an app runs through Atelier (docs/apps.md › Apps for organisations):
 // OAuth 2 or OpenID Connect with PKCE against the issuer the manifest (or the
 // organisation's AppConfig) names, in a tab of the person's profile, with the
 // loopback redirect the connectors use. The tokens stay in main, encrypted
 // with the system keychain beside the packs' keys; the app's requests to the
 // sign-in's hosts carry the access token, and its code never sees one.
 
-/** What Apex keeps for one sign-in: who it is for (issuer and client), the tokens, and who signed in. */
+/** What Atelier keeps for one sign-in: who it is for (issuer and client), the tokens, and who signed in. */
 interface StoredSignIn {
   issuer: string
   clientId: string
@@ -48,7 +48,7 @@ export function effectiveAuth(auth: readonly PackAuth[] | undefined, config: Pac
 /**
  * Who signed in, from an ID token's email, username or name. The token is
  * read without checking its signature: it came straight from the token
- * endpoint over TLS (OpenID Connect Core 3.1.3.7), and Apex only shows it.
+ * endpoint over TLS (OpenID Connect Core 3.1.3.7), and Atelier only shows it.
  */
 export function userOf(idToken: string | null): string | null {
   const part = idToken?.split('.')[1]
@@ -110,7 +110,7 @@ export class PackSignIns {
     return s.secret.expiresAt === null || s.secret.expiresAt > Date.now() ? s.secret.accessToken : null
   }
 
-  /** The state after refreshing a token that is due (apex.auth.status, so an app that starts after a while sends a working token). */
+  /** The state after refreshing a token that is due (atelier.auth.status, so an app that starts after a while sends a working token). */
   async fresh(packId: string, auth: EffectiveAuth): Promise<PackAuthState> {
     const s = this.#read(packId, auth)
     if (s && needsRefresh(s.secret) && s.secret.refreshToken) await this.#refresh(packId, auth, s)

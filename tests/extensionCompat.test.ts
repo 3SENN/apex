@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -131,9 +131,9 @@ const info = (over: Partial<ExtensionInfo>): ExtensionInfo => ({
 describe('toolbar and settings logic', () => {
   it('shows buttons on websites, the lone button on utility pages, and nothing elsewhere', () => {
     expect(extensionsSlot('https://example.com/')).toBe('website')
-    expect(extensionsSlot('apex://settings/extensions')).toBe('internal')
-    expect(extensionsSlot('apex://history')).toBe('internal')
-    expect(extensionsSlot('apex://chats')).toBeNull()
+    expect(extensionsSlot('atelier://settings/extensions')).toBe('internal')
+    expect(extensionsSlot('atelier://history')).toBe('internal')
+    expect(extensionsSlot('atelier://chats')).toBeNull()
     expect(extensionsSlot('about:blank')).toBeNull()
     expect(extensionsSlot('chrome-extension://abc/options.html')).toBeNull()
     expect(extensionsSlot(null)).toBeNull()

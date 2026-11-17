@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -114,7 +114,7 @@ export function isPNG(buf) {
 
 /**
  * Decodes an 8-bit, non-interlaced RGB or RGBA PNG into RGBA pixels.
- * Enough for Apex's own files and for checking them.
+ * Enough for Atelier's own files and for checking them.
  */
 export function decodePNG(buf) {
   if (!isPNG(buf)) throw new Error('Not a PNG')

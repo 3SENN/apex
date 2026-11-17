@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -13,7 +13,7 @@ import {
   combineDecisions,
   decisionOptions,
   externalScheme,
-  isApexOrigin,
+  isAtelierOrigin,
   isSilentExternal,
   mediaPerms,
   promptKey,
@@ -49,7 +49,7 @@ describe('the permission policy table', () => {
     }
   })
 
-  it('refuses what Apex does not offer, without asking', () => {
+  it('refuses what Atelier does not offer, without asking', () => {
     for (const p of ['ar', 'vr', 'background-fetch', 'background-sync', 'periodic-background-sync', 'web-app-installation', 'system-wake-lock']) {
       expect(classifyPermission(p)).toEqual({ action: 'deny' })
     }
@@ -108,11 +108,11 @@ describe('the permission policy table', () => {
     expect(isSilentExternal('slack://open')).toBe(false)
   })
 
-  it('gives Apex pages the clipboard, and only Apex pages', () => {
-    expect(classifyPermission('clipboard-read', { origin: 'app://apex' })).toEqual({ action: 'allow' })
-    expect(classifyPermission('clipboard-read', { origin: 'apex://settings' })).toEqual({ action: 'allow' })
+  it('gives Atelier pages the clipboard, and only Atelier pages', () => {
+    expect(classifyPermission('clipboard-read', { origin: 'app://atelier' })).toEqual({ action: 'allow' })
+    expect(classifyPermission('clipboard-read', { origin: 'atelier://settings' })).toEqual({ action: 'allow' })
     expect(classifyPermission('clipboard-read', { origin: 'https://example.com' })).toEqual({ action: 'ask', perms: ['clipboard-read'] })
-    expect(isApexOrigin('https://apex.example')).toBe(false)
+    expect(isAtelierOrigin('https://atelier.example')).toBe(false)
   })
 
   it('treats the device classes as the chooser’s', () => {
@@ -177,7 +177,7 @@ describe('origin keys', () => {
   })
 
   it('gives non-web pages no key', () => {
-    for (const url of ['file:///tmp/a.html', 'data:text/html,hi', 'about:blank', 'apex://settings', 'chrome-extension://abc/page.html', 'not a url']) {
+    for (const url of ['file:///tmp/a.html', 'data:text/html,hi', 'about:blank', 'atelier://settings', 'chrome-extension://abc/page.html', 'not a url']) {
       expect(siteKey(url)).toBeNull()
     }
   })

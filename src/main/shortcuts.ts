@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -177,7 +177,7 @@ export function routeShortcut(input: Pick<Input, 'type' | 'key' | 'code' | 'cont
   const def = matchShortcut(input, ctx.platform)
   if (!def) return { kind: 'pass' }
   if (def.when === 'website' && !ctx.website) return { kind: 'pass' }
-  if (def.when === 'apex-page' && ctx.website) return { kind: 'pass' }
+  if (def.when === 'atelier-page' && ctx.website) return { kind: 'pass' }
   if (def.waitsForTakeOver && ctx.agentControlled) return { kind: 'wait', id: def.id }
   if (def.overridesPage) return { kind: 'run', id: def.id }
   // Everything else: the page or text field first, then the menu accelerator.

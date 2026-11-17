@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,14 +14,14 @@
 // still answer: a touch needs no UI), or hold a conditional (autofill)
 // request until the page aborts it, as Chrome does when it has nothing to
 // list. With a platform authenticator configured (Touch ID) passkey calls go
-// to Chromium too, and with the system passkey sheet (an Apex signed with
+// to Chromium too, and with the system passkey sheet (an Atelier signed with
 // Apple's browser passkey entitlement, main/signInCompat.ts) every call does:
 // the sheet answers or the person cancels it, as in Chrome.
 
 export type WebAuthnDecision = 'pass' | 'reject' | 'hold'
 
 /** The page preload's argument (webPreferences.additionalArguments) when the system passkey sheet is configured. */
-export const SYSTEM_PASSKEYS_ARG = '--apex-system-passkeys'
+export const SYSTEM_PASSKEYS_ARG = '--atelier-system-passkeys'
 
 /** The parts of a create() or get() call the decision reads, as plain strings. */
 export interface WebAuthnCall {
@@ -55,7 +55,7 @@ export function cappedTimeout(timeout: unknown): number {
 }
 
 export function webAuthnDecision(call: WebAuthnCall): WebAuthnDecision {
-  // Autofill passkeys need a list Apex doesn't draw: wait, as Chrome does with nothing to offer.
+  // Autofill passkeys need a list Atelier doesn't draw: wait, as Chrome does with nothing to offer.
   if (call.kind === 'get' && call.mediation === 'conditional') return 'hold'
   // Apple's sheet offers passkeys, a phone and security keys, and settles when the person cancels.
   if (call.sheet) return 'pass'
@@ -83,7 +83,7 @@ export function webAuthnDecision(call: WebAuthnCall): WebAuthnDecision {
   return 'pass'
 }
 
-/** getClientCapabilities() as Apex can honour it: no phone sign-in, no autofill, a platform authenticator only when one is configured. */
+/** getClientCapabilities() as Atelier can honour it: no phone sign-in, no autofill, a platform authenticator only when one is configured. */
 export function honestCapabilities(caps: Record<string, boolean>, platform: boolean): Record<string, boolean> {
   const out: Record<string, boolean> = { ...caps }
   out.hybridTransport = false

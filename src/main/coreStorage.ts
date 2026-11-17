@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -128,7 +128,7 @@ export async function removeChatImages(deps: Pick<CoreStorageDeps, 'chats' | 'si
   return { removed, bytes }
 }
 
-/** A files under userData that Reset Apex deletes, by step. */
+/** A files under userData that Reset Atelier deletes, by step. */
 export const RESET_FILES = {
   browsing: ['history.json', 'bookmarks.json', 'pinned-tabs.json', 'downloads.json', 'session.json', 'sites.json', 'zoom.json', 'window-state.json'],
   chats: ['chats', 'agent', 'spend.json'],

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -15,7 +15,7 @@ import type { MessageKey } from '@shared/i18n/core'
 
 export type ErrorTone = 'info' | 'warning' | 'error'
 
-/** What the card's button does. 'console' opens the provider's own console in a tab; Apex has no plans of its own. */
+/** What the card's button does. 'console' opens the provider's own console in a tab; Atelier has no plans of its own. */
 export type ErrorAction = 'retry' | 'settings' | 'model' | 'new-chat' | 'console' | 'engine' | /** The engine's own next step (an update, say), from its error card's hook. */ 'engine-step' | /** The composer's model picker. */ 'pick-model' | 'none'
 
 export type ErrorIcon = 'offline' | 'wait' | 'busy' | 'unavailable' | 'model' | 'size' | 'long' | 'refusal' | 'key' | 'quota' | 'signed-out' | 'limit' | 'missing' | 'update' | 'disk' | 'other'
@@ -85,7 +85,7 @@ export function detailsText(details: string | undefined): string | null {
 }
 
 /** The composer's model picker opens on this window event, with `{ chatId }` (a card's Use another model). */
-export const PICK_MODEL_EVENT = 'apex:pick-model'
+export const PICK_MODEL_EVENT = 'atelier:pick-model'
 
 /** When no Retry-After came with a rate limit or overload. */
 export const DEFAULT_RETRY_MS = 20_000

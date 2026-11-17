@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,9 +6,9 @@
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto'
 import { registerSecret } from '../log'
 
-// Bearer secrets for Apex's local MCP server. Chat processes get a token
+// Bearer secrets for Atelier's local MCP server. Chat processes get a token
 // derived from a secret made at launch, so each token opens only its own
-// chat's tools and every token dies when Apex quits.
+// chat's tools and every token dies when Atelier quits.
 
 export function newSecret(): Buffer {
   const secret = randomBytes(32)
@@ -42,5 +42,5 @@ export function bearerOf(header: string | string[] | undefined): string | null {
 
 /** A short, non-secret fingerprint (to tell whether a saved command still matches). */
 export function fingerprint(...parts: string[]): string {
-  return createHmac('sha256', 'apex-fingerprint').update(parts.join('\n')).digest('hex').slice(0, 16)
+  return createHmac('sha256', 'atelier-fingerprint').update(parts.join('\n')).digest('hex').slice(0, 16)
 }

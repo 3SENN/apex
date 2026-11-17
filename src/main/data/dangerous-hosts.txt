@@ -1,6 +1,6 @@
-# Apex's bundled list of dangerous sites.
+# Atelier's bundled list of dangerous sites.
 #
-# Apex has no Safe Browsing backend, so it ships this small local list and
+# Atelier has no Safe Browsing backend, so it ships this small local list and
 # updates it with each release. One host per line; an entry also covers its
 # subdomains. '#' starts a comment. Pages on these hosts show the
 # dangerous-site interstitial, and downloads from them are marked dangerous.
@@ -11,4 +11,4 @@
 # without visiting anything real.
 malware.testing.google.test
 phishing.testing.google.test
-dangerous.apex.test
+dangerous.atelier.test

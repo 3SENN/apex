@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -28,7 +28,7 @@ export interface FirstWeekWiring {
   sendEvent(event: AppEvent): void
   /** The live default-browser check. */
   isDefaultBrowser(): boolean
-  /** Asks the system to make Apex the default browser; throws a readable error when it can't. */
+  /** Asks the system to make Atelier the default browser; throws a readable error when it can't. */
   makeDefaultBrowser(): void
   /** The app's QuickModel for the starter call, on either engine; omitted (smoke runs) means curated starters only. */
   quick?: StarterQuick

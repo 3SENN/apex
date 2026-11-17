@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -32,7 +32,7 @@ import {
 } from './logic/logFilter'
 import './diagnostics.css'
 
-// The log viewer at apex://logs: search, level
+// The log viewer at atelier://logs: search, level
 // chips, a source menu, the live tail, copy, reveal and clear, over a
 // virtualized monospace list that keeps to the bottom while new lines come in.
 

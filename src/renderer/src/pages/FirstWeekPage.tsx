@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -22,7 +22,7 @@ import { useT } from '../i18n/useT'
 
 interface FirstWeekPageProps {
   tabId: string
-  /** A guide id (apex://first-week/<guide>); anything else shows the plan. */
+  /** A guide id (atelier://first-week/<guide>); anything else shows the plan. */
   section: string | null
 }
 
@@ -47,7 +47,7 @@ function Rest({ icon, title, description, action }: { icon: ReactNode; title: st
 }
 
 /**
- * apex://first-week: the getting-started page. A hero in the companion's
+ * atelier://first-week: the getting-started page. A hero in the companion's
  * colour, the plan of things to try, and short guides. It opens once by
  * itself after setup and is reachable any time at this address.
  */
@@ -135,8 +135,8 @@ export function FirstWeekPage({ tabId, section }: FirstWeekPageProps): ReactElem
         <Rest
           icon={<Sparkles size={18} />}
           title={t('firstRun.firstWeekPage.yourPlanAppearsOnce')}
-          description={t('firstRun.firstWeekPage.finishSettingUpApex')}
-          action={<Button variant="secondary" onClick={() => void call('pages', 'open', 'apex://welcome')}>{t('firstRun.firstWeekPage.finishSetup')}</Button>}
+          description={t('firstRun.firstWeekPage.finishSettingUpAtelier')}
+          action={<Button variant="secondary" onClick={() => void call('pages', 'open', 'atelier://welcome')}>{t('firstRun.firstWeekPage.finishSetup')}</Button>}
         />
       )
     }

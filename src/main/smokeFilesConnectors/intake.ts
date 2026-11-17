@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -254,7 +254,7 @@ export const checks: SmokeCheck[] = [
         } catch {
           blocked = true
         }
-        assert(blocked && probe.hits() === 0, 'a page load in apex-preprocess is cancelled before it leaves')
+        assert(blocked && probe.hits() === 0, 'a page load in atelier-preprocess is cancelled before it leaves')
       } finally {
         win.destroy()
       }
@@ -267,7 +267,7 @@ export const checks: SmokeCheck[] = [
         assert(wc, 'the preprocessing renderer is running')
         const result = await wc.executeJavaScript(`fetch(${JSON.stringify(probe.url)}).then(() => 'reached', () => 'blocked')`, true)
         assert(result === 'blocked' && probe.hits() === 0, `the preprocessing renderer cannot fetch (${result})`)
-        const node = await wc.executeJavaScript('[typeof require, typeof process, typeof window.apex].join()', true)
+        const node = await wc.executeJavaScript('[typeof require, typeof process, typeof window.atelier].join()', true)
         assert(node === 'undefined,undefined,undefined', `the preprocessing renderer has no Node or preload (${node})`)
       } finally {
         store.removeChat(chatId)

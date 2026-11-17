@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,10 +7,10 @@ import { app, BrowserWindow } from 'electron'
 import { log } from '../log'
 
 // Windows ending the session (shut down, restart, sign out) never emits
-// 'before-quit' or 'will-quit': Windows ends Apex once its windows have
+// 'before-quit' or 'will-quit': Windows ends Atelier once its windows have
 // answered WM_ENDSESSION. Each window's 'session-end' comes from that message,
 // so what quitting saves has to happen there, and synchronously: the session
-// and history files, the clean-exit marker (or the next start says Apex quit
+// and history files, the clean-exit marker (or the next start says Atelier quit
 // unexpectedly), and a running recording (it starts saving, and whatever the
 // helper can't finish is put back together on the next start). Only win32
 // sends it; elsewhere the quit events run as usual.

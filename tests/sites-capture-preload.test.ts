@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -183,7 +183,7 @@ describe('the isolated half', () => {
     const { devices } = media()
     installCapture()
     // The old channel, and a fake pagehide: neither reaches main.
-    page.dispatchEvent(new CustomEvent('apex-capture-report', { detail: '000' }))
+    page.dispatchEvent(new CustomEvent('atelier-capture-report', { detail: '000' }))
     page.dispatchEvent(new Event('pagehide'))
     expect(h.sent).toEqual([])
     await devices.getUserMedia({ audio: true })

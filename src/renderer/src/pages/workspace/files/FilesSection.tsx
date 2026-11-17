@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Files, apex://workspace/files[/<folder id>]: the folders
-// shared with Apex (read only or read and edit, all chats or one chat, an
+// Files, atelier://workspace/files[/<folder id>]: the folders
+// shared with Atelier (read only or read and edit, all chats or one chat, an
 // optional companion), each browsable with breadcrumbs, a filter and a sort,
 // opening files in the file viewer, revealing them, and showing a file's version
 // history beside the list. Companions' own files are linked below, then the
@@ -209,7 +209,7 @@ function FolderView({ folder, folders }: { folder: WatchedFolder; folders: Watch
   const shown = useMemo(() => sortEntries(entries.data ?? [], sort, filter), [entries.data, sort, filter])
   const crumbs = breadcrumbs(sub)
 
-  // Files change in Finder too: read again when Apex comes back to the front.
+  // Files change in Finder too: read again when Atelier comes back to the front.
   useEffect(() => {
     const onFocus = (): void => void entries.reload()
     window.addEventListener('focus', onFocus)

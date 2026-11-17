@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -36,11 +36,11 @@ import { parsePolicy } from '../src/main/packs/policy'
 
 // The community index for apps and worlds (docs/apps.md › The community
 // index): what an entry is, its picture and shelf, withdrawn ids, Browse's
-// filter, and that nobody's Apex fetches an index it doesn't need.
+// filter, and that nobody's Atelier fetches an index it doesn't need.
 
 const dirs: string[] = []
 const tmp = (): string => {
-  const d = mkdtempSync(join(tmpdir(), 'apex-pack-index-test-'))
+  const d = mkdtempSync(join(tmpdir(), 'atelier-pack-index-test-'))
   dirs.push(d)
   return d
 }
@@ -48,25 +48,25 @@ afterEach(() => {
   for (const d of dirs.splice(0)) rmSync(d, { recursive: true, force: true })
 })
 
-const entry = (over: Record<string, unknown> = {}) => ({ id: 'cafe', name: 'Café', version: '1.0.0', url: 'https://x.test/cafe.apexapp', sha256: 'a'.repeat(64), ...over })
+const entry = (over: Record<string, unknown> = {}) => ({ id: 'cafe', name: 'Café', version: '1.0.0', url: 'https://x.test/cafe.atelierapp', sha256: 'a'.repeat(64), ...over })
 const PNG = Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), Buffer.from('rest')])
 
 describe('the index format', () => {
   it('reads kind, picture, shelf, size and colour, and an older entry as a pack', () => {
-    const index = parseIndex(JSON.stringify({ format: 'apex-pack-index', packs: [entry({ kind: 'app', image: 'https://x.test/cafe.png', category: 'games', size: 54_000_000, color: '#FF8A5C' }), entry({ id: 'old' })] }))
+    const index = parseIndex(JSON.stringify({ format: 'atelier-pack-index', packs: [entry({ kind: 'app', image: 'https://x.test/cafe.png', category: 'games', size: 54_000_000, color: '#FF8A5C' }), entry({ id: 'old' })] }))
     expect(index.packs[0]).toMatchObject({ kind: 'app', image: 'https://x.test/cafe.png', category: 'games', size: 54_000_000, color: '#FF8A5C' })
     expect(index.packs[1]).toMatchObject({ id: 'old', kind: 'pack' })
     expect(index.withdrawn).toEqual([])
   })
 
-  it('skips an entry with a picture somewhere Apex doesn’t fetch, or an unknown kind', () => {
-    const index = parseIndex(JSON.stringify({ format: 'apex-pack-index', packs: [entry({ image: 'http://x.test/a.png' }), entry({ id: 'odd', kind: 'plugin' })] }))
+  it('skips an entry with a picture somewhere Atelier doesn’t fetch, or an unknown kind', () => {
+    const index = parseIndex(JSON.stringify({ format: 'atelier-pack-index', packs: [entry({ image: 'http://x.test/a.png' }), entry({ id: 'odd', kind: 'plugin' })] }))
     expect(index.packs).toEqual([])
     expect(index.skipped).toBe(2)
   })
 
   it('never offers a withdrawn id, and lists why', () => {
-    const index = parseIndex(JSON.stringify({ format: 'apex-pack-index', packs: [entry(), entry({ id: 'kept' })], withdrawn: [{ id: 'cafe', reason: 'Uses art it may not share.' }, { id: 'BAD ID' }] }))
+    const index = parseIndex(JSON.stringify({ format: 'atelier-pack-index', packs: [entry(), entry({ id: 'kept' })], withdrawn: [{ id: 'cafe', reason: 'Uses art it may not share.' }, { id: 'BAD ID' }] }))
     expect(index.packs.map((p) => p.id)).toEqual(['kept'])
     expect(index.withdrawn).toEqual([{ id: 'cafe', reason: 'Uses art it may not share.' }])
   })
@@ -113,10 +113,10 @@ describe('the service', () => {
     store.saveIndex({ url: INDEX, name: 'Community', addedAt: 1, lastError: null })
     return { store, author, service, fetched }
   }
-  const files = (id: string): PackFiles => new Map([[PACK_MANIFEST_FILE, Buffer.from(JSON.stringify({ format: 'apex-pack', manifestVersion: 1, id, name: id, version: '1.0.0', description: 'A pack.', contributes: { themes: [{ id: 't', name: 'T', accent: '#123456' }] }, permissions: { ...NO_PACK_PERMISSIONS } }))]])
+  const files = (id: string): PackFiles => new Map([[PACK_MANIFEST_FILE, Buffer.from(JSON.stringify({ format: 'atelier-pack', manifestVersion: 1, id, name: id, version: '1.0.0', description: 'A pack.', contributes: { themes: [{ id: 't', name: 'T', accent: '#123456' }] }, permissions: { ...NO_PACK_PERMISSIONS } }))]])
 
   it('lists entries with what they are, and fetches their picture once', async () => {
-    const { service, fetched } = setup({ format: 'apex-pack-index', packs: [entry({ kind: 'app', image: 'https://index.test/cafe.png', category: 'games' })] })
+    const { service, fetched } = setup({ format: 'atelier-pack-index', packs: [entry({ kind: 'app', image: 'https://index.test/cafe.png', category: 'games' })] })
     const [listed] = await service.browse()
     expect(listed).toMatchObject({ id: 'cafe', kind: 'app', category: 'games', hasImage: true, size: null, color: null })
     expect(await service.browseImage(INDEX, 'cafe')).toMatch(/^data:image\/png;base64,/)
@@ -126,7 +126,7 @@ describe('the service', () => {
   })
 
   it('puts a notice on an installed pack an index withdrew, and takes it away when the index does', async () => {
-    const index: Record<string, unknown> = { format: 'apex-pack-index', packs: [], withdrawn: [{ id: 'mine', reason: 'Broken.' }] }
+    const index: Record<string, unknown> = { format: 'atelier-pack-index', packs: [], withdrawn: [{ id: 'mine', reason: 'Broken.' }] }
     const { store, author, service } = setup(index)
     const archive = encodeArchive(files('mine'), author.sign(packHash(files('mine'))))
     service.confirmInstall(service.reviewArchive(archive, { kind: 'index', url: INDEX }).token)
@@ -138,7 +138,7 @@ describe('the service', () => {
   })
 
   it('reads no index in the daily check unless something came from one', async () => {
-    const { author, service, fetched } = setup({ format: 'apex-pack-index', packs: [] })
+    const { author, service, fetched } = setup({ format: 'atelier-pack-index', packs: [] })
     const archive = encodeArchive(files('local'), author.sign(packHash(files('local'))))
     service.confirmInstall(service.reviewArchive(archive, { kind: 'file' }).token)
     await service.checkUpdates()
@@ -161,11 +161,11 @@ describe('a private index (the organisation’s, behind its sign-in)', () => {
     const seen: Array<{ url: string; auth: string | null }> = []
     const fetcher = vi.fn(async (url: string, init?: RequestInit) => {
       seen.push({ url, auth: new Headers(init?.headers).get('authorization') })
-      if (url === PRIVATE) return opts.status ? new Response('no', { status: opts.status }) : new Response(JSON.stringify({ format: 'apex-pack-index', name: 'Contoso apps', packs: [entry({ id: 'dash', url: 'https://apps.contoso.test/dash.apexapp' })] }))
+      if (url === PRIVATE) return opts.status ? new Response('no', { status: opts.status }) : new Response(JSON.stringify({ format: 'atelier-pack-index', name: 'Contoso apps', packs: [entry({ id: 'dash', url: 'https://apps.contoso.test/dash.atelierapp' })] }))
       return new Response('nope', { status: 404 })
     }) as unknown as typeof fetch
     const service = createPacksService({ store, runtime: runtime as never, author, trusted: new TrustedKeys(join(dir, 'packs')), app: { agent: { startChat: vi.fn() }, skillRoutines: undefined } as never, services: () => null, companionText: () => null, fetch: fetcher })
-    const { policy } = parsePolicy({ PackIndexes: JSON.stringify([{ url: PRIVATE, name: 'Contoso apps', auth: { issuer: 'https://login.contoso.test', clientId: 'apex' } }]) }, 'test')
+    const { policy } = parsePolicy({ PackIndexes: JSON.stringify([{ url: PRIVATE, name: 'Contoso apps', auth: { issuer: 'https://login.contoso.test', clientId: 'atelier' } }]) }, 'test')
     store.setPolicy(policy)
     return { service, seen, signIns }
   }
@@ -182,8 +182,8 @@ describe('a private index (the organisation’s, behind its sign-in)', () => {
     expect((await service.browse()).map((e) => e.id)).toEqual(['dash'])
     expect(seen[0]).toEqual({ url: PRIVATE, auth: 'Bearer index-token' })
     await service.reviewIndexEntry(PRIVATE, 'dash').catch(() => undefined)
-    expect(seen.find((s) => s.url.endsWith('dash.apexapp'))?.auth).toBe('Bearer index-token')
-    await service.reviewLink('https://elsewhere.test/x.apexpack').catch(() => undefined)
+    expect(seen.find((s) => s.url.endsWith('dash.atelierapp'))?.auth).toBe('Bearer index-token')
+    await service.reviewLink('https://elsewhere.test/x.atelierpack').catch(() => undefined)
     expect(seen.find((s) => s.url.startsWith('https://elsewhere.test'))?.auth).toBeNull()
   })
 

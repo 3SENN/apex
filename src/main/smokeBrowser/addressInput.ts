@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,7 +14,7 @@ import type { ShotSpec, SmokeCheck, SmokeContext } from './types'
 // clicks and key presses through webContents.sendInputEvent, never the
 // bar's own calls. Each check opens the bar from the pill or ⌘L, types,
 // moves with the arrows and commits with Enter, ⌥Enter or ⌘Enter, in both
-// layouts and on apex:// pages. Searches use a custom engine on the local
+// layouts and on atelier:// pages. Searches use a custom engine on the local
 // smoke server, so nothing reaches the network.
 
 type Mod = 'meta' | 'alt' | 'shift' | 'control'
@@ -189,7 +189,7 @@ function closeTab(ctx: SmokeContext, tab: Tab | undefined): void {
   if (tab && ctx.tabs.find(tab.id) && !tab.view.webContents.isDestroyed()) ctx.tabs.close(tab.id)
 }
 
-/** The tab's address as the chrome shows it: an apex:// page or the web address. */
+/** The tab's address as the chrome shows it: an atelier:// page or the web address. */
 const addressOf = (tab: Tab): string => tab.internalUrl ?? tab.view.webContents.getURL()
 
 const pillClick: SmokeCheck = {
@@ -236,8 +236,8 @@ const searchNewTab: SmokeCheck = {
     const before = ctx.settings.get()
     route(ctx, '/address-input-search', 'Search results')
     ctx.settings.update({
-      customSearchEngines: [...before.customSearchEngines.filter((e) => e.id !== 'apex-smoke'), { id: 'apex-smoke', name: 'Smoke Search', template: `${base}/address-input-search?q=%s` }],
-      searchEngine: 'apex-smoke',
+      customSearchEngines: [...before.customSearchEngines.filter((e) => e.id !== 'atelier-smoke'), { id: 'atelier-smoke', name: 'Smoke Search', template: `${base}/address-input-search?q=%s` }],
+      searchEngine: 'atelier-smoke',
     })
     let opened: Tab | undefined
     const ids = new Set(ctx.tabs.all().map((t) => t.id))
@@ -253,9 +253,9 @@ const searchNewTab: SmokeCheck = {
       await barVisible(ctx, doc)
       const empty = await field(doc)
       assert(empty.value === '', `a new tab's bar starts empty (got ${JSON.stringify(empty.value)})`)
-      await typeKeys(doc.ui, 'apex smoke query')
+      await typeKeys(doc.ui, 'atelier smoke query')
       const rows = await rowsFor(doc, 'the search row for the default engine', (s) => s.rows[0]?.sub === 'Search with Smoke Search')
-      assert(rows.rows[0]?.title === 'apex smoke query', `the search row shows the query (got ${JSON.stringify(rows.rows[0])})`)
+      assert(rows.rows[0]?.title === 'atelier smoke query', `the search row shows the query (got ${JSON.stringify(rows.rows[0])})`)
       const started: string[] = []
       const wc = opened!.view.webContents
       const onStart = (details: { url: string; isMainFrame: boolean }): void => {
@@ -265,7 +265,7 @@ const searchNewTab: SmokeCheck = {
       try {
         await press(doc.ui, 'Return')
         await barClosed('Enter')
-        const want = `${base}/address-input-search?q=apex%20smoke%20query`
+        const want = `${base}/address-input-search?q=atelier%20smoke%20query`
         await waitFor(() => started.includes(want) || opened!.requestedUrl === want, 8000, `the new tab to search the default engine (started: ${started.join(', ') || 'nothing'})`)
         assert(ctx.tabs.activeId() === opened!.id, 'the search runs in the new tab')
       } finally {
@@ -278,15 +278,15 @@ const searchNewTab: SmokeCheck = {
   },
 }
 
-const keysOnApexPage: SmokeCheck = {
-  name: '⌘L on Getting started selects its address; arrows move through rows, Esc restores, Enter leaves the apex:// page',
+const keysOnAtelierPage: SmokeCheck = {
+  name: '⌘L on Getting started selects its address; arrows move through rows, Esc restores, Enter leaves the atelier:// page',
   async run(ctx) {
     const known = await webTab(ctx, '/address-input-known', 'Known page')
-    const target = route(ctx, '/address-input-from-apex', 'From apex')
+    const target = route(ctx, '/address-input-from-atelier', 'From atelier')
     let tab: Tab | undefined
     try {
-      ctx.tabs.openInternal('apex://first-week', { newTab: true })
-      await waitFor(() => ctx.tabs.active()?.internalUrl?.startsWith('apex://first-week') === true, 5000, 'Getting started in a tab')
+      ctx.tabs.openInternal('atelier://first-week', { newTab: true })
+      await waitFor(() => ctx.tabs.active()?.internalUrl?.startsWith('atelier://first-week') === true, 5000, 'Getting started in a tab')
       tab = ctx.tabs.active()!
       await sleep(300)
       ctx.chrome.ui.focus()
@@ -294,8 +294,8 @@ const keysOnApexPage: SmokeCheck = {
       let doc = await barOpened(ctx, '⌘L')
       await barVisible(ctx, doc)
       const first = await field(doc)
-      assert(first.value === addressOf(tab), `the field holds the apex:// address (got ${JSON.stringify(first.value)})`)
-      assert(first.start === 0 && first.end === first.value.length, 'the apex:// address is selected')
+      assert(first.value === addressOf(tab), `the field holds the atelier:// address (got ${JSON.stringify(first.value)})`)
+      assert(first.start === 0 && first.end === first.value.length, 'the atelier:// address is selected')
       // Typing shows open tabs (and history) for what you typed; ↓ and ↑ move, ↑ from the first row restores it.
       await typeKeys(doc.ui, 'Known page')
       const rows = await rowsFor(doc, 'an open-tab row', (s) => s.rows.some((r) => r.title.includes('Known page')))
@@ -312,18 +312,18 @@ const keysOnApexPage: SmokeCheck = {
       // Esc closes and the page keeps its address.
       await press(doc.ui, 'Escape')
       await barClosed('Esc')
-      assert(addressOf(tab).startsWith('apex://first-week'), 'Esc leaves the page as it was')
+      assert(addressOf(tab).startsWith('atelier://first-week'), 'Esc leaves the page as it was')
       const pill = await ctx.chrome.js<string>(`return document.querySelector('.pill__text')?.textContent || ''`)
       assert(pill.length > 0 && !pill.includes('Known page'), `the pill shows the page again (got ${JSON.stringify(pill)})`)
-      // Enter on an apex:// page goes there in the same tab.
+      // Enter on an atelier:// page goes there in the same tab.
       await clickOn(ctx.chrome, '.pill__text')
-      doc = await barOpened(ctx, 'a click on the apex:// pill')
+      doc = await barOpened(ctx, 'a click on the atelier:// pill')
       assert((await field(doc)).value === addressOf(tab), 'the bar reopens with the address, not the abandoned text')
       await typeKeys(doc.ui, target)
       await rowsFor(doc, 'the Open row', (s) => s.rows[0]?.sub === 'Open')
       await press(doc.ui, 'Return')
       await barClosed('Enter')
-      await waitFor(() => tab!.internalUrl === null && tab!.view.webContents.getURL() === target, 8000, `the apex:// tab to load the address (at ${addressOf(tab)})`)
+      await waitFor(() => tab!.internalUrl === null && tab!.view.webContents.getURL() === target, 8000, `the atelier:// tab to load the address (at ${addressOf(tab)})`)
       assert(ctx.tabs.activeId() === tab.id, 'Enter stays in the same tab')
     } finally {
       closeTab(ctx, tab)
@@ -388,7 +388,7 @@ const newTabKeys: SmokeCheck = {
   },
 }
 
-export const checks: SmokeCheck[] = [pillClick, searchNewTab, keysOnApexPage, newTabKeys]
+export const checks: SmokeCheck[] = [pillClick, searchNewTab, keysOnAtelierPage, newTabKeys]
 
 /** A results page for the smoke engine that echoes the query (local, never fetched from an engine). */
 function resultsRoute(ctx: SmokeContext, path: string): void {
@@ -432,22 +432,22 @@ export const shots: ShotSpec[] = [
       const before = ctx.settings.get()
       resultsRoute(ctx, '/address-input-shot-results')
       ctx.settings.update({
-        customSearchEngines: [...before.customSearchEngines.filter((e) => e.id !== 'apex-smoke'), { id: 'apex-smoke', name: 'Smoke Search', template: `${base}/address-input-shot-results?q=%s` }],
-        searchEngine: 'apex-smoke',
+        customSearchEngines: [...before.customSearchEngines.filter((e) => e.id !== 'atelier-smoke'), { id: 'atelier-smoke', name: 'Smoke Search', template: `${base}/address-input-shot-results?q=%s` }],
+        searchEngine: 'atelier-smoke',
       })
       const tab = ctx.tabs.create('about:blank', { activate: true })
       try {
         await sleep(300)
         await clickOn(ctx.chrome, '.pill__text')
         const doc = await barOpened(ctx, 'a click on a new tab’s pill')
-        await typeKeys(doc.ui, 'apex browser')
+        await typeKeys(doc.ui, 'atelier browser')
         await rowsFor(doc, 'the search row', (s) => s.rows[0]?.sub === 'Search with Smoke Search')
         await press(doc.ui, 'Return')
         await barClosed('Enter')
         // The fixture's certificate is self-signed: let it through as a person would, if it is not already.
         await waitFor(() => ctx.tabs.info(tab).pageError !== null || tab.view.webContents.getTitle().includes('Smoke Search'), 10_000, 'the results or the certificate page')
         if (ctx.tabs.info(tab).pageError) await ctx.chrome.invoke('pageErrors', 'proceed', tab.id)
-        await waitForPage(tab.view.webContents, 'apex browser – Smoke Search', 10_000, (at) => at.includes('/address-input-shot-results'))
+        await waitForPage(tab.view.webContents, 'atelier browser – Smoke Search', 10_000, (at) => at.includes('/address-input-shot-results'))
         await waitFor(() => !ctx.tabs.info(tab).loading, 5000, 'the results to finish loading')
         await sleep(300)
         await ctx.shot('address-search-result')

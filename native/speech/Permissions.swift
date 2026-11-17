@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Permission status without prompting, and one prompt per kind on request.
 // `start` never prompts: it fails fast with an error code instead, so a
-// prompt only ever follows a click on Allow in Apex. Location is read only,
+// prompt only ever follows a click on Allow in Atelier. Location is read only,
 // for the sites that ask for it: the helper never requests it.
 
 import AVFoundation
@@ -35,12 +35,12 @@ enum Permissions {
     }
   }
 
-  /// macOS reads this grant when the process starts; Apex restarts an idle helper to see a new one.
+  /// macOS reads this grant when the process starts; Atelier restarts an idle helper to see a new one.
   static func screen() -> String {
     CGPreflightScreenCaptureAccess() ? "granted" : "denied"
   }
 
-  /// Location Services as macOS has it for Apex; off for the whole Mac reads as denied.
+  /// Location Services as macOS has it for Atelier; off for the whole Mac reads as denied.
   static func location() -> String {
     guard CLLocationManager.locationServicesEnabled() else { return "denied" }
     switch CLLocationManager().authorizationStatus {

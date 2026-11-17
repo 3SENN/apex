@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,7 +11,7 @@ import type { ShotSpec, SmokeCheck, SmokeContext } from './types'
 // details panel with the tabs used, and the composer's mode toggle. Every reply
 // comes from the offline stand-in; nothing reaches the network.
 
-const chatPage = (id: string): string => `apex://chat/${id}`
+const chatPage = (id: string): string => `atelier://chat/${id}`
 
 /** Opens a chat as a page and waits for its view. Returns the tab id. */
 async function openChat(ctx: SmokeContext, id: string): Promise<string> {

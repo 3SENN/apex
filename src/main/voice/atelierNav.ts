@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,7 +10,7 @@ import { errorMessage, log } from '../log'
 import { screenAccess } from '../speech/screenAccess'
 import { micFix } from './router'
 
-// Bringing Apex forward from a voice float: open an apex:// page or a chat in
+// Bringing Atelier forward from a voice float: open an atelier:// page or a chat in
 // a new foreground tab (a new window when none is open), and the macOS
 // Privacy panes the voice errors point at.
 
@@ -31,7 +31,7 @@ export function bringForward(win: WindowContext): void {
 }
 
 /** Opens `url` in a new foreground tab, or a new window when no browser window is open. Returns the window, or null. */
-export function openInApex(ctx: AppContext, url: string): WindowContext | null {
+export function openInAtelier(ctx: AppContext, url: string): WindowContext | null {
   const win = targetWindow(ctx)
   if (win) {
     win.tabs.openInternal(url, { newTab: true })

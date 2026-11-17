@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -24,7 +24,7 @@ export const SILENT_ALLOW: ReadonlySet<string> = new Set([
   'fullscreen',
 ])
 
-/** Refused without asking: Apex doesn't offer these to sites. Full screen without a click (automatic-fullscreen) is off, as in Chrome. */
+/** Refused without asking: Atelier doesn't offer these to sites. Full screen without a click (automatic-fullscreen) is off, as in Chrome. */
 export const SILENT_DENY: ReadonlySet<string> = new Set([
   'automatic-fullscreen',
   'ar',
@@ -82,9 +82,9 @@ export function mediaPerms(mediaTypes: readonly string[] | undefined): SitePermi
   return out.length > 0 ? out : ['camera', 'microphone']
 }
 
-/** Apex's own UI and pages. */
-export function isApexOrigin(origin: string): boolean {
-  return origin === 'app://apex' || origin.startsWith('apex:')
+/** Atelier's own UI and pages. */
+export function isAtelierOrigin(origin: string): boolean {
+  return origin === 'app://atelier' || origin.startsWith('atelier:')
 }
 
 /** Mail links open without asking (OV-10). */
@@ -100,17 +100,17 @@ export function externalScheme(url: string): string | null {
 
 /**
  * The table's answer for one Electron permission request. `mediaTypes` comes
- * with 'media' requests; `origin` lets Apex pages read the clipboard.
+ * with 'media' requests; `origin` lets Atelier pages read the clipboard.
  */
 export function classifyPermission(permission: string, opts: { mediaTypes?: readonly string[]; origin?: string; url?: string } = {}): PolicyAction {
-  if (opts.origin && isApexOrigin(opts.origin) && (permission === 'clipboard-read' || permission === 'clipboard-sanitized-write')) return { action: 'allow' }
+  if (opts.origin && isAtelierOrigin(opts.origin) && (permission === 'clipboard-read' || permission === 'clipboard-sanitized-write')) return { action: 'allow' }
   if (permission === 'openExternal' && opts.url && isSilentExternal(opts.url)) return { action: 'allow' }
   if (SILENT_ALLOW.has(permission)) return { action: 'allow' }
   if (SILENT_DENY.has(permission)) return { action: 'deny' }
   if (permission === 'media') return { action: 'ask', perms: mediaPerms(opts.mediaTypes) }
   const perm = ASKS[permission]
   if (perm) return { action: 'ask', perms: [perm] }
-  // Anything Apex doesn't know yet is refused, so a new Chromium permission never opens by default.
+  // Anything Atelier doesn't know yet is refused, so a new Chromium permission never opens by default.
   return { action: 'deny' }
 }
 
@@ -328,7 +328,7 @@ export function asksQuietly(perms: readonly SitePermission[], quietSetting: bool
 /** A quiet request that nobody answers ends as a dismissal after this long. */
 export const QUIET_TIMEOUT_MS = 60_000
 
-/** navigator.permissions.query names that are site permissions here, so the page reads Apex's answer for them. */
+/** navigator.permissions.query names that are site permissions here, so the page reads Atelier's answer for them. */
 export const QUERY_NAMES: Readonly<Record<string, SitePermission>> = {
   geolocation: 'location',
   notifications: 'notifications',

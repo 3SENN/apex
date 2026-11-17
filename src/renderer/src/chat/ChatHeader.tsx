@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import { AppWindow, CalendarClock, Ellipsis, Pause } from 'lucide-react'
 import type { CompanionMood } from '@shared/companion'
 import type { MenuItemSpec } from '@shared/menu'
 import type { ChatSummary, Companion } from '@shared/services'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { useShell } from '../components/shellContext'
 import { IconButton, InlineRename, confirm, cx, menuSeparator, showMenu, toast } from '../ui'
 import { chatMenu, runChatAction, type ActionHooks } from './actions'
@@ -64,7 +64,7 @@ export function RoutinePill({ routineId }: { routineId: string }): ReactElement 
   const deleted = routines !== null && !routine
   const open = async (anchor: Element): Promise<void> => {
     if (!routine) {
-      void call('pages', 'open', 'apex://routines')
+      void call('pages', 'open', 'atelier://routines')
       return
     }
     const items: MenuItemSpec[] = [
@@ -77,8 +77,8 @@ export function RoutinePill({ routineId }: { routineId: string }): ReactElement 
     ]
     const picked = await showMenu(items, anchor)
     try {
-      if (picked === 'edit') await call('pages', 'open', `apex://routines/${routine.id}`)
-      else if (picked === 'all') await call('pages', 'open', 'apex://routines')
+      if (picked === 'edit') await call('pages', 'open', `atelier://routines/${routine.id}`)
+      else if (picked === 'all') await call('pages', 'open', 'atelier://routines')
       else if (picked === 'toggle') await call('routines', 'save', { id: routine.id, name: routine.name, prompt: routine.prompt, schedule: routine.schedule, enabled: !routine.enabled })
       else if (picked === 'run') await call('routines', 'runNow', routine.id)
       else if (picked === 'delete') {
@@ -112,7 +112,7 @@ export function TabsUsedButton({ state }: { state: ChatState }): ReactElement | 
       { id: 'close-all', label: used.length === 1 ? t('chat.header.closeThisTab') : t('chat.header.closeTheseTabs', { length: used.length }), enabled: state.log.status === 'idle' },
     ]
     const picked = await showMenu(items, anchor)
-    if (picked?.startsWith('tab:')) void apex.tabs.activate(picked.slice(4))
+    if (picked?.startsWith('tab:')) void atelier.tabs.activate(picked.slice(4))
     else if (picked === 'close-all') void call('chats', 'closeTabsUsed', state.summary?.id ?? '').catch((err: unknown) => toast.show({ message: errorText(err), tone: 'error' })) // CH-33
   }
   return (

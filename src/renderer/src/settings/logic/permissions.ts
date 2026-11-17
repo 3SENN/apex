@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,7 +14,7 @@ import type { SystemRow } from '@shared/systemPermissions'
 import { hostOf } from '../../overlay/surfaces/sites/logic'
 
 /** Privacy's permissions view (SETTINGS_ALIAS_PARENTS.access). */
-export const PERMISSIONS_URL = 'apex://settings/access'
+export const PERMISSIONS_URL = 'atelier://settings/access'
 
 /** The address, landing on a row's anchor (mac-microphone, site-notifications, …) when given. */
 export function permissionsUrl(highlight?: string): string {

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import type { Effort } from '@shared/ipc'
 import { INTERESTS, REPLY_STYLES, TECH_LEVELS, type Interest, type ReplyStyle, type TechLevel } from '@shared/userProfile'
 import { decider } from './service'
 
-// Apex's own decisions (DC-08 to DC-12, DC-14 to DC-18), each with the rule it keeps: the
+// Atelier's own decisions (DC-08 to DC-12, DC-14 to DC-18), each with the rule it keeps: the
 // question the decision model is asked, how sure it must be, and what the
 // answer means. They live together so the wording and the cutoffs can be
 // read, tested and tuned in one place. Page and reply text is only ever the
@@ -120,7 +120,7 @@ export type ClickStop = Exclude<ClickKind, 'none'>
 /**
  * A second opinion for the guard's English keyword list (agent/guard.ts). It
  * only ever adds a stop: when the list found nothing and the model is sure
- * the click buys, pays, deletes, sends or changes security, Apex asks first.
+ * the click buys, pays, deletes, sends or changes security, Atelier asks first.
  * A kind the list found is never taken away, so a hostile page cannot talk
  * its way past the guard.
  */

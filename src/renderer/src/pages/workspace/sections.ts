@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -12,9 +12,9 @@ import type { WorkspaceSection } from '@shared/workspace'
 
 /** What the hub hands a section; the apps and tables sections take none of it. */
 export interface WorkspaceSectionProps {
-  /** apex://workspace/<section>/<id> (a project, a folder). */
+  /** atelier://workspace/<section>/<id> (a project, a folder). */
   itemId?: string | null
-  /** apex://workspace/search?q=, or what is typed in the hub's search field. */
+  /** atelier://workspace/search?q=, or what is typed in the hub's search field. */
   query?: string | null
   tabId?: string
   /** The tab's address, for sections that keep state in it. */

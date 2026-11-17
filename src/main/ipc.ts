@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -123,7 +123,7 @@ export function registerIpc(deps: IpcDeps): void {
   handle(UI.back, z.tuple([tabId]), (id) => w.tabs.back(id))
   handle(UI.forward, z.tuple([tabId]), (id) => w.tabs.get(id).view.webContents.navigationHistory.goForward())
   handle(UI.reload, z.tuple([tabId, z.boolean().optional()]), (id, bypassCache) => {
-    // The chrome draws apex:// pages and the new tab; reloading the hidden page under them would do nothing visible.
+    // The chrome draws atelier:// pages and the new tab; reloading the hidden page under them would do nothing visible.
     // The id goes along: the tab menu can reload a background tab, not only the active one.
     // Reload on a destination remounts the destination page ('rail').
     if (w.tabs.rail() !== null && id === w.tabs.activeId()) w.sendEvent({ type: 'reload-page', tabId: 'rail' })

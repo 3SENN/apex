@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Search everything, apex://workspace/search?q=: past chats
+// Search everything, atelier://workspace/search?q=: past chats
 // (private ones never), memory notes, history and bookmarks of this
 // profile, and files in shared folders, companions' files and the Library.
 // Results are grouped by source, ranked by relevance with a recency bonus,

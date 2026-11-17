@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -215,9 +215,9 @@ export function clearRangeText(range: { from: number | null; to: number }, now: 
 
 export type TimelineScope = 'day' | 'week'
 
-/** The timeline on the History page: apex://history?view=timeline&scope=…&date=…. */
+/** The timeline on the History page: atelier://history?view=timeline&scope=…&date=…. */
 export function timelineUrl(scope: TimelineScope, day: string): string {
-  return `apex://history?view=timeline&scope=${scope}&date=${day}`
+  return `atelier://history?view=timeline&scope=${scope}&date=${day}`
 }
 
 /** Which view of History an address asks for (?view=timeline, else the list). */
@@ -225,7 +225,7 @@ export function historyView(search: string): 'list' | 'timeline' {
   return new URLSearchParams(search).get('view') === 'timeline' ? 'timeline' : 'list'
 }
 
-/** Where an old apex://workspace/timeline address goes now, with its scope and day. */
+/** Where an old atelier://workspace/timeline address goes now, with its scope and day. */
 export function timelineRedirect(url: string, now: number): string {
   const { scope, day } = parseTimelineQuery(url.split('?')[1] ?? '', now)
   return timelineUrl(scope, day)

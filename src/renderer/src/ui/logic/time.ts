@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Relative and absolute time labels in Apex's own wording. The words and
+// Relative and absolute time labels in Atelier's own wording. The words and
 // the date order follow the app language; the bodies live in the shared
 // format helpers (src/shared/i18n/format.ts), the signatures stay as they were.
 import { currentLocale } from '@shared/i18n/core'

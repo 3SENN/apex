@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -75,7 +75,7 @@ function blockContext(overrides: Partial<ApiBlockContext> = {}): ApiBlockContext
     documents: false,
     files: null,
     fingerprint: keyFingerprint('sk-ant-test-key'),
-    cache: new RemoteFileCache(mkdtempSync(join(tmpdir(), 'apex-remote-'))),
+    cache: new RemoteFileCache(mkdtempSync(join(tmpdir(), 'atelier-remote-'))),
     onRemote: (id, fileId) => remote.push([id, fileId]),
     skill: (id) => (id === 'brand-kit' ? { name: 'brand-kit', instructions: 'Use the brand colours.' } : null),
     readFile: (path) => Buffer.from(`bytes of ${path}`),
@@ -170,7 +170,7 @@ describe('the request cap and kept blocks', () => {
 
 describe('remote files', () => {
   it('keeps ids a duplicate still refers to when one chat is deleted, and survives a restart', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-remote-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-remote-'))
     const cache = new RemoteFileCache(dir)
     cache.set('c1', 'a1', 'fp', 'file_1')
     cache.set('c1', 'a2', 'fp', 'file_2')

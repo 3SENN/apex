@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -101,7 +101,7 @@ describe('connectors', () => {
 })
 
 describe('companion profiles', () => {
-  // The default companion is the branding's (Pip for Apex, the neutral Companion for the unofficial branding).
+  // The default companion is the branding's (Pip for Atelier, the neutral Companion for the unofficial branding).
   const presetIds = [DEFAULT_PROFILE.persona, 'nova']
   const LOOK = DEFAULT_PROFILE.look
 
@@ -199,7 +199,7 @@ describe('companion profiles', () => {
     const hair = LOOK.parts.hair
     expect(migrateCompanion({ accessory: 'cap' }, compat).look.parts).toMatchObject({ hat: 'hat-cap', hair: fitsWithHat(compat, 'hat-cap', 'hair', hair) ? hair : null })
     if (BRANDING.official) expect(migrateCompanion({ accessory: 'cap' }, compat).look.parts.hair).toBeNull()
-    expect(readCompatibility(join(tmpdir(), 'apex-missing-rules.json'))).toEqual({})
+    expect(readCompatibility(join(tmpdir(), 'atelier-missing-rules.json'))).toEqual({})
   })
 
   it('reads the Dock icon size from the PNG header before anything decodes it', () => {
@@ -220,7 +220,7 @@ describe('companion profiles', () => {
   })
 
   it('stores migrate and sanitize on disk', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-companion-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-companion-'))
     writeFileSync(join(dir, 'companion.json'), JSON.stringify({ name: 'Bolt', color: 'sky', accessory: 'cap', eyes: 'round' }))
     const presets = (): CompanionPreset[] => presetIds.map((id) => ({ id, name: id, tagline: '', personality: '', look: DEFAULT_LOOK }))
     const store = new CompanionStore(dir, { presets })
@@ -261,13 +261,13 @@ describe('companion presets', () => {
   })
 
   it('reads presets.json once and looks up personalities', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-presets-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-presets-'))
     const file = join(dir, 'presets.json')
     const presets = new CompanionPresets(file)
     // Missing file: nothing yet, and nothing cached.
     expect(presets.list()).toEqual([])
     writeFileSync(file, JSON.stringify([preset('pip'), preset('nova')]))
-    // The unofficial branding offers its own companion first, and none of Apex's characters (src/shared/branding.ts).
+    // The unofficial branding offers its own companion first, and none of Atelier's characters (src/shared/branding.ts).
     const offered = BRANDING.official ? ['pip', 'nova'] : [BRANDING.ownPreset!.id, 'nova']
     expect(presets.ids()).toEqual(offered)
     writeFileSync(file, '[]')
@@ -319,7 +319,7 @@ describe('downloads', () => {
 })
 
 describe('memory paths', () => {
-  const root = mkdtempSync(join(tmpdir(), 'apex-mem-'))
+  const root = mkdtempSync(join(tmpdir(), 'atelier-mem-'))
   mkdirSync(join(root, 'notes'), { recursive: true })
 
   it('maps /memories paths into the root', () => {
@@ -336,12 +336,12 @@ describe('memory paths', () => {
 })
 
 describe('internal pages', () => {
-  it('parses apex:// URLs and routes them from the omnibox', () => {
-    expect(parseInternalUrl('apex://library/skills')).toEqual({ page: 'library', section: 'skills', id: null, item: null })
-    expect(parseInternalUrl('apex://history')).toEqual({ page: 'history', section: null, id: null, item: null })
-    expect(parseInternalUrl('apex://nope')).toBeNull()
-    expect(isInternalUrl('https://apex.example')).toBe(false)
-    expect(omniboxToUrl('apex://downloads', 'google')).toBe('apex://downloads')
+  it('parses atelier:// URLs and routes them from the omnibox', () => {
+    expect(parseInternalUrl('atelier://library/skills')).toEqual({ page: 'library', section: 'skills', id: null, item: null })
+    expect(parseInternalUrl('atelier://history')).toEqual({ page: 'history', section: null, id: null, item: null })
+    expect(parseInternalUrl('atelier://nope')).toBeNull()
+    expect(isInternalUrl('https://atelier.example')).toBe(false)
+    expect(omniboxToUrl('atelier://downloads', 'google')).toBe('atelier://downloads')
   })
 })
 

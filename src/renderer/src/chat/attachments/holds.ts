@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { useSyncExternalStore } from 'react'
-import { apex, errorText } from '../../api'
+import { atelier, errorText } from '../../api'
 import { meetingStatus, subscribeMeetingStatus } from '../../meetings/status'
 import { t } from '@shared/i18n/core'
 import { toast } from '../../ui'
@@ -30,7 +30,7 @@ function emit(): void {
 
 function release(chatId: string, hold: Hold<Extra>): void {
   markSent(chatId)
-  void apex.agent.send(chatId, hold.text, hold.attachments).catch((err: unknown) => {
+  void atelier.agent.send(chatId, hold.text, hold.attachments).catch((err: unknown) => {
     markSent(chatId, false)
     giveBack(chatId, hold)
     toast.show({ message: errorText(err), tone: 'error' })

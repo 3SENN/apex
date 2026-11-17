@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import qrcode from 'qrcode-generator'
 
 // QR codes for "this page". The matrix comes from qrcode-generator;
-// Apex draws it itself: an SVG for the card, and a raw bitmap main turns
+// Atelier draws it itself: an SVG for the card, and a raw bitmap main turns
 // into a PNG for Copy and Save. The code is always dark on white, whatever
 // the theme, because scanners need that contrast.
 

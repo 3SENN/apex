@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -21,7 +21,7 @@ import './diagnostics.css'
 // the dialog layer that blurs the sidebar and toolbar too. A description is
 // required; pasted or dropped screenshots, picked files, this chat, a tab
 // screenshot and crash dumps are each opt-in. ⌘↩ saves the bundle in
-// Downloads and opens an email draft. Nothing is sent by Apex itself.
+// Downloads and opens an email draft. Nothing is sent by Atelier itself.
 
 export type ProblemReportProps = DiagnosticsSurfaceProps['problem-report']
 

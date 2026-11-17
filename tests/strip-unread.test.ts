@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -40,7 +40,7 @@ describe('strip unread mark', () => {
   })
 
   it('marks a chat page tab whose chat has unread results, except the one in front', () => {
-    const tabs = [tab('a', null, 'apex://chat/c1'), tab('b', null, 'apex://chat/c2')]
+    const tabs = [tab('a', null, 'atelier://chat/c1'), tab('b', null, 'atelier://chat/c2')]
     const chats = [{ id: 'c1', status: 'idle' as const, unread: true }, { id: 'c2', status: 'idle' as const, unread: false }]
     expect([...unreadTabIds(tabs, 'b', chats, new Set())]).toEqual(['a'])
     expect([...unreadTabIds(tabs, 'a', chats, new Set())]).toEqual([])

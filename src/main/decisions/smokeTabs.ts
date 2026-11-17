@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,7 +11,7 @@ import { omnibox } from '../omnibox'
 import { assert } from '../smokeKit'
 import type { SmokeCheck } from '../smokeBrowser/types'
 
-// Group tabs' smoke check (DC-18, APEX_SMOKE_ONLY=decisions): off, the rule
+// Group tabs' smoke check (DC-18, ATELIER_SMOKE_ONLY=decisions): off, the rule
 // groups the smoke server's pages by site (127.0.0.1) and Undo ends the
 // group; with the stand-in model, which is sure of the first option, the
 // tabs go under its first topic (Work) when the window has no named group,

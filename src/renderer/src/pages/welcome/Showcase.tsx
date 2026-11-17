@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// What Apex can do (ON-09): an auto-advancing carousel of Apex's
+// What Atelier can do (ON-09): an auto-advancing carousel of Atelier's
 // own animated scenes: working in tabs, meetings, documents, research,
 // routines and memory. Arrows and ←/→ move, the dots show the position and
 // jump, hover or focus pauses it, and reduced motion shows static slides
@@ -75,7 +75,7 @@ function ShowcaseSlides({ next, back, ready, look, slides }: StepProps & { slide
   const slide = SLIDES[id]
   return (
     <StepFrame
-      title={t('firstRun.welcomeShowcase.whatApexCanDo')}
+      title={t('firstRun.welcomeShowcase.whatAtelierCanDo')}
       card="bare"
       back={<BackButton onBack={back} />}
       actions={<Button variant="primary" onClick={() => next()}>{t('firstRun.welcomeShowcase.continue')}</Button>}
@@ -86,7 +86,7 @@ function ShowcaseSlides({ next, back, ready, look, slides }: StepProps & { slide
         className="wlx__showcase"
         role="region"
         aria-roledescription="carousel"
-        aria-label={t('firstRun.welcomeShowcase.whatApexCanDo')}
+        aria-label={t('firstRun.welcomeShowcase.whatAtelierCanDo')}
         tabIndex={0}
         onMouseEnter={() => {
           hovering.current = true

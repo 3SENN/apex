@@ -1,12 +1,12 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Contract for Library › Files, the file viewer and quick look.
-// Generated files and artifacts live in Apex's own store (src/main/files/**);
-// the viewer opens any file Apex holds through one token-based service, and
-// media is served over apex-file://<token>.
+// Generated files and artifacts live in Atelier's own store (src/main/files/**);
+// the viewer opens any file Atelier holds through one token-based service, and
+// media is served over atelier-file://<token>.
 
 /** How a file can be shown; the shared preview renderers (src/renderer/src/files/preview/**) switch on it. */
 export type FilePreviewable = 'image' | 'svg' | 'text' | 'markdown' | 'code' | 'html' | 'sheet' | 'pdf' | 'audio' | 'video' | 'binary' | 'empty' | 'unknown'
@@ -74,7 +74,7 @@ export interface ViewerDoc {
   size: number
   /** Text kinds carry their text; binary kinds use `url`. */
   text?: string
-  /** apex-file://<token> for images, PDFs and media. */
+  /** atelier-file://<token> for images, PDFs and media. */
   url?: string
   editable: boolean
   /** Front matter of Markdown files (skills, memory), shown above the body. */
@@ -123,7 +123,7 @@ export interface FilesServices {
     export(token: string): Promise<string | null>
     /** An open dialog; the picked path is granted for this session. Null when cancelled. */
     pickLocal(): Promise<ViewerTarget | null>
-    /** A file dropped onto the window: granted for this session like a picked one. Null when it isn't a readable file outside Apex's data. */
+    /** A file dropped onto the window: granted for this session like a picked one. Null when it isn't a readable file outside Atelier's data. */
     grantDropped(path: string): ViewerTarget | null
     /** The viewer is done with the token (its page or quick look closed). */
     release(token: string): void
@@ -142,15 +142,15 @@ export const VIEWER_TEXT_MAX = 2_000_000
 export type FilesEvent = { type: 'library-files'; items: LibraryFileRef[] }
 
 /** Privileged schemes the file viewer serves (appended to PRIVILEGED_SCHEMES). */
-export const FILE_SCHEME = 'apex-file'
-export const ARTIFACT_SCHEME = 'apex-artifact'
+export const FILE_SCHEME = 'atelier-file'
+export const ARTIFACT_SCHEME = 'atelier-artifact'
 /** The in-memory, locked-down partition artifact tabs render in. */
-export const ARTIFACTS_PARTITION = 'apex-artifacts'
+export const ARTIFACTS_PARTITION = 'atelier-artifacts'
 
-export const LIBRARY_FILES_URL = 'apex://library/files'
+export const LIBRARY_FILES_URL = 'atelier://library/files'
 
-// apex-artifact://<fileId>/ serves one Library file in the apex-artifacts partition
-const ARTIFACT_URL = /^apex-artifact:\/\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\/(?:index\.html)?(?:[?#].*)?$/
+// atelier-artifact://<fileId>/ serves one Library file in the atelier-artifacts partition
+const ARTIFACT_URL = /^atelier-artifact:\/\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\/(?:index\.html)?(?:[?#].*)?$/
 
 export function artifactUrl(fileId: string): string {
   return `${ARTIFACT_SCHEME}://${fileId.toLowerCase()}/`
@@ -182,19 +182,19 @@ function fromBase64Url(value: string): string | null {
   }
 }
 
-/** apex://file?src=<base64url ViewerTarget>[&edit=1][&name=…]. `name` only titles the tab; the viewer reads the real one. */
+/** atelier://file?src=<base64url ViewerTarget>[&edit=1][&name=…]. `name` only titles the tab; the viewer reads the real one. */
 export function fileViewerUrl(target: ViewerTarget, options: { edit?: boolean; name?: string } = {}): string {
   const name = options.name ? `&name=${encodeURIComponent(options.name.slice(0, 120))}` : ''
-  return `apex://file?src=${toBase64Url(JSON.stringify(target))}${options.edit ? '&edit=1' : ''}${name}`
+  return `atelier://file?src=${toBase64Url(JSON.stringify(target))}${options.edit ? '&edit=1' : ''}${name}`
 }
 
 /**
- * The target an apex://file address names, or null for anything malformed.
+ * The target an atelier://file address names, or null for anything malformed.
  * The shape is checked here only loosely; main validates it again (zod) and
  * confines every path before it opens anything.
  */
 export function parseFileViewerUrl(url: string): { target: ViewerTarget; edit: boolean } | null {
-  if (!url.startsWith('apex://file?') && !url.startsWith('apex://file/?')) return null
+  if (!url.startsWith('atelier://file?') && !url.startsWith('atelier://file/?')) return null
   let params: URLSearchParams
   try {
     params = new URLSearchParams(url.slice(url.indexOf('?') + 1).split('#')[0])

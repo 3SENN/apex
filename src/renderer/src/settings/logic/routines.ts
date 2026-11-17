@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -154,7 +154,7 @@ export function runsOf<T extends { routineId: string | null; lastActiveAt: numbe
     .slice(0, limit)
 }
 
-/** A starter on the Routines page's suggestion grid (DS-102): Apex's own ideas, opened as a filled-in draft. */
+/** A starter on the Routines page's suggestion grid (DS-102): Atelier's own ideas, opened as a filled-in draft. */
 export interface RoutineSuggestion {
   id: string
   name: string
@@ -535,7 +535,7 @@ export const RUN_RECORD_LABEL: Record<D.RoutineRunStatus, string> = {
 export const RUN_TRIGGER_LABEL: Record<D.RoutineTrigger, string> = {
   get schedule() { return t('settings.routines.onSchedule') },
   get manual() { return t('settings.routines.runNow') },
-  get 'catch-up'() { return t('settings.routines.caughtUpAfterApex') },
+  get 'catch-up'() { return t('settings.routines.caughtUpAfterAtelier') },
 }
 
 /** The StatusDot a run record shows; unread finished runs are marked. */

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -22,9 +22,9 @@ describe('shell service schemas', () => {
     expect(ok(SERVICE_SCHEMAS.window.setButtonPosition, [null])).toBe(true)
     expect(ok(SERVICE_SCHEMAS.window.setButtonPosition, [{ x: 5000, y: 0 }])).toBe(false)
     expect(ok(SERVICE_SCHEMAS.window.setName, [null])).toBe(true)
-    expect(ok(SERVICE_SCHEMAS.pages.open, ['apex://chats'])).toBe(true)
-    expect(ok(SERVICE_SCHEMAS.pages.open, ['apex://chat/abc', { newTab: true, background: true }])).toBe(true)
-    expect(ok(SERVICE_SCHEMAS.pages.open, ['apex://chats', { focus: true }])).toBe(false)
+    expect(ok(SERVICE_SCHEMAS.pages.open, ['atelier://chats'])).toBe(true)
+    expect(ok(SERVICE_SCHEMAS.pages.open, ['atelier://chat/abc', { newTab: true, background: true }])).toBe(true)
+    expect(ok(SERVICE_SCHEMAS.pages.open, ['atelier://chats', { focus: true }])).toBe(false)
     expect(ok(SERVICE_SCHEMAS.pages.open, ['https://evil.example'])).toBe(false)
     expect(ok(SERVICE_SCHEMAS.pages.snapshot, ['tab-1'])).toBe(true)
     expect(ok(SERVICE_SCHEMAS.split.openWith, ['tab-1', 'tab-2'])).toBe(true)

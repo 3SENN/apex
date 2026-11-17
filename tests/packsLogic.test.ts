@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -53,7 +53,7 @@ const summary = (over: Partial<PackSummary> = {}): PackSummary => ({
 })
 
 describe('the Packs page helpers', () => {
-  it('lists your packs by name before the ones that come with Apex', () => {
+  it('lists your packs by name before the ones that come with Atelier', () => {
     const sorted = sortPacks([summary({ id: 'z', name: 'Zeta', source: { kind: 'first-party' } }), summary({ id: 'b', name: 'Beta' }), summary({ id: 'a', name: 'Alpha' })])
     expect(sorted.map((p) => p.id)).toEqual(['a', 'b', 'z'])
   })

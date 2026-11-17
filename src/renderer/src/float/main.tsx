@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,7 +14,7 @@ import { FloatRoot } from './FloatRoot'
 import '../styles.css'
 import './float.css'
 
-// The floats' page (float.html). Theme, accent, Apex's own Reduce Motion and
+// The floats' page (float.html). Theme, accent, Atelier's own Reduce Motion and
 // the app language go on <html> before React renders, and main pushes every
 // later change.
 function applyFloatLanguage(l: FloatLanguage | undefined): void {

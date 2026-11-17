@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -17,8 +17,8 @@ export type MeetingStatus = 'live' | 'finishing' | 'recorded' | 'transcribed' | 
 
 /**
  * Why a meeting is recorded as audio only: you chose Record audio only, or
- * this Mac couldn't transcribe it (Speech Recognition is off for Apex, or the
- * language isn't supported), so Apex recorded the audio instead of failing.
+ * this Mac couldn't transcribe it (Speech Recognition is off for Atelier, or the
+ * language isn't supported), so Atelier recorded the audio instead of failing.
  */
 export type AudioOnlyReason = 'chosen' | 'speech-denied' | 'locale-unsupported'
 
@@ -76,7 +76,7 @@ export interface MeetingDetail extends MeetingSummary {
   /** Speaker labels; 'You' and 'Others' until renamed. */
   labels: { mic: string; system: string }
   summary: MeetingNotes | null
-  /** apex-media://meeting/<id>/audio */
+  /** atelier-media://meeting/<id>/audio */
   audioUrl: string | null
   error: SpeechErrorCode | null
   warnings: MeetingWarning[]

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,11 +9,11 @@ import { QUICK_DEFAULT_MODEL, type QuickModel } from '../agent/quick'
 import { stateOf } from './client'
 
 // The Claude fallback (DC-07): when no decision model is on, routine
-// conditions and apex.ai.decide still answer, on the person's own Claude
+// conditions and atelier.ai.decide still answer, on the person's own Claude
 // engine (their key, or another engine they set up) through QuickModel. Claude
 // states its own confidence, which is less calibrated than a decision
 // model's probabilities, so these answers carry source 'claude' and every
-// cutoff is raised for them (stricter() in @shared/decisions). Apex's own
+// cutoff is raised for them (stricter() in @shared/decisions). Atelier's own
 // hot-path decisions never come here: a Claude call is too slow for them.
 
 const SYSTEM =

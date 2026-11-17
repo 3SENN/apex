@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -31,7 +31,7 @@ function themeOptions(t: T): SegmentOption<ThemePreference>[] {
   ]
 }
 
-/** Apex's own small drawings of the two layouts, from tokens. */
+/** Atelier's own small drawings of the two layouts, from tokens. */
 function LayoutArt({ layout }: { layout: LayoutMode }): ReactElement {
   return (
     <span className={`sp-layout-art sp-layout-art--${layout}`}>
@@ -289,7 +289,7 @@ function hueStyle(hue: ProfileHue): Record<string, string> {
   return { '--swatch-light': light.hue, '--swatch-dark': dark.hue, '--swatch-on-light': '#ffffff', '--swatch-on-dark': '#ffffff' }
 }
 
-/** Apex's profile hues, as a radio group of swatches. */
+/** Atelier's profile hues, as a radio group of swatches. */
 function ProfileHuePicker({ label, value, onChange }: { label: string; value: ProfileHue; onChange(value: ProfileHue): void }): ReactElement {
   const refs = useRef<Array<HTMLButtonElement | null>>([])
   const selected = Math.max(0, PROFILE_HUES.findIndex((h) => h.id === value))

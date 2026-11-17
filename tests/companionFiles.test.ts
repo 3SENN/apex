@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,7 +10,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { CompanionFiles, cleanFileName, isReadableFile, uniqueFileName } from '../src/main/companionFiles'
 import { linkFolder } from './helpers/links'
 
-const tmp = (): string => mkdtempSync(join(tmpdir(), 'apex-files-'))
+const tmp = (): string => mkdtempSync(join(tmpdir(), 'atelier-files-'))
 
 describe('companion files', () => {
   it('adds, lists and removes files in the companion’s own folder', async () => {

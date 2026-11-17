@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { useEffect, useId, useState, type ReactElement } from 'react'
 import { RefreshCw } from 'lucide-react'
 import type { SettingsPatch, SettingsView } from '@shared/ipc'
 import { RELEASE } from '@shared/release'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { Notice, Row } from '../settings/kit'
 import { Button, Skeleton, Spinner, Switch, cx, useNow } from '../ui'
 import { useT } from '../i18n/useT'
@@ -19,7 +19,7 @@ export interface UpdateSectionProps {
   /** The settings page's view and save, when mounted there; otherwise the section reads them itself. */
   settings?: SettingsView
   update?(patch: SettingsPatch): Promise<void>
-  /** A muted line under the version (About shows what Apex runs on). */
+  /** A muted line under the version (About shows what Atelier runs on). */
   versionDetail?: string | null
 }
 
@@ -37,7 +37,7 @@ export function UpdateSection({ settings, update, versionDetail }: UpdateSection
   const view = settings ?? own
 
   useEffect(() => {
-    if (!settings) void apex.settings.get().then(setOwn, () => undefined)
+    if (!settings) void atelier.settings.get().then(setOwn, () => undefined)
   }, [settings])
 
   // A new ready version (or any other phase) forgets an earlier "Later".
@@ -49,7 +49,7 @@ export function UpdateSection({ settings, update, versionDetail }: UpdateSection
     setError(null)
     try {
       if (update) await update(patch)
-      else setOwn(await apex.settings.set(patch))
+      else setOwn(await atelier.settings.set(patch))
     } catch (err) {
       setError(errorText(err))
     }

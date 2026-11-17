@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -22,7 +22,7 @@ import { mainT } from '../i18n/mainT'
 const DAY = 86_400_000
 const WEEKDAYS = [1, 2, 3, 4, 5]
 
-/** Apex's own starters, shown on the Routines page until dismissed. */
+/** Atelier's own starters, shown on the Routines page until dismissed. */
 export const STARTER_SUGGESTIONS: readonly RoutineSuggestion[] = [
   {
     id: 'starter-morning-brief',

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -22,7 +22,7 @@ import { installLauncher, nodeLauncher, removeFolder } from './helpers/fakeProgr
 
 const ECHO_HOST = join(__dirname, 'fixtures/extensions/native-host/echo-host.mjs')
 const FIXTURE = join(__dirname, 'fixtures/extensions/mv3-basic')
-const HOST_NAME = 'com.apex.test_echo'
+const HOST_NAME = 'com.atelier.test_echo'
 
 let dir = ''
 let launcher = ''
@@ -30,11 +30,11 @@ let hostsDir = ''
 let extensionId = ''
 
 beforeAll(() => {
-  dir = mkdtempSync(join(tmpdir(), 'apex-native-'))
+  dir = mkdtempSync(join(tmpdir(), 'atelier-native-'))
   hostsDir = join(dir, 'NativeMessagingHosts')
   mkdirSync(hostsDir)
   // Hosts run without a shell, so the fake host gets an executable launcher, as a real one would be
-  // (a .bat on Windows, which Apex then runs through cmd.exe as Chrome does).
+  // (a .bat on Windows, which Atelier then runs through cmd.exe as Chrome does).
   launcher = nodeLauncher(join(dir, 'echo-host'), ECHO_HOST)
   extensionId = unpackedId(FIXTURE, readManifest(FIXTURE)!)
   writeFileSync(join(hostsDir, `${HOST_NAME}.json`), JSON.stringify({ name: HOST_NAME, description: 'Echo', path: launcher, type: 'stdio', allowed_origins: [`chrome-extension://${extensionId}/`] }))
@@ -78,7 +78,7 @@ describe('framing', () => {
 })
 
 describe('host lookup', () => {
-  it('looks in Apex’s own folder first, then Chrome’s, read-only', () => {
+  it('looks in Atelier’s own folder first, then Chrome’s, read-only', () => {
     expect(hostDirs('/u', 'darwin', '/h')).toEqual([join('/u', 'NativeMessagingHosts'), join('/h', 'Library/Application Support/Google/Chrome/NativeMessagingHosts'), '/Library/Google/Chrome/NativeMessagingHosts'])
     expect(hostDirs('/u', 'linux', '/h')[1]).toBe(join('/h', '.config/google-chrome/NativeMessagingHosts'))
     // Windows: Chrome's registry keys, per user before the machine's.
@@ -122,17 +122,17 @@ describe('host lookup', () => {
 
   it('explains why a host cannot be used', () => {
     expect(findHost('Bad Name', extensionId, [hostsDir])).toMatchObject({ ok: false, reason: 'Invalid native host name.' })
-    expect(findHost('com.apex.missing', extensionId, [hostsDir])).toMatchObject({ ok: false, reason: 'Specified native messaging host not found.' })
+    expect(findHost('com.atelier.missing', extensionId, [hostsDir])).toMatchObject({ ok: false, reason: 'Specified native messaging host not found.' })
     expect(findHost(HOST_NAME, 'p'.repeat(32), [hostsDir])).toMatchObject({ ok: false, reason: expect.stringMatching(/forbidden/) })
     const other = join(dir, 'other')
     mkdirSync(other, { recursive: true })
-    writeFileSync(join(other, 'com.apex.broken.json'), '{')
-    writeFileSync(join(other, 'com.apex.relative.json'), JSON.stringify({ name: 'com.apex.relative', path: 'host', type: 'stdio', allowed_origins: [] }))
-    writeFileSync(join(other, 'com.apex.gone.json'), JSON.stringify({ name: 'com.apex.gone', path: join(dir, 'gone'), type: 'stdio', allowed_origins: [`chrome-extension://${extensionId}/`] }))
-    expect(findHost('com.apex.broken', extensionId, [other])).toMatchObject({ ok: false, reason: expect.stringMatching(/damaged/) })
+    writeFileSync(join(other, 'com.atelier.broken.json'), '{')
+    writeFileSync(join(other, 'com.atelier.relative.json'), JSON.stringify({ name: 'com.atelier.relative', path: 'host', type: 'stdio', allowed_origins: [] }))
+    writeFileSync(join(other, 'com.atelier.gone.json'), JSON.stringify({ name: 'com.atelier.gone', path: join(dir, 'gone'), type: 'stdio', allowed_origins: [`chrome-extension://${extensionId}/`] }))
+    expect(findHost('com.atelier.broken', extensionId, [other])).toMatchObject({ ok: false, reason: expect.stringMatching(/damaged/) })
     // Chrome lets a Windows manifest name its host relative to itself; elsewhere a relative path is invalid.
-    expect(findHost('com.apex.relative', extensionId, [other])).toMatchObject({ ok: false, reason: expect.stringMatching(process.platform === 'win32' ? /forbidden/ : /invalid/) })
-    expect(findHost('com.apex.gone', extensionId, [other])).toMatchObject({ ok: false, reason: expect.stringMatching(/isn’t installed/) })
+    expect(findHost('com.atelier.relative', extensionId, [other])).toMatchObject({ ok: false, reason: expect.stringMatching(process.platform === 'win32' ? /forbidden/ : /invalid/) })
+    expect(findHost('com.atelier.gone', extensionId, [other])).toMatchObject({ ok: false, reason: expect.stringMatching(/isn’t installed/) })
   })
 })
 
@@ -275,7 +275,7 @@ describe('the first connection asks', () => {
     host.nativeDisconnect('default', id, 'p1')
     await expect(host.nativeConnect('default', caller, HOST_NAME, 'p2')).resolves.toEqual({ ok: true })
     host.nativeDisconnect('default', id, 'p2')
-    expect(asked).toEqual(['Apex Fixture Notes → com.apex.test_echo', 'Apex Fixture Notes → com.apex.test_echo'])
+    expect(asked).toEqual(['Atelier Fixture Notes → com.atelier.test_echo', 'Atelier Fixture Notes → com.atelier.test_echo'])
     host.dispose()
   })
 
@@ -303,7 +303,7 @@ describe('the first connection asks', () => {
     const { host, asked, caller } = await setup('deny')
     await expect(host.nativeConnect('default', caller, HOST_NAME, 'p1')).resolves.toEqual({ ok: false, error: 'Access to the native messaging host was not allowed.' })
     await expect(host.nativeConnect('default', caller, HOST_NAME, 'p2')).resolves.toMatchObject({ ok: false })
-    await expect(host.nativeConnect('default', caller, 'com.apex.missing', 'p3')).resolves.toEqual({ ok: false, error: 'Specified native messaging host not found.' })
+    await expect(host.nativeConnect('default', caller, 'com.atelier.missing', 'p3')).resolves.toEqual({ ok: false, error: 'Specified native messaging host not found.' })
     expect(asked).toHaveLength(1)
     host.dispose()
   })

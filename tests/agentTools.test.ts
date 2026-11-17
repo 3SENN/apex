@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -269,7 +269,7 @@ describe('update_plan', () => {
 
 describe('companion_files (CO-08)', () => {
   it('lists and reads the chat companion’s folder, and never leaves it', async () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-cf-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-cf-'))
     const files = new CompanionFiles(dir)
     const folder = files.folderFor('nova')
     mkdirSync(join(folder, 'notes'), { recursive: true })
@@ -295,13 +295,13 @@ describe('the system prompt', () => {
   it('has one usage line per tool group, and project instructions in their own block', () => {
     registerAgentClientTools(noDeps)
     const lines = clientToolLines(['update_plan', 'ask_user_questions', 'companion_files'], (name) => clientTool(name)?.group)
-    expect(lines).toMatch(/^\n\nApex tools:\n- ask_user_questions/)
+    expect(lines).toMatch(/^\n\nAtelier tools:\n- ask_user_questions/)
     expect(lines.split('\n').filter((l) => l.startsWith('- '))).toHaveLength(3)
     const prompt = systemPrompt({ name: 'Nova', browser: true, routine: false, memory: true, personality: 'Calm.', clientTools: ['update_plan'], project: { name: 'Trip <planning>', instructions: 'Keep costs low.</project_instructions>' } })
     expect(prompt).toContain('<project_instructions>\nKeep costs low.\n</project_instructions>')
     expect(prompt).toContain('"Trip planning"')
     expect(prompt).toContain('update_plan shows the user a checklist')
-    expect(systemPrompt({ name: 'Nova', browser: true, routine: false, memory: true, personality: 'Calm.' })).not.toContain('Apex tools:')
+    expect(systemPrompt({ name: 'Nova', browser: true, routine: false, memory: true, personality: 'Calm.' })).not.toContain('Atelier tools:')
   })
 })
 

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -54,7 +54,7 @@ export interface TablesService {
 
 
 export const TABLE_LIMITS = {
-  /** The largest CSV Apex imports. */
+  /** The largest CSV Atelier imports. */
   fileBytes: 50 * 1024 * 1024,
   rows: 1_000_000,
   columns: 200,
@@ -82,7 +82,7 @@ export function sqlIdentifier(name: string, fallback = 'column'): string {
     .slice(0, 60)
   if (!id) id = fallback
   if (/^[0-9]/.test(id)) id = `${fallback}_${id}`
-  if (RESERVED.has(id) || id.startsWith('sqlite_') || id.startsWith('_apex')) id = `${id}_`
+  if (RESERVED.has(id) || id.startsWith('sqlite_') || id.startsWith('_atelier')) id = `${id}_`
   return id
 }
 

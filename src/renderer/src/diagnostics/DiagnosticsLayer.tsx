@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { useCallback, useEffect, useRef, useState, type ReactElement } from 'rea
 import type { TabsSnapshot } from '@shared/ipc'
 import type { SurfaceAnchor } from '@shared/overlay'
 import { isBlankUrl, isInternalUrl, parseInternalUrl } from '@shared/url'
-import { apex, call, useAppEvent } from '../api'
+import { atelier, call, useAppEvent } from '../api'
 import { useT } from '../i18n/useT'
 import { openSurface } from '../overlay/useSurface'
 import { Modal, toast } from '../ui'
@@ -35,21 +35,21 @@ async function reportContext(tabs: TabsSnapshot, options: OpenReportOptions): Pr
       .then((view) => view.summary.title || null)
       .catch(() => null)
   }
-  // Only a web page has a screenshot of its own; apex:// pages are drawn by the chrome.
+  // Only a web page has a screenshot of its own; atelier:// pages are drawn by the chrome.
   const tabId = active && !isInternalUrl(active.url) && !isBlankUrl(active.url) ? active.id : null
   return { chatId: chatId && /^[0-9a-f-]{36}$/.test(chatId) ? chatId : null, chatTitle: chatTitle?.slice(0, 200) ?? null, tabId, preselectCrashDumps: options.preselectCrashDumps ?? false }
 }
 
 export function DiagnosticsLayer(): ReactElement | null {
   const t = useT()
-  const tabs = useRef<TabsSnapshot>(apex.initial.tabs)
-  const crashReportsOn = useRef(apex.initial.settings.crashReports)
+  const tabs = useRef<TabsSnapshot>(atelier.initial.tabs)
+  const crashReportsOn = useRef(atelier.initial.settings.crashReports)
   const [inlineReport, setInlineReport] = useState<ProblemReportProps | null>(null)
   const [inlineCrash, setInlineCrash] = useState<CrashNoticeProps | null>(null)
   const crashInstance = useRef<string | null>(null)
   const opening = useRef(false)
 
-  useEffect(() => apex.tabs.onChanged((s) => void (tabs.current = s)), [])
+  useEffect(() => atelier.tabs.onChanged((s) => void (tabs.current = s)), [])
   useAppEvent('settings', (e) => void (crashReportsOn.current = e.view.crashReports))
 
   const openReport = useCallback(async (options: OpenReportOptions = {}): Promise<void> => {
@@ -71,7 +71,7 @@ export function DiagnosticsLayer(): ReactElement | null {
   useEffect(() => setReportOpener((options) => void openReport(options)), [openReport])
   useEffect(
     () =>
-      apex.onCommand((command) => {
+      atelier.onCommand((command) => {
         if (command === 'report-problem') void openReport()
       }),
     [openReport],
@@ -84,7 +84,7 @@ export function DiagnosticsLayer(): ReactElement | null {
       void call('diagnostics', 'dismissCrash').catch(() => undefined)
       if (choice === 'report') void openReport({ preselectCrashDumps: dumps > 0 })
       if (choice === 'keep') {
-        void apex.settings
+        void atelier.settings
           .set({ crashReports: true })
           .then(() => toast.show({ tone: 'success', message: t('diagnostics.crash.kept') }))
           .catch(() => undefined)
@@ -138,7 +138,7 @@ export function DiagnosticsLayer(): ReactElement | null {
     })
   })
 
-  if (apex.role !== 'chrome') return null
+  if (atelier.role !== 'chrome') return null
   return (
     <>
       <Modal open={inlineReport !== null} onClose={() => setInlineReport(null)} dismissible={false} label={t('diagnostics.report.title')} placement="center" className="dg-modal-panel">

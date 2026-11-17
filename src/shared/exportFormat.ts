@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // The export contract: exporting chats, skills, transcripts
-// and documents (CH-36), and the Apex chat Markdown format that
-// re-imports as a read-only transcript. Front matter: `apex_export: chat`,
+// and documents (CH-36), and the Atelier chat Markdown format that
+// re-imports as a read-only transcript. Front matter: `atelier_export: chat`,
 // `version: 1`.
 import type { ChatSummary, ChatView } from './chats'
 
@@ -15,10 +15,10 @@ export const EXPORT_KINDS = ['chat', 'skill', 'transcript', 'document'] as const
 export type ExportFormat = 'text' | 'markdown' | 'html' | 'pdf'
 export const EXPORT_FORMATS = ['text', 'markdown', 'html', 'pdf'] as const satisfies readonly ExportFormat[]
 
-export const APEX_CHAT_EXPORT_VERSION = 1
+export const ATELIER_CHAT_EXPORT_VERSION = 1
 
-/** What parseApexChatMarkdown recovers from an exported chat. */
-export interface ParsedApexChat {
+/** What parseAtelierChatMarkdown recovers from an exported chat. */
+export interface ParsedAtelierChat {
   title: string
   createdAt: number | null
   companion: string | null
@@ -108,14 +108,14 @@ function unescapeBody(line: string, names: readonly string[]): string {
 /** A one-line YAML value: JSON's double-quoted strings are valid YAML. */
 const yaml = (value: string | number | null): string => (value === null ? 'null' : typeof value === 'number' ? String(value) : JSON.stringify(value))
 
-/** A chat as Markdown with Apex front matter (`apex_export: chat`, `version: 1`), then `### You` and `### <companion>` sections. */
+/** A chat as Markdown with Atelier front matter (`atelier_export: chat`, `version: 1`), then `### You` and `### <companion>` sections. */
 export function chatToMarkdown(view: Pick<ChatView, 'summary' | 'log' | 'details'>, options: ChatExportOptions = {}): string {
   const companion = options.companionName?.trim() || 'Companion'
   const names = ['You', companion]
   const lines = [
     '---',
-    'apex_export: chat',
-    `version: ${APEX_CHAT_EXPORT_VERSION}`,
+    'atelier_export: chat',
+    `version: ${ATELIER_CHAT_EXPORT_VERSION}`,
     `title: ${yaml(view.summary.title)}`,
     `createdAt: ${yaml(iso(view.summary.createdAt))}`,
     `companion: ${yaml(companion)}`,
@@ -172,16 +172,16 @@ const timeOf = (raw: string | null | undefined): number | null => {
   return Number.isFinite(ms) ? ms : null
 }
 
-/** Reads an Apex chat export back, or null when the text is not one (or from a newer version). */
-export function parseApexChatMarkdown(text: string): ParsedApexChat | null {
+/** Reads an Atelier chat export back, or null when the text is not one (or from a newer version). */
+export function parseAtelierChatMarkdown(text: string): ParsedAtelierChat | null {
   const lines = text.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n').split('\n')
   const head = frontMatter(lines)
-  if (!head || scalar(head.values.get('apex_export')) !== 'chat') return null
+  if (!head || scalar(head.values.get('atelier_export')) !== 'chat') return null
   const version = Number(scalar(head.values.get('version')))
-  if (!Number.isInteger(version) || version < 1 || version > APEX_CHAT_EXPORT_VERSION) return null
+  if (!Number.isInteger(version) || version < 1 || version > ATELIER_CHAT_EXPORT_VERSION) return null
   const companion = scalar(head.values.get('companion'))
   const names = ['You', companion?.trim() || 'Companion']
-  const messages: ParsedApexChat['messages'] = []
+  const messages: ParsedAtelierChat['messages'] = []
   let current: { role: 'user' | 'assistant'; body: string[]; at: number | null } | null = null
   const flush = (): void => {
     if (!current) return

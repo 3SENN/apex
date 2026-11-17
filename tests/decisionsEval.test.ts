@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -21,30 +21,30 @@ import { asksForInput } from '../src/main/agent/session'
 import { guardAction } from '../src/main/agent/guard'
 import type { Effort, ElementDescription } from '../src/shared/ipc'
 
-// Measuring Apex's own decisions against a real decision model
+// Measuring Atelier's own decisions against a real decision model
 // (docs/decisions.md › Measuring). Skipped unless you point it at one:
 //
-//   APEX_DECISIONS_EVAL=typesafe APEX_DECISIONS_KEY=… npx vitest run tests/decisionsEval.test.ts --silent=false
-//   APEX_DECISIONS_EVAL=experiential APEX_DECISIONS_KEY=xpl_… APEX_DECISIONS_MODEL=clef npx vitest run tests/decisionsEval.test.ts --silent=false
-//   APEX_DECISIONS_EVAL=custom APEX_DECISIONS_URL=http://127.0.0.1:8009 npx vitest run tests/decisionsEval.test.ts --silent=false
+//   ATELIER_DECISIONS_EVAL=typesafe ATELIER_DECISIONS_KEY=… npx vitest run tests/decisionsEval.test.ts --silent=false
+//   ATELIER_DECISIONS_EVAL=experiential ATELIER_DECISIONS_KEY=xpl_… ATELIER_DECISIONS_MODEL=clef npx vitest run tests/decisionsEval.test.ts --silent=false
+//   ATELIER_DECISIONS_EVAL=custom ATELIER_DECISIONS_URL=http://127.0.0.1:8009 npx vitest run tests/decisionsEval.test.ts --silent=false
 //
-// (APEX_DECISIONS_EVAL is any provider in PROVIDER_DEFAULTS;
-// APEX_DECISIONS_MODEL overrides its default model; APEX_DECISIONS_PACE_MS
+// (ATELIER_DECISIONS_EVAL is any provider in PROVIDER_DEFAULTS;
+// ATELIER_DECISIONS_MODEL overrides its default model; ATELIER_DECISIONS_PACE_MS
 // spaces the requests out for a plan with a per-minute limit, such as 6500
 // for 10 a minute.) Each labelled case in
-// fixtures/decisions-eval.json goes through the same question Apex asks and
-// the same cutoffs Apex applies. Per decision it reports accuracy on the
-// cases the model was sure of, how often it stayed unsure (Apex's rule then
+// fixtures/decisions-eval.json goes through the same question Atelier asks and
+// the same cutoffs Atelier applies. Per decision it reports accuracy on the
+// cases the model was sure of, how often it stayed unsure (Atelier's rule then
 // decides), and whether a choice changes when its options are listed in the
-// reverse order. Next to that it shows what the person would get: Apex's
+// reverse order. Next to that it shows what the person would get: Atelier's
 // rule alone, and the rule with the model taking over where it is sure. It
 // fails when a decision is right on fewer than 80% of the cases it was sure
 // of, or flips with the order. The labeling cases run the companion's
 // label_items tool the same way, and the skills cases rank one companion's
 // skills against each first message.
 
-// Any provider in the table, or 'custom' for your own server at APEX_DECISIONS_URL.
-const provider = process.env.APEX_DECISIONS_EVAL as DecisionPresetId | 'custom' | undefined
+// Any provider in the table, or 'custom' for your own server at ATELIER_DECISIONS_URL.
+const provider = process.env.ATELIER_DECISIONS_EVAL as DecisionPresetId | 'custom' | undefined
 const enabled = provider !== undefined && (provider === 'custom' || isPreset(provider))
 
 const cases = JSON.parse(readFileSync(join(__dirname, 'fixtures', 'decisions-eval.json'), 'utf8')) as {
@@ -87,8 +87,8 @@ const MIN_ACCURACY = 0.8
 
 const endpoint = enabled
   ? provider === 'custom'
-    ? endpointFor(process.env.APEX_DECISIONS_URL ?? OWN_SERVER_PLACEHOLDER, process.env.APEX_DECISIONS_KEY ?? null, process.env.APEX_DECISIONS_MODEL ?? 'kev-latest')
-    : endpointFor(PROVIDER_DEFAULTS[provider!].url, process.env.APEX_DECISIONS_KEY ?? null, process.env.APEX_DECISIONS_MODEL ?? PROVIDER_DEFAULTS[provider!].suggested, PROVIDER_DEFAULTS[provider!].dialect)
+    ? endpointFor(process.env.ATELIER_DECISIONS_URL ?? OWN_SERVER_PLACEHOLDER, process.env.ATELIER_DECISIONS_KEY ?? null, process.env.ATELIER_DECISIONS_MODEL ?? 'kev-latest')
+    : endpointFor(PROVIDER_DEFAULTS[provider!].url, process.env.ATELIER_DECISIONS_KEY ?? null, process.env.ATELIER_DECISIONS_MODEL ?? PROVIDER_DEFAULTS[provider!].suggested, PROVIDER_DEFAULTS[provider!].dialect)
   : null
 const fetchImpl: FetchLike = async (url, init) => {
   const res = await fetch(url, init)
@@ -100,7 +100,7 @@ const fetchImpl: FetchLike = async (url, init) => {
   }
 }
 
-const paceMs = Number(process.env.APEX_DECISIONS_PACE_MS) || 0
+const paceMs = Number(process.env.ATELIER_DECISIONS_PACE_MS) || 0
 let nextAt = 0
 /** Waits for the next request slot when the run is paced. */
 async function slot(): Promise<void> {
@@ -135,7 +135,7 @@ interface Outcome {
   ms: number
 }
 
-/** A decider that sends each question to the real model (and again reversed) and returns Apex's reading of the answer. */
+/** A decider that sends each question to the real model (and again reversed) and returns Atelier's reading of the answer. */
 function liveDecider(record: (o: Outcome) => void): Decider {
   return {
     active: () => true,
@@ -184,7 +184,7 @@ const same = (a: unknown, b: unknown): boolean => JSON.stringify(a) === JSON.str
 interface Measure<C> {
   run(c: C): Promise<unknown>
   expected(c: C): unknown
-  /** What Apex's rule decides on its own. */
+  /** What Atelier's rule decides on its own. */
   rule(c: C): unknown
   /** What the person gets: the model's verdict where it is sure, otherwise the rule (default). */
   combine?(verdict: unknown, rule: unknown): unknown
@@ -232,7 +232,7 @@ const keywordStop = (c: (typeof cases.agentClicks)[number]): string | null =>
   })?.action ?? null
 
 describe.skipIf(!enabled)('quick decisions against a real decision model', () => {
-  // The rule's own value goes in, as in Apex; each read ignores it, so the verdict is the model's alone.
+  // The rule's own value goes in, as in Atelier; each read ignores it, so the verdict is the model's alone.
   it(
     'needsYou',
     () =>

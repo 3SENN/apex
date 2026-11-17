@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { useEffect, useState, type ReactElement } from 'react'
 import type { Rect } from '@shared/overlay'
-import { apex } from '../api'
+import { atelier } from '../api'
 import { ConfirmHost } from './Confirm'
 import { PopoverHost } from './Popover'
 import { ToastHost, type ToastPlacement } from './Toast'
@@ -38,7 +38,7 @@ function OverlayDragGuards(): ReactElement | null {
   const [rects, setRects] = useState<Rect[]>([])
   useEffect(
     () =>
-      apex.onAppEvent((event) => {
+      atelier.onAppEvent((event) => {
         if (event.type === 'overlay-region') setRects(event.rects)
       }),
     [],
@@ -62,7 +62,7 @@ function WindowVeil(): ReactElement | null {
   const [veil, setVeil] = useState<{ on: boolean; stills: { rect: Rect; src: string }[] }>({ on: false, stills: [] })
   useEffect(
     () =>
-      apex.onAppEvent((event) => {
+      atelier.onAppEvent((event) => {
         if (event.type === 'window-veil') setVeil({ on: event.on, stills: event.stills })
       }),
     [],

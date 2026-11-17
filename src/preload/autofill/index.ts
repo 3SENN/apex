@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -52,7 +52,7 @@ export function installAutofill(): void {
   const watcher = new SubmitWatcher((s, trigger) => send({ type: 'submit', form: s.form, values: s.values, trigger }))
   const userStarted = (): boolean => Date.now() - lastGesture < GESTURE_MS || navigator.userActivation?.isActive === true
 
-  /** Reports a focus on a field Apex can help with; false when it isn't one. */
+  /** Reports a focus on a field Atelier can help with; false when it isn't one. */
   const reportFocus = (el: FieldElement): boolean => {
     const kind = kindOf(el)
     if (!kind) return false
@@ -198,7 +198,7 @@ export function installAutofill(): void {
       const form = e.target
       if (!(form instanceof HTMLFormElement)) return
       flushTouches()
-      // Only forms the person worked on: a page can't make Apex offer to save values it planted.
+      // Only forms the person worked on: a page can't make Atelier offer to save values it planted.
       if (!watcher.isDirty(form) && !userStarted()) return
       watcher.submitted(form, 'submit')
     },

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -198,7 +198,7 @@ describe('the preprocessing partition', () => {
     expect(preprocessAllow('https://example.com/a.png')).toBe(false)
     expect(preprocessAllow('http://127.0.0.1:9/x')).toBe(false)
     expect(preprocessAllow('file:///etc/passwd')).toBe(false)
-    expect(preprocessAllow('blob:app://apex/123')).toBe(true)
+    expect(preprocessAllow('blob:app://atelier/123')).toBe(true)
     expect(preprocessAllow('data:image/png;base64,AA==')).toBe(true)
     expect(preprocessAllow('http://localhost:5173/preprocess.html', 'http://localhost:5173')).toBe(true)
     expect(preprocessAllow('https://example.com/', 'http://localhost:5173')).toBe(false)
@@ -207,8 +207,8 @@ describe('the preprocessing partition', () => {
   })
 
   it('maps only the page and its assets to files', () => {
-    expect(preprocessFile('/r', 'app://apex/preprocess.html')).toBe(resolve('/r', 'preprocess.html'))
-    expect(preprocessFile('/r', 'app://apex/index.html')).toBeNull()
-    expect(preprocessFile('/r', 'app://apex/../etc/passwd')).toBeNull()
+    expect(preprocessFile('/r', 'app://atelier/preprocess.html')).toBe(resolve('/r', 'preprocess.html'))
+    expect(preprocessFile('/r', 'app://atelier/index.html')).toBeNull()
+    expect(preprocessFile('/r', 'app://atelier/../etc/passwd')).toBeNull()
   })
 })

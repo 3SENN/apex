@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -540,7 +540,7 @@ export function createWorkspace(deps: WorkspaceDeps): Workspace {
         async query(text, ctx) {
           if (text.trim().length < 2 || ctx.signal.aborted) return []
           const { hits, total } = index.query(text, { limit: 3, profile: ctx.profileId ?? profileOf(ctx.windowId) })
-          // Web history already has its own command-bar group; this one shows what only Apex keeps.
+          // Web history already has its own command-bar group; this one shows what only Atelier keeps.
           const rows: OmniboxRow[] = hits.map((hit) => ({ id: `search:${hit.id}`, group: mainT('workspace.search.group'), title: hit.title, subtitle: plainSnippet(hit.snippet), icon: hit.source, action: openRow(hit) }))
           if (total > hits.length) rows.push({ id: 'search:all', group: mainT('workspace.search.group'), title: mainT('workspace.search.seeAll', { count: total }), icon: 'search', action: { kind: 'open-internal', url: `${workspaceUrl('search')}?q=${encodeURIComponent(text.trim())}` } })
           return rows

@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// branding/official/Apex.icon: the Icon Composer document macOS 26 compiles (through
+// branding/official/Atelier.icon: the Icon Composer document macOS 26 compiles (through
 // actool) into Assets.car. It holds the mark as one bitmap layer (white, the
 // eyes cut out so the fill shows through) over a flat violet fill; the
 // system draws the squircle mask, glass, lighting and shadows, and derives
@@ -18,13 +18,13 @@ function colour(key, alpha = 1) {
   return `srgb:${r.toFixed(5)},${g.toFixed(5)},${b.toFixed(5)},${a.toFixed(5)}`
 }
 
-/** The files inside Apex.icon, in a fixed order: [relative path, kind]. */
+/** The files inside Atelier.icon, in a fixed order: [relative path, kind]. */
 export const BUNDLE_FILES = [
   ['icon.json', 'json'],
   ['Assets/pip.png', 'png']
 ]
 
-/** Returns Map<relative path inside Apex.icon, string | Buffer>. */
+/** Returns Map<relative path inside Atelier.icon, string | Buffer>. */
 export function buildIconBundle() {
   const L = iconComposerLayers()
   const files = new Map()

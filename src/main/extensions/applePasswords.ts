@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -18,7 +18,7 @@ import { verifyCrx } from './crx'
 import type { ExtensionsHost, HostObservation } from './host'
 import { manifestCandidates, manifestHostPath, originAllowed } from './nativeMessaging'
 
-// Apple Passwords (iCloud Keychain) as a built-in option on macOS. Apex
+// Apple Passwords (iCloud Keychain) as a built-in option on macOS. Atelier
 // never ships Apple's extension: turning it on downloads it from the Chrome
 // Web Store, verifies the package (its own key and the store's), asks once
 // with the install prompt, installs it like any store install, allows its
@@ -30,7 +30,7 @@ import { manifestCandidates, manifestHostPath, originAllowed } from './nativeMes
 export interface ApplePasswordsDeps {
   host: ExtensionsHost
   mac: boolean
-  /** The native-host folders the host reads, in order (Apex's own, then Chrome's). */
+  /** The native-host folders the host reads, in order (Atelier's own, then Chrome's). */
   hostDirs: readonly string[]
   /** The package from the Web Store; tests and smoke hand over a local copy. */
   fetchCrx(profileId: string): Promise<Buffer>
@@ -40,7 +40,7 @@ export interface ApplePasswordsDeps {
   yieldSetting(): boolean
   /** A status changed for a profile. */
   emit(profileId: string, status: ApplePasswordsStatus): void
-  /** Apex is signed with Apple's browser passkey entitlement, so macOS lets it start the helper (codeSignature.ts). */
+  /** Atelier is signed with Apple's browser passkey entitlement, so macOS lets it start the helper (codeSignature.ts). */
   signedAsBrowser?(): boolean
 }
 
@@ -137,7 +137,7 @@ export function createApplePasswords(deps: ApplePasswordsDeps) {
       state: applePasswordsState(i),
       installed: i.extension.installed,
       enabled: i.extension.enabled,
-      apexStepsAside: !!holder && deps.yieldSetting(),
+      atelierStepsAside: !!holder && deps.yieldSetting(),
       otherController: holder && holder.extensionId !== EXT_ID ? holder.name : null,
       error: i.port && !i.port.open ? i.port.closedWithError : null,
       signedAsBrowser: i.signedAsBrowser ?? false,

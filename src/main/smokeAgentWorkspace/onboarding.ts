@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -45,7 +45,7 @@ const conversation: SmokeCheck = {
     await ctx.chrome.invoke('onboarding', 'clearProfile')
     try {
       await atStep(ctx, 'questions', async () => {
-        ctx.tabs.openInternal('apex://welcome')
+        ctx.tabs.openInternal('atelier://welcome')
         // An engine is ready (the offline stand-in), so the companion talks instead of showing cards.
         await ctx.chrome.until(`return [...document.querySelectorAll('.iv-chip')].some((b) => b.textContent.trim() === '🎨 I design apps') ? true : null`, 15_000, 'the companion’s first question with quick replies')
         await press(ctx, '.iv-chip', '🎨 I design apps')
@@ -148,7 +148,7 @@ export const shots: ShotSpec[] = [
       await ctx.chrome.invoke('onboarding', 'clearProfile')
       try {
         await atStep(ctx, 'questions', async () => {
-          ctx.tabs.openInternal('apex://welcome')
+          ctx.tabs.openInternal('atelier://welcome')
           await ctx.chrome.until(`return [...document.querySelectorAll('.iv-chip')].some((b) => b.textContent.trim() === '🎨 I design apps') ? true : null`, 15_000, 'the first question')
           await pause(400)
           await ctx.shot('setup-conversation')
@@ -162,7 +162,7 @@ export const shots: ShotSpec[] = [
           await pause(400)
           await ctx.shot('setup-workspace')
         })
-        ctx.tabs.openInternal('apex://settings/you')
+        ctx.tabs.openInternal('atelier://settings/you')
         await ctx.chrome.until(`return [...document.querySelectorAll('h2, h3')].some((h) => h.textContent.trim() === 'About you') ? true : null`, 10_000, 'About you in Settings')
         await ctx.chrome.js(`[...document.querySelectorAll('h2, h3')].find((h) => h.textContent.trim() === 'About you').scrollIntoView({ block: 'start' })`)
         await pause(400)
@@ -177,7 +177,7 @@ export const shots: ShotSpec[] = [
     name: 'setup-questions',
     async run(ctx) {
       await atStep(ctx, 'questions', async () => {
-        ctx.tabs.openInternal('apex://welcome')
+        ctx.tabs.openInternal('atelier://welcome')
         await ctx.chrome.until(`return document.querySelector('.wlx__card')`, 8000, 'the question card')
         await pause(400)
         await ctx.shot('setup-questions')
@@ -188,7 +188,7 @@ export const shots: ShotSpec[] = [
     name: 'setup-showcase',
     async run(ctx) {
       await atStep(ctx, 'showcase', async () => {
-        ctx.tabs.openInternal('apex://welcome')
+        ctx.tabs.openInternal('atelier://welcome')
         await ctx.chrome.until(`return document.querySelector('.wlx__showcase')`, 8000, 'the showcase')
         await pause(400)
         await ctx.shot('setup-showcase')
@@ -198,11 +198,11 @@ export const shots: ShotSpec[] = [
   {
     name: 'guides-page',
     async run(ctx) {
-      ctx.tabs.openInternal('apex://guides')
+      ctx.tabs.openInternal('atelier://guides')
       // The library opens on its shelves of books; a search shows cards.
       await ctx.chrome.until(`return document.querySelector('.gd-book, .gd-card')`, 8000, 'the guides library')
       await ctx.shot('guides-page')
-      ctx.tabs.openInternal('apex://guides/morning-digest')
+      ctx.tabs.openInternal('atelier://guides/morning-digest')
       await ctx.chrome.until(`return document.querySelector('.gd-bundle')`, 8000, 'the guide detail')
       await ctx.shot('guides-detail')
     },

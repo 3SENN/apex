@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import type { ReactElement, ReactNode } from 'react'
 import './scenes.css'
 
-// Short looping previews for the guides: small vector scenes of Apex's own
+// Short looping previews for the guides: small vector scenes of Atelier's own
 // UI with a simple companion figure. Each scene rests on
 // a complete frame and plays its loop only while hovered or focused (or
 // always with `playing`); under Reduce Motion it stays on the resting frame.

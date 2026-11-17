@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,7 +14,7 @@ export type ReaderFont = (typeof READER_FONTS)[number]
 export const READER_WIDTHS = ['narrow', 'medium', 'wide'] as const
 export type ReaderWidth = (typeof READER_WIDTHS)[number]
 
-/** 'auto' follows Apex's light or dark mode. */
+/** 'auto' follows Atelier's light or dark mode. */
 export const READER_THEMES = ['auto', 'light', 'sepia', 'dark'] as const
 export type ReaderTheme = (typeof READER_THEMES)[number]
 

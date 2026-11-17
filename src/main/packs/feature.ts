@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -60,7 +60,7 @@ export function bindPacks(binding: Partial<Binding>): void {
 
 const opened = new Map<string, import('@shared/packs').PackReview | { error: string }>()
 
-/** A double-clicked .apexpack or .apexapp: its review, shown on apex://packs in this window. */
+/** A double-clicked .atelierpack or .atelierapp: its review, shown on atelier://packs in this window. */
 export function openPackFile(path: string, win: import('../features/types').WindowContext | null): void {
   if (!current || !win) return
   let token: string
@@ -114,7 +114,7 @@ export function createPacksFeature(): Feature {
   return {
     name: 'packs',
     app(app: AppContext): ServiceParts {
-      // The community index comes with Apex, but never into a smoke run, which reaches nothing outside the machine.
+      // The community index comes with Atelier, but never into a smoke run, which reaches nothing outside the machine.
       const store = new PackStore(app.dataDir, { firstParty: firstPartyPacks(), cipher: secretCipher(app.smoke), ...(app.smoke ? {} : { defaultIndexes: DEFAULT_PACK_INDEXES }) })
       const author = new AuthorKey(store.root, keyVault(app.smoke))
       const trusted = new TrustedKeys(store.root)
@@ -122,11 +122,11 @@ export function createPacksFeature(): Feature {
       const runtime = new PacksRuntime({ store, app, preload: join(__dirname, '../preload/pack.js'), installSession: () => bound.installSession, cast: () => bound.cast, serverIndicator: serverBar })
       const service = createPacksService({ store, runtime, author, trusted, app, services: () => bound.services, companionText: (id) => bound.companionText(id) })
       current = { store, runtime, service, serverBar }
-      // Worlds: Share… in the viewer saves an .apexworld, a signed pack holding just the world.
+      // Worlds: Share… in the viewer saves an .atelierworld, a signed pack holding just the world.
       runtime.worldShare = async (ref, contents) => {
         const { name, data } = service.exportWorld(ref)
         let target: string | null
-        if (app.smoke) target = join(mkdtempSync(join(tmpdir(), 'apex-smoke-worlds-')), name)
+        if (app.smoke) target = join(mkdtempSync(join(tmpdir(), 'atelier-smoke-worlds-')), name)
         else {
           const owner = app.windows.fromWebContents(contents.id)?.window ?? app.windows.focused()?.window
           const options = { defaultPath: join(electronApp.getPath('downloads'), name), filters: [{ name: mainT('packs.file.worldFilter'), extensions: [PACK_WORLD_FILE_EXTENSION] }] }
@@ -187,7 +187,7 @@ export function createPacksFeature(): Feature {
         })
         .catch((err: unknown) => log.warn('packs', 'The organisation policy could not be applied', { error: err instanceof Error ? err.message : String(err) }))
 
-      // Settings › Your data and Reset Apex: the packs folder (your author key only with the secrets).
+      // Settings › Your data and Reset Atelier: the packs folder (your author key only with the secrets).
       const removePacks = async (dryRun: boolean, secrets: boolean): Promise<{ removed: string[] }> => {
         const { readdirSync, rmSync, existsSync } = await import('node:fs')
         if (!existsSync(store.root)) return { removed: [] }
@@ -228,7 +228,7 @@ export function createPacksFeature(): Feature {
       )
 
       if (!app.smoke) {
-        // Updates: once a day while Apex runs, the first look a minute after start.
+        // Updates: once a day while Atelier runs, the first look a minute after start.
         const check = (): void => void service.checkUpdatesIfDue().catch((err: unknown) => log.warn('packs', 'Update check failed', { error: err instanceof Error ? err.message : String(err) }))
         const first = setTimeout(check, 60_000)
         const every = setInterval(check, 6 * 60 * 60_000)
@@ -247,7 +247,7 @@ export function createPacksFeature(): Feature {
       return { packs: { ...methods, openedReview } satisfies Ns }
     },
     window(win): ServiceParts {
-      const exportDir = (): string => mkdtempSync(join(tmpdir(), 'apex-smoke-packs-'))
+      const exportDir = (): string => mkdtempSync(join(tmpdir(), 'atelier-smoke-packs-'))
       const need = (): NonNullable<typeof current> => {
         if (!current) throw new PackFileError(mainT('packs.error.notReady'))
         return current
@@ -255,9 +255,9 @@ export function createPacksFeature(): Feature {
       const packs: Partial<Ns> = {
         async reviewFile() {
           const { service } = need()
-          const smokeFile = process.env.APEX_SMOKE_PACK_FILE
+          const smokeFile = process.env.ATELIER_SMOKE_PACK_FILE
           let file: string | null = null
-          if (smokeFile && need().runtime && process.env.APEX_SMOKE) file = smokeFile
+          if (smokeFile && need().runtime && process.env.ATELIER_SMOKE) file = smokeFile
           else {
             const picked = await dialog.showOpenDialog(win.window, { properties: ['openFile'], filters: [{ name: mainT('packs.file.filter'), extensions: [...PACK_ARCHIVE_EXTENSIONS] }] })
             file = picked.canceled ? null : (picked.filePaths[0] ?? null)
@@ -268,9 +268,9 @@ export function createPacksFeature(): Feature {
         },
         async loadFolder() {
           const { service } = need()
-          const smokeFolder = process.env.APEX_SMOKE_PACK_FOLDER
+          const smokeFolder = process.env.ATELIER_SMOKE_PACK_FOLDER
           let dir: string | null = null
-          if (smokeFolder && process.env.APEX_SMOKE) dir = smokeFolder
+          if (smokeFolder && process.env.ATELIER_SMOKE) dir = smokeFolder
           else {
             const picked = await dialog.showOpenDialog(win.window, { properties: ['openDirectory'], title: mainT('packs.devFolder.pick') })
             dir = picked.canceled ? null : (picked.filePaths[0] ?? null)
@@ -282,7 +282,7 @@ export function createPacksFeature(): Feature {
           const image = share?.image ? Buffer.from(share.image.slice(share.image.indexOf(',') + 1), 'base64') : null
           const { name, data } = service.exportArchive(id, from, share ? { note: share.note?.trim() || null, image } : null)
           let target: string | null
-          if (process.env.APEX_SMOKE) target = join(exportDir(), name)
+          if (process.env.ATELIER_SMOKE) target = join(exportDir(), name)
           else {
             const picked = await dialog.showSaveDialog(win.window, { defaultPath: join(electronApp.getPath('downloads'), name), filters: [{ name: mainT('packs.file.filter'), extensions: [[PACK_APP_FILE_EXTENSION, PACK_WORLD_FILE_EXTENSION].find((ext) => name.endsWith(`.${ext}`)) ?? PACK_FILE_EXTENSION] }] })
             target = picked.canceled || !picked.filePath ? null : picked.filePath
@@ -305,7 +305,7 @@ export function createPacksFeature(): Feature {
           const name = `${pack.manifest.id}-log.jsonl`
           const lines = store.logLines(id).map((l) => JSON.stringify(l)).join('\n')
           let target: string | null
-          if (process.env.APEX_SMOKE) target = join(mkdtempSync(join(tmpdir(), 'apex-smoke-log-')), name)
+          if (process.env.ATELIER_SMOKE) target = join(mkdtempSync(join(tmpdir(), 'atelier-smoke-log-')), name)
           else {
             const picked = await dialog.showSaveDialog(win.window, { defaultPath: join(electronApp.getPath('downloads'), name), filters: [{ name: mainT('packs.file.logFilter'), extensions: ['jsonl'] }] })
             target = picked.canceled || !picked.filePath ? null : picked.filePath

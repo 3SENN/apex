@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -19,7 +19,7 @@ export const packs = {
   'packs.tab.browse': 'Bladeren',
   'packs.link.label': 'Installeren via een link',
   'packs.link.button': 'Bekijken',
-  'packs.link.hint': 'Het adres van een .apexpack-, .apexapp- of .apexworld-bestand, zoals een download van een GitHub-release.',
+  'packs.link.hint': 'Het adres van een .atelierpack-, .atelierapp- of .atelierworld-bestand, zoals een download van een GitHub-release.',
   'packs.installed.empty.title': 'Nog geen packs',
   'packs.row.toggle': 'Pack {name}',
   'packs.badge.problems': 'Problemen',
@@ -33,7 +33,7 @@ export const packs = {
   'packs.count.panels': '{count, plural, one {# paneel} other {# panelen}}',
   'packs.count.apps': '{count, plural, one {# app} other {# apps}}',
   'packs.shareApp.title': '{name} delen',
-  'packs.shareApp.description': 'Bewaart een .apexapp die iedereen met {brand} kan openen, met deze afbeelding erin en ernaast.',
+  'packs.shareApp.description': 'Bewaart een .atelierapp die iedereen met {brand} kan openen, met deze afbeelding erin en ernaast.',
   'packs.shareApp.cancel': 'Annuleren',
   'packs.shareApp.save': 'Bewaren…',
   'packs.shareApp.noteLabel': 'Een briefje voor wie hem krijgt',

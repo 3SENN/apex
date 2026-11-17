@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -21,7 +21,7 @@ import { floatInvoke, useFloatPayload } from '../api'
 // The voice HUD float (MV-04, DS-PRES): the live companion bust, the
 // transcript in settled and still-changing parts, the reply preview, errors
 // with their actions, the queue, and a countdown ring that closes it unless
-// the pointer is over it. It never takes focus, so keys stay in Apex: hold
+// the pointer is over it. It never takes focus, so keys stay in Atelier: hold
 // the keys again to reply, Esc stops the reading.
 
 const THINKING_WORDS: MessageKey[] = ['voice.hud.thinking.0', 'voice.hud.thinking.1', 'voice.hud.thinking.2', 'voice.hud.thinking.3']

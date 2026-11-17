@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -17,7 +17,7 @@ import { FakeHost } from './helpers/fakeHost'
 let dir: string
 let runs: RoutineRunStore
 beforeEach(() => {
-  dir = mkdtempSync(join(tmpdir(), 'apex-runs-'))
+  dir = mkdtempSync(join(tmpdir(), 'atelier-runs-'))
   runs = new RoutineRunStore(join(dir, 'routines.sqlite'))
 })
 afterEach(() => {
@@ -63,7 +63,7 @@ describe('the runs store', () => {
     expect(runs.list({ routineId: 'other' }).total).toBe(1)
   })
 
-  it('marks runs that were going when Apex quit as stopped', () => {
+  it('marks runs that were going when Atelier quit as stopped', () => {
     const r = runs.start({ routineId: 'r1', scheduledFor: 1, trigger: 'schedule', startedAt: 1 })
     runs.close()
     runs = new RoutineRunStore(join(dir, 'routines.sqlite'))

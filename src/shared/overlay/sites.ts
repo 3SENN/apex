@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -25,7 +25,7 @@ export interface PermissionPromptProps {
    * deny (MIDI, screen, files), or none (a private window).
    */
   remember: 'both' | 'allow' | 'deny' | null
-  /** macOS has turned Apex off for the camera, microphone or Location Services; the prompt says how to turn it back on. */
+  /** macOS has turned Atelier off for the camera, microphone or Location Services; the prompt says how to turn it back on. */
   systemBlocked: ('camera' | 'microphone' | 'location')[]
   /** A cross-origin frame asks: its host, named under the site the answer is kept for. */
   embedded?: string | null
@@ -103,7 +103,7 @@ export type SitesSurfaceProps = {
 // ── permissions pass: chip props ──
 /**
  * The popover under an address bar permission chip: a held-back notification
- * request to answer, or a permission macOS has turned off for Apex. It
+ * request to answer, or a permission macOS has turned off for Atelier. It
  * resolves with PermissionChipAnswer; the chrome acts on it.
  */
 export interface PermissionChipProps {

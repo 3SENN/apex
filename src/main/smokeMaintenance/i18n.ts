@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -25,7 +25,7 @@ function topMenuLabels(): string[] {
 }
 
 async function openLanguages(ctx: SmokeContext): Promise<void> {
-  ctx.tabs.openInternal('apex://settings/languages')
+  ctx.tabs.openInternal('atelier://settings/languages')
   await ctx.chrome.until<boolean>(`return Boolean(document.querySelector('[data-settings-anchor="app-language"] select'))`, 8000, 'the Languages page’s app-language select')
   // An earlier check may have left the nav folded to its rail, which has no title; open it.
   await ctx.chrome.js(`document.querySelector('.sp-nav--rail .sp-nav__head button')?.click(); return true`)
@@ -130,7 +130,7 @@ export const shots: ShotSpec[] = [
         await setPseudo(ctx, true)
         await sleep(300)
         await ctx.shot('languages-pseudo-settings')
-        ctx.tabs.openInternal('apex://settings/general')
+        ctx.tabs.openInternal('atelier://settings/general')
         await sleep(600)
         await ctx.shot('languages-pseudo-general')
       } finally {

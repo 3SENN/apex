@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@
 // host is ready), keeps the Windows taskbar overlay in sync, and marks the root
 // so the toolbar leaves room for the Windows and Linux window controls.
 import { useEffect, useLayoutEffect, useState, type ReactElement } from 'react'
-import { apex } from '../api'
+import { atelier } from '../api'
 import { openSurface } from '../overlay/useSurface'
 import { LoginItemApprovalDialog } from './LoginItemApproval'
 import { TaskbarOverlaySync } from './TaskbarOverlaySync'
@@ -16,7 +16,7 @@ import { onLoginItemApprovalRequest } from './platform'
 import './system.css'
 
 /** Windows and Linux draw their window controls over the chrome (titleBarOverlay). */
-const CONTROLS_OVERLAY = apex.platform === 'win32' || apex.platform === 'linux'
+const CONTROLS_OVERLAY = atelier.platform === 'win32' || atelier.platform === 'linux'
 
 export function SystemLayer(): ReactElement {
   const [fallback, setFallback] = useState(false)
@@ -42,7 +42,7 @@ export function SystemLayer(): ReactElement {
   return (
     <>
       <LoginItemApprovalDialog open={fallback} onClose={() => setFallback(false)} />
-      {apex.platform === 'win32' && <TaskbarOverlaySync />}
+      {atelier.platform === 'win32' && <TaskbarOverlaySync />}
     </>
   )
 }

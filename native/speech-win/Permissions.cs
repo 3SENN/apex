@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex-speech.exe: permissions, mapped onto the macOS helper's three.
+// atelier-speech.exe: permissions, mapped onto the macOS helper's three.
 //
 //   microphone: Windows' microphone switches (machine, this user, desktop
 //               apps), then AppCapability 'microphone'.
@@ -17,7 +17,7 @@ using System.Diagnostics;
 using Microsoft.Win32;
 using Windows.Security.Authorization.AppCapabilityAccess;
 
-namespace Apex.Speech;
+namespace Atelier.Speech;
 
 internal static class Permissions
 {

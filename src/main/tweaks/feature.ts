@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -33,7 +33,7 @@ import { LEGACY_TWEAKS_FILE, TWEAKS_FILE, TweakError, TweakStore } from './store
 // Tweaks in main (TWK-01 to TWK-06): the store, the page protocol and the
 // services. Each top frame's preload asks for its rules at document start
 // (PAGE.tweaks 'get', sendSync); main answers only a tab's main frame, and
-// nothing on sign-in or apex:// pages. When a tweak changes, every open tab
+// nothing on sign-in or atelier:// pages. When a tweak changes, every open tab
 // whose rules changed gets them again (PAGE.tweaksPush 'rules'), so CSS
 // changes show at once; a script runs again on the next load. Hidden elements
 // are taken only from a tab main asked to pick (hideElements()), for the host

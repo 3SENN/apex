@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // The New app flow's brief: what you typed becomes the first
-// message, and Apex's own build rules ride along as a context block, so the
+// message, and Atelier's own build rules ride along as a context block, so the
 // companion builds with build_app inside the sandbox's limits.
 
 import { BRAND_NAME } from '@shared/branding'

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -52,7 +52,7 @@ export interface EngineErrorStep {
   run(): void
   /** How the step goes, under the card's text. */
   progress: { text: string; tone: 'busy' | 'done' | 'problem' | 'info' } | null
-  /** The step handed over to something outside Apex: Retry joins the actions and looks again first. */
+  /** The step handed over to something outside Atelier: Retry joins the actions and looks again first. */
   manual: boolean
   /** Looks again before a Retry after a manual step. */
   recheck(): Promise<unknown>

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -150,7 +150,7 @@ async function clickInChat(ctx: SmokeContext, selector: string, what: string): P
 const fieldValue = (ctx: SmokeContext): Promise<string | null> => ctx.chrome.js<string | null>(`return ${CHAT}?.querySelector('.chat-composer__field')?.value ?? null`)
 
 async function openAsk(ctx: SmokeContext, id: string): Promise<void> {
-  ctx.tabs.openInternal(`apex://meetings/${id}`)
+  ctx.tabs.openInternal(`atelier://meetings/${id}`)
   await ctx.chrome.until(`return document.querySelector('.mt-head__title')`, 8000, 'the meeting page')
   await ctx.chrome.click(/^Ask about this meeting$/, `document.querySelector('.mt-head__actions')`, 8000)
   // The composer's chips are the shared ones; the meeting is a .cmp-chip.
@@ -161,7 +161,7 @@ const library_: SmokeCheck = {
   name: 'meetings: the library lists, filters and searches seeded meetings, and a meeting page shows notes and a renamed label',
   async run(ctx) {
     const { standup, memo } = await seeded(ctx)
-    ctx.tabs.openInternal('apex://meetings')
+    ctx.tabs.openInternal('atelier://meetings')
     await rowsInclude(ctx, STANDUP, 'the seeded meeting in the list')
     assert(!(await ctx.chrome.js<string[]>(`return ${titles}`)).includes(MEMO), 'recordings stay out of the Meetings list')
 
@@ -177,7 +177,7 @@ const library_: SmokeCheck = {
     await ctx.chrome.until(`return document.body.innerText.includes('Nothing matches')`, 8000, 'the no-results state')
     await ctx.chrome.type('.mt-toolbar input[type="search"]', '')
 
-    ctx.tabs.openInternal(`apex://meetings/${standup}`)
+    ctx.tabs.openInternal(`atelier://meetings/${standup}`)
     await ctx.chrome.until(`return document.querySelector('.mt-notes__summary')?.textContent.includes('installer is signed')`, 8000, 'the summary card')
     await ctx.chrome.until(`return [...document.querySelectorAll('.mt-run__label')].map((e) => e.textContent).join('|') === 'You|Others|You'`, 8000, 'transcript runs labelled You and Others')
     await ctx.chrome.invoke('meetings', 'renameLabel', standup, 'system', 'Design team')
@@ -193,7 +193,7 @@ const exportMarkdown: SmokeCheck = {
   name: 'meetings: Markdown export writes the notes and the labelled transcript',
   async run(ctx) {
     const { standup } = await seeded(ctx)
-    const target = join(mkdtempSync(join(tmpdir(), 'apex-smoke-meetings-')), 'standup.md')
+    const target = join(mkdtempSync(join(tmpdir(), 'atelier-smoke-meetings-')), 'standup.md')
     smokeMeetings.queueSave(target)
     const path = await ctx.chrome.invoke<string | null>('meetings', 'exportFile', standup, 'markdown')
     assert(path === target, `exported to the chosen path (${String(path)})`)
@@ -312,14 +312,14 @@ const audioOnly: SmokeCheck = {
   name: 'meetings: a meeting recorded as audio only shows Audio only, why, its player and Transcribe, with no transcript or notes',
   async run(ctx) {
     const id = seededAudioOnly()
-    ctx.tabs.openInternal('apex://meetings')
+    ctx.tabs.openInternal('atelier://meetings')
     await ctx.chrome.until(
       `return [...document.querySelectorAll('.mt-row')].some((r) => r.querySelector('.mt-row__title')?.textContent === ${JSON.stringify(AUDIO_ONLY)} && r.querySelector('.mt-badge')?.textContent === 'Audio only')`,
       8000,
       'the Audio only badge in the list',
     )
-    ctx.tabs.openInternal(`apex://meetings/${id}`)
-    // In the system's words: Windows has online speech recognition, a Mac Speech Recognition for Apex.
+    ctx.tabs.openInternal(`atelier://meetings/${id}`)
+    // In the system's words: Windows has online speech recognition, a Mac Speech Recognition for Atelier.
     const why = process.platform === 'win32' ? 'online speech recognition is off in Windows' : `Speech Recognition is off for ${BRAND_NAME}`
     await ctx.chrome.until(`return document.querySelector('.mt-head__title') && document.body.innerText.includes(${JSON.stringify(why)})`, 8000, 'why it was recorded as audio only')
     const page = await ctx.chrome.js<{ transcript: boolean; notes: boolean; ask: boolean; player: boolean; transcribe: boolean }>(`return {
@@ -352,7 +352,7 @@ const recovery: SmokeCheck = {
     const d = lib.store.get(id)
     assert(d?.status === 'recorded' && d.hasAudio && d.durationMs >= 1000, `recorded with its audio (${JSON.stringify({ status: d?.status, hasAudio: d?.hasAudio, durationMs: d?.durationMs })})`)
     assert(existsSync(join(dir, 'audio.m4a')) && !existsSync(part), 'audio.m4a written, the part gone')
-    ctx.tabs.openInternal(`apex://meetings/${id}`)
+    ctx.tabs.openInternal(`atelier://meetings/${id}`)
     await ctx.chrome.until(`return document.querySelector('.mt-player audio') && document.body.innerText.includes('Recorded as audio only')`, 8000, 'the recovered recording, playable')
   },
 }
@@ -364,7 +364,7 @@ export const shots: ShotSpec[] = [
     name: 'meetings-library',
     async run(ctx) {
       await seeded(ctx)
-      ctx.tabs.openInternal('apex://meetings')
+      ctx.tabs.openInternal('atelier://meetings')
       await rowsInclude(ctx, STANDUP, 'the meetings list')
       await ctx.shot('meetings-library')
     },
@@ -373,7 +373,7 @@ export const shots: ShotSpec[] = [
     name: 'meeting-audio-only',
     async run(ctx) {
       const id = seededAudioOnly()
-      ctx.tabs.openInternal(`apex://meetings/${id}`)
+      ctx.tabs.openInternal(`atelier://meetings/${id}`)
       await ctx.chrome.until(`return document.querySelector('.mt-player audio')`, 8000, 'the audio-only meeting page')
       await ctx.shot('meeting-audio-only')
     },
@@ -382,7 +382,7 @@ export const shots: ShotSpec[] = [
     name: 'meeting-detail',
     async run(ctx) {
       const { standup } = await seeded(ctx)
-      ctx.tabs.openInternal(`apex://meetings/${standup}`)
+      ctx.tabs.openInternal(`atelier://meetings/${standup}`)
       await ctx.chrome.until(`return document.querySelector('.mt-notes__summary') && document.querySelector('.mt-run__label')`, 8000, 'the meeting page')
       await ctx.shot('meeting-detail')
     },

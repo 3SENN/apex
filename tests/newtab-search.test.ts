@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -38,7 +38,7 @@ describe('new tab search plan', () => {
       expect(plan.alt?.kind).toBe(mode === 'web' ? 'ask' : 'search')
     }
     expect(goAction('localhost:5173/x', engine)).toMatchObject({ url: 'http://localhost:5173/x', internal: false })
-    expect(goAction('apex://settings/search', engine)).toMatchObject({ url: 'apex://settings/search', label: 'apex://settings/search', internal: true })
+    expect(goAction('atelier://settings/search', engine)).toMatchObject({ url: 'atelier://settings/search', label: 'atelier://settings/search', internal: true })
     expect(goAction('two words', engine)).toBeNull()
     expect(goAction('about:blank', engine)).toBeNull()
   })

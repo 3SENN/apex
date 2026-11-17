@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import type { ReactElement } from 'react'
 import type { TabInfo, TabsSnapshot } from '@shared/ipc'
 import { X } from 'lucide-react'
-import { apex, call, errorText } from '../../api'
+import { atelier, call, errorText } from '../../api'
 import { t } from '../../i18n/useT'
 import { toast } from '../../ui'
 import { cardHost } from '../sidebar/cardContent'
@@ -23,7 +23,7 @@ export function SplitChooser({ snapshot, paneTabId }: { snapshot: TabsSnapshot; 
   const closePane = (): void => {
     const split = snapshot.split
     if (!split) return
-    void call('split', 'closeSide', split.primaryId === paneTabId ? 'left' : 'right').catch(() => apex.tabs.close(paneTabId))
+    void call('split', 'closeSide', split.primaryId === paneTabId ? 'left' : 'right').catch(() => atelier.tabs.close(paneTabId))
   }
   return (
     <div className="split-chooser" role="dialog" aria-labelledby="split-chooser-title">

@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 /* Copyright (c) 2026 Senne Chin. All rights reserved.
- * Part of the Apex Companion Art: licensed under the Apex Companion Art License
+ * Part of the Atelier Companion Art: licensed under the Atelier Companion Art License
  * (ART-LICENSE.md), not under the Mozilla Public License. */
-// Renders Apex's brand art from the real companion: the default Pip, smiling,
+// Renders Atelier's brand art from the real companion: the default Pip, smiling,
 // drawn by the app's own still renderer (src/renderer/src/companion/render.ts,
 // renderCompanionImage) in a hidden Electron window, with a transparent
 // background. Writes 1024 px masters:
 //
 //   branding/official/art/pip-head.png   the frameless floating head (the small avatars' framing)
 //   branding/official/art/pip-full.png   the whole companion
-//   branding/official/art/group-<id>-{head,full}.png  the .apexpack group picture's Mochi and Bolt (Pip is pip-*)
+//   branding/official/art/group-<id>-{head,full}.png  the .atelierpack group picture's Mochi and Bolt (Pip is pip-*)
 //
 //   node scripts/app-icons/render-pip.mjs              render into branding/official/art/
 //   node scripts/app-icons/render-pip.mjs --out <dir>  render somewhere else
@@ -33,7 +33,7 @@ const HERE = dirname(fileURLToPath(import.meta.url))
 const REPO = resolve(HERE, '..', '..')
 export const BRAND_DIR = 'branding/official/art'
 export const MASTER_SIZE = 1024
-/** Pip's head and body, then the .apexpack group picture's other members (pip/render.ts GROUP; Pip there is pip-*). */
+/** Pip's head and body, then the .atelierpack group picture's other members (pip/render.ts GROUP; Pip there is pip-*). */
 export const GROUP_IDS = ['mochi', 'bolt']
 export const MASTER_NAMES = ['pip-head', 'pip-full', ...GROUP_IDS.flatMap((id) => [`group-${id}-head`, `group-${id}-full`])]
 
@@ -81,7 +81,7 @@ async function main() {
     console.log('Usage: node scripts/app-icons/render-pip.mjs [--out <dir>] [--size <px>]')
     return
   }
-  const work = mkdtempSync(join(tmpdir(), 'apex-pip-'))
+  const work = mkdtempSync(join(tmpdir(), 'atelier-pip-'))
   try {
     const page = join(work, 'page')
     const shots = join(work, 'shots')

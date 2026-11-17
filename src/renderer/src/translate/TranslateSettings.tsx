@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -33,7 +33,7 @@ export function TranslateSection({ settings, update }: { settings: SettingsView;
   const first = languageKey(effectiveLanguages(settings.languages, system)[0]) ?? 'en'
   const save = (next: Partial<TranslateSettings>): void => void update({ translate: { ...prefs, ...next } })
   const choices = [{ value: AUTO, label: t('translate.settings.target.auto', { language: name(first) }) }, ...targetChoices(name, prefs.target)]
-  const mac = window.apex.platform === 'darwin'
+  const mac = window.atelier.platform === 'darwin'
 
   const list = (title: string, anchor: string, values: readonly string[], label: (v: string) => string, remove: (v: string) => void): ReactElement => (
     <Row anchor={anchor} title={title} stack>

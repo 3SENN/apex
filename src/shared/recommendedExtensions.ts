@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 // The Recommended shelf on Settings › Extensions and in the welcome flow
 // (ST-40 R, ON-03 R): a short, curated list of widely trusted Chrome Web
 // Store extensions, each with one line. "Add" installs
-// from the store through Apex's verified path; Apple's password extension
+// from the store through Atelier's verified path; Apple's password extension
 // on macOS points to the Passwords page's built-in switch instead.
 import type { MessageKey } from './i18n/core'
 import { EXTENSION_ID } from './extensions'
@@ -23,13 +23,13 @@ export interface RecommendedExtension {
   /** One line on why. */
   reason: MessageKey
   category: RecommendedCategory
-  /** 'store' adds from the Web Store; 'passwords-switch' opens Settings › Passwords, where Apex sets it up. */
+  /** 'store' adds from the Web Store; 'passwords-switch' opens Settings › Passwords, where Atelier sets it up. */
   action: 'store' | 'passwords-switch'
   /** Only shown on these platforms; every platform when absent. */
   platforms?: readonly string[]
 }
 
-export const PASSWORDS_SETTINGS_URL = 'apex://settings/passwords'
+export const PASSWORDS_SETTINGS_URL = 'atelier://settings/passwords'
 
 export const RECOMMENDED_EXTENSIONS: readonly RecommendedExtension[] = [
   { id: APPLE_PASSWORDS_EXTENSION_ID, name: 'iCloud Passwords', reason: 'extImport.rec.reason.apple', category: 'passwords', action: 'passwords-switch', platforms: ['darwin'] },

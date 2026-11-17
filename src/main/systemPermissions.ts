@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,14 +14,14 @@ import { log } from './log'
 import { systemNotificationStatus } from './notificationPresenter'
 
 // This Mac's permissions for Settings › Privacy › Permissions: one report of
-// what macOS says about each permission Apex uses, read without prompting,
+// what macOS says about each permission Atelier uses, read without prompting,
 // plus the asks and System Settings links behind that page's buttons. A
 // prompt only ever follows a click on Allow there. Calendars and Reminders
 // stay with the calendar service, which has its own helper.
 
 export interface SystemPermissionsDeps {
   platform: NodeJS.Platform
-  /** Electron's view for Apex itself (never prompts). */
+  /** Electron's view for Atelier itself (never prompts). */
   mediaStatus(kind: 'camera' | 'microphone' | 'screen'): string
   /** Prompts only when macOS never asked; resolves at once otherwise. */
   askForMedia(kind: 'camera' | 'microphone'): Promise<boolean>

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -21,7 +21,7 @@ import { useT } from '../../i18n/useT'
 import { shareAsPack } from '../../packs/share'
 
 interface CompanionsPageProps {
-  /** 'look' (the old apex://settings/companion) opens the active companion's card with its look editor. */
+  /** 'look' (the old atelier://settings/companion) opens the active companion's card with its look editor. */
   view: string | null
   onOpenSection(section: string): void
 }
@@ -75,12 +75,12 @@ function CompanionList({ onOpenSection }: { onOpenSection(section: string): void
     await openCompanionImport({ onCreated: added })
     setImporting(false)
   }
-  /** Apex keeps one companion visible; explain instead of failing. */
+  /** Atelier keeps one companion visible; explain instead of failing. */
   const explainLastVisible = async (c: Companion, verb: 'hide' | 'delete'): Promise<void> => {
     const action = verb === 'hide' ? t('settings.companions.verbHide') : t('settings.companions.verbDelete')
     const ok = await confirm({
       title: t('settings.companions.isYourOnlyVisible', { name: c.name }),
-      message: t('settings.companions.apexAlwaysKeepsOne', { action, name: c.name }),
+      message: t('settings.companions.atelierAlwaysKeepsOne', { action, name: c.name }),
       confirmLabel: t('settings.companions.newCompanion'),
       cancelLabel: t('settings.companions.notNow'),
     })

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -132,9 +132,9 @@ function registerMenuCommands(ctx: AppContext): void {
   claim(ctx, 'devtools', (win) => developerTools(win ?? fallbackWindow(), 'devtools'))
   claim(ctx, 'console', (win) => developerTools(win ?? fallbackWindow(), 'console'))
   claim(ctx, 'about', () => showAboutPanel())
-  claim(ctx, 'open-history', (win) => win?.tabs.openInternal('apex://history'))
-  claim(ctx, 'show-all-history', (win) => win?.tabs.openInternal('apex://history'))
-  claim(ctx, 'open-downloads', (win) => win?.tabs.openInternal('apex://downloads'))
+  claim(ctx, 'open-history', (win) => win?.tabs.openInternal('atelier://history'))
+  claim(ctx, 'show-all-history', (win) => win?.tabs.openInternal('atelier://history'))
+  claim(ctx, 'open-downloads', (win) => win?.tabs.openInternal('atelier://downloads'))
 }
 
 /** Before the window manager knows a focused window, the developer items act on the first one. */

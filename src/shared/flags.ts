@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Experiments at apex://flags (in no nav). Values are stored in the
+// Experiments at atelier://flags (in no nav). Values are stored in the
 // `flags` setting; a child flag is locked while its parent is off.
 import { BRAND_NAME } from './branding'
 import type { MessageKey } from './i18n/core'
@@ -23,7 +23,7 @@ export interface FlagDef {
   parent?: string
 }
 
-/** A flag as apex://flags shows it: its value now, whether its parent locks it, and whether a restart is waiting. */
+/** A flag as atelier://flags shows it: its value now, whether its parent locks it, and whether a restart is waiting. */
 export type FlagState = FlagDef & { value: string; locked: boolean; pendingRestart: boolean }
 
 /** The catalogue. Newest first on the page; `addedAt` also drives expiry review. */
@@ -168,7 +168,7 @@ export function isFlagLocked(values: Record<string, string>, id: string): boolea
   return def?.parent !== undefined && !isFlagOn(values, def.parent)
 }
 
-/** Every flag as the page lists it, newest first. `launch` is what was set when Apex started, for the restart banner. */
+/** Every flag as the page lists it, newest first. `launch` is what was set when Atelier started, for the restart banner. */
 export function flagStates(values: Record<string, string>, launch: Record<string, string> = values): FlagState[] {
   return [...FLAG_DEFS]
     .sort((a, b) => (a.addedAt < b.addedAt ? 1 : a.addedAt > b.addedAt ? -1 : 0))

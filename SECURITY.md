@@ -1,11 +1,11 @@
 # Security policy
 
-Apex is a browser, and it runs an AI agent inside your real tabs. We take reports about either very seriously.
+Atelier is a browser, and it runs an AI agent inside your real tabs. We take reports about either very seriously.
 
 ## Reporting a vulnerability
 
 Please report security issues privately through GitHub's
-[private vulnerability reporting](https://github.com/3SENN/apex/security/advisories/new)
+[private vulnerability reporting](https://github.com/3SENN/atelier/security/advisories/new)
 (the **Report a vulnerability** button on the repository's Security tab).
 If you can't use GitHub, email [contact@chinnovations.nl](mailto:contact@chinnovations.nl) instead.
 Do not open a public issue, pull request or discussion for a security problem.
@@ -13,7 +13,7 @@ Do not open a public issue, pull request or discussion for a security problem.
 A good report includes:
 
 - what an attacker can do, and what they need first (a malicious page, a pack, a local user, …);
-- the Apex version and platform;
+- the Atelier version and platform;
 - steps to reproduce, or a proof of concept;
 - any idea you have for a fix.
 
@@ -28,13 +28,13 @@ A good report includes:
 
 ## Supported versions
 
-Security fixes go into the latest release. Apex updates itself, so please make sure you are on the newest version
+Security fixes go into the latest release. Atelier updates itself, so please make sure you are on the newest version
 before reporting.
 
 ## Scope
 
-In scope: the Apex app and its update mechanism, the agent's guard and approval rules, the page bridge and preloads,
-pack signing, review and sandboxing, and the local servers Apex runs.
+In scope: the Atelier app and its update mechanism, the agent's guard and approval rules, the page bridge and preloads,
+pack signing, review and sandboxing, and the local servers Atelier runs.
 
 Out of scope: vulnerabilities in Chromium or Electron themselves (report those upstream), third-party websites,
 MCP servers and connectors you add, and packs from outside the community index that you chose to install.

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -31,7 +31,7 @@ export function UpdatePill(): ReactElement | null {
     else if (action === 'download') void call('updates', 'download')
     else if (action === 'check') void call('updates', 'check')
     // While downloading, the pill opens About, where the progress and the switch live.
-    else if (kind === 'downloading') void call('pages', 'open', 'apex://settings/about')
+    else if (kind === 'downloading') void call('pages', 'open', 'atelier://settings/about')
   }
 
   const icon =

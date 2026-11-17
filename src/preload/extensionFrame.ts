@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@
 // service worker. The Web Store, checked by exact origin in the main frame
 // (a prefix match would trust look-alike hosts), gets the
 // webstorePrivate and management calls its install button uses, answered
-// by Apex: every install goes through Apex's prompt.
+// by Atelier: every install goes through Atelier's prompt.
 import { BRAND_NAME } from '@shared/branding'
 import { contextBridge, ipcRenderer } from 'electron'
 import { EXT_SHIM_EVENT, EXT_SHIM_INVOKE, WEB_STORE_INVOKE } from '@shared/extensionShim'
@@ -18,8 +18,8 @@ import { installShim, type ShimBridge } from './extensionShim'
 
 function installWebStore(): void {
   type Fn = (...args: unknown[]) => unknown
-  const g = globalThis as unknown as { __apexWebStore?: { invoke(op: string, ...args: unknown[]): Promise<unknown> }; chrome?: Record<string, unknown> }
-  const bridge = g.__apexWebStore
+  const g = globalThis as unknown as { __atelierWebStore?: { invoke(op: string, ...args: unknown[]): Promise<unknown> }; chrome?: Record<string, unknown> }
+  const bridge = g.__atelierWebStore
   if (!bridge) return
   const chrome = (g.chrome ??= {}) as Record<string, Record<string, unknown> | undefined>
   const setLastError = (message: string | null): void => {
@@ -98,7 +98,7 @@ if (here.protocol === 'chrome-extension:') {
     },
   }
   try {
-    contextBridge.exposeInMainWorld('__apexExtensionShim', bridge)
+    contextBridge.exposeInMainWorld('__atelierExtensionShim', bridge)
     contextBridge.executeInMainWorld({ func: installShim })
     // chrome.storage.sync stays on this computer, shared with the extension's pages and content scripts.
     contextBridge.executeInMainWorld({ func: installStorageSync })
@@ -106,6 +106,6 @@ if (here.protocol === 'chrome-extension:') {
     console.warn(`${BRAND_NAME} extension shim unavailable:`, err instanceof Error ? err.message : String(err))
   }
 } else if (here.protocol === 'https:' && here.host === 'chromewebstore.google.com' && process.isMainFrame) {
-  contextBridge.exposeInMainWorld('__apexWebStore', { invoke: (op: string, ...args: unknown[]) => ipcRenderer.invoke(WEB_STORE_INVOKE, op, ...args) })
+  contextBridge.exposeInMainWorld('__atelierWebStore', { invoke: (op: string, ...args: unknown[]) => ipcRenderer.invoke(WEB_STORE_INVOKE, op, ...args) })
   contextBridge.executeInMainWorld({ func: installWebStore })
 }

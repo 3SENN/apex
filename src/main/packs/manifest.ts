@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Checking a pack (docs/packs.md › The manifest). validatePack works on the
-// pack's files in memory, so a folder, an .apexpack and a companion's draft
+// pack's files in memory, so a folder, an .atelierpack and a companion's draft
 // are checked the same way. It returns the manifest with hosts normalised and
 // defaults filled, or the problems, each naming where it is, in words a
 // person or a companion can act on.
@@ -13,10 +13,10 @@ import Ajv from 'ajv'
 import { z } from 'zod'
 import {
   ALL_SITES,
-  APEX_EVENTS,
+  ATELIER_EVENTS,
   KIT_MAJORS,
-  APEX_SERVICE_NAMES,
-  APEX_SERVICES_AVAILABLE,
+  ATELIER_SERVICE_NAMES,
+  ATELIER_SERVICES_AVAILABLE,
   NO_PACK_PERMISSIONS,
   PACK_APP_BUILDS,
   PACK_APP_KINDS,
@@ -75,7 +75,7 @@ import { parseSkillDocument, type SkillDocument } from '../skills/format'
 import { isEnvFile, keyIn } from './secrets'
 import { checkWorldFile, worldApps } from './worlds'
 
-/** A pack's files by relative path ('/'-separated), without Apex's own __apex/ files. */
+/** A pack's files by relative path ('/'-separated), without Atelier's own __atelier/ files. */
 export type PackFiles = Map<string, Buffer>
 
 export interface PackSkillFile {
@@ -249,7 +249,7 @@ const schema = z
   .strict()
 
 function issues(error: z.ZodError): string[] {
-  return error.issues.slice(0, 20).map((i) => `${i.path.length > 0 ? i.path.join('.') : 'apex-pack.json'}: ${i.message}`)
+  return error.issues.slice(0, 20).map((i) => `${i.path.length > 0 ? i.path.join('.') : 'atelier-pack.json'}: ${i.message}`)
 }
 
 const isCode = (p: string): boolean => /\.(m?js)$/i.test(p)
@@ -288,7 +288,7 @@ export function checkFiles(files: PackFiles, limits: PackFileLimits = packFileLi
   let total = 0
   for (const [p, data] of files) {
     total += data.length
-    if (!isPackFilePath(p, appRoots)) problems.push(`${p}: is not an allowed file path (letters, digits, dot, dash and underscore; inside an app's folder also spaces and & ' ( ) + , ! @ [ ] ~ =; not under __apex/).`)
+    if (!isPackFilePath(p, appRoots)) problems.push(`${p}: is not an allowed file path (letters, digits, dot, dash and underscore; inside an app's folder also spaces and & ' ( ) + , ! @ [ ] ~ =; not under __atelier/).`)
     if (data.length > limits.fileBytes) problems.push(`${p}: is larger than ${limits.fileBytes / 1024 / 1024} MB.`)
     if (isEnvFile(p)) problems.push(`${p}: a .env file holds keys, and a pack's files are public. Leave it out: list the keys people enter in secrets, and public values in env (docs/apps.md › Your own servers).`)
     if (isCode(p) && !built(p) && looksMinified(data.toString('utf8'))) problems.push(`${p}: looks minified. Packs ship readable code, so people can see what runs; a build tool's output goes in an app with "build": "bundled".`)
@@ -343,7 +343,7 @@ function checkPlugin(m: { id: string; provides?: Array<{ service: string; method
   const own = new Set<string>()
   for (const [i, svc] of (m.provides ?? []).entries()) {
     const where = `provides.${i}`
-    if (APEX_SERVICE_NAMES.includes(svc.service)) problems.push(`${where}.service: "${svc.service}" is one of ${BRAND_NAME}'s own services; pick another name.`)
+    if (ATELIER_SERVICE_NAMES.includes(svc.service)) problems.push(`${where}.service: "${svc.service}" is one of ${BRAND_NAME}'s own services; pick another name.`)
     if (own.has(svc.service)) problems.push(`${where}.service: "${svc.service}" is used twice.`)
     own.add(svc.service)
     const methods = Object.entries(svc.methods)
@@ -373,11 +373,11 @@ function checkPlugin(m: { id: string; provides?: Array<{ service: string; method
     if (seen.has(name)) problems.push(`uses.${i}: "${name}" is listed twice.`)
     seen.add(name)
     if (own.has(name)) problems.push(`uses.${i}: "${name}" is this pack's own service; it doesn't need to use it.`)
-    if (APEX_SERVICE_NAMES.includes(name) && !APEX_SERVICES_AVAILABLE.includes(name)) problems.push(`uses.${i}: ${BRAND_NAME} doesn't offer the ${name} service yet.`)
+    if (ATELIER_SERVICE_NAMES.includes(name) && !ATELIER_SERVICES_AVAILABLE.includes(name)) problems.push(`uses.${i}: ${BRAND_NAME} doesn't offer the ${name} service yet.`)
   }
   for (const [i, name] of (m.events?.on ?? []).entries()) {
-    const ok = APEX_EVENTS.includes(name) || /^([a-z0-9][a-z0-9-]{1,31})\/([a-z][a-z0-9-]{0,31})$/.test(name)
-    if (!ok) problems.push(`events.on.${i}: "${name}" is neither <pack-id>/<event> nor one of ${BRAND_NAME}'s events (${APEX_EVENTS.join(', ')}).`)
+    const ok = ATELIER_EVENTS.includes(name) || /^([a-z0-9][a-z0-9-]{1,31})\/([a-z][a-z0-9-]{0,31})$/.test(name)
+    if (!ok) problems.push(`events.on.${i}: "${name}" is neither <pack-id>/<event> nor one of ${BRAND_NAME}'s events (${ATELIER_EVENTS.join(', ')}).`)
     else if (name.startsWith(`${m.id}/`)) problems.push(`events.on.${i}: a pack doesn't listen to its own events; handle them where it sends them.`)
   }
   if (new Set(m.events?.emits ?? []).size !== (m.events?.emits ?? []).length) problems.push('events.emits: a name is listed twice.')
@@ -552,7 +552,7 @@ export function validatePack(files: PackFiles): PackCheck {
   }
   unique(c.apps ?? [], 'id', 'contributes.apps')
   for (const [i, app] of (c.apps ?? []).entries()) checkApp(app, i, c.apps ?? [], files, problems)
-  // Asset slots: unique within the pack (an app reads them at __apex/assets/<slot>/), each layout a folder of its app.
+  // Asset slots: unique within the pack (an app reads them at __atelier/assets/<slot>/), each layout a folder of its app.
   const slots = new Set<string>()
   for (const [i, app] of (c.apps ?? []).entries()) {
     for (const [j, slot] of (app.assets ?? []).entries()) {
@@ -659,12 +659,12 @@ export function validatePack(files: PackFiles): PackCheck {
   }
   if (permissions.speak && !permissions.model) problems.push('permissions.speak: companions speak through the model; add permissions.model too.')
   if (permissions.speak && !(c.apps ?? []).some((a) => a.cast)) problems.push('permissions.speak: only an app with a cast has companions to speak.')
-  // apex.server (docs/packs.md › A web server of its own): only an app's own pages start one.
+  // atelier.server (docs/packs.md › A web server of its own): only an app's own pages start one.
   if (permissions.server && (c.apps?.length ?? 0) === 0) problems.push('permissions.server: only an app’s pages can run a web server. Add an app, or leave it out.')
 
   if (!code && !(m.provides ?? []).some((s) => s.module)) {
     if ((m.uses?.length ?? 0) > 0 || (m.events?.emits?.length ?? 0) > 0 || (m.events?.on?.length ?? 0) > 0) problems.push('uses and events: only panels, apps, tools, cards and service modules can use services or events. Add one, or leave them out.')
-    if ((m.provides?.length ?? 0) > 0) problems.push('provides: a service needs code to answer it: a module, or an app or panel that calls apex.services.provide.')
+    if ((m.provides?.length ?? 0) > 0) problems.push('provides: a service needs code to answer it: a module, or an app or panel that calls atelier.services.provide.')
   }
 
   // Optional permissions: hosts in their stored shape, nothing already required, and code to ask for them.

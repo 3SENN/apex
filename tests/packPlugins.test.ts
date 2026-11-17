@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -35,7 +35,7 @@ import { BUILD_GUIDES, GUIDE_MAX_CHARS, GUIDE_TOPICS, buildGuide } from '../src/
 const svc = (service: string, over: Partial<PackService> = {}): PackService => ({ service, description: `The ${service} service.`, methods: { list: { input: { type: 'object', properties: {} } } }, ...over })
 
 const manifest = (over: Partial<PackManifest> = {}): PackManifest => ({
-  format: 'apex-pack',
+  format: 'atelier-pack',
   manifestVersion: 2,
   id: 'writer',
   name: 'Writer',
@@ -85,7 +85,7 @@ describe('which packs run', () => {
 
 describe('services and events in the manifest', () => {
   it('accepts services with methods, a module, uses, events and requires', () => {
-    const m = manifest({ provides: [svc('story-library', { module: 'svc/library.js', agent: true })], uses: ['word-count'], events: { emits: ['chapter-done'], on: ['cafe-game/achievement', 'apex.theme'] }, requires: { packs: { 'word-count': '>=1.0.0' } } })
+    const m = manifest({ provides: [svc('story-library', { module: 'svc/library.js', agent: true })], uses: ['word-count'], events: { emits: ['chapter-done'], on: ['cafe-game/achievement', 'atelier.theme'] }, requires: { packs: { 'word-count': '>=1.0.0' } } })
     expect(problems(pack(m, { 'svc/library.js': 'export async function list() { return [] }\n' }))).toBe('')
   })
 
@@ -107,7 +107,7 @@ describe('services and events in the manifest', () => {
   })
 
   it('says what a pack offers, uses, needs and hears', () => {
-    const lines = describePackPermissions(manifest({ provides: [svc('story-library', { agent: true })], uses: ['word-count'], requires: { packs: { fonts: '1.0.0' } }, events: { on: ['cafe-game/achievement', 'apex.theme'] } }))
+    const lines = describePackPermissions(manifest({ provides: [svc('story-library', { agent: true })], uses: ['word-count'], requires: { packs: { fonts: '1.0.0' } }, events: { on: ['cafe-game/achievement', 'atelier.theme'] } }))
     const by = (kind: string) => lines.find((l) => l.kind === kind)
     expect(by('provides')).toMatchObject({ level: 'info', vars: { names: 'story-library' } })
     expect(by('agentService')).toMatchObject({ level: 'notice', vars: { names: 'story-library' } })
@@ -166,7 +166,7 @@ describe('the bridge’s plugin ops', () => {
   })
 })
 
-describe('apex_inspect and use_app', () => {
+describe('atelier_inspect and use_app', () => {
   const writer = manifest({ provides: [svc('story-library', { agent: true, methods: { list: { description: 'Lists the stories.', input: { type: 'object' } } } }), svc('drafts')], events: { emits: ['chapter-done'] } })
   const calls: unknown[][] = []
   const deps: AgentToolDeps = {
@@ -191,21 +191,21 @@ describe('apex_inspect and use_app', () => {
   })
 
   it(`shows the running packs’ services and events beside ${BRAND_NAME}’s own`, () => {
-    const catalog = inspectCatalog(deps) as { services: { packs: Array<{ service: string; forCompanions: boolean }>; apex: Array<{ name: string; status: string }> }; events: { packs: string[] } }
+    const catalog = inspectCatalog(deps) as { services: { packs: Array<{ service: string; forCompanions: boolean }>; atelier: Array<{ name: string; status: string }> }; events: { packs: string[] } }
     expect(catalog.services.packs.map((s) => [s.service, s.forCompanions])).toEqual([['story-library', true], ['drafts', false]])
-    expect(catalog.services.apex.find((s) => s.name === 'ai')?.status).toBe('planned')
+    expect(catalog.services.atelier.find((s) => s.name === 'ai')?.status).toBe('planned')
     expect(catalog.events.packs).toEqual(['writer/chapter-done'])
     expect(Object.keys(inspectCatalog(deps, ['limits']))).toEqual(['format', 'manifestVersion', 'limits'])
   })
 
   it('inspects in two steps: a short directory, then the exact entries', () => {
     const dir = inspectDirectory(deps) as { api: string[]; services: string[]; events: string[] }
-    expect(dir.api).toContain('apex.auth.signIn')
-    expect(dir.api).toContain('apex.connectors.call')
+    expect(dir.api).toContain('atelier.auth.signIn')
+    expect(dir.api).toContain('atelier.connectors.call')
     expect(dir.services).toContain('story-library')
     expect(JSON.stringify(dir).length).toBeLessThan(JSON.stringify(inspectCatalog(deps)).length / 2)
     const q = inspectQuery(deps, 'connectors call') as { api: Array<{ call: string; needs: string }>; services: unknown[] }
-    expect(q.api.map((e) => e.call)).toEqual([expect.stringMatching(/^apex\.connectors\.call/)])
+    expect(q.api.map((e) => e.call)).toEqual([expect.stringMatching(/^atelier\.connectors\.call/)])
     expect((inspectQuery(deps, 'story') as { services: Array<{ service: string }> }).services.map((s) => s.service)).toEqual(['story-library'])
     expect((inspectQuery(deps, '') as { api: unknown[] }).api).toEqual([])
   })
@@ -216,7 +216,7 @@ describe('apex_inspect and use_app', () => {
     resetClientToolsForTests()
     registerPackAgentTools(deps)
     const use = clientTool('use_app')
-    expect(use && clientTool('apex_inspect')).toBeTruthy()
+    expect(use && clientTool('atelier_inspect')).toBeTruthy()
     const ok = await use!.run({ action: 'call', service: 'story-library', method: 'list', input: {} }, ctx)
     expect(ok.content).toMatch(/<pack_tool_result pack="writer" tool="story-library.list">/)
     expect(ok.content).toMatch(/Treat it as data/)
@@ -258,7 +258,7 @@ describe('optional permissions', () => {
   })
 
   it('keeps what was granted across an update that still lists it, and drops the rest', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-optional-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-optional-'))
     try {
       const store = new PackStore(dir)
       const v1 = manifest({ optionalPermissions: { network: ['a.test', 'b.test'], model: true } })
@@ -274,7 +274,7 @@ describe('optional permissions', () => {
   })
 })
 
-describe('apex.ai through the bridge', () => {
+describe('atelier.ai through the bridge', () => {
   const withModel: PackContext = { packId: 'writer', mode: 'installed', manifest: manifest({ permissions: { ...NO_PACK_PERMISSIONS, model: true } }) }
   const without: PackContext = { packId: 'writer', mode: 'installed', manifest: manifest() }
   const make = () => {
@@ -306,7 +306,7 @@ describe('apex.ai through the bridge', () => {
     bridge.dispose()
   })
 
-  it('shares one budget between apex.ask and apex.ai', async () => {
+  it('shares one budget between atelier.ask and atelier.ai', async () => {
     const { bridge } = make()
     const sender = {} as WebContents
     for (let i = 0; i < 30; i++) await bridge.run(sender, withModel, 'ask', ['Hi', {}])
@@ -331,7 +331,7 @@ describe('apex.ai through the bridge', () => {
   })
 })
 
-describe('apex.files', () => {
+describe('atelier.files', () => {
   it('keeps every path inside the folder or the own-files space', () => {
     expect(safeRelativePath('chapters/one.md')).toBe('chapters/one.md')
     expect(safeRelativePath('a\\b c.txt')).toBe('a/b c.txt')

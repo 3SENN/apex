@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -81,7 +81,7 @@ function shorten(message: string): string {
   return message.length > MESSAGE_SHOWN_MAX ? `${message.slice(0, MESSAGE_SHOWN_MAX)}…` : message
 }
 
-/** The dialog for a page's alert, confirm or prompt. The title names the site, so a page can't pose as Apex. */
+/** The dialog for a page's alert, confirm or prompt. The title names the site, so a page can't pose as Atelier. */
 export function pageDialogSpec(msg: PageDialogMessage, origin: string, offerStop: boolean): DialogSpec {
   const site = siteLabel(origin)
   const title = site ? t('menus.pageDialog.title', { site }) : t('menus.pageDialog.titleUnknown')

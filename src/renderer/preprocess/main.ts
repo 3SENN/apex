@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -142,7 +142,7 @@ async function pdfThumbnail(input: { base64: string }): Promise<{ thumbnail: str
     const canvas = document.createElement('canvas')
     canvas.width = Math.max(1, Math.ceil(viewport.width))
     canvas.height = Math.max(1, Math.ceil(viewport.height))
-    // Paper is white in both themes: this is the page itself, not Apex's UI.
+    // Paper is white in both themes: this is the page itself, not Atelier's UI.
     await page.render({ canvas, viewport, background: '#ffffff' }).promise
     return { thumbnail: await thumbnailOf(canvas, canvas.width, canvas.height) }
   } finally {
@@ -152,4 +152,4 @@ async function pdfThumbnail(input: { base64: string }): Promise<{ thumbnail: str
 
 const api: PreprocessApi = { version: 1, prepareImage, rasterizeSvg, pdfThumbnail }
 
-;(globalThis as unknown as { apexPreprocess: PreprocessApi }).apexPreprocess = api
+;(globalThis as unknown as { atelierPreprocess: PreprocessApi }).atelierPreprocess = api

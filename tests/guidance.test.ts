@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,11 +11,11 @@ import { NUDGES, TIPS, pickNudge, rotatingTip, tipsFor } from '@shared/tips'
 import { createGuidanceService } from '../src/main/guidance'
 
 describe('tips', () => {
-  it('has unique ids, short text, and only apex:// links', () => {
+  it('has unique ids, short text, and only atelier:// links', () => {
     expect(new Set(TIPS.map((t) => t.id)).size).toBe(TIPS.length)
     for (const tip of TIPS) {
       expect(tip.text.length).toBeLessThan(160)
-      if (tip.link) expect(tip.link.url.startsWith('apex://')).toBe(true)
+      if (tip.link) expect(tip.link.url.startsWith('atelier://')).toBe(true)
     }
   })
 
@@ -38,7 +38,7 @@ describe('tips', () => {
 
 describe('the guidance store', () => {
   it('remembers dismissals once each, across restarts, and reports changes', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-guidance-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-guidance-'))
     const events: number[] = []
     const a = createGuidanceService({ dataDir: dir, onChange: (s) => events.push(s.dismissedTips.length + s.dismissedNudges.length) })
     a.dismissTip('work-stop')
@@ -51,7 +51,7 @@ describe('the guidance store', () => {
 })
 
 describe('new-tab nudges', () => {
-  const item = (id: string, done: boolean) => ({ id, kind: 'auto' as const, title: id, description: '', glyph: 'plug' as const, hue: 'teal' as const, done, action: { kind: 'page' as const, url: 'apex://connectors' } })
+  const item = (id: string, done: boolean) => ({ id, kind: 'auto' as const, title: id, description: '', glyph: 'plug' as const, hue: 'teal' as const, done, action: { kind: 'page' as const, url: 'atelier://connectors' } })
   const view = (items: ReturnType<typeof item>[], status: 'ready' | 'off' = 'ready', snoozedUntil: number | null = null) => ({ status, items, snoozedUntil })
 
   it('shows at most one, for the first unfinished checklist item with a nudge', () => {

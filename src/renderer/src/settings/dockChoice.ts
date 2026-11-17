@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,7 +10,7 @@ import { useEffect } from 'react'
 import { lookKey } from '@shared/companionLogic'
 import type { Companion } from '@shared/companion'
 import type { Settings } from '@shared/ipc'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { companionImage } from '../components/companionData'
 import { renderDockIcon } from '../companion/dockRender'
 import { chosenCompanion } from './logic/dock'
@@ -34,7 +34,7 @@ export function useDockChoice(choice: Settings['dockIcon'], companions: readonly
   const chosen = chosenCompanion(choice, companions)
   const key = chosen ? `${chosen.id}:${lookKey(chosen.look)}` : null
   useEffect(() => {
-    if (!chosen || apex.platform !== 'darwin') return
+    if (!chosen || atelier.platform !== 'darwin') return
     let live = true
     const timer = setTimeout(() => {
       if (!live) return

@@ -13,11 +13,11 @@ Format:
 - then sections for what is well established, what is still open, and numbers worth knowing;
 - end with three links worth reading in full, each with one line on why.
 
-<!-- apex:step {"id":"scope","title":"Pin down the question"} -->
+<!-- atelier:step {"id":"scope","title":"Pin down the question"} -->
 Restate the topic as one clear question. If it is too broad to answer well, narrow it and say how you narrowed it.
 
-<!-- apex:step {"id":"gather","title":"Gather sources"} -->
+<!-- atelier:step {"id":"gather","title":"Gather sources"} -->
 Search for five to ten good sources. Skim each and keep the ones that add something new.
 
-<!-- apex:step {"id":"write","title":"Write the brief"} -->
+<!-- atelier:step {"id":"write","title":"Write the brief"} -->
 Write the brief in the format above. Mark anything you are unsure of.

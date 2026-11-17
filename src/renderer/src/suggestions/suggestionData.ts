@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@
 import { useEffect, useState } from 'react'
 import type { SiteSuggestion } from '@shared/siteSuggestions'
 import { chatUrl } from '@shared/url'
-import { apex, call } from '../api'
+import { atelier, call } from '../api'
 import { setDraftText } from '../chat/surfaces'
 import { useEvent } from '../settings/data'
 
@@ -19,7 +19,7 @@ import { useEvent } from '../settings/data'
  * that inserts the text calls preventDefault(); otherwise the chat opens in
  * a tab with the draft waiting.
  */
-export const SUGGESTION_DRAFT_EVENT = 'apex:suggestion-draft'
+export const SUGGESTION_DRAFT_EVENT = 'atelier:suggestion-draft'
 
 export interface SuggestionDraftDetail {
   chatId: string
@@ -55,6 +55,6 @@ export async function draftSuggestionTask(tabId: string, task: { id: string; pro
   const target = await call('siteSuggestions', 'draft', tabId, task.id, chatId ? { chatId } : 'new')
   setDraftText(target, task.prompt)
   const consumed = !window.dispatchEvent(new CustomEvent<SuggestionDraftDetail>(SUGGESTION_DRAFT_EVENT, { detail: { chatId: target, text: task.prompt }, cancelable: true }))
-  if (!consumed) await apex.tabs.create(chatUrl(target))
+  if (!consumed) await atelier.tabs.create(chatUrl(target))
   return target
 }

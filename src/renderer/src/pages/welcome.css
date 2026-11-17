@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -128,7 +128,7 @@
   max-width: 100%;
 }
 
-/* The sparkle circle behind the figure: Apex's field in its colour, fading out to the edge. */
+/* The sparkle circle behind the figure: Atelier's field in its colour, fading out to the edge. */
 .wlt__halo {
   position: absolute;
   left: 50%;
@@ -317,7 +317,7 @@
   justify-content: flex-start;
 }
 
-/* The opening: the Apex logo (Pip's head) pops in over the rising glow, where the companion will stand, and a spark lands beside it. */
+/* The opening: the Atelier logo (Pip's head) pops in over the rising glow, where the companion will stand, and a spark lands beside it. */
 .wl-dawn {
   position: absolute;
   inset: 0;

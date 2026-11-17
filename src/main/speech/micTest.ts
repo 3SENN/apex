@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,7 +10,7 @@ import { SPEECH_TEST_URL, SpeechError, type SpeechBroker, type SpeechSession } f
 // The microphone test on Settings › Transcription (ST-21): it records
 // without transcribing, with live levels, so you can hear what a meeting
 // recording would sound like at the current sensitivities. Only the last test
-// is kept, in userData/speech/test.m4a, which apex-media://speech/test plays.
+// is kept, in userData/speech/test.m4a, which atelier-media://speech/test plays.
 
 export interface MicTestDeps {
   broker: SpeechBroker

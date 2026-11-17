@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Version history (OV-33). Every Apex-initiated write, delete, move and
+// Version history (OV-33). Every Atelier-initiated write, delete, move and
 // restore of a text file records a version here first, so an earlier save
 // can be previewed and restored from the viewer. Metadata lives in
 // workspace.sqlite; contents live under userData/versions/<file>/<content
@@ -16,7 +16,7 @@ import { VERSION_LIMITS, fileRefKey, type FileRef, type FileVersion } from '@sha
 import { migrate, type DatabaseSync } from '../db'
 import { writeAtomic } from './fsutil'
 
-/** Larger files are not versioned (they are rarely text Apex edits). */
+/** Larger files are not versioned (they are rarely text Atelier edits). */
 export const VERSION_MAX_BYTES = 5 * 1024 * 1024
 const DAY_MS = 86_400_000
 

@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Apex's motion numbers and the spring, as pure data. styles.css mirrors the
+// Atelier's motion numbers and the spring, as pure data. styles.css mirrors the
 // durations as --motion-* tokens; ui/motion.ts adds the live Reduce Motion
 // switch. Everything resolves to instant when motion is reduced.
 
@@ -33,7 +33,7 @@ export interface MotionDurations {
   swell: number
 }
 
-// Apex's motion durations (design-spec.md, DS-81).
+// Atelier's motion durations (design-spec.md, DS-81).
 export const MOTION: Readonly<MotionDurations> = {
   pop: 60,
   quick: 90,
@@ -73,7 +73,7 @@ const INSTANT: MotionDurations = { pop: 0, quick: 0, enter: 0, exit: 0, glide: 0
 /** A spring that is already at rest: infinitely stiff and critically damped. */
 const INSTANT_SPRING: SpringPreset = { stiffness: Number.POSITIVE_INFINITY, damping: Number.POSITIVE_INFINITY, mass: 1 }
 
-/** Either the system's or Apex's own Reduce Motion stills everything. */
+/** Either the system's or Atelier's own Reduce Motion stills everything. */
 export function resolveMotion(systemReduced: boolean, appReduced: boolean): ResolvedMotion {
   const reduced = systemReduced || appReduced
   return reduced ? { reduced, durations: { ...INSTANT }, spring: { ...INSTANT_SPRING } } : { reduced, durations: { ...MOTION }, spring: { ...SPRING } }

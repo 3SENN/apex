@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -33,7 +33,7 @@ export interface Tab {
   needsInput: boolean
   pinned: boolean
   lastActiveAt: number
-  /** Set while the tab shows an apex:// page drawn by the chrome. */
+  /** Set while the tab shows an atelier:// page drawn by the chrome. */
   internalUrl: string | null
   /** The last web address asked for, until the page commits one. */
   requestedUrl: string
@@ -78,7 +78,7 @@ interface TabManagerOptions {
   bridge: PageBridge
   onFindResult?: (result: FindResult) => void
   onPeek?: (url: string) => void
-  /** Chat titles and companion names for apex:// tab titles and breadcrumbs. */
+  /** Chat titles and companion names for atelier:// tab titles and breadcrumbs. */
   names?: InternalNames
   /** The in-page agent overlay's look and text for a controlled tab. */
   agentOverlay?: (tab: Tab) => Omit<AgentOverlay, 'active'>
@@ -226,7 +226,7 @@ export class TabManager extends EventEmitter<TabManagerEvents> {
     }
   }
 
-  /** Opens a URL in a tab: apex:// pages are drawn by the chrome, the rest load. */
+  /** Opens a URL in a tab: atelier:// pages are drawn by the chrome, the rest load. */
   navigate(id: string, url: string): void {
     const tab = this.get(id)
     // Going somewhere new replaces a page that was asleep.
@@ -249,7 +249,7 @@ export class TabManager extends EventEmitter<TabManagerEvents> {
     void tab.view.webContents.loadURL(url).catch(() => undefined)
   }
 
-  /** Leaves an Apex page so the tab's web content shows again. */
+  /** Leaves an Atelier page so the tab's web content shows again. */
   leaveInternal(id: string): void {
     const tab = this.get(id)
     if (!tab.internalUrl) return
@@ -259,7 +259,7 @@ export class TabManager extends EventEmitter<TabManagerEvents> {
   }
 
   /**
-   * Opens an Apex page, reusing the tab that already shows it (for chats,
+   * Opens an Atelier page, reusing the tab that already shows it (for chats,
    * the tab showing that same chat), unless `newTab` is set. Destinations
    * open on the window-level surface instead (DS-99): the active tab stays
    * as it is, hidden, and no tab is created; `newTab` keeps the old way.
@@ -326,7 +326,7 @@ export class TabManager extends EventEmitter<TabManagerEvents> {
     }
   }
 
-  /** ⌘R and the reload button. apex:// pages are drawn by the chrome, so the caller remounts those instead. */
+  /** ⌘R and the reload button. atelier:// pages are drawn by the chrome, so the caller remounts those instead. */
   reload(id: string, bypassCache = false): void {
     const wc = this.get(id).view.webContents
     if (bypassCache) wc.reloadIgnoringCache()
@@ -638,7 +638,7 @@ export class TabManager extends EventEmitter<TabManagerEvents> {
     return this.#tabs.find((t) => t.view.webContents === webContents)
   }
 
-  /** True while the chrome draws this tab itself: an apex:// page, the new tab or an error page. */
+  /** True while the chrome draws this tab itself: an atelier:// page, the new tab or an error page. */
   isChromeDrawn(tab: Tab): boolean {
     return tab.internalUrl !== null || isBlankUrl(tab.view.webContents.getURL()) || this.#covered(tab)
   }
@@ -724,7 +724,7 @@ export class TabManager extends EventEmitter<TabManagerEvents> {
   }
 
   /**
-   * A small JPEG of what the tab shows, for blurred backdrops. apex:// pages
+   * A small JPEG of what the tab shows, for blurred backdrops. atelier:// pages
    * and the new tab are drawn by the chrome, so its content area is captured.
    */
   async capture(id: string, chrome: WebContents): Promise<string | null> {
@@ -756,7 +756,7 @@ export class TabManager extends EventEmitter<TabManagerEvents> {
 
   /**
    * Places and shows views: only the active tab (or both split panes), and
-   * not while blank or on an Apex page, where the chrome draws instead. A
+   * not while blank or on an Atelier page, where the chrome draws instead. A
    * page in HTML full screen fills the window on its own. A page an agent
    * works in keeps painting while it isn't showing: it sits outside the
    * window at the page area's size (#offstage), so the agent sees and clicks
@@ -846,7 +846,7 @@ export class TabManager extends EventEmitter<TabManagerEvents> {
     const wc = tab.view.webContents
     if (!wc.isDestroyed() && wasControlled !== controlled) {
       // Keep rendering and timers live while the agent works, even if the
-      // user switches to another app and Apex is covered.
+      // user switches to another app and Atelier is covered.
       wc.setBackgroundThrottling(!controlled)
       // The agent's input debugger is attached on first use; release it with the tab.
       if (!controlled) detachInput(wc)
@@ -1283,7 +1283,7 @@ export class TabManager extends EventEmitter<TabManagerEvents> {
       nodeIntegrationInSubFrames: true,
       webviewTag: false,
       safeDialogs: true,
-      // Page dialogs go through Apex's own (preload/page/dialogs.ts); any that slip past fail closed.
+      // Page dialogs go through Atelier's own (preload/page/dialogs.ts); any that slip past fail closed.
       disableDialogs: true,
       spellcheck: true,
     }
@@ -1403,7 +1403,7 @@ export class TabManager extends EventEmitter<TabManagerEvents> {
 
   #railState(): RailState | null {
     if (this.#rail === null) return null
-    // The pill reads "Apex / ‹page›" (DS-99).
+    // The pill reads "Atelier / ‹page›" (DS-99).
     const { title } = internalTitle(this.#rail, this.#options.names)
     return { url: this.#rail, title, crumbs: [BRAND_NAME, title] }
   }
@@ -1539,7 +1539,7 @@ export class TabManager extends EventEmitter<TabManagerEvents> {
       if (scheme && EXTERNAL_SCHEMES.has(scheme)) {
         event.preventDefault()
         // A pack's page never hands an address (and what it carries) to another app.
-        if (!(tab.sandbox && /^apex-pack:/i.test(tab.view.webContents.getURL()))) void shell.openExternal(event.url)
+        if (!(tab.sandbox && /^atelier-pack:/i.test(tab.view.webContents.getURL()))) void shell.openExternal(event.url)
       }
     })
     on('render-process-gone', changed)

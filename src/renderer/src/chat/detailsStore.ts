@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,8 +11,8 @@ import type { DetailsSectionId } from './logic/details'
 // chats already decided for themselves (so it opens by itself only once),
 // and the sub-task docked in it per chat (CH-32).
 
-const OPEN_KEY = 'apex.details.open'
-const COLLAPSE_KEY = 'apex.details.collapsed'
+const OPEN_KEY = 'atelier.details.open'
+const COLLAPSE_KEY = 'atelier.details.collapsed'
 
 interface DetailsStoreState {
   open: boolean

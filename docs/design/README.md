@@ -1,6 +1,6 @@
 # Design docs
 
-These are Apex's product and design specifications: what each surface does, how it looks and moves, and how the pieces fit together. They describe the browser as built, and new work starts by adding or changing an item here.
+These are Atelier's product and design specifications: what each surface does, how it looks and moves, and how the pieces fit together. They describe the browser as built, and new work starts by adding or changing an item here.
 
 | File | Covers |
 |---|---|

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -20,7 +20,7 @@ import type { SurfaceComponentProps } from '../../types'
 // line. Outside clicks, a tab switch or deleting the folder close it.
 
 export const FOLDER_WIDTH = 400
-const DRAG_TYPE = 'application/x-apex-bookmark'
+const DRAG_TYPE = 'application/x-atelier-bookmark'
 const OPEN_ALL = 'open-all'
 const OPEN_ALL_GROUP = 'open-all-group'
 

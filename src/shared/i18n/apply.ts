@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 // One place that turns settings into the active language, for main
 // (setupI18n) and the renderer (I18nProvider) alike: appLanguage resolved
 // against the system's preferred list, the region kept for Intl, and en-XA
-// when the `pseudo-locale` flag is on (or APEX_PSEUDO_LOCALE=1 in main).
+// when the `pseudo-locale` flag is on (or ATELIER_PSEUDO_LOCALE=1 in main).
 import { isFlagOn } from '../flags'
 import { currentLanguage, currentLocale, pseudoActive, setLanguage } from './core'
 import { regionalTag, resolveAppLanguage, type AppLanguage, type AppLanguageSetting } from './locales'

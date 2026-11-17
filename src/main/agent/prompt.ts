@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -65,7 +65,7 @@ export function clientToolLines(names: readonly string[], groupOf: (name: string
       if (line) lines.push(`- ${line}`)
     }
   }
-  return lines.length > 0 ? `\n\nApex tools:\n${lines.join('\n')}` : ''
+  return lines.length > 0 ? `\n\nAtelier tools:\n${lines.join('\n')}` : ''
 }
 
 /** At most this many of the companion's own skills are listed; read_skill finds the rest. */

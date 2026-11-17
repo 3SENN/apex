@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -143,7 +143,7 @@ describe('chat sorting', () => {
 
 describe('visible order for ⌘1–8', () => {
   it('lists pinned tiles, then chat rows, then tabs, and skips chat tabs whose row is listed', () => {
-    const chatTab = tab('t-chat', { url: 'apex://chat/c1' })
+    const chatTab = tab('t-chat', { url: 'atelier://chat/c1' })
     const order = visibleOrder([tab('p', { pinned: true })], ['c1', 'c2'], [tab('a'), chatTab, tab('b')])
     expect(order).toEqual([
       { kind: 'tab', id: 'p' },
@@ -152,8 +152,8 @@ describe('visible order for ⌘1–8', () => {
       { kind: 'tab', id: 'a' },
       { kind: 'tab', id: 'b' },
     ])
-    expect(chatIdOfUrl('apex://chat/c1')).toBe('c1')
-    expect(chatIdOfUrl('apex://chats')).toBeNull()
+    expect(chatIdOfUrl('atelier://chat/c1')).toBe('c1')
+    expect(chatIdOfUrl('atelier://chats')).toBeNull()
   })
 })
 
@@ -297,7 +297,7 @@ describe('menus', () => {
   })
 
   it('offers copy only for web addresses in the pill menu', () => {
-    expect(addressMenu({ url: 'apex://chats', showFullUrls: false, canPaste: true }).find((i) => i.id === 'copy')?.enabled).toBe(false)
+    expect(addressMenu({ url: 'atelier://chats', showFullUrls: false, canPaste: true }).find((i) => i.id === 'copy')?.enabled).toBe(false)
     expect(addressMenu({ url: 'https://a.example/', showFullUrls: true, canPaste: true }).find((i) => i.id === 'full-urls')?.checked).toBe(true)
   })
 
@@ -319,8 +319,8 @@ describe('address pill', () => {
     expect(pillParts('http://localhost:3000/', '', null).insecure).toBe(false)
   })
 
-  it('uses breadcrumbs for Apex pages and a placeholder for the new tab', () => {
-    expect(pillParts('apex://settings/you', 'Settings', ['Settings', 'You'])).toMatchObject({ kind: 'apex', crumbs: ['Settings', 'You'] })
+  it('uses breadcrumbs for Atelier pages and a placeholder for the new tab', () => {
+    expect(pillParts('atelier://settings/you', 'Settings', ['Settings', 'You'])).toMatchObject({ kind: 'atelier', crumbs: ['Settings', 'You'] })
     expect(pillParts('about:blank', '', null).kind).toBe('blank')
     expect(pillParts('file:///tmp/a.txt', '', null).kind).toBe('other')
   })

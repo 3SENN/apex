@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -258,9 +258,9 @@ export const BUDGET_NOTICE_AT = 0.8
  * per-token spend here).
  */
 export function detailsPrompt(input: { canSend: boolean; engine: string | undefined; spend: { usd: number; budgetUsd: number | null } | null }): DetailsPrompt | null {
-  if (!input.canSend) return { kind: 'api-key', url: 'apex://settings/model' }
+  if (!input.canSend) return { kind: 'api-key', url: 'atelier://settings/model' }
   const spend = input.spend
   if (engineHasOwnAccount(input.engine) || !spend || spend.budgetUsd === null || !(spend.budgetUsd > 0)) return null
   if (spend.usd / spend.budgetUsd < BUDGET_NOTICE_AT) return null
-  return { kind: 'budget', url: 'apex://settings/you', usd: spend.usd, budgetUsd: spend.budgetUsd }
+  return { kind: 'budget', url: 'atelier://settings/you', usd: spend.usd, budgetUsd: spend.budgetUsd }
 }

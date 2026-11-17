@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,7 +11,7 @@
 import { useEffect, useState } from 'react'
 import type { SettingsView } from '@shared/ipc'
 import { lookKey } from '@shared/companionLogic'
-import { apex, call } from '../api'
+import { atelier, call } from '../api'
 import { companionImage } from '../companion'
 import { useCompanions } from '../components/shellContext'
 import { useEvent } from '../settings/data'
@@ -24,7 +24,7 @@ const OVERLAY_PX = 32
 export function TaskbarOverlaySync(): null {
   const t = useT()
   const theme = useResolvedTheme()
-  const [settings, setSettings] = useState<SettingsView>(apex.initial.settings)
+  const [settings, setSettings] = useState<SettingsView>(atelier.initial.settings)
   useEvent('settings', (e) => setSettings(e.view))
   const { list } = useCompanions()
 

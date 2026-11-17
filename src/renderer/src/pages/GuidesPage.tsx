@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The Guides destination (ON-16; apex://guides[/<id>]): Apex's own
+// The Guides destination (ON-16; atelier://guides[/<id>]): Atelier's own
 // guides and curated bundles, with category filters and search. A guide's
 // page shows its text and its bundle; Try it installs the bundle (built-in
 // skills ready, routines saved paused for review, connectors suggested) or
@@ -15,7 +15,7 @@ import type { MessageKey } from '@shared/i18n/en'
 import { connectorConnectUrl } from '@shared/connectors'
 import { chatUrl, routineUrl } from '@shared/url'
 import { t } from '@shared/i18n/core'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { GuideText } from '../guidance/GuideText'
 import { DestinationFrame } from '../settings/destinations/common'
 import { DestinationToolbar, PageError, PageHeader, PageSkeleton } from '../settings/kit'
@@ -46,7 +46,7 @@ function useGuides(): { guides: Guide[] | null; error: string | null; reload(): 
 
 export default function GuidesPage({ tabId, guideId }: GuidesPageProps): ReactElement {
   const { guides, error, reload } = useGuides()
-  const open = (id: string | null): void => void apex.nav.go(tabId, guideUrl(id ?? undefined))
+  const open = (id: string | null): void => void atelier.nav.go(tabId, guideUrl(id ?? undefined))
   const header = <PageHeader title={t('firstRun.guides.title')} description={t('firstRun.guides.description')} />
 
   if (error) {

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 // Settings › Model and key › Usage: tokens your companions
 // used this month and over the last 30 days, by day as bars, and by chat,
 // companion, model and kind of work. Costs appear only as an estimate, for
-// turns on your API key; other engines' turns show tokens only. Apex sells
+// turns on your API key; other engines' turns show tokens only. Atelier sells
 // nothing: no credits, plans, quotas or upgrade prompts.
 import { useState, type ReactElement } from 'react'
 import { BarChart3, Table2 } from 'lucide-react'

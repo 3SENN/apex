@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,7 +14,7 @@ import { createFakeSpeechHelper } from '../src/main/speech/fake'
 // The helper process link (protocol v2): the version handshake, an
 // outdated binary, crashes and the one immediate restart.
 
-/** Stands in for apex-speech: records commands and prints whatever the test says. */
+/** Stands in for atelier-speech: records commands and prints whatever the test says. */
 class ScriptedHelper extends EventEmitter implements HelperProcess {
   readonly stdin = new PassThrough()
   readonly stdout = new PassThrough()
@@ -55,7 +55,7 @@ const v2 = (cmd: Record<string, unknown>, self: ScriptedHelper): void => {
 function link(onCommand = v2, options: { handshakeMs?: number } = {}) {
   const helpers: ScriptedHelper[] = []
   const l = new HelperLink({
-    path: '/fake/apex-speech',
+    path: '/fake/atelier-speech',
     assumeExists: true,
     handshakeMs: options.handshakeMs ?? 200,
     retryAfterMs: 1_000,
@@ -79,14 +79,14 @@ describe('LineSplitter', () => {
 describe('speechHelperPath', () => {
   it('is macOS only and depends on packaging', () => {
     expect(speechHelperPath({ platform: 'linux', packaged: false, resourcesPath: '/r', appPath: '/a' })).toBeNull()
-    expect(speechHelperPath({ platform: 'darwin', packaged: true, resourcesPath: '/r', appPath: '/a' })).toBe(join('/r', 'apex-speech'))
-    expect(speechHelperPath({ platform: 'darwin', packaged: false, resourcesPath: '/r', appPath: '/a' })).toBe(join('/a', 'native', 'speech', 'build', 'apex-speech'))
+    expect(speechHelperPath({ platform: 'darwin', packaged: true, resourcesPath: '/r', appPath: '/a' })).toBe(join('/r', 'atelier-speech'))
+    expect(speechHelperPath({ platform: 'darwin', packaged: false, resourcesPath: '/r', appPath: '/a' })).toBe(join('/a', 'native', 'speech', 'build', 'atelier-speech'))
   })
 })
 
 describe('HelperLink', () => {
   it('is missing without a helper binary', async () => {
-    const l = new HelperLink({ path: '/nonexistent/apex-speech' })
+    const l = new HelperLink({ path: '/nonexistent/atelier-speech' })
     expect(l.state).toBe('missing')
     await expect(l.ensure()).rejects.toMatchObject({ code: 'helper-missing' })
     expect(new HelperLink({ path: null }).state).toBe('missing')

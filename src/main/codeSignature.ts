@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import { readFileSync } from 'node:fs'
 // embedded signature (LC_CODE_SIGNATURE): the signing team, the identifier
 // and the entitlements plist. No codesign subprocess, once per run and cached,
 // so startup can decide synchronously, before the first tab exists, whether
-// this Apex is signed with Apple's browser passkey entitlement
+// this Atelier is signed with Apple's browser passkey entitlement
 // (com.apple.developer.web-browser.public-key-credential).
 //
 // Reading the blob doesn't validate it, and needn't: the kernel already did
@@ -134,7 +134,7 @@ export function ownSignature(executable: string = process.execPath): CodeSignatu
 }
 
 /**
- * Apex is signed by a team with the browser passkey entitlement: macOS lets
+ * Atelier is signed by a team with the browser passkey entitlement: macOS lets
  * it ask for any site's iCloud Keychain passkeys, and Apple's Passwords helper
  * accepts it as a parent process.
  */

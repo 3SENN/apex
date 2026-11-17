@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -66,11 +66,11 @@ describe('DS-75b: Companions on New Tab is a profile setting', () => {
   it('follows settings, and hands an old per-window "off" over once', () => {
     expect(floorShown(null)).toBe(true)
     expect(floorShown({ companionFloor: false })).toBe(false)
-    const store = new Map<string, string>([['apex.newtab.companionFloor', 'off']])
+    const store = new Map<string, string>([['atelier.newtab.companionFloor', 'off']])
     const storage = { getItem: (k: string) => store.get(k) ?? null, removeItem: (k: string) => void store.delete(k) }
     expect(takeLegacyFloorSetting(storage)).toBe(false)
     expect(takeLegacyFloorSetting(storage)).toBeNull()
-    store.set('apex.newtab.companionFloor', 'on')
+    store.set('atelier.newtab.companionFloor', 'on')
     expect(takeLegacyFloorSetting(storage)).toBeNull()
     expect(store.size).toBe(0)
   })

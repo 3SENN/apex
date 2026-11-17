@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,7 +14,7 @@ import type { ShotSpec, SmokeCheck, SmokeContext } from './types'
 
 // The address feature's smoke checks and light and dark shots: the
 // command bar's rows and commit, zoom per host, find, bookmarks with the
-// editor and folders, and Apex's history, bookmarks and search pages. Pages
+// editor and folders, and Atelier's history, bookmarks and search pages. Pages
 // come from the local smoke server; nothing reaches the network.
 
 const PAGE = `<!doctype html><html><head><title>Address fixture</title>
@@ -273,7 +273,7 @@ export const shots: ShotSpec[] = [
       }
     },
   },
-  pageShot('address-history', 'apex://history', '.sp-toolbar', 'the history page'),
-  pageShot('address-bookmarks', 'apex://bookmarks', '.sp-toolbar', 'the bookmarks page'),
-  pageShot('address-search-settings', 'apex://settings/search', '.se-list', 'Settings › Search'),
+  pageShot('address-history', 'atelier://history', '.sp-toolbar', 'the history page'),
+  pageShot('address-bookmarks', 'atelier://bookmarks', '.sp-toolbar', 'the bookmarks page'),
+  pageShot('address-search-settings', 'atelier://settings/search', '.se-list', 'Settings › Search'),
 ]

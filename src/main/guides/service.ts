@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The guides service (ON-16): list and search Apex's own guides, and
+// The guides service (ON-16): list and search Atelier's own guides, and
 // Try it. A bundle's skills are built-in skills named by name (already
 // shipped, so they're reported as ready); its routines are saved paused for
 // review; its connectors come back as suggestions for the chrome to offer.

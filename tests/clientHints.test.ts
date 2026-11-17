@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -84,7 +84,7 @@ describe('client hints', () => {
     expect(isTrustworthy('http://localhost:3000/')).toBe(true)
     expect(isTrustworthy('http://[::1]/')).toBe(true)
     expect(isTrustworthy('http://a.example/')).toBe(false)
-    expect(isTrustworthy('app://apex/')).toBe(false)
+    expect(isTrustworthy('app://atelier/')).toBe(false)
     expect(parseAcceptCh(['Sec-CH-UA-WoW64 , Sec-CH-UA-Form-Factors,Sec-CH-UA-WoW64', 'Viewport-Width'])).toEqual(['sec-ch-ua-wow64', 'sec-ch-ua-form-factors'])
   })
 })

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -19,7 +19,7 @@ import { ruleOrigin, SiteRulesStore } from '../src/main/agent/sitePolicy'
 // approvals per chat, and the Saved permissions view.
 
 function store(defaultAccess: 'allow' | 'ask' = 'allow') {
-  const path = join(mkdtempSync(join(tmpdir(), 'apex-sites-')), 'agent-site-rules.json')
+  const path = join(mkdtempSync(join(tmpdir(), 'atelier-sites-')), 'agent-site-rules.json')
   let now = 1000
   const sites = new SiteRulesStore(path, { defaultAccess: () => defaultAccess, now: () => now++ })
   return { sites, path }
@@ -54,7 +54,7 @@ describe('SiteRulesStore', () => {
   it('keys rules by origin, keeps http and https only, and survives a reload', () => {
     const { sites, path } = store()
     expect(ruleOrigin('https://shop.example/cart?x=1')).toBe('https://shop.example')
-    expect(ruleOrigin('apex://settings')).toBeNull()
+    expect(ruleOrigin('atelier://settings')).toBeNull()
     sites.set('https://shop.example/cart', 'never')
     sites.allowAction('https://news.example/a', 'post')
     expect(() => sites.set('file:///etc/hosts', 'allow')).toThrow(/web addresses/)

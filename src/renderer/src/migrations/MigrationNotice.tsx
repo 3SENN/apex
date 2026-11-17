@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -13,7 +13,7 @@ import { Button, confirm, cx, toast } from '../ui'
 import './migrations.css'
 
 // The migration notice above a chat whose file couldn't be brought up to date, or
-// that a newer Apex saved (SS-09). The chat stays readable and the composer
+// that a newer Atelier saved (SS-09). The chat stays readable and the composer
 // is disabled while it shows. Try again re-runs the migration after a
 // repair; Restore original puts the backup back (keeping the current file);
 // Show file reveals it in Finder.

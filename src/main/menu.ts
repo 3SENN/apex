@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -54,7 +54,7 @@ export interface MenuSources {
   /** Reopens entry `index` of closed() (windows.reopen); false when it couldn't. */
   reopenClosed?(index: number): boolean
   isDefaultBrowser?(): boolean
-  /** Opens the default-browser flow; without it Apex opens its settings page. */
+  /** Opens the default-browser flow; without it Atelier opens its settings page. */
   makeDefaultBrowser?(): void
   update?(): MenuState['update']
   /** Diagnostics for Help › Copy Diagnostics; the diagnostics feature may add to it. */
@@ -404,7 +404,7 @@ export class AppMenu {
       case 'theme-dark':
         return setTheme('dark')
       case 'appearance-settings':
-        return ctx.tabs.openInternal('apex://settings/appearance')
+        return ctx.tabs.openInternal('atelier://settings/appearance')
       case 'layout-sidebar':
       case 'layout-horizontal':
         settings.update({ layout: id === 'layout-sidebar' ? 'sidebar' : 'horizontal' })
@@ -450,7 +450,7 @@ export class AppMenu {
         return
       }
       case 'getting-started':
-        return ctx.tabs.openInternal('apex://first-week')
+        return ctx.tabs.openInternal('atelier://first-week')
       case 'adblock':
         // The chrome's settings call applies the blocker; main's store only records it.
         settings.update({ adblock: !settings.get().adblock })
@@ -461,15 +461,15 @@ export class AppMenu {
         await menuActionHooks[id]?.(ctx.win, active?.id)
         return
       case 'search-engine':
-        return ctx.tabs.openInternal('apex://settings/search')
+        return ctx.tabs.openInternal('atelier://settings/search')
       case 'clear-cache':
         return this.#runCommand('clear-data', ctx)
       case 'default-browser':
         if (menuSources.makeDefaultBrowser) menuSources.makeDefaultBrowser()
-        else ctx.tabs.openInternal('apex://settings/default-browser')
+        else ctx.tabs.openInternal('atelier://settings/default-browser')
         return
       case 'manage-profile':
-        return ctx.tabs.openInternal('apex://settings/you')
+        return ctx.tabs.openInternal('atelier://settings/you')
       case 'zoom-row':
       case 'rename-window':
         // Drawn and handled by the chrome.
@@ -541,8 +541,8 @@ export class AppMenu {
       back: { run: (ctx) => { const id = ctx.tabs.activeId(); if (id) ctx.tabs.back(id) }, enabled: (ctx) => activeInfo(ctx)?.canGoBack ?? false },
       forward: { run: (ctx) => ctx.tabs.active()?.view.webContents.navigationHistory.goForward(), enabled: (ctx) => activeInfo(ctx)?.canGoForward ?? false },
       'bookmark-page': { run: () => this.#deps.addBookmark() },
-      'open-bookmarks': open('apex://bookmarks'),
-      'bookmark-manager': open('apex://bookmarks'),
+      'open-bookmarks': open('atelier://bookmarks'),
+      'bookmark-manager': open('atelier://bookmarks'),
       'next-entry': step(1),
       'previous-entry': step(-1),
       'next-entry-bracket': step(1),
@@ -562,10 +562,10 @@ export class AppMenu {
       'minimize-all': { run: () => BrowserWindow.getAllWindows().forEach((w) => w.isMinimizable() && w.minimize()) },
       'toggle-fullscreen': { run: (ctx) => ctx.window.setFullScreen(!ctx.window.isFullScreen()) },
       quit: { run: () => app.quit() },
-      'open-settings': open('apex://settings'),
-      'open-library': open('apex://chats'),
-      'import-data': open('apex://settings/import'),
-      'check-default-browser': open('apex://settings/default-browser'),
+      'open-settings': open('atelier://settings'),
+      'open-library': open('atelier://chats'),
+      'import-data': open('atelier://settings/import'),
+      'check-default-browser': open('atelier://settings/default-browser'),
       'clear-data': { run: (ctx) => sendChrome(ctx, 'clear-data') },
       'close-other-tabs': {
         run: (ctx) => {
@@ -628,7 +628,7 @@ function closeTab(ctx: ActionContext): void {
 
 /**
  * What reload, zoom and the developer items act on: a focused popup, the
- * chrome itself when it draws the active tab (apex:// pages and the new
+ * chrome itself when it draws the active tab (atelier:// pages and the new
  * tab), or the active web page. Null when nothing is focused.
  */
 export function target(ctx: { window: BrowserWindow; tabs: TabManager }): { kind: 'popup' | 'chrome' | 'tab'; wc: WebContents } | null {

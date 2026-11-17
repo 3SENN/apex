@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -26,7 +26,7 @@ type Scope = 'own' | 'shared'
 /** CO-09: the tab's two views, the nightly tidy and the notes. */
 type View = 'tidy' | 'notes'
 
-const EXPLAINER_KEY = 'apex.card.memory.explainerHidden'
+const EXPLAINER_KEY = 'atelier.card.memory.explainerHidden'
 
 function readExplainerHidden(): boolean {
   try {
@@ -80,7 +80,7 @@ export function MemoryTab({ companion, focusItem }: MemoryTabProps) {
         action={
           view === 'notes'
             ? { label: t('memory.card.newNote'), icon: <Plus aria-hidden />, onClick: () => setOpen('new') }
-            : { label: t('memory.card.settings'), icon: <Settings2 aria-hidden />, onClick: () => void call('pages', 'open', 'apex://settings/memory') }
+            : { label: t('memory.card.settings'), icon: <Settings2 aria-hidden />, onClick: () => void call('pages', 'open', 'atelier://settings/memory') }
         }
       />
       {!explainerHidden && (

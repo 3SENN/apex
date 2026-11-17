@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -12,7 +12,7 @@
 // chrome.storage.sync comes from installStorageSync
 // (src/shared/extensionStorageSync.ts). Both extension preloads run
 // `installShim` in the main world through contextBridge.executeInMainWorld,
-// after exposing `__apexExtensionShim` (invoke and on). The function is
+// after exposing `__atelierExtensionShim` (invoke and on). The function is
 // serialized into that world, so it must not reference anything outside
 // itself.
 
@@ -23,8 +23,8 @@ export interface ShimBridge {
 
 export function installShim(): void {
   type Fn = (...args: unknown[]) => unknown
-  const g = globalThis as unknown as { __apexExtensionShim?: ShimBridge; chrome?: Record<string, Record<string, unknown>>; browser?: unknown; window?: { close: () => void } }
-  const bridge = g.__apexExtensionShim
+  const g = globalThis as unknown as { __atelierExtensionShim?: ShimBridge; chrome?: Record<string, Record<string, unknown>>; browser?: unknown; window?: { close: () => void } }
+  const bridge = g.__atelierExtensionShim
   const chrome = g.chrome
   if (!bridge || !chrome || !chrome.runtime || !(chrome.runtime as { id?: string }).id) return
 
@@ -102,7 +102,7 @@ export function installShim(): void {
     getBadgeText: api('action.getBadgeText'),
     setBadgeBackgroundColor: api('action.setBadgeBackgroundColor'),
     getBadgeBackgroundColor: api('action.getBadgeBackgroundColor'),
-    // Apex picks the badge's text colour for contrast; the call succeeds and changes nothing.
+    // Atelier picks the badge's text colour for contrast; the call succeeds and changes nothing.
     setBadgeTextColor: (...args: unknown[]) => {
       const cb = args.find((a) => typeof a === 'function') as Fn | undefined
       if (!cb) return Promise.resolve()
@@ -197,7 +197,7 @@ export function installShim(): void {
     })
   }
 
-  // contextMenus: items show in the page's context menu; Apex keeps them, clicks come back as onClicked.
+  // contextMenus: items show in the page's context menu; Atelier keeps them, clicks come back as onClicked.
   if (!chrome.contextMenus && asks('contextMenus')) {
     let n = 0
     const clickHandlers = new Map<string, Fn>()
@@ -263,7 +263,7 @@ export function installShim(): void {
     })
   }
 
-  // chrome.privacy: browser settings as ChromeSettings (get/set/clear/onChange). Apex lets an extension
+  // chrome.privacy: browser settings as ChromeSettings (get/set/clear/onChange). Atelier lets an extension
   // hold password saving; address and card autofill answer "not_controllable".
   if (!chrome.privacy && asks('privacy')) {
     const settingListeners = new Map<string, Set<Fn>>()
@@ -306,7 +306,7 @@ export function installShim(): void {
     })
   }
 
-  // chrome.declarativeContent: rules kept by Apex; URL conditions decide where ShowAction turns the action on.
+  // chrome.declarativeContent: rules kept by Atelier; URL conditions decide where ShowAction turns the action on.
   if (!chrome.declarativeContent && asks('declarativeContent')) {
     const instance = (type: string): unknown =>
       function (this: Record<string, unknown>, opts?: Record<string, unknown>) {
@@ -493,7 +493,7 @@ export function installShim(): void {
   define(chrome.runtime, 'sendNativeMessage', api('native.send', (host, message) => ({ host, message })))
   define(chrome.runtime, 'openOptionsPage', api('runtime.openOptionsPage', () => ({})))
 
-  // A popup's window.close() closes Apex's popup view; elsewhere it does what it always did.
+  // A popup's window.close() closes Atelier's popup view; elsewhere it does what it always did.
   const win = g.window
   if (win && typeof win.close === 'function') {
     const original = win.close.bind(win)

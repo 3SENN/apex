@@ -1,14 +1,14 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The helper an app's server hands its pages at __apex/client.js (docs/packs.md
+// The helper an app's server hands its pages at __atelier/client.js (docs/packs.md
 // › A web server of its own): one socket to the app that reconnects by itself.
 // A classic script, readable, for any browser a phone has:
 //
-//   <script src="__apex/client.js"></script>
-//   const link = apexServer.connect({ query: { name: 'Sam' } })
+//   <script src="__atelier/client.js"></script>
+//   const link = atelierServer.connect({ query: { name: 'Sam' } })
 //   link.onOpen(() => …); link.onMessage((value, text) => …); link.onClose(() => …)
 //   link.send({ t: 'tap' })   // objects go as JSON, text as it is
 //
@@ -51,7 +51,7 @@ export const SERVER_CLIENT_JS = `/* ${BRAND_NAME}: the socket to the app that se
   }
 
   Link.prototype._url = function () {
-    var url = new URL('__apex/socket', base)
+    var url = new URL('__atelier/socket', base)
     url.protocol = base.protocol === 'https:' ? 'wss:' : 'ws:'
     var query = this._query
     Object.keys(query).forEach(function (name) {
@@ -138,7 +138,7 @@ export const SERVER_CLIENT_JS = `/* ${BRAND_NAME}: the socket to the app that se
     if (this._socket) this._socket.close(1000)
   }
 
-  window.apexServer = {
+  window.atelierServer = {
     base: base.href,
     connect: function (options) {
       return new Link(options)

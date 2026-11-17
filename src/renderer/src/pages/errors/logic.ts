@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// What each Apex error page says and offers (SS-07).
+// What each Atelier error page says and offers (SS-07).
 // Pure, so the copy and the action order are unit-tested; the view
 // renders whatever this returns.
 import type { MessageKey } from '@shared/i18n/core'
@@ -11,7 +11,7 @@ import type { PageErrorKind } from '@shared/sites'
 
 export type ErrorAction = 'retry' | 'reload' | 'search' | 'clear-cookies' | 'back' | 'back-to-safety' | 'allow-adblock' | /* privacy pack */ 'continue-insecure' | 'go-back'
 
-/** neutral: a network hiccup; warning: Apex stopped it on purpose; danger: going on could hurt. */
+/** neutral: a network hiccup; warning: Atelier stopped it on purpose; danger: going on could hurt. */
 export type ErrorTone = 'neutral' | 'warning' | 'danger'
 
 export interface ErrorCopy {

@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { floatMayCall, type FloatKind } from '@shared/float'
 
-// Who may call what from a floating window. Each float runs Apex's own page
+// Who may call what from a floating window. Each float runs Atelier's own page
 // in a sandbox, but it still only gets the few methods its kind needs, and
 // only from its own main frame: a stray frame or another window is refused.
 

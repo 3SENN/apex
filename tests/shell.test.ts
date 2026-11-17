@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -53,8 +53,8 @@ describe('chrome crash recovery', () => {
   })
 
   it('shows a static page whose only action leads back to the UI', () => {
-    const html = decodeURIComponent(recoveryPageUrl('app://apex/index.html?a=1&b="2"').replace(/^data:text\/html;charset=utf-8,/, ''))
-    expect(html).toContain('href="app://apex/index.html?a=1&amp;b=&quot;2&quot;"')
+    const html = decodeURIComponent(recoveryPageUrl('app://atelier/index.html?a=1&b="2"').replace(/^data:text\/html;charset=utf-8,/, ''))
+    expect(html).toContain('href="app://atelier/index.html?a=1&amp;b=&quot;2&quot;"')
     expect(html).not.toMatch(/<script/i)
     expect(html).toContain('color-scheme: light dark')
   })

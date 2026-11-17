@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -26,14 +26,14 @@ import { hostKey, httpsUpgrades } from './httpsFirst'
 //   session: top-level http requests of tabs go to https first; sitesSafety's
 //   did-fail-load asks httpsUpgrades whether a failure was a failed upgrade
 //   and shows the https-unavailable page at the http address.
-// - Cookie banners on each tab's page at dom-ready: Apex's own stylesheet plus
+// - Cookie banners on each tab's page at dom-ready: Atelier's own stylesheet plus
 //   the enabled downloaded lists' rules as injected stylesheets, and the reject
 //   script in its own isolated world.
 // - The per-page counts and states the site info summary reads.
 
 /** The reject script's isolated world (others: 999 preload, 1004 pip, 1005 media, 1006 forms, 1051 read, 1077 probe). */
 export const COOKIE_WORLD = 1033
-const PROFILE_PARTITION = /^persist:apex-profile-(.+)$/
+const PROFILE_PARTITION = /^persist:atelier-profile-(.+)$/
 const DAY = 24 * 60 * 60 * 1000
 
 interface PageState {

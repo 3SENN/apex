@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -182,7 +182,7 @@ final class FileTranscriber: @unchecked Sendable {
     let startMs = Double(index) * FileTranscriber.chunkMs
     guard !finished else { return }
     guard startMs < durationMs else { return finish() }
-    let piece = FileManager.default.temporaryDirectory.appendingPathComponent("apex-speech-\(UUID().uuidString).m4a")
+    let piece = FileManager.default.temporaryDirectory.appendingPathComponent("atelier-speech-\(UUID().uuidString).m4a")
     guard let export = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetAppleM4A) else {
       return fail(.failed, "The recording could not be read.")
     }

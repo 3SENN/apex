@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -42,7 +42,7 @@ import { smokeFetch } from '../src/main/decisions/feature'
 import { conditionMet, lastReplyOf } from '../src/main/routines'
 
 // Quick decisions (docs/decisions.md): the System One client, the decider's
-// rule-first contract, compare mode, the Claude fallback, keys, Apex's own
+// rule-first contract, compare mode, the Claude fallback, keys, Atelier's own
 // questions, and routine conditions.
 
 const sealer: Sealer = {
@@ -167,7 +167,7 @@ let dir: string
 /** The decider's clock in makeDecisions, moved by hand for the rate-limit pause. */
 let clock = 0
 beforeEach(() => {
-  dir = mkdtempSync(join(tmpdir(), 'apex-decisions-'))
+  dir = mkdtempSync(join(tmpdir(), 'atelier-decisions-'))
   clock = 1_000_000
 })
 afterEach(() => {
@@ -502,7 +502,7 @@ describe('System One client', () => {
     expect(yesNo(refused.answers.waits)).toBeNull()
     expect(sureChoice(refused.answers.kind)).toBeNull()
     expect(sureLevel(refused.answers.level)).toBe(0)
-    // Levels are read by the labels Apex sent, whatever numbering the server uses; an unknown label leaves the rule.
+    // Levels are read by the labels Atelier sent, whatever numbering the server uses; an unknown label leaves the rule.
     const oneBased = await requestDecision(
       fakeFetch([
         {
@@ -1440,7 +1440,7 @@ describe('keys', () => {
   })
 })
 
-describe('Apex’s own decisions', () => {
+describe('Atelier’s own decisions', () => {
   it('needsYou: a polite closing offer does not wait on you once the model is sure', async () => {
     const { d } = makeDecisions(settingsWith({ provider: 'typesafe' }), fakeFetch([noulReply('waits', 0.1)]))
     setDecider(d)

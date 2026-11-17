@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import type { SettingsPatch, SettingsView } from '@shared/ipc'
 import { BRANDING } from '@shared/branding'
 import { ART_LICENSE_NAME, PRIVACY_URL, RELEASE, SOURCE_URL } from '@shared/release'
 import type { AboutInfo } from '@shared/services/settings'
-import { apex, call } from '../../api'
+import { atelier, call } from '../../api'
 import { BrandLogo } from '../../brand/BrandLogo'
 import { AboutDiagnostics } from '../../diagnostics/AboutDiagnostics'
 import { MigrationResults } from '../../migrations/MigrationResults'
@@ -22,7 +22,7 @@ import { parseLicenses, trademarkLine, type LicenseEntry } from '../../updates/l
 import { useResource } from '../data'
 import { Card, PageHeader, Row, Section } from '../kit'
 
-// Settings › About Apex (ST-56): the version with the
+// Settings › About Atelier (ST-56): the version with the
 // update row and the auto-download switch, the website, the privacy notice,
 // Report a problem and View logs, the data updates after a chat-store
 // migration, the source notice (the code's MPL and the companion art's
@@ -38,7 +38,7 @@ function websiteUrl(fromInfo: string | undefined): string | null {
 
 const PLATFORMS: Record<string, string> = { darwin: 'macOS', win32: 'Windows', linux: 'Linux' }
 
-/** "Chromium 140 · macOS arm64": the engine Apex shows, never the framework under it. */
+/** "Chromium 140 · macOS arm64": the engine Atelier shows, never the framework under it. */
 export function runtimeLine(info: Pick<AboutInfo, 'chromium' | 'platform' | 'arch'>): string {
   const parts = [info.chromium && `Chromium ${info.chromium.split('.')[0]}`, `${PLATFORMS[info.platform] ?? info.platform} ${info.arch}`.trim()]
   return parts.filter(Boolean).join(' · ')
@@ -65,11 +65,11 @@ export function AboutPage({ settings, update }: { settings: SettingsView; update
           <UpdateSection settings={settings} update={update} versionDetail={info.data ? runtimeLine(info.data) : null} />
           {website && (
             <Row title={t('updates.about.website')} description={t('updates.about.websiteBody')}>
-              <IconButton label={t('updates.about.website')} icon={<ExternalLink size={16} />} onClick={() => void apex.tabs.create(website)} />
+              <IconButton label={t('updates.about.website')} icon={<ExternalLink size={16} />} onClick={() => void atelier.tabs.create(website)} />
             </Row>
           )}
           <Row title={t('updates.about.privacyTitle')} description={t('updates.about.privacyBody')}>
-            <IconButton label={t('updates.about.openPrivacy')} icon={<ExternalLink size={16} />} onClick={() => void apex.tabs.create(PRIVACY_URL)} />
+            <IconButton label={t('updates.about.openPrivacy')} icon={<ExternalLink size={16} />} onClick={() => void atelier.tabs.create(PRIVACY_URL)} />
           </Row>
           <AboutDiagnostics />
         </Card>
@@ -79,12 +79,12 @@ export function AboutPage({ settings, update }: { settings: SettingsView; update
         <Card>
           {version && (
             <Row title={t('updates.licenses.sourceTitle')} description={t('updates.licenses.source', { url: SOURCE_URL, version, artLicense: ART_LICENSE_NAME })}>
-              <IconButton label={t('updates.licenses.openSource')} icon={<ExternalLink size={16} />} onClick={() => void apex.tabs.create(SOURCE_URL)} />
+              <IconButton label={t('updates.licenses.openSource')} icon={<ExternalLink size={16} />} onClick={() => void atelier.tabs.create(SOURCE_URL)} />
             </Row>
           )}
           {chromiumLicenses && (
             <Row title={t('updates.licenses.chromiumTitle')} description={t('updates.licenses.chromiumBody')}>
-              <IconButton label={t('updates.licenses.openChromium')} icon={<ExternalLink size={16} />} onClick={() => void apex.tabs.create(chromiumLicenses)} />
+              <IconButton label={t('updates.licenses.openChromium')} icon={<ExternalLink size={16} />} onClick={() => void atelier.tabs.create(chromiumLicenses)} />
             </Row>
           )}
           <Licenses />

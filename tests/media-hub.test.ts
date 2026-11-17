@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -119,7 +119,7 @@ describe('media sources', () => {
     expect(mediaSources([a], m).map((s) => s.tabId)).toEqual(['a'])
   })
 
-  it('keeps the tab Apex paused until it plays again, and forgets closed tabs', () => {
+  it('keeps the tab Atelier paused until it plays again, and forgets closed tabs', () => {
     const a = tab('a', { report: report() })
     let [m, playing] = observeMedia(EMPTY_MEDIA_MEMORY, new Map(), [a])
     m = { ...m, held: 'a' }
@@ -177,7 +177,7 @@ describe('automatic picture-in-picture', () => {
     expect(autoPipEligible({ ...base, report: report({ pip: true }) })).toBe(false)
     expect(autoPipEligible({ ...base, report: report({ playing: false }) })).toBe(false)
   })
-  it('never for an agent tab, a muted tab, a page Apex draws or with the setting off', () => {
+  it('never for an agent tab, a muted tab, a page Atelier draws or with the setting off', () => {
     expect(autoPipEligible({ ...base, enabled: false })).toBe(false)
     expect(autoPipEligible({ ...base, tabMuted: true })).toBe(false)
     expect(autoPipEligible({ ...base, agentControlled: true })).toBe(false)

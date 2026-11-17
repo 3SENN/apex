@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -58,13 +58,13 @@ export interface SystemServices {
 
 export type SystemEvent = { type: 'login-item'; state: LoginItemState }
 
-/** The argument a launch at login carries (Windows Run key, Linux autostart), so Apex can start without a window. */
+/** The argument a launch at login carries (Windows Run key, Linux autostart), so Atelier can start without a window. */
 export const LAUNCH_AT_LOGIN_FLAG = '--background'
 
-/** The Linux desktop entry the installer adds (executableName `apex`); xdg-settings and autostart name it. */
-export const LINUX_DESKTOP_ENTRY = 'apex.desktop'
+/** The Linux desktop entry the installer adds (executableName `atelier`); xdg-settings and autostart name it. */
+export const LINUX_DESKTOP_ENTRY = 'atelier.desktop'
 
-/** Windows: the AppUserModelId, equal to electron-builder's appId, so notifications and the taskbar group under Apex. */
+/** Windows: the AppUserModelId, equal to electron-builder's appId, so notifications and the taskbar group under Atelier. */
 export const APP_USER_MODEL_ID = BUNDLE_ID
 
 /** Windows and Linux: the window controls overlay's height, matching the chrome's --bar-height. */

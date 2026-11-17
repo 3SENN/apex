@@ -1,6 +1,6 @@
-# apex-speech.exe, the Windows speech helper
+# atelier-speech.exe, the Windows speech helper
 
-Apex's speech helper for Windows. It does what
+Atelier's speech helper for Windows. It does what
 `native/speech` does on macOS, and speaks exactly the same JSON-lines protocol
 v2: one command per line on stdin, one reply or event per
 line on stdout, and nothing else on stdout. Main's parser
@@ -19,7 +19,7 @@ line on stdout, and nothing else on stdout. Main's parser
 - `Session.cs` holds one session at a time: capture, levels, `pause` and
   `resume` (paused audio is neither transcribed nor recorded), and `stop`.
 - `Recorder.cs` writes each source as a WAV part and mixes the parts into the
-  AAC `.m4a` Apex asked for, through Media Foundation.
+  AAC `.m4a` Atelier asked for, through Media Foundation.
 - `Devices.cs` lists capture devices and dictation languages; `Apps.cs` answers
   `frontmost`, `activate` and `authenticate` (Windows Hello).
 - `Protocol.cs` reads commands strictly (anything malformed is an `invalid`
@@ -29,7 +29,7 @@ line on stdout, and nothing else on stdout. Main's parser
 
 Commands: `hello`, `permissions`, `request`, `devices`, `locales`, `start`,
 `pause`, `resume`, `stop`, `transcribe`, `authenticate`, `frontmost`,
-`activate`. The lid line (`{"type":"lid"}`) is macOS-only; on Windows, Apex
+`activate`. The lid line (`{"type":"lid"}`) is macOS-only; on Windows, Atelier
 pauses a meeting recording on Electron's `powerMonitor` `suspend` instead.
 
 ## Permissions
@@ -51,7 +51,7 @@ prompts:
 System audio and files are transcribed on this PC. Microphone dictation goes
 through Microsoft's online speech service, so the helper is honest about it:
 `started.onDevice` is false while it transcribes (true for a recording that
-only captures audio), and every `locales` item has `onDevice: false`. Apex's
+only captures audio), and every `locales` item has `onDevice: false`. Atelier's
 privacy wording reads these flags, so it never claims on-device dictation on
 Windows.
 
@@ -66,10 +66,10 @@ node scripts/build-speech-helper.mjs --arch=arm64 # or x64
 ```
 
 `build.mjs` runs `dotnet publish` (self-contained, single file, not trimmed)
-into `build/win-<arch>/` and copies the result to `build/apex-speech.exe`.
-Apex runs that file in development (`speechHelperPath()` in
+into `build/win-<arch>/` and copies the result to `build/atelier-speech.exe`.
+Atelier runs that file in development (`speechHelperPath()` in
 `src/main/speech/helper.ts`), and electron-builder packages it as
-`resources/apex-speech.exe`. On Linux the helper is unavailable, and Apex
+`resources/atelier-speech.exe`. On Linux the helper is unavailable, and Atelier
 says so.
 
 ## Dependencies

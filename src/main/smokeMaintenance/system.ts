@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -16,7 +16,7 @@ import type { ShotSpec, SmokeCheck } from '../smokeBrowser/types'
 import type { SmokeContext } from '../smokeBrowser/types'
 
 // The login item through a fake (setLoginItemSettings is never called),
-// background mode keeping Apex alive with a tray and Open Apex bringing the
+// background mode keeping Atelier alive with a tray and Open Atelier bringing the
 // window back, the tray menu, second launches, and shots of the General rows
 // and the approval dialog. Offline only. ⌘Q is not pressed: it would end the
 // run; the policy's quit rule is unit-tested.
@@ -36,7 +36,7 @@ function fake(): FakeLoginItem {
 const DISABLED: LoginItemState = { supported: true, openAtLogin: false, status: 'disabled' }
 
 async function openGeneral(ctx: SmokeContext): Promise<void> {
-  ctx.tabs.openInternal('apex://settings/general')
+  ctx.tabs.openInternal('atelier://settings/general')
   await ctx.chrome.until<boolean>(`return Boolean(document.querySelector('[data-settings-anchor="open-at-login"] [role="switch"]'))`, 8000, 'the General page’s open-at-login row')
 }
 
@@ -80,18 +80,18 @@ export const checks: SmokeCheck[] = [
     },
   },
   {
-    name: 'system: with background mode on, the last window closing keeps Apex running with a tray; Open Apex brings it back',
+    name: 'system: with background mode on, the last window closing keeps Atelier running with a tray; Open Atelier brings it back',
     async run(ctx) {
       const r = runtime()
       const win = BrowserWindow.fromWebContents(ctx.chrome.ui)
       assert(win, 'no chrome window')
-      // A Linux desktop without a tray host: background mode stays off (its row is hidden), so Apex never runs invisibly.
+      // A Linux desktop without a tray host: background mode stays off (its row is hidden), so Atelier never runs invisibly.
       if (!r.trayAvailable()) {
         assert(process.platform === 'linux', 'only a Linux desktop can lack a tray')
         ctx.settings.update({ runInBackground: true })
         try {
           assert(!r.runInBackground(), 'background mode took effect without a tray to come back from')
-          assert(backgroundPolicy({ platform: 'linux', runInBackground: r.runInBackground(), windowCount: 0, quitting: false, openedAtLogin: false }) === 'quit', 'closing the last window would leave Apex running invisibly')
+          assert(backgroundPolicy({ platform: 'linux', runInBackground: r.runInBackground(), windowCount: 0, quitting: false, openedAtLogin: false }) === 'quit', 'closing the last window would leave Atelier running invisibly')
           assert(!r.trayShown, 'a tray icon was shown without a tray host')
         } finally {
           ctx.settings.update({ runInBackground: false })
@@ -105,12 +105,12 @@ export const checks: SmokeCheck[] = [
         // Stand in for closing it: smoke drives this window, so it is hidden instead.
         win.hide()
         await waitFor(() => !win.isVisible(), 3000, 'the window to hide')
-        assert(r.windowAllClosed(), 'background mode let Apex quit')
+        assert(r.windowAllClosed(), 'background mode let Atelier quit')
         assert(r.trayShown, 'no tray icon while windowless')
         if (process.platform === 'darwin') assert(r.dockHidden, 'the Dock icon stayed while windowless')
         assert(r.record.notices <= notices + 1, 'the still-running notice showed more than once')
         await r.runTrayItem({ id: TRAY_IDS.open })
-        await waitFor(() => win.isVisible(), 3000, 'Open Apex to show the window')
+        await waitFor(() => win.isVisible(), 3000, 'Open Atelier to show the window')
         assert(!r.dockHidden, 'the Dock icon did not come back with the window')
         // A second time stays quiet: the notice is once ever.
         win.hide()
@@ -133,7 +133,7 @@ export const checks: SmokeCheck[] = [
     async run(ctx) {
       ctx.server.page('/e4-second-instance', '<!doctype html><title>Second launch</title><p>Opened by a second launch.</p>')
       const url = `${ctx.server.http}/e4-second-instance`
-      const targets = parseLaunchArgs(['apex', '--allow-file-access-from-files', '--background', url], { cwd: process.cwd(), platform: process.platform })
+      const targets = parseLaunchArgs(['atelier', '--allow-file-access-from-files', '--background', url], { cwd: process.cwd(), platform: process.platform })
       assert(targets.urls.length === 1 && targets.urls[0] === url, `unexpected targets ${JSON.stringify(targets)}`)
       const before = new Set(ctx.tabs.all().map((t) => t.id))
       runtime().handleLaunch(targets)
@@ -161,7 +161,7 @@ export const shots: ShotSpec[] = [
       login.seed(DISABLED)
       login.seed({ supported: true, openAtLogin: true, status: 'requires-approval' }, true)
       // A General page left open by the shot before still shows that state; load it fresh.
-      ctx.tabs.openInternal('apex://settings/appearance')
+      ctx.tabs.openInternal('atelier://settings/appearance')
       await ctx.chrome.until<boolean>(`return !document.querySelector('[data-settings-anchor="open-at-login"]')`, 5000, 'another settings page')
       await openGeneral(ctx)
       await ctx.chrome.until<boolean>(`return document.querySelector('[data-settings-anchor="open-at-login"] [role="switch"]')?.getAttribute('aria-checked') === 'false'`, 5000, 'the switch to read off')

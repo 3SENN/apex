@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -47,13 +47,13 @@ export interface ControllerDeps {
   askRestart(running: UpdateRestartRunning, version: string | null): Promise<'now' | 'when-idle' | null>
   /** The unsupported prompt: 'update', 'later', or null when dismissed. */
   askUnsupported(below: string, message: string | null): Promise<'update' | 'later' | null>
-  /** The release feed's apex-support.json, or null. Only called when updates are enabled. */
+  /** The release feed's atelier-support.json, or null. Only called when updates are enabled. */
   supportFeed(): Promise<SupportFeed | null>
   entries: readonly WhatsNewEntry[]
   onStatus(status: UpdateStatus): void
   onRestarting(running: UpdateRestartRunning): void
   /**
-   * Apex is quitting to install (true), or the install failed (false). The
+   * Atelier is quitting to install (true), or the install failed (false). The
    * native updater closes windows before 'before-quit' fires, so main marks
    * the quit itself: close confirmations stay away and the saved session
    * keeps every window.
@@ -311,7 +311,7 @@ export class UpdateController {
     this.#d.onRestarting(this.#d.running())
     this.#quittingForUpdate = true
     this.#d.clock.clearTimeout(this.#watchdog)
-    // If Apex is still here after the watchdog, the install is stuck.
+    // If Atelier is still here after the watchdog, the install is stuck.
     this.#watchdog = this.#d.clock.setTimeout(() => {
       this.#watchdog = null
       if (this.#status.phase !== 'installing') return

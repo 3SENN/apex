@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -16,7 +16,7 @@ import { CHAT_MODELS, EFFORTS, hasEffortControl, modelLabel } from '../logic/com
 // effort presets with a check, or a lock once the chat has started, and
 // Manage companions. The switch is remembered per viewer.
 
-const ADVANCED_KEY = 'apex.composer.chipAdvanced'
+const ADVANCED_KEY = 'atelier.composer.chipAdvanced'
 
 export function chipAdvanced(): boolean {
   try {
@@ -36,7 +36,7 @@ export function setChipAdvanced(on: boolean): void {
 
 /**
  * `act` is the chat's "act without asking" mode (CH-18), shown as a switch row
- * (DS-125: Apex's options live here, not as a control-row button); null hides it.
+ * (DS-125: Atelier's options live here, not as a control-row button); null hides it.
  */
 export function chipMenuItems(input: { companions: readonly Companion[]; companionId: string; setup: ChatSetup | null; advanced: boolean; act?: boolean | null; /** Only the models (an error card's Use another model); a started chat's pick goes to a new chat. */ models?: boolean }): PopoverItem[] {
   const { companions, companionId, setup, advanced, act = null } = input

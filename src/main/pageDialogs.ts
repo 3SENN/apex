@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -41,7 +41,7 @@ interface TabEntry {
 
 const tabsByWc = new Map<number, TabEntry>()
 
-/** The leave-page state of a tab's webContents (leavePage.ts records Apex's own intents here). */
+/** The leave-page state of a tab's webContents (leavePage.ts records Atelier's own intents here). */
 export function leaveStateOf(wc: WebContents): LeaveState | null {
   return tabsByWc.get(wc.id)?.leave ?? null
 }

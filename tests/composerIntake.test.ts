@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -84,7 +84,7 @@ describe('drop acceptance (CH-23)', () => {
     const selection = pageDragSource({ uriList: '', html: 'Read <a href="/more">more</a> here', text: 'Read more here' }, page)
     expect(selection).toMatchObject({ type: 'selection', text: 'Read more here', url: page.url, title: 'Post', links: [{ text: 'more', url: 'https://example.com/more' }] })
     expect(pageDragSource({ uriList: '', html: '', text: 'plain words' }, page)).toBeNull()
-    expect(pageDragSource({ uriList: 'https://example.com/cat.png', html: '', text: '' }, { ...page, url: 'apex://newtab' })).toBeNull()
+    expect(pageDragSource({ uriList: 'https://example.com/cat.png', html: '', text: '' }, { ...page, url: 'atelier://newtab' })).toBeNull()
   })
 })
 

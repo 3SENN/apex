@@ -1,6 +1,6 @@
 # UX plan
 
-This plan gives an overview of Apex's layout and UX structure: which surfaces exist, where they sit, and how the flows work. Each item is specified in detail in [feature-spec.md](feature-spec.md). The visual system and motion are in [design-spec.md](design-spec.md), which wins where the two disagree.
+This plan gives an overview of Atelier's layout and UX structure: which surfaces exist, where they sit, and how the flows work. Each item is specified in detail in [feature-spec.md](feature-spec.md). The visual system and motion are in [design-spec.md](design-spec.md), which wins where the two disagree.
 
 ## Shell
 
@@ -8,18 +8,18 @@ This plan gives an overview of Apex's layout and UX structure: which surfaces ex
 - **One agent session per chat** in main, with agent events keyed by chat id. Chat pages, per-chat badges, parallel chats and companion ownership all rely on this.
 - **Data model:** chat summaries carry companion, unread, pinned, archived and needs-input fields. Skills, routines, files and memory have an owner: a companion, or shared with all. Older global items migrate to the first companion, or become shared.
 - **Settings schema:** `layout` (sidebar by default, and unknown values fall back to sidebar) and `theme`.
-- **Pages:** the apex:// table (`src/shared/url.ts`) has `chats`, `chat/<id>`, `routines`, `skills`, `connectors` and `companion/<id>/<section>`. `apex://library` redirects to the matching destination. Memory lives on the companion card (shared memory in Settings › Memory), and Connectors has its own row.
+- **Pages:** the atelier:// table (`src/shared/url.ts`) has `chats`, `chat/<id>`, `routines`, `skills`, `connectors` and `companion/<id>/<section>`. `atelier://library` redirects to the matching destination. Memory lives on the companion card (shared memory in Settings › Memory), and Connectors has its own row.
 
 **Layout: sidebar first, horizontal kept as an option.**
 - The sidebar layout is the default. The horizontal strip stays as the alternative behind the `layout` setting.
 - Settings › Appearance (with illustrated previews), the View menu and ⇧⌘S switch layouts live, without reloading tabs.
-- Pinning, groups, the context menu, previews and drag work in both layouts. In the horizontal layout, Apex pages share a navigation rail.
+- Pinning, groups, the context menu, previews and drag work in both layouts. In the horizontal layout, Atelier pages share a navigation rail.
 
 **Sidebar:**
 - **Header:** the toolbar's height (40 px), with its icons on the toolbar's centre line. The macOS window controls are on the left.
   - When the sidebar hides, the controls travel with it as it slides away and are hidden while it is collapsed; the toolbar has no inset ([DS-19](design-spec.md#ds-19)). In full screen macOS manages them.
   - On the right are downloads (only while there are downloads), the sidebar-options button and Search, which opens the tab-and-chat search (⇧⌘A).
-- **Destination rows:** each opens its `apex://` page, reusing one tab per destination.
+- **Destination rows:** each opens its `atelier://` page, reusing one tab per destination.
   - The rows are All chats (with unread and needs-input dots, never counts; right-click marks all read), Routines (a countdown to the next run, and an unread dot when a result arrives), Skills and Connectors.
   - Connectors is the integrations row; the name keeps it apart from Apps, the tools the agent builds.
   - Meetings and Guides (the guides library) are destinations too.
@@ -59,12 +59,12 @@ This plan gives an overview of Apex's layout and UX structure: which surfaces ex
 - **The sidebar toggle, back, forward and reload:** tooltips with shortcuts. ⌘-click opens in a new tab, and a long press or right-click lists that direction's history. ⇧-click on reload bypasses the cache, and the icon animates while loading before it turns into Stop.
 - **A centred address pill:**
   - **Websites:** the host without www (long hosts shortened in the middle), plus a slash and the page title when the URL has a path, query or fragment. A not-secure marker shows for plain http (except localhost) and after a certificate bypass.
-  - **Apex pages:** breadcrumbs ("Chat / <title>", "Settings / <page>") with stable page titles, and `apex://settings` rewritten to the resolved page. The new tab shows a placeholder.
-  - **Inside the pill:** a site-info button on the left and the bookmark star on the right, both hidden on Apex pages. A zoom chip shows when zoom isn't 100%.
+  - **Atelier pages:** breadcrumbs ("Chat / <title>", "Settings / <page>") with stable page titles, and `atelier://settings` rewritten to the resolved page. The new tab shows a placeholder.
+  - **Inside the pill:** a site-info button on the left and the bookmark star on the right, both hidden on Atelier pages. A zoom chip shows when zoom isn't 100%.
   - **Editing:** a click or Enter edits the pill in place with the full URL, and suggestions grow below it in the overlay layer ([DS-23](design-spec.md#ds-23)). The pill's context menu has copy, paste and go, edit, and a show-full-URLs checkbox (also in Settings › Appearance, off by default).
 - **The bookmark star** lives in the pill, not among the actions. It and ⌘D open the bookmark editor popover.
 - **Actions on the right** are contextual ([DS-24](design-spec.md#ds-24)):
-  - **Apex pages:** none on chat and app pages.
+  - **Atelier pages:** none on chat and app pages.
   - **Websites:** a chat-about-this-page button that toggles the side panel (⌘J) and carries the working and approval indicators. The agent status pill anchors near it.
   - **Split:** only while the view is split; it shows which side has focus and opens the split menu.
   - **Downloads** live in the sidebar header in the sidebar layout ([DS-05](design-spec.md#ds-05)) and stay here in the horizontal one.
@@ -94,7 +94,7 @@ This plan gives an overview of Apex's layout and UX structure: which surfaces ex
   - **Header:** shows which chat is attached, with a way to switch, and an expand button that opens the same chat as a page.
   - **Driving:** only one surface drives a running chat; the others mirror it.
 - **Page full screen:** a chromeless layout state hides the sidebar, toolbar and panel, and lets the page view fill the window (`enter-html-full-screen`, `leave-html-full-screen`). Focus mode reuses the state, and a notice says how to leave.
-- **Chrome crash:** one renderer draws the sidebar, toolbar and every Apex page, so a crash would blank the window. Apex handles `render-process-gone` and failed loads on the chrome's webContents with an automatic reload and a visible retry.
+- **Chrome crash:** one renderer draws the sidebar, toolbar and every Atelier page, so a crash would blank the window. Atelier handles `render-process-gone` and failed loads on the chrome's webContents with an automatic reload and a visible retry.
 - **Order:** ⌘1–8 and next or previous tab follow the sidebar's visible order (pinned tiles, then chats, then tabs, skipping collapsed groups). ⌥⌘→/⌥⌘← and ⇧⌘]/⇧⌘[ step in that order, since ⌃Tab is the recent-tab switcher.
 - **Window title:** follows the active tab's title, or a custom window name.
 - **Menu bar:**
@@ -102,7 +102,7 @@ This plan gives an overview of Apex's layout and UX structure: which surfaces ex
   - History has about ten recent chats and Show All Chats.
 
 **Chats as pages:**
-- `apex://chat/<id>` shows the conversation centred in the content card, with the composer at the bottom. The composer hint uses the companion's name and follows its state: new chat, follow-up, queued while running, editing a queued message, meeting attached, or no API key.
+- `atelier://chat/<id>` shows the conversation centred in the content card, with the composer at the bottom. The composer hint uses the companion's name and follows its state: new chat, follow-up, queued while running, editing a queued message, meeting attached, or no API key.
 - **Header** inside the content card: the title (click to rename), the owning companion's avatar, a routine pill for routine chats, a button for the tabs this chat used, and a ⋯ menu (new chat, rename, duplicate, open in a new tab, export, and delete with confirmation or Undo). The address-pill breadcrumb can't hold these.
 - **Composer:**
   - a companion chip (switching mid-chat continues in a new chat, because the system prompt is fixed per chat);
@@ -117,7 +117,7 @@ This plan gives an overview of Apex's layout and UX structure: which surfaces ex
   - a marker when the turn changed memory.
 - **States:** a skeleton while loading, a not-found state for deleted chats, and a could-not-load state with retry. The view doesn't force-scroll when you have scrolled up; a jump-to-newest button appears instead.
 - The side panel stays as "ask about this page" next to websites. Both views share the same chat.
-- **All chats** (`apex://chats`): grouped by date with pinned chats on top, search, filters (companion, routine runs, status), row menus with inline rename, and delete with confirmation.
+- **All chats** (`atelier://chats`): grouped by date with pinned chats on top, search, filters (companion, routine runs, status), row menus with inline rename, and delete with confirmation.
 
 **New tab page:** the active companion with previous and next controls (and ←/→ in an empty ask field) to choose who takes the next chat, plus an add-companion entry. Tab keeps moving focus.
 
@@ -128,9 +128,9 @@ This plan gives an overview of Apex's layout and UX structure: which surfaces ex
   - only a "⋯" menu (use for new chats, the Dock icon, duplicate with progress, hide or unhide, reset, delete) and close;
   - one floating save pill under the header (saving, saved, or couldn't save with retry).
 - **Deleting:** delete is disabled, with an explanation, for the last visible companion. Deleting the active one switches to another, and its past chats stay readable with a neutral avatar.
-- **tabs** (arrow keys move between them; each tab and item has a deep link, `apex://companion/<id>/<section>`):
+- **tabs** (arrow keys move between them; each tab and item has a deep link, `atelier://companion/<id>/<section>`):
   - **General:**
-    - an edge-to-edge hero washed in the companion's colour, with the animated shape field behind the live full-body companion, the big editable name, Export… (which saves a `.apexcompanion` file plus a share image rendered off-screen) and Customize look, which edits the look in place (with undo and redo);
+    - an edge-to-edge hero washed in the companion's colour, with the animated shape field behind the live full-body companion, the big editable name, Export… (which saves a `.ateliercompanion` file plus a share image rendered off-screen) and Customize look, which edits the look in place (with undo and redo);
     - exactly two summary rows, Skills (N skills ›) and Routines (N routines ›);
     - Standing instructions: prose edited in place, added to the companion's system prompt next to its personality, autosaved and applied to new chats only. The personality preset is a small ghost select at the end of its label row.
   - **Skills, Routines, Files, Memory:** this companion's own plus shared ones, so each companion has its own memory folder.
@@ -138,9 +138,9 @@ This plan gives an overview of Apex's layout and UX structure: which surfaces ex
 - **Create and import:**
   - a new-companion sheet, from the switcher, the new-tab picker, the card and Settings › Companions;
   - built-in presets, which add a new companion instead of overwriting the current one;
-  - opening or dropping a `.apexcompanion` file shows a review sheet before it is added.
+  - opening or dropping a `.ateliercompanion` file shows a review sheet before it is added.
 
-Apex has multiple companions. Chats, skills, routines, files and memory are owned per companion, or shared with all.
+Atelier has multiple companions. Chats, skills, routines, files and memory are owned per companion, or shared with all.
 
 **Settings** start with a local You card (name, optional avatar, API key status), Appearance and Companions (list, create, import). The other pages come with their features below.
 
@@ -366,7 +366,7 @@ Apex has multiple companions. Chats, skills, routines, files and memory are owne
 - **Onboarding:** choosing what you do (suggests skills and routines), a connectors step, favourite sites as pinned tabs, importing ChatGPT or Claude history, and a launch step, with illustrations and optional UI sounds.
 - **Guidance:** a getting-started checklist, dismissible tips, new-tab nudges, and a guides library.
 - **Calendar:** macOS Calendar and Reminders read access through a native helper (opt-in).
-- **Experiments:** an `apex://flags` page.
+- **Experiments:** an `atelier://flags` page.
 - **App links:** "open in the site's app" suggestions for known app links.
 
 ## Release and operations
@@ -383,7 +383,7 @@ Apex has multiple companions. Chats, skills, routines, files and memory are owne
 
 ## Out of scope
 
-- Teams and billing: Apex needs no backend to work, and leaves out what only a server could provide.
+- Teams and billing: Atelier needs no backend to work, and leaves out what only a server could provide.
 - Hosted publishing.
 - Device fingerprinting.
 - Platform passkeys in builds without Apple's browser passkey entitlement (official signed builds can turn them on; see [docs/release.md](../release.md#browser-passkeys-and-icloud-passwords)).

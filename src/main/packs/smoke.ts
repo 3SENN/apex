@@ -1,15 +1,15 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Packs end to end in the real app (APEX_SMOKE_ONLY=PACKS, docs/packs.md): a
+// Packs end to end in the real app (ATELIER_SMOKE_ONLY=PACKS, docs/packs.md): a
 // signed pack installs only after its review, and its skill, command, menu
 // item and tweak appear; its tool runs in the sandbox, reads only its sites,
 // fetches only its hosts and has no network or Node of its own; its panel
 // opens in its own tab and can't leave; turning it off takes everything
 // away; a companion's draft is tested in a throwaway sandbox and proposed
-// with a card; apex://packs shows the review. An app pack (docs/apps.md) opens
+// with a card; atelier://packs shows the review. An app pack (docs/apps.md) opens
 // its game in a tab, which runs its own module, worker and WebAssembly and
 // loads its own image, sound (by byte range) and data, while the network, inline
 // code and navigating away stay closed; only the game may go full screen. Two
@@ -67,15 +67,15 @@ const PAGE = `<!doctype html><html><head><meta charset="utf-8"><title>Pack fixtu
 
 const TOOL = `// Reads the page, then tries what a pack may and may not do.
 export async function run(input) {
-  const info = await apex.page.info()
-  const text = await apex.page.text()
-  const heads = await apex.page.query('h1')
-  const allowed = await apex.fetch(input.allowed)
+  const info = await atelier.page.info()
+  const text = await atelier.page.text()
+  const heads = await atelier.page.query('h1')
+  const allowed = await atelier.fetch(input.allowed)
   let refused = 'not refused'
-  try { await apex.fetch('https://example.com/') } catch (err) { refused = String(err.message) }
+  try { await atelier.fetch('https://example.com/') } catch (err) { refused = String(err.message) }
   let direct = 'reached'
   try { await fetch(input.allowed) } catch { direct = 'blocked' }
-  await apex.storage.set('runs', ((await apex.storage.get('runs')) ?? 0) + 1)
+  await atelier.storage.set('runs', ((await atelier.storage.get('runs')) ?? 0) + 1)
   return { host: info && info.host, text, heads, allowed: await allowed.text(), refused, direct, node: typeof require + '/' + typeof process }
 }
 `
@@ -84,7 +84,7 @@ const PANEL = `<!doctype html><html><head><meta charset="utf-8"><title>Smoke pan
 
 function fixture(serverHost: string, version = '1.0.0'): PackFiles {
   const manifest: PackManifest = {
-    format: 'apex-pack',
+    format: 'atelier-pack',
     manifestVersion: 1,
     id: ID,
     name: 'Smoke pack',
@@ -131,14 +131,14 @@ await step('spaced', async () => (await (await fetch('./data/level one.json')).j
 await step('frame', () => new Promise((resolve) => { const f = document.getElementById('help'); const started = Date.now(); const poll = () => { const title = f.contentDocument ? f.contentDocument.title : null; if (title || Date.now() - started > 5000) resolve(title === null ? 'no document' : title); else setTimeout(poll, 50) }; poll() }))
 await step('net', () => fetch(${JSON.stringify(net)}).then(() => 'reached', () => 'blocked'))
 out.node = typeof require + '/' + typeof process
-out.apex = Boolean(window.apex && window.apex.pack && window.apex.pack.id)
+out.atelier = Boolean(window.atelier && window.atelier.pack && window.atelier.pack.id)
 window.__out = out
 document.title = 'ready'
 `
 
 function appFixture(serverHttp: string): PackFiles {
   const manifest: PackManifest = {
-    format: 'apex-pack',
+    format: 'atelier-pack',
     manifestVersion: 2,
     id: APP_ID,
     name: 'Smoke app',
@@ -214,7 +214,7 @@ async function installs(ctx: SmokeContext): Promise<void> {
   const { mkdtempSync } = await import('node:fs')
   const { tmpdir } = await import('node:os')
   const { join } = await import('node:path')
-  const author = new AuthorKey(mkdtempSync(join(tmpdir(), 'apex-smoke-author-')), { encrypt: (b) => b, decrypt: (b) => b })
+  const author = new AuthorKey(mkdtempSync(join(tmpdir(), 'atelier-smoke-author-')), { encrypt: (b) => b, decrypt: (b) => b })
   const review = service.reviewArchive(encodeArchive(files, author.sign(packHash(files))), { kind: 'file' })
   assert(review.problems.length === 0, `the fixture pack has problems: ${review.problems.join('; ')}`)
   assert(review.signature === 'signed', 'the fixture pack did not read as signed')
@@ -230,14 +230,14 @@ async function installs(ctx: SmokeContext): Promise<void> {
   assert(card && card.error === null && card.lines.join('|') === 'First line|Second line', `the new tab card: ${JSON.stringify(card)}`)
   await ctx.chrome.until('return Boolean(document.querySelector(".side-apps .side-row"))', 5000, 'the pack app in the sidebar')
   // The Packs page: its card says what it is (a panel makes it an app), and the card opens its sheet.
-  ctx.tabs.openInternal('apex://packs')
+  ctx.tabs.openInternal('atelier://packs')
   await ctx.chrome.until(
     `const tile = [...document.querySelectorAll('.pk-grid .pk-tile')].find((t) => t.textContent.includes('Smoke pack'))
      return tile && tile.dataset.kind === 'app' && tile.querySelector('.pk-tile__line').textContent.startsWith('App')`,
     10_000,
     'the pack’s card on the Packs page',
   )
-  assert(!(await ctx.chrome.js<boolean>('const s = document.querySelector(".sp-main"); return Boolean(s) && s.scrollWidth > s.clientWidth + 1')), 'apex://packs scrolls sideways')
+  assert(!(await ctx.chrome.js<boolean>('const s = document.querySelector(".sp-main"); return Boolean(s) && s.scrollWidth > s.clientWidth + 1')), 'atelier://packs scrolls sideways')
   await ctx.shot('packs-yours')
   await ctx.chrome.js(`[...document.querySelectorAll('.pk-tile')].find((t) => t.textContent.includes('Smoke pack'))?.querySelector('.pk-tile__main')?.click(); return true`)
   await ctx.chrome.until(`const sheet = document.querySelector('.pk-sheet'); return sheet && sheet.querySelector('.pk-hero') && sheet.textContent.includes('What’s inside')`, 10_000, 'the pack’s sheet')
@@ -272,11 +272,11 @@ async function toolRuns(ctx: SmokeContext): Promise<void> {
     assert(wrapped, `the pack tool's result isn't marked as the pack's own output: ${result.content.slice(0, 120)}`)
     const out = JSON.parse(wrapped[1] as string) as { host: string; text: string; heads: string[]; allowed: string; refused: string; direct: string; node: string }
     assert(out.text.includes('Pack fixture page') && out.heads[0] === 'Pack fixture page', `the tool didn't read the page: ${result.content.slice(0, 200)}`)
-    assert(out.allowed === 'api says hello', `apex.fetch to a listed host failed: ${out.allowed}`)
-    assert(/not in this pack’s network/.test(out.refused), `apex.fetch to an unlisted host was not refused: ${out.refused}`)
+    assert(out.allowed === 'api says hello', `atelier.fetch to a listed host failed: ${out.allowed}`)
+    assert(/not in this pack’s network/.test(out.refused), `atelier.fetch to an unlisted host was not refused: ${out.refused}`)
     assert(out.direct === 'blocked', 'pack code reached the network without the bridge')
     assert(out.node === 'undefined/undefined', `pack code can see Node: ${out.node}`)
-    assert(need().store.storage(ID).runs === 1, 'apex.storage did not keep the run count')
+    assert(need().store.storage(ID).runs === 1, 'atelier.storage did not keep the run count')
   } finally {
     ctx.tabs.close(tab.id)
   }
@@ -293,12 +293,12 @@ async function panelStays(ctx: SmokeContext): Promise<void> {
   }, 5000, 'the panel tab')
   const wc = (tab as Tab).view.webContents
   try {
-    await waitForPage(wc, 'the pack panel', 10_000, (at) => at.startsWith('apex-pack://'))
-    await waitFor(() => js<boolean>(wc, 'Boolean(window.apex && window.apex.pack.id === "smoke-pack")').catch(() => false), 5000, 'window.apex in the panel')
-    assert((await js<string>(wc, 'apex.storage.set("panel", 7).then(() => apex.storage.get("panel"))')) === (7 as unknown as string), 'apex.storage from the panel')
+    await waitForPage(wc, 'the pack panel', 10_000, (at) => at.startsWith('atelier-pack://'))
+    await waitFor(() => js<boolean>(wc, 'Boolean(window.atelier && window.atelier.pack.id === "smoke-pack")').catch(() => false), 5000, 'window.atelier in the panel')
+    assert((await js<string>(wc, 'atelier.storage.set("panel", 7).then(() => atelier.storage.get("panel"))')) === (7 as unknown as string), 'atelier.storage from the panel')
     await js(wc, 'location.href = "https://example.com/"').catch(() => undefined)
     await new Promise((r) => setTimeout(r, 500))
-    assert(wc.getURL().startsWith('apex-pack://smoke-pack/'), `the panel navigated away to ${wc.getURL()}`)
+    assert(wc.getURL().startsWith('atelier-pack://smoke-pack/'), `the panel navigated away to ${wc.getURL()}`)
     const blocked = await js<string>(wc, `fetch(${JSON.stringify(`${ctx.server.http}/packs/api`)}).then(() => 'reached', () => 'blocked')`)
     assert(blocked === 'blocked', 'a panel reached the network directly')
     assert((await js<string>(wc, 'typeof RTCPeerConnection')) === 'undefined', 'a pack page can still make WebRTC connections')
@@ -341,7 +341,7 @@ async function builds(ctx: SmokeContext): Promise<void> {
   assert(!made.isError && made.content.includes('"guide"'), `create_pack failed: ${made.content.slice(0, 200)}`)
   const host = new URL(ctx.server.http).hostname
   const manifest = {
-    format: 'apex-pack',
+    format: 'atelier-pack',
     manifestVersion: 1,
     id: DRAFT,
     name: 'Smoke draft',
@@ -357,10 +357,10 @@ async function builds(ctx: SmokeContext): Promise<void> {
   }
   await write.run({ id: DRAFT, path: PACK_MANIFEST_FILE, content: JSON.stringify(manifest) }, toolCtx())
   await write.run({ id: DRAFT, path: 'add.js', content: 'export async function run(input) { return { sum: input.a + input.b } }\n' }, toolCtx())
-  await write.run({ id: DRAFT, path: 'peek.js', content: 'export async function run() { return apex.page.text() }\n' }, toolCtx())
+  await write.run({ id: DRAFT, path: 'peek.js', content: 'export async function run() { return atelier.page.text() }\n' }, toolCtx())
   // A cookie in your own session; the test page must not carry it.
   const { session } = await import('electron')
-  await session.defaultSession.cookies.set({ url: ctx.server.http, name: 'apexsmoke', value: 'signed-in-secret' })
+  await session.defaultSession.cookies.set({ url: ctx.server.http, name: 'ateliersmoke', value: 'signed-in-secret' })
   ctx.server.route('/packs/whoami', (req, res) => {
     res.writeHead(200, { 'content-type': 'text/html' })
     res.end(`<!doctype html><p>cookie:${req.headers.cookie ?? 'none'}</p>`)
@@ -371,7 +371,7 @@ async function builds(ctx: SmokeContext): Promise<void> {
   const failed = report.results.filter((r) => !r.ok)
   assert(report.ok && report.results[0]?.result === '{"sum":5}', `test_pack: ${failed.length ? JSON.stringify(failed) : tested.content.slice(0, 400)}; log ${JSON.stringify(report.log ?? [])}`)
   assert(report.results[1]?.result === 'cookie:none', `a test page carried your cookies: ${report.results[1]?.result}`)
-  await session.defaultSession.cookies.remove(ctx.server.http, 'apexsmoke')
+  await session.defaultSession.cookies.remove(ctx.server.http, 'ateliersmoke')
   assert(!clientTool(packToolName(DRAFT, 'add')), 'a tested draft left its tool registered')
   assert(!need().store.get(DRAFT), 'test_pack installed the draft')
   const events: unknown[] = []
@@ -380,10 +380,10 @@ async function builds(ctx: SmokeContext): Promise<void> {
   assert(!need().store.get(DRAFT), 'propose_pack installed the draft')
 
   // The review opens from the card's address.
-  ctx.tabs.openInternal(`apex://packs?draft=${DRAFT}&review=1`)
+  ctx.tabs.openInternal(`atelier://packs?draft=${DRAFT}&review=1`)
   await ctx.chrome.until('return Boolean(document.querySelector(".pk-review"))', 10_000, 'the review sheet for the draft')
   const overflow = await ctx.chrome.js<boolean>('const s = document.querySelector(".sp-main"); return Boolean(s) && s.scrollWidth > s.clientWidth + 1')
-  assert(!overflow, 'apex://packs scrolls sideways')
+  assert(!overflow, 'atelier://packs scrolls sideways')
   await ctx.shot('packs-review')
   await ctx.chrome.escape()
 }
@@ -394,7 +394,7 @@ async function appRuns(ctx: SmokeContext): Promise<void> {
   const { mkdtempSync } = await import('node:fs')
   const { tmpdir } = await import('node:os')
   const { join } = await import('node:path')
-  const author = new AuthorKey(mkdtempSync(join(tmpdir(), 'apex-smoke-author-')), { encrypt: (b) => b, decrypt: (b) => b })
+  const author = new AuthorKey(mkdtempSync(join(tmpdir(), 'atelier-smoke-author-')), { encrypt: (b) => b, decrypt: (b) => b })
   const review = service.reviewArchive(encodeArchive(files, author.sign(packHash(files))), { kind: 'file' })
   assert(review.problems.length === 0, `the app pack has problems: ${review.problems.join('; ')}`)
   assert(review.permissions.some((l) => l.kind === 'apps') && review.permissions.some((l) => l.kind === 'bundled'), 'the review does not list the apps and the built code')
@@ -412,7 +412,7 @@ async function appRuns(ctx: SmokeContext): Promise<void> {
       tab = ctx.tabs.all().find((t) => t.requestedUrl === url)
       return Boolean(tab)
     }, 5000, `the ${appId} tab`)
-    await waitForPage((tab as Tab).view.webContents, `the ${appId} app`, 10_000, (at) => at.startsWith(`apex-pack://${APP_ID}/`))
+    await waitForPage((tab as Tab).view.webContents, `the ${appId} app`, 10_000, (at) => at.startsWith(`atelier-pack://${APP_ID}/`))
     return tab as Tab
   }
 
@@ -435,7 +435,7 @@ async function appRuns(ctx: SmokeContext): Promise<void> {
     assert(out.frame === 'Smoke help', `a frame of the app’s own page: ${String(out.frame)}`)
     assert(out.net === 'blocked', 'the app reached the network')
     assert(out.node === 'undefined/undefined', `the app can see Node: ${String(out.node)}`)
-    assert(out.apex === true, 'window.apex is missing in the app')
+    assert(out.atelier === true, 'window.atelier is missing in the app')
     const inline = await js<string>(wc, `new Promise((resolve) => { window.__inline = 'blocked'; const s = document.createElement('script'); s.textContent = 'window.__inline = "ran"'; document.body.append(s); setTimeout(() => resolve(window.__inline), 100) })`)
     assert(inline === 'blocked', 'an app page ran an inline script')
     // Granting is the page's request being let through (Electron's enter-html-full-screen). macOS may never finish
@@ -455,7 +455,7 @@ async function appRuns(ctx: SmokeContext): Promise<void> {
     await new Promise((r) => setTimeout(r, 800))
     await js(wc, 'location.href = "https://example.com/"').catch(() => undefined)
     await new Promise((r) => setTimeout(r, 500))
-    assert(wc.getURL().startsWith(`apex-pack://${APP_ID}/`), `the game navigated away to ${wc.getURL()}`)
+    assert(wc.getURL().startsWith(`atelier-pack://${APP_ID}/`), `the game navigated away to ${wc.getURL()}`)
     await ctx.shot('packs-app')
   } finally {
     if (ctx.tabs.find(game.id)) ctx.tabs.close(game.id)
@@ -466,7 +466,7 @@ async function appRuns(ctx: SmokeContext): Promise<void> {
   assert(typeof still === 'string' && still.startsWith('data:image/png;base64,'), 'the game’s still was not drawn')
   const image = Buffer.from((still as string).slice((still as string).indexOf(',') + 1), 'base64')
   const shared = service.exportArchive(APP_ID, 'installed', { note: 'Play the smoke game.', image })
-  assert(shared.name.endsWith('.apexapp'), `an app pack exported as ${shared.name}`)
+  assert(shared.name.endsWith('.atelierapp'), `an app pack exported as ${shared.name}`)
   const again = service.reviewArchive(shared.data, { kind: 'file' })
   assert(again.shared.note === 'Play the smoke game.' && Boolean(again.shared.image?.startsWith('data:image/png;base64,')), 'the review does not show what Share… added')
   service.cancelReview(again.token)
@@ -484,7 +484,7 @@ async function appRuns(ctx: SmokeContext): Promise<void> {
 /** A one-app pack laid out the way a Vite or Next build is: an inline bootstrap, root paths, page files and client routes. */
 function siteFixture(): PackFiles {
   const manifest: PackManifest = {
-    format: 'apex-pack',
+    format: 'atelier-pack',
     manifestVersion: 2,
     id: SITE_ID,
     name: 'Smoke site',
@@ -523,9 +523,9 @@ async function buildOutputRuns(ctx: SmokeContext): Promise<void> {
     assert(ran.isolated === true && ran.shared === 'function', `an isolated app is not cross-origin isolated: ${JSON.stringify(ran)}`)
     const injected = await js<string>(wc, `new Promise((resolve) => { window.__inline = 'blocked'; const s = document.createElement('script'); s.textContent = 'window.__inline = "ran"'; document.head.append(s); setTimeout(() => resolve(window.__inline), 100) })`)
     assert(injected === 'blocked', 'a script injected after load ran in an app page')
-    await js(wc, `location.href = ${JSON.stringify(`apex-pack://${SITE_ID}/about`)}`).catch(() => undefined)
+    await js(wc, `location.href = ${JSON.stringify(`atelier-pack://${SITE_ID}/about`)}`).catch(() => undefined)
     await waitFor(() => js<boolean>(wc, 'document.title === "About ready"').catch(() => false), 10_000, '/about to serve about.html')
-    await js(wc, `location.href = ${JSON.stringify(`apex-pack://${SITE_ID}/shop/item/42`)}`).catch(() => undefined)
+    await js(wc, `location.href = ${JSON.stringify(`atelier-pack://${SITE_ID}/shop/item/42`)}`).catch(() => undefined)
     await waitFor(() => js<boolean>(wc, 'document.title === "Home ready" && location.pathname === "/shop/item/42"').catch(() => false), 10_000, 'a client route to serve the entry page')
   } finally {
     if (tab && ctx.tabs.find(tab.id)) ctx.tabs.close(tab.id)
@@ -538,10 +538,10 @@ async function devFolderReloads(ctx: SmokeContext): Promise<void> {
   const { existsSync, mkdirSync, mkdtempSync, writeFileSync } = await import('node:fs')
   const { tmpdir } = await import('node:os')
   const { join } = await import('node:path')
-  const folder = mkdtempSync(join(tmpdir(), 'apex-smoke-dev-'))
+  const folder = mkdtempSync(join(tmpdir(), 'atelier-smoke-dev-'))
   mkdirSync(join(folder, 'app'))
   const manifest: PackManifest = {
-    format: 'apex-pack',
+    format: 'atelier-pack',
     manifestVersion: 2,
     id: DEV_ID,
     name: 'Smoke dev',
@@ -556,7 +556,7 @@ async function devFolderReloads(ctx: SmokeContext): Promise<void> {
   const page = (v: string): string => `<!doctype html><html><head><meta charset="utf-8"><title>start</title><script>document.title = ${JSON.stringify(v)}</script></head><body>${v}</body></html>`
   writeFileSync(join(folder, PACK_MANIFEST_FILE), JSON.stringify(manifest, null, 2))
   writeFileSync(join(folder, 'app', 'index.html'), page('v1'))
-  process.env.APEX_SMOKE_PACK_FOLDER = folder
+  process.env.ATELIER_SMOKE_PACK_FOLDER = folder
   let tab: Tab | undefined
   try {
     const review = await ctx.chrome.invoke<{ token: string; problems: string[]; source: { kind: string } }>('packs', 'loadFolder')
@@ -570,8 +570,8 @@ async function devFolderReloads(ctx: SmokeContext): Promise<void> {
     }, 5000, 'the linked app’s tab')
     const wc = (tab as Tab).view.webContents
     await waitFor(() => js<boolean>(wc, 'document.title === "v1"').catch(() => false), 10_000, 'the linked app to load')
-    const env = await js<string>(wc, 'JSON.stringify(apex.env)')
-    assert(env === '{"SERVER":"http://127.0.0.1:8787"}', `a linked folder’s .env did not fill apex.env for the declared name only: ${env}`)
+    const env = await js<string>(wc, 'JSON.stringify(atelier.env)')
+    assert(env === '{"SERVER":"http://127.0.0.1:8787"}', `a linked folder’s .env did not fill atelier.env for the declared name only: ${env}`)
     const served = await js<number>(wc, "fetch('/.env').then((r) => r.status)")
     assert(served === 404, `the folder’s .env is served to the pack: ${served}`)
     const local = await js<string>(wc, `fetch(${JSON.stringify(`${ctx.server.http}/`)}, { mode: 'no-cors' }).then(() => 'reached', () => 'blocked')`)
@@ -579,7 +579,7 @@ async function devFolderReloads(ctx: SmokeContext): Promise<void> {
     writeFileSync(join(folder, 'app', 'index.html'), page('v2'))
     await waitFor(() => js<boolean>(wc, 'document.title === "v2"').catch(() => false), 10_000, 'the linked app to reload after its file changed')
   } finally {
-    delete process.env.APEX_SMOKE_PACK_FOLDER
+    delete process.env.ATELIER_SMOKE_PACK_FOLDER
     if (tab && ctx.tabs.find(tab.id)) ctx.tabs.close(tab.id)
     if (need().store.get(DEV_ID)) service.remove(DEV_ID)
   }
@@ -644,7 +644,7 @@ async function serversWork(ctx: SmokeContext): Promise<void> {
   const near = `http://127.0.0.1:${net.port}`
   const granted = `http://localhost:${net.port}`
   const manifest: PackManifest = {
-    format: 'apex-pack',
+    format: 'atelier-pack',
     manifestVersion: 2,
     id: NET_ID,
     name: 'Smoke net',
@@ -660,7 +660,7 @@ async function serversWork(ctx: SmokeContext): Promise<void> {
     [PACK_MANIFEST_FILE, Buffer.from(JSON.stringify(manifest))],
     ['app/index.html', Buffer.from('<!doctype html><html><head><meta charset="utf-8"><title>net</title></head><body>net</body></html>')],
   ])
-  const author = new AuthorKey(mkdtempSync(join(tmpdir(), 'apex-smoke-author-')), { encrypt: (b) => b, decrypt: (b) => b })
+  const author = new AuthorKey(mkdtempSync(join(tmpdir(), 'atelier-smoke-author-')), { encrypt: (b) => b, decrypt: (b) => b })
   let tab: Tab | undefined
   let keyTab: Tab | undefined
   try {
@@ -678,7 +678,7 @@ async function serversWork(ctx: SmokeContext): Promise<void> {
       return Boolean(tab)
     }, 5000, 'the server app’s tab')
     const wc = (tab as Tab).view.webContents
-    await waitForPage(wc, 'the server app', 10_000, (at) => at.startsWith(`apex-pack://${NET_ID}/`))
+    await waitForPage(wc, 'the server app', 10_000, (at) => at.startsWith(`atelier-pack://${NET_ID}/`))
     type Got = { status: number; body: { origin: string; auth: boolean; method: string; host: string } } | string
     const get = (address: string, init = '{}'): Promise<Got> => js<Got>(wc, `fetch(${JSON.stringify(address)}, ${init}).then(async (r) => ({ status: r.status, body: await r.json() }), (err) => 'blocked: ' + err.message)`)
     const body = (got: Got, what: string): Exclude<Got, string>['body'] => {
@@ -687,31 +687,31 @@ async function serversWork(ctx: SmokeContext): Promise<void> {
     }
 
     const hello = body(await get(`${near}/hello`), 'the app could not reach its own server')
-    assert(hello.origin === `apex-pack://${NET_ID}`, `the server saw the origin ${hello.origin}`)
+    assert(hello.origin === `atelier-pack://${NET_ID}`, `the server saw the origin ${hello.origin}`)
     assert(hello.auth, 'the key the person entered was not on the request to its host')
     const posted = body(await get(`${near}/hello`, `{ method: 'POST', headers: { 'X-App': '1', 'Content-Type': 'application/json' }, body: '{"n":1}' }`), 'a POST with its own header failed')
     assert(posted.method === 'POST' && posted.auth && net.preflights() > 0, `the preflighted POST: ${JSON.stringify(posted)}, ${net.preflights()} preflights`)
     const noCors = await get(`${near}/nocors`)
     assert(typeof noCors === 'string', 'the page read a response its server did not allow (CORS)')
     const ws = await js<string>(wc, `new Promise((resolve) => { const s = new WebSocket(${JSON.stringify(`ws://127.0.0.1:${net.port}/ws`)}); s.onopen = () => s.send('hi'); s.onmessage = (e) => { resolve(String(e.data)); s.close() }; s.onerror = () => resolve('error'); setTimeout(() => resolve('timeout'), 5000) })`)
-    assert(ws === `echo:hi|auth:true|origin:apex-pack://${NET_ID}`, `the app’s WebSocket: ${ws}`)
+    assert(ws === `echo:hi|auth:true|origin:atelier-pack://${NET_ID}`, `the app’s WebSocket: ${ws}`)
     const image = await js<number>(wc, `new Promise((resolve) => { const i = new Image(); i.onload = () => resolve(i.naturalWidth); i.onerror = () => resolve(-1); i.src = ${JSON.stringify(`${near}/pic.png`)} })`)
     assert(image === 1, `an image from the app’s server: ${image}`)
     assert(typeof (await get(`${granted}/hello`)) === 'string', 'the app reached a host it may only ask for')
     assert(typeof (await get('https://example.com/')) === 'string', 'the app reached a host it doesn’t list')
 
-    const env = await js<string>(wc, 'JSON.stringify(apex.env)')
-    assert(env === '{"GREETING":"hello"}', `apex.env: ${env}`)
-    const status = await js<Record<string, boolean>>(wc, 'apex.secrets.status()')
-    assert(status.NET_KEY === true, `apex.secrets.status: ${JSON.stringify(status)}`)
-    const viaMain = await js<{ auth: boolean }>(wc, `apex.fetch(${JSON.stringify(`${near}/nocors`)}).then((r) => r.json())`)
-    assert(viaMain.auth === true, 'apex.fetch did not carry the key to its host')
+    const env = await js<string>(wc, 'JSON.stringify(atelier.env)')
+    assert(env === '{"GREETING":"hello"}', `atelier.env: ${env}`)
+    const status = await js<Record<string, boolean>>(wc, 'atelier.secrets.status()')
+    assert(status.NET_KEY === true, `atelier.secrets.status: ${JSON.stringify(status)}`)
+    const viaMain = await js<{ auth: boolean }>(wc, `atelier.fetch(${JSON.stringify(`${near}/nocors`)}).then((r) => r.json())`)
+    assert(viaMain.auth === true, 'atelier.fetch did not carry the key to its host')
 
     // Granted later: the host works at once, without the key; a redirect to it leaves the key behind.
     const realPrompt = runtime.permissionPrompt
     runtime.permissionPrompt = async () => true
     try {
-      const asked = await js<{ granted: boolean }>(wc, "apex.permissions.request({ network: ['localhost'] })")
+      const asked = await js<{ granted: boolean }>(wc, "atelier.permissions.request({ network: ['localhost'] })")
       assert(asked.granted, 'asking for the optional host was refused')
     } finally {
       runtime.permissionPrompt = realPrompt
@@ -723,10 +723,10 @@ async function serversWork(ctx: SmokeContext): Promise<void> {
     service.revokeGranted(NET_ID)
     await waitFor(async () => typeof (await get(`${granted}/hello`)) === 'string', 5000, 'a host taken back to be blocked again')
 
-    // No key: requests go without one, and apex.secrets.request opens the pack's page and hears the save.
+    // No key: requests go without one, and atelier.secrets.request opens the pack's page and hears the save.
     service.clearSecret(NET_ID, 'NET_KEY')
     assert(!body(await get(`${near}/hello`), 'the server after the key was removed').auth, 'a removed key was still sent')
-    const asking = js<{ set: boolean }>(wc, "apex.secrets.request('NET_KEY')")
+    const asking = js<{ set: boolean }>(wc, "atelier.secrets.request('NET_KEY')")
     await waitFor(() => {
       keyTab = ctx.tabs.all().find((t) => [t.internalUrl ?? '', t.requestedUrl].some((u) => u.includes(`pack=${NET_ID}`) && u.includes('key=NET_KEY')))
       return Boolean(keyTab)
@@ -749,7 +749,7 @@ async function serversWork(ctx: SmokeContext): Promise<void> {
 async function assetPacksWork(ctx: SmokeContext): Promise<void> {
   const { service, runtime } = need()
   const diner: PackManifest = {
-    format: 'apex-pack',
+    format: 'atelier-pack',
     manifestVersion: 2,
     id: DINER_ID,
     name: 'Smoke diner',
@@ -759,7 +759,7 @@ async function assetPacksWork(ctx: SmokeContext): Promise<void> {
     permissions: { ...NO_PACK_PERMISSIONS },
   }
   const winter: PackManifest = {
-    format: 'apex-pack',
+    format: 'atelier-pack',
     manifestVersion: 2,
     id: WINTER_ID,
     name: 'Smoke winter',
@@ -780,7 +780,7 @@ async function assetPacksWork(ctx: SmokeContext): Promise<void> {
       [
         'app/main.js',
         Buffer.from(
-          "const read = async (p) => (await fetch(apex.assets.url('art', p))).text()\nwindow.__assets = { sign: await read('sign.txt'), menu: await read('the menu.txt'), active: await apex.assets.active('art') }\ndocument.title = 'assets ' + (window.__assets.active ? window.__assets.active.set : 'own')\n",
+          "const read = async (p) => (await fetch(atelier.assets.url('art', p))).text()\nwindow.__assets = { sign: await read('sign.txt'), menu: await read('the menu.txt'), active: await atelier.assets.active('art') }\ndocument.title = 'assets ' + (window.__assets.active ? window.__assets.active.set : 'own')\n",
         ),
       ],
       ['app/art/sign.txt', Buffer.from('own sign')],
@@ -808,17 +808,17 @@ async function assetPacksWork(ctx: SmokeContext): Promise<void> {
     const chosen = await js<{ sign: string; menu: string; active: { setName: string } }>(wc, 'window.__assets')
     assert(chosen.sign === 'winter sign', `the asset pack’s file: ${chosen.sign}`)
     assert(chosen.menu === 'own menu', `a file the asset pack lacks comes from the app: ${chosen.menu}`)
-    assert(chosen.active.setName === 'Winter', 'apex.assets.active does not name the chosen set')
+    assert(chosen.active.setName === 'Winter', 'atelier.assets.active does not name the chosen set')
   } finally {
     if (tab && ctx.tabs.find(tab.id)) ctx.tabs.close(tab.id)
   }
 }
 
-/** A kit app (docs/apps.md › The kit): bare imports of three and apex-kit resolve, and a companion stands in its own scene. */
+/** A kit app (docs/apps.md › The kit): bare imports of three and atelier-kit resolve, and a companion stands in its own scene. */
 async function kitAppRuns(ctx: SmokeContext): Promise<void> {
   const { service, runtime } = need()
   const manifest: PackManifest = {
-    format: 'apex-pack',
+    format: 'atelier-pack',
     manifestVersion: 2,
     id: KIT_ID,
     name: 'Smoke kit',
@@ -829,8 +829,8 @@ async function kitAppRuns(ctx: SmokeContext): Promise<void> {
   }
   const script = [
     "import * as THREE from 'three'",
-    "import { character } from 'apex-kit/character.js'",
-    'const [me] = await apex.cast.members()',
+    "import { character } from 'atelier-kit/character.js'",
+    'const [me] = await atelier.cast.members()',
     'const look = me.look',
     'const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true })',
     'renderer.setSize(256, 256)',
@@ -846,10 +846,10 @@ async function kitAppRuns(ctx: SmokeContext): Promise<void> {
     'let meshes = 0',
     'pip.object3d.traverse((o) => { if (o.isMesh) meshes++ })',
     'window.__kit = { revision: THREE.REVISION, meshes, member: { ref: me.ref, name: me.name } }',
-    "const { guide } = await import('apex-kit/guide.js')",
+    "const { guide } = await import('atelier-kit/guide.js')",
     'const g = await guide({ size: 140 })',
     "g.say('Welcome to the smoke test!', { mood: 'happy' })",
-    "window.__guide = { name: g.name, bubble: document.querySelector('[data-apex-guide] [role=status]').textContent, canvas: Boolean(document.querySelector('[data-apex-guide] canvas')) }",
+    "window.__guide = { name: g.name, bubble: document.querySelector('[data-atelier-guide] [role=status]').textContent, canvas: Boolean(document.querySelector('[data-atelier-guide] canvas')) }",
     "document.title = 'kit ready'",
   ].join('\n')
   const files: PackFiles = new Map([
@@ -872,23 +872,23 @@ async function kitAppRuns(ctx: SmokeContext): Promise<void> {
     await waitFor(() => js<boolean>(wc, 'document.title === "kit ready"').catch(() => false), 20_000, 'the kit app to build a companion')
     const kit = await js<{ revision: string; meshes: number; member: { ref: string; name: string } }>(wc, 'window.__kit')
     assert(kit.revision === '186', `three from the kit: ${kit.revision}`)
-    assert(kit.meshes >= 5, `the companion from apex-kit/character.js has ${kit.meshes} meshes`)
-    assert(/^[0-9a-f]{16}$/.test(kit.member.ref) && kit.member.name.length > 0, `apex.cast.members: ${JSON.stringify(kit.member)}`)
+    assert(kit.meshes >= 5, `the companion from atelier-kit/character.js has ${kit.meshes} meshes`)
+    assert(/^[0-9a-f]{16}$/.test(kit.member.ref) && kit.member.name.length > 0, `atelier.cast.members: ${JSON.stringify(kit.member)}`)
     const guided = await js<{ name: string; bubble: string; canvas: boolean }>(wc, 'window.__guide')
-    assert(guided.bubble === 'Welcome to the smoke test!' && guided.canvas && guided.name === kit.member.name, `apex-kit/guide.js: ${JSON.stringify(guided)}`)
+    assert(guided.bubble === 'Welcome to the smoke test!' && guided.canvas && guided.name === kit.member.name, `atelier-kit/guide.js: ${JSON.stringify(guided)}`)
     // The person picks who plays (the smoke run answers the chooser), and a member says a line in character.
     const realPrompt = runtime.castPrompt
     let asked = 0
     runtime.castPrompt = async () => (asked++ === 0 ? 0 : null)
     try {
-      const picked = await js<Array<{ ref: string }>>(wc, 'apex.cast.pick({ max: 2 })')
-      assert(picked.length === 1 && asked === 2, `apex.cast.pick: ${JSON.stringify(picked)} after ${asked} questions`)
+      const picked = await js<Array<{ ref: string }>>(wc, 'atelier.cast.pick({ max: 2 })')
+      assert(picked.length === 1 && asked === 2, `atelier.cast.pick: ${JSON.stringify(picked)} after ${asked} questions`)
     } finally {
       runtime.castPrompt = realPrompt
     }
-    const line = await js<string>(wc, `apex.cast.speak(${JSON.stringify(kit.member.ref)}, { situation: 'won a long rally 11-9', mood: 'proud' })`)
-    assert(typeof line === 'string' && line.length > 0, `apex.cast.speak: ${line}`)
-    const stranger = await js<string>(wc, "apex.cast.speak('0000000000000000', { situation: 'x' }).then(() => 'spoke', (err) => err.message)")
+    const line = await js<string>(wc, `atelier.cast.speak(${JSON.stringify(kit.member.ref)}, { situation: 'won a long rally 11-9', mood: 'proud' })`)
+    assert(typeof line === 'string' && line.length > 0, `atelier.cast.speak: ${line}`)
+    const stranger = await js<string>(wc, "atelier.cast.speak('0000000000000000', { situation: 'x' }).then(() => 'spoke', (err) => err.message)")
     assert(/No companion in this app’s cast/.test(stranger), `a ref from nowhere: ${stranger}`)
     await ctx.shot('packs-kit')
   } finally {
@@ -927,7 +927,7 @@ async function worldStillShows(): Promise<void> {
   const { default: town } = await import('../../firstParty/worlds/worlds/harbour-town.json?raw')
   const made = await create.run({ id: STILL_DRAFT, name: 'Smoke world still', description: 'A world in the smoke test.' }, toolCtx())
   assert(!made.isError, `create_pack: ${made.content.slice(0, 200)}`)
-  const manifest: PackManifest = { format: 'apex-pack', manifestVersion: 2, id: STILL_DRAFT, name: 'Smoke world still', version: '0.0.1', description: 'A world in the smoke test.', contributes: { worlds: ['worlds/town.json'] }, permissions: { ...NO_PACK_PERMISSIONS } }
+  const manifest: PackManifest = { format: 'atelier-pack', manifestVersion: 2, id: STILL_DRAFT, name: 'Smoke world still', version: '0.0.1', description: 'A world in the smoke test.', contributes: { worlds: ['worlds/town.json'] }, permissions: { ...NO_PACK_PERMISSIONS } }
   for (const [path, content] of [[PACK_MANIFEST_FILE, JSON.stringify(manifest, null, 2)], ['worlds/town.json', town]] as const) {
     const wrote = await write.run({ id: STILL_DRAFT, path, content }, toolCtx())
     assert(!wrote.isError, `write_pack_file ${path}: ${wrote.content.slice(0, 200)}`)
@@ -946,7 +946,7 @@ async function worldStillShows(): Promise<void> {
 
 function providerFixture(): PackFiles {
   const manifest: PackManifest = {
-    format: 'apex-pack',
+    format: 'atelier-pack',
     manifestVersion: 2,
     id: PROVIDER_ID,
     name: 'Smoke scores',
@@ -972,7 +972,7 @@ function providerFixture(): PackFiles {
     [
       'app/main.js',
       Buffer.from(
-        "await apex.services.provide('smoke-scores', { top: async () => ['page'], add: async (input) => input.n * 3 })\nawait apex.status.set({ text: '7 points', badge: 7 })\nwindow.score = () => apex.events.emit('scored', { points: 7 })\ndocument.title = 'serving'\n",
+        "await atelier.services.provide('smoke-scores', { top: async () => ['page'], add: async (input) => input.n * 3 })\nawait atelier.status.set({ text: '7 points', badge: 7 })\nwindow.score = () => atelier.events.emit('scored', { points: 7 })\ndocument.title = 'serving'\n",
       ),
     ],
   ])
@@ -980,7 +980,7 @@ function providerFixture(): PackFiles {
 
 function consumerFixture(host: string): PackFiles {
   const manifest: PackManifest = {
-    format: 'apex-pack',
+    format: 'atelier-pack',
     manifestVersion: 2,
     id: CONSUMER_ID,
     name: 'Smoke board',
@@ -995,7 +995,7 @@ function consumerFixture(host: string): PackFiles {
   return new Map([
     [PACK_MANIFEST_FILE, Buffer.from(JSON.stringify(manifest, null, 2))],
     ['board.html', Buffer.from('<!doctype html><html><head><meta charset="utf-8"><title>Board</title></head><body><p>Board</p><script type="module" src="board.js"></script></body></html>')],
-    ['board.js', Buffer.from("window.__heard = []\napex.events.on('smoke-scores/scored', (data) => window.__heard.push(data))\ndocument.title = 'listening'\n")],
+    ['board.js', Buffer.from("window.__heard = []\natelier.events.on('smoke-scores/scored', (data) => window.__heard.push(data))\ndocument.title = 'listening'\n")],
   ])
 }
 
@@ -1019,11 +1019,11 @@ async function pluginsWork(ctx: SmokeContext): Promise<void> {
   await waitFor(() => runtime.isRunning(CONSUMER_ID) && runtime.isRunning(PROVIDER_ID), 5000, 'both packs to run once the service is there')
 
   // A companion reads the live catalog, then uses the service the scores pack offers it.
-  const inspect = clientTool('apex_inspect')
+  const inspect = clientTool('atelier_inspect')
   const useApp = clientTool('use_app')
-  assert(inspect && useApp, 'apex_inspect and use_app are not registered')
+  assert(inspect && useApp, 'atelier_inspect and use_app are not registered')
   const catalog = JSON.parse((await inspect.run({ what: ['services', 'events'] }, toolCtx())).content) as { services: { packs: Array<{ service: string }> }; events: { packs: string[] } }
-  assert(catalog.services.packs.some((s) => s.service === 'smoke-scores') && catalog.events.packs.includes('smoke-scores/scored'), 'apex_inspect does not list the running pack’s service and event')
+  assert(catalog.services.packs.some((s) => s.service === 'smoke-scores') && catalog.events.packs.includes('smoke-scores/scored'), 'atelier_inspect does not list the running pack’s service and event')
   const used = await useApp.run({ action: 'call', service: 'smoke-scores', method: 'add', input: { n: 5 } }, toolCtx())
   assert(!used.isError && /<pack_tool_result pack="smoke-scores"[^>]*>\s*10\s*</.test(used.content), `use_app did not reach the service: ${used.content.slice(0, 200)}`)
 
@@ -1041,25 +1041,25 @@ async function pluginsWork(ctx: SmokeContext): Promise<void> {
   let app: Tab | null = null
   try {
     const bw = board.view.webContents
-    assert((await js<number>(bw, "apex.services.call('smoke-scores', 'add', { n: 21 })")) === 42, 'the service’s module did not answer')
-    const misfit = await js<string>(bw, "apex.services.call('smoke-scores', 'add', {}).then(() => 'accepted', (err) => err.message)")
+    assert((await js<number>(bw, "atelier.services.call('smoke-scores', 'add', { n: 21 })")) === 42, 'the service’s module did not answer')
+    const misfit = await js<string>(bw, "atelier.services.call('smoke-scores', 'add', {}).then(() => 'accepted', (err) => err.message)")
     assert(/doesn't fit/.test(misfit), `an input that doesn’t fit the schema: ${misfit}`)
-    const stranger = await js<string>(bw, "apex.services.call('other-service', 'top', {}).then(() => 'accepted', (err) => err.message)")
+    const stranger = await js<string>(bw, "atelier.services.call('other-service', 'top', {}).then(() => 'accepted', (err) => err.message)")
     assert(/not in this pack's uses/.test(stranger), `a service the board doesn’t use: ${stranger}`)
 
-    // apex.ai on the person's engine (the smoke run's offline stand-in answers): a reply, a stream and JSON that fits a schema.
-    const asked0 = await js<string>(bw, "apex.ai.ask('ping the model', { tier: 'fast' })")
-    assert(/ping the model/.test(asked0), `apex.ai.ask: ${asked0}`)
-    const streamed = await js<{ all: string; pieces: number }>(bw, "(async () => { let pieces = 0; const all = await apex.ai.stream('stream me', { onText: () => pieces++ }); return { all, pieces } })()")
-    assert(/stream me/.test(streamed.all) && streamed.pieces >= 1, `apex.ai.stream: ${JSON.stringify(streamed)}`)
-    const shaped = await js<{ title?: string }>(bw, "apex.ai.json('Summarise the meeting as JSON', { schema: { type: 'object', properties: { title: { type: 'string' } }, required: ['title'] } })")
-    assert(typeof shaped.title === 'string' && shaped.title.length > 0, `apex.ai.json: ${JSON.stringify(shaped)}`)
+    // atelier.ai on the person's engine (the smoke run's offline stand-in answers): a reply, a stream and JSON that fits a schema.
+    const asked0 = await js<string>(bw, "atelier.ai.ask('ping the model', { tier: 'fast' })")
+    assert(/ping the model/.test(asked0), `atelier.ai.ask: ${asked0}`)
+    const streamed = await js<{ all: string; pieces: number }>(bw, "(async () => { let pieces = 0; const all = await atelier.ai.stream('stream me', { onText: () => pieces++ }); return { all, pieces } })()")
+    assert(/stream me/.test(streamed.all) && streamed.pieces >= 1, `atelier.ai.stream: ${JSON.stringify(streamed)}`)
+    const shaped = await js<{ title?: string }>(bw, "atelier.ai.json('Summarise the meeting as JSON', { schema: { type: 'object', properties: { title: { type: 'string' } }, required: ['title'] } })")
+    assert(typeof shaped.title === 'string' && shaped.title.length > 0, `atelier.ai.json: ${JSON.stringify(shaped)}`)
 
-    // apex.files: what the picker gives, a folder it may read and write (never outside it), and files of the person's own it keeps.
+    // atelier.files: what the picker gives, a folder it may read and write (never outside it), and files of the person's own it keeps.
     const { mkdtempSync, mkdirSync: mkdir, readFileSync: readFile, writeFileSync: writeFile } = await import('node:fs')
     const { tmpdir } = await import('node:os')
     const { join } = await import('node:path')
-    const place = mkdtempSync(join(tmpdir(), 'apex-smoke-files-'))
+    const place = mkdtempSync(join(tmpdir(), 'atelier-smoke-files-'))
     writeFile(join(place, 'picked.txt'), 'picked text')
     mkdir(join(place, 'game data'))
     writeFile(join(place, 'game data', 'level one.json'), '{"name":"from the player"}')
@@ -1067,59 +1067,59 @@ async function pluginsWork(ctx: SmokeContext): Promise<void> {
     runtime.pickers.open = async (_c, o) => (o.folder ? [o.title.includes('read and write') ? place : join(place, 'game data')] : [join(place, 'picked.txt')])
     runtime.pickers.save = async () => join(place, 'saved.txt')
     try {
-      const opened = await js<Array<{ name: string; text: string }>>(bw, '(async () => (await apex.files.open({})).map((f) => ({ name: f.name, text: new TextDecoder().decode(f.data) })))()')
-      assert(opened[0]?.name === 'picked.txt' && opened[0].text === 'picked text', `apex.files.open: ${JSON.stringify(opened)}`)
-      const saved = await js<{ saved: boolean }>(bw, "apex.files.save('notes.txt', 'saved by the board')")
-      assert(saved.saved && readFile(join(place, 'saved.txt'), 'utf8') === 'saved by the board', 'apex.files.save did not write the file')
-      await js(bw, 'apex.files.folder()')
-      await js(bw, "apex.files.write('chapters/one.md', 'Chapter one')")
-      const listed = await js<Array<{ name: string }>>(bw, "apex.files.list('chapters')")
-      assert(listed.some((f) => f.name === 'one.md') && readFile(join(place, 'chapters', 'one.md'), 'utf8') === 'Chapter one', 'apex.files.write and list in the folder')
-      const escaped = await js<string>(bw, "apex.files.read('../outside.txt').then(() => 'read', (err) => err.message)")
+      const opened = await js<Array<{ name: string; text: string }>>(bw, '(async () => (await atelier.files.open({})).map((f) => ({ name: f.name, text: new TextDecoder().decode(f.data) })))()')
+      assert(opened[0]?.name === 'picked.txt' && opened[0].text === 'picked text', `atelier.files.open: ${JSON.stringify(opened)}`)
+      const saved = await js<{ saved: boolean }>(bw, "atelier.files.save('notes.txt', 'saved by the board')")
+      assert(saved.saved && readFile(join(place, 'saved.txt'), 'utf8') === 'saved by the board', 'atelier.files.save did not write the file')
+      await js(bw, 'atelier.files.folder()')
+      await js(bw, "atelier.files.write('chapters/one.md', 'Chapter one')")
+      const listed = await js<Array<{ name: string }>>(bw, "atelier.files.list('chapters')")
+      assert(listed.some((f) => f.name === 'one.md') && readFile(join(place, 'chapters', 'one.md'), 'utf8') === 'Chapter one', 'atelier.files.write and list in the folder')
+      const escaped = await js<string>(bw, "atelier.files.read('../outside.txt').then(() => 'read', (err) => err.message)")
       assert(/isn’t inside the folder/.test(escaped), `a path outside the folder: ${escaped}`)
-      const own = await js<{ files: string[] }>(bw, "apex.files.own({ folder: true, note: 'Choose your game data' })")
-      assert(own.files.includes('level one.json'), `apex.files.own: ${JSON.stringify(own)}`)
-      const ownText = await js<string>(bw, "fetch(apex.files.ownUrl('level one.json')).then((r) => r.text())")
+      const own = await js<{ files: string[] }>(bw, "atelier.files.own({ folder: true, note: 'Choose your game data' })")
+      assert(own.files.includes('level one.json'), `atelier.files.own: ${JSON.stringify(own)}`)
+      const ownText = await js<string>(bw, "fetch(atelier.files.ownUrl('level one.json')).then((r) => r.text())")
       assert(ownText === '{"name":"from the player"}', `the person's own file, read back: ${ownText}`)
       service.revokeGranted(CONSUMER_ID)
-      const afterRevoke = await js<string>(bw, "apex.files.read('chapters/one.md').then(() => 'read', (err) => err.message)")
-      assert(/apex.files.folder\(\) first/.test(afterRevoke), `the folder after Take back: ${afterRevoke}`)
+      const afterRevoke = await js<string>(bw, "atelier.files.read('chapters/one.md').then(() => 'read', (err) => err.message)")
+      assert(/atelier.files.folder\(\) first/.test(afterRevoke), `the folder after Take back: ${afterRevoke}`)
     } finally {
       Object.assign(runtime.pickers, realPickers)
     }
 
     // Scheduled notifications: one fires on time, a cancelled one never does.
-    await js(bw, "apex.notifications.schedule({ id: 'soon', at: Date.now() + 1500, title: 'Dishes ready' })")
-    await js(bw, "apex.notifications.schedule({ id: 'never', at: Date.now() + 2000, title: 'Not this one' })")
-    await js(bw, "apex.notifications.cancel('never')")
-    const pending = await js<Array<{ id: string }>>(bw, 'apex.notifications.list()')
-    assert(pending.length === 1 && pending[0]?.id === 'soon', `apex.notifications.list: ${JSON.stringify(pending)}`)
+    await js(bw, "atelier.notifications.schedule({ id: 'soon', at: Date.now() + 1500, title: 'Dishes ready' })")
+    await js(bw, "atelier.notifications.schedule({ id: 'never', at: Date.now() + 2000, title: 'Not this one' })")
+    await js(bw, "atelier.notifications.cancel('never')")
+    const pending = await js<Array<{ id: string }>>(bw, 'atelier.notifications.list()')
+    assert(pending.length === 1 && pending[0]?.id === 'soon', `atelier.notifications.list: ${JSON.stringify(pending)}`)
     await waitFor(() => runtime.firedForSmoke.some((f) => f.packId === CONSUMER_ID && f.id === 'soon'), 6000, 'the scheduled notification to fire')
     await new Promise((r) => setTimeout(r, 800))
     assert(!runtime.firedForSmoke.some((f) => f.id === 'never'), 'a cancelled notification fired')
 
     // Asking for more while it runs: refused before, allowed once the person says yes, gone when taken back.
     const optionalUrl = JSON.stringify(`${ctx.server.http}/packs/optional`)
-    const before = await js<string>(bw, `apex.fetch(${optionalUrl}).then((r) => r.text(), (err) => 'refused: ' + err.message)`)
-    assert(before.startsWith('refused'), `apex.fetch reached a host it only may ask for: ${before}`)
+    const before = await js<string>(bw, `atelier.fetch(${optionalUrl}).then((r) => r.text(), (err) => 'refused: ' + err.message)`)
+    assert(before.startsWith('refused'), `atelier.fetch reached a host it only may ask for: ${before}`)
     const realPrompt = runtime.permissionPrompt
     runtime.permissionPrompt = async () => true
-    const asked = await js<{ granted: boolean }>(bw, `apex.permissions.request({ network: [${JSON.stringify(host)}] })`)
+    const asked = await js<{ granted: boolean }>(bw, `atelier.permissions.request({ network: [${JSON.stringify(host)}] })`)
     assert(asked.granted === true, 'an allowed request was not granted')
-    const after = await js<string>(bw, `apex.fetch(${optionalUrl}).then((r) => r.text(), (err) => 'refused: ' + err.message)`)
-    assert(after === 'asked and allowed', `apex.fetch after the grant: ${after}`)
+    const after = await js<string>(bw, `atelier.fetch(${optionalUrl}).then((r) => r.text(), (err) => 'refused: ' + err.message)`)
+    assert(after === 'asked and allowed', `atelier.fetch after the grant: ${after}`)
     runtime.permissionPrompt = async () => false
-    const no = await js<{ granted: boolean }>(bw, `apex.permissions.request({ sites: [${JSON.stringify(host)}] })`)
+    const no = await js<{ granted: boolean }>(bw, `atelier.permissions.request({ sites: [${JSON.stringify(host)}] })`)
     assert(no.granted === false, 'a refused request was granted')
-    const outside = await js<string>(bw, "apex.permissions.request({ clipboard: true }).then(() => 'asked', (err) => err.message)")
+    const outside = await js<string>(bw, "atelier.permissions.request({ clipboard: true }).then(() => 'asked', (err) => err.message)")
     assert(/optionalPermissions/.test(outside), `a request outside optionalPermissions: ${outside}`)
     runtime.permissionPrompt = realPrompt
     service.revokeGranted(CONSUMER_ID)
-    const revoked = await js<string>(bw, `apex.fetch(${optionalUrl}).then((r) => r.text(), (err) => 'refused: ' + err.message)`)
-    assert(revoked.startsWith('refused'), `apex.fetch still works after Take back: ${revoked}`)
+    const revoked = await js<string>(bw, `atelier.fetch(${optionalUrl}).then((r) => r.text(), (err) => 'refused: ' + err.message)`)
+    assert(revoked.startsWith('refused'), `atelier.fetch still works after Take back: ${revoked}`)
 
     app = await openTab(() => runtime.openApp(PROVIDER_ID, 'main'), packUrl(PROVIDER_ID, 'app/index.html'), 'serving')
-    const top = await js<string[]>(bw, "apex.services.call('smoke-scores', 'top')")
+    const top = await js<string[]>(bw, "atelier.services.call('smoke-scores', 'top')")
     assert(top[0] === 'page', `an open page that serves the service is not preferred: ${JSON.stringify(top)}`)
     await js(app.view.webContents, 'window.score()')
     await waitFor(() => js<boolean>(bw, 'window.__heard.length === 1 && window.__heard[0].points === 7').catch(() => false), 5000, 'the board to hear the scores’ event')
@@ -1139,7 +1139,7 @@ async function pluginsWork(ctx: SmokeContext): Promise<void> {
  * yours with a guest and one of your companions; the guest talks; stepping
  * into a place opens its app, which reads where it came from and finds the
  * residents there as its cast (the guest speaks from it too); Share… saves an
- * .apexworld that reviews and installs as a pack; the editor opens.
+ * .atelierworld that reviews and installs as a pack; the editor opens.
  */
 async function worldsWork(ctx: SmokeContext): Promise<void> {
   const { service, store, runtime } = need()
@@ -1147,14 +1147,14 @@ async function worldsWork(ctx: SmokeContext): Promise<void> {
   const { tmpdir } = await import('node:os')
   const { join } = await import('node:path')
   // Worlds comes off, so the browser is as before until someone wants it.
-  assert(!store.get('apex-worlds')?.entry.enabled, 'the Worlds pack is on in a new profile')
-  store.setEnabled('apex-worlds', true)
-  assert(runtime.isRunning('apex-worlds'), 'the Worlds pack did not turn on')
-  assert(runtime.worldList().some((w) => w.ref === 'pack:apex-worlds/worlds/harbour-town.json'), 'Harbour town is not among the worlds')
+  assert(!store.get('atelier-worlds')?.entry.enabled, 'the Worlds pack is on in a new profile')
+  store.setEnabled('atelier-worlds', true)
+  assert(runtime.isRunning('atelier-worlds'), 'the Worlds pack did not turn on')
+  assert(runtime.worldList().some((w) => w.ref === 'pack:atelier-worlds/worlds/harbour-town.json'), 'Harbour town is not among the worlds')
 
   // The app a place opens: it may cast the person's companions and have them (and guests) speak.
   const placeManifest: PackManifest = {
-    format: 'apex-pack',
+    format: 'atelier-pack',
     manifestVersion: 2,
     id: PLACE_ID,
     name: 'Smoke place',
@@ -1167,7 +1167,7 @@ async function worldsWork(ctx: SmokeContext): Promise<void> {
     [PACK_MANIFEST_FILE, Buffer.from(JSON.stringify(placeManifest))],
     ['app/index.html', Buffer.from('<!doctype html><html><head><meta charset="utf-8"><title>hall</title></head><body>hall</body></html>')],
   ])
-  const author = new AuthorKey(mkdtempSync(join(tmpdir(), 'apex-smoke-author-')), { encrypt: (b) => b, decrypt: (b) => b })
+  const author = new AuthorKey(mkdtempSync(join(tmpdir(), 'atelier-smoke-author-')), { encrypt: (b) => b, decrypt: (b) => b })
   const placeReview = service.reviewArchive(encodeArchive(placeFiles, author.sign(packHash(placeFiles))), { kind: 'file' })
   assert(placeReview.problems.length === 0, `the place app: ${placeReview.problems.join('; ')}`)
   service.confirmInstall(placeReview.token)
@@ -1175,7 +1175,7 @@ async function worldsWork(ctx: SmokeContext): Promise<void> {
   const look = { rig: 'A', parts: { head: 'head-round', ears: null, hair: 'hair-tuft', hat: null, eyeAccessory: null, earAccessory: null, prop: null }, face: { eyes: 'eyes-round', brows: 'brows-soft', mouth: 'mouth-smile' }, colors: { skin: '#ffd2a8', hair: '#c0583c', accent: '#fff3c4', outfit: '#e0705a' } }
   runtime.worldSave(
     {
-      format: 'apex-world',
+      format: 'atelier-world',
       version: 1,
       id: TOWN,
       name: 'Smoke town',
@@ -1197,8 +1197,8 @@ async function worldsWork(ctx: SmokeContext): Promise<void> {
   let viewer: Tab | undefined
   let hall: Tab | undefined
   try {
-    runtime.openApp('apex-worlds', 'main', null, `world=${encodeURIComponent(ref)}`)
-    const viewerUrl = packUrl('apex-worlds', 'app/index.html')
+    runtime.openApp('atelier-worlds', 'main', null, `world=${encodeURIComponent(ref)}`)
+    const viewerUrl = packUrl('atelier-worlds', 'app/index.html')
     await waitFor(() => {
       viewer = ctx.tabs.all().find((t) => t.requestedUrl.startsWith(viewerUrl))
       return Boolean(viewer)
@@ -1208,7 +1208,7 @@ async function worldsWork(ctx: SmokeContext): Promise<void> {
     wc.on('console-message', (event) => {
       if (event.level === 'error' && pageErrors.length < 5) pageErrors.push(event.message.slice(0, 200))
     })
-    await waitForPage(wc, 'the world viewer', 10_000, (at) => at.startsWith('apex-pack://apex-worlds/'))
+    await waitForPage(wc, 'the world viewer', 10_000, (at) => at.startsWith('atelier-pack://atelier-worlds/'))
     // Tilly is a guest; the open spot gets one of your other companions if you have one, never the one you walk as.
     // The world's first frames compile its shadowed scene's shaders while three companions load; where WebGL is
     // software (a CI machine without a GPU) that takes a while, so the wait is long and says where it stopped.
@@ -1216,14 +1216,14 @@ async function worldsWork(ctx: SmokeContext): Promise<void> {
       const at = await js<unknown>(wc, `window.__worlds ? { screen: window.__worlds.screen, opening: window.__worlds.opening, world: window.__worlds.current?.world.id ?? null, people: window.__worlds.stage.people.map((p) => p.name), notes: [document.getElementById('home-note')?.textContent, document.getElementById('stage-note')?.textContent].filter(Boolean) } : 'no viewer'`).catch(() => 'no page')
       throw new Error(`${err instanceof Error ? err.message : String(err)} So far: ${JSON.stringify(at)}${pageErrors.length ? `; page errors: ${pageErrors.join(' | ')}` : ''}`)
     })
-    const shown = await js<{ world: string; people: string[]; me: string | null; scene: number }>(wc, `(async () => ({ world: window.__worlds.stage.world.id, people: window.__worlds.stage.people.map((p) => p.name), me: (await apex.cast.members())[0]?.name ?? null, scene: window.__worlds.stage.scene.children.length }))()`)
+    const shown = await js<{ world: string; people: string[]; me: string | null; scene: number }>(wc, `(async () => ({ world: window.__worlds.stage.world.id, people: window.__worlds.stage.people.map((p) => p.name), me: (await atelier.cast.members())[0]?.name ?? null, scene: window.__worlds.stage.scene.children.length }))()`)
     assert(shown.world === TOWN && shown.scene > 2, `the viewer shows ${JSON.stringify(shown)}`)
     assert(shown.me !== null && !shown.people.includes(shown.me), `the companion you walk as also lives in the world: ${JSON.stringify(shown)}`)
-    const line = await js<string>(wc, `apex.worlds.speak(${JSON.stringify(ref)}, 'tilly', { situation: 'Someone walks up to say hello.' })`)
+    const line = await js<string>(wc, `atelier.worlds.speak(${JSON.stringify(ref)}, 'tilly', { situation: 'Someone walks up to say hello.' })`)
     assert(typeof line === 'string' && line.length > 0, 'the guest said nothing')
 
     // Stepping in: the place's app opens, knows where it came from, and has the residents as its cast.
-    const entered = await js<{ opened: boolean }>(wc, `apex.worlds.enter(${JSON.stringify(ref)}, 'hall')`)
+    const entered = await js<{ opened: boolean }>(wc, `atelier.worlds.enter(${JSON.stringify(ref)}, 'hall')`)
     assert(entered.opened, 'stepping into the hall opened nothing')
     const hallUrl = packUrl(PLACE_ID, 'app/index.html')
     await waitFor(() => {
@@ -1231,18 +1231,18 @@ async function worldsWork(ctx: SmokeContext): Promise<void> {
       return Boolean(hall)
     }, 5000, 'the hall’s app')
     const hwc = (hall as Tab).view.webContents
-    await waitForPage(hwc, 'the hall’s app', 10_000, (at) => at.startsWith(`apex-pack://${PLACE_ID}/`))
-    const context = await js<{ world: { name: string }; place: { id: string }; cast: Array<{ ref: string; name: string; guest: boolean }> } | null>(hwc, 'apex.world.context()')
+    await waitForPage(hwc, 'the hall’s app', 10_000, (at) => at.startsWith(`atelier-pack://${PLACE_ID}/`))
+    const context = await js<{ world: { name: string }; place: { id: string }; cast: Array<{ ref: string; name: string; guest: boolean }> } | null>(hwc, 'atelier.world.context()')
     assert(context?.world.name === 'Smoke town' && context.place.id === 'hall', `the app’s world context: ${JSON.stringify(context)}`)
     // You first (the companion you walked in as), then whoever lives there.
     assert(context.cast[0]?.name === shown.me && !context.cast[0]?.guest && context.cast.some((c) => c.guest && c.name === 'Tilly'), `the hall’s cast: ${JSON.stringify(context.cast)}`)
     const guest = context.cast.find((c) => c.guest) as { ref: string }
-    const said = await js<string>(hwc, `apex.cast.speak(${JSON.stringify(guest.ref)}, { situation: 'You won a point.' })`)
+    const said = await js<string>(hwc, `atelier.cast.speak(${JSON.stringify(guest.ref)}, { situation: 'You won a point.' })`)
     assert(typeof said === 'string' && said.length > 0, 'the guest said nothing in the hall’s app')
 
-    // Share…: an .apexworld that reviews as a pack holding just the world, and installs.
-    const saved = await js<string | null>(wc, `apex.worlds.share(${JSON.stringify(ref)})`)
-    assert(typeof saved === 'string' && saved.endsWith('.apexworld'), `Share… saved ${String(saved)}`)
+    // Share…: an .atelierworld that reviews as a pack holding just the world, and installs.
+    const saved = await js<string | null>(wc, `atelier.worlds.share(${JSON.stringify(ref)})`)
+    assert(typeof saved === 'string' && saved.endsWith('.atelierworld'), `Share… saved ${String(saved)}`)
     const review = service.reviewArchive(readFileSync(saved as string), { kind: 'file' })
     assert(review.problems.length === 0 && review.permissions.some((l) => l.kind === 'worlds'), `the shared world’s review: ${review.problems.join('; ')}`)
     service.confirmInstall(review.token)
@@ -1256,7 +1256,7 @@ async function worldsWork(ctx: SmokeContext): Promise<void> {
     await ctx.shot('packs-worlds')
   } finally {
     for (const tab of [hall, viewer]) if (tab && ctx.tabs.find(tab.id)) ctx.tabs.close(tab.id)
-    store.setEnabled('apex-worlds', false)
+    store.setEnabled('atelier-worlds', false)
   }
 }
 
@@ -1275,11 +1275,11 @@ async function browseShowsApps(ctx: SmokeContext): Promise<void> {
   })
   const sha = 'a'.repeat(64)
   const index = {
-    format: 'apex-pack-index',
+    format: 'atelier-pack-index',
     name: 'Smoke index',
     packs: [
-      { id: 'smoke-browse-app', name: 'Smoke arcade', description: 'A game in the smoke index.', version: '1.0.0', url: `${ctx.server.http}/packs/none.apexapp`, sha256: sha, kind: 'app', category: 'games', size: 1_200_000, color: '#ff8a5c', image: `${ctx.server.http}/packs/card.png` },
-      { id: 'smoke-gone', name: 'Withdrawn', description: 'Never offered.', version: '1.0.0', url: `${ctx.server.http}/packs/gone.apexpack`, sha256: sha },
+      { id: 'smoke-browse-app', name: 'Smoke arcade', description: 'A game in the smoke index.', version: '1.0.0', url: `${ctx.server.http}/packs/none.atelierapp`, sha256: sha, kind: 'app', category: 'games', size: 1_200_000, color: '#ff8a5c', image: `${ctx.server.http}/packs/card.png` },
+      { id: 'smoke-gone', name: 'Withdrawn', description: 'Never offered.', version: '1.0.0', url: `${ctx.server.http}/packs/gone.atelierpack`, sha256: sha },
     ],
     withdrawn: [{ id: 'smoke-gone', reason: 'Smoke test.' }],
   }
@@ -1297,7 +1297,7 @@ async function browseShowsApps(ctx: SmokeContext): Promise<void> {
     const image = await service.browseImage(url, 'smoke-browse-app')
     assert(typeof image === 'string' && image.startsWith('data:image/png;base64,'), 'main did not fetch the picture')
 
-    ctx.tabs.openInternal('apex://packs?tab=browse&find=smoke-browse-app')
+    ctx.tabs.openInternal('atelier://packs?tab=browse&find=smoke-browse-app')
     await ctx.chrome.until(
       `const cards = [...document.querySelectorAll('.pk-browse__card')]
        const search = document.querySelector('.sp-dest-toolbar input[type="search"]')
@@ -1327,7 +1327,7 @@ async function policyApplies(ctx: SmokeContext): Promise<void> {
     res.end(JSON.stringify({ auth: req.headers.authorization ?? null }))
   })
   const manifest: PackManifest = {
-    format: 'apex-pack',
+    format: 'atelier-pack',
     manifestVersion: 2,
     id: ORG_ID,
     name: 'Smoke org',
@@ -1342,7 +1342,7 @@ async function policyApplies(ctx: SmokeContext): Promise<void> {
     [PACK_MANIFEST_FILE, Buffer.from(JSON.stringify(manifest))],
     ['app/index.html', Buffer.from('<!doctype html><html><head><meta charset="utf-8"><title>org</title></head><body>org</body></html>')],
   ])
-  const author = new AuthorKey(mkdtempSync(join(tmpdir(), 'apex-smoke-author-')), { encrypt: (b) => b, decrypt: (b) => b })
+  const author = new AuthorKey(mkdtempSync(join(tmpdir(), 'atelier-smoke-author-')), { encrypt: (b) => b, decrypt: (b) => b })
   const archive = encodeArchive(files, author.sign(packHash(files)))
   service.confirmInstall(service.reviewArchive(archive, { kind: 'file' }).token)
   const { policy, problems } = parsePolicy({ PackSideloading: false, AppConfig: { [ORG_ID]: { env: { SERVER: ctx.server.http }, secrets: { ORG_KEY: 'org-key-123456789' } } } }, 'smoke')
@@ -1357,19 +1357,19 @@ async function policyApplies(ctx: SmokeContext): Promise<void> {
       return Boolean(tab)
     }, 5000, 'the company tool’s tab')
     const wc = (tab as Tab).view.webContents
-    await waitForPage(wc, 'the company tool', 10_000, (at) => at.startsWith(`apex-pack://${ORG_ID}/`))
-    const env = await js<string>(wc, 'apex.env.SERVER')
-    assert(env === ctx.server.http, `the organisation’s SERVER did not reach apex.env: ${env}`)
-    const status = await js<Record<string, boolean>>(wc, 'apex.secrets.status()')
+    await waitForPage(wc, 'the company tool', 10_000, (at) => at.startsWith(`atelier-pack://${ORG_ID}/`))
+    const env = await js<string>(wc, 'atelier.env.SERVER')
+    assert(env === ctx.server.http, `the organisation’s SERVER did not reach atelier.env: ${env}`)
+    const status = await js<Record<string, boolean>>(wc, 'atelier.secrets.status()')
     assert(status.ORG_KEY === true, 'the organisation’s key does not count as set')
-    const got = await js<{ auth: string | null }>(wc, `fetch(apex.env.SERVER + '/packs/org').then((r) => r.json())`)
+    const got = await js<{ auth: string | null }>(wc, `fetch(atelier.env.SERVER + '/packs/org').then((r) => r.json())`)
     assert(got.auth === 'Bearer org-key-123456789', `the organisation’s key was not on the request: ${JSON.stringify(got)}`)
     assert(service.summary(ORG_ID).secrets[0]?.state === 'policy', 'the pack’s page does not say the organisation set the key')
 
     // A file install is refused, and the Packs page says why instead of offering it.
     const refused = service.reviewArchive(archive, { kind: 'file' })
     assert(refused.problems.some((p) => /only from its indexes/.test(p)), `a sideloaded review: ${refused.problems.join('; ')}`)
-    ctx.tabs.openInternal('apex://packs')
+    ctx.tabs.openInternal('atelier://packs')
     await ctx.chrome.until(
       `const text = document.body.innerText
        return text.includes('Your organisation lets packs in only from Browse.') && ![...document.querySelectorAll('button')].some((b) => /Install from file|From a file|^Add$/i.test((b.textContent || '').trim()))`,
@@ -1439,12 +1439,12 @@ async function startCompany(archive: Buffer): Promise<{ base: string; signIns: (
       })
       return
     }
-    if (url.pathname === '/dashboard.apexapp') return void res.writeHead(200, { 'content-type': 'application/octet-stream' }).end(archive)
+    if (url.pathname === '/dashboard.atelierapp') return void res.writeHead(200, { 'content-type': 'application/octet-stream' }).end(archive)
     // The company's private index: only for someone signed in.
     if (url.pathname === '/index.json') {
       if (req.headers.authorization !== 'Bearer company-token-1') return void res.writeHead(401).end()
       const sha = createHash('sha256').update(archive).digest('hex')
-      return json(200, { format: 'apex-pack-index', name: 'Contoso apps', packs: [{ id: 'smoke-dashboard', name: 'Smoke dashboard', description: 'The team’s numbers.', version: '1.0.0', url: `${base}/dashboard.apexapp`, sha256: sha, kind: 'app' }] })
+      return json(200, { format: 'atelier-pack-index', name: 'Contoso apps', packs: [{ id: 'smoke-dashboard', name: 'Smoke dashboard', description: 'The team’s numbers.', version: '1.0.0', url: `${base}/dashboard.atelierapp`, sha256: sha, kind: 'app' }] })
     }
     res.writeHead(404).end()
   })
@@ -1457,7 +1457,7 @@ async function startCompany(archive: Buffer): Promise<{ base: string; signIns: (
  * A company's app (docs/apps.md › Apps for organisations): the policy
  * force-installs the dashboard from the company's address and points its
  * sign-in at the company's own identity provider and client (AppConfig); the
- * app signs in through Apex in a tab, its requests to the company's API carry
+ * app signs in through Atelier in a tab, its requests to the company's API carry
  * the token (the app never sees it), it reads one of the person's connectors
  * (a tool set to ask asks them), the audit log notes where it all went, and
  * signing out takes the token off.
@@ -1469,7 +1469,7 @@ async function companyAppWorks(ctx: SmokeContext): Promise<void> {
   const { tmpdir } = await import('node:os')
   const { join } = await import('node:path')
   const manifest: PackManifest = {
-    format: 'apex-pack',
+    format: 'atelier-pack',
     manifestVersion: 2,
     id: DASH_ID,
     name: 'Smoke dashboard',
@@ -1485,17 +1485,17 @@ async function companyAppWorks(ctx: SmokeContext): Promise<void> {
     [PACK_MANIFEST_FILE, Buffer.from(JSON.stringify(manifest))],
     ['app/index.html', Buffer.from('<!doctype html><html><head><meta charset="utf-8"><title>dashboard</title></head><body>dashboard</body></html>')],
   ])
-  const author = new AuthorKey(mkdtempSync(join(tmpdir(), 'apex-smoke-author-')), { encrypt: (b) => b, decrypt: (b) => b })
+  const author = new AuthorKey(mkdtempSync(join(tmpdir(), 'atelier-smoke-author-')), { encrypt: (b) => b, decrypt: (b) => b })
   const archive = encodeArchive(files, author.sign(packHash(files)))
   const company = await startCompany(archive)
-  const address = `${company.base}/dashboard.apexapp`
+  const address = `${company.base}/dashboard.atelierapp`
   // The person's notes connector: the MCP fixture as a local server they approved, run by the Node that runs the smoke.
   const { appRoot } = await import('../resources')
   const notes = await ctx.chrome.invoke<{ id: string }>('connectors', 'save', {
     name: NOTES_CONNECTOR,
     displayName: 'Smoke notes',
-    // A packaged run has no tests/ inside its asar: smoke-packaged.mjs points APEX_SMOKE_FIXTURES at the repo's.
-    transport: { kind: 'local', command: 'node', args: [join(process.env.APEX_SMOKE_FIXTURES ?? join(appRoot(), 'tests', 'fixtures'), 'mcp', 'echo-server.mjs')], env: [], cwd: null },
+    // A packaged run has no tests/ inside its asar: smoke-packaged.mjs points ATELIER_SMOKE_FIXTURES at the repo's.
+    transport: { kind: 'local', command: 'node', args: [join(process.env.ATELIER_SMOKE_FIXTURES ?? join(appRoot(), 'tests', 'fixtures'), 'mcp', 'echo-server.mjs')], env: [], cwd: null },
     auth: 'none',
     enabled: true,
   })
@@ -1528,20 +1528,20 @@ async function companyAppWorks(ctx: SmokeContext): Promise<void> {
       return Boolean(tab)
     }, 5000, 'the dashboard’s tab')
     const wc = (tab as Tab).view.webContents
-    await waitForPage(wc, 'the dashboard', 10_000, (at) => at.startsWith(`apex-pack://${DASH_ID}/`))
-    const me = (): Promise<{ auth: string | null }> => js<{ auth: string | null }>(wc, `fetch(apex.env.API + '/api/me').then((r) => r.json())`)
-    const signedOut = await js<Record<string, { signedIn: boolean }>>(wc, 'apex.auth.status()')
-    assert(signedOut.corp?.signedIn === false, `apex.auth.status before signing in: ${JSON.stringify(signedOut)}`)
+    await waitForPage(wc, 'the dashboard', 10_000, (at) => at.startsWith(`atelier-pack://${DASH_ID}/`))
+    const me = (): Promise<{ auth: string | null }> => js<{ auth: string | null }>(wc, `fetch(atelier.env.API + '/api/me').then((r) => r.json())`)
+    const signedOut = await js<Record<string, { signedIn: boolean }>>(wc, 'atelier.auth.status()')
+    assert(signedOut.corp?.signedIn === false, `atelier.auth.status before signing in: ${JSON.stringify(signedOut)}`)
     assert((await me()).auth === null, 'a request carried a sign-in before anyone signed in')
 
     const tabsBefore = ctx.tabs.all().length
-    const signedIn = await js<{ signedIn: boolean; user: string | null }>(wc, "apex.auth.signIn('corp')")
-    assert(signedIn.signedIn && signedIn.user === 'ana@contoso.example', `apex.auth.signIn: ${JSON.stringify(signedIn)}`)
+    const signedIn = await js<{ signedIn: boolean; user: string | null }>(wc, "atelier.auth.signIn('corp')")
+    assert(signedIn.signedIn && signedIn.user === 'ana@contoso.example', `atelier.auth.signIn: ${JSON.stringify(signedIn)}`)
     assert(company.signIns() === 1, 'the company’s provider did not hand out a token')
     await waitFor(() => ctx.tabs.all().length === tabsBefore && ctx.tabs.active()?.id === (tab as Tab).id, 5000, 'the sign-in tab to close and the dashboard to come back')
     const got = await me()
     assert(got.auth === 'Bearer company-token-1', `the company’s API did not get the sign-in: ${JSON.stringify(got)}`)
-    const page = await js<string>(wc, 'JSON.stringify(Object.keys(apex.auth)) + JSON.stringify(apex.env)')
+    const page = await js<string>(wc, 'JSON.stringify(Object.keys(atelier.auth)) + JSON.stringify(atelier.env)')
     assert(!page.includes('company-token-1'), 'the app can read the token')
     const after = service.summary(DASH_ID).signIns[0]
     assert(after?.signedIn === true && after.user === 'ana@contoso.example' && !JSON.stringify(service.summary(DASH_ID)).includes('company-token'), `the pack’s page after signing in: ${JSON.stringify(after)}`)
@@ -1549,39 +1549,39 @@ async function companyAppWorks(ctx: SmokeContext): Promise<void> {
     assert(audit.some((m) => m.startsWith('signed in to')) && audit.some((m) => m.startsWith('sign-in sent to 127.0.0.1:')), `the audit log: ${audit.join(' | ')}`)
 
     // One of the person's connectors: a read-only tool runs; one set to ask asks them, and a no stops it.
-    const linked = await js<Record<string, { connected: boolean; name: string | null }>>(wc, 'apex.connectors.status()')
-    assert(linked[NOTES_CONNECTOR]?.connected === true && linked[NOTES_CONNECTOR]?.name === 'Smoke notes', `apex.connectors.status: ${JSON.stringify(linked)}`)
-    const tools = await js<Array<{ name: string }>>(wc, `apex.connectors.tools(${JSON.stringify(NOTES_CONNECTOR)})`)
-    assert(tools.some((t) => t.name === 'echo'), `apex.connectors.tools: ${JSON.stringify(tools)}`)
-    const echoed = await js<{ text: string; isError: boolean }>(wc, `apex.connectors.call(${JSON.stringify(NOTES_CONNECTOR)}, 'echo', { text: 'quarterly numbers' })`)
-    assert(echoed.text === 'quarterly numbers' && !echoed.isError, `apex.connectors.call echo: ${JSON.stringify(echoed)}`)
+    const linked = await js<Record<string, { connected: boolean; name: string | null }>>(wc, 'atelier.connectors.status()')
+    assert(linked[NOTES_CONNECTOR]?.connected === true && linked[NOTES_CONNECTOR]?.name === 'Smoke notes', `atelier.connectors.status: ${JSON.stringify(linked)}`)
+    const tools = await js<Array<{ name: string }>>(wc, `atelier.connectors.tools(${JSON.stringify(NOTES_CONNECTOR)})`)
+    assert(tools.some((t) => t.name === 'echo'), `atelier.connectors.tools: ${JSON.stringify(tools)}`)
+    const echoed = await js<{ text: string; isError: boolean }>(wc, `atelier.connectors.call(${JSON.stringify(NOTES_CONNECTOR)}, 'echo', { text: 'quarterly numbers' })`)
+    assert(echoed.text === 'quarterly numbers' && !echoed.isError, `atelier.connectors.call echo: ${JSON.stringify(echoed)}`)
     const asked: string[] = []
     runtime.permissionPrompt = async ({ lines }) => (asked.push(...lines), false)
-    const declined = await js<string>(wc, `apex.connectors.call(${JSON.stringify(NOTES_CONNECTOR)}, 'create_note', { title: 'Q3' }).then(() => 'ran', (err) => err.message)`)
+    const declined = await js<string>(wc, `atelier.connectors.call(${JSON.stringify(NOTES_CONNECTOR)}, 'create_note', { title: 'Q3' }).then(() => 'ran', (err) => err.message)`)
     assert(declined !== 'ran' && asked.some((l) => l.includes('Smoke notes')), `a tool set to ask ran without asking: ${declined} (${asked.join(' | ')})`)
     runtime.permissionPrompt = async () => true
-    const saved = await js<{ text: string }>(wc, `apex.connectors.call(${JSON.stringify(NOTES_CONNECTOR)}, 'create_note', { title: 'Q3' })`)
+    const saved = await js<{ text: string }>(wc, `atelier.connectors.call(${JSON.stringify(NOTES_CONNECTOR)}, 'create_note', { title: 'Q3' })`)
     assert(saved.text.startsWith('saved') && saved.text.includes('Q3'), `create_note once allowed: ${JSON.stringify(saved)}`)
-    const elsewhere = await js<string>(wc, "apex.connectors.call('github', 'search', {}).then(() => 'ran', (err) => err.message)")
+    const elsewhere = await js<string>(wc, "atelier.connectors.call('github', 'search', {}).then(() => 'ran', (err) => err.message)")
     assert(elsewhere !== 'ran', 'an app used a connector it doesn’t name')
     const used = service.summary(DASH_ID).connectorsUsed[0]
     assert(used?.connected === true && used.name === 'Smoke notes', `the pack’s page: ${JSON.stringify(used)}`)
     const calls = store.logLines(DASH_ID).filter((l) => l.source === 'audit').map((l) => l.message)
     assert(calls.includes(`connectors.call ${NOTES_CONNECTOR} echo`), `the audit log for connectors: ${calls.join(' | ')}`)
 
-    // The organisation's model gateway answers apex.ai, under its own token and model name.
-    const answer = await js<string>(wc, "apex.ai.ask('How did the quarter go?', { tier: 'fast' })")
-    assert(answer === 'From the Contoso gateway.' && company.gatewayCalls.includes('contoso-fast'), `apex.ai under the organisation’s gateway: ${answer} (${company.gatewayCalls.join(', ')})`)
+    // The organisation's model gateway answers atelier.ai, under its own token and model name.
+    const answer = await js<string>(wc, "atelier.ai.ask('How did the quarter go?', { tier: 'fast' })")
+    assert(answer === 'From the Contoso gateway.' && company.gatewayCalls.includes('contoso-fast'), `atelier.ai under the organisation’s gateway: ${answer} (${company.gatewayCalls.join(', ')})`)
     assert(service.stateNow().policy.aiProvider, 'the Packs page does not say apps use the organisation’s AI service')
 
-    await js(wc, "apex.auth.signOut('corp')")
+    await js(wc, "atelier.auth.signOut('corp')")
     assert((await me()).auth === null, 'a request still carried the sign-in after signing out')
 
     // The company's private index: Browse asks to sign in first, then lists what it offers.
     const indexUrl = `${company.base}/index.json`
     store.setPolicy({ ...store.policy, indexes: [indexUrl], indexAuth: { [indexUrl]: { name: 'Contoso apps', issuer: company.base, clientId: 'smoke-company', scopes: [] } } })
     assert((await service.browse()).length === 0, 'Browse read the private index before anyone signed in')
-    ctx.tabs.openInternal('apex://packs?tab=browse')
+    ctx.tabs.openInternal('atelier://packs?tab=browse')
     await ctx.chrome.until(
       `return document.body.innerText.includes('Contoso apps is your organisation’s.') && [...document.querySelectorAll('.sp-notice button')].some((b) => /Sign in/.test(b.textContent || ''))`,
       10_000,
@@ -1590,7 +1590,7 @@ async function companyAppWorks(ctx: SmokeContext): Promise<void> {
     await ctx.chrome.invoke('packs', 'signInIndex', indexUrl)
     const listed = await service.browse()
     assert(listed.some((e) => e.id === DASH_ID && e.indexUrl === indexUrl), `the private index after signing in: ${JSON.stringify(listed.map((e) => e.id))}`)
-    ctx.tabs.openInternal(`apex://packs?tab=browse&find=${DASH_ID}`)
+    ctx.tabs.openInternal(`atelier://packs?tab=browse&find=${DASH_ID}`)
     await ctx.chrome.until(
       `return !document.body.innerText.includes('Contoso apps is your organisation’s.') && [...document.querySelectorAll('.pk-browse__card')].some((c) => c.textContent.includes('Smoke dashboard'))`,
       10_000,
@@ -1621,7 +1621,7 @@ async function creatorModeJoins(ctx: SmokeContext): Promise<void> {
   const id = ctx.host.start('smoke-creator: make me a counter')
   await waitFor(() => !ctx.host.isRunning(id), 20_000, 'the Creator chat to finish')
   const tools = ctx.host.systemPromptView({ chatId: id }).tools
-  assert(tools.includes('create_pack') && tools.includes('test_pack') && tools.includes('apex_inspect'), `the builder did not join the chat: ${tools.join(', ')}`)
+  assert(tools.includes('create_pack') && tools.includes('test_pack') && tools.includes('atelier_inspect'), `the builder did not join the chat: ${tools.join(', ')}`)
   assert(need().store.hasDraft(CREATOR_DRAFT), 'create_pack, called after creator_mode in the same turn, made no draft')
 }
 
@@ -1634,17 +1634,17 @@ export const packsSmoke: SmokeGroup = {
     { name: 'turning a pack off takes its skill, tool, tweak and panel away', run: offTakesAway },
     { name: 'an app pack’s game runs its own module, worker, WebAssembly, image, sound and data in its own tab, with no network, and only the game goes full screen', run: appRuns },
     { name: 'a build tool’s output runs as it is: its inline bootstrap, root paths, page files, client routes and cross-origin isolation', run: buildOutputRuns },
-    { name: 'developer mode: a linked folder reloads its open app when a file changes, its .env fills apex.env and is never served, and unlinking keeps the folder', run: devFolderReloads },
+    { name: 'developer mode: a linked folder reloads its open app when a file changes, its .env fills atelier.env and is never served, and unlinking keeps the folder', run: devFolderReloads },
     { name: 'an app reaches its own server (fetch, preflight, image, WebSocket) with normal CORS and nothing else; the key the person enters goes to its host only', run: serversWork },
     {
-      name: 'an app’s own web server (phones as controllers): its folder and routes on this computer and over TLS on the Wi-Fi, a phone’s frames reach the page in order, a wrong token gets nothing, Apex’s bar sits over the app with Stop, no Wi-Fi without lan, and closing the app stops it',
+      name: 'an app’s own web server (phones as controllers): its folder and routes on this computer and over TLS on the Wi-Fi, a phone’s frames reach the page in order, a wrong token gets nothing, Atelier’s bar sits over the app with Stop, no Wi-Fi without lan, and closing the app stops it',
       run: serverWorks,
     },
-    { name: 'a kit app imports three and apex-kit by name and builds a companion in its own scene', run: kitAppRuns },
+    { name: 'a kit app imports three and atelier-kit by name and builds a companion in its own scene', run: kitAppRuns },
     { name: 'a companion starts apps from the 2D and 3D starters and playtests them: frames as images, frame times and the state it reports', run: async () => startersPlay() },
     { name: 'a companion builds a world and test_pack shows it a still from the world’s camera', run: async () => worldStillShows() },
     {
-      name: 'worlds: the viewer shows a world with a guest and your companion, places open their app with the residents as its cast, and Share… makes an .apexworld that installs',
+      name: 'worlds: the viewer shows a world with a guest and your companion, places open their app with the residents as its cast, and Share… makes an .atelierworld that installs',
       run: async (ctx) => {
         try {
           await worldsWork(ctx)
@@ -1655,7 +1655,7 @@ export const packsSmoke: SmokeGroup = {
     },
     { name: 'Browse lists apps with their picture and shelf, never a withdrawn id, and opens at one pack', run: browseShowsApps },
     { name: 'an organisation’s policy: its values and key reach an app, the Packs page says what is managed, sideloads are refused, blocked packs stop', run: policyApplies },
-    { name: 'a company’s app: the policy force-installs it with the company’s own sign-in; it signs in through Apex, its API gets the token and the app never does, it reads the person’s connector as they set it, its model calls go to the organisation’s gateway, and the audit log says where it went', run: companyAppWorks },
+    { name: 'a company’s app: the policy force-installs it with the company’s own sign-in; it signs in through Atelier, its API gets the token and the app never does, it reads the person’s connector as they set it, its model calls go to the organisation’s gateway, and the audit log says where it went', run: companyAppWorks },
     {
       name: 'Creator mode: a chat has the switch, not the builder; once on, the builder joins the chat mid-turn and the companion builds with it',
       run: async (ctx) => {

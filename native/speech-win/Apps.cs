@@ -1,15 +1,15 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex-speech.exe: the launcher's fallbacks (frontmost, activate) and the
+// atelier-speech.exe: the launcher's fallbacks (frontmost, activate) and the
 // device-owner check (authenticate) through Windows Hello.
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Windows.Security.Credentials.UI;
 
-namespace Apex.Speech;
+namespace Atelier.Speech;
 
 internal static class Apps
 {
@@ -73,7 +73,7 @@ internal static class Apps
         }
     }
 
-    /// <summary>Windows Hello, parented to the foreground window (Apex's, when it asks).</summary>
+    /// <summary>Windows Hello, parented to the foreground window (Atelier's, when it asks).</summary>
     public static async Task<string> AuthenticateAsync(string reason)
     {
         try

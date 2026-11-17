@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -48,7 +48,7 @@ export function FilesTab({ companion, focusPath, onOpenPage }: FilesTabProps) {
   const files = useLoaded(() => call('companionFiles', 'list', companion.id, folder), [companion.id, folder], (e) => e.type === 'companion-files' && e.companionId === companion.id)
   const visible = sortFiles(filterFiles(files.data ?? [], query), sort)
   const phase = useSkeletonPhase(files.status === 'loading' && !files.data)
-  // Files can change in Finder too, so the list is read again when Apex comes back to the front.
+  // Files can change in Finder too, so the list is read again when Atelier comes back to the front.
   useEffect(() => {
     const onFocus = (): void => files.reload()
     window.addEventListener('focus', onFocus)

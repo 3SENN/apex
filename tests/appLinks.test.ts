@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -36,7 +36,7 @@ describe('appLinkFor', () => {
     expect(appLinkFor('https://zoom.us.evil.example/j/123456789')).toBeNull()
     expect(appLinkFor('https://open.spotify.com.evil.example/track/x')).toBeNull()
     expect(appLinkFor('ftp://zoom.us/j/123456789')).toBeNull()
-    expect(appLinkFor('apex://settings')).toBeNull()
+    expect(appLinkFor('atelier://settings')).toBeNull()
     expect(appLinkFor('not a url')).toBeNull()
   })
 
@@ -52,7 +52,7 @@ describe('appLinkFor', () => {
   })
 
   it('takes a custom table (smoke adds a test app)', () => {
-    const rules = [{ key: 't', app: 'Test', scheme: 'apex-smoke', hosts: ['127.0.0.1'], map: (u: URL) => `apex-smoke://open${u.pathname}` }]
-    expect(appLinkFor('http://127.0.0.1:4000/page', rules)).toEqual({ app: 'Test', scheme: 'apex-smoke', openUrl: 'apex-smoke://open/page' })
+    const rules = [{ key: 't', app: 'Test', scheme: 'atelier-smoke', hosts: ['127.0.0.1'], map: (u: URL) => `atelier-smoke://open${u.pathname}` }]
+    expect(appLinkFor('http://127.0.0.1:4000/page', rules)).toEqual({ app: 'Test', scheme: 'atelier-smoke', openUrl: 'atelier-smoke://open/page' })
   })
 })

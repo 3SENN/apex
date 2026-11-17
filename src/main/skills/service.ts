@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -21,7 +21,7 @@ import { SKILL_FILE_MAX_BYTES as IMPORT_MAX_BYTES } from '../skillFiles'
 import { parseSkillDocument, skillNameFromFile } from './format'
 import type { SkillStore } from './store'
 
-/** Apex's own drafting prompt for Save as skill. */
+/** Atelier's own drafting prompt for Save as skill. */
 export const DRAFT_SYSTEM = `You turn a conversation into a reusable skill for ${BRAND_NAME}, a web browser with a built-in assistant. A skill is a set of instructions the assistant follows whenever the user types /name.
 
 Reply with JSON only, no prose and no code fence:

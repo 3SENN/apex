@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import type { ChatFeedback, ChatSetup, ChatSummary, ChatView, MessageDetails, Qu
 import type { AgentEvent } from '@shared/ipc'
 import type { AppEvent } from '@shared/services'
 import { foldAgentLog, type AgentLog } from '../agentLog'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { REVEAL_BATCH_MS, advanceReveal, newReveal, type RevealRecord } from './logic/reveal'
 import { LOADING_LOG, applyView, beginLoad, receiveEvent, type LiveLog } from './logic/sync'
 import { isStopNotice } from './logic/view'
@@ -43,7 +43,7 @@ export interface ChatState {
   sentAt: number | null
   /** How long each finished run took, by the message it answered (this session only). */
   durations: Record<string, number>
-  /** The file could not be migrated, or a newer Apex saved it (ChatView.notice). */
+  /** The file could not be migrated, or a newer Atelier saved it (ChatView.notice). */
   notice?: ChatView['notice']
   // CH-13 paging, SS-05 save failures, the paused run, SS-03's live error
   /** Index of the first loaded log event in the saved log; above 0, older pages can load. */
@@ -370,8 +370,8 @@ function subscribeOnce(): void {
   if (subscribed) return
   subscribed = true
   // The chrome lives as long as these subscriptions, so they are never removed.
-  apex.agent.onEvent((event, meta) => controllers.get(meta.chatId)?.agentEvent(event, meta.seq))
-  apex.onAppEvent((event) => {
+  atelier.agent.onEvent((event, meta) => controllers.get(meta.chatId)?.agentEvent(event, meta.seq))
+  atelier.onAppEvent((event) => {
     if (event.type !== 'chats' && event.type !== 'chat-queue' && event.type !== 'chat-tabs' && event.type !== 'chat-save-state' && event.type !== 'agent-control') return
     for (const controller of controllers.values()) controller.appEvent(event)
   })

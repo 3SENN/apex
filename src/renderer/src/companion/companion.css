@@ -1,13 +1,13 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 /* Companion presence: live figures, breathing stills, small faces with
    state marks, and speech bubbles. Colours come from the companion's look
-   (--companion-*, --face-*, --bubble-tint) mixed with Apex's neutral tokens,
+   (--companion-*, --face-*, --bubble-tint) mixed with Atelier's neutral tokens,
    so every surface works in light and dark mode. Under either Reduce Motion
-   switch (the system's, or Apex's own via <html data-motion>) nothing here
+   switch (the system's, or Atelier's own via <html data-motion>) nothing here
    travels. */
 
 /* ---- live figure ---- */

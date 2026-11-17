@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { randomBytes } from 'node:crypto'
 
 // Viewer tokens: each open document gets an opaque token that names it
-// in later calls and in apex-file://<token>/ URLs. A token belongs to the tab
+// in later calls and in atelier-file://<token>/ URLs. A token belongs to the tab
 // that shows it and expires with that tab; tokens without a tab (quick look)
 // expire on release or after a long idle time, and the registry is capped.
 

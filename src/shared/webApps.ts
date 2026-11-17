@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Websites saved as apps (WA-01): a site you use a lot, kept as an app in
-// Apex. It stays a web address: nothing is converted or installed. Saving
+// Atelier. It stays a web address: nothing is converted or installed. Saving
 // takes the site's own name and icon (its web app manifest when it has one,
 // else its title and favicon); the app is listed in Workspace › Apps and the
 // command bar, and opening it goes back to its tab when one is open, else

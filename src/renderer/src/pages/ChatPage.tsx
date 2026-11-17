@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { useCallback, type ReactElement } from 'react'
 import { chatUrl } from '@shared/url'
-import { apex } from '../api'
+import { atelier } from '../api'
 import '../chat/chat.css'
 import { ChatHeader } from '../chat/ChatHeader'
 import { ChatView } from '../chat/ChatView'
@@ -20,14 +20,14 @@ import { MOTION, useLayerPresence } from '../ui' // DS-123: the panel's exit
 import { useDetailsAutoOpen } from '../chat/DetailsSections' // CH-35: the extra sections and the panel opening once by itself
 
 /**
- * apex://chat/<id>: the conversation in one centred column, composer at the bottom, header floating over it.
+ * atelier://chat/<id>: the conversation in one centred column, composer at the bottom, header floating over it.
  * `held` (DS-65): the chat was expanded from the panel and shows in a website's tab, its page beside it.
  */
 export function ChatPage({ chatId, tabId, held = false }: { chatId: string; tabId: string; held?: boolean }): ReactElement {
   const shell = useShell()
   // New chats and companion switches replace the chat in this tab (beside its page, while held).
-  const show = useCallback((id: string) => (held ? holdChatInTab(tabId, id) : void apex.nav.go(tabId, chatUrl(id))), [tabId, held])
-  // CH-13: apex://chat/<id>#<message> scrolls to the message and highlights it.
+  const show = useCallback((id: string) => (held ? holdChatInTab(tabId, id) : void atelier.nav.go(tabId, chatUrl(id))), [tabId, held])
+  // CH-13: atelier://chat/<id>#<message> scrolls to the message and highlights it.
   const url = useTabs().tabs.find((t) => t.id === tabId)?.url ?? ''
   const anchor = held ? null : messageAnchor(url)
   const state = useChat(chatId)
@@ -51,7 +51,7 @@ export function ChatPage({ chatId, tabId, held = false }: { chatId: string; tabI
             state={state}
             companion={companion}
             mood={mood}
-            hooks={{ newChat, deleted: () => (held ? releaseChatInTab(tabId) : void apex.nav.go(tabId, 'apex://chats')) }}
+            hooks={{ newChat, deleted: () => (held ? releaseChatInTab(tabId) : void atelier.nav.go(tabId, 'atelier://chats')) }}
             onCollapse={() => void collapseToPanel(chatId, tabId, shell.openPanel)}
           />
         )}

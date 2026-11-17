@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -204,7 +204,7 @@ function ContextSection({ chatId, state }: DetailsSectionProps): ReactElement {
   const routine = routineId ? routines?.find((r) => r.id === routineId) : null
   return (
     <div className="chat-details__context">
-      {routineId && <Row icon={<CalendarClock size={14} />} label={routine?.name ?? t('chat.detailsPanel.routine')} onClick={() => void call('pages', 'open', `apex://routines/${routineId}`)} />}
+      {routineId && <Row icon={<CalendarClock size={14} />} label={routine?.name ?? t('chat.detailsPanel.routine')} onClick={() => void call('pages', 'open', `atelier://routines/${routineId}`)} />}
       <TabsUsedSection chatId={chatId} state={state} />
     </div>
   )
@@ -215,7 +215,7 @@ function SubtasksSection({ model }: DetailsSectionProps): ReactElement {
     <ul className="chat-details__list">
       {model.subtasks.map((s) => (
         <li key={s.id}>
-          <Row icon={s.status === 'done' ? <CircleCheck size={14} /> : <CircleDot size={14} />} label={s.title} onClick={() => void call('pages', 'open', `apex://chat/${s.childChatId}`)} />
+          <Row icon={s.status === 'done' ? <CircleCheck size={14} /> : <CircleDot size={14} />} label={s.title} onClick={() => void call('pages', 'open', `atelier://chat/${s.childChatId}`)} />
         </li>
       ))}
     </ul>

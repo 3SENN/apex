@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -13,7 +13,7 @@ import { log } from '../log'
 // button, by priority (a waiting approval, then the unread dot, then the
 // companion chosen in the Dock-icon setting); the chrome draws each image from
 // its tokens and hands it over. Windows and Linux flash the frame when an
-// approval arrives while Apex is in the background; Linux also shows the
+// approval arrives while Atelier is in the background; Linux also shows the
 // unread count as the launcher badge.
 
 export interface OverlayImage {
@@ -31,7 +31,7 @@ export function pickOverlay(state: AttentionState, images: OverlayImages): (Over
   return null
 }
 
-/** Flash when a new approval arrives while no Apex window has focus. Pure. */
+/** Flash when a new approval arrives while no Atelier window has focus. Pure. */
 export function shouldFlash(previous: AttentionState, next: AttentionState, focused: boolean): boolean {
   return !focused && next.needsYou > previous.needsYou
 }

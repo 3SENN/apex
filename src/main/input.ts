@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -234,7 +234,7 @@ export function attachInput(wc: WebContents): Promise<void> {
   if (!hold) {
     const release = cdp.acquire(wc)
     wc.debugger.once('detach', () => holds.delete(wc))
-    // Keep the page focused for the agent even when Apex is not frontmost.
+    // Keep the page focused for the agent even when Atelier is not frontmost.
     const ready = cdp.send(wc, 'Emulation.setFocusEmulationEnabled', { enabled: true }).then(() => undefined)
     hold = { ready, release }
     holds.set(wc, hold)

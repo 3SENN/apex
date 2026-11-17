@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,10 +8,10 @@ import { COMPANION_FILE_EXTENSION } from '@shared/companion'
 import { LAUNCH_AT_LOGIN_FLAG, type OsPlatform } from '@shared/system'
 import { isPackArchiveName } from '@shared/packs'
 
-// Windows and Linux hand links and files to Apex by
+// Windows and Linux hand links and files to Atelier by
 // starting it again; the single-instance lock turns that into
 // 'second-instance' with the new process's argv. parseLaunchArgs is pure:
-// http(s) and file URLs, web files to open as tabs, .apexcompanion files for
+// http(s) and file URLs, web files to open as tabs, .ateliercompanion files for
 // the import review. Flags and anything else are ignored.
 
 export interface LaunchTargets {
@@ -21,7 +21,7 @@ export interface LaunchTargets {
   background: boolean
 }
 
-/** Files Apex opens as a tab, matching the file associations it registers. */
+/** Files Atelier opens as a tab, matching the file associations it registers. */
 const WEB_FILE = /\.(html?|xhtml|shtml|svg|webp|pdf)$/i
 /** More than this is not a person opening links. */
 export const MAX_LAUNCH_TARGETS = 20

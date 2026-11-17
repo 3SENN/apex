@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Site suggestions and open-in-app (OV-23, SH-32/DS-24).
 // Opt-in and off by default: on a site that matches a connector you have,
-// one from the directory, or a desktop app, Apex offers to connect it or one
+// one from the directory, or a desktop app, Atelier offers to connect it or one
 // to three ready-made tasks from its own templates. Snooze, off for this
 // site and off everywhere live in userData/site-suggestions.json; your
 // activity-memory exclusions are respected. The open-in-app chip needs no
@@ -58,7 +58,7 @@ export function tasksFor(match: SiteMatch, t: (key: MessageKey, vars?: Record<st
 
 export interface SiteSuggestionDeps {
   dataDir: string
-  /** The page a tab shows now, or null for unknown, Apex and blank tabs. */
+  /** The page a tab shows now, or null for unknown, Atelier and blank tabs. */
   tabUrl(tabId: string): string | null
   connectors(): SuggestionConnector[]
   directory(): SuggestionDirectoryEntry[]

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -49,7 +49,7 @@ export function defineSettings<M extends Record<string, SettingInput>>(map: M): 
   return Object.freeze(out) as Registry<M>
 }
 
-/** The models Apex offers. */
+/** The models Atelier offers. */
 export const MODELS = ['claude-opus-5-5', 'claude-sonnet-5-5', 'claude-haiku-5-5', 'claude-fable-5-1'] as const
 
 const absolutePath = z.string().trim().min(1).max(1024).regex(/^\//).refine((p) => !p.includes('\0')).nullable()
@@ -74,7 +74,7 @@ export const SETTINGS = defineSettings({
   ...EXTRA_ENGINE_SETTINGS,
   externalAccess: { scope: 'app', schema: z.boolean(), default: false },
   externalTabs: { scope: 'app', schema: z.enum(['own', 'any']), default: 'own' },
-  /** Settings › Quick decisions (docs/decisions.md): an optional decision model; off keeps Apex's own rules. */
+  /** Settings › Quick decisions (docs/decisions.md): an optional decision model; off keeps Atelier's own rules. */
   decisions: { scope: 'app', schema: DECISIONS_SETTINGS_SCHEMA, default: DECISIONS_DEFAULTS as DecisionsSettings },
   monthlyBudgetUsd: { scope: 'app', schema: z.number().finite().min(1).max(100_000).nullable(), default: null },
   panelWidth: { scope: 'app', schema: z.number().int().min(PANEL_WIDTH.min).max(PANEL_WIDTH.max), default: PANEL_WIDTH.default },
@@ -196,7 +196,7 @@ export const SETTINGS = defineSettings({
   introSounds: { scope: 'app', schema: z.boolean(), default: true },
   /** Tips while a chat works (CH-29). */
   chatTips: { scope: 'app', schema: z.boolean(), default: true },
-  /** Apex://flags values by flag id. */
+  /** Atelier://flags values by flag id. */
   flags: { scope: 'app', schema: z.record(z.string().regex(/^[a-z0-9-]{1,64}$/), z.string().max(64)), default: {} },
   /** The newer destinations start in the overflow dropdown, so the visible block is DS-06's five rows plus More. */
   'sidebar.destinations.workspace': { scope: 'profile', schema: z.boolean(), default: false },

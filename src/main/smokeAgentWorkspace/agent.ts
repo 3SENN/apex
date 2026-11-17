@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -142,7 +142,7 @@ export const shots: ShotSpec[] = [
     name: 'agent-permissions-settings',
     async run(ctx) {
       await ctx.chrome.invoke('agentSites', 'setSite', 'https://shop.example', 'ask')
-      ctx.tabs.openInternal('apex://settings/permissions')
+      ctx.tabs.openInternal('atelier://settings/permissions')
       await ctx.chrome.until(`return document.querySelector('.ag-modes') && document.querySelector('.ag-saved')`, 8000, 'Settings › Agent permissions')
       await ctx.shot('agent-permissions-settings')
       await ctx.chrome.invoke('agentSites', 'removeSite', 'https://shop.example')
@@ -151,7 +151,7 @@ export const shots: ShotSpec[] = [
   {
     name: 'usage-settings',
     async run(ctx) {
-      ctx.tabs.openInternal('apex://settings/model')
+      ctx.tabs.openInternal('atelier://settings/model')
       await ctx.chrome.until(`return document.querySelector('.ag-usage .ag-bars, .ag-usage .ui-empty, .ag-usage [class*="empty"]')`, 8000, 'the Usage section')
       await ctx.chrome.js(`document.querySelector('.ag-usage')?.scrollIntoView({ block: 'center' }); return true`)
       await ctx.shot('usage-settings')
@@ -160,7 +160,7 @@ export const shots: ShotSpec[] = [
   {
     name: 'prompt-viewer',
     async run(ctx) {
-      ctx.tabs.openInternal('apex://settings/model')
+      ctx.tabs.openInternal('atelier://settings/model')
       await ctx.chrome.click(/^View system prompt$/, `document.querySelector('.sp-page')`)
       await ctx.chrome.until(`return document.querySelector('.ag-prompt__text')`, 8000, 'the system prompt dialog')
       await ctx.shot('prompt-viewer')

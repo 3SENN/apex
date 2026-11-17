@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -54,7 +54,7 @@ export const CALENDAR_ITEMS_MAX = 500
 /** How long before a meeting starts it counts as "soon" (the meeting card and alert). */
 export const MEETING_SOON_MS = 2 * 60_000
 
-/** Whether the agent may read this kind: switched on in Apex and granted by macOS. */
+/** Whether the agent may read this kind: switched on in Atelier and granted by macOS. */
 export function calendarReadable(status: CalendarStatus, kind: CalendarKind): boolean {
   return status.available && status.enabled[kind] && status[kind] === 'granted'
 }

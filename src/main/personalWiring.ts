@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -30,9 +30,9 @@ export interface PersonalWiringDeps {
   theme: ThemeController
   companions: CompanionStore
   /** The focused (or first) browser window, for HUD placement. */
-  apexWindow(): BrowserWindow | null
+  atelierWindow(): BrowserWindow | null
   smoke: boolean
-  /** The offline Messages stand-in under APEX_SMOKE; QuickModel never reaches the network in smoke. */
+  /** The offline Messages stand-in under ATELIER_SMOKE; QuickModel never reaches the network in smoke. */
   smokeClient: { client(apiKey: string | null): never } | null
   /** The getting-started automatic items; index.ts maps the signal to 'try-dictation'. */
   onSignal?(id: GettingStartedSignal): void
@@ -46,7 +46,7 @@ export type AppQuickDeps = Pick<PersonalWiringDeps, 'dataDir' | 'home' | 'settin
 /**
  * The one engine-agnostic service for model calls outside chats. It runs
  * on the engine the person picked (falling back to another one they set up),
- * the offline smoke client under APEX_SMOKE, and never another engine in smoke.
+ * the offline smoke client under ATELIER_SMOKE, and never another engine in smoke.
  */
 export function createAppQuickModel(deps: AppQuickDeps): QuickModel {
   return createQuickModel({
@@ -70,11 +70,11 @@ export function createPersonalWiring(deps: PersonalWiringDeps): PersonalWiring {
   const float = createFloatManager({
     theme: () => deps.theme.state(),
     companion: () => deps.companions.active(),
-    // Apex's own Reduce Motion, or the system's (macOS and Windows report it).
+    // Atelier's own Reduce Motion, or the system's (macOS and Windows report it).
     reduceMotion: () => deps.settings.get().reduceMotion || systemReducesMotion(),
     // The floats speak the app language main applied, not Chromium's.
     language: () => ({ language: currentLanguage(), locale: currentLocale(), pseudo: pseudoActive() }),
-    apexWindow: deps.apexWindow,
+    atelierWindow: deps.atelierWindow,
     smoke: deps.smoke,
     callService: async (service, method, args) => {
       if (!bound) throw new Error('Not available yet')

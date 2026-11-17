@@ -1,14 +1,14 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex://settings/<page>: a grouped nav and one page at a time. The nav
+// atelier://settings/<page>: a grouped nav and one page at a time. The nav
 // collapses to an icon rail when the content card is narrow.
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactElement } from 'react'
 import type { SettingsPatch, SettingsView } from '@shared/ipc'
 import type { CompanionProfile } from '@shared/companion'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { GuidePageContext, Notice } from '../settings/kit'
 import { useLocalPreference } from '../settings/data'
 import { clampNavWidth, NAV_RAIL_BELOW, NAV_WIDTH, navMode, resolveSettingsSection, settingsNav, settingsQuery, type NavEntry } from '../settings/logic/nav'
@@ -58,7 +58,7 @@ export interface SettingsPageProps {
   url?: string
 }
 
-const NAV_WIDTH_KEY = 'apex.settings.navWidth'
+const NAV_WIDTH_KEY = 'atelier.settings.navWidth'
 
 /** The expanded nav's width, remembered per viewer; storage can be missing or blocked. */
 function useNavWidth(): [number, (width: number) => void] {
@@ -84,13 +84,13 @@ export function SettingsPage({ section, settings, companion, onSettings, tabId, 
   // Other platforms' rows are hidden, not greyed out (ST-01); titles follow the app language.
   const t = useT()
   const language = useLanguageVersion()
-  const navGroups = useMemo(() => settingsNav(undefined, apex.platform), [language])
-  const resolved = resolveSettingsSection(section, undefined, apex.platform)
+  const navGroups = useMemo(() => settingsNav(undefined, atelier.platform), [language])
+  const resolved = resolveSettingsSection(section, undefined, atelier.platform)
   const query = settingsQuery(url)
   const root = useRef<HTMLDivElement>(null)
   const main = useRef<HTMLElement>(null)
   const [width, setWidth] = useState(Number.POSITIVE_INFINITY)
-  const [collapsed, setCollapsed] = useLocalPreference<'yes' | 'no'>('apex.settings.navCollapsed', 'no', ['yes', 'no'])
+  const [collapsed, setCollapsed] = useLocalPreference<'yes' | 'no'>('atelier.settings.navCollapsed', 'no', ['yes', 'no'])
   const [navWidth, setNavWidth] = useNavWidth()
   const [peeking, setPeeking] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -115,7 +115,7 @@ export function SettingsPage({ section, settings, companion, onSettings, tabId, 
 
   // Unknown and not-yet-built pages land on the default one; the address follows so the breadcrumb agrees.
   useEffect(() => {
-    if (resolved.redirect) go(`apex://settings/${resolved.redirect}${query.raw ? `?${query.raw}` : ''}`)
+    if (resolved.redirect) go(`atelier://settings/${resolved.redirect}${query.raw ? `?${query.raw}` : ''}`)
   }, [resolved.redirect, section])
 
   // A new page starts at the top.
@@ -125,10 +125,10 @@ export function SettingsPage({ section, settings, companion, onSettings, tabId, 
   }, [resolved.page, resolved.view])
 
   function go(url: string): void {
-    if (tabId) void apex.nav.go(tabId, url)
+    if (tabId) void atelier.nav.go(tabId, url)
     else void call('pages', 'open', url)
   }
-  const openSection = (id: string): void => go(`apex://settings/${id}`)
+  const openSection = (id: string): void => go(`atelier://settings/${id}`)
   const openEntry = (entry: NavEntry): void => {
     setPeeking(false)
     if (entry.kind === 'link') void call('pages', 'open', entry.url)
@@ -137,7 +137,7 @@ export function SettingsPage({ section, settings, companion, onSettings, tabId, 
   // Pages may await the save (async buttons); failures still show inline.
   const update = (patch: SettingsPatch): Promise<void> => {
     setError(null)
-    return apex.settings.set(patch).then(
+    return atelier.settings.set(patch).then(
       (view) => void onSettings(view),
       (err: unknown) => setError(errorText(err)),
     )

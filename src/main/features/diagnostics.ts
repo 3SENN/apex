@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -61,7 +61,7 @@ export const diagnosticsFeature: Feature = {
       }),
       // The outcome reaches the window as a 'feedback-draft' event, for its toast.
       register('send-feedback', () => Promise.resolve(diagnostics.sendFeedback()).catch(() => undefined)),
-      register('show-logs', (win) => target(win)?.tabs.openInternal('apex://logs', { newTab: true })),
+      register('show-logs', (win) => target(win)?.tabs.openInternal('atelier://logs', { newTab: true })),
       () => ctx.settings.off('changed', onSettings),
       // Outcomes as kinds only: agent error codes and routine run results.
       captureAgentErrors(ctx.agent),

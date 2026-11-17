@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import type { ReactElement } from 'react'
 import { ArrowUpRight } from 'lucide-react'
-import { apex } from '../api'
+import { atelier } from '../api'
 import { useT } from '../i18n/useT'
 
 // The illustrated Google setup. Google wants every app to bring its
@@ -87,7 +87,7 @@ export function GoogleSetupSteps(): ReactElement {
           )
         })}
       </ol>
-      <button type="button" className="cx-link" onClick={() => void apex.tabs.create(CONSOLE_URL)}>
+      <button type="button" className="cx-link" onClick={() => void atelier.tabs.create(CONSOLE_URL)}>
         {t('connectors.google.openConsole')} <ArrowUpRight size={13} aria-hidden />
       </button>
     </section>

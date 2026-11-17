@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -80,7 +80,7 @@ export async function captureScene({ chrome, tabs, settings, bookmarks, first, b
     // ---- a chat page, with the card over it ----
     const chatId = baseState.picnicChatId ?? baseState.laptopChatId
     if (chatId) {
-      const tab = tabs.create(`apex://chat/${chatId}`)
+      const tab = tabs.create(`atelier://chat/${chatId}`)
       await chrome.until(`return document.querySelector('.chat-view--page .chat-log') && document.querySelector('.bookmarks-bar, .bm-bar, [aria-label="Bookmarks"]')`, 8000, 'the chat page and bookmarks bar')
       pointAt(SCENE.width - 40, SCENE.height - 40)
       await shoot('scene-chat', 1200)
@@ -105,7 +105,7 @@ export async function captureScene({ chrome, tabs, settings, bookmarks, first, b
 
     // ---- an empty chat, as a page ----
     const draft = await chrome.invoke<ChatSummary>('chats', 'create', {})
-    const empty = tabs.create(`apex://chat/${draft.id}`)
+    const empty = tabs.create(`atelier://chat/${draft.id}`)
     await chrome.until(`return document.querySelector('.chat-view--page.chat-view--empty .companion__live[data-ready]')`, 15_000, 'the waiting companion on the page')
     await shoot('chat-empty-page', 1200)
     tabs.close(empty.id)

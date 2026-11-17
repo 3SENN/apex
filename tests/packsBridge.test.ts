@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -37,7 +37,7 @@ import { SkillStore } from '../src/main/skills/store'
 
 const dirs: string[] = []
 const tmp = (): string => {
-  const d = mkdtempSync(join(tmpdir(), 'apex-packs-bridge-'))
+  const d = mkdtempSync(join(tmpdir(), 'atelier-packs-bridge-'))
   dirs.push(d)
   return d
 }
@@ -46,7 +46,7 @@ afterEach(() => {
 })
 
 const manifest = (over: Partial<PackManifest> = {}): PackManifest => ({
-  format: 'apex-pack',
+  format: 'atelier-pack',
   manifestVersion: 1,
   id: 'tracker',
   name: 'Tracker',
@@ -122,7 +122,7 @@ describe('the bridge', () => {
     await expect(bridge.run(sender, ctx(), 'ask', ['q', {}])).rejects.toThrow(/no model permission/)
     await expect(bridge.run(sender, ctx(), 'clipboard.write', ['x'])).rejects.toThrow(/no clipboard permission/)
     await expect(bridge.run(sender, ctx(), 'fetch', ['https://api.test/', {}])).rejects.toThrow(/no network permission/)
-    await expect(bridge.run(sender, ctx(), 'shell', [])).rejects.toThrow(/apex has no shell/)
+    await expect(bridge.run(sender, ctx(), 'shell', [])).rejects.toThrow(/atelier has no shell/)
     await expect(bridge.run(sender, ctx(), 'storage.get', [42])).rejects.toThrow(/arguments are wrong/)
     expect(deps.notify).not.toHaveBeenCalled()
     const granted = ctx(manifest({ permissions: { ...NO_PACK_PERMISSIONS, notifications: true, model: true, clipboard: true } }))
@@ -131,7 +131,7 @@ describe('the bridge', () => {
     expect(await bridge.run(sender, granted, 'ask', ['q', { system: 's' }])).toBe('answer')
   })
 
-  it('answers apex.ai.decide with the model permission, on its own budget when a decision model is on', async () => {
+  it('answers atelier.ai.decide with the model permission, on its own budget when a decision model is on', async () => {
     const { bridge, deps } = bridgeWith(null)
     const questions = { spam: { type: 'noul', instructions: 'Is this spam?' } }
     await expect(bridge.run(sender, ctx(), 'ai.decide', ['Win a prize!', questions])).rejects.toThrow(/no model permission/)
@@ -150,7 +150,7 @@ describe('the bridge', () => {
     })
     for (let i = 0; i < 60; i++) await fallback.bridge.run(sender, granted, 'ai.decide', ['x', questions])
     await expect(fallback.bridge.run(sender, granted, 'ai.decide', ['x', questions])).rejects.toThrow(/60 times an hour/)
-    // Without one, each call is a model call: the 60-an-hour budget, shared with apex.ai.
+    // Without one, each call is a model call: the 60-an-hour budget, shared with atelier.ai.
     const claude = bridgeWith(null)
     vi.mocked(claude.deps.plugin.ai.decidesOnModel).mockReturnValue(false)
     for (let i = 0; i < 60; i++) await claude.bridge.run(sender, granted, 'ai.decide', ['x', questions])
@@ -281,7 +281,7 @@ describe('installing, trust and updates', () => {
   const withCompanion = (instructions: string, version = '1.0.0'): { m: PackManifest; files: PackFiles } => {
     const m = manifest({ version, contributes: { companions: ['companions/scout.json'] }, permissions: NO_PACK_PERMISSIONS })
     const scout = {
-      format: 'apex-companion',
+      format: 'atelier-companion',
       version: 1,
       name: 'Scout',
       persona: 'custom',
@@ -337,7 +337,7 @@ describe('installing, trust and updates', () => {
     const { store, author, service } = setup()
     store.createDraft({ id: 'mine', name: 'Mine', description: 'Mine.' })
     const out = service.exportArchive('mine', 'draft')
-    expect(out.name).toBe('mine-1.0.0.apexpack')
+    expect(out.name).toBe('mine-1.0.0.atelierpack')
     const review = service.reviewArchive(out.data, { kind: 'file' })
     expect(review).toMatchObject({ signature: 'signed', keyId: author.keyId() })
     store.writeDraftFile('mine', 'secret.js', 'const token = "ghp_abcdefghijklmnopqrstuvwxyz0123456789"')

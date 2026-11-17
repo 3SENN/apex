@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -18,7 +18,7 @@ import { mediaReportOf } from './registry'
 // show controls and picture-in-picture, then open, save and copy its address.
 // Electron's menu has none of these, so the
 // frame's page helper acts on the element the menu opened on; picture-in-
-// picture needs a user gesture, so in the main frame it runs from Apex's own
+// picture needs a user gesture, so in the main frame it runs from Atelier's own
 // world at the menu's point.
 
 function sendTo(params: ContextMenuParams, command: PageMediaCommand): void {

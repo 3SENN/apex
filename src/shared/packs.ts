@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Packs (docs/packs.md): the one unit you make, install, share and remix. A
-// pack is a folder with apex-pack.json listing what it adds (skills, routine
+// pack is a folder with atelier-pack.json listing what it adds (skills, routine
 // templates, tweaks, themes, companions, connectors, panels, apps, commands,
 // page menu items and agent tools) and the permissions its code may use. This
 // module holds the contract both sides share: the manifest's types and
@@ -15,30 +15,30 @@ import type { MessageKey } from './i18n/core'
 import type { CompanionFileSchedule } from './companion'
 import { normalizeTweakHost } from './tweaks'
 
-export const PACK_FORMAT = 'apex-pack'
-/** The newest manifest version this Apex reads (2 added apps). */
+export const PACK_FORMAT = 'atelier-pack'
+/** The newest manifest version this Atelier reads (2 added apps). */
 export const PACK_MANIFEST_VERSION = 2
-/** What Apex writes into a new manifest: 1 still reads in older Apex; a pack needs 2 only once it holds an app. */
+/** What Atelier writes into a new manifest: 1 still reads in older Atelier; a pack needs 2 only once it holds an app. */
 export const PACK_MANIFEST_NEW_VERSION = 1
-export const PACK_MANIFEST_FILE = 'apex-pack.json'
-export const PACK_FILE_EXTENSION = 'apexpack'
+export const PACK_MANIFEST_FILE = 'atelier-pack.json'
+export const PACK_FILE_EXTENSION = 'atelierpack'
 /** The same archive, for a pack that holds an app (docs/apps.md › Sharing). */
-export const PACK_APP_FILE_EXTENSION = 'apexapp'
+export const PACK_APP_FILE_EXTENSION = 'atelierapp'
 /** Every extension an archive may have, for open dialogs and the OS. */
-/** A pack that holds only worlds travels as .apexworld (docs/apps.md › Worlds); same archive. */
-export const PACK_WORLD_FILE_EXTENSION = 'apexworld'
+/** A pack that holds only worlds travels as .atelierworld (docs/apps.md › Worlds); same archive. */
+export const PACK_WORLD_FILE_EXTENSION = 'atelierworld'
 export const PACK_ARCHIVE_EXTENSIONS: readonly string[] = [PACK_FILE_EXTENSION, PACK_APP_FILE_EXTENSION, PACK_WORLD_FILE_EXTENSION]
 
-/** Whether a file name is a pack archive (.apexpack, .apexapp or .apexworld). */
+/** Whether a file name is a pack archive (.atelierpack, .atelierapp or .atelierworld). */
 export function isPackArchiveName(name: string): boolean {
   const lower = name.toLowerCase()
   return PACK_ARCHIVE_EXTENSIONS.some((ext) => lower.endsWith(`.${ext}`))
 }
-export const PACK_SCHEME = 'apex-pack'
-/** Each pack runs in its own persistent, locked-down partition: persist:apex-pack-<id>. */
-export const PACK_PARTITION_PREFIX = 'persist:apex-pack-'
-/** Apex's own files inside a pack's address (the tool host, the signature); a pack can't ship them. */
-export const PACK_RESERVED_DIR = '__apex'
+export const PACK_SCHEME = 'atelier-pack'
+/** Each pack runs in its own persistent, locked-down partition: persist:atelier-pack-<id>. */
+export const PACK_PARTITION_PREFIX = 'persist:atelier-pack-'
+/** Atelier's own files inside a pack's address (the tool host, the signature); a pack can't ship them. */
+export const PACK_RESERVED_DIR = '__atelier'
 export const PACK_SIGNATURE_FILE = `${PACK_RESERVED_DIR}/signature.json`
 /** Share… adds a note and a share image beside the signed files (docs/apps.md › Sharing); neither is signed. */
 export const PACK_SHARE_FILE = `${PACK_RESERVED_DIR}/share.json`
@@ -47,14 +47,14 @@ export const PACK_SHARE_NOTE_MAX = 500
 export const PACK_SHARE_IMAGE_MAX = 4 * 1024 * 1024
 export const PACK_TOOL_HOST_PATH = `${PACK_RESERVED_DIR}/tool-host.html`
 export const PACK_TOOL_HOST_SCRIPT = `${PACK_RESERVED_DIR}/tool-host.js`
-export const PACK_INDEX_FORMAT = 'apex-pack-index'
+export const PACK_INDEX_FORMAT = 'atelier-pack-index'
 /** What an index entry is (docs/apps.md › The community index): a pack, an app (or game), or a world. */
 export const PACK_INDEX_KINDS = ['pack', 'app', 'world'] as const
 export type PackIndexKind = (typeof PACK_INDEX_KINDS)[number]
 export const PACK_INDEX_CATEGORIES = ['games', 'tools', 'worlds', 'creative', 'learning', 'productivity', 'companions', 'other'] as const
 export type PackIndexCategory = (typeof PACK_INDEX_CATEGORIES)[number]
-/** The community index Apex starts with (github.com/3SENN/apex-packs); you can remove it on Browse. */
-export const DEFAULT_PACK_INDEXES: ReadonlyArray<{ url: string; name: string }> = [{ url: 'https://raw.githubusercontent.com/3SENN/apex-packs/main/index.json', name: 'Community packs' }]
+/** The community index Atelier starts with (github.com/3SENN/atelier-packs); you can remove it on Browse. */
+export const DEFAULT_PACK_INDEXES: ReadonlyArray<{ url: string; name: string }> = [{ url: 'https://raw.githubusercontent.com/3SENN/atelier-packs/main/index.json', name: 'Community packs' }]
 
 export const PACK_LIMITS = {
   files: 200,
@@ -124,29 +124,29 @@ export const PACK_VERSION_PATTERN = /^(0|[1-9]\d{0,5})\.(0|[1-9]\d{0,5})\.(0|[1-
 const SEGMENT = /^[A-Za-z0-9._-]{1,100}$/
 
 /** First-party packs (docs/packs.md › First-party packs). */
-export const BUILTIN_SKILLS_PACK_ID = 'apex-builtin-skills'
-export const EXAMPLE_PACK_ID = 'apex-example-reading-time'
+export const BUILTIN_SKILLS_PACK_ID = 'atelier-builtin-skills'
+export const EXAMPLE_PACK_ID = 'atelier-example-reading-time'
 
 /** The bridge's IPC channels (src/preload/pack.ts ↔ src/main/packs/bridge.ts). */
 export const PACK_IPC = {
   /** sendSync at boot: the pack's id, name and version, or null outside a pack page. */
-  info: 'apex-pack:info',
-  /** invoke({ op, args }): every window.apex call. */
-  bridge: 'apex-pack:bridge',
+  info: 'atelier-pack:info',
+  /** invoke({ op, args }): every window.atelier call. */
+  bridge: 'atelier-pack:bridge',
   /** main → tool host: one tool call. */
-  toolCall: 'apex-pack:tool-call',
+  toolCall: 'atelier-pack:tool-call',
   /** tool host → main: the call's result. */
-  toolResult: 'apex-pack:tool-result',
-  /** tool host → main: apex.tools.serve was called. */
-  toolReady: 'apex-pack:tool-ready',
-  /** main → a pack page that called apex.services.provide: one service call. */
-  serviceCall: 'apex-pack:service-call',
+  toolResult: 'atelier-pack:tool-result',
+  /** tool host → main: atelier.tools.serve was called. */
+  toolReady: 'atelier-pack:tool-ready',
+  /** main → a pack page that called atelier.services.provide: one service call. */
+  serviceCall: 'atelier-pack:service-call',
   /** that page → main: the call's result. */
-  serviceResult: 'apex-pack:service-result',
+  serviceResult: 'atelier-pack:service-result',
   /** main → a pack page or tool host: an event it listens to (docs/apps.md › Events). */
-  event: 'apex-pack:event',
-  /** main → the page that called apex.ai.stream: one piece of the reply. */
-  aiChunk: 'apex-pack:ai-chunk',
+  event: 'atelier-pack:event',
+  /** main → the page that called atelier.ai.stream: one piece of the reply. */
+  aiChunk: 'atelier-pack:ai-chunk',
 } as const
 
 export type PackBridgeReply = { ok: true; value: unknown } | { ok: false; error: string }
@@ -170,7 +170,7 @@ export interface PackServiceCallMessage {
 }
 
 export interface PackEventMessage {
-  /** `<packId>/<event>` for a pack's event, `apex.<event>` for Apex's own. */
+  /** `<packId>/<event>` for a pack's event, `atelier.<event>` for Atelier's own. */
   name: string
   data: unknown
 }
@@ -200,7 +200,7 @@ export interface PackTweak {
 export interface PackTheme {
   id: string
   name: string
-  /** #rrggbb; Apex derives the rest of the accent from it, with readable text. */
+  /** #rrggbb; Atelier derives the rest of the accent from it, with readable text. */
   accent: string
 }
 
@@ -251,7 +251,7 @@ export interface PackApp {
   eval?: boolean
   /** What asset packs may replace (docs/apps.md › Asset slots and asset packs). */
   assets?: PackAssetSlot[]
-  /** The Apex kit major it builds on (docs/apps.md › The kit): its pages get an import map for three, three/addons/ and apex-kit/. */
+  /** The Atelier kit major it builds on (docs/apps.md › The kit): its pages get an import map for three, three/addons/ and atelier-kit/. */
   kit?: number
   /** It casts the person's companions as characters (docs/apps.md › The cast): how many it can use. */
   cast?: { min: number; max: number }
@@ -265,7 +265,7 @@ export interface PackCastMember {
   look: import('./companion').CompanionLook
 }
 
-/** The kit majors this Apex serves. */
+/** The kit majors this Atelier serves. */
 export const KIT_MAJORS: readonly number[] = [1]
 /** Where a pack's pages load the kit: inside their own origin, so modules and isolation need nothing extra. */
 export const PACK_KIT_DIR = `${PACK_RESERVED_DIR}/kit`
@@ -288,7 +288,7 @@ export interface PackAssetSet {
   root: string
 }
 
-/** Where an app page reads the person's own files (apex.files.own): copies in the app's private space, never part of the pack. */
+/** Where an app page reads the person's own files (atelier.files.own): copies in the app's private space, never part of the pack. */
 export const PACK_OWN_DIR = `${PACK_RESERVED_DIR}/own`
 
 /** A path relative to a granted folder or the own-files space: `/`-separated, no `..`, nothing absolute; null when it isn't one. */
@@ -339,7 +339,7 @@ export function packAppEntryPath(app: Pick<PackApp, 'root' | 'entry'>): string {
 
 /**
  * A card on the new tab page. Its module exports `async function run(ctx)`
- * and returns text lines (or one string); Apex draws them itself, so no pack
+ * and returns text lines (or one string); Atelier draws them itself, so no pack
  * code runs in the new tab page. `open` runs when the card is clicked.
  */
 export interface PackCard {
@@ -349,7 +349,7 @@ export interface PackCard {
   open?: PackRun
 }
 
-/** What a card shows, as Apex draws it. */
+/** What a card shows, as Atelier draws it. */
 export interface PackCardView {
   packId: string
   packName: string
@@ -369,7 +369,7 @@ export interface PackSidebarEntry {
   title: string
   /** A data: URL of the pack's icon, or null for the package glyph. */
   icon: string | null
-  /** An app's status (apex.status.set), while one of its pages is open. */
+  /** An app's status (atelier.status.set), while one of its pages is open. */
   status: PackAppStatus | null
 }
 
@@ -427,29 +427,29 @@ export interface PackContributions {
 export interface PackPermissions {
   /** Hosts the pack's code may read and its tweaks change; `*.example.com` also covers example.com. */
   sites: string[]
-  /** Hosts apex.fetch may reach: https, or http on localhost and 127.0.0.1. */
+  /** Hosts atelier.fetch may reach: https, or http on localhost and 127.0.0.1. */
   network: string[]
   /** Tweak scripts on the tweaks' sites. */
   pageScripts: boolean
   notifications: boolean
-  /** apex.ask: one-shot model calls on your chosen engine. */
+  /** atelier.ask: one-shot model calls on your chosen engine. */
   model: boolean
   clipboard: boolean
-  /** apex.files: files the person picks, a folder they choose, files of their own (docs/apps.md › Assets › Your own files). */
+  /** atelier.files: files the person picks, a folder they choose, files of their own (docs/apps.md › Assets › Your own files). */
   files?: boolean
-  /** apex.cast.speak: the person's companions say lines in this app, in character (needs model). */
+  /** atelier.cast.speak: the person's companions say lines in this app, in character (needs model). */
   speak?: boolean
-  /** apex.worlds: lists, reads, changes and opens the person's worlds (the world viewer). */
+  /** atelier.worlds: lists, reads, changes and opens the person's worlds (the world viewer). */
   worlds?: boolean
   /**
-   * apex.connectors: the person's connectors it uses, by their directory
+   * atelier.connectors: the person's connectors it uses, by their directory
    * entry (atlassian, github) or a server's name. Each tool runs as the person
    * set it in Connectors: off refuses, "ask" asks them every time.
    */
   connectors?: string[]
   /**
-   * apex.server (docs/packs.md › A web server of its own): an app's page may
-   * start a small web server that Apex runs for it, on this computer only, or
+   * atelier.server (docs/packs.md › A web server of its own): an app's page may
+   * start a small web server that Atelier runs for it, on this computer only, or
    * with `lan` for phones and computers on the same Wi-Fi too.
    */
   server?: PackServerPermission
@@ -472,7 +472,7 @@ export interface PackConnectorState {
 
 export const NO_PACK_PERMISSIONS: PackPermissions = { sites: [], network: [], pageScripts: false, notifications: false, model: false, clipboard: false }
 
-/** What a pack may ask for while it runs (apex.permissions.request, docs/apps.md › Freedom), and what the person granted of it. */
+/** What a pack may ask for while it runs (atelier.permissions.request, docs/apps.md › Freedom), and what the person granted of it. */
 export interface PackOptionalPermissions {
   sites?: string[]
   network?: string[]
@@ -485,7 +485,7 @@ export interface PackOptionalPermissions {
 
 /**
  * A key or token the person enters for a pack: their API key for a service,
- * their account's token. Apex keeps it in the system keychain and adds it to
+ * their account's token. Atelier keeps it in the system keychain and adds it to
  * requests to its hosts; the pack's code never reads it.
  */
 export interface PackSecret {
@@ -494,7 +494,7 @@ export interface PackSecret {
   name: string
   /** Where to find it, in a sentence. */
   description?: string
-  /** Where Apex sends it: hosts from permissions.network or optionalPermissions.network. */
+  /** Where Atelier sends it: hosts from permissions.network or optionalPermissions.network. */
   hosts: string[]
   /** The request header it goes in, such as Authorization or X-Api-Key. */
   header: string
@@ -509,13 +509,13 @@ export const PACK_HEADER_NAME_PATTERN = /^[A-Za-z0-9-]{1,64}$/
 /** Headers a secret can't go in: the browser sets them, or they would carry sign-ins. */
 export const PACK_SECRET_HEADER_FORBIDDEN = /^(cookie|cookie2|host|origin|referer|connection|content-length|content-type|keep-alive|te|trailer|transfer-encoding|upgrade|via|proxy-.*|sec-.*)$/i
 
-/** Whether a secret has a value now: entered in Apex, set by the organisation's policy, from a linked folder's .env (developer mode), or neither. */
+/** Whether a secret has a value now: entered in Atelier, set by the organisation's policy, from a linked folder's .env (developer mode), or neither. */
 export type PackSecretState = 'set' | 'policy' | 'env' | 'none'
 
 /**
- * A sign-in an app runs through Apex (docs/apps.md › Apps for organisations):
+ * A sign-in an app runs through Atelier (docs/apps.md › Apps for organisations):
  * OAuth 2 or OpenID Connect with PKCE against the issuer, in a tab, with a
- * loopback redirect. Apex keeps the tokens in the system keychain, refreshes
+ * loopback redirect. Atelier keeps the tokens in the system keychain, refreshes
  * them, and adds the access token (Authorization: Bearer) to the app's
  * requests to its hosts; the app's code never sees a token.
  */
@@ -591,17 +591,17 @@ export const PACK_SERVICE_METHOD_PATTERN = /^[a-z][A-Za-z0-9_]{0,31}$/
 /** A pack's own event name; others hear it as `<packId>/<name>`. */
 export const PACK_EVENT_NAME_PATTERN = /^[a-z][a-z0-9-]{0,31}$/
 export const PACK_REQUIRE_PATTERN = /^(>=)?(0|[1-9]\d{0,5})\.(0|[1-9]\d{0,5})\.(0|[1-9]\d{0,5})$/
-/** Names Apex keeps for its own services (docs/apps.md › Services): no pack may provide one. */
-export const APEX_SERVICE_NAMES: readonly string[] = ['ai', 'apex', 'assets', 'auth', 'cast', 'connectors', 'events', 'files', 'guide', 'kit', 'notify', 'pad', 'rooms', 'status', 'storage', 'world']
-/** Apex's own services a pack can already list in `uses`; the other reserved names have no service yet. */
-export const APEX_SERVICES_AVAILABLE: readonly string[] = []
-/** Events Apex itself sends to packs that list them in `events.on`. */
-export const APEX_EVENTS: readonly string[] = ['apex.theme']
+/** Names Atelier keeps for its own services (docs/apps.md › Services): no pack may provide one. */
+export const ATELIER_SERVICE_NAMES: readonly string[] = ['ai', 'atelier', 'assets', 'auth', 'cast', 'connectors', 'events', 'files', 'guide', 'kit', 'notify', 'pad', 'rooms', 'status', 'storage', 'world']
+/** Atelier's own services a pack can already list in `uses`; the other reserved names have no service yet. */
+export const ATELIER_SERVICES_AVAILABLE: readonly string[] = []
+/** Events Atelier itself sends to packs that list them in `events.on`. */
+export const ATELIER_EVENTS: readonly string[] = ['atelier.theme']
 export const PACK_SERVICE_LIMITS = { services: 10, methods: 30, uses: 20, emits: 20, listens: 30, requires: 20, payloadBytes: 1024 * 1024, eventBytes: 64 * 1024, callTimeoutMs: 30_000, eventsPerSecond: 50 } as const
 
 export interface PackServiceMethod {
   description?: string
-  /** A JSON Schema object for the input; Apex checks every call against it. */
+  /** A JSON Schema object for the input; Atelier checks every call against it. */
   input: Record<string, unknown>
 }
 
@@ -618,7 +618,7 @@ export interface PackService {
 export interface PackEvents {
   /** Events the pack sends: its own names, which others hear as `<packId>/<name>`. */
   emits?: string[]
-  /** Events it hears: `<packId>/<name>` or one of APEX_EVENTS. */
+  /** Events it hears: `<packId>/<name>` or one of ATELIER_EVENTS. */
   on?: string[]
 }
 
@@ -627,7 +627,7 @@ export interface PackRequires {
   packs?: Record<string, string>
 }
 
-/** A notification a pack set for later (apex.notifications.schedule). */
+/** A notification a pack set for later (atelier.notifications.schedule). */
 export interface PackScheduledNotification {
   id: string
   /** When, in ms since the epoch. */
@@ -637,7 +637,7 @@ export interface PackScheduledNotification {
 }
 export const PACK_SCHEDULE_LIMITS = { count: 50, aheadMs: 30 * 24 * 60 * 60_000, lateMs: 60 * 60_000 } as const
 
-/** What an app shows on its sidebar row and tab (apex.status.set). */
+/** What an app shows on its sidebar row and tab (atelier.status.set). */
 export interface PackAppStatus {
   text: string | null
   badge: number | null
@@ -648,7 +648,7 @@ export const PACK_STATUS_TEXT_MAX = 40
 
 export type PackStatusEvent = { type: 'pack-status'; packId: string; itemId: string; status: PackAppStatus | null }
 
-/** One call of window.apex as apex_inspect lists it; `op` is the bridge op it becomes (none for calls the preload answers itself). */
+/** One call of window.atelier as atelier_inspect lists it; `op` is the bridge op it becomes (none for calls the preload answers itself). */
 export interface PackApiEntry {
   call: string
   op: string | null
@@ -656,84 +656,84 @@ export interface PackApiEntry {
   status: 'available' | 'planned'
 }
 
-/** window.apex, for apex_inspect and the build guide (docs/apps.md › window.apex). A test keeps it in step with the bridge's ops. */
+/** window.atelier, for atelier_inspect and the build guide (docs/apps.md › window.atelier). A test keeps it in step with the bridge's ops. */
 export const PACK_API: readonly PackApiEntry[] = [
-  { call: 'apex.pack', op: null, needs: '–', status: 'available' },
-  { call: 'apex.storage.get(key)', op: 'storage.get', needs: '–', status: 'available' },
-  { call: 'apex.storage.set(key, value)', op: 'storage.set', needs: '– (JSON, 1 MB per pack)', status: 'available' },
-  { call: 'apex.storage.remove(key)', op: 'storage.remove', needs: '–', status: 'available' },
-  { call: 'apex.storage.keys()', op: 'storage.keys', needs: '–', status: 'available' },
-  { call: 'apex.page.info()', op: 'page.info', needs: 'the page’s host in permissions.sites', status: 'available' },
-  { call: 'apex.page.text()', op: 'page.text', needs: 'the page’s host in permissions.sites', status: 'available' },
-  { call: 'apex.page.query(selector)', op: 'page.query', needs: 'the page’s host in permissions.sites', status: 'available' },
-  { call: 'apex.fetch(url, init)', op: 'fetch', needs: 'the host in permissions.network (from main: no CORS, no cookies, text bodies up to the fetch limit)', status: 'available' },
-  { call: 'fetch(), WebSocket, EventSource, <img>, <audio> to your own hosts', op: null, needs: 'an app’s own pages and the host in permissions.network; normal CORS (the page’s origin is apex-pack://<pack id>); no WebRTC', status: 'available' },
-  { call: 'apex.env.NAME', op: null, needs: '– (public values from the manifest’s env; a linked folder’s .env overrides them while you develop)', status: 'available' },
-  { call: 'apex.secrets.status() → { NAME: true | false }', op: 'secrets.status', needs: 'secrets in the manifest (whether each has a value, never the value)', status: 'available' },
-  { call: 'apex.secrets.request(NAME) → { set }', op: 'secrets.request', needs: 'the secret in the manifest; opens the pack’s page so the person can enter it', status: 'available' },
-  { call: 'apex.auth.status() → { id: { signedIn, user } }', op: 'auth.status', needs: 'auth in the manifest (who is signed in, never a token)', status: 'available' },
-  { call: 'apex.auth.signIn(id) → { signedIn, user }', op: 'auth.signIn', needs: `the sign-in in the manifest; opens the identity provider in a tab, then ${BRAND_NAME} sends the token to its hosts`, status: 'available' },
-  { call: 'apex.auth.signOut(id)', op: 'auth.signOut', needs: 'the sign-in in the manifest', status: 'available' },
-  { call: 'apex.notify({ title, body })', op: 'notify', needs: 'permissions.notifications', status: 'available' },
-  { call: 'apex.notifications.schedule({ id, at, title, body }) / cancel(id) / list()', op: 'notify.schedule', needs: `permissions.notifications (fires while ${BRAND_NAME} runs, even with the app closed; up to 50, 30 days ahead)`, status: 'available' },
-  { call: 'apex.notifications.cancel(id)', op: 'notify.cancel', needs: 'permissions.notifications', status: 'available' },
-  { call: 'apex.notifications.list()', op: 'notify.list', needs: 'permissions.notifications', status: 'available' },
-  { call: 'apex.ask(prompt, { system })', op: 'ask', needs: 'permissions.model', status: 'available' },
-  { call: 'apex.clipboard.write(text)', op: 'clipboard.write', needs: 'permissions.clipboard', status: 'available' },
-  { call: 'apex.open(url)', op: 'open', needs: 'the host in permissions.network', status: 'available' },
-  { call: 'apex.log(...values)', op: 'log', needs: '–', status: 'available' },
-  { call: 'apex.tools.serve(handler)', op: null, needs: '– (the tool host only)', status: 'available' },
-  { call: 'apex.test.ready(state)', op: 'test.ready', needs: '– (what test_pack’s playtest reads; call it whenever the state changes, every frame is fine)', status: 'available' },
-  { call: 'apex.services.call(service, method, input)', op: 'services.call', needs: 'the service in uses', status: 'available' },
-  { call: 'apex.services.provide(service, { method: async (input, ctx) => … })', op: 'services.provide', needs: 'the service in provides', status: 'available' },
-  { call: 'apex.events.on(name, fn)', op: 'events.on', needs: 'the name in events.on', status: 'available' },
-  { call: 'apex.events.emit(name, data)', op: 'events.emit', needs: 'the name in events.emits', status: 'available' },
-  { call: 'apex.status.set({ text, badge, progress }) / apex.status.clear()', op: 'status.set', needs: '– (an app’s own pages)', status: 'available' },
-  { call: 'apex.permissions.request({ sites, network, notifications, model, clipboard })', op: 'permissions.request', needs: 'the permission in optionalPermissions', status: 'available' },
-  { call: 'apex.assets.active(slot) / apex.assets.url(slot, path)', op: 'assets.active', needs: 'the slot in the app’s assets (an app’s own pages)', status: 'available' },
-  { call: 'apex.ai.ask(prompt, { system, tier: "fast" | "smart", maxTokens })', op: 'ai.ask', needs: 'permissions.model (60 model calls an hour, 500 a day per pack)', status: 'available' },
-  { call: 'apex.ai.json(prompt, { schema, system, tier })', op: 'ai.json', needs: 'permissions.model', status: 'available' },
-  { call: 'apex.ai.decide(state, { key: { type: "noul" | "choice" | "score", instructions, criteria } })', op: 'ai.decide', needs: 'permissions.model (the person’s decision model when one is on: 600 an hour, 5,000 a day; otherwise their Claude engine within the model budget)', status: 'available' },
-  { call: 'apex.ai.stream(prompt, { onText, system, tier })', op: 'ai.stream', needs: 'permissions.model (pieces as they arrive with an API key; one piece on other engines)', status: 'available' },
-  { call: 'apex.ai.session({ system, tier, tools: [{ name, description, input, run }] }).send(text)', op: 'ai.turn', needs: 'permissions.model (on any engine: Messages API tools with an API key, one JSON-answering run per round on other engines)', status: 'available' },
-  { call: 'apex.cast.members() → [{ ref, name, rig, look }]', op: 'cast.members', needs: 'cast on the app (an app’s own pages)', status: 'available' },
-  { call: 'apex.cast.pick({ max, title })', op: 'cast.pick', needs: 'cast on the app; the person picks', status: 'available' },
-  { call: 'apex.cast.speak(ref, { situation, mood })', op: 'cast.speak', needs: 'permissions.model and permissions.speak', status: 'available' },
-  { call: 'apex.cast.sprites() / model()', op: null, needs: '– (bundled apps’ renders of a look)', status: 'planned' },
-  { call: 'apex.guide.say(text, { mood })', op: 'guide.say', needs: '–', status: 'planned' },
-  { call: 'apex.files.open({ accept, multiple }) → [{ name, size, data }]', op: 'files.open', needs: 'permissions.files', status: 'available' },
-  { call: 'apex.files.save(name, data)', op: 'files.save', needs: 'permissions.files', status: 'available' },
-  { call: 'apex.files.folder() then list(path) / read(path) / write(path, data)', op: 'files.folder', needs: 'permissions.files (one folder the person picks, until taken back)', status: 'available' },
-  { call: 'apex.files.list(path)', op: 'files.list', needs: 'permissions.files and a picked folder', status: 'available' },
-  { call: 'apex.files.read(path)', op: 'files.read', needs: 'permissions.files and a picked folder', status: 'available' },
-  { call: 'apex.files.write(path, data)', op: 'files.write', needs: 'permissions.files and a picked folder', status: 'available' },
-  { call: 'apex.files.own({ accept, multiple, folder, note }) / apex.files.ownUrl(path)', op: 'files.own', needs: 'permissions.files (copies stay on this computer, never in the pack)', status: 'available' },
-  { call: 'apex.world.context() → { world, place, cast } or null', op: 'world.context', needs: '– (an app opened from a world’s place; the cast are the residents there)', status: 'available' },
-  { call: 'apex.worlds.list()', op: 'worlds.list', needs: 'permissions.worlds (the world viewer)', status: 'available' },
-  { call: 'apex.worlds.get(ref) → { world, residents }', op: 'worlds.get', needs: 'permissions.worlds', status: 'available' },
-  { call: 'apex.worlds.save(world)', op: 'worlds.save', needs: 'permissions.worlds (your own worlds; a pack’s world is saved as a copy)', status: 'available' },
-  { call: 'apex.worlds.remove(ref)', op: 'worlds.remove', needs: 'permissions.worlds', status: 'available' },
-  { call: 'apex.worlds.apps()', op: 'worlds.apps', needs: 'permissions.worlds (the apps a place can open)', status: 'available' },
-  { call: 'apex.worlds.enter(ref, placeId)', op: 'worlds.enter', needs: 'permissions.worlds (opens the place’s app with its residents as the cast)', status: 'available' },
-  { call: 'apex.worlds.speak(ref, residentId, { situation })', op: 'worlds.speak', needs: 'permissions.worlds, model and speak', status: 'available' },
-  { call: 'apex.worlds.find(packId)', op: 'worlds.find', needs: 'permissions.worlds (opens Browse at a pack a place opens and the person lacks)', status: 'available' },
-  { call: 'apex.worlds.share(ref)', op: 'worlds.share', needs: 'permissions.worlds (saves an .apexworld; your companions become open spots)', status: 'available' },
-  { call: 'apex.rooms.create / join', op: 'rooms.create', needs: 'permissions.rooms', status: 'planned' },
-  { call: 'apex.pad.pair / on / vibrate', op: 'pad.pair', needs: 'permissions.rooms and the app’s pad', status: 'planned' },
-  { call: 'apex.connectors.status() → { ref: { connected, name } }', op: 'connectors.status', needs: 'permissions.connectors', status: 'available' },
-  { call: 'apex.connectors.tools(ref) → [{ name, title, description, readOnly, inputSchema }]', op: 'connectors.tools', needs: 'the connector in permissions.connectors (tools the person turned off are left out)', status: 'available' },
-  { call: 'apex.connectors.call(ref, tool, input) → { text, data, isError }', op: 'connectors.call', needs: 'the connector in permissions.connectors; the tool runs as the person set it (off refuses, ask asks them each time)', status: 'available' },
-  { call: 'apex.connectors.connect(ref)', op: 'connectors.connect', needs: 'the connector in permissions.connectors; opens Connectors at it so the person can connect it', status: 'available' },
-  { call: 'apex.server.start({ lan, root, token, maxConnections }) → { url, lanUrl, port, qr, token }', op: 'server.start', needs: `permissions.server (lan: true in it and in the call for phones and computers on the same Wi-Fi: https with ${BRAND_NAME}’s certificate); an app’s own pages; the server stops when the page closes`, status: 'available' },
-  { call: 'apex.server.stop()', op: 'server.stop', needs: 'permissions.server', status: 'available' },
-  { call: 'apex.server.status() → { running, url, lanUrl, port, qr, lan, connections }', op: 'server.status', needs: 'permissions.server', status: 'available' },
-  { call: 'apex.server.onRequest(async (req) => ({ status, headers, body }))', op: 'server.respond', needs: 'permissions.server (requests no file in root answers: { method, path, query, headers, body, json }; text or JSON back, 2 MB)', status: 'available' },
-  { call: 'apex.server.onConnection((socket) => { socket.onMessage(fn); socket.onClose(fn); socket.send(data) }) / apex.server.broadcast(data)', op: 'server.send', needs: 'permissions.server (served pages connect to __apex/socket, or use __apex/client.js; text messages, 16 KB in, 64 KB out)', status: 'available' },
+  { call: 'atelier.pack', op: null, needs: '–', status: 'available' },
+  { call: 'atelier.storage.get(key)', op: 'storage.get', needs: '–', status: 'available' },
+  { call: 'atelier.storage.set(key, value)', op: 'storage.set', needs: '– (JSON, 1 MB per pack)', status: 'available' },
+  { call: 'atelier.storage.remove(key)', op: 'storage.remove', needs: '–', status: 'available' },
+  { call: 'atelier.storage.keys()', op: 'storage.keys', needs: '–', status: 'available' },
+  { call: 'atelier.page.info()', op: 'page.info', needs: 'the page’s host in permissions.sites', status: 'available' },
+  { call: 'atelier.page.text()', op: 'page.text', needs: 'the page’s host in permissions.sites', status: 'available' },
+  { call: 'atelier.page.query(selector)', op: 'page.query', needs: 'the page’s host in permissions.sites', status: 'available' },
+  { call: 'atelier.fetch(url, init)', op: 'fetch', needs: 'the host in permissions.network (from main: no CORS, no cookies, text bodies up to the fetch limit)', status: 'available' },
+  { call: 'fetch(), WebSocket, EventSource, <img>, <audio> to your own hosts', op: null, needs: 'an app’s own pages and the host in permissions.network; normal CORS (the page’s origin is atelier-pack://<pack id>); no WebRTC', status: 'available' },
+  { call: 'atelier.env.NAME', op: null, needs: '– (public values from the manifest’s env; a linked folder’s .env overrides them while you develop)', status: 'available' },
+  { call: 'atelier.secrets.status() → { NAME: true | false }', op: 'secrets.status', needs: 'secrets in the manifest (whether each has a value, never the value)', status: 'available' },
+  { call: 'atelier.secrets.request(NAME) → { set }', op: 'secrets.request', needs: 'the secret in the manifest; opens the pack’s page so the person can enter it', status: 'available' },
+  { call: 'atelier.auth.status() → { id: { signedIn, user } }', op: 'auth.status', needs: 'auth in the manifest (who is signed in, never a token)', status: 'available' },
+  { call: 'atelier.auth.signIn(id) → { signedIn, user }', op: 'auth.signIn', needs: `the sign-in in the manifest; opens the identity provider in a tab, then ${BRAND_NAME} sends the token to its hosts`, status: 'available' },
+  { call: 'atelier.auth.signOut(id)', op: 'auth.signOut', needs: 'the sign-in in the manifest', status: 'available' },
+  { call: 'atelier.notify({ title, body })', op: 'notify', needs: 'permissions.notifications', status: 'available' },
+  { call: 'atelier.notifications.schedule({ id, at, title, body }) / cancel(id) / list()', op: 'notify.schedule', needs: `permissions.notifications (fires while ${BRAND_NAME} runs, even with the app closed; up to 50, 30 days ahead)`, status: 'available' },
+  { call: 'atelier.notifications.cancel(id)', op: 'notify.cancel', needs: 'permissions.notifications', status: 'available' },
+  { call: 'atelier.notifications.list()', op: 'notify.list', needs: 'permissions.notifications', status: 'available' },
+  { call: 'atelier.ask(prompt, { system })', op: 'ask', needs: 'permissions.model', status: 'available' },
+  { call: 'atelier.clipboard.write(text)', op: 'clipboard.write', needs: 'permissions.clipboard', status: 'available' },
+  { call: 'atelier.open(url)', op: 'open', needs: 'the host in permissions.network', status: 'available' },
+  { call: 'atelier.log(...values)', op: 'log', needs: '–', status: 'available' },
+  { call: 'atelier.tools.serve(handler)', op: null, needs: '– (the tool host only)', status: 'available' },
+  { call: 'atelier.test.ready(state)', op: 'test.ready', needs: '– (what test_pack’s playtest reads; call it whenever the state changes, every frame is fine)', status: 'available' },
+  { call: 'atelier.services.call(service, method, input)', op: 'services.call', needs: 'the service in uses', status: 'available' },
+  { call: 'atelier.services.provide(service, { method: async (input, ctx) => … })', op: 'services.provide', needs: 'the service in provides', status: 'available' },
+  { call: 'atelier.events.on(name, fn)', op: 'events.on', needs: 'the name in events.on', status: 'available' },
+  { call: 'atelier.events.emit(name, data)', op: 'events.emit', needs: 'the name in events.emits', status: 'available' },
+  { call: 'atelier.status.set({ text, badge, progress }) / atelier.status.clear()', op: 'status.set', needs: '– (an app’s own pages)', status: 'available' },
+  { call: 'atelier.permissions.request({ sites, network, notifications, model, clipboard })', op: 'permissions.request', needs: 'the permission in optionalPermissions', status: 'available' },
+  { call: 'atelier.assets.active(slot) / atelier.assets.url(slot, path)', op: 'assets.active', needs: 'the slot in the app’s assets (an app’s own pages)', status: 'available' },
+  { call: 'atelier.ai.ask(prompt, { system, tier: "fast" | "smart", maxTokens })', op: 'ai.ask', needs: 'permissions.model (60 model calls an hour, 500 a day per pack)', status: 'available' },
+  { call: 'atelier.ai.json(prompt, { schema, system, tier })', op: 'ai.json', needs: 'permissions.model', status: 'available' },
+  { call: 'atelier.ai.decide(state, { key: { type: "noul" | "choice" | "score", instructions, criteria } })', op: 'ai.decide', needs: 'permissions.model (the person’s decision model when one is on: 600 an hour, 5,000 a day; otherwise their Claude engine within the model budget)', status: 'available' },
+  { call: 'atelier.ai.stream(prompt, { onText, system, tier })', op: 'ai.stream', needs: 'permissions.model (pieces as they arrive with an API key; one piece on other engines)', status: 'available' },
+  { call: 'atelier.ai.session({ system, tier, tools: [{ name, description, input, run }] }).send(text)', op: 'ai.turn', needs: 'permissions.model (on any engine: Messages API tools with an API key, one JSON-answering run per round on other engines)', status: 'available' },
+  { call: 'atelier.cast.members() → [{ ref, name, rig, look }]', op: 'cast.members', needs: 'cast on the app (an app’s own pages)', status: 'available' },
+  { call: 'atelier.cast.pick({ max, title })', op: 'cast.pick', needs: 'cast on the app; the person picks', status: 'available' },
+  { call: 'atelier.cast.speak(ref, { situation, mood })', op: 'cast.speak', needs: 'permissions.model and permissions.speak', status: 'available' },
+  { call: 'atelier.cast.sprites() / model()', op: null, needs: '– (bundled apps’ renders of a look)', status: 'planned' },
+  { call: 'atelier.guide.say(text, { mood })', op: 'guide.say', needs: '–', status: 'planned' },
+  { call: 'atelier.files.open({ accept, multiple }) → [{ name, size, data }]', op: 'files.open', needs: 'permissions.files', status: 'available' },
+  { call: 'atelier.files.save(name, data)', op: 'files.save', needs: 'permissions.files', status: 'available' },
+  { call: 'atelier.files.folder() then list(path) / read(path) / write(path, data)', op: 'files.folder', needs: 'permissions.files (one folder the person picks, until taken back)', status: 'available' },
+  { call: 'atelier.files.list(path)', op: 'files.list', needs: 'permissions.files and a picked folder', status: 'available' },
+  { call: 'atelier.files.read(path)', op: 'files.read', needs: 'permissions.files and a picked folder', status: 'available' },
+  { call: 'atelier.files.write(path, data)', op: 'files.write', needs: 'permissions.files and a picked folder', status: 'available' },
+  { call: 'atelier.files.own({ accept, multiple, folder, note }) / atelier.files.ownUrl(path)', op: 'files.own', needs: 'permissions.files (copies stay on this computer, never in the pack)', status: 'available' },
+  { call: 'atelier.world.context() → { world, place, cast } or null', op: 'world.context', needs: '– (an app opened from a world’s place; the cast are the residents there)', status: 'available' },
+  { call: 'atelier.worlds.list()', op: 'worlds.list', needs: 'permissions.worlds (the world viewer)', status: 'available' },
+  { call: 'atelier.worlds.get(ref) → { world, residents }', op: 'worlds.get', needs: 'permissions.worlds', status: 'available' },
+  { call: 'atelier.worlds.save(world)', op: 'worlds.save', needs: 'permissions.worlds (your own worlds; a pack’s world is saved as a copy)', status: 'available' },
+  { call: 'atelier.worlds.remove(ref)', op: 'worlds.remove', needs: 'permissions.worlds', status: 'available' },
+  { call: 'atelier.worlds.apps()', op: 'worlds.apps', needs: 'permissions.worlds (the apps a place can open)', status: 'available' },
+  { call: 'atelier.worlds.enter(ref, placeId)', op: 'worlds.enter', needs: 'permissions.worlds (opens the place’s app with its residents as the cast)', status: 'available' },
+  { call: 'atelier.worlds.speak(ref, residentId, { situation })', op: 'worlds.speak', needs: 'permissions.worlds, model and speak', status: 'available' },
+  { call: 'atelier.worlds.find(packId)', op: 'worlds.find', needs: 'permissions.worlds (opens Browse at a pack a place opens and the person lacks)', status: 'available' },
+  { call: 'atelier.worlds.share(ref)', op: 'worlds.share', needs: 'permissions.worlds (saves an .atelierworld; your companions become open spots)', status: 'available' },
+  { call: 'atelier.rooms.create / join', op: 'rooms.create', needs: 'permissions.rooms', status: 'planned' },
+  { call: 'atelier.pad.pair / on / vibrate', op: 'pad.pair', needs: 'permissions.rooms and the app’s pad', status: 'planned' },
+  { call: 'atelier.connectors.status() → { ref: { connected, name } }', op: 'connectors.status', needs: 'permissions.connectors', status: 'available' },
+  { call: 'atelier.connectors.tools(ref) → [{ name, title, description, readOnly, inputSchema }]', op: 'connectors.tools', needs: 'the connector in permissions.connectors (tools the person turned off are left out)', status: 'available' },
+  { call: 'atelier.connectors.call(ref, tool, input) → { text, data, isError }', op: 'connectors.call', needs: 'the connector in permissions.connectors; the tool runs as the person set it (off refuses, ask asks them each time)', status: 'available' },
+  { call: 'atelier.connectors.connect(ref)', op: 'connectors.connect', needs: 'the connector in permissions.connectors; opens Connectors at it so the person can connect it', status: 'available' },
+  { call: 'atelier.server.start({ lan, root, token, maxConnections }) → { url, lanUrl, port, qr, token }', op: 'server.start', needs: `permissions.server (lan: true in it and in the call for phones and computers on the same Wi-Fi: https with ${BRAND_NAME}’s certificate); an app’s own pages; the server stops when the page closes`, status: 'available' },
+  { call: 'atelier.server.stop()', op: 'server.stop', needs: 'permissions.server', status: 'available' },
+  { call: 'atelier.server.status() → { running, url, lanUrl, port, qr, lan, connections }', op: 'server.status', needs: 'permissions.server', status: 'available' },
+  { call: 'atelier.server.onRequest(async (req) => ({ status, headers, body }))', op: 'server.respond', needs: 'permissions.server (requests no file in root answers: { method, path, query, headers, body, json }; text or JSON back, 2 MB)', status: 'available' },
+  { call: 'atelier.server.onConnection((socket) => { socket.onMessage(fn); socket.onClose(fn); socket.send(data) }) / atelier.server.broadcast(data)', op: 'server.send', needs: 'permissions.server (served pages connect to __atelier/socket, or use __atelier/client.js; text messages, 16 KB in, 64 KB out)', status: 'available' },
   { call: 'socket.close(code)', op: 'server.close', needs: 'permissions.server', status: 'available' },
-  { call: 'apex.env, secrets and sign-ins set by an organisation’s AppConfig policy', op: null, needs: '– (managed packs)', status: 'available' },
+  { call: 'atelier.env, secrets and sign-ins set by an organisation’s AppConfig policy', op: null, needs: '– (managed packs)', status: 'available' },
 ]
 
-/** A place in Apex that packs fill (docs/apps.md › Surfaces), for apex_inspect. */
+/** A place in Atelier that packs fill (docs/apps.md › Surfaces), for atelier_inspect. */
 export interface PackSurfaceEntry {
   id: string
   cardinality: 'list' | 'single' | 'keyed'
@@ -746,11 +746,11 @@ export interface PackSurfaceEntry {
 export const PACK_SURFACES: readonly PackSurfaceEntry[] = [
   { id: 'tab', cardinality: 'list', entry: 'hosted: an app or panel in a tab', via: 'contributes.apps, contributes.panels', status: 'available' },
   { id: 'beside', cardinality: 'list', entry: 'hosted: a panel beside the page in split view', via: 'contributes.panels', status: 'available' },
-  { id: 'sidebar', cardinality: 'list', entry: 'drawn: a row with icon, title and status', via: 'sidebar: true on an app or panel; apex.status.set', status: 'available' },
+  { id: 'sidebar', cardinality: 'list', entry: 'drawn: a row with icon, title and status', via: 'sidebar: true on an app or panel; atelier.status.set', status: 'available' },
   { id: 'newtab.cards', cardinality: 'list', entry: 'drawn: up to five lines from a module', via: 'contributes.cards', status: 'available' },
   { id: 'commands', cardinality: 'list', entry: 'drawn: command bar rows (Open <app> for every app)', via: 'contributes.commands', status: 'available' },
   { id: 'page.menu', cardinality: 'list', entry: 'drawn: page, selection and link menu items', via: 'contributes.menus', status: 'available' },
-  { id: 'status', cardinality: 'keyed', entry: 'drawn: an app’s text, badge or progress on its row', via: 'apex.status.set', status: 'available' },
+  { id: 'status', cardinality: 'keyed', entry: 'drawn: an app’s text, badge or progress on its row', via: 'atelier.status.set', status: 'available' },
   { id: 'newtab.page', cardinality: 'single', entry: 'hosted: the new tab page, when the person picks it', via: 'planned', status: 'planned' },
   { id: 'share', cardinality: 'list', entry: 'drawn: Send to <app> for a page, selection, link or file', via: 'planned', status: 'planned' },
   { id: 'open.with', cardinality: 'keyed', entry: 'drawn: Open with <app> for a file type', via: 'planned', status: 'planned' },
@@ -758,7 +758,7 @@ export const PACK_SURFACES: readonly PackSurfaceEntry[] = [
   { id: 'float', cardinality: 'list', entry: 'hosted: a small always-on-top window', via: 'planned', status: 'planned' },
   { id: 'settings', cardinality: 'list', entry: 'hosted: the app’s own section in Settings › Apps', via: 'planned', status: 'planned' },
   { id: 'app.assets', cardinality: 'single', entry: 'drawn: which asset pack fills one of an app’s slots', via: 'assets on an app; contributes.assets in an asset pack', status: 'available' },
-  { id: 'world.places', cardinality: 'list', entry: 'drawn: a place in a world that opens an app', via: 'contributes.worlds (places with opens); apex.world.context() in the app', status: 'available' },
+  { id: 'world.places', cardinality: 'list', entry: 'drawn: a place in a world that opens an app', via: 'contributes.worlds (places with opens); atelier.world.context() in the app', status: 'available' },
 ]
 
 /** Whether a required version is met: `1.2.0` and `>=1.2.0` both mean that version or newer. */
@@ -791,21 +791,21 @@ export interface PackManifest {
   optionalPermissions?: PackOptionalPermissions
   /** Services it offers to other packs (manifest version 2). */
   provides?: PackService[]
-  /** Services it uses, from other packs or Apex; it waits until they are there. */
+  /** Services it uses, from other packs or Atelier; it waits until they are there. */
   uses?: string[]
   events?: PackEvents
   requires?: PackRequires
-  /** Keys the person enters, which Apex adds to requests to their hosts (manifest version 2). */
+  /** Keys the person enters, which Atelier adds to requests to their hosts (manifest version 2). */
   secrets?: PackSecret[]
-  /** Public settings the pack's pages read as apex.env (manifest version 2); a linked folder's .env overrides them while you develop. */
+  /** Public settings the pack's pages read as atelier.env (manifest version 2); a linked folder's .env overrides them while you develop. */
   env?: Record<string, string>
-  /** Sign-ins Apex runs for the pack's apps, whose access tokens go to their hosts (manifest version 2). */
+  /** Sign-ins Atelier runs for the pack's apps, whose access tokens go to their hosts (manifest version 2). */
   auth?: PackAuth[]
 }
 
 // ---- paths, hosts and names ----
 
-/** Whether a manifest path is a safe relative file path inside the pack (not under __apex/). */
+/** Whether a manifest path is a safe relative file path inside the pack (not under __atelier/). */
 export function isPackPath(path: string): boolean {
   if (typeof path !== 'string' || path.length === 0 || path.length > 300) return false
   const parts = path.split('/')
@@ -906,7 +906,7 @@ export function packCoversHost(patterns: readonly string[], host: string): boole
 
 const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1'])
 
-/** Whether apex.fetch may reach this address under a pack's `network` list. */
+/** Whether atelier.fetch may reach this address under a pack's `network` list. */
 export function packFetchAllowed(network: readonly string[], url: string): boolean {
   let parsed: URL
   try {
@@ -970,12 +970,12 @@ export function bumpPackVersion(version: string): string {
   return `${a ?? 0}.${b ?? 0}.${(c ?? 0) + 1}`
 }
 
-/** apex-pack://<id>/<path>. */
+/** atelier-pack://<id>/<path>. */
 export function packUrl(packId: string, path = ''): string {
   return `${PACK_SCHEME}://${packId}/${path.split('/').map(encodeURIComponent).join('/')}`
 }
 
-/** The pack and path an apex-pack address names, or null. */
+/** The pack and path an atelier-pack address names, or null. */
 export function parsePackUrl(url: string): { packId: string; path: string } | null {
   let parsed: URL
   try {
@@ -1023,7 +1023,7 @@ export type PackGrantKind =
   | 'assets'
   /** An app whose scripts may run code they make (eval). */
   | 'eval'
-  /** apex.files. */
+  /** atelier.files. */
   | 'files'
   /** The person's companions as characters, and their lines. */
   | 'cast'
@@ -1038,19 +1038,19 @@ export type PackGrantKind =
   | 'requires'
   /** Other packs' events it hears. */
   | 'listens'
-  /** Permissions it may ask for later (apex.permissions.request). */
+  /** Permissions it may ask for later (atelier.permissions.request). */
   | 'optional'
-  /** Keys the person enters, which Apex sends to their hosts. */
+  /** Keys the person enters, which Atelier sends to their hosts. */
   | 'secrets'
-  /** Sign-ins Apex runs, whose tokens go to their hosts. */
+  /** Sign-ins Atelier runs, whose tokens go to their hosts. */
   | 'signIn'
-  /** The person's connectors its apps use (apex.connectors). */
+  /** The person's connectors its apps use (atelier.connectors). */
   | 'usesConnectors'
   /** World files it adds. */
   | 'worlds'
-  /** apex.worlds: your worlds, read, changed and opened. */
+  /** atelier.worlds: your worlds, read, changed and opened. */
   | 'worldAccess'
-  /** apex.server: a web server of its own, on this computer (subject '') or on the Wi-Fi too (subject 'lan'). */
+  /** atelier.server: a web server of its own, on this computer (subject '') or on the Wi-Fi too (subject 'lan'). */
   | 'server'
   | 'styles'
   | 'notifications'
@@ -1195,7 +1195,7 @@ export function packGrants(m: PackGrantManifest): PackGrant[] {
   }
   for (const name of m.uses ?? []) add('uses', 'notice', name)
   for (const id of Object.keys(m.requires?.packs ?? {})) add('requires', 'info', id)
-  for (const name of m.events?.on ?? []) if (!name.startsWith('apex.')) add('listens', 'info', name)
+  for (const name of m.events?.on ?? []) if (!name.startsWith('atelier.')) add('listens', 'info', name)
   const o = m.optionalPermissions
   if (o) for (const part of [...(o.sites ?? []).map((h) => `site:${h}`), ...(o.network ?? []).map((h) => `network:${h}`), ...(['notifications', 'model', 'clipboard'] as const).filter((k) => o[k] === true)]) add('optional', 'info', part)
   return grants
@@ -1356,7 +1356,7 @@ export interface PackSource {
   url?: string
 }
 
-/** 'signed' by an author key, 'unsigned', or shipped with Apex. */
+/** 'signed' by an author key, 'unsigned', or shipped with Atelier. */
 export type PackSignatureState = 'signed' | 'unsigned' | 'first-party'
 
 export interface PackContributionCounts {
@@ -1411,7 +1411,7 @@ export interface PackSummary {
   assetSlots: Array<{ appId: string; appName: string; slot: string; name: string; description: string; chosen: string | null; options: Array<{ value: string; label: string }> }>
   /** Why a pack that is on isn't running yet: the services or packs it needs (docs/apps.md › Services). */
   waiting: string[]
-  /** The folder it may read and write (apex.files.folder), and the size of the person's own files it keeps. */
+  /** The folder it may read and write (atelier.files.folder), and the size of the person's own files it keeps. */
   folder: string | null
   ownBytes: number
   /** What it may ask for later, not granted yet; and what the person granted of it. */
@@ -1448,7 +1448,7 @@ export interface PackFileInfo {
 export interface PackLogLine {
   at: number
   level: 'info' | 'warn' | 'error'
-  /** Where it came from: a tool, a panel, the bridge, Apex. */
+  /** Where it came from: a tool, a panel, the bridge, Atelier. */
   source: string
   message: string
 }
@@ -1556,9 +1556,9 @@ export interface PacksServices {
     get(id: string): PackDetail
     setEnabled(id: string, enabled: boolean): PackSummary
     remove(id: string): void
-    /** The review of an .apexpack opened from Finder (apex://packs?opened=<token>), once; null when it's gone. */
+    /** The review of an .atelierpack opened from Finder (atelier://packs?opened=<token>), once; null when it's gone. */
     openedReview(token: string): PackReview | null
-    /** Picks an .apexpack file; null when cancelled. */
+    /** Picks an .atelierpack file; null when cancelled. */
     reviewFile(): Promise<PackReview | null>
     reviewLink(url: string): Promise<PackReview>
     reviewDraft(id: string): PackReview
@@ -1566,7 +1566,7 @@ export interface PacksServices {
     reviewUpdate(id: string): Promise<PackReview>
     confirmInstall(token: string): PackSummary
     cancelReview(token: string): void
-    /** Saves an .apexpack (.apexapp for a pack with an app) of an installed pack or a draft; with `share`, its note and share image go inside and the image is saved beside it. The path, or null when cancelled. */
+    /** Saves an .atelierpack (.atelierapp for a pack with an app) of an installed pack or a draft; with `share`, its note and share image go inside and the image is saved beside it. The path, or null when cancelled. */
     exportPack(id: string, from: 'installed' | 'draft', share?: PackShareInput): Promise<string | null>
     /** A still of an installed app, rendered off-screen in its sandbox (1200×630 PNG data URL), or null when it can't draw. */
     appStill(id: string, appId: string): Promise<string | null>
@@ -1584,13 +1584,13 @@ export interface PacksServices {
     openApp(id: string, appId: string): void
     /** Opens a world in the world viewer (docs/apps.md › Worlds): `own:<id>` or `pack:<packId>/<path>`. */
     openWorld(ref: string): void
-    /** Takes back everything a pack was granted later (apex.permissions.request), and the folder it was given. */
+    /** Takes back everything a pack was granted later (atelier.permissions.request), and the folder it was given. */
     revokeGranted(id: string): PackSummary
     /** Developer mode: picks a pack folder and reviews it; installing links the folder (no copy) and reloads on every change. Null when cancelled. */
     loadFolder(): Promise<PackReview | null>
     /** Reads a linked folder again now. */
     reloadFolder(id: string): PackSummary
-    /** Keeps a key the person entered for one of a pack's secrets (in the system keychain); the next request to its hosts carries it, and an app waiting in apex.secrets.request hears at once. */
+    /** Keeps a key the person entered for one of a pack's secrets (in the system keychain); the next request to its hosts carries it, and an app waiting in atelier.secrets.request hears at once. */
     setSecret(id: string, secretId: string, value: string): PackSummary
     /** Forgets a key the person entered; requests go without it from then on. */
     clearSecret(id: string, secretId: string): PackSummary
@@ -1632,13 +1632,13 @@ export interface PacksServices {
 
 export type PacksEvent = { type: 'packs'; state: PacksState }
 
-/** apex://packs[?pack=<id>[&key=<secret>|&open=<app>]|?draft=<id>[&review=1]|?tab=browse[&find=<text>]|?install=<url>]. */
+/** atelier://packs[?pack=<id>[&key=<secret>|&open=<app>]|?draft=<id>[&review=1]|?tab=browse[&find=<text>]|?install=<url>]. */
 export function packsPageUrl(target?: { pack?: string; key?: string; open?: string; draft?: string; review?: boolean; tab?: 'installed' | 'drafts' | 'browse'; find?: string; install?: string }): string {
-  if (target?.install) return `apex://packs?install=${encodeURIComponent(target.install)}`
-  if (target?.draft) return `apex://packs?draft=${encodeURIComponent(target.draft)}${target.review ? '&review=1' : ''}`
-  if (target?.pack) return `apex://packs?pack=${encodeURIComponent(target.pack)}${target.key ? `&key=${encodeURIComponent(target.key)}` : ''}${target.open ? `&open=${encodeURIComponent(target.open)}` : ''}`
-  if (target?.tab) return `apex://packs?tab=${target.tab}${target.find ? `&find=${encodeURIComponent(target.find)}` : ''}`
-  return 'apex://packs'
+  if (target?.install) return `atelier://packs?install=${encodeURIComponent(target.install)}`
+  if (target?.draft) return `atelier://packs?draft=${encodeURIComponent(target.draft)}${target.review ? '&review=1' : ''}`
+  if (target?.pack) return `atelier://packs?pack=${encodeURIComponent(target.pack)}${target.key ? `&key=${encodeURIComponent(target.key)}` : ''}${target.open ? `&open=${encodeURIComponent(target.open)}` : ''}`
+  if (target?.tab) return `atelier://packs?tab=${target.tab}${target.find ? `&find=${encodeURIComponent(target.find)}` : ''}`
+  return 'atelier://packs'
 }
 
 export function emptyCounts(): PackContributionCounts {

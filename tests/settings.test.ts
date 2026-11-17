@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,7 +10,7 @@ import { describe, expect, it } from 'vitest'
 import { PANEL_WIDTH, SIDEBAR_WIDTH } from '@shared/ipc'
 import { DEFAULT_SETTINGS, SettingsStore, WindowStateStore, applySettingsPatch, migrateSettings, settingsPatchSchema } from '../src/main/settings'
 
-const tempDir = (): string => mkdtempSync(join(tmpdir(), 'apex-settings-'))
+const tempDir = (): string => mkdtempSync(join(tmpdir(), 'atelier-settings-'))
 
 describe('settings migration', () => {
   it('starts from the defaults: sidebar layout, system theme, companion accent', () => {
@@ -104,7 +104,7 @@ describe('settings patches', () => {
     const saved = JSON.parse(readFileSync(join(dir, 'profile-settings.json'), 'utf8')) as Record<string, unknown>
     expect(saved.theme).toBe('light')
     expect(saved).not.toHaveProperty('showBookmarksBar')
-    // settings.json mirrors the default profile's values for an older Apex.
+    // settings.json mirrors the default profile's values for an older Atelier.
     expect(JSON.parse(readFileSync(join(dir, 'settings.json'), 'utf8')).theme).toBe('light')
     expect(new SettingsStore(dir).get().theme).toBe('light')
   })
@@ -173,9 +173,9 @@ describe('settings scopes', () => {
 
   it('gives each window a view with its profile', () => {
     const store = new SettingsStore(tempDir())
-    expect(store.view().profile).toMatchObject({ id: 'default', isDefault: true, partition: 'persist:apex-web' })
-    store.setProfileResolver((id) => ({ id, name: 'Work', hue: 'tide', createdAt: 1, partition: `persist:apex-profile-${id}`, isDefault: false }))
-    expect(store.viewFor('work1234').profile).toMatchObject({ name: 'Work', partition: 'persist:apex-profile-work1234' })
+    expect(store.view().profile).toMatchObject({ id: 'default', isDefault: true, partition: 'persist:atelier-web' })
+    store.setProfileResolver((id) => ({ id, name: 'Work', hue: 'tide', createdAt: 1, partition: `persist:atelier-profile-${id}`, isDefault: false }))
+    expect(store.viewFor('work1234').profile).toMatchObject({ name: 'Work', partition: 'persist:atelier-profile-work1234' })
     expect(store.viewFor('work1234')).toHaveProperty('hasApiKey')
   })
 

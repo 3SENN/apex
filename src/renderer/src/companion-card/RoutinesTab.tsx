@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -21,7 +21,7 @@ import { useLoaded } from './useLoaded'
 interface RoutinesTabProps {
   companion: Companion
   focusId: string | null
-  /** Opens apex://routines/<id> in a tab and closes the card (after asking). */
+  /** Opens atelier://routines/<id> in a tab and closes the card (after asking). */
   onOpenPage(url: string): void
 }
 
@@ -61,7 +61,7 @@ export function RoutinesTab({ companion, focusId, onOpenPage }: RoutinesTabProps
 
   const open = async (routine: Routine): Promise<void> => {
     const ok = await confirm({ title: t('coCard.routines.open', { name: routine.name }), message: t('coCard.routines.itsPageOpensIn'), confirmLabel: t('coCard.routines.openRoutine') })
-    if (ok) onOpenPage(`apex://routines/${routine.id}`)
+    if (ok) onOpenPage(`atelier://routines/${routine.id}`)
   }
   const rowMenu = async (routine: Routine, anchor: Element): Promise<void> => {
     const choice = await showMenu(

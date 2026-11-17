@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -73,7 +73,7 @@ function closesWith([surface, , windowId]: ViewingEntry, windows: ClosingWindows
   return windows === 'all' || (windowId !== undefined && windows.has(windowId))
 }
 
-/** The chats a tab holds: its apex://chat page, or a chat held beside its website (surface 'page:<tabId>'). */
+/** The chats a tab holds: its atelier://chat page, or a chat held beside its website (surface 'page:<tabId>'). */
 export function chatsOfTab(tab: ChatTabLike, viewing: Viewing): string[] {
   const page = chatIdOf(tab.internalUrl)
   const held = viewing.flatMap(([surface, chatId]) => (surface === `page:${tab.id}` ? [chatId] : []))
@@ -223,7 +223,7 @@ export interface PrivateQuitDeps {
 }
 
 /**
- * The 'before-quit' listener for every way Apex quits (⌘Q, the app and Dock
+ * The 'before-quit' listener for every way Atelier quits (⌘Q, the app and Dock
  * menus, an OS logout): a private chat with content holds the quit and asks
  * once, covering every window; yes quits again, and that second pass goes
  * through. Installed ahead of the other before-quit listeners, which leave a
@@ -246,7 +246,7 @@ export function privateQuitGate(deps: PrivateQuitDeps): (event: { preventDefault
     asking = true
     void ending
       .ask(win)
-      // A question that can't show never keeps Apex from quitting.
+      // A question that can't show never keeps Atelier from quitting.
       .catch(() => true)
       .then((ok) => {
         if (!ok) return

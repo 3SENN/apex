@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // The private internal/ folder (a separate, private repo checked out inside
-// this one and gitignored): the parts of official Apex builds that can't be
+// this one and gitignored): the parts of official Atelier builds that can't be
 // published, such as engines that need a provider's approval before a
 // public release may offer them, and the maintainer's signing values
 // (internal/release.env). Public code imports those parts as
@@ -33,15 +33,15 @@ export function internalPresent(repo = REPO) {
   const marker = join(repo, INTERNAL_MARKER)
   if (!existsSync(marker)) return false
   try {
-    return JSON.parse(readFileSync(marker, 'utf8'))?.name === 'apex-internal'
+    return JSON.parse(readFileSync(marker, 'utf8'))?.name === 'atelier-internal'
   } catch {
     return false
   }
 }
 
-/** Whether a build uses the internal folder: present, and not turned off with APEX_INTERNAL=0. */
+/** Whether a build uses the internal folder: present, and not turned off with ATELIER_INTERNAL=0. */
 export function isInternal(env = process.env, repo = REPO) {
-  return env.APEX_INTERNAL !== '0' && internalPresent(repo)
+  return env.ATELIER_INTERNAL !== '0' && internalPresent(repo)
 }
 
 /** The folder `@internal` resolves to: internal/, or the public stubs. */
@@ -49,9 +49,9 @@ export function internalRoot(env = process.env, repo = REPO) {
   return isInternal(env, repo) ? join(repo, 'internal') : join(repo, 'src', 'stubs')
 }
 
-/** Whether APEX_PUBLIC_RELEASE asks for a public release (read as scripts/release/config.mjs reads it). */
+/** Whether ATELIER_PUBLIC_RELEASE asks for a public release (read as scripts/release/config.mjs reads it). */
 export function publicRelease(env = process.env) {
-  const value = typeof env.APEX_PUBLIC_RELEASE === 'string' ? env.APEX_PUBLIC_RELEASE.trim() : ''
+  const value = typeof env.ATELIER_PUBLIC_RELEASE === 'string' ? env.ATELIER_PUBLIC_RELEASE.trim() : ''
   return value === '1' || value === 'true'
 }
 
@@ -117,13 +117,13 @@ export function runPrepackage(env = process.env, repo = REPO) {
 
 /** The build-time define the app reads: whether the internal folder is built in. */
 export function internalDefines(env = process.env, repo = REPO) {
-  return { __APEX_INTERNAL__: JSON.stringify(isInternal(env, repo)) }
+  return { __ATELIER_INTERNAL__: JSON.stringify(isInternal(env, repo)) }
 }
 
 /** A one-line description of the mode, for scripts that print it. */
 export function describeMode(env = process.env, repo = REPO) {
   if (isInternal(env, repo)) return 'with the internal/ folder'
-  return internalPresent(repo) ? 'without the internal/ folder (APEX_INTERNAL=0)' : 'from public code only'
+  return internalPresent(repo) ? 'without the internal/ folder (ATELIER_INTERNAL=0)' : 'from public code only'
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
@@ -135,5 +135,5 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       console.error(`[internal] ${err instanceof Error ? err.message : String(err)}`)
       process.exit(1)
     }
-  } else console.log(`Apex builds ${describeMode()}${isInternal() && !areaIncluded('engines') ? ', with the public engines only (APEX_PUBLIC_RELEASE)' : ''}.`)
+  } else console.log(`Atelier builds ${describeMode()}${isInternal() && !areaIncluded('engines') ? ', with the public engines only (ATELIER_PUBLIC_RELEASE)' : ''}.`)
 }

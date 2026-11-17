@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { useEffect, useState, type ReactElement } from 'react'
 import type { PopupStripState } from '@shared/api'
-import { apex } from '../api'
+import { atelier } from '../api'
 import { useT } from '../i18n/useT'
 import './popupStrip.css'
 
@@ -17,7 +17,7 @@ import './popupStrip.css'
 export function PopupStrip(): ReactElement {
   const t = useT()
   const [state, setState] = useState<PopupStripState | null>(null)
-  useEffect(() => apex.overlay.onStrip(setState), [])
+  useEffect(() => atelier.overlay.onStrip(setState), [])
 
   const host = state?.host ?? ''
   const secure = state?.secure ?? false

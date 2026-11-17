@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -18,7 +18,7 @@ import { isBlankUrl, looksLikeAddress, omniboxToUrl, parseInternalUrl } from '@s
 export type NewTabMode = 'companion' | 'web'
 
 export type StartAction =
-  /** The typed text is an address: go there (an apex:// page opens in place). */
+  /** The typed text is an address: go there (an atelier:// page opens in place). */
   | { kind: 'go'; url: string; label: string; internal: boolean }
   | { kind: 'search'; url: string; engine: string; query: string }
   | { kind: 'ask'; text: string }
@@ -32,7 +32,7 @@ export interface StartPlan {
   alt: StartAction | null
 }
 
-/** "example.com" for a typed address, the address itself for an apex:// page or a file. */
+/** "example.com" for a typed address, the address itself for an atelier:// page or a file. */
 function goLabel(url: string, internal: boolean): string {
   if (internal) return url
   return displayHost(url).display || typedForm(url)

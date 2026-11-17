@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -62,7 +62,7 @@ export function parseInsights(text: string, now: number): Insight[] {
     const detail = typeof e.detail === 'string' ? e.detail.trim().slice(0, 400) : ''
     if (!kind || !title) continue
     // A routine idea opens the routine editor; nothing else gets an action.
-    const action = kind === 'routine-idea' ? { label: mainT('core.mainInsights.makeARoutine'), url: 'apex://routines/new' } : null
+    const action = kind === 'routine-idea' ? { label: mainT('core.mainInsights.makeARoutine'), url: 'atelier://routines/new' } : null
     out.push({ id: insightId(kind, title), kind, title, detail, action, at: now })
     if (out.length >= MAX_INSIGHTS) break
   }

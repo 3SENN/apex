@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // The bridge (docs/packs.md › The sandbox and the bridge): main's side of
-// window.apex. Every call arrives as one op from a pack's page or tool host;
+// window.atelier. Every call arrives as one op from a pack's page or tool host;
 // before anything runs, the sender must be the top frame of its own pack's
 // address, the pack must be on (or a draft under test), the arguments must
 // pass zod, and the op's permission must be granted. A refusal is logged to
@@ -68,11 +68,11 @@ export interface BridgeDeps {
    * draft: a test never gets more network or model access than you granted.
    */
   installedGrants(packId: string): { network: string[]; model: boolean } | null
-  /** apex.env: the pack's public values (docs/apps.md › Your own servers). */
+  /** atelier.env: the pack's public values (docs/apps.md › Your own servers). */
   env?(ctx: PackContext): Record<string, string>
   /** Records a permission a pack just used (an organisation's audit log; a no-op without one). */
   audit?(ctx: PackContext, op: string, detail: string): void
-  /** A request's headers with the pack's keys for its host, or null when nothing changes (apex.fetch, hop by hop). */
+  /** A request's headers with the pack's keys for its host, or null when nothing changes (atelier.fetch, hop by hop). */
   requestHeaders?(ctx: PackContext, url: string, headers: Record<string, string>): Record<string, string> | null
   /** The plugin model (docs/apps.md › Services, Events): checked against the manifests by the runtime. */
   plugin: {
@@ -81,31 +81,31 @@ export interface BridgeDeps {
     emit(sender: WebContents, ctx: PackContext, name: string, data: unknown): void
     listen(sender: WebContents, ctx: PackContext, names: string[]): void
     status(sender: WebContents, ctx: PackContext, status: PackAppStatus | null): void
-    /** apex.permissions.request: asks the person for some of the pack's optionalPermissions. */
+    /** atelier.permissions.request: asks the person for some of the pack's optionalPermissions. */
     request(sender: WebContents, ctx: PackContext, asked: PackOptionalPermissions): Promise<{ granted: boolean }>
-    /** apex.secrets: whether each key has a value (never the value), and asking the person for one. */
+    /** atelier.secrets: whether each key has a value (never the value), and asking the person for one. */
     secrets?: {
       status(ctx: PackContext): Record<string, boolean>
       request(sender: WebContents, ctx: PackContext, id: string): Promise<{ set: boolean }>
     }
-    /** apex.connectors: the person's connectors the pack names, as they set each tool. */
+    /** atelier.connectors: the person's connectors the pack names, as they set each tool. */
     connectors?: {
       status(ctx: PackContext): Record<string, PackConnectorState>
       tools(ctx: PackContext, ref: string): Array<{ name: string; title: string; description: string; readOnly: boolean; inputSchema: unknown }>
       call(sender: WebContents, ctx: PackContext, ref: string, tool: string, input: unknown): Promise<{ text: string; data: unknown; isError: boolean }>
       connect(sender: WebContents, ctx: PackContext, ref: string): null
     }
-    /** apex.auth: the pack's sign-ins (who is signed in, never a token), signing in in a tab, and signing out. */
+    /** atelier.auth: the pack's sign-ins (who is signed in, never a token), signing in in a tab, and signing out. */
     auth?: {
       status(ctx: PackContext): Promise<Record<string, PackAuthState>>
       signIn(sender: WebContents, ctx: PackContext, id: string): Promise<PackAuthState>
       signOut(ctx: PackContext, id: string): PackAuthState
     }
-    /** apex.ai (docs/apps.md › Apex as the AI engine): the model on the person's engine, within the pack's budget. */
+    /** atelier.ai (docs/apps.md › Atelier as the AI engine): the model on the person's engine, within the pack's budget. */
     ai: {
       text(ctx: PackContext, r: AiRequest): Promise<string>
       json(ctx: PackContext, r: AiRequest & { schema: Record<string, unknown> }): Promise<unknown>
-      /** apex.ai.decide (docs/decisions.md): typed answers with probabilities. */
+      /** atelier.ai.decide (docs/decisions.md): typed answers with probabilities. */
       /** `beforeClaude` charges the model budget when the decision model can't answer and the Claude engine does instead. */
       decide(ctx: PackContext, r: DecisionRequest, beforeClaude: (() => void) | null): Promise<{ answers: DecisionResult['answers']; model: string; source: DecisionResult['source'] }>
       /** A decision model is on, so a decide call costs next to nothing and uses its own, larger budget. */
@@ -113,19 +113,19 @@ export interface BridgeDeps {
       stream(sender: WebContents, ctx: PackContext, r: AiRequest, streamId: string): Promise<string>
       turn(sender: WebContents, ctx: PackContext, r: AiTurn): Promise<{ text: string; history: unknown[] }>
     }
-    /** apex.test.ready: the state a page reports for test_pack's playtest (kept only while a draft is under test). */
+    /** atelier.test.ready: the state a page reports for test_pack's playtest (kept only while a draft is under test). */
     testState(sender: WebContents, ctx: PackContext, state: unknown): void
-    /** apex.cast (docs/apps.md › The cast): the person's companions as characters; lines written in main. */
+    /** atelier.cast (docs/apps.md › The cast): the person's companions as characters; lines written in main. */
     cast(sender: WebContents, ctx: PackContext, op: 'cast.members' | 'cast.pick' | 'cast.speak', args: unknown[]): Promise<unknown>
-    /** apex.notifications: notifications set for later, fired while Apex runs. */
+    /** atelier.notifications: notifications set for later, fired while Atelier runs. */
     schedule(ctx: PackContext, op: 'notify.schedule' | 'notify.cancel' | 'notify.list', args: unknown[]): unknown
-    /** apex.files (docs/apps.md › Assets › Your own files): what the person picks, and nothing else on the disk. */
+    /** atelier.files (docs/apps.md › Assets › Your own files): what the person picks, and nothing else on the disk. */
     files(sender: WebContents, ctx: PackContext, op: FilesOp, args: unknown[]): Promise<unknown>
-    /** apex.worlds (the world viewer) and apex.world.context (an app opened from a world's place). */
+    /** atelier.worlds (the world viewer) and atelier.world.context (an app opened from a world's place). */
     worlds?(sender: WebContents, ctx: PackContext, op: WorldsOp, args: unknown[]): Promise<unknown>
-    /** apex.server (docs/packs.md › A web server of its own): the app page's own web server, run by Apex. */
+    /** atelier.server (docs/packs.md › A web server of its own): the app page's own web server, run by Atelier. */
     server?(sender: WebContents, ctx: PackContext, op: ServerOp, args: unknown[]): Promise<unknown>
-    /** apex.assets.active: what fills one of the pack's asset slots (null: the app's own files). */
+    /** atelier.assets.active: what fills one of the pack's asset slots (null: the app's own files). */
     assets(sender: WebContents, ctx: PackContext, slot: string): { pack: string; packName: string; set: string; setName: string } | null
   }
   fetch?: typeof fetch
@@ -134,7 +134,7 @@ export interface BridgeDeps {
 
 export class BridgeRefusal extends Error {}
 
-/** One apex.ai request: the model tier the pack asks for, never a model name (Apex maps tiers to models). */
+/** One atelier.ai request: the model tier the pack asks for, never a model name (Atelier maps tiers to models). */
 export interface AiRequest {
   prompt: string
   system: string | null
@@ -142,7 +142,7 @@ export interface AiRequest {
   maxTokens: number
 }
 
-/** One message of an apex.ai.session: the conversation so far is the page's, the tools are its own. */
+/** One message of an atelier.ai.session: the conversation so far is the page's, the tools are its own. */
 export interface AiTurn {
   system: string | null
   tier: 'fast' | 'smart'
@@ -155,19 +155,19 @@ export interface AiTurn {
 const aiOptions = z.object({ system: z.string().max(8_000).optional(), tier: z.enum(['fast', 'smart']).optional(), maxTokens: z.number().int().min(1).max(8_000).optional() }).strict()
 const aiId = z.string().regex(/^[A-Za-z0-9_-]{6,64}$/)
 
-/** The apex.worlds ops and apex.world.context; the runtime answers them. */
+/** The atelier.worlds ops and atelier.world.context; the runtime answers them. */
 export type WorldsOp = 'world.context' | 'worlds.list' | 'worlds.get' | 'worlds.save' | 'worlds.remove' | 'worlds.apps' | 'worlds.enter' | 'worlds.speak' | 'worlds.share' | 'worlds.find'
 const worldRef = z.string().max(400).refine((r) => parseWorldRef(r) !== null, { error: 'is not a world ref' })
 const worldPart = z.string().regex(WORLD_ID_PATTERN)
 
-/** The apex.files ops; the runtime answers them. */
+/** The atelier.files ops; the runtime answers them. */
 export type FilesOp = 'files.open' | 'files.save' | 'files.folder' | 'files.list' | 'files.read' | 'files.write' | 'files.own'
 const FILES_BYTES = 50 * 1024 * 1024
 const fileData = z.union([z.string().max(FILES_BYTES), z.instanceof(Uint8Array).refine((d) => d.byteLength <= FILES_BYTES, { error: 'is larger than 50 MB' })])
 const relPath = z.string().max(500)
 const accept = z.array(z.string().regex(/^\.?[A-Za-z0-9]{1,12}$/)).max(30).optional()
 
-/** The apex.server ops; the runtime answers them. */
+/** The atelier.server ops; the runtime answers them. */
 export type ServerOp = 'server.start' | 'server.stop' | 'server.status' | 'server.respond' | 'server.send' | 'server.close'
 const socketId = z.string().regex(SERVER_SOCKET_ID_PATTERN)
 
@@ -313,15 +313,15 @@ const hostOf = (url: unknown): string => {
   }
 }
 
-/** Every op the bridge answers; apex_inspect's catalog lists each (a test checks). */
+/** Every op the bridge answers; atelier_inspect's catalog lists each (a test checks). */
 export const BRIDGE_OPS: readonly string[] = Object.keys(ARGS)
 
 /** Request headers a pack can't set: they'd claim another origin or carry your sign-ins. */
-const FORBIDDEN_HEADERS = /^(cookie|cookie2|host|origin|referer|connection|content-length|keep-alive|te|trailer|transfer-encoding|upgrade|via|proxy-.*|sec-.*|authorization-apex.*)$/i
+const FORBIDDEN_HEADERS = /^(cookie|cookie2|host|origin|referer|connection|content-length|keep-alive|te|trailer|transfer-encoding|upgrade|via|proxy-.*|sec-.*|authorization-atelier.*)$/i
 
 const MODEL_CALLS_PER_HOUR = 60
 const MODEL_CALLS_PER_DAY = 500
-/** apex.ai.decide on a decision model: a tiny fraction of a model call, so ten times the budget. On Claude it counts as a model call. */
+/** atelier.ai.decide on a decision model: a tiny fraction of a model call, so ten times the budget. On Claude it counts as a model call. */
 const DECISIONS_PER_HOUR = 600
 const DECISIONS_PER_DAY = 5_000
 
@@ -345,7 +345,7 @@ export function createBridge(deps: BridgeDeps): Bridge {
     return true
   }
 
-  /** The hosts apex.fetch may reach: the pack's own list, and in a test only what its installed version may already reach (or this computer). */
+  /** The hosts atelier.fetch may reach: the pack's own list, and in a test only what its installed version may already reach (or this computer). */
   const networkFor = (ctx: PackContext): string[] => {
     const own = ctx.manifest.permissions.network
     if (ctx.mode !== 'test') return own
@@ -353,7 +353,7 @@ export function createBridge(deps: BridgeDeps): Bridge {
     return own.filter((h) => h === 'localhost' || h === '127.0.0.1' || granted.includes(h))
   }
 
-  /** Every model call of a pack counts, apex.ask and each round of a session alike: 60 an hour and 500 a day (starting values). */
+  /** Every model call of a pack counts, atelier.ask and each round of a session alike: 60 an hour and 500 a day (starting values). */
   const budget = (ctx: PackContext, op: string): void => {
     if (!rate(asks, `${ctx.packId}:hour`, MODEL_CALLS_PER_HOUR, 60 * 60_000)) refuse(ctx, op, `A pack can use the model ${MODEL_CALLS_PER_HOUR} times an hour.`)
     if (!rate(asks, `${ctx.packId}:day`, MODEL_CALLS_PER_DAY, 24 * 60 * 60_000)) refuse(ctx, op, `A pack can use the model ${MODEL_CALLS_PER_DAY} times a day.`)
@@ -391,7 +391,7 @@ export function createBridge(deps: BridgeDeps): Bridge {
   }
 
   const run = async (sender: WebContents, ctx: PackContext, op: string, raw: unknown[]): Promise<unknown> => {
-    if (!Object.hasOwn(ARGS, op)) return refuse(ctx, op, `apex has no ${op}.`)
+    if (!Object.hasOwn(ARGS, op)) return refuse(ctx, op, `atelier has no ${op}.`)
     const parsed = ARGS[op as BridgeOp].safeParse(raw)
     if (!parsed.success) return refuse(ctx, op, `The arguments are wrong: ${parsed.error.issues.map((i) => `${i.path.join('.') || 'args'} ${i.message}`).join('; ')}`)
     const args = parsed.data as unknown[]
@@ -443,7 +443,7 @@ export function createBridge(deps: BridgeDeps): Bridge {
       case 'fetch': {
         const [url, init] = args as [string, { method?: string; headers?: Record<string, string>; body?: string }]
         const network = networkFor(ctx)
-        if (network.length === 0) return refuse(ctx, op, ctx.mode === 'test' ? 'In test_pack, apex.fetch reaches only this computer and hosts an installed version of this pack may already use.' : 'This pack has no network permission.')
+        if (network.length === 0) return refuse(ctx, op, ctx.mode === 'test' ? 'In test_pack, atelier.fetch reaches only this computer and hosts an installed version of this pack may already use.' : 'This pack has no network permission.')
         return packFetch({ url, init, network, doFetch, refuse: (why) => refuse(ctx, op, why), headersFor: deps.requestHeaders ? (at, h) => deps.requestHeaders?.(ctx, at, h) ?? null : undefined })
       }
       case 'notify': {
@@ -455,7 +455,7 @@ export function createBridge(deps: BridgeDeps): Bridge {
       case 'ask': {
         if (!p.model) return refuse(ctx, op, 'This pack has no model permission.')
         // A test never spends your model account on a pack you haven't allowed to: it gets a stand-in answer.
-        if (ctx.mode === 'test' && !deps.installedGrants(ctx.packId)?.model) return '[test_pack: apex.ask doesn’t run in a test of a pack you haven’t allowed to ask the model. This stands in for its answer.]'
+        if (ctx.mode === 'test' && !deps.installedGrants(ctx.packId)?.model) return '[test_pack: atelier.ask doesn’t run in a test of a pack you haven’t allowed to ask the model. This stands in for its answer.]'
         budget(ctx, op)
         const [prompt, options] = args as [string, { system?: string }]
         deps.log(ctx, { level: 'info', source: 'bridge', message: `ask (${prompt.length} characters)` })
@@ -481,7 +481,7 @@ export function createBridge(deps: BridgeDeps): Bridge {
       case 'ai.stream':
       case 'ai.turn': {
         if (!p.model) return refuse(ctx, op, 'This pack has no model permission.')
-        if (ctx.mode === 'test' && !deps.installedGrants(ctx.packId)?.model) return op === 'ai.turn' ? { text: '[test_pack: apex.ai doesn’t run in a test of a pack you haven’t allowed to use the model.]', history: [] } : op === 'ai.json' ? null : '[test_pack: apex.ai doesn’t run in a test of a pack you haven’t allowed to use the model. This stands in for its answer.]'
+        if (ctx.mode === 'test' && !deps.installedGrants(ctx.packId)?.model) return op === 'ai.turn' ? { text: '[test_pack: atelier.ai doesn’t run in a test of a pack you haven’t allowed to use the model.]', history: [] } : op === 'ai.json' ? null : '[test_pack: atelier.ai doesn’t run in a test of a pack you haven’t allowed to use the model. This stands in for its answer.]'
         budget(ctx, op)
         if (op === 'ai.turn') {
           const [def, history, text, sessionId] = args as [{ system?: string; tier?: 'fast' | 'smart'; tools: AiTurn['tools'] }, unknown[], string, string]
@@ -557,7 +557,7 @@ export function createBridge(deps: BridgeDeps): Bridge {
       case 'files.write':
       case 'files.own':
         if (!p.files) return refuse(ctx, op, 'This pack has no files permission.')
-        if (ctx.mode === 'test') return refuse(ctx, op, 'apex.files isn’t used in test_pack: nobody is there to pick a file.')
+        if (ctx.mode === 'test') return refuse(ctx, op, 'atelier.files isn’t used in test_pack: nobody is there to pick a file.')
         return deps.plugin.files(sender, ctx, op as FilesOp, args)
       case 'assets.active':
         return deps.plugin.assets(sender, ctx, args[0] as string)
@@ -577,7 +577,7 @@ export function createBridge(deps: BridgeDeps): Bridge {
       case 'worlds.find':
         if (!p.worlds || !deps.plugin.worlds) return refuse(ctx, op, 'This pack has no worlds permission.')
         // A test reads worlds but never changes, opens or shares one.
-        if (ctx.mode === 'test' && op !== 'worlds.list' && op !== 'worlds.get' && op !== 'worlds.apps') return refuse(ctx, op, 'In test_pack, apex.worlds only reads.')
+        if (ctx.mode === 'test' && op !== 'worlds.list' && op !== 'worlds.get' && op !== 'worlds.apps') return refuse(ctx, op, 'In test_pack, atelier.worlds only reads.')
         if (op === 'worlds.speak') {
           if (!p.model || !p.speak) return refuse(ctx, op, 'Residents speak through the model: this pack needs model and speak.')
           budget(ctx, op)
@@ -597,7 +597,7 @@ export function createBridge(deps: BridgeDeps): Bridge {
         const ref = args[0] as string
         if (!refs.includes(ref)) return refuse(ctx, op, `${ref} is not in this pack’s permissions.connectors.`)
         if (!deps.plugin.connectors) return refuse(ctx, op, 'Connectors aren’t available here.')
-        if (ctx.mode === 'test') return op === 'connectors.tools' ? [] : refuse(ctx, op, 'In test_pack, apps use no connectors: apex.connectors.status() says none is connected.')
+        if (ctx.mode === 'test') return op === 'connectors.tools' ? [] : refuse(ctx, op, 'In test_pack, apps use no connectors: atelier.connectors.status() says none is connected.')
         if (op === 'connectors.tools') return deps.plugin.connectors.tools(ctx, ref)
         if (op === 'connectors.connect') return deps.plugin.connectors.connect(sender, ctx, ref)
         return deps.plugin.connectors.call(sender, ctx, ref, args[1] as string, args[2] ?? {})
@@ -607,7 +607,7 @@ export function createBridge(deps: BridgeDeps): Bridge {
       case 'auth.signIn':
       case 'auth.signOut': {
         if (!deps.plugin.auth) return refuse(ctx, op, 'Sign-ins aren’t available here.')
-        if (ctx.mode === 'test') return refuse(ctx, op, 'In test_pack, nobody signs in: apex.auth.status() says signed out.')
+        if (ctx.mode === 'test') return refuse(ctx, op, 'In test_pack, nobody signs in: atelier.auth.status() says signed out.')
         const id = args[0] as string
         if (!(ctx.manifest.auth ?? []).some((a) => a.id === id)) return refuse(ctx, op, `${id} is not in this pack’s auth.`)
         return op === 'auth.signIn' ? deps.plugin.auth.signIn(sender, ctx, id) : deps.plugin.auth.signOut(ctx, id)
@@ -676,7 +676,7 @@ export function checkSender(event: { sender: WebContents; senderFrame: unknown }
   return ctx
 }
 
-/** apex.fetch: allowlisted hosts only, redirects re-checked hop by hop (keys too), no cookies, capped size and time. */
+/** atelier.fetch: allowlisted hosts only, redirects re-checked hop by hop (keys too), no cookies, capped size and time. */
 export async function packFetch(input: {
   url: string
   init: { method?: string; headers?: Record<string, string>; body?: string }

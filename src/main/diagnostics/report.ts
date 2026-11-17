@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -58,7 +58,7 @@ export interface ReportParts {
   dumps: Array<{ name: string; path: string }>
 }
 
-/** "Apex problem report 2026-10-29 14.05.zip", in local time. */
+/** "Atelier problem report 2026-10-29 14.05.zip", in local time. */
 export function reportFileName(date: Date): string {
   const pad = (n: number): string => String(n).padStart(2, '0')
   return `${BRAND_NAME} problem report ${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}.${pad(date.getMinutes())}.zip`
