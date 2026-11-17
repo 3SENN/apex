@@ -11,7 +11,7 @@ folder: they are built with
 The files that depict an Apex character (the icons, the installer sidebar, the tray images and the rendered art; the
 mark is Pip) are Apex Companion Art, under the [Apex Companion Art License](../../ART-LICENSE.md); the rest is under
 the [Mozilla Public License 2.0](../../LICENSE). [LICENSE.md](LICENSE.md) lists which is which. All of it is
-trademarked: the Apex name, logo, sprout mark and characters are trademarks of Senne Chin, neither licence grants
+trademarked: the Apex name, logo, sprout mark and characters are trademarks of Chinnovations, neither licence grants
 trademark rights, and their use is governed by the [trademark policy](../../TRADEMARKS.md). Builds you share,
 including ones shared to test changes for Apex, use the [unofficial branding](../unofficial/) instead, which is what
 a build from source gets by default; a build you distribute as your own product (a fork) also replaces the companion
