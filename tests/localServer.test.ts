@@ -11,6 +11,7 @@ import { request as httpsRequest } from 'node:https'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { spawnSync } from 'node:child_process'
+import { runInNewContext } from 'node:vm'
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 
 vi.mock('electron', () => ({
@@ -575,5 +576,62 @@ describe('the helper for served pages and the starter', () => {
     }
     expect(made.get('phone/index.html')!.toString()).toContain('<script src="__apex/client.js"></script>')
     expect(made.get('app/main.js')!.toString()).toContain("apex.server.start({ lan: true, root: 'phone' })")
+  })
+
+  it('the phone keeps motion and pad moves under 90 a second, so every button release gets through', () => {
+    const made = starterFiles('phone-controller', { id: 'my-pads', name: 'My pads', description: 'Phones as pads.' })
+    type Handler = (e: Record<string, unknown>) => void
+    let clock = 0
+    const sent: Array<Record<string, unknown>> = []
+    const onWindow = new Map<string, Handler>()
+    const elements = new Map<string, { handlers: Map<string, Handler>; [k: string]: unknown }>()
+    const $ = (id: string) => {
+      if (!elements.has(id)) {
+        const handlers = new Map<string, Handler>()
+        const classes = new Set<string>()
+        elements.set(id, {
+          handlers,
+          value: 'Sam',
+          classList: { add: (c: string) => classes.add(c), remove: (c: string) => classes.delete(c), contains: (c: string) => classes.has(c) },
+          addEventListener: (type: string, fn: Handler) => handlers.set(type, fn),
+          setPointerCapture: () => undefined,
+          hasPointerCapture: () => true,
+          getBoundingClientRect: () => ({ left: 0, top: 0, width: 100, height: 100 }),
+        })
+      }
+      return elements.get(id)!
+    }
+    const fire = (id: string, type: string, e: Record<string, unknown> = {}) => $(id).handlers.get(type)!({ preventDefault: () => undefined, pointerId: 1, clientX: 50, clientY: 50, ...e })
+    const page: Record<string, unknown> = {
+      navigator: { language: 'en' },
+      document: { documentElement: {}, querySelectorAll: () => [], getElementById: $, addEventListener: () => undefined, visibilityState: 'visible' },
+      localStorage: { getItem: () => null, setItem: () => undefined },
+      performance: { now: () => clock },
+      screen: {},
+      DeviceMotionEvent: function DeviceMotionEvent() {},
+      apexServer: { connect: () => ({ send: (m: unknown) => sent.push(JSON.parse(JSON.stringify(m))), onOpen: () => undefined, onClose: () => undefined, onMessage: () => undefined }) },
+      addEventListener: (type: string, fn: Handler) => onWindow.set(type, fn),
+    }
+    page.window = page
+    runInNewContext(made.get('phone/phone.js')!.toString(), page)
+
+    fire('go', 'click')
+    fire('motion', 'click')
+    fire('touch', 'pointerdown')
+    // Three seconds of a phone tilting and a finger on the pad, each event at about 62 a second.
+    for (let t = 0; t < 3_000; t += 4) {
+      clock = t
+      if (t % 16 === 0) onWindow.get('devicemotion')!({ rotationRate: { alpha: t }, acceleration: {}, accelerationIncludingGravity: {} })
+      if (t % 16 === 8) fire('touch', 'pointermove', { clientX: t % 100 })
+    }
+    clock = 3_000
+    fire('touch', 'pointerup')
+
+    const motion = sent.filter((m) => m.t === 'motion').length
+    const pointer = sent.filter((m) => m.t === 'pointer').length
+    expect((motion + pointer) / 3).toBeLessThanOrEqual(92)
+    expect(motion).toBeGreaterThan(100)
+    expect(pointer).toBeGreaterThan(100)
+    expect(sent.at(-1)).toMatchObject({ t: 'button', b: 'pad', down: false })
   })
 })

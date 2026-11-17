@@ -203,6 +203,19 @@ export const PHONE_SCRIPT = `// The phone: joins the app with a name, turns on m
   var send = function (m) {
     if (link) link.send(m)
   }
+  // Motion and pad moves share 90 messages a second. The app takes 120 a
+  // second from each phone, so a button press or release always fits: a lost
+  // release would leave a button held down.
+  var streamTokens = 0
+  var streamAt = 0
+  function mayStream() {
+    var now = performance.now()
+    streamTokens = Math.min(6, streamTokens + (now - streamAt) * 0.09)
+    streamAt = now
+    if (streamTokens < 1) return false
+    streamTokens -= 1
+    return true
+  }
   var name = $('name')
   try {
     name.value = localStorage.getItem('apex-controller-name') || ''
@@ -245,7 +258,7 @@ export const PHONE_SCRIPT = `// The phone: joins the app with a name, turns on m
   var last = 0
   function sendFrame() {
     var now = performance.now()
-    if (now - last < 16) return
+    if (now - last < 16 || !mayStream()) return
     last = now
     frame.ts = Math.round(now)
     send(frame)
@@ -327,7 +340,7 @@ export const PHONE_SCRIPT = `// The phone: joins the app with a name, turns on m
     send({ t: 'button', b: 'pad', down: true, x: p.x, y: p.y })
   })
   touch.addEventListener('pointermove', function (e) {
-    if (!touch.hasPointerCapture(e.pointerId) || performance.now() - lastMove < 16) return
+    if (!touch.hasPointerCapture(e.pointerId) || performance.now() - lastMove < 16 || !mayStream()) return
     lastMove = performance.now()
     var p = at(e)
     send({ t: 'pointer', x: p.x, y: p.y })
