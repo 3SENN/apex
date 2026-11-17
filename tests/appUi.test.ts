@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -35,7 +35,7 @@ function rootTokens(css: string, from = 0): Map<string, string> {
 
 describe(`${BRAND_NAME} UI for apps (APP-UI)`, () => {
   it('carries the browser’s own token values', () => {
-    const app = rootTokens(UI, UI.indexOf('@layer apex.tokens {'))
+    const app = rootTokens(UI, UI.indexOf('@layer atelier.tokens {'))
     const browser = rootTokens(BROWSER)
     let shared = 0
     for (const [name, value] of app) {
@@ -70,7 +70,7 @@ describe(`${BRAND_NAME} UI for apps (APP-UI)`, () => {
   })
 
   it('goes first in the app’s head, making one when there is none', () => {
-    const style = '<style data-apex-ui>x</style>'
+    const style = '<style data-atelier-ui>x</style>'
     expect(withAppUi('<!doctype html><html><head><title>A</title></head><body></body></html>', style)).toBe(`<!doctype html><html><head>${style}<title>A</title></head><body></body></html>`)
     expect(withAppUi('<!doctype html><html lang="en"><body><header>h</header></body></html>', style)).toBe(`<!doctype html><html lang="en"><head>${style}</head><body><header>h</header></body></html>`)
     expect(withAppUi('<!DOCTYPE html><p>hi</p>', style)).toBe(`<!DOCTYPE html>${style}<p>hi</p>`)
@@ -81,8 +81,8 @@ describe(`${BRAND_NAME} UI for apps (APP-UI)`, () => {
   it('brings the companion’s accent in its token layer', () => {
     expect(appUiStyle(null, '#ff8a5c')).toBe('')
     const styled = appUiStyle(':root{}', '#ff8a5c')
-    expect(styled).toMatch(/^<style data-apex-ui>/)
-    expect(styled).toMatch(/@layer apex\.tokens \{ :root \{ --companion-accent-light: #[0-9a-f]{6};.*--companion-accent-dark: #[0-9a-f]{6};/)
+    expect(styled).toMatch(/^<style data-atelier-ui>/)
+    expect(styled).toMatch(/@layer atelier\.tokens \{ :root \{ --companion-accent-light: #[0-9a-f]{6};.*--companion-accent-dark: #[0-9a-f]{6};/)
     expect(appUiStyle(':root{}', 'red;}</style><script>')).not.toContain('<script>')
     expect(appUiStyle(':root{}', null)).not.toContain('--companion-accent')
   })
@@ -90,8 +90,8 @@ describe(`${BRAND_NAME} UI for apps (APP-UI)`, () => {
   it('is served in every app page', async () => {
     const store = { html: () => '<!doctype html><html><head><title>T</title></head><body></body></html>' }
     const id = '0f8fad5b-d9cb-469f-a165-70867728950e'
-    const res = serveApp(store, id, `apex-app://${id}/`, () => '<style data-apex-ui></style>')
-    expect(await res.text()).toContain('<head><style data-apex-ui></style><title>T</title>')
+    const res = serveApp(store, id, `atelier-app://${id}/`, () => '<style data-atelier-ui></style>')
+    expect(await res.text()).toContain('<head><style data-atelier-ui></style><title>T</title>')
   })
 })
 
@@ -137,7 +137,7 @@ describe('the design check', () => {
 
 describe('starters', () => {
   it('are scripts that parse', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-starters-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-starters-'))
     for (const starter of ['game-3d', 'game-2d', 'tool', 'story', 'sorter'] as const) {
       const file = join(dir, `${starter}.mjs`)
       writeFileSync(file, starterFiles(starter, { id: 'x.y', name: 'Test', description: 'A test.' }).get('app/main.js')!)
@@ -150,11 +150,11 @@ describe('starters', () => {
     for (const starter of ['game-3d', 'game-2d', 'tool', 'story', 'sorter'] as const) {
       const files = starterFiles(starter, { id: 'x.y', name: 'Test', description: 'A test.' })
       const page = files.get('app/index.html')!.toString()
-      expect(page.indexOf('/__apex/kit/1/apex-kit/ui.css')).toBeGreaterThan(-1)
-      expect(page.indexOf('/__apex/kit/1/apex-kit/ui.css')).toBeLessThan(page.indexOf('./style.css'))
+      expect(page.indexOf('/__atelier/kit/1/atelier-kit/ui.css')).toBeGreaterThan(-1)
+      expect(page.indexOf('/__atelier/kit/1/atelier-kit/ui.css')).toBeLessThan(page.indexOf('./style.css'))
       expect(files.get('app/style.css')!.toString(), starter).not.toMatch(/#[0-9a-f]{3,8}\b|rgba?\(/i)
       const code = files.get('app/main.js')!.toString()
-      // A 3D scene keeps its own light and world colours; the interface takes Apex UI's.
+      // A 3D scene keeps its own light and world colours; the interface takes Atelier UI's.
       if (starter !== 'game-3d') expect(code, starter).not.toMatch(/#[0-9a-f]{6}\b|0x[0-9a-f]{6}\b/i)
       expect(code, starter).not.toMatch(/6b5bff|f7f5ff|15131f/i)
     }

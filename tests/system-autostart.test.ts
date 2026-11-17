@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -24,7 +24,7 @@ function memoryFs(): AutostartFs & { files: Map<string, string> } {
   }
 }
 
-const entry = { launcher: '/home/me/Apps/Apex.AppImage', name: 'Apex', comment: 'Apex starts when you sign in.' }
+const entry = { launcher: '/home/me/Apps/Atelier.AppImage', name: 'Atelier', comment: 'Atelier starts when you sign in.' }
 
 describe('autostartDir', () => {
   it('uses XDG_CONFIG_HOME when absolute, else ~/.config', () => {
@@ -36,13 +36,13 @@ describe('autostartDir', () => {
 
 describe('execArg', () => {
   it('leaves plain paths alone and quotes reserved characters per the Desktop Entry spec', () => {
-    expect(execArg('/opt/Apex/apex')).toBe('/opt/Apex/apex')
-    expect(execArg('/home/me/My Apps/Apex.AppImage')).toBe('"/home/me/My Apps/Apex.AppImage"')
+    expect(execArg('/opt/Atelier/atelier')).toBe('/opt/Atelier/atelier')
+    expect(execArg('/home/me/My Apps/Atelier.AppImage')).toBe('"/home/me/My Apps/Atelier.AppImage"')
     // A quoted $ is \$, and the string rule doubles the backslash.
-    expect(execArg('/home/me/$x/apex')).toBe('"/home/me/\\\\$x/apex"')
+    expect(execArg('/home/me/$x/atelier')).toBe('"/home/me/\\\\$x/atelier"')
     expect(execArg('/a"b')).toBe('"/a\\\\"b"')
     expect(execArg('/a\\b')).toBe('"/a\\\\\\\\b"')
-    expect(execArg('/100%/apex')).toBe('/100%%/apex')
+    expect(execArg('/100%/atelier')).toBe('/100%%/atelier')
   })
 })
 
@@ -51,7 +51,7 @@ describe('autostartContent', () => {
     const text = autostartContent(entry)
     expect(text.startsWith('[Desktop Entry]\n')).toBe(true)
     expect(text).toContain('\nType=Application\n')
-    expect(text).toContain('\nExec=/home/me/Apps/Apex.AppImage --background\n')
+    expect(text).toContain('\nExec=/home/me/Apps/Atelier.AppImage --background\n')
     expect(text).toContain('\nX-GNOME-Autostart-enabled=true\n')
     expect(text).not.toContain('Hidden=')
     expect(parseAutostart(text, entry.launcher)).toEqual({ enabled: true, current: true })
@@ -67,7 +67,7 @@ describe('parseAutostart', () => {
     const text = autostartContent(entry)
     expect(parseAutostart(`${text}Hidden=true\n`, entry.launcher).enabled).toBe(false)
     expect(parseAutostart(text.replace('X-GNOME-Autostart-enabled=true', 'X-GNOME-Autostart-enabled=false'), entry.launcher).enabled).toBe(false)
-    expect(parseAutostart(text, '/elsewhere/Apex.AppImage')).toEqual({ enabled: true, current: false })
+    expect(parseAutostart(text, '/elsewhere/Atelier.AppImage')).toEqual({ enabled: true, current: false })
     expect(parseAutostart('[Other]\nExec=x\n', entry.launcher).enabled).toBe(false)
   })
 })
@@ -88,13 +88,13 @@ describe('LinuxAutostart', () => {
 
   it('rewrites an enabled entry that points at a moved AppImage, and leaves a disabled one alone', () => {
     const fs = memoryFs()
-    const old = new LinuxAutostart({ dir: '/c', entry: { ...entry, launcher: '/old/Apex.AppImage' }, fs })
+    const old = new LinuxAutostart({ dir: '/c', entry: { ...entry, launcher: '/old/Atelier.AppImage' }, fs })
     old.enable()
     const now = new LinuxAutostart({ dir: '/c', entry, fs })
     now.refresh()
     expect(fs.files.get(now.path)).toBe(autostartContent(entry))
-    fs.files.set(now.path, `${autostartContent({ ...entry, launcher: '/old/Apex.AppImage' })}Hidden=true\n`)
+    fs.files.set(now.path, `${autostartContent({ ...entry, launcher: '/old/Atelier.AppImage' })}Hidden=true\n`)
     now.refresh()
-    expect(fs.files.get(now.path)).toContain('/old/Apex.AppImage')
+    expect(fs.files.get(now.path)).toContain('/old/Atelier.AppImage')
   })
 })

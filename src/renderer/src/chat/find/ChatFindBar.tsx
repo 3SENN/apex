@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -15,13 +15,13 @@ import '../chatTools.css'
 // The find bar of a chat surface (CH-37): a count, next and previous, Enter,
 // ⇧Enter and Esc. Matches come from the whole log, so older messages that
 // aren't rendered yet still count; jumping to one asks the log to render it
-// (an 'apex:chat-reveal' event for the log's paging) and then highlights it. The
+// (an 'atelier:chat-reveal' event for the log's paging) and then highlights it. The
 // highlights use the CSS Custom Highlight API, so the messages' DOM is never
 // touched.
 
 const SEARCH_DELAY_MS = 60
-const HIGHLIGHT_ALL = 'apex-find'
-const HIGHLIGHT_CURRENT = 'apex-find-current'
+const HIGHLIGHT_ALL = 'atelier-find'
+const HIGHLIGHT_CURRENT = 'atelier-find-current'
 
 /** The text nodes under an element, with each one's start in the joined text. */
 function textNodes(root: Element): Array<{ node: Text; start: number }> {
@@ -152,7 +152,7 @@ export function ChatFindBar({ chatId, items, root, nonce, onClose, className }: 
       }
       if (match && !currentRange && tries < 10) {
         // Not rendered yet: ask the log to render it, then look again.
-        if (tries === 0) window.dispatchEvent(new CustomEvent('apex:chat-reveal', { detail: { chatId, itemId: match.itemId } }))
+        if (tries === 0) window.dispatchEvent(new CustomEvent('atelier:chat-reveal', { detail: { chatId, itemId: match.itemId } }))
         tries++
         frame = requestAnimationFrame(paint)
         return

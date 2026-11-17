@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -58,7 +58,7 @@ describe('settings nav', () => {
     expect(settingsNav(undefined, 'win32').flatMap((g) => g.entries.map((e) => e.id))).not.toContain('dock-icon')
     expect(settingsNav(undefined, 'darwin').flatMap((g) => g.entries.map((e) => e.id))).toContain('dock-icon')
     const connectors = nav.flatMap((g) => g.entries).find((e) => e.id === 'connectors')
-    expect(connectors).toMatchObject({ kind: 'link', url: 'apex://connectors' })
+    expect(connectors).toMatchObject({ kind: 'link', url: 'atelier://connectors' })
     expect(nav.map((g) => g.label)).toEqual([null, 'Companion', 'Agent', 'Browsing', 'Your data', null])
   })
 

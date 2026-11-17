@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -70,7 +70,7 @@ function within(root: string, path: string): boolean {
 /**
  * A file dropped onto the window: granted for this
  * session like a picked one, so it opens in the viewer. The path comes from
- * the renderer, so it must be absolute, a regular file, and outside Apex's own
+ * the renderer, so it must be absolute, a regular file, and outside Atelier's own
  * data folder (profiles, keys and the library's store are never opened this way).
  */
 export function grantDropped(viewer: Pick<Viewer, 'grantLocal'>, dataDir: string, path: string): ViewerTarget | null {

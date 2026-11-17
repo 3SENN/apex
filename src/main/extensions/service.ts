@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -23,7 +23,7 @@ import { checkForUpdates, downloadCrx, wireWebStore } from './webStore'
 
 // Extensions: Electron's own session.extensions behind a small adapter
 // (the extensions library waits for its two-week version pin), Web Store
-// installs through Apex's own verified bridge, toolbar actions and popups,
+// installs through Atelier's own verified bridge, toolbar actions and popups,
 // permissions, manifest commands and native messaging. This module is the service face: it routes calls to the
 // asking window's profile and turns the host's questions into prompts.
 
@@ -65,7 +65,7 @@ export interface ExtensionsDeps {
   /** A tab's webContents by id, and a frame by process and routing ids (chrome.webNavigation). */
   contents?(tabId: number): WebContents | null
   frameById?(processId: number, routingId: number): NavFrame | null
-  /** Apex's own value for a browser setting extensions read through chrome.privacy. */
+  /** Atelier's own value for a browser setting extensions read through chrome.privacy. */
   browserSetting?(profileId: string, key: PrivacyKey): boolean
   /** settings.autofill.yieldToPasswordExtension. */
   yieldToPasswordExtension?(): boolean

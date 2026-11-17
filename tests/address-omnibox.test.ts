@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -138,7 +138,7 @@ describe('keys and copying (SH-36)', () => {
   it('jumps between universal-search groups', () => {
     const groups: OmniboxGroup[] = [
       { group: 'tabs', rows: [{ id: '1', group: 'tabs', title: 'a', action: { kind: 'switch-tab', tabId: '1' } }, { id: '2', group: 'tabs', title: 'b', action: { kind: 'switch-tab', tabId: '2' } }] },
-      { group: 'chats', rows: [{ id: '3', group: 'chats', title: 'c', action: { kind: 'open-internal', url: 'apex://chat/c' } }] },
+      { group: 'chats', rows: [{ id: '3', group: 'chats', title: 'c', action: { kind: 'open-internal', url: 'atelier://chat/c' } }] },
     ]
     expect(groupJump(groups, 0, 1)).toBe(2)
     expect(groupJump(groups, 2, -1)).toBe(0)

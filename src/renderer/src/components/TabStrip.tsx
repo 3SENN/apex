@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import type { OrderEntry, SettingsView, TabInfo, TabsSnapshot } from '@shared/ip
 import type { Bookmark } from '@shared/services'
 import type { TabGroup } from '@shared/tabs'
 import { Camera, Mic, MonitorUp, Plus, Volume2, VolumeX, X } from 'lucide-react'
-import { apex, call } from '../api'
+import { atelier, call } from '../api'
 import { t } from '../i18n/useT'
 import { Skeleton, StatusDot, cx, showContextMenu, useReducedMotion } from '../ui'
 import { useShell } from './shellContext'
@@ -129,7 +129,7 @@ function StripTab({ tab, props, order, gapBefore, group, dropTarget, dragActive,
         if (e.button === 1) e.preventDefault()
       }}
       onAuxClick={(e) => {
-        if (e.button === 1) void apex.tabs.close(tab.id)
+        if (e.button === 1) void atelier.tabs.close(tab.id)
       }}
       onKeyDown={(e) => {
         if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) {
@@ -168,7 +168,7 @@ function StripTab({ tab, props, order, gapBefore, group, dropTarget, dragActive,
           title={t('tabs.tabStrip.closeTabW')}
           onClick={(e) => {
             e.stopPropagation()
-            void apex.tabs.close(tab.id)
+            void atelier.tabs.close(tab.id)
           }}
         >
           <X size={13} aria-hidden />
@@ -317,7 +317,7 @@ export function TabStrip(props: TabStripProps): ReactElement {
           if (item.kind !== 'tab') return null
           return tabEl(item.tab, item.groupId ? (groups.get(item.groupId) ?? null) : null)
         })}
-        <button type="button" className="tabstrip__new" aria-label={t('tabs.strip.newTab')} title={t('tabs.tabStrip.t', { value: t('tabs.strip.newTab') })} onClick={() => void apex.tabs.create(undefined, { position: 'end' }).then(shell.focusAddress)}>
+        <button type="button" className="tabstrip__new" aria-label={t('tabs.strip.newTab')} title={t('tabs.tabStrip.t', { value: t('tabs.strip.newTab') })} onClick={() => void atelier.tabs.create(undefined, { position: 'end' }).then(shell.focusAddress)}>
           <Plus size={16} aria-hidden />
         </button>
       </div>

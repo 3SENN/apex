@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import { createServer, type IncomingMessage, type Server, type ServerResponse } 
 import type { AddressInfo } from 'node:net'
 import { bearerOf } from './secrets'
 
-// Apex's local MCP server: Streamable HTTP on 127.0.0.1, answering every
+// Atelier's local MCP server: Streamable HTTP on 127.0.0.1, answering every
 // POST with a single JSON response (no server-sent streams). Electron's
 // runAsNode fuse is off, so the server lives inside main instead of a
 // separate node script.

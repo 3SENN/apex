@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,9 +7,9 @@
 // node --test native/haptics/test/loader.test.js
 //
 // The loader's stub behaviour, with injected platform, file checks and
-// dlopen, so it runs anywhere. When build/apex_haptics.node exists on a Mac,
+// dlopen, so it runs anywhere. When build/atelier_haptics.node exists on a Mac,
 // it also loads the real addon and checks its argument handling. Playing a
-// real pattern needs APEX_HAPTICS_LIVE=1.
+// real pattern needs ATELIER_HAPTICS_LIVE=1.
 const test = require('node:test')
 const assert = require('node:assert/strict')
 const fs = require('node:fs')
@@ -44,7 +44,7 @@ const INVALID = [
   Object.create(null),
 ]
 
-const FAKE_FILE = '/fake/apex_haptics.node'
+const FAKE_FILE = '/fake/atelier_haptics.node'
 const exists = (file) => file === FAKE_FILE
 
 function fakeAddon() {
@@ -70,7 +70,7 @@ function noDlopen() {
 test('PATTERNS lists the three AppKit patterns and is frozen', () => {
   assert.deepEqual([...PATTERNS], ['alignment', 'levelChange', 'generic'])
   assert.ok(Object.isFrozen(PATTERNS))
-  assert.equal(BINARY, 'apex_haptics.node')
+  assert.equal(BINARY, 'atelier_haptics.node')
 })
 
 test('normalisePattern maps the kebab-case spelling and keeps the rest', () => {
@@ -275,7 +275,7 @@ test('defaultPaths ends with this folder build output', () => {
 })
 
 test('defaultPaths tries the packaged Resources/native copy first', () => {
-  const resources = '/Applications/Apex.app/Contents/Resources'
+  const resources = '/Applications/Atelier.app/Contents/Resources'
   assert.deepEqual(defaultPaths(resources), [
     path.join(resources, 'native', BINARY),
     path.join(__dirname, '..', 'build', BINARY),
@@ -308,13 +308,13 @@ const built = path.join(__dirname, '..', 'build', BINARY)
 // (build-native.mjs --arch=x64 on Apple silicon makes one without).
 function realAddonSkip() {
   if (process.platform !== 'darwin') return 'the addon is macOS only'
-  if (!fs.existsSync(built)) return 'build/apex_haptics.node is not built'
+  if (!fs.existsSync(built)) return 'build/atelier_haptics.node is not built'
   const want = { arm64: 'arm64', x64: 'x86_64' }[process.arch]
   try {
     const archs = execFileSync('lipo', ['-archs', built], { encoding: 'utf8' }).trim().split(/\s+/)
-    if (!archs.includes(want)) return `build/apex_haptics.node has no ${want} slice (${archs.join(', ')})`
+    if (!archs.includes(want)) return `build/atelier_haptics.node has no ${want} slice (${archs.join(', ')})`
   } catch {
-    return 'lipo could not read build/apex_haptics.node'
+    return 'lipo could not read build/atelier_haptics.node'
   }
   return false
 }
@@ -349,12 +349,12 @@ test(
 )
 
 test(
-  'the built addon plays every pattern (APEX_HAPTICS_LIVE=1)',
+  'the built addon plays every pattern (ATELIER_HAPTICS_LIVE=1)',
   {
     skip: !canLoadReal
       ? skipReal
-      : process.env.APEX_HAPTICS_LIVE !== '1'
-        ? 'set APEX_HAPTICS_LIVE=1 to play real patterns on the trackpad'
+      : process.env.ATELIER_HAPTICS_LIVE !== '1'
+        ? 'set ATELIER_HAPTICS_LIVE=1 to play real patterns on the trackpad'
         : false,
   },
   () => {

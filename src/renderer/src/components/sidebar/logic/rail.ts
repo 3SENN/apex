@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -15,7 +15,7 @@ export const RAIL_STEP = 8
 /** Recent chats listed under the destinations. */
 export const RAIL_RECENT = 5
 
-/** The rail shows in the horizontal layout on apex:// pages and on the destination surface. */
+/** The rail shows in the horizontal layout on atelier:// pages and on the destination surface. */
 export function railShown(layout: 'sidebar' | 'horizontal' | string, snapshot: Pick<TabsSnapshot, 'tabs' | 'activeId' | 'rail'>): boolean {
   if (layout === 'sidebar') return false
   if (snapshot.rail) return true
@@ -34,7 +34,7 @@ export interface RailPrefs {
   hintSeen: boolean
 }
 
-export const RAIL_PREFS_KEY = 'apex.rail'
+export const RAIL_PREFS_KEY = 'atelier.rail'
 
 /** Saved prefs, or the defaults for anything missing or broken. */
 export function parseRailPrefs(raw: string | null): RailPrefs {

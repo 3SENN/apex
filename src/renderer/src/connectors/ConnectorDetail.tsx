@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import { ArrowLeft, ArrowUpRight, Check, ChevronDown, KeyRound, Pencil, Plus, Re
 import { SHARED_OWNER } from '@shared/chats'
 import { CONNECTOR_SWATCHES, connectorDetailUrl, policiesFor, type ConnectorHealth, type DirectoryEntry, type ToolPolicy } from '@shared/connectors'
 import type { Connector } from '@shared/services'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { useT, type T } from '../i18n/useT'
 import { ownerList } from '../settings/destinations/common'
 import type { ConnectorDialogs } from '../settings/destinations/ConnectorEditor'
@@ -104,7 +104,7 @@ export function ConnectorDetail({ connector: c, all, directory, tabId, dialogs, 
     try {
       await call('connectors', 'remove', c.id)
       toast.show({ message: t('connectors.detail.removed', { name: c.displayName }) })
-      void apex.nav.go(tabId, 'apex://connectors')
+      void atelier.nav.go(tabId, 'atelier://connectors')
     } catch (err) {
       toast.show({ tone: 'error', message: errorText(err) })
     }
@@ -132,7 +132,7 @@ export function ConnectorDetail({ connector: c, all, directory, tabId, dialogs, 
 
   return (
     <article className="cx-detail" aria-labelledby="cx-detail-title">
-      <button type="button" className="cx-back" onClick={() => void apex.nav.go(tabId, 'apex://connectors')}>
+      <button type="button" className="cx-back" onClick={() => void atelier.nav.go(tabId, 'atelier://connectors')}>
         <ArrowLeft size={14} aria-hidden /> {t('connectors.page.back')}
       </button>
 
@@ -251,7 +251,7 @@ export function ConnectorDetail({ connector: c, all, directory, tabId, dialogs, 
 
       <footer className="cx-detail__foot">
         {entry && (
-          <Button variant="ghost" iconEnd={<ArrowUpRight />} onClick={() => void apex.tabs.create(entry.docsUrl)}>
+          <Button variant="ghost" iconEnd={<ArrowUpRight />} onClick={() => void atelier.tabs.create(entry.docsUrl)}>
             {t('connectors.detail.docs')}
           </Button>
         )}
@@ -337,7 +337,7 @@ function Accounts({ connector, all, entry, tabId, onAdd, onDefault }: { connecto
                 {a.accountLabel && <span className="cx-muted"> · {a.accountLabel}</span>}
               </span>
             ) : (
-              <button type="button" className="cx-link cx-account__name" onClick={() => void apex.nav.go(tabId, connectorDetailUrl(a.id))}>
+              <button type="button" className="cx-link cx-account__name" onClick={() => void atelier.nav.go(tabId, connectorDetailUrl(a.id))}>
                 {a.displayName}
                 {a.accountLabel && <span className="cx-muted"> · {a.accountLabel}</span>}
               </button>
@@ -410,7 +410,7 @@ function SettingsFields({ connector, entry }: { connector: Connector; entry: Dir
   )
 }
 
-/** Every tool from tools/list with its policy; Ask only where Apex runs the server. */
+/** Every tool from tools/list with its policy; Ask only where Atelier runs the server. */
 function Tools({ connector: c, busy, onCheck }: { connector: Connector; busy: boolean; onCheck(): void }): ReactElement {
   const t = useT()
   const toast = useToast()

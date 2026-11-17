@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -16,11 +16,11 @@ import { engines as STUB_NL } from '../src/stubs/engines/i18n/nl'
 
 // The app's name in the interface, like Firefox's -brand-short-name: no
 // message writes it out; they say {brand}, which the i18n layer fills in from
-// the branding the build was made with (Apex, or Summit for the unofficial
+// the branding the build was made with (Atelier, or Summit for the unofficial
 // branding; src/shared/i18n/core.ts). No call site passes it.
 
 const REPO = resolve(__dirname, '..')
-const NAMES = /\b(Apex|Summit|Pip)\b/
+const NAMES = /\b(Atelier|Summit|Pip)\b/
 
 afterEach(() => {
   vi.doUnmock('../src/shared/branding')
@@ -50,7 +50,7 @@ describe('the catalogues', () => {
 
 describe('{brand}', () => {
   for (const official of ['1', '0']) {
-    const branding = brandingFrom(runtimeBranding({ APEX_OFFICIAL_BRANDING: official }))
+    const branding = brandingFrom(runtimeBranding({ ATELIER_OFFICIAL_BRANDING: official }))
 
     it(`resolves to ${branding.name} in English and Dutch, with no call site passing it`, async () => {
       vi.resetModules()

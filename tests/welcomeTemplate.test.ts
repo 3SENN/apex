@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -117,12 +117,12 @@ describe('the illustration orbit', () => {
 })
 
 describe('the layout audit covers the setup flow', () => {
-  it('opens apex://welcome at every setup step', () => {
+  it('opens atelier://welcome at every setup step', () => {
     const pages = layoutPages({ chatId: null, companionId: null, fileUrl: null, sourceUrl: null })
     const welcome = pages.filter((p) => p.welcomeStep)
     expect(welcome.map((p) => p.welcomeStep)).toEqual([...SETUP_STEPS])
     for (const p of welcome) {
-      expect(p.url).toBe('apex://welcome')
+      expect(p.url).toBe('atelier://welcome')
       expect(p.name).toBe(`welcome-${p.welcomeStep}`)
     }
     expect(pages.some((p) => p.name === 'welcome')).toBe(false)

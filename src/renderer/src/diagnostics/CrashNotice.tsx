@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,7 +11,7 @@ import type { SurfaceComponentProps } from '../overlay/types'
 import { Button, IconButton, cx } from '../ui'
 import './diagnostics.css'
 
-// The crash notice: a window card on the launch after Apex
+// The crash notice: a window card on the launch after Atelier
 // ended uncleanly. Report a problem (with any kept crash dumps switched
 // on), Dismiss, and, while crash reports are off, keep them from now on.
 

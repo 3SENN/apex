@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import { AudioLines, ExternalLink, FileCog, ImageIcon, RotateCw, TriangleAlert, 
 import type { AttachmentRef } from '@shared/attachments'
 import { UNSETTLED_STATUSES } from '@shared/meetings'
 import { t } from '@shared/i18n/core'
-import { apex } from '../../api'
+import { atelier } from '../../api'
 import { Button, Spinner, cx } from '../../ui'
 import { cancelHold, useHeldSend } from '../attachments/holds'
 import { removeFromDraft, useDraftAttachments } from '../attachments/drafts'
@@ -84,7 +84,7 @@ export function Chip({ view, lead, onRemove, onRetry, onOpen }: ChipProps): Reac
           type="button"
           className="cmp-chip__source"
           aria-label={t('composer.chip.openSource', { host: hostLabel(view.sourceUrl) })}
-          onClick={() => void apex.tabs.create(view.sourceUrl ?? undefined)}
+          onClick={() => void atelier.tabs.create(view.sourceUrl ?? undefined)}
         >
           <ExternalLink aria-hidden="true" />
         </button>

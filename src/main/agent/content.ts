@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -30,7 +30,7 @@ import { writeAtomic } from '../settings'
 export const OFFICE_NEEDS_DOCUMENTS = 'This chat started without Files and documents, so it can’t read office files. Turn it on in Settings › Model and key, then start a new chat.'
 export const REQUEST_TOO_LARGE = 'This message and its attachments come to more than 32 MB, the most one request can carry. Remove some attachments, or start a new chat for them.'
 
-/** The part of the SDK's Files API Apex uses (stable `client.files`, no beta header). */
+/** The part of the SDK's Files API Atelier uses (stable `client.files`, no beta header). */
 export interface FilesApi {
   upload(params: { file: Awaited<ReturnType<typeof toFile>> }): PromiseLike<{ id: string }>
   download(fileId: string): PromiseLike<{ arrayBuffer(): Promise<ArrayBuffer> }>

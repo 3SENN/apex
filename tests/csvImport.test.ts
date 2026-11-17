@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -21,7 +21,7 @@ const cipher: VaultCipher = {
 }
 const fixture = (name: string): string => readFileSync(join(__dirname, 'fixtures', 'passwords', name), 'utf8')
 const isSecure = (url: string): boolean => credentialOrigin(url) !== null
-const tempDir = (): string => mkdtempSync(join(tmpdir(), 'apex-import-'))
+const tempDir = (): string => mkdtempSync(join(tmpdir(), 'atelier-import-'))
 
 describe('format and mapping guesses', () => {
   it.each([

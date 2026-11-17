@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -182,7 +182,7 @@ describe('privacy exceptions', () => {
   })
 
   it('saves per profile and reads back, keeping the kinds apart', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-privacy-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-privacy-'))
     dirs.push(dir)
     const file = join(dir, 'privacy-exceptions.json')
     const store = new PrivacyExceptionStore(file)
@@ -201,7 +201,7 @@ describe('privacy exceptions', () => {
     const memory = new PrivacyExceptionStore(null)
     memory.set('https', 'example.com', true)
     expect(memory.has('https', 'example.com')).toBe(true)
-    const dir = mkdtempSync(join(tmpdir(), 'apex-privacy-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-privacy-'))
     dirs.push(dir)
     const file = join(dir, 'privacy-exceptions.json')
     writeFileSync(file, JSON.stringify({ https: ['ok.example', 'http://bad/', 42], cookieBanners: 'nope' }))
@@ -209,7 +209,7 @@ describe('privacy exceptions', () => {
   })
 })
 
-describe('cookie banners: Apex’s own list', () => {
+describe('cookie banners: Atelier’s own list', () => {
   it('hides every tool’s banner with !important rules and unlocks scrolling', () => {
     const css = bundledCss()
     expect(css).toContain('#onetrust-consent-sdk')
@@ -310,7 +310,7 @@ describe('cookie banners: optional lists', () => {
   })
 
   it('downloads a list once, caches it on disk and refreshes it after a week', async () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-lists-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-lists-'))
     dirs.push(dir)
     let now = 1_000_000
     const fetchText = vi.fn(async (url: string) => {
@@ -343,7 +343,7 @@ describe('cookie banners: optional lists', () => {
   })
 
   it('keeps the old copy when a download fails, and says so', async () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-lists-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-lists-'))
     dirs.push(dir)
     const lists = new CookieLists({ dir, fetchText: async () => LIST })
     await lists.update(['ublock-cookies'])

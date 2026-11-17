@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,13 +6,13 @@
 import type { MessageKey } from '@shared/i18n/core'
 import type { MeetingKind, MeetingStatus, MeetingSummary, TranscriptSegment } from '@shared/meetings'
 
-// Pure rules behind apex://meetings: reading its address, labels for each
+// Pure rules behind atelier://meetings: reading its address, labels for each
 // status, the audio clock, which transcript line is playing, and how the
 // transcript groups into bubbles.
 
 export type MeetingsFilter = 'meetings' | 'recordings'
 
-/** apex://meetings?filter=recordings&q=<text>: the segment and search the page opens with. */
+/** atelier://meetings?filter=recordings&q=<text>: the segment and search the page opens with. */
 export function readMeetingsQuery(url: string): { filter: MeetingsFilter; q: string } {
   const query = url.split('?')[1]?.split('#')[0] ?? ''
   const params = new URLSearchParams(query)

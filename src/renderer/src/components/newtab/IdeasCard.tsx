@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import { ArrowRight, BookOpen, ChefHat, ChevronLeft, ChevronRight, Globe, Lightb
 import type { Routine } from '@shared/routines'
 import type { Skill } from '@shared/skills'
 import type { TabInfo } from '@shared/ipc'
-import { apex, call, useLiveList } from '../../api'
+import { atelier, call, useLiveList } from '../../api'
 import { motionReduced } from '../../ui/motion'
 import { buildIdeaPages, clampPage, pagerState, type Idea, type IdeaGlyph } from './newtabLogic'
 import { useT } from '../../i18n/useT'
@@ -21,7 +21,7 @@ import { useT } from '../../i18n/useT'
 // motion (DS-142); Reduce Motion swaps them at once.
 
 const PREVIEW_MS = 900
-const DISMISSED_KEY = 'apex.newtab.ideas.dismissed'
+const DISMISSED_KEY = 'atelier.newtab.ideas.dismissed'
 
 const GLYPHS: Record<IdeaGlyph, typeof Sparkles> = {
   sparkles: Sparkles,
@@ -55,8 +55,8 @@ function writeDismissed(ids: ReadonlySet<string>): void {
 }
 
 function useTabs(): readonly TabInfo[] {
-  const [tabs, setTabs] = useState<readonly TabInfo[]>(() => apex.initial.tabs.tabs)
-  useEffect(() => apex.tabs.onChanged((snapshot) => setTabs(snapshot.tabs)), [])
+  const [tabs, setTabs] = useState<readonly TabInfo[]>(() => atelier.initial.tabs.tabs)
+  useEffect(() => atelier.tabs.onChanged((snapshot) => setTabs(snapshot.tabs)), [])
   return tabs
 }
 

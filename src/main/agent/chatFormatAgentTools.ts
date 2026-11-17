@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -16,7 +16,7 @@ const str = (v: unknown): v is string => typeof v === 'string'
 const num = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v)
 
 const DELEGATION: readonly DelegationStatus[] = ['working', 'done', 'needs-attention', 'needs-input', 'stopped', 'interrupted']
-const IMPORT_SOURCES = ['chatgpt', 'claude', 'apex'] as const
+const IMPORT_SOURCES = ['chatgpt', 'claude', 'atelier'] as const
 const TRIGGERS = ['schedule', 'manual', 'catch-up'] as const
 
 type SummaryLinks = Pick<ChatSummary, keyof typeof CHAT_SUMMARY_LINK_DEFAULTS>

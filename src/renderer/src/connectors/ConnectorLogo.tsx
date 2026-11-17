@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,7 +11,7 @@ import { cx } from '../ui'
 
 // A connector's logo tile: your own logo, else the site's favicon
 // fetched at runtime by main (through the default profile and cached), else
-// Apex's generic icon for the category. No brand logo ships with Apex.
+// Atelier's generic icon for the category. No brand logo ships with Atelier.
 
 const CATEGORY_ICONS: Record<ConnectorCategory, LucideIcon> = {
   work: Briefcase,

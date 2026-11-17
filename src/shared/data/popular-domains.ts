@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Registrable domains people visit most, for lookalike checks. A
 // host whose letters only resemble one of these (a Cyrillic "а" for "a", a
-// "0" for "o") is shown in its raw punycode form and flagged. Apex's own list.
+// "0" for "o") is shown in its raw punycode form and flagged. Atelier's own list.
 export const POPULAR_DOMAINS: readonly string[] = [
   'google.com', 'youtube.com', 'facebook.com', 'instagram.com', 'whatsapp.com', 'twitter.com', 'x.com',
   'wikipedia.org', 'amazon.com', 'amazon.co.uk', 'amazon.de', 'amazon.fr', 'amazon.nl', 'apple.com', 'icloud.com',

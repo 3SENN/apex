@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -55,7 +55,7 @@ describe('the Firefox User-Agent', () => {
     expect(firefoxUserAgent('win32', 156)).toBe('Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:156.0) Gecko/20100101 Firefox/156.0')
     expect(firefoxUserAgent('linux', 156)).toBe('Mozilla/5.0 (X11; Linux x86_64; rv:156.0) Gecko/20100101 Firefox/156.0')
     expect(FF).toMatch(/^Mozilla\/5\.0 \(Macintosh; Intel Mac OS X 10\.15; rv:(\d+)\.0\) Gecko\/20100101 Firefox\/\1\.0$/)
-    expect(FF).not.toMatch(/Chrome|AppleWebKit|Electron|Apex/)
+    expect(FF).not.toMatch(/Chrome|AppleWebKit|Electron|Atelier/)
   })
 
   it('names a recent stable major (Firefox 140 ESR shipped June 2025; a release every four weeks since)', () => {
@@ -78,7 +78,7 @@ describe('which requests go out as Firefox', () => {
     expect(requestIdentity(at('https://mail.google.com/mail/u/0/'), 'https://accounts.google.com/CheckCookie')).toBe('chromium')
     expect(requestIdentity(at('https://mail.google.com/sync', 'xhr'), 'https://mail.google.com/mail/u/0/')).toBe('chromium')
     expect(requestIdentity(at('https://www.gstatic.com/x.js', 'script'), null)).toBe('chromium')
-    // Other providers keep Apex's identity.
+    // Other providers keep Atelier's identity.
     expect(requestIdentity(at('https://login.microsoftonline.com/common/oauth2/v2.0/authorize'), null)).toBe('chromium')
     expect(requestIdentity(at('https://github.githubassets.com/x.js', 'script'), 'https://github.com/login')).toBe('chromium')
   })

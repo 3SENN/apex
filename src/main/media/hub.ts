@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -239,7 +239,7 @@ export class MediaHub {
     }
   }
 
-  /** Into picture-in-picture or out: in the main frame from Apex's own world, in a subframe from the frame's. */
+  /** Into picture-in-picture or out: in the main frame from Atelier's own world, in a subframe from the frame's. */
   async pictureInPicture(tabId: string): Promise<boolean> {
     const found = this.#find(tabId)
     if (!found) return false

@@ -1,18 +1,18 @@
 {
-  "name": "apexbrowser",
-  "productName": "Apex",
-  "version": "1.4.5",
-  "description": "Apex, the browser you make your own: a companion that works in your tabs and builds the tools you describe.",
-  "homepage": "https://apexbrowser.eu",
+  "name": "atelierbrowser",
+  "productName": "Atelier",
+  "version": "1.5.0",
+  "description": "Atelier, the browser you make your own: a companion that works in your tabs and builds the tools you describe.",
+  "homepage": "https://atelierbrowser.eu",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/3SENN/apex.git"
+    "url": "git+https://github.com/3SENN/atelier.git"
   },
   "bugs": {
-    "url": "https://github.com/3SENN/apex/issues"
+    "url": "https://github.com/3SENN/atelier/issues"
   },
   "author": "Senne Chin",
-  "license": "MPL-2.0 AND LicenseRef-Apex-Companion-Art",
+  "license": "MPL-2.0 AND LicenseRef-Atelier-Companion-Art",
   "private": true,
   "main": "./out/main/index.js",
   "scripts": {

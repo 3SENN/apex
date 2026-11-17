@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -31,7 +31,7 @@ async function REFUSED(): Promise<string> {
   refusedUrl = `http://127.0.0.1:${port}/`
   return refusedUrl
 }
-const DANGEROUS_URL = 'https://dangerous.apex.test/'
+const DANGEROUS_URL = 'https://dangerous.atelier.test/'
 
 function info(ctx: SmokeContext, tab: Tab): TabInfo {
   return ctx.tabs.info(tab)
@@ -45,7 +45,7 @@ async function errorTab(ctx: SmokeContext, url: string, kind: PageErrorKind): Pr
 }
 
 const refused: SmokeCheck = {
-  name: 'site errors: a refused connection shows Apex’s error page, keeping the address',
+  name: 'site errors: a refused connection shows Atelier’s error page, keeping the address',
   async run(ctx) {
     const REFUSED_URL = await REFUSED()
     const tab = await errorTab(ctx, REFUSED_URL, 'refused')
@@ -87,7 +87,7 @@ const certificate: SmokeCheck = {
       assert(details?.certificate?.sha256.includes(':'), 'the interstitial has the offered certificate’s fingerprint')
       assert(info(ctx, tab).security === 'insecure', 'the pill shows the connection as not secure')
       // Shot here, before Proceed anyway: afterwards the host is let through for the session.
-      if (process.env.APEX_SMOKE_SHOTS) {
+      if (process.env.ATELIER_SMOKE_SHOTS) {
         await ctx.chrome.js('document.querySelector(".perr__toggle")?.click(); return true')
         await ctx.shot('sites-error-certificate')
       }
@@ -118,7 +118,7 @@ const crashed: SmokeCheck = {
       })
       wc.forcefullyCrashRenderer()
       // A sandboxed renderer on a Linux CI runner may never act on the request: then it is ended from
-      // outside, as a crash looks to Apex (anything but a clean exit). On a Mac it is gone at once.
+      // outside, as a crash looks to Atelier (anything but a clean exit). On a Mac it is gone at once.
       await waitFor(() => gone !== null || wc.isCrashed(), 5000, 'the renderer to go after forcefullyCrashRenderer').catch(() => {
         const pid = wc.getOSProcessId()
         if (pid > 0) process.kill(pid, 'SIGKILL')

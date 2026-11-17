@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,7 +14,7 @@ import { capBytes, countLines } from './text'
 // preprocessing renderer, PDFs to a worker thread; everything here only
 // decides, checks limits and words the reasons.
 
-/** A failure the chip shows as is: the message is already in Apex's words. */
+/** A failure the chip shows as is: the message is already in Atelier's words. */
 export class IntakeError extends Error {
   override name = 'IntakeError'
 }

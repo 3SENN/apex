@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Contracts for the feature services the chrome calls through one generic
-// channel (`apex.invoke(service, method, ...args)`). Main validates every
+// channel (`atelier.invoke(service, method, ...args)`). Main validates every
 // call against a schema in src/main/services.ts.
 import type { SpendView } from './pricing'
 import type { ChatFeedback, ChatListFilter, ChatSummary, ChatView, FeedbackRating, MessageDetails, NewChatOptions, QueuedMessage } from './chats'
@@ -142,7 +142,7 @@ export interface MemoryFile {
   size: number
   modifiedAt: number
   owner: Owner
-  /** Who last wrote it: the agent (memory tool) or you (an editor); null for notes from before Apex kept track. */
+  /** Who last wrote it: the agent (memory tool) or you (an editor); null for notes from before Atelier kept track. */
   author: 'agent' | 'you' | null
 }
 
@@ -200,7 +200,7 @@ export interface CompanionFileEntry {
   kind: 'file' | 'folder'
   size: number
   modifiedAt: number
-  /** A type Apex can read (text, Markdown, PDF, images); other files are view-only. */
+  /** A type Atelier can read (text, Markdown, PDF, images); other files are view-only. */
   readable: boolean
 }
 
@@ -250,7 +250,7 @@ export interface LayoutBounds {
 }
 
 export interface Services extends CoreServices, AddressServices, TabServices, SiteServices, MenuServices, ChatServices, SettingsServices, UpdatesServices, DiagnosticsServices, MigrationsServices, SystemServices, HapticsServices {
-  /** This month's spend on your own key and your budget (DS-18); Apex sells nothing. */
+  /** This month's spend on your own key and your budget (DS-18); Atelier sells nothing. */
   spend: {
     view(): SpendView
   }
@@ -373,7 +373,7 @@ export interface Services extends CoreServices, AddressServices, TabServices, Si
     reset(id: string): Companion
     /** Refuses the last visible companion. Its chats stay (shown with a neutral avatar); its own skills, routines, connectors and memory go. */
     remove(id: string): void
-    /** Saves a .apexcompanion file through a save dialog. Resolves to the path, or null when cancelled. */
+    /** Saves a .ateliercompanion file through a save dialog. Resolves to the path, or null when cancelled. */
     export(id: string, options?: CompanionExportOptions): Promise<string | null>
     /** Opens a file dialog, then validates the file. Null when cancelled; throws a readable error for bad files. */
     pickImport(): Promise<CompanionImportPreview | null>
@@ -413,12 +413,12 @@ export interface Services extends CoreServices, AddressServices, TabServices, Si
   }
   pages: {
     /**
-     * Opens an apex:// page. By default it reuses the tab that shows that page
+     * Opens an atelier:// page. By default it reuses the tab that shows that page
      * (the same chat for chat/<id>) and rewrites aliases (library sections,
-     * bare apex://settings). `newTab` always opens a new tab; `background` keeps the current one active.
+     * bare atelier://settings). `newTab` always opens a new tab; `background` keeps the current one active.
      */
     open(url: string, options?: { newTab?: boolean; background?: boolean }): void
-    /** A small downscaled JPEG data URL of what the tab shows (its page, or the chrome's own content area for apex:// pages); null if nothing can be captured. */
+    /** A small downscaled JPEG data URL of what the tab shows (its page, or the chrome's own content area for atelier:// pages); null if nothing can be captured. */
     snapshot(tabId: string): Promise<string | null>
   }
   /** Native menus. The chrome wraps this as showMenu(items, anchor). */
@@ -470,7 +470,7 @@ export interface Services extends CoreServices, AddressServices, TabServices, Si
     /** Setup finished: creates the getting-started plan and opens it once as a tab. */
     complete(): void
   }
-  /** The getting-started plan (apex://first-week). Every change returns the new view and also arrives as a 'first-week' event. */
+  /** The getting-started plan (atelier://first-week). Every change returns the new view and also arrives as a 'first-week' event. */
   firstWeek: {
     /** The page's state; reruns the import and default-browser checks. */
     view(): FirstWeekView
@@ -488,7 +488,7 @@ export interface Services extends CoreServices, AddressServices, TabServices, Si
     show(): FirstWeekView
     /** The notice about a reset file has been seen. */
     acknowledge(): FirstWeekView
-    /** Asks the system to make Apex the default browser (macOS confirms), then rechecks. */
+    /** Asks the system to make Atelier the default browser (macOS confirms), then rechecks. */
     makeDefaultBrowser(): FirstWeekView
   }
   /**
@@ -501,7 +501,7 @@ export interface Services extends CoreServices, AddressServices, TabServices, Si
   engine: {
     /** Where every engine stands; an engine's first look-up starts in the background when none has run. */
     status(): EngineStatus
-    /** ST-60: copies the command that adds Apex to Claude Code, secret included, to the clipboard. */
+    /** ST-60: copies the command that adds Atelier to Claude Code, secret included, to the clipboard. */
     copyCommand(): Promise<void>
     /** ST-60: runs that command for you (Claude Code must be on this computer). */
     addToClaudeCode(): Promise<{ ok: boolean; message: string }>
@@ -598,10 +598,10 @@ export type AppEvent =
   | { type: 'routines'; items: import('./routines').Routine[] } // routine records
   | { type: 'companion'; profile: Companion }
   | { type: 'companions'; items: Companion[]; activeId: string }
-  /** The OS opened a .apexcompanion file (double-click): show the review sheet, or the error. */
+  /** The OS opened a .ateliercompanion file (double-click): show the review sheet, or the error. */
   | { type: 'companion-import'; preview: CompanionImportPreview }
   | { type: 'companion-import-error'; message: string }
-  /** A companion's Files folder changed through Apex. */
+  /** A companion's Files folder changed through Atelier. */
   | { type: 'companion-files'; companionId: string }
   | { type: 'settings'; view: SettingsView }
   | { type: 'theme'; theme: ThemeState }
@@ -612,5 +612,5 @@ export type AppEvent =
   /** Engine status changed: an engine's look-up finished or its sign-in or limit changed, outside access. */
   | { type: 'engine'; status: EngineStatus }
   | { type: 'spend'; view: SpendView }
-  /** Reload on a tab the chrome draws (an apex:// page or the new tab): remount that tab's page. */
+  /** Reload on a tab the chrome draws (an atelier:// page or the new tab): remount that tab's page. */
   | { type: 'reload-page'; tabId: string }

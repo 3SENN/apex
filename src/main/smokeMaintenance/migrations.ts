@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -43,7 +43,7 @@ const V0 = (id: string, title: string): string =>
 
 const NEWER = (id: string): string =>
   JSON.stringify({
-    formatVersion: CHAT_FORMAT_VERSION + 4, id, title: 'Saved by a newer Apex', companionId: FIRST_COMPANION_ID,
+    formatVersion: CHAT_FORMAT_VERSION + 4, id, title: 'Saved by a newer Atelier', companionId: FIRST_COMPANION_ID,
     capabilities: { model: 'claude-opus-5-5', browser: true, webTools: true, memory: true, connectorIds: [], engine: 'api-key', newerOnly: true },
     system: 's',
     messages: [{ role: 'user', content: 'Hello from later' }],
@@ -84,9 +84,9 @@ function seed(chats: ChatStore, title: string, text: (id: string) => string): st
 function seedAll(ctx: SmokeContext): Seeded {
   if (seeded) return seeded
   const { chats } = ctx
-  const newer = seed(chats, 'Saved by a newer Apex', NEWER)
+  const newer = seed(chats, 'Saved by a newer Atelier', NEWER)
   seeded = {
-    v0: seed(chats, 'Picnic from an older Apex', (id) => V0(id, 'Picnic from an older Apex')),
+    v0: seed(chats, 'Picnic from an older Atelier', (id) => V0(id, 'Picnic from an older Atelier')),
     current: seed(chats, 'Already up to date', (id) => JSON.stringify({ ...JSON.parse(V0(id, 'Already up to date')), formatVersion: CHAT_FORMAT_VERSION, capabilities: { model: 'claude-opus-5-5', browser: true, webTools: true, memory: true, connectorIds: [], engine: 'api-key' } })),
     newer,
     corrupt: seed(chats, 'A damaged chat', () => '{"title":"A damaged chat","messages":['),
@@ -97,8 +97,8 @@ function seedAll(ctx: SmokeContext): Seeded {
 
 async function openChat(ctx: SmokeContext, id: string, ready: string): Promise<string> {
   const tab = ctx.tabs.create('about:blank')
-  ctx.tabs.navigate(tab.id, `apex://chat/${id}`)
-  await ctx.chrome.until(`return document.querySelector(${JSON.stringify(ready)})`, 8000, `apex://chat/${id} to show ${ready}`)
+  ctx.tabs.navigate(tab.id, `atelier://chat/${id}`)
+  await ctx.chrome.until(`return document.querySelector(${JSON.stringify(ready)})`, 8000, `atelier://chat/${id} to show ${ready}`)
   return tab.id
 }
 
@@ -116,7 +116,7 @@ export const checks: SmokeCheck[] = [
       const backup = backupPath(backupDir, s.v0, 0)
       assert(existsSync(backup), 'no backup was written')
       const first = readFileSync(backup, 'utf8')
-      writeFileSync(file, V0(s.v0, 'Picnic from an older Apex (again)'))
+      writeFileSync(file, V0(s.v0, 'Picnic from an older Atelier (again)'))
       ctx.chats.upgradeFile(s.v0)
       assert(readFileSync(backup, 'utf8') === first, 'the backup was rewritten')
       assert(readdirSync(backupDir).filter((n) => n.startsWith(s.v0)).length === 1, 'more than one backup')
@@ -168,7 +168,7 @@ export const checks: SmokeCheck[] = [
   {
     name: 'migrations: a newer settings.json is kept before the fallback',
     async run() {
-      const dir = mkdtempSync(join(tmpdir(), 'apex-smoke-e3-'))
+      const dir = mkdtempSync(join(tmpdir(), 'atelier-smoke-e3-'))
       const saved = JSON.stringify({ formatVersion: 7, theme: 'dark', fromTheFuture: true })
       writeFileSync(join(dir, 'settings.json'), saved)
       const store = new SettingsStore(dir)
@@ -179,7 +179,7 @@ export const checks: SmokeCheck[] = [
   {
     name: 'migrations: every chat format fixture migrates to the current format',
     async run() {
-      const root = join(process.env.APEX_SMOKE_FIXTURES ?? join(app.getAppPath(), 'tests', 'fixtures'), 'chats')
+      const root = join(process.env.ATELIER_SMOKE_FIXTURES ?? join(app.getAppPath(), 'tests', 'fixtures'), 'chats')
       // The packaged app ships without the test fixtures; the unit suite covers them there.
       if (!existsSync(root)) return
       const base = { capabilities: { model: 'claude-opus-5-5', browser: true, webTools: true, memory: true, connectorIds: [] }, system: 's', messages: [{ role: 'user', content: 'hi' }], details: {}, feedback: {} }
@@ -219,7 +219,7 @@ export const shots: ShotSpec[] = [
       ctx.tabs.close(newer)
       // About › Data updates, once the About page mounts MigrationResults.
       const about = ctx.tabs.create('about:blank')
-      ctx.tabs.navigate(about.id, 'apex://settings/about')
+      ctx.tabs.navigate(about.id, 'atelier://settings/about')
       let shown = true
       await waitFor(async () => ctx.chrome.js<boolean>(`return Boolean(document.querySelector('.migration-results .sp-row'))`), 6000, 'About › Data updates').catch(() => {
         shown = false

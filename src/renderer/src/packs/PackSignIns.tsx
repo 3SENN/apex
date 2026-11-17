@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // A pack's sign-ins on its page (docs/apps.md › Apps for organisations):
 // what each signs in to, where its token goes, who is signed in, and Sign in
-// or Sign out. Apex runs the sign-in in a tab and keeps the tokens in main;
+// or Sign out. Atelier runs the sign-in in a tab and keeps the tokens in main;
 // this page only ever learns the name of who signed in.
 import { useState, type ReactElement } from 'react'
 import type { PackSummary } from '@shared/packs'

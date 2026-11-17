@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -23,8 +23,8 @@ import {
 // gateways such as Experiential Labs and self-hosted servers (Kev and the
 // like) all answer the same way with TypeSafe's System One request, and
 // OpenAI's Decisions request for GPT-6 Luna, which it translates both ways so
-// Apex's questions and readers stay one shape. No SDK: the request is small,
-// and a plain fetch keeps the timeout, the abort and the errors in Apex's
+// Atelier's questions and readers stay one shape. No SDK: the request is small,
+// and a plain fetch keeps the timeout, the abort and the errors in Atelier's
 // hands. A 429 or 529 is retried once after a short pause; everything else
 // fails at once so the caller's rule answers instead.
 
@@ -119,7 +119,7 @@ export function retryAfterMs(value: string | null | undefined, now = Date.now())
   return Number.isNaN(at) ? null : Math.max(0, at - now)
 }
 
-/** The state as the provider takes it: text stays text, an object is sent as JSON, both held to Apex's size limit. */
+/** The state as the provider takes it: text stays text, an object is sent as JSON, both held to Atelier's size limit. */
 export function stateOf(state: DecisionRequest['state']): DecisionRequest['state'] {
   if (typeof state === 'string') return state.slice(0, DECISION_LIMITS.stateChars)
   const json = JSON.stringify(state)
@@ -243,8 +243,8 @@ function fromDecisions(raw: unknown, question: DecisionQuestion): unknown {
       confidence: a.confidence,
       probabilities: Object.fromEntries(a.probabilities.map((p) => [String(p.value), p.probability])),
     }
-  // A level is matched by the label Apex sent, not the server's own numbering (which may start at 1); the score follows from that.
-  // Without a label, the value counts only as a level index Apex knows.
+  // A level is matched by the label Atelier sent, not the server's own numbering (which may start at 1); the score follows from that.
+  // Without a label, the value counts only as a level index Atelier knows.
   const labels = question.type === 'score' ? question.criteria.map(levelLabel) : []
   const indexOf = (p: z.infer<typeof listed>[number]): number => (typeof p.label === 'string' ? labels.indexOf(p.label) : typeof p.value === 'number' && Number.isInteger(p.value) && p.value >= 0 && p.value < labels.length ? p.value : -1)
   const levels = a.probabilities.map((p) => ({

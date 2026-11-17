@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -23,7 +23,7 @@ export const ICNS_TYPES = {
   ic10: { size: 1024, scale: 2, label: 'icon_512x512@2x.png' }
 }
 
-/** Every icns entry Apex writes, in file order. */
+/** Every icns entry Atelier writes, in file order. */
 export const ICNS_ORDER = ['ic04', 'ic11', 'ic05', 'ic12', 'ic07', 'ic13', 'ic08', 'ic14', 'ic09', 'ic10']
 
 /** The icns run-length scheme (shared with it32): runs of 3..130, literals of 1..128. */

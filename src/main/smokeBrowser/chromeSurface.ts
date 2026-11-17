@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -17,13 +17,13 @@ import type { SmokeCheck, SmokeContext } from './types'
 // The chrome surface and Google's Chrome identity, end to end on the smoke
 // server: a page whose first inline <head> script reads window.chrome, on an
 // ordinary host and on the test host signInHosts.ts counts as Google's
-// sign-in (APEX_SMOKE_SIGNIN_HOSTS), in a tab, a same-origin iframe, a
+// sign-in (ATELIER_SMOKE_SIGNIN_HOSTS), in a tab, a same-origin iframe, a
 // cross-origin iframe, an about:blank iframe the page adds, and a
 // window.open popup. Each sees chrome.app, chrome.runtime, chrome.csi and
 // chrome.loadTimes before any page script runs, reading as native code; the
 // Google host gets Chrome's User-Agent (not Firefox's) and the matching client
 // hints on every request; top-level pages have a window around them.
-// APEX_SMOKE_SURFACE_OUT=<file> writes what was measured as JSON.
+// ATELIER_SMOKE_SURFACE_OUT=<file> writes what was measured as JSON.
 
 interface Head {
   type: string
@@ -243,7 +243,7 @@ async function run(ctx: SmokeContext): Promise<void> {
     closeTab(ctx.tabs, tab)
     closeTab(ctx.tabs, google)
   }
-  const out = process.env.APEX_SMOKE_SURFACE_OUT
+  const out = process.env.ATELIER_SMOKE_SURFACE_OUT
   if (out) (await import('node:fs')).writeFileSync(out, JSON.stringify({ reports, requests: Object.fromEntries(seen) }, null, 2))
   assert(problems.length === 0, `${problems.length} chrome surface problem(s): ${problems.slice(0, 6).join('; ')}`)
 }

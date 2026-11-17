@@ -1,12 +1,12 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // "Leave this page?": Electron cancels an unload the page wants to
-// keep unless main says otherwise synchronously, so Apex lets it cancel,
+// keep unless main says otherwise synchronously, so Atelier lets it cancel,
 // asks with its own dialog, then redoes what you were doing with a one-shot
-// skip. What you were doing is the newest recorded intent: Apex's own
+// skip. What you were doing is the newest recorded intent: Atelier's own
 // navigations, reloads, history moves and closes, and the page's own
 // navigations as its preload reports them. Pure, so tested.
 

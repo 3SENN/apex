@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,16 +6,16 @@
 import { SETUP_STEPS, type SetupStepId } from '@shared/onboarding'
 import { INTERNAL_PAGES, SETTINGS_ALIAS_PARENTS, SETTINGS_PAGES } from '@shared/url'
 
-// What the layout audit visits: every apex:// page and every Settings page,
-// every step of the setup flow (apex://welcome at that step), the new-tab
+// What the layout audit visits: every atelier:// page and every Settings page,
+// every step of the setup flow (atelier://welcome at that step), the new-tab
 // page, and the window sizes it opens them at.
 
 export interface LayoutPage {
   /** File-safe name: settings-you, connectors, newtab... */
   name: string
-  /** The apex:// address, or null for the new-tab page (a blank tab). */
+  /** The atelier:// address, or null for the new-tab page (a blank tab). */
   url: string | null
-  /** apex://welcome only: the setup step to put setup at before opening it. */
+  /** atelier://welcome only: the setup step to put setup at before opening it. */
   welcomeStep?: SetupStepId
 }
 
@@ -44,9 +44,9 @@ export function sizeLabel(width: number, height: number, panel: boolean): string
 export interface LayoutTargets {
   chatId: string | null
   companionId: string | null
-  /** apex://file?src=... for a file the run added. */
+  /** atelier://file?src=... for a file the run added. */
   fileUrl: string | null
-  /** apex://view-source?url=... for a fixture page. */
+  /** atelier://view-source?url=... for a fixture page. */
   sourceUrl: string | null
 }
 
@@ -60,21 +60,21 @@ export function layoutPages(targets: LayoutTargets): LayoutPage[] {
   for (const page of Object.keys(INTERNAL_PAGES)) {
     if (page === 'library') continue
     if (page === 'settings') {
-      for (const s of SETTINGS_PAGES) pages.push({ name: `settings-${s.id}`, url: `apex://settings/${s.id}` })
+      for (const s of SETTINGS_PAGES) pages.push({ name: `settings-${s.id}`, url: `atelier://settings/${s.id}` })
       // Sub-views with an address of their own (Site settings, Permissions) lay out on their own too.
-      for (const sub of Object.keys(SETTINGS_ALIAS_PARENTS)) pages.push({ name: `settings-${sub}`, url: `apex://settings/${sub}` })
+      for (const sub of Object.keys(SETTINGS_ALIAS_PARENTS)) pages.push({ name: `settings-${sub}`, url: `atelier://settings/${sub}` })
       continue
     }
     if (page === 'welcome') {
-      for (const step of SETUP_STEPS) pages.push({ name: `welcome-${step}`, url: 'apex://welcome', welcomeStep: step })
+      for (const step of SETUP_STEPS) pages.push({ name: `welcome-${step}`, url: 'atelier://welcome', welcomeStep: step })
       continue
     }
     const url =
-      page === 'chat' ? (targets.chatId ? `apex://chat/${targets.chatId}` : null)
-      : page === 'companion' ? (targets.companionId ? `apex://companion/${targets.companionId}` : null)
+      page === 'chat' ? (targets.chatId ? `atelier://chat/${targets.chatId}` : null)
+      : page === 'companion' ? (targets.companionId ? `atelier://companion/${targets.companionId}` : null)
       : page === 'file' ? targets.fileUrl
       : page === 'view-source' ? targets.sourceUrl
-      : `apex://${page}`
+      : `atelier://${page}`
     if (url) pages.push({ name: page, url })
   }
   return pages

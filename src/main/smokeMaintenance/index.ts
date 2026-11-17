@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,7 +14,7 @@ import * as updates from './updates'
 
 // The maintenance smoke group's checks and screenshot specs: diagnostics,
 // migrations, updates, system, native, release and languages
-// (APEX_SMOKE_ONLY=MAINTENANCE runs only these).
+// (ATELIER_SMOKE_ONLY=MAINTENANCE runs only these).
 // Smoke never makes a request outside the local fixture server, never calls
 // setLoginItemSettings and never quits for an update.
 

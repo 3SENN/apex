@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -17,7 +17,7 @@ import type { Tab, TabManager } from './tabs'
 // the tab, a video playing with its sound on qualifies even in a quiet passage,
 // and audio alone or muted autoplay doesn't (autoPipEligible, shared/media.ts).
 
-/** Apex's isolated world for picture-in-picture (999 is page full screen, 1005 the media card). */
+/** Atelier's isolated world for picture-in-picture (999 is page full screen, 1005 the media card). */
 export const PIP_WORLD = 1004
 
 /** Picks a video that is playing with sound and allows picture-in-picture; muted autoplay is skipped. */
@@ -48,7 +48,7 @@ export function pipEligible(tab: PipCandidate, enabled: boolean): boolean {
 export class AutoPip {
   readonly #tabs: TabManager
   readonly #enabled: () => boolean
-  /** Tabs Apex moved into picture-in-picture, so only those come back. */
+  /** Tabs Atelier moved into picture-in-picture, so only those come back. */
   readonly #entered = new Set<string>()
   #lastActive: string | null = null
   readonly #off: (() => void)[] = []

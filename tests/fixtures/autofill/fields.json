@@ -1,5 +1,5 @@
 {
-  "about": "Apex-written classifier corpus. Each case lists the attributes a frame reads off one field and the kind Apex should give it; unlisted attributes are empty.",
+  "about": "Atelier-written classifier corpus. Each case lists the attributes a frame reads off one field and the kind Atelier should give it; unlisted attributes are empty.",
   "cases": [
     { "note": "autocomplete wins over a misleading name", "a": { "autocomplete": "email", "name": "username" }, "kind": "email" },
     { "note": "section- prefix and shipping/billing modifiers", "a": { "autocomplete": "section-checkout shipping postal-code" }, "kind": "postal-code" },

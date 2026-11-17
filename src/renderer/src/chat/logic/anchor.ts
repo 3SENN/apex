@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import type { LogItem } from '../../agentLog'
 
-// CH-13: apex://chat/<id>#<message> links. The fragment names one of your
+// CH-13: atelier://chat/<id>#<message> links. The fragment names one of your
 // messages or a reply's turn; the chat scrolls to it and highlights it, loading
 // older pages until it turns up. When it is gone, a notice offers the newest.
 

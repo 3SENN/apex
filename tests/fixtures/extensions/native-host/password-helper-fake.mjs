@@ -8,11 +8,11 @@
 //   in  { cmd: 2, msg: '{"QID":"m0",…}' }   (challenge)  → { cmd: 2, payload: { QID: 'm0', PAKE } }
 //   anything else (tab events, end of operation…) is logged, with no reply.
 // The log (one JSON line per message, plus a first line with how it was
-// started) goes to APEX_FAKE_HELPER_LOG.
+// started) goes to ATELIER_FAKE_HELPER_LOG.
 import { appendFileSync } from 'node:fs'
 import { randomBytes } from 'node:crypto'
 
-const logFile = process.env.APEX_FAKE_HELPER_LOG
+const logFile = process.env.ATELIER_FAKE_HELPER_LOG
 const log = (entry) => {
   if (logFile) appendFileSync(logFile, `${JSON.stringify(entry)}\n`)
 }

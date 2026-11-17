@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { useSyncExternalStore } from 'react'
 import { ACTIVITY_PROP_PART, type CompanionEngine, type CompanionLook } from '@shared/companion'
 import { NO_PROP, heldPropAfter, heldPropShown, type ActivityProp, type HeldProp } from '@shared/agentControl'
 import { engineReady, isEngine, type EngineStatus } from '@shared/engine'
-import { apex, call } from '../api'
+import { atelier, call } from '../api'
 
 // The companion acts out the agent's steps. One store for the chrome
 // follows every chat's events and says which prop a chat's companion holds
@@ -44,7 +44,7 @@ function schedule(): void {
 function start(): void {
   if (started || typeof window === 'undefined') return
   started = true
-  apex.agent.onEvent((event, meta) => {
+  atelier.agent.onEvent((event, meta) => {
     const now = Date.now()
     const before = held.get(meta.chatId) ?? NO_PROP
     const after = heldPropAfter(before, event, now)
@@ -56,7 +56,7 @@ function start(): void {
     if (heldPropShown(before, now) !== heldPropShown(after, now)) notify()
     else schedule()
   })
-  apex.onAppEvent((event) => {
+  atelier.onAppEvent((event) => {
     if (event.type === 'chats') {
       for (const c of event.items) owners.set(c.id, c.companionId)
     } else if (event.type === 'engine') {

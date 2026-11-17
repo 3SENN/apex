@@ -1,10 +1,10 @@
 /* Copyright (c) 2026 Senne Chin. All rights reserved.
- * Part of the Apex Companion Art: licensed under the Apex Companion Art License
+ * Part of the Atelier Companion Art: licensed under the Atelier Companion Art License
  * (ART-LICENSE.md), not under the Mozilla Public License. */
 
-// Apex's icon art. The logo is the brand mark: Pip, Apex's first companion,
+// Atelier's icon art. The logo is the brand mark: Pip, Atelier's first companion,
 // drawn flat, with the sprout growing from its highest point and two smiling
-// eyes, in the same 64-unit grid as apexbrowser.eu's mark.svg and icon.svg.
+// eyes, in the same 64-unit grid as atelierbrowser.eu's mark.svg and icon.svg.
 // The app icon is the mark in white on a flat violet squircle; the in-app
 // mark is the mark in its own colours (lavender head, violet sprout); the
 // tray is its silhouette with the eyes cut out. Small sizes grow the mark and
@@ -46,7 +46,7 @@ export function pip() {
   return masters
 }
 
-/** Apex's icon colours: the brand's violet (apexbrowser.eu/brand.html) and what the art around it needs. */
+/** Atelier's icon colours: the brand's violet (atelierbrowser.eu/brand.html) and what the art around it needs. */
 export const PALETTE = {
   /** The tile, the sprout, links. */
   violet: '#6a4bff',
@@ -79,7 +79,7 @@ const solid = (color) => ({ type: 'solid', color })
 // The mark.
 
 /**
- * The mark in its 64-unit grid (apexbrowser.eu/assets/brand/mark.svg). The
+ * The mark in its 64-unit grid (atelierbrowser.eu/assets/brand/mark.svg). The
  * head is one closed outline from (32, 19.5); the sprout and the eyes are
  * round-capped strokes. Every curve is a cubic: [x0, y0, x1, y1, x2, y2, x3, y3].
  */
@@ -154,7 +154,7 @@ export function minEye(size) {
   return size <= 20 ? 1.15 : size <= 40 ? 1.3 : 0
 }
 
-/** The mark sits a little below the tile's middle, as on apexbrowser.eu, so its weight looks centred. */
+/** The mark sits a little below the tile's middle, as on atelierbrowser.eu, so its weight looks centred. */
 const MARK_DROP = 0.022
 
 // ---------------------------------------------------------------------------
@@ -195,7 +195,7 @@ function ellipse(cx, cy, rx, ry) {
 // Scenes.
 
 /**
- * The app icon: the mark in white on a flat violet tile, as on apexbrowser.eu.
+ * The app icon: the mark in white on a flat violet tile, as on atelierbrowser.eu.
  *   style       'mac' | 'flat'
  *   appearance  'light' | 'dark' (the tile; macOS 26 dark)
  *   ground      'violet' (the icon) | 'light' (the mark in its own colours on a white tile, a preview variant)
@@ -325,7 +325,7 @@ function pageScene(size, style) {
   return { p, ops }
 }
 
-/** The icon for HTML documents Apex opens: a page with text lines and the app icon as its badge. */
+/** The icon for HTML documents Atelier opens: a page with text lines and the app icon as its badge. */
 export function htmlDocument(size, { style = 'mac' } = {}) {
   const { p, ops } = pageScene(size, style)
   const small = size < 48
@@ -347,7 +347,7 @@ export function htmlDocument(size, { style = 'mac' } = {}) {
   return ops.concat(badge)
 }
 
-/** The icon for exported companions (.apexcompanion): a page with Pip's head on it. */
+/** The icon for exported companions (.ateliercompanion): a page with Pip's head on it. */
 export function companionDocument(size, { style = 'mac' } = {}) {
   const { head } = pip()
   const { p, ops } = pageScene(size, style)
@@ -371,7 +371,7 @@ export function companionDocument(size, { style = 'mac' } = {}) {
   return ops
 }
 
-/** The .apexpack group picture's other members (render-pip.mjs writes them; Pip is pip()). */
+/** The .atelierpack group picture's other members (render-pip.mjs writes them; Pip is pip()). */
 export const GROUP_MASTERS = {
   mochi: { head: 'branding/official/art/group-mochi-head.png', full: 'branding/official/art/group-mochi-full.png' },
   bolt: { head: 'branding/official/art/group-bolt-head.png', full: 'branding/official/art/group-bolt-full.png' },
@@ -414,7 +414,7 @@ function confetti(p, ops) {
 }
 
 /**
- * The icon for packs (.apexpack): a group picture. Mochi, Pip and Bolt stand
+ * The icon for packs (.atelierpack): a group picture. Mochi, Pip and Bolt stand
  * together on the page under confetti, Pip in front; middling sizes keep their
  * three heads, and the smallest keep Pip's head alone so it still reads.
  */
@@ -545,7 +545,7 @@ export function installerSidebar() {
 }
 
 // ---------------------------------------------------------------------------
-// Icon Composer layers (branding/official/Apex.icon). 1024-point canvas; the system
+// Icon Composer layers (branding/official/Atelier.icon). 1024-point canvas; the system
 // supplies the squircle mask, glass and shadows.
 
 /** The mark where the macOS icon puts it, scaled from the 824 body up to the full 1024 canvas around the centre. */

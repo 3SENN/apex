@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -39,7 +39,7 @@ const IMAGE_SIGNATURES: readonly { sig: readonly number[]; at?: number; mediaTyp
 const HEIC_BRANDS = new Set(['heic', 'heix', 'hevc', 'hevx', 'heim', 'heis', 'mif1', 'msf1'])
 const AVIF_BRANDS = new Set(['avif', 'avis'])
 
-/** Programs and archives Apex never reads, whatever they are called. */
+/** Programs and archives Atelier never reads, whatever they are called. */
 const EXECUTABLE_SIGNATURES: readonly (readonly number[])[] = [
   [0x7f, 0x45, 0x4c, 0x46], // ELF
   [0xfe, 0xed, 0xfa, 0xce],

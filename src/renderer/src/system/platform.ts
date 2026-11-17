@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -17,8 +17,8 @@ export function platformKind(platform: string): PlatformKind {
 /** On Windows, in the chrome or a float window: for the `.win` wording of a string that says Mac. */
 export function isWindows(): boolean {
   if (typeof window === 'undefined') return false
-  const w = window as { apex?: { platform?: string }; apexFloat?: { platform?: string } }
-  return (w.apex?.platform ?? w.apexFloat?.platform) === 'win32'
+  const w = window as { atelier?: { platform?: string }; atelierFloat?: { platform?: string } }
+  return (w.atelier?.platform ?? w.atelierFloat?.platform) === 'win32'
 }
 
 /** "Keep running in the menu bar / notification area / system tray". */

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -19,8 +19,8 @@ import { GhostApp } from './ghost/GhostApp'
 
 // Theme and accent go on <html> before React renders, so neither the default
 // mode nor the default accent flashes; main sends every later change.
-applyTheme(window.apex.initial.theme)
-window.apex.onAppEvent((event) => {
+applyTheme(window.atelier.initial.theme)
+window.atelier.onAppEvent((event) => {
   if (event.type === 'theme') applyTheme(event.theme)
   // The chrome's ground follows the window material (opaque under Reduce Transparency).
   if (event.type === 'window-material') document.documentElement.dataset.material = event.material
@@ -28,7 +28,7 @@ window.apex.onAppEvent((event) => {
 
 // The role goes on <html> before the first paint too, so an overlay tier is
 // transparent from its first frame (OV-01).
-const role = window.apex.role
+const role = window.atelier.role
 document.documentElement.dataset.uiRole = role
 
 function Root(): ReactElement | null {

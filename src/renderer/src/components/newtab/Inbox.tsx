@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { useEffect, useMemo, useState, type ReactElement } from 'react'
 import { Bell, CheckCheck, CircleAlert, MessageCircleQuestionMark, Repeat } from 'lucide-react'
 import type { ChatSummary } from '@shared/chats'
 import type { Routine, RoutineRun } from '@shared/routines'
-import { apex, call, relativeTime, useLiveList } from '../../api'
+import { atelier, call, relativeTime, useLiveList } from '../../api'
 import { IconButton, showPopoverMenu, type PopoverItem } from '../../ui'
 import { buildInbox, inboxUnread, type InboxItem } from './newtabLogic'
 import { useT } from '../../i18n/useT'
@@ -28,7 +28,7 @@ function useRuns(): [RoutineRun[], () => void] {
   }
   useEffect(() => {
     reload()
-    return apex.onAppEvent((e) => {
+    return atelier.onAppEvent((e) => {
       if (e.type === 'routine-runs') reload()
     })
   }, [])
@@ -79,8 +79,8 @@ export function InboxButton({ className }: { className?: string }): ReactElement
       return reloadRuns()
     }
     const item = items.find((i) => i.id === choice)
-    if (item?.chatId) void call('pages', 'open', `apex://chat/${item.chatId}`)
-    else if (item?.kind === 'routine') void call('pages', 'open', 'apex://routines')
+    if (item?.chatId) void call('pages', 'open', `atelier://chat/${item.chatId}`)
+    else if (item?.kind === 'routine') void call('pages', 'open', 'atelier://routines')
   }
 
   return (

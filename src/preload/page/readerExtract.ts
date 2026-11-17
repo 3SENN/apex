@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import { READER_LIMITS, articleText, countWords, isReaderBlock, readingMinutes, 
 
 // Reader extraction (RD-01, RD-02): Mozilla Readability on a clone of the
 // document, so the page itself is never touched, then a walk that keeps only
-// Apex's allowed elements and attributes. The result is plain data (text and
+// Atelier's allowed elements and attributes. The result is plain data (text and
 // small objects), never HTML: the chrome builds the view from it with React,
 // so nothing from the page can run, style or submit anything there. No
 // electron import, so the tests run it on fixture documents.
@@ -187,7 +187,7 @@ function convert(node: Node, base: string, page: string, budget: Budget, depth: 
   if (tag === 'a') {
     const target = linkTarget(el.getAttribute('href'), base, page)
     const children = kids(parent)
-    // A link Apex won't follow keeps its text; one that is a jump target keeps its id.
+    // A link Atelier won't follow keeps its text; one that is a jump target keeps its id.
     if (!target) return own.id ? [{ tag, ...own, children }] : children
     budget.nodes--
     return [{ tag, ...target, ...own, children }]

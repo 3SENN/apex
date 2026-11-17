@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import { describe, expect, it } from 'vitest'
 import { readManifest } from '../src/main/extensions/manifest'
 import { describePermissions, hostLabel, hostsPhrase, isAllHosts, phraseFor, requestedIds, siteAccessOf } from '../src/main/extensions/permissions'
 
-// OV-16, ST-40: what an extension can do, in Apex's own plain words.
+// OV-16, ST-40: what an extension can do, in Atelier's own plain words.
 
 const FIXTURES = join(__dirname, 'fixtures/extensions')
 
@@ -95,7 +95,7 @@ describe('optional permissions at run time (OV-16, ST-40)', () => {
     const { tmpdir } = await import('node:os')
     const { ExtensionsHost } = await import('../src/main/extensions/host')
     const { fakeAdapter, fakeSession } = await import('./fixtures/extensions/fakeAdapter')
-    const dir = mkdtempSync(join(tmpdir(), 'apex-ext-perm-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-ext-perm-'))
     const prompts: { kind: string; permissions: { label: string }[] }[] = []
     let answer = true
     const host = new ExtensionsHost({

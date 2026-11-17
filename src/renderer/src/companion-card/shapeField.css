@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-/* ShapeField: the frame around Apex's ambient field on companion surfaces.
+/* ShapeField: the frame around Atelier's ambient field on companion surfaces.
    The glyphs and their light and dark colours come from ui/AmbientField;
    this adds the box and the fades. Owners position it (it fills its nearest
    positioned ancestor by default) and can change the fades with

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -133,7 +133,7 @@ interface Turn {
 }
 
 function harness(script: (request: Request, n: number) => Turn) {
-  const dir = mkdtempSync(join(tmpdir(), 'apex-deleg-'))
+  const dir = mkdtempSync(join(tmpdir(), 'atelier-deleg-'))
   const presets: CompanionPreset[] = [{ id: 'nova', name: 'Nova', tagline: '', personality: 'Curious.', look: DEFAULT_LOOK }]
   const chats = new ChatStore(dir, FIRST_COMPANION_ID)
   const events: ChatAgentEvent[] = []

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -122,7 +122,7 @@ function fakeTabs() {
 const presets: CompanionPreset[] = [{ id: 'nova', name: 'Nova', tagline: '', personality: 'Curious.', look: DEFAULT_LOOK }]
 
 function setup(script: (request: Request, n: number) => Turn, options: { confirm?: boolean; focus?: ElementDescription | null; online?: { value: boolean; listeners: Array<(on: boolean) => void> }; memoryGate?: Promise<void> } = {}) {
-  const dir = mkdtempSync(join(tmpdir(), 'apex-run-'))
+  const dir = mkdtempSync(join(tmpdir(), 'atelier-run-'))
   const companions = new CompanionStore(dir, { presets: () => presets })
   const chats = new ChatStore(dir, FIRST_COMPANION_ID)
   const events: ChatAgentEvent[] = []
@@ -362,7 +362,7 @@ describe('pause, notes and the chat mode', () => {
     await until(() => t.host.tabOwners().t1 === id && t.memoryCalls.length === 1, 'owns t1 and is on the memory step')
     t.host.pause(id)
     expect(t.host.isPaused(id)).toBe(true)
-    t.host.noteForNextResult('t1', 'The page asked for your camera and Apex denied it.')
+    t.host.noteForNextResult('t1', 'The page asked for your camera and Atelier denied it.')
     slow.open()
     await new Promise((r) => setTimeout(r, 30))
     // The next browser step waits at the gate.
@@ -371,7 +371,7 @@ describe('pause, notes and the chat mode', () => {
     t.host.resume(id)
     await until(() => t.chats.summary(id)?.status === 'finished', 'finished')
     const results = JSON.stringify(t.requests[1]?.messages.at(-1))
-    expect(results).toContain('apex_note')
+    expect(results).toContain('atelier_note')
     expect(results).toContain('camera')
   })
 
@@ -519,7 +519,7 @@ describe('run helpers', () => {
     notes.add('t2', 'two')
     expect(notes.take(['t1'])).toEqual(['one'])
     expect(notes.take(['t1'])).toEqual([])
-    expect(noteBlock(['x'])?.text).toContain('<apex_note>')
+    expect(noteBlock(['x'])?.text).toContain('<atelier_note>')
     expect(noteBlock([])).toBeNull()
     expect(plainSnippet('## Title\n- **bold** item and `code` [link](https://x.y)')).toBe('Title bold item and code link')
   })

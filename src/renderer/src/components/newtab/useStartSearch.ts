@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState, type Keyboard
 import type { SettingsView } from '@shared/ipc'
 import type { OmniboxAction, OmniboxGroup, OmniboxRow } from '@shared/omnibox'
 import { resolveEngine, type SearchEngineDef } from '@shared/searchEngines'
-import { apex, call, errorText } from '../../api'
+import { atelier, call, errorText } from '../../api'
 import { toast } from '../../ui'
 import { startEntries, startKey, startPlan, startSuggestions, type NewTabMode, type StartAction, type StartEntry, type StartPlan } from './searchLogic'
 
@@ -58,7 +58,7 @@ export interface StartSearch {
 }
 
 export function useStartSearch({ tabId, text, settings, bypass, busy, private: isPrivate = false, onAsk, onClear, focusField }: StartSearchOptions): StartSearch {
-  const source = settings ?? apex.initial.settings
+  const source = settings ?? atelier.initial.settings
   const [pendingMode, setPendingMode] = useState<NewTabMode | null>(null)
   const stored: NewTabMode = source.newTabMode === 'web' ? 'web' : 'companion'
   const mode = pendingMode ?? stored
@@ -145,8 +145,8 @@ export function useStartSearch({ tabId, text, settings, bypass, busy, private: i
     else runRow(entry.row)
   }
 
-  const save = (patch: Parameters<typeof apex.settings.set>[0]): void => {
-    apex.settings.set(patch).catch((err: unknown) => {
+  const save = (patch: Parameters<typeof atelier.settings.set>[0]): void => {
+    atelier.settings.set(patch).catch((err: unknown) => {
       setPendingMode(null)
       toast.show({ message: errorText(err), tone: 'error' })
     })

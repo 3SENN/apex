@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -16,7 +16,7 @@ import { browserToolSpecs, describeBrowserState, qualified, toMcpResult, unquali
 import { memberSchemas } from '../src/main/agent/schemas'
 import type { TabManager } from '../src/main/tabs'
 
-// Apex's local MCP server: it fails closed on a missing or wrong secret, a
+// Atelier's local MCP server: it fails closed on a missing or wrong secret, a
 // browser origin or a foreign host, and dispatches tools for its route.
 
 interface Reply {
@@ -51,7 +51,7 @@ async function start(route: McpRoute, token = 'a-good-token-of-sixteen+'): Promi
 }
 
 const echoRoute = (calls: unknown[] = []): McpRoute => ({
-  name: 'Apex',
+  name: 'Atelier',
   tools: () => [{ name: 'echo', description: 'Echo', inputSchema: { type: 'object' } }],
   call: async (name, args) => {
     calls.push([name, args])
@@ -79,7 +79,7 @@ describe('McpServer', () => {
     const calls: unknown[] = []
     const { port, auth } = await start(echoRoute(calls))
     const init = await post(port, '/mcp/test', { jsonrpc: '2.0', id: 'a', method: 'initialize', params: { protocolVersion: '2025-06-18' } }, auth)
-    expect(init.body).toMatchObject({ jsonrpc: '2.0', id: 'a', result: { protocolVersion: '2025-06-18', capabilities: { tools: {} }, serverInfo: { name: 'Apex' } } })
+    expect(init.body).toMatchObject({ jsonrpc: '2.0', id: 'a', result: { protocolVersion: '2025-06-18', capabilities: { tools: {} }, serverInfo: { name: 'Atelier' } } })
     const unknownVersion = await post(port, '/mcp/test', { jsonrpc: '2.0', id: 2, method: 'initialize', params: { protocolVersion: '1999-01-01' } }, auth)
     expect((unknownVersion.body as { result: { protocolVersion: string } }).result.protocolVersion).toBe('2025-11-25')
     expect((await post(port, '/mcp/test', { jsonrpc: '2.0', method: 'notifications/initialized' }, auth)).status).toBe(202)
@@ -102,7 +102,7 @@ describe('McpServer', () => {
   it('turns a throwing tool into an error result and lets notifications/cancelled abort a call', async () => {
     let seen: AbortSignal | null = null
     const route: McpRoute = {
-      name: 'Apex',
+      name: 'Atelier',
       tools: () => [{ name: 'wait', description: '', inputSchema: { type: 'object' } }, { name: 'boom', description: '', inputSchema: { type: 'object' } }],
       call: (name, _args, signal) => {
         if (name === 'boom') return Promise.reject(new Error('kaput'))
@@ -143,7 +143,7 @@ describe('secrets and helpers', () => {
     expect(bearerOf(undefined)).toBeNull()
     expect(loopbackHost('127.0.0.1:4000')).toBe(true)
     expect(loopbackHost('localhost')).toBe(true)
-    expect(loopbackHost('apex.example:4000')).toBe(false)
+    expect(loopbackHost('atelier.example:4000')).toBe(false)
   })
 
   it('exposes every browser member with its schema as an object', () => {
@@ -154,8 +154,8 @@ describe('secrets and helpers', () => {
       expect(spec.inputSchema).not.toHaveProperty('$schema')
       expect(spec.description.length).toBeGreaterThan(10)
     }
-    expect(qualified(['navigate'])).toEqual(['mcp__apex__navigate'])
-    expect(unqualified('mcp__apex__navigate')).toBe('navigate')
+    expect(qualified(['navigate'])).toEqual(['mcp__atelier__navigate'])
+    expect(unqualified('mcp__atelier__navigate')).toBe('navigate')
     expect(unqualified('WebSearch')).toBeNull()
   })
 
@@ -170,8 +170,8 @@ describe('secrets and helpers', () => {
   })
 
   it('quotes the add command so the secret header stays one argument', () => {
-    expect(addCommand('/opt/claude', 'http://127.0.0.1:4000/mcp/outside', 'SECRET', 'darwin')).toBe("/opt/claude mcp add --transport http --scope user apex http://127.0.0.1:4000/mcp/outside --header 'Authorization: Bearer SECRET'")
-    expect(addCommand('C:\\Program Files\\nodejs\\claude.cmd', 'http://127.0.0.1:4000/mcp/outside', 'SECRET', 'win32')).toBe('"C:\\Program Files\\nodejs\\claude.cmd" mcp add --transport http --scope user apex http://127.0.0.1:4000/mcp/outside --header "Authorization: Bearer SECRET"')
+    expect(addCommand('/opt/claude', 'http://127.0.0.1:4000/mcp/outside', 'SECRET', 'darwin')).toBe("/opt/claude mcp add --transport http --scope user atelier http://127.0.0.1:4000/mcp/outside --header 'Authorization: Bearer SECRET'")
+    expect(addCommand('C:\\Program Files\\nodejs\\claude.cmd', 'http://127.0.0.1:4000/mcp/outside', 'SECRET', 'win32')).toBe('"C:\\Program Files\\nodejs\\claude.cmd" mcp add --transport http --scope user atelier http://127.0.0.1:4000/mcp/outside --header "Authorization: Bearer SECRET"')
   })
 })
 
@@ -182,7 +182,7 @@ const buyButton: ElementDescription = { role: 'button', name: 'Buy now', tag: 'b
 const PAGE = { x: 0, y: 0, width: 1000, height: 800 }
 
 function outsideSetup(policy: 'own' | 'any', approve: (description: string) => boolean) {
-  const dir = mkdtempSync(join(tmpdir(), 'apex-outside-'))
+  const dir = mkdtempSync(join(tmpdir(), 'atelier-outside-'))
   const wc = (url: string) => ({ getURL: () => url, getTitle: () => 'Shop', isDestroyed: () => false, isLoading: () => false, getZoomFactor: () => 1 })
   const tabs = [{ id: 'tab-1', internalUrl: null, view: { webContents: wc('https://shop.example/'), getBounds: () => PAGE } }]
   let active = 'tab-1'

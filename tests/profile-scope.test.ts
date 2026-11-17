@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -18,7 +18,7 @@ import { eventForProfile, profileThemeState, runInProfile, scopedInstance, scope
 // SH-64 regressions: a profile's theme, accent and stores are its own, not
 // the default profile's. No Electron windows, no network.
 
-const temp = (): string => mkdtempSync(join(tmpdir(), 'apex-profile-scope-'))
+const temp = (): string => mkdtempSync(join(tmpdir(), 'atelier-profile-scope-'))
 
 describe('profile scope', () => {
   it('carries the profile through async work and leaves the default outside it', async () => {

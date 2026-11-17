@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -126,7 +126,7 @@ describe('switching from the command bar and the chrome', () => {
     const all = spaceCommandRows(spaces, 'space', target, labels)
     expect(all.map((r) => r.id)).toEqual(['space:p1', 'space:p2'])
     expect(all[1]?.action).toEqual({ kind: 'open-internal', url: spaceSwitchUrl('p2') })
-    expect(spaceSwitchUrl(null)).toBe('apex://workspace?space=none')
+    expect(spaceSwitchUrl(null)).toBe('atelier://workspace?space=none')
     expect(spaceCommandRows(spaces, 'nothing like it', target, labels)).toEqual([])
     expect(spaceCommandRows([info(null, 'No project', ['t1'], true)], 'space', target, labels)).toEqual([])
   })

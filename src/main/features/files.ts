@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -17,8 +17,8 @@ import { registerStorageCategory } from '../storage'
 import { sandboxSession } from './sandboxSessions'
 import type { Feature } from './types'
 
-// The files feature module: Library › Files, the viewer, the apex-file and
-// apex-artifact schemes and artifact tabs. It fills ctx.content.libraryFiles and
+// The files feature module: Library › Files, the viewer, the atelier-file and
+// atelier-artifact schemes and artifact tabs. It fills ctx.content.libraryFiles and
 // ctx.content.viewer.
 
 /** ON-13: the getting-started signal the first artifact sends. */
@@ -74,12 +74,12 @@ export function createFilesFeature(): Feature {
       ctx.content.viewer = files.viewer
       const done = files
 
-      // apex-file://<token>/: the chrome's and its overlays' session.
+      // atelier-file://<token>/: the chrome's and its overlays' session.
       protocol.handle(FILE_SCHEME, (request) => {
         const token = fileTokenOf(request.url)
         return serveFile(request, token ? done.documents.served(token) : null)
       })
-      // Artifacts get no network, navigation or popups: only their own apex-artifact: document.
+      // Artifacts get no network, navigation or popups: only their own atelier-artifact: document.
       artifacts = sandboxSession(ARTIFACTS_PARTITION, artifactRequestAllowed)
       undo.push(handleArtifactProtocol(artifacts, files.store))
       undo.push(

@@ -1,6 +1,6 @@
 # Companion system
 
-Apex's companion is assembled at runtime from modular parts. The pieces are:
+Atelier's companion is assembled at runtime from modular parts. The pieces are:
 - 3D parts for each slot;
 - a 2D expression layer drawn onto a UV-mapped face surface;
 - JSON rules for which parts fit together, hat placement, pupil movement and randomization;
@@ -14,7 +14,7 @@ The shared contract (ids, types, file formats) is `src/shared/companion.ts`. Thi
 
 ## Licensing
 
-The engine is open source under the [MPL-2.0](../LICENSE): the contract (`src/shared/companion.ts`), the look rules (`src/shared/companionLogic.ts`), the runtime (`src/renderer/src/companion/`), the kit (`src/kit/`) and main's side (`src/main/companion.ts`, `src/main/companions.ts`). The art is not: the generated files in `src/renderer/public/companion/`, their recipes in `scripts/companion-assets/`, and the six Apex characters (Pip, Juniper, Bolt, Mochi, Sage and Pepper) are Apex Companion Art, under the [Apex Companion Art License](../ART-LICENSE.md). Anyone may make characters from it for Apex and share them, in `.apexcompanion` files, packs, apps and worlds too, and a character of your own may be your brand's mascot inside Apex. Builds made from this repository, with or without changes, may include the art when they are shared so others can test or review changes for Apex (pull-request previews, testers, CI artifacts; section 2.1). The art can't be used outside Apex, and a build you distribute as your own product (a fork) uses a name and icons of its own and its own character designs in place of the art (section 3.1; see [Bring your own designs](#bring-your-own-designs)). The six characters are trademarks ([TRADEMARKS.md](../TRADEMARKS.md)). Each art folder has a `LICENSE.md`, and the art's source files carry the art notice instead of the MPL one.
+The engine is open source under the [MPL-2.0](../LICENSE): the contract (`src/shared/companion.ts`), the look rules (`src/shared/companionLogic.ts`), the runtime (`src/renderer/src/companion/`), the kit (`src/kit/`) and main's side (`src/main/companion.ts`, `src/main/companions.ts`). The art is not: the generated files in `src/renderer/public/companion/`, their recipes in `scripts/companion-assets/`, and the six Atelier characters (Pip, Juniper, Bolt, Mochi, Sage and Pepper) are Atelier Companion Art, under the [Atelier Companion Art License](../ART-LICENSE.md). Anyone may make characters from it for Atelier and share them, in `.ateliercompanion` files, packs, apps and worlds too, and a character of your own may be your brand's mascot inside Atelier. Builds made from this repository, with or without changes, may include the art when they are shared so others can test or review changes for Atelier (pull-request previews, testers, CI artifacts; section 2.1). The art can't be used outside Atelier, and a build you distribute as your own product (a fork) uses a name and icons of its own and its own character designs in place of the art (section 3.1; see [Bring your own designs](#bring-your-own-designs)). The six characters are trademarks ([TRADEMARKS.md](../TRADEMARKS.md)). Each art folder has a `LICENSE.md`, and the art's source files carry the art notice instead of the MPL one.
 
 No character is written into the engine. `DEFAULT_LOOK` is the branding's default companion's look (Pip's comes from `presets.json` in official builds), or `PLAIN_LOOK`, the unofficial branding's neutral companion, in code bundled without the branding.
 
@@ -22,7 +22,7 @@ No character is written into the engine. `DEFAULT_LOOK` is the branding's defaul
 
 ```
 scripts/companion-assets/        generator (Node, ESM .mjs): geometry, animation, SVG, config, compression
-src/renderer/public/companion/   generated output, committed; served at app://apex/companion/
+src/renderer/public/companion/   generated output, committed; served at app://atelier/companion/
   manifest.json                  CompanionManifest
   rigs/A.glb B.glb C.glb         base rigs with animation clips
   parts/<part-id>.glb            one file per 3D part
@@ -102,11 +102,11 @@ The pure logic lives in `src/shared/companionLogic.ts` (compatibility checks inc
   - reduced motion slows clips and stops the bigger one-shots;
   - everything is disposed on unmount.
 - **Fallback:** if WebGL or loading fails, draw the 2D face layers in a tinted circle. Never leave a blank box.
-- **Test hook:** set `window.__apexCompanionStats = { ready, errors }`; the smoke test asserts that instances rendered without errors, and that the editor shows its part chips, face swatches, palettes and a thumbnail for every preset.
+- **Test hook:** set `window.__atelierCompanionStats = { ready, errors }`; the smoke test asserts that instances rendered without errors, and that the editor shows its part chips, face swatches, palettes and a thumbnail for every preset.
 
 ## Bring your own designs
 
-The engine draws whatever art it is given, so a fork (a build you distribute as your own product), or any build that won't use Apex's characters, brings its own designs and changes no engine code. Everything it loads comes from one folder and one branding file:
+The engine draws whatever art it is given, so a fork (a build you distribute as your own product), or any build that won't use Atelier's characters, brings its own designs and changes no engine code. Everything it loads comes from one folder and one branding file:
 
 | What | Where the engine loads it | Format |
 |---|---|---|
@@ -117,15 +117,15 @@ The engine draws whatever art it is given, so a fork (a build you distribute as 
 | Rules and presets | `config/*.json` | head and hat compatibility, hat seats, pupil ranges, randomization palettes, animation events and `presets.json` (`CompanionPreset[]`) |
 | The default companion | `branding/<id>/companion.json` (named by `branding.json`'s `companion` and `defaultPreset`) | one `CompanionPreset`: name, tagline, personality, summary and a look of part ids, face ids and colours |
 
-The renderer fetches the folder from `app://apex/companion/` (Vite copies `src/renderer/public/` into the build), main reads `config/presets.json` and the compatibility rules from the same folder (the source folder in a dev run, `out/renderer/companion/` when built), and the kit copies it to `/__apex/kit/1/companion/` for apps. Looks, `.apexcompanion` files and a cast member's `look` hold only ids and colours, never geometry, so they draw with whichever art the build has.
+The renderer fetches the folder from `app://atelier/companion/` (Vite copies `src/renderer/public/` into the build), main reads `config/presets.json` and the compatibility rules from the same folder (the source folder in a dev run, `out/renderer/companion/` when built), and the kit copies it to `/__atelier/kit/1/companion/` for apps. Looks, `.ateliercompanion` files and a cast member's `look` hold only ids and colours, never geometry, so they draw with whichever art the build has.
 
 To swap in your own:
 
 1. Replace the files in `src/renderer/public/companion/` with your own, made by a generator of your own or exported from a 3D tool, in the formats above. Keep the slot, anchor, clip and tint names; to use other part or face ids, change `PART_IDS`, `FACE_IDS` and the variant lists in `src/shared/companion.ts` (MPL) to match your manifest.
-2. Replace `scripts/companion-assets/` with your generator, or remove it and the `companion:assets` script, so nothing writes Apex's art back.
+2. Replace `scripts/companion-assets/` with your generator, or remove it and the `companion:assets` script, so nothing writes Atelier's art back.
 3. Write your own `config/presets.json` (or `[]`), and give your branding a `companion.json` with a look from your parts; set `hiddenPresets` to the presets you leave out.
 4. Draw your own icons (`branding/unofficial/icon.svg` and `scripts/app-icons/unofficial.mjs`), and leave `branding/official/` out of your builds.
-5. Run `npx vitest run tests/companionAssets.test.ts tests/brandingSwitch.test.ts`: they check the folder against the contract (every file referenced and present, every variant, the triangle budgets, presets with valid looks) and the branding's default companion. Change their checks of Apex's own presets (six, Pip first) to yours.
+5. Run `npx vitest run tests/companionAssets.test.ts tests/brandingSwitch.test.ts`: they check the folder against the contract (every file referenced and present, every variant, the triangle budgets, presets with valid looks) and the branding's default companion. Change their checks of Atelier's own presets (six, Pip first) to yours.
 
 ## Integration (main and chrome)
 
@@ -134,13 +134,13 @@ To swap in your own:
   - The service methods are `companion.get`, `companion.set(patch)`, `companion.presets()` (the branding's own companion first, then the generated `presets.json`'s that the branding offers) and `companion.setDockIcon(pngDataUrl)`.
 - **Persona:** the preset's `personality` is added to the system prompt when a chat starts and stays in that chat's snapshot.
 - **Settings › Companions** lists every companion (hidden ones too), each opening its card, with create, import and, on macOS, the Dock icon toggle.
-- **The companion card** (`apex://companion/<id>`, `src/renderer/src/companion-card/`) edits a companion, and its look is edited in place on the card:
+- **The companion card** (`atelier://companion/<id>`, `src/renderer/src/companion-card/`) edits a companion, and its look is edited in place on the card:
   - the figure stays centred, with one toolbar for undo, redo and four shuffle styles;
   - a ring of bubbles around it, one per category (shape: the body, head and ears; eyes, mouth and brows; hair, hat, accessories and colours), each opening an option card;
   - the colours card offers the palettes from `randomization-config` and a free colour picker;
   - parts a head does not accept are disabled. A hat can still be picked over hair or ears it does not go with and replaces them; picking such hair or ears afterwards takes the hat off (the latest pick wins);
   - every change saves as it is made.
-- **New companions:** the new-companion sheet offers a shuffled companion and the presets; an `.apexcompanion` file is reviewed before it is added.
+- **New companions:** the new-companion sheet offers a shuffled companion and the presets; an `.ateliercompanion` file is reviewed before it is added.
 - **Welcome:** the welcome flow offers a shuffled companion, the presets and naming.
 - **Accent colour:** the chrome's accent colour follows `look.colors.accent`.
 - **Dock icon (macOS):** when enabled, the chrome renders the companion off-screen at 512 px and main calls `app.dock.setIcon`.

@@ -1,12 +1,12 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex-speech: the lid observer.
+// atelier-speech: the lid observer.
 //
 // While the helper runs it watches IOPMrootDomain for clamshell changes and
-// prints {"type":"lid","closed":true|false} on stdout. Apex pauses a meeting
+// prints {"type":"lid","closed":true|false} on stdout. Atelier pauses a meeting
 // recording when the lid closes and resumes it on open (src/main/native/lid.ts).
 // The line only reports changes: the lid's state at launch is remembered but
 // not printed, so a recording started with the lid already shut (clamshell
@@ -31,7 +31,7 @@ final class LidObserver: @unchecked Sendable {
   /// kClamshellStateBit in the message argument.
   static let clamshellStateBit: UInt = 1 << 0
 
-  private let queue = DispatchQueue(label: "com.sennechin.apex.speech.lid")
+  private let queue = DispatchQueue(label: "com.sennechin.atelier.speech.lid")
   private var port: IONotificationPortRef?
   private var notifier: io_object_t = 0
   private var rootDomain: io_service_t = 0
@@ -39,7 +39,7 @@ final class LidObserver: @unchecked Sendable {
   private var lastClosed: Bool?
 
   /// Starts watching; a second call does nothing. Never fails loudly: without
-  /// the notification Apex still pauses on sleep through powerMonitor.
+  /// the notification Atelier still pauses on sleep through powerMonitor.
   func start(emit: @escaping ([String: Any]) -> Void) {
     queue.sync {
       guard port == nil else { return }

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -16,7 +16,7 @@ import { readDefaultValue } from '../system/registry'
 // length (bytes, not characters: the library this replaces got that wrong).
 // A host's messages are capped at 1 MB, as in Chrome; the extension's own at
 // Chrome's 64 MB message limit. A host lives exactly as long as its port.
-// Hosts are found in Apex's own NativeMessagingHosts folder first, then
+// Hosts are found in Atelier's own NativeMessagingHosts folder first, then
 // (read-only) in Chrome's: its folders, or on Windows its registry keys.
 // They start the way Chrome starts them: the caller's origin and
 // --parent-window as arguments, the host's own folder as the working
@@ -114,7 +114,7 @@ export const CHROME_HOST_KEYS = ['HKEY_CURRENT_USER\\Software\\Google\\Chrome\\N
 const REGISTRY_KEY = /^HKEY_(?:CURRENT_USER|LOCAL_MACHINE)\\/
 
 /**
- * Where host manifests live, in the order they are read: Apex's own folder,
+ * Where host manifests live, in the order they are read: Atelier's own folder,
  * then Chrome's (read-only lookup). On Windows Chrome's are registry
  * keys, each naming a manifest file in a subkey per host.
  */
@@ -234,7 +234,7 @@ export class NativePort extends EventEmitter<NativePortEvents> {
     return this.#closed
   }
 
-  /** How the host ended by itself; null while it runs, or when Apex ended it. */
+  /** How the host ended by itself; null while it runs, or when Atelier ended it. */
   get exit(): NativeExit | null {
     return this.#exit
   }

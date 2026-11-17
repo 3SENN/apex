@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { useEffect, useRef, useState, type RefObject } from 'react'
 import type { OverlayResult, SurfaceAnchor, SurfaceId, SurfaceProps } from '@shared/overlay'
-import { apex } from '../api'
+import { atelier } from '../api'
 
 // The chrome's way to open overlay surfaces. While the overlay host isn't
 // available it rejects every open, so callers keep their fallbacks (inline dropdown,
@@ -17,7 +17,7 @@ let listening = false
 function listen(): void {
   if (listening) return
   listening = true
-  apex.overlay.onResult((r) => {
+  atelier.overlay.onResult((r) => {
     waiting.get(r.instanceId)?.(r)
     waiting.delete(r.instanceId)
   })
@@ -37,7 +37,7 @@ function resolveAnchor(anchor: RefObject<HTMLElement | null> | SurfaceAnchor): S
 /** Opens a surface and resolves with its result (a value or a dismissal). */
 export async function openSurface<S extends SurfaceId>(surface: S, anchor: SurfaceAnchor, props: SurfaceProps<S>): Promise<OverlayResult> {
   listen()
-  const { instanceId } = await apex.overlay.open(surface, anchor, props)
+  const { instanceId } = await atelier.overlay.open(surface, anchor, props)
   return new Promise((resolve) => waiting.set(instanceId, resolve))
 }
 
@@ -63,12 +63,12 @@ export function useSurface<S extends SurfaceId>(surface: S, options: UseSurfaceO
     let id: string | null = null
     let cancelled = false
     listen()
-    apex.overlay
+    atelier.overlay
       .open(surface, anchor, options.props)
       .then((opened) => {
         id = opened.instanceId
         if (cancelled) {
-          apex.overlay.close(id)
+          atelier.overlay.close(id)
           return
         }
         setInstanceId(id)
@@ -84,7 +84,7 @@ export function useSurface<S extends SurfaceId>(surface: S, options: UseSurfaceO
       cancelled = true
       if (id) {
         waiting.delete(id)
-        apex.overlay.close(id)
+        atelier.overlay.close(id)
       }
       setInstanceId(null)
     }
@@ -92,7 +92,7 @@ export function useSurface<S extends SurfaceId>(surface: S, options: UseSurfaceO
   }, [surface, options.open])
 
   useEffect(() => {
-    if (instanceId) apex.overlay.update(instanceId, options.props)
+    if (instanceId) atelier.overlay.update(instanceId, options.props)
   }, [instanceId, options.props])
 
   useEffect(() => {
@@ -100,7 +100,7 @@ export function useSurface<S extends SurfaceId>(surface: S, options: UseSurfaceO
     if (!options.prewarmOnHover || 'kind' in anchor) return
     const el = anchor.current
     if (!el) return
-    const warm = (): void => apex.overlay.prewarm(surface)
+    const warm = (): void => atelier.overlay.prewarm(surface)
     el.addEventListener('pointerenter', warm, { once: true })
     return () => el.removeEventListener('pointerenter', warm)
   }, [surface, options.prewarmOnHover, options.anchor])

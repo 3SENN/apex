@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@
 // hands judgment calls over many items (labeling, sorting, filtering,
 // checking emails, products, search results, rows) to the decision model:
 // one System One request per item, a few at a time, read with the same
-// cutoffs as Apex's own decisions, and "unsure" where the model is not sure,
+// cutoffs as Atelier's own decisions, and "unsure" where the model is not sure,
 // for the companion to look at itself. Offered only while a decision model is
 // set up and "Labeling and sorting" is on, never in a private chat. There is
 // no Claude fallback: the companion is the Claude engine and judges the items

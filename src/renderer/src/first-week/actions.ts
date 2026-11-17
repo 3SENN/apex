@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import type { FirstWeekItem, FirstWeekView } from '@shared/firstWeek'
 import { chatUrl, companionUrl } from '@shared/url'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { toast } from '../ui'
 import { t } from '@shared/i18n/core'
 
@@ -17,7 +17,7 @@ export async function runItem(item: FirstWeekItem, companionId: string | null, u
   try {
     switch (item.action.kind) {
       case 'chat': {
-        const chatId = await apex.agent.start(item.action.prompt, companionId ? { companionId } : undefined)
+        const chatId = await atelier.agent.start(item.action.prompt, companionId ? { companionId } : undefined)
         update(await call('firstWeek', 'setDone', item.id, true))
         await call('pages', 'open', chatUrl(chatId))
         return
@@ -30,8 +30,8 @@ export async function runItem(item: FirstWeekItem, companionId: string | null, u
         return
       case 'web-search':
         // NT-01: a new tab whose composer searches the web; the first search ticks the item.
-        await apex.settings.set({ newTabMode: 'web' })
-        await apex.tabs.create()
+        await atelier.settings.set({ newTabMode: 'web' })
+        await atelier.tabs.create()
         return
       case 'default-browser':
         update(await call('firstWeek', 'makeDefaultBrowser'))

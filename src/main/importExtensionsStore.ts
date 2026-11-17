@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -24,7 +24,7 @@ import { browserExtensions, confirmList, extensionName, installBatch, installOne
 import { log } from './log'
 
 // The Electron side of ST-46 X and ST-40 R: packages come from the Chrome
-// Web Store's own download endpoint through the Apex profile's session (its
+// Web Store's own download endpoint through the Atelier profile's session (its
 // proxy and request rules apply), are verified as the store's (the
 // publisher signature and the id) before anything is unpacked, and install
 // through the extensions host's installPackage, the same path the store
@@ -51,7 +51,7 @@ function host() {
 /** Reads a verified package's manifest from a scratch copy, then removes it. */
 export function inspectPackage(id: string, crx: Buffer): PackageFacts {
   const checked = verifyCrx(crx, { expectedId: id, requirePublisher: true })
-  const dir = mkdtempSync(join(tmpdir(), 'apex-ext-'))
+  const dir = mkdtempSync(join(tmpdir(), 'atelier-ext-'))
   try {
     unpackArchive(checked.archive, dir)
     const manifest = readManifest(dir)
@@ -93,7 +93,7 @@ async function confirmBatch(win: WindowContext | null, items: readonly BatchItem
   }
 }
 
-/** The StoreInstaller for one Apex profile and the window that asked. */
+/** The StoreInstaller for one Atelier profile and the window that asked. */
 export function storeInstaller(opts: { profileId: string; win: WindowContext | null; offline: boolean; chromeVersion?: string }): StoreInstaller {
   const { profileId, win, offline } = opts
   const chromeVersion = opts.chromeVersion ?? process.versions.chrome ?? '0'
@@ -147,8 +147,8 @@ export function extensionImportServices(context: () => AppContext): {
   }
   return {
     extensions: async (browserId, profileId) => {
-      const { profileId: apexProfile } = asking()
-      const installed = new Set(currentExtensions()?.host.list(apexProfile).map((e) => e.id) ?? [])
+      const { profileId: atelierProfile } = asking()
+      const installed = new Set(currentExtensions()?.host.list(atelierProfile).map((e) => e.id) ?? [])
       return browserExtensions(process.platform, app.getPath('home'), process.env, browserId, profileId, installed)
     },
     installExtensions: (request) =>

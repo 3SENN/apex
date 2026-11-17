@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 /* The reader (RD-02, RD-05, RD-06): a calm column of type over the tab's
-   pane. Its colours come from Apex's tokens: Light and Dark pin the
+   pane. Its colours come from Atelier's tokens: Light and Dark pin the
    color-scheme those tokens resolve against, Automatic follows the app, and
    Sepia is the reader's own warm paper (contrast checked to 4.5:1 for text). */
 
@@ -504,11 +504,11 @@
 
 /* ---- read aloud ---- */
 
-::highlight(apex-reader-word) {
+::highlight(atelier-reader-word) {
   background-color: var(--reader-word);
 }
 
-::highlight(apex-reader-line) {
+::highlight(atelier-reader-line) {
   background-color: var(--reader-line);
 }
 
@@ -576,10 +576,10 @@ p.reader__status {
    width), so measuring it changes nothing; a pill too narrow for the host
    leaves the reader button out (View › Reader and ⌥⌘R still work). */
 .toolbar__center {
-  container: apex-address / inline-size;
+  container: atelier-address / inline-size;
 }
 
-@container apex-address (max-width: 260px) {
+@container atelier-address (max-width: 260px) {
   .pill__reader {
     display: none;
   }

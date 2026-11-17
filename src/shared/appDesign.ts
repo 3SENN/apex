@@ -1,14 +1,14 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // How an app a companion builds should look (APP-UI): the notes build_app
-// carries, and the design check its result reports. Apex serves every app
-// with Apex UI (src/kit/ui.css: the browser's tokens and ax-* components),
-// so an app built with it looks like the rest of Apex. Its ideas draw on
+// carries, and the design check its result reports. Atelier serves every app
+// with Atelier UI (src/kit/ui.css: the browser's tokens and ax-* components),
+// so an app built with it looks like the rest of Atelier. Its ideas draw on
 // public interface guidelines (credited
-// in docs/apps.md › Apex UI).
+// in docs/apps.md › Atelier UI).
 
 import { BRAND_NAME } from './branding'
 /** The rules both kinds of app share: the tokens, the components, how it should feel and what to leave out. */
@@ -18,14 +18,14 @@ const APP_DESIGN_RULES = `- Tokens (CSS variables): page var(--bg-page), a raise
 - Numbers: Intl.NumberFormat and Intl.DateTimeFormat in the person's locale, tabular figures, inputmode="decimal" for amounts.
 - Leave out: gradients, glows and frosted glass; emoji as icons or in headings (draw a small inline SVG instead); a card around every item, or cards in cards; coloured stripes along a box's edge; all-caps labels; a huge number over a tiny label; centring everything; animation that's only decoration.`
 
-/** What build_app tells the model about design: Apex puts Apex UI in the app, the rules, and the look at the draft. */
+/** What build_app tells the model about design: Atelier puts Atelier UI in the app, the rules, and the look at the draft. */
 export const APP_DESIGN_NOTES = `Design: ${BRAND_NAME} puts its own interface kit, ${BRAND_NAME} UI, in every app, so build with it and the app looks like the rest of ${BRAND_NAME} (read_skill "app-design" has examples of every part).
 ${APP_DESIGN_RULES}
 The result shows the draft in light and dark and lists design problems it found: look, fix what's off, then tell the person.`
 
-/** The build guide's design part for pack apps, which link Apex UI themselves. */
+/** The build guide's design part for pack apps, which link Atelier UI themselves. */
 export const PACK_DESIGN_NOTES = `DESIGN (every app looks like ${BRAND_NAME}: ${BRAND_NAME} UI)
-- Link ${BRAND_NAME} UI first in each page's <head>, before your own CSS: <link rel="stylesheet" href="/__apex/kit/1/apex-kit/ui.css"> (the app needs kit: 1; the starters do). In a canvas or three.js scene take colours from it: getComputedStyle(document.body).backgroundColor for the page, a hidden probe element with color: var(--accent) for a token; read them again when prefers-color-scheme changes.
+- Link ${BRAND_NAME} UI first in each page's <head>, before your own CSS: <link rel="stylesheet" href="/__atelier/kit/1/atelier-kit/ui.css"> (the app needs kit: 1; the starters do). In a canvas or three.js scene take colours from it: getComputedStyle(document.body).backgroundColor for the page, a hidden probe element with color: var(--accent) for a token; read them again when prefers-color-scheme changes.
 ${APP_DESIGN_RULES}
 - Look at test_pack's frames before propose_pack: fix anything cut off, cramped or low in contrast.`
 

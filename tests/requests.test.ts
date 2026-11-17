@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -142,7 +142,7 @@ describe('after a restart', () => {
 describe('the auto-approval countdown (CH-42)', () => {
   function session(rule: 'site' | 'chat') {
     const log: AgentEvent[] = []
-    const sites = new SiteRulesStore(join(mkdtempSync(join(tmpdir(), 'apex-cd-')), 'rules.json'), { defaultAccess: () => 'allow' })
+    const sites = new SiteRulesStore(join(mkdtempSync(join(tmpdir(), 'atelier-cd-')), 'rules.json'), { defaultAccess: () => 'allow' })
     if (rule === 'site') sites.allowAction('https://shop.example', 'purchase')
     const grants = rule === 'chat' ? [{ origin: 'https://shop.example', action: 'purchase' as const, at: 1 }] : []
     const host: SessionAgentToolsHost = {

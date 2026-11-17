@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -12,9 +12,9 @@ import { assert, docWith, sleep, waitFor } from '../smokeKit'
 import { waitForPage } from '../smokeLoad'
 import type { Tab } from '../tabs'
 
-// The media hub's smoke checks (MD-01 to MD-03; APEX_SMOKE_ONLY=MEDIA runs
+// The media hub's smoke checks (MD-01 to MD-03; ATELIER_SMOKE_ONLY=MEDIA runs
 // only these). A local looping video (tests/fixtures/media/loop.webm, a test
-// pattern with a tone that Apex generated) plays muted on fixture pages, so
+// pattern with a tone that Atelier generated) plays muted on fixture pages, so
 // no check needs a gesture or the network.
 
 const ART = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=='
@@ -26,7 +26,7 @@ const session = (src: string): string => `<!doctype html><title>Session loop</ti
 <video id="v" src="${src}" muted autoplay loop playsinline width="320" height="180"></video>
 <script>
   let n = 0
-  navigator.mediaSession.metadata = new MediaMetadata({ title: 'Apex loop', artist: 'Smoke fixture', artwork: [{ src: '${ART}', sizes: '96x96', type: 'image/png' }] })
+  navigator.mediaSession.metadata = new MediaMetadata({ title: 'Atelier loop', artist: 'Smoke fixture', artwork: [{ src: '${ART}', sizes: '96x96', type: 'image/png' }] })
   navigator.mediaSession.setActionHandler('nexttrack', () => { n += 1; document.title = 'next ' + n })
 </script></body>`
 
@@ -73,7 +73,7 @@ const sources: SmokeCheck = {
       await sleep(600)
       const state = await ctx.chrome.invoke<MediaHubState>('media', 'state')
       assert(!state.sources.some((s) => s.tabId === quiet.id), 'muted autoplay without a Media Session is not a source')
-      const s = await sourceOf(ctx, loud.id, (x) => x.canNext && x.title === 'Apex loop', 'the Media Session source with next')
+      const s = await sourceOf(ctx, loud.id, (x) => x.canNext && x.title === 'Atelier loop', 'the Media Session source with next')
       assert(s.artist === 'Smoke fixture' && s.artwork?.startsWith('data:image/png') && s.video && s.playing, `title, artist, artwork and state come from the page (got ${JSON.stringify(s)})`)
       assert(s.visible && s.active, 'the showing tab is visible and holds media focus')
 
@@ -97,7 +97,7 @@ const sources: SmokeCheck = {
       await ctx.chrome.js(`document.querySelector('.np-button button').click(); return true`)
       const doc = await docWith(ctx.chrome, '.np-pop', 5000, 'the now-playing popover')
       const text = await doc.js<string>(`return document.querySelector('.np-pop')?.textContent ?? ''`)
-      assert(text.includes('Apex loop') && text.includes('Smoke fixture'), `the popover lists the source (got ${text.slice(0, 120)})`)
+      assert(text.includes('Atelier loop') && text.includes('Smoke fixture'), `the popover lists the source (got ${text.slice(0, 120)})`)
       // The overlay frame placed it, at its full width (the frame sizes the overlay view to it).
       const placed = await doc.until<{ w: number; h: number }>(
         `const el = document.querySelector('.np-pop'); if (!el || !el.closest('.ov-frame[data-placed]')) return false
@@ -149,7 +149,7 @@ const shots: ShotSpec[] = [
       })
       const tab = await mediaTab(ctx, '/md/shot', session('/md/loop.webm'))
       try {
-        await sourceOf(ctx, tab.id, (x) => x.title === 'Apex loop', 'the source for the shot')
+        await sourceOf(ctx, tab.id, (x) => x.title === 'Atelier loop', 'the source for the shot')
         await ctx.chrome.until<boolean>(`return Boolean(document.querySelector('.np-button button'))`, 4000, 'the now-playing button')
         await ctx.chrome.js(`document.querySelector('.np-button button').click(); return true`)
         await docWith(ctx.chrome, '.np-pop', 5000, 'the now-playing popover')

@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex-speech.exe: one capture session (protocol v2 `start` … `stopped`).
+// atelier-speech.exe: one capture session (protocol v2 `start` … `stopped`).
 //
 //   microphone: WinRT dictation (MicRecognizer) for the words; a WASAPI
 //               capture of the same default microphone for levels and the
@@ -14,7 +14,7 @@
 // Pausing stops the clock and drops audio, so segment times and the
 // recording both exclude pauses. A system source that can't start leaves
 // the microphone running alone, with a non-fatal error that says so.
-namespace Apex.Speech;
+namespace Atelier.Speech;
 
 internal sealed class Session : IAsyncDisposable
 {

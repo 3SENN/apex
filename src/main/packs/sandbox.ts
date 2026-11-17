@@ -1,15 +1,15 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The apex-pack:// sandbox (docs/packs.md › The sandbox and the bridge). Each
-// pack runs in its own persistent partition, persist:apex-pack-<id>, which
-// only ever serves that pack's own files, with Apex's tool host under
-// __apex/. Defence in depth, because pack code may come from anyone:
+// The atelier-pack:// sandbox (docs/packs.md › The sandbox and the bridge). Each
+// pack runs in its own persistent partition, persist:atelier-pack-<id>, which
+// only ever serves that pack's own files, with Atelier's tool host under
+// __atelier/. Defence in depth, because pack code may come from anyone:
 //   - the CSP allows the pack's own script files (never inline code, so
 //     nothing that wasn't in the review can run), styles, images and fonts;
-//     nothing reaches the network (apex.fetch goes through main);
+//     nothing reaches the network (atelier.fetch goes through main);
 //   - the session's proxy is a dead end and WebRTC is off, so sockets that
 //     skip the request layer (preconnect, STUN and TURN) get nowhere;
 //   - the session refuses http, https, ws and file itself, and the webRequest
@@ -199,12 +199,12 @@ export function toolHostScript(modules: Array<{ name: string; module: string }>)
   const imports = modules.map((m, i) => `import * as t${i} from ${JSON.stringify(`/${m.module}`)}`).join('\n')
   const table = modules.map((m, i) => `${JSON.stringify(m.name)}: t${i}`).join(',\n  ')
   return `${imports}
-window.addEventListener('error', (e) => window.apex.log('Uncaught: ' + (e.message || e.error)))
-window.addEventListener('unhandledrejection', (e) => window.apex.log('Unhandled rejection: ' + (e.reason && e.reason.message ? e.reason.message : String(e.reason))))
+window.addEventListener('error', (e) => window.atelier.log('Uncaught: ' + (e.message || e.error)))
+window.addEventListener('unhandledrejection', (e) => window.atelier.log('Unhandled rejection: ' + (e.reason && e.reason.message ? e.reason.message : String(e.reason))))
 const tools = {
   ${table}
 }
-window.apex.tools.serve(async (name, input, ctx) => {
+window.atelier.tools.serve(async (name, input, ctx) => {
   // A service call names svc:<service>#<method>: the module exports one function per method.
   const hash = name.indexOf('#')
   const mod = tools[hash > 0 ? name.slice(0, hash) : name]
@@ -235,7 +235,7 @@ export interface PackFileSource {
   kit?(path: string): string | null
   /** The import map a kit app of that major gets, as JSON text; null when the kit isn't built. */
   kitImportMap?(major: number): string | null
-  /** One of the person's own files a pack keeps (apex.files.own), on disk; null when it has none at that path. */
+  /** One of the person's own files a pack keeps (atelier.files.own), on disk; null when it has none at that path. */
   own?(packId: string, path: string, mode: PackMode): string | null
   /** One of a slot's files (docs/apps.md › Asset slots): from the chosen asset pack, else the app's own layout; null when neither has it. */
   asset?(packId: string, slot: string, path: string, mode: PackMode): { data: Buffer | null; disk: string | null } | null
@@ -341,7 +341,7 @@ export function resolveAppPath(app: Pick<PackApp, 'root' | 'entry'>, path: strin
   return at
 }
 
-/** What an apex-pack request inside pack `packId`'s partition gets back. Anything outside that one pack is a 404. */
+/** What an atelier-pack request inside pack `packId`'s partition gets back. Anything outside that one pack is a 404. */
 export async function servePack(source: PackFileSource, packId: string, url: string, mode: PackMode = 'installed', rangeHeader: string | null = null, accept: string | null = null): Promise<Response> {
   const target = parsePackUrl(url)
   const notFound = (): Response => new Response('Not found', { status: 404, headers: { 'content-type': 'text/plain; charset=utf-8' } })
@@ -436,7 +436,7 @@ export function createPackSandbox(deps: {
   installSession: () => ((session: Session, info: SessionInfo) => void) | null
 }): PackSandbox {
   const sessions = new Map<string, SessionEntry>()
-  const refuseNetwork = (): Response => new Response('Packs reach the network only through apex.fetch, or an app’s own hosts.', { status: 403 })
+  const refuseNetwork = (): Response => new Response('Packs reach the network only through atelier.fetch, or an app’s own hosts.', { status: 403 })
 
   /** The session's way out: with no hosts, every scheme refuses and every socket goes to a proxy that isn't there; with hosts, those (and only those) connect. */
   const applyNetwork = (entry: SessionEntry): void => {
@@ -465,7 +465,7 @@ export function createPackSandbox(deps: {
     if (existing) return existing.ses
     if (!parsePackUrl(packUrl(packId))) throw new Error('This pack isn’t installed.')
     // A test run keeps nothing: its partition lives in memory only.
-    const partition = mode === 'test' ? `apex-pack-test-${packId}` : `${PACK_PARTITION_PREFIX}${packId}`
+    const partition = mode === 'test' ? `atelier-pack-test-${packId}` : `${PACK_PARTITION_PREFIX}${packId}`
     const ses = electronSession.fromPartition(partition)
     ses.protocol.handle(PACK_SCHEME, (request) => servePack(deps.source, packId, request.url, mode, request.headers.get('range'), request.headers.get('accept')))
     try {
@@ -505,7 +505,7 @@ export function createPackSandbox(deps: {
       item.cancel()
     })
     try {
-      ses.registerPreloadScript({ id: 'apex-pack-bridge', type: 'frame', filePath: deps.preload })
+      ses.registerPreloadScript({ id: 'atelier-pack-bridge', type: 'frame', filePath: deps.preload })
     } catch (err) {
       log.warn('packs', 'The pack bridge preload could not be registered', { error: err instanceof Error ? err.message : String(err) })
     }

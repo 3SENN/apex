@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { useCallback, useEffect, useRef, useState, type RefObject } from 'react'
 import type { MediaHubState } from '@shared/media'
-import { apex } from '../../api'
+import { atelier } from '../../api'
 import { useLatest } from '../../ui'
 import { anchorFromElement } from '../../overlay/useSurface'
 
@@ -31,7 +31,7 @@ export function useNowPlayingPopover(anchor: RefObject<HTMLElement | null>, stat
     generation.current++
     instance.current = null
     setOpen(false)
-    if (id) apex.overlay.close(id)
+    if (id) atelier.overlay.close(id)
   }, [])
 
   const show = useCallback(async (): Promise<void> => {
@@ -41,8 +41,8 @@ export function useNowPlayingPopover(anchor: RefObject<HTMLElement | null>, stat
     const gen = ++generation.current
     setOpen(true)
     try {
-      const { instanceId } = await apex.overlay.open('now-playing', anchorFromElement(el), { state: latest.current })
-      if (gen !== generation.current) apex.overlay.close(instanceId)
+      const { instanceId } = await atelier.overlay.open('now-playing', anchorFromElement(el), { state: latest.current })
+      if (gen !== generation.current) atelier.overlay.close(instanceId)
       else instance.current = instanceId
     } catch {
       setOpen(false)
@@ -54,7 +54,7 @@ export function useNowPlayingPopover(anchor: RefObject<HTMLElement | null>, stat
   // Esc, an outside click or going to a tab closes it from the overlay side.
   useEffect(
     () =>
-      apex.overlay.onResult((r) => {
+      atelier.overlay.onResult((r) => {
         if (r.instanceId !== instance.current) return
         instance.current = null
         setOpen(false)
@@ -65,7 +65,7 @@ export function useNowPlayingPopover(anchor: RefObject<HTMLElement | null>, stat
   useEffect(() => {
     if (!instance.current) return
     if (state.sources.length === 0) hide()
-    else apex.overlay.update(instance.current, { state })
+    else atelier.overlay.update(instance.current, { state })
   }, [state])
 
   useEffect(() => () => hide(), [])

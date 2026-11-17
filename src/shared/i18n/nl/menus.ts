@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -207,7 +207,7 @@ export const menus = {
   'menus.passkey.title': 'Kies een toegangssleutel voor {host}',
   'menus.passkey.body': 'Meer dan één account heeft een toegangssleutel op deze Mac. Kies waarmee je inlogt.',
   'menus.passkey.account': 'Account {n}',
-  'menus.pageAction.notOnApexPage': 'Dat werkt alleen op webpagina’s.',
+  'menus.pageAction.notOnAtelierPage': 'Dat werkt alleen op webpagina’s.',
   'menus.pageAction.showInFolder': 'Toon in map',
   'menus.pageAction.linkCopied': 'Link gekopieerd',
   'menus.pageAction.markdownLinkCopied': 'Markdown-link gekopieerd',

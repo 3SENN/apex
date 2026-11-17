@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -200,7 +200,7 @@ describe('service merging', () => {
 })
 
 describe('smoke groups and domains', () => {
-  it('select groups from APEX_SMOKE_ONLY', () => {
+  it('select groups from ATELIER_SMOKE_ONLY', () => {
     const groups = [{ group: 'BROWSER' as const, checks: [], shots: [] }, { group: 'VOICE-PASSWORDS' as const, checks: [], shots: [] }]
     expect(selectedGroups(undefined, groups).map((g) => g.group)).toEqual(['BROWSER', 'VOICE-PASSWORDS'])
     expect(selectedGroups('voice-passwords', groups).map((g) => g.group)).toEqual(['VOICE-PASSWORDS'])

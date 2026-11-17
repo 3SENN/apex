@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -18,14 +18,14 @@ import type { ShotSpec, SmokeCheck, SmokeContext } from './types'
 import { checks as chromeSurfaceChecks } from './chromeSurface'
 import { checks as signInModeChecks } from './signInIdentity'
 
-// Browser identity (sign-in compatibility): what a site sees of Apex, read
+// Browser identity (sign-in compatibility): what a site sees of Atelier, read
 // from a local fixture page the way a site would: navigator and its client
 // hints in the page, an iframe, a dedicated worker, a service worker, a popup
 // and a second profile, the request headers the server receives, and whether
 // a DevTools client has the Runtime domain on (the console.debug probe: an
 // Error whose `stack` getter only runs when a CDP client serializes it).
 // Everything runs on the smoke server; nothing leaves the machine.
-// APEX_SMOKE_IDENTITY_OUT=<file> writes the full measured report as JSON.
+// ATELIER_SMOKE_IDENTITY_OUT=<file> writes the full measured report as JSON.
 
 const HINT_HEADERS = [
   'sec-ch-ua',
@@ -133,7 +133,7 @@ async function readSignals(high: string[]): Promise<Signals> {
     alertNative: native(w.alert),
     getUserMediaNative: native(nav.mediaDevices?.getUserMedia),
     nodeGlobals: ['process', 'require', 'module', 'Buffer', 'global', 'electron', '__dirname'].filter((k) => k in w),
-    appGlobals: Object.getOwnPropertyNames(w).filter((k) => /apex|electron/i.test(k)),
+    appGlobals: Object.getOwnPropertyNames(w).filter((k) => /atelier|electron/i.test(k)),
     notification,
     outer: [w.outerWidth, w.outerHeight],
     inner: [w.innerWidth, w.innerHeight],
@@ -366,7 +366,7 @@ async function measureAll(ctx: SmokeContext): Promise<IdentityReport> {
 }
 
 function write(report: IdentityReport): void {
-  const out = process.env.APEX_SMOKE_IDENTITY_OUT
+  const out = process.env.ATELIER_SMOKE_IDENTITY_OUT
   if (out) writeFileSync(out, JSON.stringify(report, null, 2))
 }
 
@@ -390,7 +390,7 @@ export function identityProblems(report: IdentityReport): string[] {
       return
     }
     expect(s.ua === ua, `${where}: navigator.userAgent ${s.ua}`)
-    expect(!/electron|apex/i.test(JSON.stringify([s.ua, s.brands, s.high])), `${where}: an Electron or Apex token shows`)
+    expect(!/electron|atelier/i.test(JSON.stringify([s.ua, s.brands, s.high])), `${where}: an Electron or Atelier token shows`)
     expect(same(s.brands, id.brands), `${where}: brands ${JSON.stringify(s.brands)}`)
     expect(s.mobile === false && s.uaPlatform === id.platform, `${where}: mobile/platform ${s.mobile}/${s.uaPlatform}`)
     const h = s.high ?? {}
@@ -411,7 +411,7 @@ export function identityProblems(report: IdentityReport): string[] {
 
   const low = lowEntropyHints(id)
   // Following the system, tabs hold a language override only where Chromium's own navigator.languages
-  // would disagree with the header (on Linux it ends with glib's 'c'): measured here, not taken from Apex.
+  // would disagree with the header (on Linux it ends with glib's 'c'): measured here, not taken from Atelier.
   const systemHeader = report.contexts.tab?.requests.document?.['accept-language']
   const systemHeld = Boolean(report.ownLanguages && systemHeader !== undefined && acceptLanguageHeader(report.ownLanguages) !== systemHeader)
   for (const [name, c] of Object.entries(report.contexts)) {

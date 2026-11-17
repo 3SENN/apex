@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { useSyncExternalStore } from 'react'
 import type { Connector } from '@shared/services'
-import { apex, call } from '../api'
+import { atelier, call } from '../api'
 import { needsAttention } from './logic/directory'
 
 // Every connector as the chrome last heard them, kept live from the
@@ -24,7 +24,7 @@ function fill(next: readonly Connector[]): void {
 function start(): void {
   if (started) return
   started = true
-  apex.onAppEvent((e) => {
+  atelier.onAppEvent((e) => {
     if (e.type === 'connectors') fill(e.items)
   })
   void call('connectors', 'list').then(fill, () => undefined)

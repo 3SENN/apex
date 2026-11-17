@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -25,7 +25,7 @@ export interface I18nDeps {
   settings: I18nSettings
   /** Rebuilds the native menus in the new language. */
   menus: { invalidate(): void }
-  /** userData: where the APEX_PSEUDO_LOCALE marker lives. Without it the variable only affects main. */
+  /** userData: where the ATELIER_PSEUDO_LOCALE marker lives. Without it the variable only affects main. */
   dataDir?: string
   /** The system's preferred languages (tests pass a list). */
   systemLanguages?: () => readonly string[]
@@ -43,7 +43,7 @@ export interface I18nHandle {
 
 const PSEUDO_MARKER = 'pseudo-locale-env.json'
 
-// APEX_PSEUDO_LOCALE=1 turns the pseudo-locale flag on for this launch so the chrome shows
+// ATELIER_PSEUDO_LOCALE=1 turns the pseudo-locale flag on for this launch so the chrome shows
 // en-XA too; the marker keeps the value it replaced, and the next launch
 // without the variable puts it back.
 function syncPseudoEnv(deps: I18nDeps, env: Record<string, string | undefined>): void {
@@ -51,11 +51,11 @@ function syncPseudoEnv(deps: I18nDeps, env: Record<string, string | undefined>):
   const marker = join(deps.dataDir, PSEUDO_MARKER)
   const flags = deps.settings.get().flags ?? {}
   try {
-    if (env.APEX_PSEUDO_LOCALE === '1') {
+    if (env.ATELIER_PSEUDO_LOCALE === '1') {
       if (flags[PSEUDO_FLAG] === 'on') return
       writeFileSync(marker, JSON.stringify({ previous: flags[PSEUDO_FLAG] ?? null }))
       deps.settings.update({ flags: { ...flags, [PSEUDO_FLAG]: 'on' } })
-      log.info('i18n', 'APEX_PSEUDO_LOCALE=1: the pseudo-locale is on for this launch')
+      log.info('i18n', 'ATELIER_PSEUDO_LOCALE=1: the pseudo-locale is on for this launch')
     } else if (existsSync(marker)) {
       const saved = JSON.parse(readFileSync(marker, 'utf8')) as { previous?: string | null }
       const next = { ...flags }
@@ -63,10 +63,10 @@ function syncPseudoEnv(deps: I18nDeps, env: Record<string, string | undefined>):
       else delete next[PSEUDO_FLAG]
       rmSync(marker, { force: true })
       deps.settings.update({ flags: next })
-      log.info('i18n', 'The pseudo-locale from APEX_PSEUDO_LOCALE is off again')
+      log.info('i18n', 'The pseudo-locale from ATELIER_PSEUDO_LOCALE is off again')
     }
   } catch (err) {
-    log.warn('i18n', 'Could not sync APEX_PSEUDO_LOCALE with the pseudo-locale flag', { error: err instanceof Error ? err.message : String(err) })
+    log.warn('i18n', 'Could not sync ATELIER_PSEUDO_LOCALE with the pseudo-locale flag', { error: err instanceof Error ? err.message : String(err) })
   }
 }
 
@@ -76,7 +76,7 @@ function inputsOf(settings: { appLanguage?: unknown; flags?: Record<string, stri
 
 export function setupI18n(deps: I18nDeps): I18nHandle {
   const env = deps.env ?? process.env
-  const forcePseudo = env.APEX_PSEUDO_LOCALE === '1' && !deps.dataDir
+  const forcePseudo = env.ATELIER_PSEUDO_LOCALE === '1' && !deps.dataDir
   const system = (): readonly string[] => (deps.smoke ? ['en-US'] : (deps.systemLanguages ?? systemLanguages)())
 
   setMissingKeyReporter((key, language) => log.warn('i18n', `No ${language} text for ${key} yet; showing English`))

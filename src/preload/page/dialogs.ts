@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,7 +10,7 @@ import { PAGE_LEAVE_INTENT, type PageLeaveIntentMessage } from '@shared/pageDial
 // Styled alert, confirm and prompt (OV-08): overrides installed
 // with contextBridge.executeInMainWorld, answered over PAGE.dialog with
 // sendSync, so the page blocks exactly as it would on a native dialog while
-// main shows Apex's own. The overrides are non-configurable, so a page can't
+// main shows Atelier's own. The overrides are non-configurable, so a page can't
 // delete them to reach a native box (tabs also run with disableDialogs, so
 // anything that slips past fails closed). Also reports the page's own
 // cross-document navigations for "Leave this page?".

@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Apex's own guides (ON-16): short pieces,
+// Atelier's own guides (ON-16): short pieces,
 // some with a curated bundle (built-in skills by name, routines installed
 // paused for review, suggested connectors from the connector directory). `useCases`
 // maps setup's "What would you like a hand with?" answers to guides.
@@ -161,7 +161,7 @@ export const GUIDES: readonly CatalogueGuide[] = [
     bundle: null,
     get body() { return mainT('firstRun.guide.skillsInAMinute.body') },
   },
-  // ── The further shelves of the gallery (Apex's own guides) ──
+  // ── The further shelves of the gallery (Atelier's own guides) ──
   {
     id: 'private-chats',
     get title() { return mainT('firstRun.guide.privateChats.title') },

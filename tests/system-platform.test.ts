@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -135,7 +135,7 @@ describe('Linux default browser, synchronous check and the default-browser servi
 describe('Windows AppUserModelId', () => {
   it('matches electron-builder\'s appId, so notifications group under the app', () => {
     // The branding's bundle id (scripts/branding.mjs), as electron-builder.config.mjs packages it.
-    const { appId } = builderConfig({ ...process.env, APEX_BUNDLE_ID: '' }, { platform: 'win32' }) as { appId: string }
+    const { appId } = builderConfig({ ...process.env, ATELIER_BUNDLE_ID: '' }, { platform: 'win32' }) as { appId: string }
     expect(APP_USER_MODEL_ID).toBe(appId)
   })
 })

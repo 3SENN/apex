@@ -1,17 +1,17 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Page errors, site safety and page notices (SS-07).
 // Pure rules shared by main and the chrome: which
-// failed-load codes become which Apex error page, the dangerous-host list, the
+// failed-load codes become which Atelier error page, the dangerous-host list, the
 // download risk classifier and the props of the page notice surface.
 import type { CertificateDetails, DownloadClassifyInput, DownloadDanger, PageErrorKind } from './sites'
 
 // ---- failed loads ----
 
-/** Chromium's net error names for the codes Apex shows (net/base/net_error_list.h). */
+/** Chromium's net error names for the codes Atelier shows (net/base/net_error_list.h). */
 const NET_ERRORS: Readonly<Record<number, string>> = {
   [-2]: 'ERR_FAILED',
   [-3]: 'ERR_ABORTED',
@@ -68,7 +68,7 @@ export function isCertificateError(code: number): boolean {
   return (code <= -200 && code > -300) || code === -501
 }
 
-/** Why Apex's own request mux cancelled a navigation, so its ERR_BLOCKED_BY_CLIENT gets the right page. */
+/** Why Atelier's own request mux cancelled a navigation, so its ERR_BLOCKED_BY_CLIENT gets the right page. */
 export type BlockReason = 'adblock' | 'dangerous' | 'lockdown' | 'content'
 
 const OFFLINE = new Set([-21, -106])
@@ -77,7 +77,7 @@ const REFUSED = new Set([-15, -100, -101, -102, -103, -104, -109])
 const TIMED_OUT = new Set([-7, -118])
 
 /**
- * Maps a main-frame did-fail-load code to Apex's error page. null means show
+ * Maps a main-frame did-fail-load code to Atelier's error page. null means show
  * nothing: ERR_ABORTED is a stop, a download or a replaced navigation. A name
  * or connection failure while the system is offline is the offline page,
  * since that is what the person can act on.
@@ -190,7 +190,7 @@ function doubleExtension(filename: string): boolean {
 }
 
 /**
- * How risky a download looks, from what Apex knows locally (there is no
+ * How risky a download looks, from what Atelier knows locally (there is no
  * Safe Browsing backend): files from a listed host, disguised names and
  * programs fetched over plain http are dangerous; other programs, installers
  * and macro documents are uncommon, so they wait for Keep or Discard.
@@ -210,7 +210,7 @@ export function classifyDownload(d: DownloadClassifyInput, isDangerousHost: (hos
 // ---- page notices (the popup-blocked surface, SS-07) ----
 
 /**
- * One tab-anchored notice surface serves every "Apex stopped something on
+ * One tab-anchored notice surface serves every "Atelier stopped something on
  * this page" message: blocked pop-ups, a blocked redirect from a frame,
  * blocked automatic downloads and an unresponsive page.
  */

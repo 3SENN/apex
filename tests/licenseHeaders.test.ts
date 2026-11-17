@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 
 // Every first-party source file carries the MPL-2.0 notice (CONTRIBUTING.md › Licence and copyright), except the
-// companion art's sources, which carry the Apex Companion Art notice instead (ART-LICENSE.md, section 1). That
+// companion art's sources, which carry the Atelier Companion Art notice instead (ART-LICENSE.md, section 1). That
 // includes the build's own sources: the NSIS script, the gyp file, YAML, property lists and the .NET project, each
 // in its own comment syntax. Test fixtures, generated assets and JSON (which has no comments) are data, not source,
 // and are left as they are.
@@ -22,7 +22,7 @@ const ART = ['scripts/companion-assets/', 'scripts/app-icons/art.mjs', 'scripts/
 const isArt = (file: string): boolean => ART.some((path) => (path.endsWith('/') ? file.startsWith(path) : file === path))
 
 const mpl = (head: string): boolean => head.includes('This Source Code Form is subject to the terms of the Mozilla Public') && head.includes('mozilla.org/MPL/2.0/')
-const art = (head: string): boolean => head.includes('Part of the Apex Companion Art: licensed under the Apex Companion Art License') && head.includes('(ART-LICENSE.md), not under the Mozilla Public License.')
+const art = (head: string): boolean => head.includes('Part of the Atelier Companion Art: licensed under the Atelier Companion Art License') && head.includes('(ART-LICENSE.md), not under the Mozilla Public License.')
 
 const sources = (): string[] =>
   execFileSync('git', ['ls-files'], { cwd: REPO, encoding: 'utf8' })
@@ -50,7 +50,7 @@ describe('licence notices', () => {
     for (const dir of ['scripts/companion-assets', 'scripts/app-icons', 'scripts/app-icons/pip', 'src/renderer/public/companion', 'branding/official']) {
       const notice = join(REPO, dir, 'LICENSE.md')
       expect(existsSync(notice), dir).toBe(true)
-      expect(readFileSync(notice, 'utf8'), dir).toMatch(/Apex Companion Art License/)
+      expect(readFileSync(notice, 'utf8'), dir).toMatch(/Atelier Companion Art License/)
     }
   })
 })

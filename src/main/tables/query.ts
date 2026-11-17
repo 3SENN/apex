@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -35,7 +35,7 @@ export function runRead(req: ReadRequest, maxRows: number = TABLE_LIMITS.queryRo
   const db = existsSync(req.dbPath) ? new DatabaseSync(req.dbPath, { readOnly: true }) : new DatabaseSync(':memory:')
   try {
     if (req.sharedPath && req.sharedPath !== req.dbPath && existsSync(req.sharedPath)) {
-      // Apex attaches it itself; the guard refuses ATTACH from the agent. A read-only main
+      // Atelier attaches it itself; the guard refuses ATTACH from the agent. A read-only main
       // connection opens attached files read-only too.
       db.prepare('ATTACH DATABASE ? AS shared').run(req.sharedPath)
     }

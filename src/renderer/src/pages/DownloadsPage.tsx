@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex://downloads: every download with its progress, speed and time left,
+// atelier://downloads: every download with its progress, speed and time left,
 // files waiting for Keep or Discard, and the finished ones to open,
 // reveal or drag out.
 import { useEffect, useState, type DragEvent, type MouseEvent, type ReactElement } from 'react'
@@ -66,7 +66,7 @@ export function DownloadsPage(): ReactElement {
     }
   }
 
-  const openSettings = (): void => void call('pages', 'open', 'apex://settings/downloads')
+  const openSettings = (): void => void call('pages', 'open', 'atelier://settings/downloads')
 
   const rowMenu = (d: DownloadInfo, e: MouseEvent): void => {
     const actions = downloadActions(downloadPhase(d))

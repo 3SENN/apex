@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -71,30 +71,30 @@ describe('originOf', () => {
 
 describe('parseInternalUrl', () => {
   it('reads pages, sections, ids and items', () => {
-    expect(parseInternalUrl('apex://chats')).toEqual({ page: 'chats', section: null, id: null, item: null })
-    expect(parseInternalUrl('apex://settings/appearance')).toEqual({ page: 'settings', section: 'appearance', id: null, item: null })
-    expect(parseInternalUrl('apex://chat/3f2a-91_x')).toEqual({ page: 'chat', section: null, id: '3f2a-91_x', item: null })
-    expect(parseInternalUrl('apex://routines/r-1')).toEqual({ page: 'routines', section: null, id: 'r-1', item: null })
-    expect(parseInternalUrl('apex://companion/companion-1/skills/s-9')).toEqual({ page: 'companion', section: 'skills', id: 'companion-1', item: 's-9' })
-    expect(parseInternalUrl('apex://companion/companion-1')).toEqual({ page: 'companion', section: null, id: 'companion-1', item: null })
-    expect(parseInternalUrl('apex://history/?q=1#x')).toEqual({ page: 'history', section: null, id: null, item: null })
+    expect(parseInternalUrl('atelier://chats')).toEqual({ page: 'chats', section: null, id: null, item: null })
+    expect(parseInternalUrl('atelier://settings/appearance')).toEqual({ page: 'settings', section: 'appearance', id: null, item: null })
+    expect(parseInternalUrl('atelier://chat/3f2a-91_x')).toEqual({ page: 'chat', section: null, id: '3f2a-91_x', item: null })
+    expect(parseInternalUrl('atelier://routines/r-1')).toEqual({ page: 'routines', section: null, id: 'r-1', item: null })
+    expect(parseInternalUrl('atelier://companion/companion-1/skills/s-9')).toEqual({ page: 'companion', section: 'skills', id: 'companion-1', item: 's-9' })
+    expect(parseInternalUrl('atelier://companion/companion-1')).toEqual({ page: 'companion', section: null, id: 'companion-1', item: null })
+    expect(parseInternalUrl('atelier://history/?q=1#x')).toEqual({ page: 'history', section: null, id: null, item: null })
   })
 
   it('refuses unsafe ids and sections, and pages that need an id', () => {
     for (const url of [
-      'apex://chat',
-      'apex://chat/',
-      'apex://chat/../../etc',
-      'apex://chat/a%2Fb',
-      'apex://chat/a/b',
-      'apex://companion//general',
-      'apex://companion/c1/General',
-      'apex://companion/c1/general/x/y',
-      'apex://settings/a/b',
-      'apex://settings/<script>',
-      'apex://constructor',
-      'apex://__proto__',
-      'https://apex.example/chat/1',
+      'atelier://chat',
+      'atelier://chat/',
+      'atelier://chat/../../etc',
+      'atelier://chat/a%2Fb',
+      'atelier://chat/a/b',
+      'atelier://companion//general',
+      'atelier://companion/c1/General',
+      'atelier://companion/c1/general/x/y',
+      'atelier://settings/a/b',
+      'atelier://settings/<script>',
+      'atelier://constructor',
+      'atelier://__proto__',
+      'https://atelier.example/chat/1',
     ]) {
       expect(parseInternalUrl(url), url).toBeNull()
     }
@@ -102,41 +102,41 @@ describe('parseInternalUrl', () => {
 
   it('builds chat and companion addresses that parse back', () => {
     expect(parseInternalUrl(chatUrl('abc'))?.id).toBe('abc')
-    expect(companionUrl('c1')).toBe('apex://companion/c1')
-    expect(companionUrl('c1', 'memory')).toBe('apex://companion/c1/memory')
+    expect(companionUrl('c1')).toBe('atelier://companion/c1')
+    expect(companionUrl('c1', 'memory')).toBe('atelier://companion/c1/memory')
     expect(parseInternalUrl(companionUrl('c1', 'files', 'f-2'))).toEqual({ page: 'companion', section: 'files', id: 'c1', item: 'f-2' })
   })
 })
 
 describe('resolveInternalUrl', () => {
   it('redirects library sections to their destinations', () => {
-    expect(resolveInternalUrl('apex://library')).toBe('apex://chats')
-    expect(resolveInternalUrl('apex://library/chats')).toBe('apex://chats')
-    expect(resolveInternalUrl('apex://library/routines')).toBe('apex://routines')
-    expect(resolveInternalUrl('apex://library/skills')).toBe('apex://skills')
-    expect(resolveInternalUrl('apex://library/connectors')).toBe('apex://connectors')
-    expect(resolveInternalUrl('apex://library/memory')).toBe('apex://settings/memory')
-    expect(resolveInternalUrl('apex://library/whatever')).toBe('apex://chats')
+    expect(resolveInternalUrl('atelier://library')).toBe('atelier://chats')
+    expect(resolveInternalUrl('atelier://library/chats')).toBe('atelier://chats')
+    expect(resolveInternalUrl('atelier://library/routines')).toBe('atelier://routines')
+    expect(resolveInternalUrl('atelier://library/skills')).toBe('atelier://skills')
+    expect(resolveInternalUrl('atelier://library/connectors')).toBe('atelier://connectors')
+    expect(resolveInternalUrl('atelier://library/memory')).toBe('atelier://settings/memory')
+    expect(resolveInternalUrl('atelier://library/whatever')).toBe('atelier://chats')
   })
 
-  it('lands apex://settings on its first page and follows renamed pages', () => {
-    expect(resolveInternalUrl('apex://settings')).toBe('apex://settings/you')
-    expect(resolveInternalUrl('apex://settings/agent')).toBe('apex://settings/model')
-    expect(resolveInternalUrl('apex://settings/connectors')).toBe('apex://connectors')
-    expect(resolveInternalUrl('apex://settings/appearance')).toBe('apex://settings/appearance')
+  it('lands atelier://settings on its first page and follows renamed pages', () => {
+    expect(resolveInternalUrl('atelier://settings')).toBe('atelier://settings/you')
+    expect(resolveInternalUrl('atelier://settings/agent')).toBe('atelier://settings/model')
+    expect(resolveInternalUrl('atelier://settings/connectors')).toBe('atelier://connectors')
+    expect(resolveInternalUrl('atelier://settings/appearance')).toBe('atelier://settings/appearance')
   })
 
   it('keeps other pages and refuses unknown ones', () => {
-    expect(resolveInternalUrl('apex://chat/abc')).toBe('apex://chat/abc')
-    expect(resolveInternalUrl('apex://nope')).toBeNull()
+    expect(resolveInternalUrl('atelier://chat/abc')).toBe('atelier://chat/abc')
+    expect(resolveInternalUrl('atelier://nope')).toBeNull()
   })
 
   it('opens a renamed page from its old address, as saved tabs and bookmarks have it', () => {
-    expect(resolveInternalUrl('apex://boosts')).toBe('apex://tweaks') // compatibility: apex://boosts before the rename
-    expect(resolveInternalUrl('apex://boosts?site=example.com')).toBe('apex://tweaks?site=example.com') // compatibility
-    expect(parseInternalUrl('apex://boosts')).toEqual({ page: 'tweaks', section: null, id: null, item: null }) // compatibility
-    expect(resolveInternalUrl('apex://boostsx')).toBeNull()
-    expect(resolveInternalUrl('apex://tweaks?site=example.com')).toBe('apex://tweaks?site=example.com')
+    expect(resolveInternalUrl('atelier://boosts')).toBe('atelier://tweaks') // compatibility: atelier://boosts before the rename
+    expect(resolveInternalUrl('atelier://boosts?site=example.com')).toBe('atelier://tweaks?site=example.com') // compatibility
+    expect(parseInternalUrl('atelier://boosts')).toEqual({ page: 'tweaks', section: null, id: null, item: null }) // compatibility
+    expect(resolveInternalUrl('atelier://boostsx')).toBeNull()
+    expect(resolveInternalUrl('atelier://tweaks?site=example.com')).toBe('atelier://tweaks?site=example.com')
   })
 })
 
@@ -144,14 +144,14 @@ describe('internalTitle', () => {
   const names = { chat: (id: string) => (id === 'c1' ? 'Trip to Lisbon' : null), companion: (id: string) => (id === 'p1' ? 'Pip' : null) }
 
   it('gives breadcrumbs for chats, settings and companions', () => {
-    expect(internalTitle('apex://chat/c1', names)).toEqual({ title: 'Trip to Lisbon', crumbs: ['Chat', 'Trip to Lisbon'] })
-    expect(internalTitle('apex://chat/unknown', names)).toEqual({ title: 'New chat', crumbs: ['Chat', 'New chat'] })
-    expect(internalTitle('apex://settings/appearance')).toEqual({ title: 'Settings', crumbs: ['Settings', 'Appearance'] })
-    expect(internalTitle('apex://settings/legacy')).toEqual({ title: 'Settings', crumbs: ['Settings'] })
+    expect(internalTitle('atelier://chat/c1', names)).toEqual({ title: 'Trip to Lisbon', crumbs: ['Chat', 'Trip to Lisbon'] })
+    expect(internalTitle('atelier://chat/unknown', names)).toEqual({ title: 'New chat', crumbs: ['Chat', 'New chat'] })
+    expect(internalTitle('atelier://settings/appearance')).toEqual({ title: 'Settings', crumbs: ['Settings', 'Appearance'] })
+    expect(internalTitle('atelier://settings/legacy')).toEqual({ title: 'Settings', crumbs: ['Settings'] })
     // The look editor sits under Companions.
-    expect(internalTitle('apex://settings/companion')).toEqual({ title: 'Settings', crumbs: ['Settings', 'Companions'] })
-    expect(internalTitle('apex://companion/p1/memory', names)).toEqual({ title: 'Pip', crumbs: ['Pip', 'Memory'] })
-    expect(internalTitle('apex://chats')).toEqual({ title: 'All chats', crumbs: ['All chats'] })
+    expect(internalTitle('atelier://settings/companion')).toEqual({ title: 'Settings', crumbs: ['Settings', 'Companions'] })
+    expect(internalTitle('atelier://companion/p1/memory', names)).toEqual({ title: 'Pip', crumbs: ['Pip', 'Memory'] })
+    expect(internalTitle('atelier://chats')).toEqual({ title: 'All chats', crumbs: ['All chats'] })
   })
 })
 
@@ -162,28 +162,28 @@ describe('isInsecureUrl', () => {
     expect(isInsecureUrl('http://localhost:3000/')).toBe(false)
     expect(isInsecureUrl('http://127.0.0.1/')).toBe(false)
     expect(isInsecureUrl('http://[::1]:8080/')).toBe(false)
-    expect(isInsecureUrl('apex://chats')).toBe(false)
+    expect(isInsecureUrl('atelier://chats')).toBe(false)
   })
 })
 
 describe('passwords and meetings routes', () => {
-  it('knows apex://passwords and apex://meetings, with a meeting id', () => {
-    expect(parseInternalUrl('apex://passwords')).toEqual({ page: 'passwords', section: null, id: null, item: null })
-    expect(parseInternalUrl('apex://passwords?site=example.com')?.page).toBe('passwords')
-    expect(parseInternalUrl('apex://meetings?filter=recordings&q=standup')).toEqual({ page: 'meetings', section: null, id: null, item: null })
-    expect(parseInternalUrl('apex://meetings/0b9e2d4c-1a2b-4c3d-8e9f-001122334455')?.id).toBe('0b9e2d4c-1a2b-4c3d-8e9f-001122334455')
-    expect(parseInternalUrl('apex://meetings/../etc')).toBeNull()
+  it('knows atelier://passwords and atelier://meetings, with a meeting id', () => {
+    expect(parseInternalUrl('atelier://passwords')).toEqual({ page: 'passwords', section: null, id: null, item: null })
+    expect(parseInternalUrl('atelier://passwords?site=example.com')?.page).toBe('passwords')
+    expect(parseInternalUrl('atelier://meetings?filter=recordings&q=standup')).toEqual({ page: 'meetings', section: null, id: null, item: null })
+    expect(parseInternalUrl('atelier://meetings/0b9e2d4c-1a2b-4c3d-8e9f-001122334455')?.id).toBe('0b9e2d4c-1a2b-4c3d-8e9f-001122334455')
+    expect(parseInternalUrl('atelier://meetings/../etc')).toBeNull()
   })
 
   it('adds Meetings right after Skills, on the destination surface', () => {
     expect(DESTINATIONS.indexOf('meetings')).toBe(DESTINATIONS.indexOf('skills') + 1)
-    expect(isDestinationUrl('apex://meetings')).toBe(true)
-    expect(isDestinationUrl('apex://passwords')).toBe(false)
+    expect(isDestinationUrl('atelier://meetings')).toBe(true)
+    expect(isDestinationUrl('atelier://passwords')).toBe(false)
   })
 
   it('adds the Voice, Transcription and Passwords settings pages', () => {
     const ids = SETTINGS_PAGES.map((p) => p.id)
     expect(ids).toEqual(expect.arrayContaining(['voice', 'transcription', 'passwords']))
-    expect(internalTitle('apex://settings/passwords').crumbs).toEqual(['Settings', 'Passwords and autofill'])
+    expect(internalTitle('atelier://settings/passwords').crumbs).toEqual(['Settings', 'Passwords and autofill'])
   })
 })

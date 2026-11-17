@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import type { CommandBarProps, CommandBarResult } from '@shared/overlay/address'
 import { copyValue, flattenGroups, stepSelection, type OmniboxAction, type OmniboxCompletion, type OmniboxGroup, type OmniboxRow } from '@shared/omnibox'
 import { displayHost } from '@shared/domains'
 import { Clock, Command, Globe, LayoutGrid, MessageSquareText, Search, Settings, Sparkles, Star, X } from 'lucide-react'
-import { apex, call, errorText } from '../../../api'
+import { atelier, call, errorText } from '../../../api'
 import { useT } from '../../../i18n/useT'
 import { cx } from '../../../ui'
 import type { SurfaceComponentProps } from '../../types'
@@ -150,7 +150,7 @@ export function CommandBar({ props, resolve, close, anchorRect, viewport }: Surf
   // question, never per key and never in a private window. A hint for older text, or one that
   // arrives after a row was picked, changes nothing.
   useEffect(() => {
-    const query = touched ? hintQuery(typed, apex.initial.window.kind === 'private') : null
+    const query = touched ? hintQuery(typed, atelier.initial.window.kind === 'private') : null
     if (!query) return
     const timer = setTimeout(() => {
       call('decisions', 'searchOrAsk', query, 'search').then(

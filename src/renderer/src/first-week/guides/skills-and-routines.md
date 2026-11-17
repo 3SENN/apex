@@ -12,12 +12,12 @@ Good skills are specific:
 - **/compare** "Line up the options on this page in a table with price, rating and delivery time."
 - **/reply** "Draft a short, warm reply to the email I'm looking at. Don't send it."
 
-Make one in [Skills](apex://skills), or from a companion's card so only that companion uses it.
+Make one in [Skills](atelier://skills), or from a companion's card so only that companion uses it.
 
 ## Routines: chats on a schedule
 
 A routine runs a prompt for you at a time you choose: every morning, on weekdays, or every few hours. Each run is a fresh chat, and you get a notification when it's ready.
 
-Routines can read the web, use your connected apps and look at memory, but they never take over the tab you're using. Set one up in [Routines](apex://routines).
+Routines can read the web, use your connected apps and look at memory, but they never take over the tab you're using. Set one up in [Routines](atelier://routines).
 
 > Tip: a routine can start with a skill. Write the skill once, then schedule it.

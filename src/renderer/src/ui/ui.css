@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-/* Apex renderer kit. Every colour comes from the tokens at the top of
+/* Atelier renderer kit. Every colour comes from the tokens at the top of
    styles.css, so both modes work without overrides here. */
 
 .ui-sr-only {
@@ -1715,7 +1715,7 @@ html.ui-resizing-y * {
   }
 }
 
-/* Apex's own Reduce Motion (ui/motion.ts) does the same. */
+/* Atelier's own Reduce Motion (ui/motion.ts) does the same. */
 :root[data-motion='reduced'] :is(.ui-skeleton, .ui-status-dot--pulse) {
   animation: none;
 }

@@ -1,4 +1,4 @@
-# Apex haptics addon
+# Atelier haptics addon
 
 A tiny Node-API addon that plays a trackpad haptic on macOS through AppKit's
 `NSHapticFeedbackManager`. On every other platform, and whenever the binary is
@@ -22,9 +22,9 @@ fails, `perform` returns false rather than throwing.
 
 | File | What it is |
 |---|---|
-| `binding.gyp` | node-gyp target `apex_haptics`: AppKit on macOS, a no-op source elsewhere; Node-API 8, macOS 13 floor (Electron 45's own) |
+| `binding.gyp` | node-gyp target `atelier_haptics`: AppKit on macOS, a no-op source elsewhere; Node-API 8, macOS 13 floor (Electron 45's own) |
 | `addon.cc` | the Node-API surface: `perform(pattern)`, which checks its argument |
-| `haptics.h` | the platform seam (`apex_haptics::Play`) |
+| `haptics.h` | the platform seam (`atelier_haptics::Play`) |
 | `haptics.mm` | macOS: `[[NSHapticFeedbackManager defaultPerformer] performFeedbackPattern:…]`, on the main thread |
 | `haptics_noop.cc` | Windows and Linux: returns false |
 | `index.js`, `index.d.ts` | the loader (`process.dlopen`, stub fallback) and its types |
@@ -41,7 +41,7 @@ node scripts/build-native.mjs --arch=host    # this Mac only (or --arch=arm64 / 
 The script reads the Electron version from `node_modules/electron/package.json`.
 It installs the build tools here on first run (`npm ci --ignore-scripts`), and
 downloads the Electron headers into `.electron-gyp/`. It runs node-gyp once per
-architecture, merges the slices into `build/apex_haptics.node`, signs it ad hoc,
+architecture, merges the slices into `build/atelier_haptics.node`, signs it ad hoc,
 and loads it inside the installed Electron (as Node) to prove the ABI and the
 architecture. On other platforms it prints a notice and exits 0. Rebuild after
 every Electron upgrade.
@@ -50,7 +50,7 @@ every Electron upgrade.
 
 ```sh
 node --test native/haptics/test/loader.test.js native/haptics/test/build-native.test.js
-APEX_HAPTICS_LIVE=1 node --test native/haptics/test/loader.test.js   # also plays real patterns
+ATELIER_HAPTICS_LIVE=1 node --test native/haptics/test/loader.test.js   # also plays real patterns
 ```
 
 The loader tests inject the platform, file checks and dlopen, so they run

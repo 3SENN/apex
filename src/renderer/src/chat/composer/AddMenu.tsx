@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -412,11 +412,11 @@ const SEARCH: Record<SubmenuId, () => string> = {
 function emptyState(level: SubmenuId, name: string): { text: string; action: MenuRow | null } {
   switch (level) {
     case 'skills':
-      return { text: t('composer.add.empty.skills', { name }), action: { id: 'go:apex://skills', label: t('composer.add.empty.skillsAction'), kind: 'item' } }
+      return { text: t('composer.add.empty.skills', { name }), action: { id: 'go:atelier://skills', label: t('composer.add.empty.skillsAction'), kind: 'item' } }
     case 'meetings':
-      return { text: t('composer.add.empty.meetings'), action: { id: 'go:apex://meetings', label: t('composer.add.empty.meetingsAction'), kind: 'item' } }
+      return { text: t('composer.add.empty.meetings'), action: { id: 'go:atelier://meetings', label: t('composer.add.empty.meetingsAction'), kind: 'item' } }
     case 'connectors':
-      return { text: t('composer.add.empty.connectors', { name }), action: { id: 'go:apex://connectors', label: t('composer.add.empty.connectorsAction'), kind: 'item' } }
+      return { text: t('composer.add.empty.connectors', { name }), action: { id: 'go:atelier://connectors', label: t('composer.add.empty.connectorsAction'), kind: 'item' } }
     case 'tabs':
       return { text: t('composer.add.empty.tabs'), action: null }
   }

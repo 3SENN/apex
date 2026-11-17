@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -255,7 +255,7 @@ export class ChromeWindow extends EventEmitter<{ changed: [WindowState] }> {
   }
 
   /**
-   * One renderer draws the sidebar, toolbar and every Apex page, so a crash
+   * One renderer draws the sidebar, toolbar and every Atelier page, so a crash
    * or a failed load blanks the whole window. Reload it automatically a few
    * times, then show a static page with a retry link.
    */

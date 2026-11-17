@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -114,7 +114,7 @@ function setup(
   settings: Partial<{ model: string; effort: Effort }> = {},
   options: { memoryGate?: Promise<void> } = {},
 ) {
-  const dir = mkdtempSync(join(tmpdir(), 'apex-host-'))
+  const dir = mkdtempSync(join(tmpdir(), 'atelier-host-'))
   const companions = new CompanionStore(dir, { presets: () => presets })
   const chats = new ChatStore(dir, FIRST_COMPANION_ID)
   const skills = new SkillStore(dir)
@@ -497,7 +497,7 @@ function richChatDeps(dir: string) {
 describe('agent host: local connectors, continue and duplicate', () => {
   it('waits for a local connector approval and runs the edited input (CH-40)', async () => {
     const t = setup((_request, n) => (n === 1 ? { tools: [{ name: 'Tracker__create_issue', input: { title: 'Bug' }, client: true }] } : { text: 'Filed it.' }))
-    const c = richChatDeps(mkdtempSync(join(tmpdir(), 'apex-host-c-')))
+    const c = richChatDeps(mkdtempSync(join(tmpdir(), 'atelier-host-c-')))
     t.host.useRichChat(c.deps)
     const id = t.host.start('file a bug')
     await until(() => t.eventsOf(id).some((e) => e.type === 'connector-approval'), 'the approval card')
@@ -516,7 +516,7 @@ describe('agent host: local connectors, continue and duplicate', () => {
 
   it('continues in a new chat with the last message and its copied attachments (CH-41)', async () => {
     const t = setup(() => ({ text: 'Okay.' }))
-    const c = richChatDeps(mkdtempSync(join(tmpdir(), 'apex-host-c-')))
+    const c = richChatDeps(mkdtempSync(join(tmpdir(), 'atelier-host-c-')))
     t.host.useRichChat(c.deps)
     const id = t.host.start('summarize my notes', {}, [{ kind: 'ref', id: 'a1' }])
     await until(() => !t.host.isRunning(id), 'the first chat')
@@ -531,7 +531,7 @@ describe('agent host: local connectors, continue and duplicate', () => {
 
   it('duplicates a chat and counts the attachments that could not be copied (CH-47)', async () => {
     const t = setup(() => ({ text: 'Okay.' }))
-    const dir = mkdtempSync(join(tmpdir(), 'apex-host-c-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-host-c-'))
     const c = richChatDeps(dir)
     t.host.useRichChat(c.deps)
     const id = t.host.start('hello')

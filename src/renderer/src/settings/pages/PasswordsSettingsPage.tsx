@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -106,7 +106,7 @@ export function PasswordsSettingsPage({ settings, update }: SettingsPageProps): 
             title={t('passwords.settings.saved')}
             description={status.data && !status.data.available ? t('passwords.unavailable') : count === null ? '…' : t('passwords.count', { count })}
           >
-            <Button variant="primary" iconEnd={<ArrowUpRight />} onClick={() => void call('pages', 'open', 'apex://passwords')}>
+            <Button variant="primary" iconEnd={<ArrowUpRight />} onClick={() => void call('pages', 'open', 'atelier://passwords')}>
               {t('passwords.settings.manage')}
             </Button>
           </Row>

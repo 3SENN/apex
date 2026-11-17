@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -87,16 +87,16 @@ import { WindowManager } from './windows'
 import { mainT } from './i18n/mainT'
 import { appRoot } from './resources'
 
-const smoke = process.env.APEX_SMOKE === '1'
+const smoke = process.env.ATELIER_SMOKE === '1'
 if (smoke) {
-  app.setPath('userData', mkdtempSync(join(tmpdir(), 'apex-smoke-')))
-  app.setPath('downloads', mkdtempSync(join(tmpdir(), 'apex-smoke-downloads-')))
+  app.setPath('userData', mkdtempSync(join(tmpdir(), 'atelier-smoke-')))
+  app.setPath('downloads', mkdtempSync(join(tmpdir(), 'atelier-smoke-downloads-')))
   // Chats in the smoke test talk to an offline stand-in (smokeClient.ts); a
   // placeholder key keeps the UI out of its "no key" state. Nothing is sent.
   process.env.ANTHROPIC_API_KEY = 'smoke-offline'
   // A test host Google's sign-in mode applies to (signInHosts.ts; the smokeBrowser sign-in check). Set before any
   // page process starts, so the page preload sees it too.
-  process.env.APEX_SMOKE_SIGNIN_HOSTS ??= 'accounts.google.localhost=google'
+  process.env.ATELIER_SMOKE_SIGNIN_HOSTS ??= 'accounts.google.localhost=google'
   // The smoke window usually runs behind other apps. Chromium would mark its
   // pages hidden (occluded) and drop their input, so keep them live.
   app.commandLine.appendSwitch('disable-backgrounding-occluded-windows')
@@ -106,7 +106,7 @@ if (smoke) {
   // app would otherwise stop at macOS's keychain prompt before any check runs.
   app.commandLine.appendSwitch('use-mock-keychain')
   // Linux CI has no GPU: Chromium blocklists its software GL for WebGL, which the companion draws with.
-  // SwiftShader stands in for the smoke run only; a person's Apex keeps Chromium's own GPU rules.
+  // SwiftShader stands in for the smoke run only; a person's Atelier keeps Chromium's own GPU rules.
   if (process.platform === 'linux') {
     app.commandLine.appendSwitch('ignore-gpu-blocklist')
     app.commandLine.appendSwitch('enable-unsafe-swiftshader')
@@ -122,13 +122,13 @@ if (smoke) {
 }
 // Lets the smoke test's visual check capture both colour schemes. It seeds
 // the (throwaway) theme setting, so switching the theme still works.
-const smokeTheme = smoke && (process.env.APEX_SMOKE_THEME === 'light' || process.env.APEX_SMOKE_THEME === 'dark') ? process.env.APEX_SMOKE_THEME : null
+const smokeTheme = smoke && (process.env.ATELIER_SMOKE_THEME === 'light' || process.env.ATELIER_SMOKE_THEME === 'dark') ? process.env.ATELIER_SMOKE_THEME : null
 if (smokeTheme) nativeTheme.themeSource = smokeTheme
 const smokeClient = smoke ? createSmokeClient() : null
 
 registerAppScheme()
 app.enableSandbox()
-// Present as stock Chromium (userAgent.ts): the reduced UA, no Electron or Apex
+// Present as stock Chromium (userAgent.ts): the reduced UA, no Electron or Atelier
 // token. Sessions get the same string with their languages (languages.ts).
 app.userAgentFallback = browserUserAgent()
 // Sign-in compatibility mode: a tab on a 'firefox' sign-in page presents Firefox there (signInIdentity.ts;
@@ -143,7 +143,7 @@ app.on('web-contents-created', (_event, contents) => {
   contents.setWindowOpenHandler((details) => core()?.windowOpen(contents, details) ?? { action: 'deny' })
 })
 
-// Background mode may keep Apex running in the tray; otherwise the default quit.
+// Background mode may keep Atelier running in the tray; otherwise the default quit.
 // Windows and Linux decide as the last browser window closes (see lastBrowserWindowWatch below); this
 // one then leaves it be.
 let allClosedDecided = false
@@ -152,11 +152,11 @@ app.on('window-all-closed', () => {
   backgroundMode.windowAllClosed(() => app.quit())
 })
 
-// A double-clicked .apexcompanion file can arrive before start-up finishes;
+// A double-clicked .ateliercompanion file can arrive before start-up finishes;
 // it waits here until the chrome can show the review sheet.
 const openedCompanionFiles: string[] = []
 let openCompanionFile: ((path: string) => void) | null = null
-// Packs (docs/packs.md): a double-clicked .apexpack waits the same way, then opens its review on apex://packs.
+// Packs (docs/packs.md): a double-clicked .atelierpack waits the same way, then opens its review on atelier://packs.
 const openedPackFiles: string[] = []
 let openPack: ((path: string) => void) | null = null
 app.on('open-file', (event, path) => {
@@ -172,7 +172,7 @@ app.on('open-file', (event, path) => {
   else openedCompanionFiles.push(path)
 })
 
-// Links from other apps, once Apex is the default browser (ON-13). They can
+// Links from other apps, once Atelier is the default browser (ON-13). They can
 // also arrive before start-up finishes and wait for the first window.
 const openedUrls: string[] = []
 let openExternalUrl: ((url: string) => void) | null = null
@@ -192,13 +192,13 @@ function readCompanionFile(path: string): string {
 void app.whenReady().then(async () => {
   const dataDir = app.getPath('userData')
   handleAppProtocol(join(__dirname, '../renderer'))
-  const webSession = session.fromPartition('persist:apex-web')
+  const webSession = session.fromPartition('persist:atelier-web')
   const settings = new SettingsStore(dataDir)
   // Experiments' "Google sign-in: present as Firefox", applied live (signInIdentity.ts).
   followIdentityExperiments(settings)
   if (smokeTheme) settings.update({ theme: smokeTheme })
-  // APEX_SMOKE_LANG=nl runs smoke with Apex in Dutch (pair it with APEX_SMOKE_ONLY=layout: the other checks read English).
-  if (smoke && process.env.APEX_SMOKE_LANG === 'nl') settings.update({ appLanguage: 'nl' })
+  // ATELIER_SMOKE_LANG=nl runs smoke with Atelier in Dutch (pair it with ATELIER_SMOKE_ONLY=layout: the other checks read English).
+  if (smoke && process.env.ATELIER_SMOKE_LANG === 'nl') settings.update({ appLanguage: 'nl' })
   const history = new HistoryStore(dataDir)
   const bridge = new PageBridge()
   const bookmarks = new BookmarkStore(dataDir)
@@ -292,7 +292,7 @@ void app.whenReady().then(async () => {
     },
   }
   // ---- engines: your API key, and any engine the build adds (ST-58 to ST-60) ----
-  // Approvals for a Claude Code session (or another MCP client) outside Apex: a native prompt that fails closed.
+  // Approvals for a Claude Code session (or another MCP client) outside Atelier: a native prompt that fails closed.
   const askOutside = async (description: string, origin: string, signal: AbortSignal): Promise<boolean> => {
     if (smoke || window.isDestroyed() || signal.aborted) return false
     window.show()
@@ -467,7 +467,7 @@ void app.whenReady().then(async () => {
   // The one QuickModel for model calls outside chats, on whichever engine the person picked.
   const quick = createAppQuickModel({ dataDir, home: app.getPath('home'), settings, engines, smoke, smokeClient })
 
-  // ---- getting started (apex://first-week) ----
+  // ---- getting started (atelier://first-week) ----
   const firstWeek = setupFirstWeek({
     dataDir,
     settings,
@@ -492,7 +492,7 @@ void app.whenReady().then(async () => {
   setSettingsDeps({ chats, history, memory, bookmarks, companions: companion, webSession, stopRoutines: () => routineRunner.stop(), signalImport: () => firstWeek.store.signal('import-data') })
   const windowManager = new WindowManager()
   // Windows and Linux: the last browser window closing is the last window closing. Electron would
-  // wait for Apex's helper windows too (the hidden tab-drag ghost, hidden floats), so Apex ran on with
+  // wait for Atelier's helper windows too (the hidden tab-drag ghost, hidden floats), so Atelier ran on with
   // no window and no tray, and the next start found it still there. macOS keeps its Dock behaviour.
   if (process.platform !== 'darwin') {
     let checking = false
@@ -543,7 +543,7 @@ void app.whenReady().then(async () => {
   tabManager.on('created', (tab) => tabsRegistry.add(tab, window.id))
   tabManager.on('closed', (tab) => tabsRegistry.remove(tab.id))
   // Floats, QuickModel, notify, signals and the ctx.personal slots; speech replaces the v1 wiring
-  const personalWiring = createPersonalWiring({ dataDir, home: app.getPath('home'), settings, engines, theme, companions: companion, apexWindow: () => window, smoke, smokeClient, quick,
+  const personalWiring = createPersonalWiring({ dataDir, home: app.getPath('home'), settings, engines, theme, companions: companion, atelierWindow: () => window, smoke, smokeClient, quick,
     // ON-13: getting-started signals tick their checklist items.
     onSignal: (id) => firstWeek.store.signal(id === 'transcription-ready' ? 'try-dictation' : id === 'meeting-transcribed' ? 'record-meeting' : id === 'web-searched' ? 'search-web' : 'build-artifact'),
   })
@@ -578,7 +578,7 @@ void app.whenReady().then(async () => {
       attention,
     }),
   })
-  features.installSession(webSession, { private: false, partition: 'persist:apex-web' })
+  features.installSession(webSession, { private: false, partition: 'persist:atelier-web' })
   // Profile sessions run the same installers (ProfileManager.sessionFor.2).
   attachSessionInstaller(features.installSession)
   // Each profile session gets its own ad-blocking value (the sites feature's installer covers permissions).
@@ -631,7 +631,7 @@ void app.whenReady().then(async () => {
     const ownHistory = profileManager.store(profileId, 'history', (dir) => new HistoryStore(dir))
     return mergeServices(scoped, { history: { search: (query, limit) => ownHistory.search(query, limit), remove: (url) => ownHistory.remove(url), clear: () => ownHistory.clear() } })
   }
-  // The locked-down sandbox partitions (apex-preprocess, apex-artifacts) get the webRequest mux too, so their lockdown holds.
+  // The locked-down sandbox partitions (atelier-preprocess, atelier-artifacts) get the webRequest mux too, so their lockdown holds.
   for (const sandbox of sandboxSessions()) features.installSession(sandbox.session, { private: true, partition: sandbox.partition })
   const firstWindow: WindowContext = {
     id: window.id,
@@ -803,7 +803,7 @@ void app.whenReady().then(async () => {
         const text = companionService.exportText(id, options)
         const target = await dialog.showSaveDialog(window, {
           defaultPath: join(app.getPath('documents'), exportFileName(companion.get(id).name, COMPANION_FILE_EXTENSION)),
-          filters: [{ name: mainT('core.mainIndex.apexCompanion'), extensions: [COMPANION_FILE_EXTENSION] }],
+          filters: [{ name: mainT('core.mainIndex.atelierCompanion'), extensions: [COMPANION_FILE_EXTENSION] }],
         })
         if (target.canceled || !target.filePath) return null
         writeFileSync(target.filePath, text, 'utf8')
@@ -814,7 +814,7 @@ void app.whenReady().then(async () => {
         return target.filePath
       },
       pickImport: async () => {
-        const picked = await dialog.showOpenDialog(window, { properties: ['openFile'], filters: [{ name: mainT('core.mainIndex.apexCompanion'), extensions: [COMPANION_FILE_EXTENSION] }] })
+        const picked = await dialog.showOpenDialog(window, { properties: ['openFile'], filters: [{ name: mainT('core.mainIndex.atelierCompanion'), extensions: [COMPANION_FILE_EXTENSION] }] })
         const path = picked.filePaths[0]
         if (picked.canceled || !path) return null
         return companionService.preview(readCompanionFile(path))
@@ -870,7 +870,7 @@ void app.whenReady().then(async () => {
       complete: () => {
         settings.update({ onboarded: true })
         // The getting-started page opens itself once, right after setup.
-        if (firstWeek.store.setupFinished()) tabManager.openInternal('apex://first-week', { newTab: true })
+        if (firstWeek.store.setupFinished()) tabManager.openInternal('atelier://first-week', { newTab: true })
       },
     },
     ...firstWeek.services,
@@ -1016,10 +1016,10 @@ void app.whenReady().then(async () => {
   // Session.json brings back every window; without one, the pinned tabs and a new tab.
   if (!coreHandle.restoreSession()) {
     if (!smoke) tabManager.restorePinned()
-    tabManager.create(!settings.get().onboarded && !smoke ? 'apex://welcome' : 'about:blank')
+    tabManager.create(!settings.get().onboarded && !smoke ? 'atelier://welcome' : 'about:blank')
   }
 
-  // Opened .apexcompanion files go to the chrome's review sheet.
+  // Opened .ateliercompanion files go to the chrome's review sheet.
   openCompanionFile = (path) => {
     try {
       sendEvent({ type: 'companion-import', preview: companionService.preview(readCompanionFile(path)) })

@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // The Calendar and Reminders client tools (calendar_events,
 // list_reminders). Read-only, and offered only while that kind is switched
-// on in Apex (Agent permissions › This Mac); without macOS's permission
+// on in Atelier (Agent permissions › This Mac); without macOS's permission
 // they say so instead of guessing.
 import { z } from 'zod'
 import { CALENDAR_RANGE_MAX_MS, type CalendarKind } from '@shared/calendar'

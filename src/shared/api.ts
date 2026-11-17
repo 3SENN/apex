@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -28,8 +28,8 @@ export interface NewTabOptions {
 
 type Unsubscribe = () => void
 
-/** The bridge the UI preload exposes to the browser chrome as `window.apex`. */
-export interface ApexApi {
+/** The bridge the UI preload exposes to the browser chrome as `window.atelier`. */
+export interface AtelierApi {
   tabs: {
     create(url?: string, options?: NewTabOptions): Promise<void>
     close(tabId: string): Promise<void>
@@ -40,7 +40,7 @@ export interface ApexApi {
     go(tabId: string, input: string): Promise<void>
     back(tabId: string): Promise<void>
     forward(tabId: string): Promise<void>
-    /** On an apex:// page this remounts the page instead (a 'reload-page' command). */
+    /** On an atelier:// page this remounts the page instead (a 'reload-page' command). */
     reload(tabId: string, bypassCache?: boolean): Promise<void>
     stop(tabId: string): Promise<void>
     suggest(input: string): Promise<Suggestion[]>

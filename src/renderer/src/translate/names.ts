@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Language names for page translation (TR-11), in Apex's own language.
+// Language names for page translation (TR-11), in Atelier's own language.
 import { COMMON_LANGUAGE_TAGS } from '@shared/languages'
 import { languageKey } from '@shared/translate'
 

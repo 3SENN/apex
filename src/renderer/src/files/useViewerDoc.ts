@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { LibraryFileRef, ViewerDoc, ViewerTarget } from '@shared/files'
 import { t } from '@shared/i18n/core'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 
 // Opens one viewer target and keeps its document current (OV-32).
 // The token belongs to `owner` (the viewer tab) and is released when the
@@ -18,7 +18,7 @@ export interface ViewerDocHandle {
   doc: ViewerDoc | null
   /** Why the target couldn't be opened at all (refused, malformed, unavailable). */
   error: string | null
-  /** The viewer refused the path (outside Apex's folders, or a local file not granted). */
+  /** The viewer refused the path (outside Atelier's folders, or a local file not granted). */
   refused: boolean
   loading: boolean
   reload(): Promise<void>
@@ -82,7 +82,7 @@ export function useViewerDoc(target: ViewerTarget | null, owner?: string): Viewe
   // Library files: follow the store's change event (a report growing, a rename elsewhere, a delete).
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | null = null
-    const off = apex.onAppEvent((event) => {
+    const off = atelier.onAppEvent((event) => {
       if (event.type !== 'library-files') return
       const current = latest.current
       if (!current?.libraryId) return

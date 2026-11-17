@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -173,7 +173,7 @@ async function until(condition: () => boolean): Promise<void> {
 }
 
 function setup(settings: { documents: boolean; engine?: EngineId }) {
-  const dir = mkdtempSync(join(tmpdir(), 'apex-docs-'))
+  const dir = mkdtempSync(join(tmpdir(), 'atelier-docs-'))
   const chats = new ChatStore(dir, FIRST_COMPANION_ID)
   const events: ChatAgentEvent[] = []
   const smoke = createSmokeClient()
@@ -275,7 +275,7 @@ describe('reading a PDF tab', () => {
     expect(await isPdfTab(pdfTab('https://example.com/report.PDF').tab)).toBe(true)
     expect(await isPdfTab(pdfTab('https://example.com/view?id=1', { contentType: 'application/pdf' }).tab)).toBe(true)
     expect(await isPdfTab(pdfTab('https://example.com/page').tab)).toBe(false)
-    expect(await isPdfTab(pdfTab('apex://settings/report.pdf').tab)).toBe(false)
+    expect(await isPdfTab(pdfTab('atelier://settings/report.pdf').tab)).toBe(false)
   })
 
   it('fetches the bytes through the tab’s session once, and reads them as text', async () => {

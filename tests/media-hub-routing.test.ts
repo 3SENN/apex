@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -142,7 +142,7 @@ describe('media hub routing', () => {
 })
 
 describe('page media reports', () => {
-  it('accepts a report and clamps its speed; rejects artwork Apex would not draw', () => {
+  it('accepts a report and clamps its speed; rejects artwork Atelier would not draw', () => {
     expect(pageMediaMessageSchema.parse(report({ rate: 8 }))).toMatchObject({ rate: 3 })
     expect(pageMediaMessageSchema.parse(null)).toBeNull()
     expect(pageMediaMessageSchema.safeParse(report({ artwork: 'javascript:alert(1)' })).success).toBe(false)

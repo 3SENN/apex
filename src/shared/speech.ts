@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Speech recognition, provided on macOS by the native apex-speech helper
+// Speech recognition, provided on macOS by the native atelier-speech helper
 // (native/speech). Dictation listens to the microphone; meeting mode also
 // transcribes system audio, so both sides of a call end up in the transcript.
 //
@@ -46,16 +46,16 @@ export interface SpeechPermissions {
   microphone: Perm
   speech: Perm
   screen: 'granted' | 'denied'
-  /** Location Services for Apex (CoreLocation); absent from a helper that doesn't report it. */
+  /** Location Services for Atelier (CoreLocation); absent from a helper that doesn't report it. */
   location?: Perm
 }
 
 /**
- * Screen Recording as Apex's own process can use it (screenshots, sharing
+ * Screen Recording as Atelier's own process can use it (screenshots, sharing
  * windows and screens). macOS only says granted or not, so main remembers
- * whether Apex has asked: 'not-determined' is never asked (the first use in
+ * whether Atelier has asked: 'not-determined' is never asked (the first use in
  * context asks), 'denied' is asked and still off, and 'relaunch' is allowed
- * in System Settings but not in effect until Apex starts again (macOS reads
+ * in System Settings but not in effect until Atelier starts again (macOS reads
  * the grant at launch). 'unsupported' is any platform without the switch.
  */
 export type ScreenAccess = 'granted' | 'not-determined' | 'denied' | 'relaunch' | 'unsupported'
@@ -73,7 +73,7 @@ export interface SpeechLocale {
   name: string
   /** Recognised on this Mac. Other locales send audio to Apple's servers (ST-18). */
   onDevice: boolean
-  /** Which engine Apex uses for it; missing from an older helper, which only has 'recognizer'. */
+  /** Which engine Atelier uses for it; missing from an older helper, which only has 'recognizer'. */
   engine?: SpeechEngine
 }
 
@@ -91,7 +91,7 @@ export type SpeechEngine = 'analyzer' | 'recognizer'
 export type SpeechAssetState = 'unavailable' | 'unsupported' | 'supported' | 'downloading' | 'installed' | 'failed'
 
 export interface SpeechAssets {
-  /** BCP-47, as Apex asked. */
+  /** BCP-47, as Atelier asked. */
   locale: string
   state: SpeechAssetState
   /** 0 to 1 while downloading, else null (1 once installed). */
@@ -118,7 +118,7 @@ export const HELPER_ERROR_CODES: readonly HelperErrorCode[] = [
   'no-speech', 'recording-failed', 'busy', 'invalid', 'failed',
 ]
 
-/** Commands Apex writes to the helper's stdin, one JSON object per line. */
+/** Commands Atelier writes to the helper's stdin, one JSON object per line. */
 export type HelperCommand =
   | { cmd: 'hello' }
   | { cmd: 'permissions' }
@@ -188,7 +188,7 @@ type SessionLineType = 'started' | 'partial' | 'final' | 'level' | 'paused' | 'r
 type WithoutSession<T> = T extends unknown ? Omit<T, 'session'> : never
 
 /**
- * A session's helper events without `session`, plus Apex's own warnings.
+ * A session's helper events without `session`, plus Atelier's own warnings.
  * Errors carry any SpeechErrorCode: a helper that dies mid-session ends it
  * with a fatal 'helper-failed' error (widened from HelperErrorCode).
  */
@@ -253,7 +253,7 @@ export interface SpeechBroker {
   devices(): Promise<AudioInputDevice[]>
   locales(): Promise<SpeechLocaleList>
   transcribeFile(path: string, onEvent: (e: SpeechSessionEvent) => void): Promise<void>
-  /** Puts a recording a session never finished back together from the parts left beside `path` (Apex crashed or was force quit mid-recording). */
+  /** Puts a recording a session never finished back together from the parts left beside `path` (Atelier crashed or was force quit mid-recording). */
   recoverRecording(path: string): Promise<{ audio: { path: string; bytes: number } | null; durationMs: number; error?: string }>
   authenticate(reason: string): Promise<'ok' | 'cancelled' | 'unavailable'>
   frontmost(): Promise<{ pid: number } | null>
@@ -301,11 +301,11 @@ export interface SpeechServices {
     request(kind: PermissionKind): Promise<SpeechPermissions>
     /** Opens the right System Settings › Privacy pane. */
     openPrivacySettings(kind: PermissionKind): void
-    /** Screen Recording for Apex's own screenshots and sharing (see ScreenAccess). */
+    /** Screen Recording for Atelier's own screenshots and sharing (see ScreenAccess). */
     screenAccess(): Promise<ScreenAccess>
     /** Asks macOS for Screen Recording (its prompt shows only the first time); never opens System Settings. */
     requestScreen(): Promise<ScreenAccess>
-    /** Quits and reopens Apex, so a Screen Recording grant made since launch takes effect. */
+    /** Quits and reopens Atelier, so a Screen Recording grant made since launch takes effect. */
     relaunch(): void
     devices(): Promise<AudioInputDevice[]>
     locales(): Promise<SpeechLocaleList>
@@ -318,7 +318,7 @@ export interface SpeechServices {
     /** Records a short microphone test without transcribing it (ST-21). */
     testStart(): Promise<void>
     testStop(): Promise<{ durationMs: number }>
-    testInfo(): { exists: boolean; durationMs: number; url: 'apex-media://speech/test' | null }
+    testInfo(): { exists: boolean; durationMs: number; url: 'atelier-media://speech/test' | null }
     testDelete(): void
     /** Back to the default mic, sensitivities and languages. */
     resetCapture(): void
@@ -358,7 +358,7 @@ export const WINDOWS_PRIVACY_PANES: Record<PermissionKind, string | null> = {
 // Pure; main, the renderer kit and the features that use speech share them
 
 /** Where the last microphone test plays from (its handler serves userData/speech/test.m4a). */
-export const SPEECH_TEST_URL = 'apex-media://speech/test'
+export const SPEECH_TEST_URL = 'atelier-media://speech/test'
 
 /** The recognizer's context hints have practical limits: at most this many terms… */
 export const VOCABULARY_TERMS_MAX = 100

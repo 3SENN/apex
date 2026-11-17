@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -25,7 +25,7 @@ import { UpdatesStore } from './store'
 import { fetchSupportFeed, supportFeedUrl } from './supportFeed'
 
 // The update service: builds the controller with the real or the fake
-// backend, and answers Services.updates. APEX_SMOKE=1 picks the fake backend
+// backend, and answers Services.updates. ATELIER_SMOKE=1 picks the fake backend
 // on a manual clock, so smoke drives every state with no network and no
 // waiting; the real backend runs only in a packaged, signed build.
 
@@ -85,7 +85,7 @@ const ACTIVE_CAPTURE = new Set(['starting', 'recording', 'paused', 'stopping'])
 const MEETING_SAVE_MS = 120_000
 
 export function setupUpdates(deps: UpdatesDeps): UpdatesRuntime & { services: UpdatesServices } {
-  const smoke = deps.smoke || process.env.APEX_SMOKE === '1'
+  const smoke = deps.smoke || process.env.ATELIER_SMOKE === '1'
   let kind: BackendKind = deps.backend ?? (smoke ? 'fake' : 'real')
   // Smoke moves time by hand: a 16-minute backoff or the 20 s watchdog take no time.
   const clock: Clock = smoke ? new ManualClock(Date.now()) : systemClock()

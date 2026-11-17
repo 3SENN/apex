@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -176,7 +176,7 @@ describe.runIf(process.platform === 'win32')('on Windows itself', () => {
   const ARGS = ['plain', 'with space', 'a&b', 'say "hi"', '100%', '%PATH%', 'C:\\dir\\', 'a\\"b', '^caret', '(paren)', '!bang!', '', 'semi;colon', 'a,b', '<lt>', 'x|y', '*?', 'ünïcode']
 
   it('hands every argument to a batch file’s program exactly', async () => {
-    dir = mkdtempSync(join(tmpdir(), 'apex-programs-'))
+    dir = mkdtempSync(join(tmpdir(), 'atelier-programs-'))
     writeFileSync(join(dir, 'echo.cjs'), 'process.stdout.write(JSON.stringify(process.argv.slice(2)))')
     writeFileSync(join(dir, 'run me.bat'), `@"${process.execPath}" "%~dp0echo.cjs" %*\r\n`)
     const result = await run(join(dir, 'run me.bat'), ARGS)
@@ -185,7 +185,7 @@ describe.runIf(process.platform === 'win32')('on Windows itself', () => {
   })
 
   it('runs an npm shim as node, with line breaks intact', async () => {
-    dir = mkdtempSync(join(tmpdir(), 'apex-programs-'))
+    dir = mkdtempSync(join(tmpdir(), 'atelier-programs-'))
     writeFileSync(join(dir, 'echo.cjs'), 'process.stdout.write(JSON.stringify(process.argv.slice(2)))')
     writeFileSync(join(dir, 'tool.cmd'), SHIM('echo.cjs'))
     const args = [...ARGS, 'line one\nline two']
@@ -195,7 +195,7 @@ describe.runIf(process.platform === 'win32')('on Windows itself', () => {
   })
 
   it('ends a process and the processes it started', async () => {
-    dir = mkdtempSync(join(tmpdir(), 'apex-programs-'))
+    dir = mkdtempSync(join(tmpdir(), 'atelier-programs-'))
     const pidFile = join(dir, 'grandchild.pid')
     // The child starts a grandchild that would outlive it, then both wait.
     const child = spawnProgram(process.execPath, ['-e', `const c = require('node:child_process').spawn(process.execPath, ['-e', 'setTimeout(() => {}, 60000)'], { stdio: 'ignore' }); require('node:fs').writeFileSync(${JSON.stringify(pidFile)}, String(c.pid)); setTimeout(() => {}, 60000)`], { stdio: 'ignore' })

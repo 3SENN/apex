@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -35,7 +35,7 @@ export interface AddressServices {
     commit(tabId: string, input: string, action: OmniboxAction, options?: { background?: boolean; newTab?: boolean }): OmniboxCommitResult
     /** A history row's ✕. */
     removeHistory(url: string): void
-    /** Universal search: every window's tabs, chats, Apex pages and commands. */
+    /** Universal search: every window's tabs, chats, Atelier pages and commands. */
     universal(text: string, filter: UniversalFilter): Promise<OmniboxGroup[]>
   }
 }

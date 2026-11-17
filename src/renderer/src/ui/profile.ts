@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -20,4 +20,4 @@ export function applyProfileHue(hue: unknown): void {
   for (const [name, value] of Object.entries(profileVariables(next))) root.style.setProperty(name, value)
 }
 
-if (typeof window !== 'undefined') applyProfileHue(window.apex?.initial?.settings?.profileHue)
+if (typeof window !== 'undefined') applyProfileHue(window.atelier?.initial?.settings?.profileHue)

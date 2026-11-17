@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -56,7 +56,7 @@ function siteIcon(site: string): Promise<string | null> {
   return icon
 }
 
-/** Sites' own icons (null until known, or when Apex has none). */
+/** Sites' own icons (null until known, or when Atelier has none). */
 export function useSiteIcons(sites: readonly string[]): Record<string, string | null> {
   const [found, setFound] = useState<Record<string, string | null>>({})
   const key = sites.join('\n')
@@ -220,7 +220,7 @@ function UrlEntry({ onConnected }: { onConnected(): void }): ReactElement {
 export function ConnectorsStep({ next, back, ready }: StepProps): ReactElement {
   const t = useT()
   const { reduced } = useMotion()
-  // ON-18: when your profile said what you do and named no app Apex can connect (and needs none), there's nothing to offer here.
+  // ON-18: when your profile said what you do and named no app Atelier can connect (and needs none), there's nothing to offer here.
   useEffect(() => {
     let live = true
     void Promise.all([call('onboarding', 'profile').catch(() => null), call('onboarding', 'plan').catch(() => null)]).then(([profile, plan]) => {

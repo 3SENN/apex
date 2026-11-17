@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// One app's web server (docs/packs.md › A web server of its own): Apex owns
+// One app's web server (docs/packs.md › A web server of its own): Atelier owns
 // the real sockets and the app's page only ever sees what passed the checks.
-// Plain HTTP on 127.0.0.1, or HTTPS on every interface with Apex's own
+// Plain HTTP on 127.0.0.1, or HTTPS on every interface with Atelier's own
 // certificate when the app may share on the Wi-Fi (phones give motion sensors
 // only to secure pages). Every request and socket must come from this
 // computer or a private network, name this server in its Host header (no DNS
@@ -71,7 +71,7 @@ export interface LocalServerOptions {
   tls: { key: string; cert: string } | null
   /** A file under the served folder, by its path there (index.html for the base), or null. */
   file(rel: string): ServedFile | null
-  /** A file of the Apex kit (Apex UI's ui.css and the rest), by its path under the kit, or null. */
+  /** A file of the Atelier kit (Atelier UI's ui.css and the rest), by its path under the kit, or null. */
   kitFile?(rel: string): string | null
   /** The names a Host header may carry, without the port: 127.0.0.1, localhost, the LAN addresses. */
   hostNames(): readonly string[]
@@ -247,7 +247,7 @@ export class LocalServer {
       const full = reading ? this.#opts.kitFile?.(rel.slice(SERVER_KIT_PATH.length)) : null
       return full ? this.#sendFile(res, method, rel, { path: full }) : this.#plain(res, 404, 'Not found.')
     }
-    if (rel.startsWith('__apex/')) return this.#plain(res, 404, 'Not found.')
+    if (rel.startsWith('__atelier/')) return this.#plain(res, 404, 'Not found.')
     if (reading) {
       const file = this.#opts.file(rel)
       if (file) return this.#sendFile(res, method, rel === '' || rel.endsWith('/') ? 'index.html' : rel, file)

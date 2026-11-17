@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,6 +11,34 @@ import type { WhatsNewEntry } from './updates'
 // entry. Keep each highlight to a title and one or two plain sentences: the
 // card combines every entry since the version you last saw.
 export const WHATS_NEW: readonly WhatsNewEntry[] = [
+  {
+    version: '1.5.0',
+    date: '2026-11-17',
+    title: BRANDING.official ? 'Apex is now Atelier' : `${BRAND_NAME} 1.5`,
+    highlights: [
+      // The new name is the official branding's (TRADEMARKS.md); other builds were never called Apex.
+      ...(BRANDING.official
+        ? [
+            {
+              title: 'Apex is now Atelier',
+              body: 'The same browser, the same companion and everything you made, under a new name. An atelier is where you make things your own, and that is what Atelier is for.',
+            },
+          ]
+        : []),
+      {
+        title: 'Packs have a new file type',
+        body: 'Packs, apps, worlds and companions you share are now .atelierpack, .atelierapp, .atelierworld and .ateliercompanion files.',
+      },
+      {
+        title: 'Settings save while a page loads',
+        body: 'Changing a setting while a tab was loading a page could fail. It now always saves, and changing other settings no longer refreshes every page’s permissions.',
+      },
+      {
+        title: 'Up to date',
+        body: `${BRAND_NAME} now runs on Electron 45.3.2, with the newest Anthropic SDK and fixes in the libraries it uses.`,
+      },
+    ],
+  },
   {
     version: '1.4.5',
     date: '2026-11-17',
@@ -354,7 +382,7 @@ export const WHATS_NEW: readonly WhatsNewEntry[] = [
     highlights: [
       {
         title: `Apps and games in ${BRAND_NAME}`,
-        body: 'Packs can now hold full apps and games that open in a tab. Find them on Packs › Browse, or open an .apexapp someone sent you. Your companions can play their characters.',
+        body: 'Packs can now hold full apps and games that open in a tab. Find them on Packs › Browse, or open an .atelierapp someone sent you. Your companions can play their characters.',
       },
       {
         title: 'Build one with your companion',
@@ -362,7 +390,7 @@ export const WHATS_NEW: readonly WhatsNewEntry[] = [
       },
       {
         title: 'Worlds',
-        body: 'Walk around a place as your companion, talk to the people who live there, and step into places that open apps. Build your own and share it as an .apexworld.',
+        body: 'Walk around a place as your companion, talk to the people who live there, and step into places that open apps. Build your own and share it as an .atelierworld.',
       },
     ],
   },
@@ -424,7 +452,7 @@ export const WHATS_NEW: readonly WhatsNewEntry[] = [
       ...(BRANDING.official
         ? [
             {
-              title: 'Pip is the new face of Apex',
+              title: 'Pip is the new face of Atelier',
               body: 'The app icon, menu bar and welcome now show Pip, and the welcome flow keeps the companion clear of every word.',
             },
           ]

@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Settings › Dock icon (ST-09, macOS): a radio group of Apex's own icon and
+// Settings › Dock icon (ST-09, macOS): a radio group of Atelier's own icon and
 // each companion. Choosing a companion draws its head and hands it to the
 // Dock; the status line spins until main says the Dock changed. Main keeps
 // the old per-companion flag in step and falls back to the standard icon
@@ -18,7 +18,7 @@ import { applyDockChoice } from '../dockChoice'
 import { chosenCompanion, DOCK_STANDARD, dockChoiceFor, dockValue } from '../logic/dock'
 import { Card, ChoiceTiles, Notice, PageError, PageHeader, PageSkeleton, Section, type ChoiceTile } from '../kit'
 import type { SettingsPageProps } from '../pageTypes'
-import { apex } from '../../api'
+import { atelier } from '../../api'
 import { DockDesigner } from '../dock/DockDesigner'
 
 type Status = { kind: 'idle' } | { kind: 'updating' } | { kind: 'done'; name: string | null } | { kind: 'failed'; message: string }
@@ -95,7 +95,7 @@ export function DockIconPage({ settings, update }: Pick<SettingsPageProps, 'sett
         {status.kind === 'failed' && <Notice tone="error">{status.message}</Notice>}
       </Section>
       {/* ST-10: shown while a companion is the Dock icon, macOS only */}
-      {apex.platform === 'darwin' && current && (
+      {atelier.platform === 'darwin' && current && (
         <Section title={t('firstRun.dock.designTitle')} note={t('firstRun.dock.designNote')}>
           <Card>
             <DockDesigner companions={items.filter((c) => !c.hidden)} chosenId={current.id} />

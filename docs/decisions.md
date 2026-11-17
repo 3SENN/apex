@@ -1,6 +1,6 @@
 # Quick decisions
 
-Apex makes many small judgment calls: is a reply waiting on you, does this
+Atelier makes many small judgment calls: is a reply waiting on you, does this
 click buy or delete something, is this a search or a question. Today each one
 is a rule (a keyword list, a closing "?", a fixed mode). Quick decisions adds
 an optional **decision model** next to those rules: a non-generative model
@@ -16,7 +16,7 @@ in time; otherwise the rule decides, so nothing ever waits on it.
 Nothing is fixed to one provider or one model. Settings › Quick decisions,
 in the Agent group next to Model and key:
 
-1. **Use a decision model**: one switch, off by default. Off, Apex's own
+1. **Use a decision model**: one switch, off by default. Off, Atelier's own
    rules decide and nothing is sent; your providers and models stay set up.
    Beside it, one status (Off, Not set up, Working, Not answering, Paused,
    Ready) and a line saying what to do next ("Connect a provider below to
@@ -29,7 +29,7 @@ in the Agent group next to Model and key:
    switches it on and checks it.
 3. **Your models**: the ones you chose, in order: the first answers; when it
    fails, is busy or reaches its rate limit, the next one does while there is
-   time, then Apex's rules. Each says how it is doing (Working in 480 ms, Not
+   time, then Atelier's rules. Each says how it is doing (Working in 480 ms, Not
    answering with the provider's own words, Paused, Not asked yet), and has
    Test, up, down and remove. Up to six. **Add a model** lists what each
    connected provider offers, read live from its model list, with its price
@@ -69,7 +69,7 @@ cheap ($0.042 per million tokens for TypeSafe's Jev 1.14, November 2026).
 Providers speak one of two requests: TypeSafe's System One
 (`POST …/v1/systemone`, `Authorization: Bearer <key>`), which Jev, Kev and
 Clef take, or OpenAI's Decisions (`POST …/v1/decisions`), which GPT-6 Luna
-takes. One client speaks both (DC-02, DC-19): Apex's questions and readers
+takes. One client speaks both (DC-02, DC-19): Atelier's questions and readers
 are written once in System One's shape, and the client turns them into
 Decisions' named list (`predicate`, `choice` with `choices`, `score` with
 `levels`) and its answers back (a `refusal` reads as an even spread, so the
@@ -95,21 +95,21 @@ that is not listed works as a server of your own.
 Model ids are whatever the provider calls them, pinned versions where it has
 them (an alias such as `jev-latest` moves under you); each model in your list
 shows which version answered last, and a change of version is logged. Note
-that probabilities differ between models, so a model new to Apex is worth an
+that probabilities differ between models, so a model new to Atelier is worth an
 eval run (DC-06) before it decides alone; OpenRouter notes that some makers
 (ScaleDown, Respan) expect their own state shapes.
 
 **Rate limits and failures.** A 429 is retried once; if it holds, that model
 sits out for a minute (or the provider's Retry-After, at least five seconds
 and at most ten minutes) and the
-next model in your list answers; with all of them paused, Apex's rules decide
+next model in your list answers; with all of them paused, Atelier's rules decide
 and routines and packs use the Claude engine. A model that fails, is busy or
 can't be reached hands over to the next while there is time left (300 ms or
 more); a timeout leaves none, so the rule decides. Settings shows each model's
 state, with what the provider said (redacted and cut to 200 characters). A free Experiential Labs key allows 10 requests a
 minute per free model (`jev-latest`, `clef`); past that it answers "Enable
 Keep going on credits to continue", which is a switch in your account there,
-not something Apex can turn on. `gpt-6-luna-decisions` is paid per token
+not something Atelier can turn on. `gpt-6-luna-decisions` is paid per token
 there from the first request.
 
 **The slow tail (DC-20).** A gateway answers about one request in five in
@@ -129,7 +129,7 @@ answer time shown is from the first send.
 
 ## The rule-first contract (DC-01)
 
-Every one of Apex's decisions calls `decider().decide({ use, rule, request, read })`
+Every one of Atelier's decisions calls `decider().decide({ use, rule, request, read })`
 (src/main/decisions/service.ts):
 
 - `rule` is what the rule decided. It comes straight back when the provider is
@@ -144,7 +144,7 @@ Every one of Apex's decisions calls `decider().decide({ use, rule, request, read
 the person can see where it would have decided otherwise before letting it.
 Either way, every disagreement is noted (DC-05).
 
-## Apex's own decisions (DC-08 to DC-12, DC-14 to DC-18)
+## Atelier's own decisions (DC-08 to DC-12, DC-14 to DC-18)
 
 All questions live in src/main/decisions/uses.ts.
 
@@ -183,7 +183,7 @@ labeling, sorting, filtering or checking many items it has read, such as
 emails, products, search results, table rows or tabs. It takes up to 50 items
 (each with an id and its text), one to five questions in the System One shape,
 and an optional shared context ("emails in Sam's work inbox"). Each item is one
-request, four at a time; the answers are read with the same cutoffs as Apex's
+request, four at a time; the answers are read with the same cutoffs as Atelier's
 own (yes at 0.7, no at 0.3, a choice at 0.75, a level at 0.6) and come back as
 the verdict and its probability, or "unsure" with what the model leaned
 towards, for the companion to judge itself. A rate limit, a refused key or an
@@ -198,7 +198,7 @@ context.
 
 ## Routines and packs (DC-07)
 
-Two callers that are not Apex's own decisions use `decider().ask()`: the
+Two callers that are not Atelier's own decisions use `decider().ask()`: the
 decision model when one is on, otherwise the person's Claude engine (their API
 key, or another engine, through QuickModel), so both work on every engine. A
 failing or rate-limited decision model falls back to Claude too; for a pack
@@ -213,11 +213,11 @@ is raised for it (`stricter()`).
   Only a clear no (≤ 0.3, ≤ 0.15 on Claude) keeps it quiet: the run is still
   recorded and marked read. A failed check, an empty reply or an unsure answer
   notifies, since a missed result costs more than an extra one.
-- **`apex.ai.decide(state, questions)`** for packs, with `permissions.model`.
+- **`atelier.ai.decide(state, questions)`** for packs, with `permissions.model`.
   On a decision model it has its own budget, 600 an hour and 5,000 a day;
   on Claude each call counts against the 60-an-hour model budget. The `sorter`
   starter shows it: topics and urgency for a list of messages, "unsure" when
-  the model is not sure. See [apps.md](apps.md) › Apex as the AI engine.
+  the model is not sure. See [apps.md](apps.md) › Atelier as the AI engine.
 
 ## Thresholds
 
@@ -242,7 +242,7 @@ otherwise, and demand more where a wrong answer costs more.
   redaction, and never sent to a page. A server's id is random and never
   reused, its key goes when it is removed (and any left over at the next
   start), and an address with a name or password in it is refused. Reset
-  Apex clears the comparisons with the settings and the keys with the other
+  Atelier clears the comparisons with the settings and the keys with the other
   secrets.
 - Page text is only ever the state being judged; the questions say so, and
   the click guard's model can only add stops.
@@ -251,7 +251,7 @@ otherwise, and demand more where a wrong answer costs more.
 
 ## Comparisons (DC-05)
 
-Where the model's sure answer differed from the rule, Apex keeps a row on this
+Where the model's sure answer differed from the rule, Atelier keeps a row on this
 computer (`decision-comparisons.json`, the newest 200): the use, both answers,
 how sure the model was, whether it was used, the version, and a redacted
 160-character excerpt. Settings shows the newest 20 with how many decisions
@@ -264,13 +264,13 @@ several languages. tests/decisionsEval.test.ts runs them through the same
 questions and cutoffs against a real model:
 
 ```
-APEX_DECISIONS_EVAL=typesafe APEX_DECISIONS_KEY=… npx vitest run tests/decisionsEval.test.ts --silent=false
-APEX_DECISIONS_EVAL=experiential APEX_DECISIONS_KEY=xpl_… APEX_DECISIONS_MODEL=clef npx vitest run tests/decisionsEval.test.ts --silent=false
-APEX_DECISIONS_EVAL=experiential APEX_DECISIONS_KEY=xpl_… APEX_DECISIONS_MODEL=gpt-6-luna-decisions npx vitest run tests/decisionsEval.test.ts --silent=false
-APEX_DECISIONS_EVAL=custom APEX_DECISIONS_URL=http://127.0.0.1:8009 npx vitest run tests/decisionsEval.test.ts --silent=false
+ATELIER_DECISIONS_EVAL=typesafe ATELIER_DECISIONS_KEY=… npx vitest run tests/decisionsEval.test.ts --silent=false
+ATELIER_DECISIONS_EVAL=experiential ATELIER_DECISIONS_KEY=xpl_… ATELIER_DECISIONS_MODEL=clef npx vitest run tests/decisionsEval.test.ts --silent=false
+ATELIER_DECISIONS_EVAL=experiential ATELIER_DECISIONS_KEY=xpl_… ATELIER_DECISIONS_MODEL=gpt-6-luna-decisions npx vitest run tests/decisionsEval.test.ts --silent=false
+ATELIER_DECISIONS_EVAL=custom ATELIER_DECISIONS_URL=http://127.0.0.1:8009 npx vitest run tests/decisionsEval.test.ts --silent=false
 ```
 
-`APEX_DECISIONS_EVAL` is any provider in the table; `APEX_DECISIONS_PACE_MS`
+`ATELIER_DECISIONS_EVAL` is any provider in the table; `ATELIER_DECISIONS_PACE_MS`
 spaces the requests out for a per-minute limit (6500 for 10 a minute).
 Per use it reports accuracy on the cases the model was sure of, how often it
 stayed unsure, whether a choice flips when its options are reversed, and the
@@ -288,7 +288,7 @@ rule decided), and answer times:
 | `clef` | 27 of 27 | 19 of 46 | 0 | 0.8 to 1.0 s | 1.0 to 3.2 s |
 | `jev-latest` | 31 of 31 | 15 of 46 | 0 | 0.5 to 0.7 s | 0.9 to 2.8 s |
 
-What the person gets, on `clef-flash`: Apex's rules alone against the rules
+What the person gets, on `clef-flash`: Atelier's rules alone against the rules
 with the model taking over where it is sure.
 
 | Decision | Rules alone | With the model |
@@ -337,7 +337,7 @@ tabs question first let `jev-latest` file "Hotels in Lisbon" under travel
 instead of the person's own "Lisbon trip" group; it now says their own groups
 come first, and all three models got that case right after.
 
-In a real chat (Opus 5.5, Apex's own system prompt and tools,
+In a real chat (Opus 5.5, Atelier's own system prompt and tools,
 `label_items` answered by Luna), the companion sorted 10 emails
 itself and handed 25 to `label_items` on its own, which answered all 25.
 
@@ -350,14 +350,14 @@ itself and handed 25 to `label_items` on its own, which answered all 25.
 | src/main/decisions/service.ts | the decider: rule first, compare mode, ask() with the Claude fallback, comparisons |
 | src/main/decisions/claude.ts | the Claude fallback through QuickModel |
 | src/main/decisions/keys.ts | the sealed keys |
-| src/main/decisions/uses.ts | Apex's own questions and cutoffs |
+| src/main/decisions/uses.ts | Atelier's own questions and cutoffs |
 | src/main/decisions/tool.ts | `label_items`, the companion's tool |
 | src/main/agent/turnDecisions.ts | effort per message and the skills' ranking at a chat's first message |
 | src/main/tabAutoGroup.ts | "Group tabs": the plan by site or by the model's answers |
 | src/renderer/src/overlay/surfaces/address/enter.ts | the address bar's Ask row first, and Enter |
 | src/main/decisions/feature.ts | wiring, the settings services, smoke's stand-in model |
 | src/renderer/src/settings/agent/QuickDecisions.tsx | the settings sections |
-| src/main/decisions/smoke.ts, smokeTabs.ts | `APEX_SMOKE_ONLY=decisions` |
+| src/main/decisions/smoke.ts, smokeTabs.ts | `ATELIER_SMOKE_ONLY=decisions` |
 
 ## Not yet
 

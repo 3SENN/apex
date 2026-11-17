@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { mainT } from '../i18n/mainT'
 
 // Text rules for attachments: line counts the chips show, caps, and the
-// small framing Apex adds around a selection so the agent sees its source.
+// small framing Atelier adds around a selection so the agent sees its source.
 
 /** Characters of a saved chat attached as context (CH-25). */
 export const CHAT_ATTACH_MAX_CHARS = 200_000

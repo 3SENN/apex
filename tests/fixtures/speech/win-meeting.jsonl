@@ -11,4 +11,4 @@
 {"type":"restored","session":"m1","source":"system"}
 {"type":"error","session":"m1","source":"mic","code":"device-missing","message":"The microphone went away (The audio endpoint was removed.).","fatal":false}
 {"type":"final","session":"m1","source":"mic","text":"Great, thanks everyone.","startMs":4800,"endMs":6200}
-{"type":"stopped","session":"m1","durationMs":6420,"audio":{"path":"C:\\Users\\someone\\AppData\\Roaming\\Apex\\meetings\\m1.m4a","bytes":482113}}
+{"type":"stopped","session":"m1","durationMs":6420,"audio":{"path":"C:\\Users\\someone\\AppData\\Roaming\\Atelier\\meetings\\m1.m4a","bytes":482113}}

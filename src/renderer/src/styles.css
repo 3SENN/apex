@@ -1,16 +1,16 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-/* Apex design system. Original styling: Inter (OFL), Lucide icons (ISC). */
+/* Atelier design system. Original styling: Inter (OFL), Lucide icons (ISC). */
 
 /* ---- design tokens ----
    One set of names serves both modes: every colour is light-dark(light, dark)
    and the mode is just `color-scheme`. main.tsx sets <html data-theme> to the
    resolved mode before React renders; until then (or if it is missing) the
    system preference decides. Colour roles (docs/design-spec.md):
-   - neutral: Apex ink, warm greys and paper. The toolbar, pill, bookmarks
+   - neutral: Atelier ink, warm greys and paper. The toolbar, pill, bookmarks
      bar, labels and icons, and every surface by default.
    - profile hue: the person's own colour (--profile-*, from
      src/shared/profile.ts via ui/profile.ts). The sidebar ground, the footer
@@ -229,7 +229,7 @@
   --dur-base: var(--motion-exit);
   --dur-slow: var(--motion-medium);
   --dur-slower: var(--motion-page);
-  /* Apex's own numbers (DS-81): menus pop in one frame and close at once; the
+  /* Atelier's own numbers (DS-81): menus pop in one frame and close at once; the
      card enters a beat faster than it leaves; layout is one short timeline. */
   --motion-pop: 60ms;
   --motion-quick: 90ms;
@@ -328,7 +328,7 @@
   color-scheme: light dark;
 }
 
-/* Reduce Motion: the system setting, or Apex's own (ui/motion.ts sets
+/* Reduce Motion: the system setting, or Atelier's own (ui/motion.ts sets
    data-motion). Every duration collapses; looping animations stop where
    their own rules say so. */
 @media (prefers-reduced-motion: reduce) {
@@ -2194,7 +2194,7 @@ select {
   animation: none;
 }
 
-/* apex://bookmarks: roots, breadcrumbs and drop marks. */
+/* atelier://bookmarks: roots, breadcrumbs and drop marks. */
 .bm-crumbs {
   display: flex;
   align-items: center;
@@ -2328,7 +2328,7 @@ select {
   display: flex;
   justify-content: flex-end;
 }
-/* Apex's own group palette: a soft fill for the header chip, readable text on
+/* Atelier's own group palette: a soft fill for the header chip, readable text on
    it, and a ring for focus and the strip's underline. Dark mode lifts the
    text and deepens the fill so each hue still reads on the dark ground. */
 :root {
@@ -2668,7 +2668,7 @@ select {
   overflow-wrap: anywhere;
 }
 
-/* Apex://view-source. */
+/* Atelier://view-source. */
 .vs {
   flex-direction: column;
   background: var(--bg-base);

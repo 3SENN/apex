@@ -1,7 +1,7 @@
 {
   "about": "The unofficial branding's icons, drawn from branding/unofficial/icon.svg by scripts/app-icons/unofficial.mjs. sha256 is the file; content is the decoded pixels (or text).",
   "files": {
-    "branding/unofficial/apexcompanion.icns": {
+    "branding/unofficial/ateliercompanion.icns": {
       "kind": "icns",
       "bytes": 43788,
       "sha256": "0324b451e9fe3c805752ecf23d4d56195197350a5bd45a1511aedffe3ccd434c",
@@ -49,7 +49,7 @@
         ]
       ]
     },
-    "branding/unofficial/apexcompanion.ico": {
+    "branding/unofficial/ateliercompanion.ico": {
       "kind": "ico",
       "bytes": 84252,
       "sha256": "0694e2bef2e5199b6ad56409fe36658b294b5bc2f97d2afa2b3121abceaffeb2",
@@ -93,7 +93,7 @@
         ]
       ]
     },
-    "branding/unofficial/apexcompanion.png": {
+    "branding/unofficial/ateliercompanion.png": {
       "kind": "png",
       "bytes": 6773,
       "sha256": "6e627f6b8761aece90bc70901fb77bdb1102c7ff3be742b48f572d6d2e4457c2",
@@ -105,7 +105,7 @@
         ]
       ]
     },
-    "branding/unofficial/apexpack.icns": {
+    "branding/unofficial/atelierpack.icns": {
       "kind": "icns",
       "bytes": 43788,
       "sha256": "0324b451e9fe3c805752ecf23d4d56195197350a5bd45a1511aedffe3ccd434c",
@@ -153,7 +153,7 @@
         ]
       ]
     },
-    "branding/unofficial/apexpack.ico": {
+    "branding/unofficial/atelierpack.ico": {
       "kind": "ico",
       "bytes": 84252,
       "sha256": "0694e2bef2e5199b6ad56409fe36658b294b5bc2f97d2afa2b3121abceaffeb2",
@@ -197,7 +197,7 @@
         ]
       ]
     },
-    "branding/unofficial/apexpack.png": {
+    "branding/unofficial/atelierpack.png": {
       "kind": "png",
       "bytes": 6773,
       "sha256": "6e627f6b8761aece90bc70901fb77bdb1102c7ff3be742b48f572d6d2e4457c2",

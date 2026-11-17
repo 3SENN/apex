@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { useSyncExternalStore } from 'react'
 import type { ChatSummary } from '@shared/chats'
 import type { CompanionMood } from '@shared/companion'
-import { apex, call } from '../api'
+import { atelier, call } from '../api'
 import {
   chatIsLive,
   chatMood,
@@ -83,8 +83,8 @@ function seedCompanions(ids: readonly string[]): void {
 function start(): void {
   if (started || typeof window === 'undefined') return
   started = true
-  apex.agent.onEvent((event, meta) => dispatch({ type: 'agent', chatId: meta.chatId, event, at: Date.now() }))
-  apex.onAppEvent((event) => {
+  atelier.agent.onEvent((event, meta) => dispatch({ type: 'agent', chatId: meta.chatId, event, at: Date.now() }))
+  atelier.onAppEvent((event) => {
     if (event.type === 'chats') dispatch({ type: 'chats', items: event.items, at: Date.now() })
     else if (event.type === 'companions') seedCompanions(event.items.map((c) => c.id))
     // DS-68: quick ask's composer (its own window) is an input like any other.

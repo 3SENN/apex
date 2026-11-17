@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -164,7 +164,7 @@
   height: 64vh;
   border: 1px solid var(--fv-rule);
   border-radius: var(--radius-md, 10px);
-  /* The page's own paper: white in both themes is the page, not Apex's UI. */
+  /* The page's own paper: white in both themes is the page, not Atelier's UI. */
   background: #ffffff;
 }
 
@@ -356,7 +356,7 @@
   outline-offset: 1px;
 }
 
-/* ── The viewer page (apex://file) ── */
+/* ── The viewer page (atelier://file) ── */
 
 .fv-page {
   display: flex;
@@ -513,7 +513,7 @@
   color: var(--fv-thumb-ink);
 }
 
-/* The kind glyph sits in a soft rounded tile, Apex's own. */
+/* The kind glyph sits in a soft rounded tile, Atelier's own. */
 .lf-card__glyph {
   display: grid;
   width: 60px;

@@ -1,4 +1,4 @@
-# Copyright (c) 2026 The Apex Authors. All rights reserved.
+# Copyright (c) 2026 The Atelier Authors. All rights reserved.
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -21,7 +21,7 @@ updates:
       # @types/node follows the Node inside Electron (Node 24 for Electron 45), not the newest Node.
       - dependency-name: '@types/node'
         update-types: ['version-update:semver-major']
-      # three.js is the version the Apex kit promises to apps (docs/apps.md › The kit); it moves with the kit, on purpose.
+      # three.js is the version the Atelier kit promises to apps (docs/apps.md › The kit); it moves with the kit, on purpose.
       - dependency-name: 'three'
       - dependency-name: '@types/three'
     groups:

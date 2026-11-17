@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -23,7 +23,7 @@ export function clampPageShare(value: number): number {
   return Math.min(PAGE_SHARE.max, Math.max(PAGE_SHARE.min, value))
 }
 
-/** A tab can hold a chat beside its page while it shows a website (not the new tab or an Apex page). */
+/** A tab can hold a chat beside its page while it shows a website (not the new tab or an Atelier page). */
 export function canHoldChat(url: string): boolean {
   return !isBlankUrl(url) && !isInternalUrl(url)
 }
@@ -63,7 +63,7 @@ export function releaseChat(held: HeldChats, chatId: string): HeldChats {
 
 /**
  * Drops holds whose tab closed, left the window, or went to the new tab or an
- * Apex page. Returns `held` itself when nothing changed.
+ * Atelier page. Returns `held` itself when nothing changed.
  */
 export function pruneHeld(held: HeldChats, tabs: ReadonlyArray<{ id: string; url: string }>): HeldChats {
   if (held.size === 0) return held
@@ -106,7 +106,7 @@ export type ExpandPlan =
 
 /**
  * A website tab holds the chat beside its page; a new tab becomes the chat
- * page itself; an Apex page (or a destination over the content) leaves the
+ * page itself; an Atelier page (or a destination over the content) leaves the
  * chat to open in its own tab.
  */
 export function planExpand(active: { id: string; url: string } | null | undefined, railShown: boolean): ExpandPlan {

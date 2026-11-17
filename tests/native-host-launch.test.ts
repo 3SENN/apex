@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -24,7 +24,7 @@ let dir = ''
 let launcher = ''
 
 beforeAll(() => {
-  dir = mkdtempSync(join(tmpdir(), 'apex-host-launch-'))
+  dir = mkdtempSync(join(tmpdir(), 'atelier-host-launch-'))
   mkdirSync(join(dir, 'bin'))
   // The launcher itself runs Node for the fake, so the host's own environment is what the fake reports
   // (on Windows a .bat, which starts through cmd.exe as Chrome starts it there).

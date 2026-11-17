@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import type { ReactElement } from 'react'
 import { AppWindow, Globe, Maximize2, PanelRightClose, X } from 'lucide-react'
 import type { TabInfo, TabsSnapshot } from '@shared/ipc'
 import { chatUrl, parseInternalUrl } from '@shared/url'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { t } from '../i18n/useT'
 import { Button, IconButton, cx, toast } from '../ui'
 import { useTabs } from './hooks'
@@ -47,7 +47,7 @@ export function TabsUsedSection({ chatId, state }: { chatId: string; state: Chat
           const inUse = state.tabIds.includes(tab.id)
           return (
             <li key={tab.id} className={cx('chat-tabs__row', tab.id === snapshot.activeId && 'chat-tabs__row--active')}>
-              <button type="button" className="chat-tabs__switch" title={t('chat.tabs.switch', { title })} onClick={() => void apex.tabs.activate(tab.id)}>
+              <button type="button" className="chat-tabs__switch" title={t('chat.tabs.switch', { title })} onClick={() => void atelier.tabs.activate(tab.id)}>
                 <Favicon tab={tab} />
                 <span className="chat-tabs__title">{title}</span>
                 {inUse && <span className="chat-tabs__state">{t('chat.tabs.inUse')}</span>}
@@ -115,7 +115,7 @@ function ChatPages({ beside, snapshot }: { beside: ChatBeside; snapshot: TabsSna
     // DS-65: in one tab, the chat moves to the other page's tab and that tab comes forward.
     if (beside.inTab) {
       holdChatInTab(pageId, beside.chatId)
-      void apex.tabs.activate(pageId).catch(fail)
+      void atelier.tabs.activate(pageId).catch(fail)
       return
     }
     void call('split', 'openWith', beside.chatTabId, pageId).catch(fail)
@@ -123,7 +123,7 @@ function ChatPages({ beside, snapshot }: { beside: ChatBeside; snapshot: TabsSna
   const expand = async (): Promise<void> => {
     if (beside.inTab) return releaseChatInTab(beside.pageTabId)
     await call('split', 'close').catch(fail)
-    await apex.tabs.activate(beside.pageTabId)
+    await atelier.tabs.activate(beside.pageTabId)
   }
   const hide = async (): Promise<void> => {
     // DS-65: the page keeps its tab and the chat opens as a page of its own.
@@ -133,7 +133,7 @@ function ChatPages({ beside, snapshot }: { beside: ChatBeside; snapshot: TabsSna
       return
     }
     await call('split', 'close').catch(fail)
-    await apex.tabs.activate(beside.chatTabId)
+    await atelier.tabs.activate(beside.chatTabId)
   }
   return (
     <div className="chat-pages" role="group" aria-label={t('chat.pages.label')}>

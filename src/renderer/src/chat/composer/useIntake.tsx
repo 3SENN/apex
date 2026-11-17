@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -189,7 +189,7 @@ export function useIntake({ chatId, text, setText, field, companions, companionI
       else place({ text: text && !text.endsWith(' ') ? `${text} ${token} ` : `${text}${token} `, caret: text.length + token.length + (text && !text.endsWith(' ') ? 2 : 1) })
       if (!inChat) {
         const companion = companions.find((c) => c.id === companionId)?.name ?? ''
-        toast.show({ message: t('composer.mention.connectorOff', { name: connector.name, companion }), action: { label: t('composer.mention.openConnectors'), onAction: () => void call('pages', 'open', 'apex://settings/connectors') } })
+        toast.show({ message: t('composer.mention.connectorOff', { name: connector.name, companion }), action: { label: t('composer.mention.openConnectors'), onAction: () => void call('pages', 'open', 'atelier://settings/connectors') } })
       }
       return
     }

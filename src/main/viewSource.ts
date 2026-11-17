@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import type { Session } from 'electron'
 import { VIEW_SOURCE_MAX_BYTES, type ViewSourceResult } from '@shared/dialogs'
 
-// View source: apex://view-source asks main for the document's text.
+// View source: atelier://view-source asks main for the document's text.
 // It is fetched again through the tab's own session, so cookies and the
 // cache match what the page saw; only http and https are fetched, and the
 // text is capped.

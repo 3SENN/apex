@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,9 +11,9 @@ import type { Bounds } from './ipc'
 /** Page-frame channels. Every frame (nested and cross-origin too) runs the page preload. */
 export const PAGE_AUTOFILL = {
   /** any frame -> main, routed by event.senderFrame */
-  report: 'apex-autofill:report',
+  report: 'atelier-autofill:report',
   /** main -> WebFrameMain.send */
-  command: 'apex-autofill:command',
+  command: 'atelier-autofill:command',
 } as const
 
 /** What ended a form: the submit event, Enter, a submit control, the form leaving the page, or the page going away. */
@@ -69,9 +69,9 @@ export interface AutofillSettings {
   passwordsImported: boolean
   /**
    * While a password extension (Apple Passwords, or any that turns off the
-   * browser's password saving through chrome.privacy) is on, Apex's own
+   * browser's password saving through chrome.privacy) is on, Atelier's own
    * password fill offers and save prompts step aside. Address and card
-   * autofill keep working. Off keeps Apex's offers as well.
+   * autofill keep working. Off keeps Atelier's offers as well.
    */
   yieldToPasswordExtension: boolean
 }
@@ -87,7 +87,7 @@ export const PASSKEY_ROWS_VISIBLE = false
 /** One row of a fill popup. Never carries a password or a card number. */
 export interface FillRow {
   id: string
-  /** 'generated' is the strong-password row; 'manage' opens apex://passwords or Settings; 'passkey' is hidden. */
+  /** 'generated' is the strong-password row; 'manage' opens atelier://passwords or Settings; 'passkey' is hidden. */
   kind: 'login' | 'card' | 'address' | 'generated' | 'manage' | 'passkey'
   title: string
   subtitle?: string

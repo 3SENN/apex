@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -45,10 +45,10 @@ export interface ConnectorV2 {
   directoryId: string | null
   transport: ConnectorTransport
   auth: ConnectorAuth
-  /** 'server': Anthropic's MCP connector calls it; 'local': Apex's own client does (localhost URLs and stdio). */
+  /** 'server': Anthropic's MCP connector calls it; 'local': Atelier's own client does (localhost URLs and stdio). */
   execution: 'server' | 'local'
   labelColor: string | null
-  /** A runtime favicon data URL, or null for Apex's generic icon. Never a bundled brand logo. */
+  /** A runtime favicon data URL, or null for Atelier's generic icon. Never a bundled brand logo. */
   logo: string | null
   health: ConnectorHealth
   healthDetail: string | null
@@ -152,21 +152,21 @@ export interface ConnectorsServices {
   }
 }
 
-/** apex://connectors?connect=<directoryId>: the directory with that entry's connect banner. */
+/** atelier://connectors?connect=<directoryId>: the directory with that entry's connect banner. */
 export function connectorConnectUrl(directoryId: string): string {
-  return `apex://connectors?connect=${encodeURIComponent(directoryId)}`
+  return `atelier://connectors?connect=${encodeURIComponent(directoryId)}`
 }
 
-/** Who asked to connect (an app's name), from an apex://connectors?connect=… address; null when a plain link did. */
+/** Who asked to connect (an app's name), from an atelier://connectors?connect=… address; null when a plain link did. */
 export function connectFromOf(url: string): string | null {
-  if (!url.startsWith('apex://connectors')) return null
+  if (!url.startsWith('atelier://connectors')) return null
   const from = new URLSearchParams(url.split('#')[0]?.split('?')[1] ?? '').get('from')?.replace(/[\u0000-\u001f\u007f]/g, '').trim()
   return from ? from.slice(0, 60) : null
 }
 
-/** The directory id an apex://connectors address asks to connect, or null. */
+/** The directory id an atelier://connectors address asks to connect, or null. */
 export function connectRequestOf(url: string): string | null {
-  if (!url.startsWith('apex://connectors')) return null
+  if (!url.startsWith('atelier://connectors')) return null
   const query = url.split('#')[0]?.split('?')[1]
   if (!query) return null
   const id = new URLSearchParams(query).get('connect')
@@ -175,7 +175,7 @@ export function connectRequestOf(url: string): string | null {
 
 // Shared by main's store and the renderer's forms
 
-/** Apex's own directory categories, in display order. */
+/** Atelier's own directory categories, in display order. */
 export const CONNECTOR_CATEGORIES = ['work', 'mail-calendar', 'code', 'design', 'sales-support', 'finance', 'data', 'web'] as const
 export type ConnectorCategory = (typeof CONNECTOR_CATEGORIES)[number]
 
@@ -186,9 +186,9 @@ export const CONNECTOR_SWATCHES = ['#d9534f', '#e8833a', '#d4a72c', '#4f9d5b', '
 export const LOGO_MAX_BYTES = 256 * 1024
 export const LOGO_DATA_URL = /^data:image\/(png|jpeg|gif|webp|svg\+xml|x-icon|vnd\.microsoft\.icon);base64,[A-Za-z0-9+/=]+$/
 
-/** apex://connectors/<id>: one connector's detail page. */
+/** atelier://connectors/<id>: one connector's detail page. */
 export function connectorDetailUrl(id: string): string {
-  return `apex://connectors/${encodeURIComponent(id)}`
+  return `atelier://connectors/${encodeURIComponent(id)}`
 }
 
 /** localhost, loopback, private and link-local ranges, and names that only resolve on this network. */
@@ -227,7 +227,7 @@ export function checkConnectorUrl(raw: string): { ok: true; href: string; privat
 /**
  * Where a connector runs. Anthropic's MCP connector reaches only public https
  * servers with a Bearer token, so anything private, with a custom header or
- * started from a command runs through Apex's own client instead.
+ * started from a command runs through Atelier's own client instead.
  */
 export function executionOf(transport: ConnectorInputV2['transport'] | ConnectorTransport, auth: ConnectorAuth): 'server' | 'local' {
   if (transport.kind === 'local') return 'local'

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,16 +6,16 @@
 // Worlds (docs/apps.md › Worlds): a place made of ground, kit props, named
 // places, residents and a sky. You walk around it as your companion; stepping
 // into a place opens its app with the residents there as its cast. A world is
-// a JSON file inside a pack (contributes.worlds), or one of your own that Apex
-// keeps for you; it shares as a pack that holds just the world (.apexworld).
+// a JSON file inside a pack (contributes.worlds), or one of your own that Atelier
+// keeps for you; it shares as a pack that holds just the world (.atelierworld).
 import type { CompanionLook } from './companion'
 
-export const WORLD_FORMAT = 'apex-world'
+export const WORLD_FORMAT = 'atelier-world'
 /** The first-party pack whose app shows and edits worlds. */
-export const WORLDS_PACK_ID = 'apex-worlds'
+export const WORLDS_PACK_ID = 'atelier-worlds'
 export const WORLD_VERSION = 1
 /** The file a pack that is only a world travels as. */
-export const WORLD_FILE_EXTENSION = 'apexworld'
+export const WORLD_FILE_EXTENSION = 'atelierworld'
 
 /** Starting values (docs/apps.md › Worlds › Limits). */
 export const WORLD_LIMITS = {
@@ -43,7 +43,7 @@ export type WorldSky = (typeof WORLD_SKIES)[number]
 export const WORLD_GROUNDS = ['grass', 'path', 'sand', 'boards', 'stone', 'floor', 'water', 'snow'] as const
 export type WorldGround = (typeof WORLD_GROUNDS)[number]
 
-/** The kit's props (apex-kit/props.js), by id, with the name the editor shows. */
+/** The kit's props (atelier-kit/props.js), by id, with the name the editor shows. */
 export const WORLD_PROPS = {
   tree: 'Tree',
   pine: 'Pine',
@@ -123,7 +123,7 @@ export interface WorldDoc {
   camera?: { at: [number, number, number]; lookAt: [number, number, number] }
 }
 
-/** A world as Apex lists it: one of yours (`own:<id>`) or one a pack brought (`pack:<packId>/<path>`). */
+/** A world as Atelier lists it: one of yours (`own:<id>`) or one a pack brought (`pack:<packId>/<path>`). */
 export interface WorldEntry {
   ref: string
   id: string
@@ -138,7 +138,7 @@ export interface WorldEntry {
   updatedAt: number
 }
 
-/** What an app opened from a world's place reads (apex.world.context()). */
+/** What an app opened from a world's place reads (atelier.world.context()). */
 export interface WorldContext {
   world: { ref: string; name: string; palette: WorldPalette; sky: WorldSky }
   place: { id: string; name: string }

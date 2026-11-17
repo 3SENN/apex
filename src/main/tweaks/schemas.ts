@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -43,7 +43,7 @@ function renamed(raw: unknown, from: string, to: string): unknown {
   return old === undefined || to in rest ? raw : { ...rest, [to]: old }
 }
 
-export const LEGACY_TWEAK_EXPORT_FORMAT = 'apex-boosts' // compatibility: the export format before the rename
+export const LEGACY_TWEAK_EXPORT_FORMAT = 'atelier-boosts' // compatibility: the export format before the rename
 
 /** A tweak's shape in files (the tweaks file, an export) and when one comes back after removal. */
 const tweakShape = z.object({

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import type { TabGroupPatch } from '@shared/services/tabs'
 import type { TabGroup } from '@shared/tabs'
 import { GROUP_NAME_MAX } from '@shared/tabs'
 import { ChevronRight } from 'lucide-react'
-import { apex, call, errorText } from '../../api'
+import { atelier, call, errorText } from '../../api'
 import { t } from '../../i18n/useT'
 import { cx, toast } from '../../ui'
 import { groupCard } from './cardContent'
@@ -103,7 +103,7 @@ export function GroupRow({ group, tabIds, tabs, renaming, focusable, onRename, v
           side: chip ? 'below' : 'right',
           build: async () => groupCard(group, groupMembers(tabs, tabIds)),
           onChoose: (value) => {
-            if (typeof value === 'string') void apex.tabs.activate(value)
+            if (typeof value === 'string') void atelier.tabs.activate(value)
           },
         })
       }}

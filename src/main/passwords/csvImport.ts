@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,7 +14,7 @@ import type { LoginInput } from './vault'
 
 /** How many rows the preview shows. */
 export const PREVIEW_ROWS = 5
-/** The largest CSV Apex reads (a password export is a few hundred KB at most). */
+/** The largest CSV Atelier reads (a password export is a few hundred KB at most). */
 export const CSV_MAX_BYTES = 20 * 1024 * 1024
 export const MASK = '••••••••'
 

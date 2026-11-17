@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@
 
 export type PrivacyExceptionKind = 'https' | 'cookieBanners'
 
-/** Hosts, sorted: sites allowed without HTTPS, and sites whose cookie banners Apex leaves alone. */
+/** Hosts, sorted: sites allowed without HTTPS, and sites whose cookie banners Atelier leaves alone. */
 export interface PrivacyExceptions {
   https: string[]
   cookieBanners: string[]
@@ -21,7 +21,7 @@ export interface CookieListInfo {
   id: CookieListId
   /** The list's own name (a proper noun, not translated). */
   name: string
-  /** Where Apex downloads it from; only when the person turns it on. */
+  /** Where Atelier downloads it from; only when the person turns it on. */
   url: string
   /** The host the settings row names. */
   source: string
@@ -30,7 +30,7 @@ export interface CookieListInfo {
 }
 
 /**
- * Community lists the person can add. Apex never bundles them: each is
+ * Community lists the person can add. Atelier never bundles them: each is
  * downloaded from its maintainers when turned on and refreshed weekly, and
  * only its element-hiding rules are used.
  */
@@ -46,7 +46,7 @@ export interface CookieListStatus {
   enabled: boolean
   /** When the copy on disk was downloaded (ms), or null before the first download. */
   updatedAt: number | null
-  /** Hiding rules Apex took from it. */
+  /** Hiding rules Atelier took from it. */
   rules: number
   state: 'idle' | 'updating' | 'failed'
 }
@@ -61,17 +61,17 @@ export type ConnectionSummary =
   | 'http-allowed'
   /** Over http: HTTPS-First is off, or the address is local. */
   | 'http'
-  /** Not a website (apex:// pages, files, the new tab). */
+  /** Not a website (atelier:// pages, files, the new tab). */
   | 'none'
 
 export type CookieBannerState =
-  /** Apex pressed the banner's Reject button. */
+  /** Atelier pressed the banner's Reject button. */
   | 'rejected'
   /** A banner was there and is hidden. */
   | 'hidden'
   /** Still watching the page (consent tools load late). */
   | 'checking'
-  /** No banner Apex knows. */
+  /** No banner Atelier knows. */
   | 'none'
   /** The person lets this site show its banner. */
   | 'allowed'

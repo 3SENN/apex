@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 // Packs on disk (docs/packs.md › Layout on disk): installed packs, drafts,
 // each pack's storage and log, and the index of what is installed and on.
 // Installed files are kept in memory too (a pack without an app is at most
-// 10 MB), so the apex-pack:// handler, the tool host and the contribution sync
+// 10 MB), so the atelier-pack:// handler, the tool host and the contribution sync
 // read them without touching the disk. An app's folder can hold a game's
 // assets (docs/apps.md), so those files stay on disk and are read when served.
 // A pack whose files no longer pass validatePack (changed on disk by hand,
@@ -64,11 +64,11 @@ interface IndexEntry {
   granted: PackOptionalPermissions | null
   /** What fills each of its apps' asset slots: `<pack>/<set>` by slot id; a slot not listed uses the app's own files. */
   assets: Record<string, string> | null
-  /** The folder apex.files.folder may read and write, until the person takes it back. */
+  /** The folder atelier.files.folder may read and write, until the person takes it back. */
   folder: string | null
-  /** Notifications it set for later (apex.notifications.schedule). */
+  /** Notifications it set for later (atelier.notifications.schedule). */
   schedules: PackScheduledNotification[]
-  /** Who each of its apps last cast (apex.cast.pick): companion ids by app id. */
+  /** Who each of its apps last cast (atelier.cast.pick): companion ids by app id. */
   cast: Record<string, string[]> | null
   /** An index lists it as withdrawn (docs/apps.md › The community index): no updates, and a notice on its page. */
   withdrawn?: { index: string; reason: string | null } | null
@@ -498,7 +498,7 @@ export class PackStore extends EventEmitter<{ changed: []; log: [string] }> {
     this.#writeIndex()
   }
 
-  /** Where a pack keeps the person's own files (apex.files.own): never part of the pack, removed with it. */
+  /** Where a pack keeps the person's own files (atelier.files.own): never part of the pack, removed with it. */
   ownDir(id: string): string {
     if (!PACK_ID_PATTERN.test(id)) throw new PackFileError('Not a pack.')
     return join(this.root, 'own', id)
@@ -635,7 +635,7 @@ export class PackStore extends EventEmitter<{ changed: []; log: [string] }> {
       const check = validatePack(files)
       manifest = check.ok ? check.pack.manifest : check.manifest
       problems = check.ok ? [] : check.problems
-      if (manifest && manifest.id !== id) problems = [...problems, `apex-pack.json: id is "${manifest.id}" but the draft's folder is "${id}". Use "${id}".`]
+      if (manifest && manifest.id !== id) problems = [...problems, `atelier-pack.json: id is "${manifest.id}" but the draft's folder is "${id}". Use "${id}".`]
     } catch (err) {
       problems = [err instanceof Error ? err.message : String(err)]
     }
@@ -689,7 +689,7 @@ export class PackStore extends EventEmitter<{ changed: []; log: [string] }> {
   }
 
   writeDraftFile(id: string, path: string, content: string): void {
-    if (!isPackPath(path)) throw new PackFileError(`${path} is not a file path inside the pack (letters, digits, dot, dash and underscore; not under __apex/).`)
+    if (!isPackPath(path)) throw new PackFileError(`${path} is not a file path inside the pack (letters, digits, dot, dash and underscore; not under __atelier/).`)
     if (!this.hasDraft(id)) throw new PackFileError(`There is no draft called ${id}. Call create_pack first.`)
     const size = Buffer.byteLength(content)
     if (size > PACK_LIMITS.fileBytes) throw new PackFileError(`A file is at most ${PACK_LIMITS.fileBytes / 1024 / 1024} MB.`)
@@ -710,7 +710,7 @@ export class PackStore extends EventEmitter<{ changed: []; log: [string] }> {
     this.emit('changed')
   }
 
-  // ---- apex.storage ----
+  // ---- atelier.storage ----
 
   #dataPath(id: string): string {
     if (!PACK_ID_PATTERN.test(id)) throw new PackFileError('Not a pack.')

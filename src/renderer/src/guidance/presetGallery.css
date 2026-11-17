@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-/* The preset gallery (apex://presets) and a preset's profile
-   (apex://presets/<id>). Each card and the profile take the preset's own
+/* The preset gallery (atelier://presets) and a preset's profile
+   (atelier://presets/<id>). Each card and the profile take the preset's own
    colour as --ps-tint; everything else is theme tokens. */
 
 .ps-content {
@@ -362,7 +362,7 @@
   color: var(--text-secondary);
 }
 
-/* Four stat tiles, each with its own pale tint (Apex's own: sky, sand, lilac, sage). */
+/* Four stat tiles, each with its own pale tint (Atelier's own: sky, sand, lilac, sage). */
 .ps-stats {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

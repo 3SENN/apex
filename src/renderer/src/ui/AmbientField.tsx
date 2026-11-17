@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -98,7 +98,7 @@ function drawGlyph(ctx: CanvasRenderingContext2D, cell: LatticeCell, size: numbe
 }
 
 /**
- * Apex's ambient field, the "tide weave": a canvas lattice of small glyphs
+ * Atelier's ambient field, the "tide weave": a canvas lattice of small glyphs
  * whose sizes swell in slow rings from `origin`. It fills its positioned
  * parent and ignores the pointer. It pauses off screen, while the window is
  * hidden and when `paused`, caps its pixel density, draws one still frame

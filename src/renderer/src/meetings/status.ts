@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { useSyncExternalStore } from 'react'
 import type { MeetingStatus, MeetingSummary } from '@shared/meetings'
-import { apex, call } from '../api'
+import { atelier, call } from '../api'
 
 // Every meeting's status and title as the chrome last heard them, kept live
 // from the 'meetings' and 'meeting-live' events. The composer's meeting chip
@@ -30,7 +30,7 @@ function fill(items: readonly MeetingSummary[]): void {
 function start(): void {
   if (started) return
   started = true
-  apex.onAppEvent((e) => {
+  atelier.onAppEvent((e) => {
     if (e.type === 'meetings') fill(e.items)
     else if (e.type === 'meeting-live') {
       const before = known.get(e.id)

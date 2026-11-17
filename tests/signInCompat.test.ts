@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -79,7 +79,7 @@ describe('WebAuthn without a passkey sheet', () => {
     expect(webAuthnDecision(call({ kind: 'get', platform: true, hints: ['client-device'] }))).toBe('pass')
   })
 
-  it('reports only what Apex can do in getClientCapabilities', () => {
+  it('reports only what Atelier can do in getClientCapabilities', () => {
     const native = { conditionalGet: true, conditionalCreate: true, hybridTransport: true, passkeyPlatformAuthenticator: true, userVerifyingPlatformAuthenticator: false, immediateGet: true, relatedOrigins: true, 'extension:prf': true }
     expect(honestCapabilities(native, false)).toEqual({ ...native, conditionalGet: false, conditionalCreate: false, hybridTransport: false, passkeyPlatformAuthenticator: false, immediateGet: false })
     expect(honestCapabilities(native, true)).toMatchObject({ passkeyPlatformAuthenticator: true, userVerifyingPlatformAuthenticator: true, hybridTransport: false })
@@ -96,18 +96,18 @@ describe('WebAuthn without a passkey sheet', () => {
 describe('passkeys follow the signature', () => {
   const plist = (groups: string[], browser = false): string =>
     `<?xml version="1.0"?><plist version="1.0"><dict><key>com.apple.security.cs.allow-jit</key><true/>${browser ? '<key>com.apple.developer.web-browser.public-key-credential</key><true/>' : ''}<key>keychain-access-groups</key><array>${groups.map((g) => `<string>${g}</string>`).join('')}</array></dict></plist>`
-  const GROUP = 'ABCDE12345.com.sennechin.apex.webauthn'
+  const GROUP = 'ABCDE12345.com.sennechin.atelier.webauthn'
 
   it('finds the .webauthn group', () => {
-    expect(webAuthnKeychainGroup(plist(['ABCDE12345.com.sennechin.apex.shared', GROUP]))).toBe(GROUP)
-    expect(webAuthnKeychainGroup(plist(['ABCDE12345.com.sennechin.apex']))).toBeNull()
+    expect(webAuthnKeychainGroup(plist(['ABCDE12345.com.sennechin.atelier.shared', GROUP]))).toBe(GROUP)
+    expect(webAuthnKeychainGroup(plist(['ABCDE12345.com.sennechin.atelier']))).toBeNull()
     expect(webAuthnKeychainGroup('<plist><dict></dict></plist>')).toBeNull()
     expect(webAuthnKeychainGroup(null)).toBeNull()
   })
 
   it('turns Touch ID on only for a group of the team that signed the app', () => {
     expect(touchIdGroup(plist([GROUP]), 'ABCDE12345')).toBe(GROUP)
-    expect(touchIdGroup(plist(['ZZZZZ99999.com.sennechin.apex.webauthn']), 'ABCDE12345')).toBeNull()
+    expect(touchIdGroup(plist(['ZZZZZ99999.com.sennechin.atelier.webauthn']), 'ABCDE12345')).toBeNull()
     expect(touchIdGroup(plist([GROUP]), null)).toBeNull()
   })
 
@@ -123,7 +123,7 @@ describe('passkeys follow the signature', () => {
     expect(webAuthnOptions({ on: true, touchIdGroup: null, platformPasskeys: true })).toEqual({ platformPasskeys: true })
   })
 
-  it('leaves an unsigned or unpackaged Apex exactly as it was, and tells pages about the sheet only when it is on', () => {
+  it('leaves an unsigned or unpackaged Atelier exactly as it was, and tells pages about the sheet only when it is on', () => {
     const real = process.platform
     Object.defineProperty(process, 'platform', { value: 'darwin' })
     try {
@@ -150,7 +150,7 @@ describe('WebAuthn with the system passkey sheet', () => {
   it('keeps the fail-fast table without it', () => {
     expect(webAuthnDecision(call({ kind: 'get', hints: ['hybrid'] }))).toBe('reject')
     expect(webAuthnDecision(call({ kind: 'get', platform: true, sheet: false, hints: ['hybrid'] }))).toBe('reject')
-    expect(SYSTEM_PASSKEYS_ARG).toMatch(/^--apex-/)
+    expect(SYSTEM_PASSKEYS_ARG).toMatch(/^--atelier-/)
   })
 })
 

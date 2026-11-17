@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import { CalendarClock, CornerUpLeft, EyeOff, FileInput, Play, ShieldOff } from 
 import type { ApprovalMode } from '@shared/agentTools'
 import type { ChatSummary } from '@shared/chats'
 import { chatUrl, routineUrl } from '@shared/url'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { useT } from '../i18n/useT'
 import { Button, RelativeTime, StatusDot, confirm, cx, toast } from '../ui'
 import { useChatList, useRoutines } from './hooks'
@@ -40,7 +40,7 @@ function startMode(): void {
     },
     () => undefined,
   )
-  apex.onAppEvent((event) => {
+  atelier.onAppEvent((event) => {
     if (event.type !== 'agent-mode') return
     mode = event.mode
     for (const l of modeListeners) l()
@@ -298,8 +298,8 @@ export function NewTabPrivateToggle({ on, onChange }: { on: boolean; onChange(on
 
 /** CH-30: starts a private chat from the new tab and shows it there. */
 export function startPrivateChat(tabId: string, text: string, companionId: string): void {
-  void apex.agent.start(text, { companionId, private: true }).then(
-    (chatId) => void apex.nav.go(tabId, chatUrl(chatId)),
+  void atelier.agent.start(text, { companionId, private: true }).then(
+    (chatId) => void atelier.nav.go(tabId, chatUrl(chatId)),
     (err: unknown) => fail(err),
   )
 }

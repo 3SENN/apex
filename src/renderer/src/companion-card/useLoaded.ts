@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { SettingsView } from '@shared/ipc'
 import type { AppEvent } from '@shared/services'
-import { apex, errorText } from '../api'
+import { atelier, errorText } from '../api'
 
 export interface Loaded<T> {
   data: T | null
@@ -40,7 +40,7 @@ export function useLoaded<T>(load: () => Promise<T>, deps: readonly unknown[], r
   useEffect(() => {
     setState({ data: null, status: 'loading', error: null })
     reload()
-    return apex.onAppEvent((event) => {
+    return atelier.onAppEvent((event) => {
       const verdict = refresher.current?.(event) ?? false
       if (verdict === true) reload()
       else if (verdict !== false) {
@@ -55,6 +55,6 @@ export function useLoaded<T>(load: () => Promise<T>, deps: readonly unknown[], r
 
 /** The global settings (default model and effort, API key state), kept live. */
 export function useSettingsView(): SettingsView | null {
-  const { data } = useLoaded(() => apex.settings.get(), [], (e) => (e.type === 'settings' ? { data: e.view } : false))
+  const { data } = useLoaded(() => atelier.settings.get(), [], (e) => (e.type === 'settings' ? { data: e.view } : false))
   return data
 }

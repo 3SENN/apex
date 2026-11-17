@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,11 +7,11 @@ import { memo, useCallback, useEffect, useMemo, useState, type ReactElement } fr
 import { Copy, ExternalLink, FileCode, RotateCw } from 'lucide-react'
 import { VIEW_SOURCE_MAX_BYTES, type ViewSourceResult } from '@shared/dialogs'
 import { SOURCE_LINES_STEP, isMarkupSource, sourceLines, tokenizeLine, viewSourceTarget } from '@shared/viewSource'
-import { apex, call, errorText, formatBytes } from '../api'
+import { atelier, call, errorText, formatBytes } from '../api'
 import { useT } from '../i18n/useT'
 import { Button, EmptyState, ErrorState, Spinner, Switch, toast } from '../ui'
 
-// apex://view-source?url=…: the page's source as the server sent it,
+// atelier://view-source?url=…: the page's source as the server sent it,
 // fetched again through the tab's session, with line numbers, optional
 // pretty-printing for markup, line wrap, Copy, Reload and a way back to the
 // page. Long documents draw in steps so the page stays responsive.
@@ -117,7 +117,7 @@ export function ViewSourcePage({ url, tabId }: ViewSourcePageProps): ReactElemen
           <Button size="sm" variant="ghost" icon={<RotateCw />} onClick={() => void fetchSource()}>
             {t('menus.viewSource.reload')}
           </Button>
-          <Button size="sm" variant="ghost" icon={<ExternalLink />} onClick={() => void apex.nav.go(tabId, target)}>
+          <Button size="sm" variant="ghost" icon={<ExternalLink />} onClick={() => void atelier.nav.go(tabId, target)}>
             {t('menus.viewSource.open')}
           </Button>
         </div>

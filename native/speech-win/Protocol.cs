@@ -1,15 +1,15 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex-speech.exe: the JSON-lines protocol v2, the same
+// atelier-speech.exe: the JSON-lines protocol v2, the same
 // one the macOS helper speaks. Commands arrive on stdin, one JSON object per
 // line; replies and session events leave on stdout the same way. Nothing
 // else is ever written to stdout, so main's parser sees only protocol lines.
 using System.Text.Json;
 
-namespace Apex.Speech;
+namespace Atelier.Speech;
 
 internal static class Protocol
 {
@@ -46,7 +46,7 @@ internal static class Out
             }
             catch (IOException)
             {
-                // Apex went away; the stdin loop ends on its own.
+                // Atelier went away; the stdin loop ends on its own.
             }
         }
     }

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,13 +10,13 @@ import { log } from '../log'
 
 // Screen Recording on macOS. CGPreflightScreenCaptureAccess only says granted
 // or not, so a first use would read as "denied" before macOS ever asked.
-// Main remembers whether Apex has asked (userData/speech/screen-access.json,
+// Main remembers whether Atelier has asked (userData/speech/screen-access.json,
 // not the renderer's storage), so the first use in context asks instead.
 // A grant made in System Settings since launch shows up in a fresh helper
 // first; this process (screenshots, sharing windows) sees it only after a
 // relaunch, which is what 'relaunch' says.
 
-/** Whether Apex has asked macOS for Screen Recording, kept across launches. */
+/** Whether Atelier has asked macOS for Screen Recording, kept across launches. */
 export interface ScreenPrompt {
   asked(): boolean
   markAsked(): void
@@ -75,7 +75,7 @@ export interface ScreenAccessHost {
   status(): Promise<ScreenAccess>
   /** Asks macOS (its prompt shows only the first time), then the new state. Never opens System Settings. */
   request(): Promise<ScreenAccess>
-  /** Quits and reopens Apex, so a grant made since launch takes effect. */
+  /** Quits and reopens Atelier, so a grant made since launch takes effect. */
   relaunch(): void
   /** Back to never asked (the smoke run's fresh setup). */
   forgetAsked(): void

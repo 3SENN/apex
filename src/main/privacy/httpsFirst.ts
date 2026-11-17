@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import { isCertificateError } from '@shared/safety'
 // HTTPS-First (privacy pack, Settings › Privacy). A tab's top-level http://
 // navigation is sent to https:// first; when the secure version fails (no
 // TLS on the host, a bad certificate, a refused or reset connection, or an
-// https answer that redirects straight back to http), the tab shows Apex's
+// https answer that redirects straight back to http), the tab shows Atelier's
 // "This site doesn't support a secure connection" page at the http address,
 // with Continue to site (a remembered per-site exception) and Go back. The
 // machine itself, the local network and names with no public suffix are
@@ -98,7 +98,7 @@ interface Pending {
   host: string
   /** The https answer redirected back to http on the same host. */
   downgraded: boolean
-  /** A typed bare host the address bar sent to https, not an http:// address Apex upgraded. */
+  /** A typed bare host the address bar sent to https, not an http:// address Atelier upgraded. */
   typed?: boolean
 }
 

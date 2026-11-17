@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -44,7 +44,7 @@ afterEach(() => {
   for (const d of dirs.splice(0)) rmSync(d, { recursive: true, force: true })
 })
 
-const m = (over: Partial<PackManifest> = {}): PackManifest => ({ format: 'apex-pack', manifestVersion: 2, id: 'board', name: 'Board', version: '1.0.0', description: '', contributes: { apps: [{ id: 'main', name: 'Board', root: 'app', entry: 'index.html', build: 'kit', kind: 'tool' }] }, permissions: { ...NO_PACK_PERMISSIONS }, ...over })
+const m = (over: Partial<PackManifest> = {}): PackManifest => ({ format: 'atelier-pack', manifestVersion: 2, id: 'board', name: 'Board', version: '1.0.0', description: '', contributes: { apps: [{ id: 'main', name: 'Board', root: 'app', entry: 'index.html', build: 'kit', kind: 'tool' }] }, permissions: { ...NO_PACK_PERMISSIONS }, ...over })
 const KEY = '0123456789abcdef'
 
 describe('reading a policy', () => {
@@ -75,12 +75,12 @@ describe('reading a policy', () => {
   })
 
   it('reads a smoke run’s policy from a file, and only in a smoke run', async () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-policy-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-policy-'))
     dirs.push(dir)
     const file = join(dir, 'policy.json')
     writeFileSync(file, JSON.stringify({ PackSideloading: false }))
-    expect((await readPolicy({ platform: 'linux', smoke: true, env: { APEX_SMOKE_POLICY_FILE: file } })).policy.sideloading).toBe(false)
-    expect((await readPolicy({ platform: 'linux', smoke: false, env: { APEX_SMOKE_POLICY_FILE: file } })).policy.managed).toBe(false)
+    expect((await readPolicy({ platform: 'linux', smoke: true, env: { ATELIER_SMOKE_POLICY_FILE: file } })).policy.sideloading).toBe(false)
+    expect((await readPolicy({ platform: 'linux', smoke: false, env: { ATELIER_SMOKE_POLICY_FILE: file } })).policy.managed).toBe(false)
   })
 })
 
@@ -121,10 +121,10 @@ describe('who may come in', () => {
 
 describe('a policy in effect', () => {
   const themePack = (id: string): PackFiles =>
-    new Map([[PACK_MANIFEST_FILE, Buffer.from(JSON.stringify({ format: 'apex-pack', manifestVersion: 1, id, name: id, version: '1.0.0', description: 'A pack.', contributes: { themes: [{ id: 't', name: 'T', accent: '#123456' }] }, permissions: { ...NO_PACK_PERMISSIONS } }))]])
+    new Map([[PACK_MANIFEST_FILE, Buffer.from(JSON.stringify({ format: 'atelier-pack', manifestVersion: 1, id, name: id, version: '1.0.0', description: 'A pack.', contributes: { themes: [{ id: 't', name: 'T', accent: '#123456' }] }, permissions: { ...NO_PACK_PERMISSIONS } }))]])
 
   function setup(served: Record<string, Buffer> = {}) {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-policy-wired-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-policy-wired-'))
     dirs.push(dir)
     const store = new PackStore(dir)
     const author = new AuthorKey(join(dir, 'packs'), { encrypt: (b: Buffer) => b, decrypt: (b: Buffer) => b })
@@ -154,7 +154,7 @@ describe('a policy in effect', () => {
     const review = service.reviewArchive(archive(themePack('notes')), { kind: 'file' })
     store.setPolicy(parsePolicy({ PackSideloading: false, PackIndexes: ['https://corp.example/index.json'] }, 't').policy)
     expect(() => service.confirmInstall(review.token)).toThrow(/only from its indexes/)
-    expect(service.reviewArchive(archive(themePack('notes')), { kind: 'link', url: 'https://x.example/n.apexpack' }).problems).toContain('Your organisation lets packs in only from its indexes.')
+    expect(service.reviewArchive(archive(themePack('notes')), { kind: 'link', url: 'https://x.example/n.atelierpack' }).problems).toContain('Your organisation lets packs in only from its indexes.')
     expect(service.stateNow().policy).toEqual({ managed: true, sideloading: false, indexesLocked: true, audit: false, aiProvider: false })
     expect(store.indexes().map((i) => i.url)).toEqual(['https://corp.example/index.json'])
     await expect(service.addIndex('https://mine.example/index.json')).rejects.toThrow(/chooses the indexes/)
@@ -162,7 +162,7 @@ describe('a policy in effect', () => {
   })
 
   it('installs what it forces, checked against its hash, and keeps it on and installed', async () => {
-    const url = 'https://corp.example/tools.apexpack'
+    const url = 'https://corp.example/tools.atelierpack'
     const maker = setup()
     const data = maker.archive(themePack('corp-tools'))
     const { store, service } = setup({ [url]: data })
@@ -172,8 +172,8 @@ describe('a policy in effect', () => {
     expect(service.summary('corp-tools').managed).toBe(true)
     expect(() => service.setEnabled('corp-tools', false)).toThrow(/can’t be turned off or removed/)
     expect(() => service.remove('corp-tools')).toThrow(/can’t be turned off or removed/)
-    store.setPolicy(parsePolicy({ PackForceInstall: [{ url: 'https://corp.example/other.apexpack', sha256: 'a'.repeat(64) }] }, 't').policy)
-    expect((await service.applyPolicy())[0]).toMatch(/other\.apexpack/)
+    store.setPolicy(parsePolicy({ PackForceInstall: [{ url: 'https://corp.example/other.atelierpack', sha256: 'a'.repeat(64) }] }, 't').policy)
+    expect((await service.applyPolicy())[0]).toMatch(/other\.atelierpack/)
   })
 
   it('changes nothing without a policy', () => {
@@ -213,7 +213,7 @@ describe('the audit log', () => {
       audit: (_ctx, op, detail) => audited.push(`${op}${detail ? ` ${detail}` : ''}`),
     })
     const invoke = ipc.handle.mock.calls[0]?.[1] as (event: unknown, payload: unknown) => Promise<{ ok: boolean }>
-    const sender = { isDestroyed: () => false, mainFrame: {}, getURL: () => 'apex-pack://board/app/index.html' }
+    const sender = { isDestroyed: () => false, mainFrame: {}, getURL: () => 'atelier-pack://board/app/index.html' }
     const event = { sender, senderFrame: sender.mainFrame }
     expect((await invoke(event, { op: 'clipboard.write', args: ['hi'] })).ok).toBe(true)
     expect((await invoke(event, { op: 'storage.keys', args: [] })).ok).toBe(true)
@@ -222,7 +222,7 @@ describe('the audit log', () => {
   })
 
   it('can’t be cleared while the policy keeps it', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-policy-audit-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-policy-audit-'))
     dirs.push(dir)
     const store = new PackStore(dir)
     const author = new AuthorKey(join(dir, 'packs'), { encrypt: (b: Buffer) => b, decrypt: (b: Buffer) => b })

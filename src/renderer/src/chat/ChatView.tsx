@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import { accentTokens } from '@shared/accent'
 import type { CompanionMood } from '@shared/companion'
 import type { Companion as CompanionRecord } from '@shared/services'
 import type { NewChatOptions } from '@shared/chats'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { Bubble, Companion } from '../companion'
 import { signalPresence, useChatPresence } from '../companion/presence'
 import { useCompanionImage } from '../components/companionData'
@@ -200,7 +200,7 @@ export function ChatView({ chatId, surfaceId, variant, onChangeChat, newChatComp
           action={
             <>
               <Button variant="primary" icon={<MessageSquarePlus size={14} />} onClick={newChat}>{t('chat.view.newChat')}</Button>
-              <Button onClick={() => void call('pages', 'open', 'apex://chats')}>{t('chat.view.allChats')}</Button>
+              <Button onClick={() => void call('pages', 'open', 'atelier://chats')}>{t('chat.view.allChats')}</Button>
             </>
           }
         />
@@ -222,7 +222,7 @@ export function ChatView({ chatId, surfaceId, variant, onChangeChat, newChatComp
       driving.claim()
       signalPresence('sent', companion?.id ?? null, chatId)
       markSent(chatId)
-      void apex.agent.send(chatId, text).catch((err: unknown) => {
+      void atelier.agent.send(chatId, text).catch((err: unknown) => {
         markSent(chatId, false)
         toast.show({ message: errorText(err), tone: 'error' })
       })
@@ -235,7 +235,7 @@ export function ChatView({ chatId, surfaceId, variant, onChangeChat, newChatComp
           <div className="chat-callout" role="note">
             <KeyRound size={16} aria-hidden="true" />
             <p>{t('chat.view.addYourAnthropicApi', { name })}</p>
-            <Button size="sm" variant="primary" onClick={() => void call('pages', 'open', 'apex://settings/model')}>{t('chat.view.openSettings')}</Button>
+            <Button size="sm" variant="primary" onClick={() => void call('pages', 'open', 'atelier://settings/model')}>{t('chat.view.openSettings')}</Button>
           </div>
         )}
         {state.setup?.fixed && companion === null && (

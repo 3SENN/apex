@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -32,7 +32,7 @@ describe('composer drafts', () => {
     const { mkdtempSync } = await import('node:fs')
     const { tmpdir } = await import('node:os')
     const { DraftStore } = await import('../src/main/drafts')
-    const dir = mkdtempSync(join(tmpdir(), 'apex-drafts-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-drafts-'))
     const first = new DraftStore(dir, 5)
     first.set(id, 'half a thought')
     first.set('11111111-2222-3333-4444-555555555555', 'other')

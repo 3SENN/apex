@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -13,12 +13,12 @@ import type { Tab } from '../tabs'
 import { artifactDocument, artifactHeaders, artifactNavigationAllowed } from './policy'
 
 // Artifact tabs: a Library file shown as a real tab, rendered in the
-// in-memory apex-artifacts partition with no preload. The partition is locked
+// in-memory atelier-artifacts partition with no preload. The partition is locked
 // down (webRequest.lockdown and a deny-all permission override, see
 // features/sandboxSessions.ts); here each tab also refuses navigation, popups and
 // downloads, and the scheme serves only the artifact's own document.
 
-/** Serves apex-artifact://<fileId>/ from the Library on the artifacts session. */
+/** Serves atelier-artifact://<fileId>/ from the Library on the artifacts session. */
 export function handleArtifactProtocol(session: Session, library: LibraryStore): () => void {
   session.protocol.handle(ARTIFACT_SCHEME, (request) => {
     const id = artifactIdOf(request.url)

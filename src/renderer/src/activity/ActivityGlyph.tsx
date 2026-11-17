@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -16,7 +16,7 @@ import { statusLine } from './logic'
 import { useActivityStatus } from './useActivity'
 import './activity.css'
 
-/** Apex's own mark: an eye-shaped lens with a pupil, drawn at 16 px like the lucide set. */
+/** Atelier's own mark: an eye-shaped lens with a pupil, drawn at 16 px like the lucide set. */
 export function ActivityMark({ size = 16 }: { size?: number }): ReactElement {
   return (
     <svg className="am-mark" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

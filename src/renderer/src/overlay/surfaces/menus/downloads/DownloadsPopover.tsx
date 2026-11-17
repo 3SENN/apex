@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -114,13 +114,13 @@ export function DownloadsPopover({ props, anchorRect, viewport, close, exiting }
         <Button variant="ghost" size="sm" disabled={!clearable} onClick={() => void call('downloads', 'clear')}>
           {t('downloads.popover.clear')}
         </Button>
-        <IconButton size="sm" label={t('downloads.popover.showAllLabel')} icon={<ArrowUpRight />} onClick={() => openPage('apex://downloads')} />
+        <IconButton size="sm" label={t('downloads.popover.showAllLabel')} icon={<ArrowUpRight />} onClick={() => openPage('atelier://downloads')} />
       </header>
       {folderMissing && (
         <p className="dl-pop__notice" role="status">
           <TriangleAlert aria-hidden />
           <span>{t('downloads.popover.folderMissing')}</span>
-          <button type="button" className="dl-link" onClick={() => openPage('apex://settings/downloads')}>
+          <button type="button" className="dl-link" onClick={() => openPage('atelier://settings/downloads')}>
             {t('downloads.popover.folderSettings')}
           </button>
         </p>
@@ -134,7 +134,7 @@ export function DownloadsPopover({ props, anchorRect, viewport, close, exiting }
           title={t('downloads.popover.empty')}
           description={t('downloads.popover.emptyDetail')}
           action={
-            <Button size="sm" onClick={() => openPage('apex://downloads')}>
+            <Button size="sm" onClick={() => openPage('atelier://downloads')}>
               {t('downloads.popover.showAll')}
             </Button>
           }
@@ -147,7 +147,7 @@ export function DownloadsPopover({ props, anchorRect, viewport, close, exiting }
         </ul>
       )}
       {props.total > rows.length && (
-        <button type="button" className="dl-pop__more dl-link" onClick={() => openPage('apex://downloads')}>
+        <button type="button" className="dl-pop__more dl-link" onClick={() => openPage('atelier://downloads')}>
           {t('downloads.popover.more', { count: props.total - rows.length })}
         </button>
       )}

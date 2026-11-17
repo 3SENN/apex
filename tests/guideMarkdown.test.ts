@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -34,15 +34,15 @@ describe('guide Markdown', () => {
     expect(inlineText(parseInline('a * b ** c `d'))).toBe('a * b ** c `d')
   })
 
-  it('links only to Apex pages', () => {
-    expect(parseInline('[All chats](apex://chats)')).toEqual([{ type: 'link', href: 'apex://chats', children: [{ type: 'text', text: 'All chats' }] }])
+  it('links only to Atelier pages', () => {
+    expect(parseInline('[All chats](atelier://chats)')).toEqual([{ type: 'link', href: 'atelier://chats', children: [{ type: 'text', text: 'All chats' }] }])
     const evil = parseInline('[evil](javascript:alert(1))')
     expect(evil.some((n) => n.type === 'link')).toBe(false)
     expect(inlineText(evil)).not.toContain('javascript')
     expect(parseInline('[site](https://example.com)')).toEqual([{ type: 'text', text: 'site' }])
   })
 
-  it('ships every guide, each titled as listed and linking only to real Apex pages', () => {
+  it('ships every guide, each titled as listed and linking only to real Atelier pages', () => {
     for (const guide of FIRST_WEEK_GUIDES) {
       const source = readFileSync(join(__dirname, '../src/renderer/src/first-week/guides', `${guide.id}.md`), 'utf8')
       const blocks = parseGuide(source)
@@ -51,8 +51,8 @@ describe('guide Markdown', () => {
       const words = source.split(/\s+/).length
       // Short guides: roughly the minutes on the badge at a relaxed reading pace.
       expect(words).toBeLessThan(guide.minutes * 200)
-      const links = [...source.matchAll(/\]\((apex:\/\/[^)]+)\)/g)].map((m) => m[1])
-      for (const href of links) expect(href).toMatch(/^apex:\/\/(chats|skills|routines|connectors|settings\/memory)$/)
+      const links = [...source.matchAll(/\]\((atelier:\/\/[^)]+)\)/g)].map((m) => m[1])
+      for (const href of links) expect(href).toMatch(/^atelier:\/\/(chats|skills|routines|connectors|settings\/memory)$/)
     }
   })
 
@@ -65,7 +65,7 @@ describe('guide Markdown', () => {
       expect(guideTitle(blocks)).toBe(NL[key])
       expect(blocks.length).toBe(parseGuide(english).length)
       expect(source.split(/\s+/).length).toBeLessThan(guide.minutes * 200)
-      const links = (text: string): string[] => [...text.matchAll(/\]\((apex:\/\/[^)]+)\)/g)].map((m) => m[1] ?? '')
+      const links = (text: string): string[] => [...text.matchAll(/\]\((atelier:\/\/[^)]+)\)/g)].map((m) => m[1] ?? '')
       expect(links(source)).toEqual(links(english))
     }
   })

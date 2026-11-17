@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -279,7 +279,7 @@ export const passwords = {
   'passwords.apple.state.ready': 'Klaar. De wachtwoorden uit je iCloud-sleutelhanger worden op websites ingevuld.',
   'passwords.apple.state.helperClosed': 'Apples hulpprogramma heeft de verbinding verbroken. Mogelijk accepteert het deze versie van {brand} nog niet.',
   'passwords.apple.state.helperClosedError': 'Apples hulpprogramma heeft de verbinding verbroken ({error}). Mogelijk accepteert het deze versie van {brand} nog niet.',
-  'passwords.apple.state.needsSignedApex': 'Vereist een ondertekende {brand} met Apples toestemming voor browser-passkeys',
+  'passwords.apple.state.needsSignedAtelier': 'Vereist een ondertekende {brand} met Apples toestemming voor browser-passkeys',
   'passwords.apple.state.icloudOff': 'iCloud-wachtwoorden staan uit op deze Mac, of je moet je opnieuw aanmelden in Systeeminstellingen.',
   'passwords.apple.badge.ready': 'Klaar',
   'passwords.apple.badge.waiting': 'Wacht op code',

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -137,7 +137,7 @@ describe('ambient field', () => {
     expect(buildLattice(0, 100)).toEqual([])
   })
 
-  it('uses only Apex’s four glyphs, all of them', () => {
+  it('uses only Atelier’s four glyphs, all of them', () => {
     const glyphs = new Set(buildLattice(400, 400).map((c) => c.glyph))
     expect([...glyphs].sort()).toEqual([...GLYPHS].sort())
     expect(buildLattice(400, 400, 22, 1)).not.toEqual(buildLattice(400, 400, 22, 2))
@@ -197,7 +197,7 @@ describe('ambient field', () => {
 })
 
 describe('profile hues', () => {
-  it('offers Apex’s nine hues with Stone first', () => {
+  it('offers Atelier’s nine hues with Stone first', () => {
     expect(PROFILE_HUE_IDS).toEqual(['stone', 'fig', 'moss', 'tide', 'clay', 'dusk', 'plum', 'sun', 'peony'])
     expect(PROFILE_HUES[0].label).toBe('Stone')
     expect(isProfileHue('moss')).toBe(true)

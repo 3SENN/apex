@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -38,7 +38,7 @@ async function listen(ctx: SmokeContext): Promise<void> {
     window.__l5cStarted = window.__l5cStarted || []
     if (!window.__l5cListening) {
       window.__l5cListening = true
-      window.apex.onAppEvent((e) => { if (e.type === 'download-started') window.__l5cStarted.push(e) })
+      window.atelier.onAppEvent((e) => { if (e.type === 'download-started') window.__l5cStarted.push(e) })
     }
     return true`)
 }
@@ -134,7 +134,7 @@ const agentDownload: SmokeCheck = {
   async run(ctx) {
     await listen(ctx)
     const url = serve(ctx, '/menus-downloads/agent.txt', 'downloads-agent.txt', Buffer.from('from the agent'))
-    // A tab held with no chat is Claude Code outside Apex: an agent run (ST-60).
+    // A tab held with no chat is Claude Code outside Atelier: an agent run (ST-60).
     const row = await download(ctx, url, 'downloads-agent.txt', (tabId) => ctx.tabs.setAgentControlled(tabId, true, null))
     assert(row.byAgent, 'the row is marked as the agent’s')
     const started = await startedFor(ctx, row.id)
@@ -167,7 +167,7 @@ const folderView: SmokeCheck = {
   async run(ctx) {
     const folder = await ctx.chrome.invoke<DownloadFolderView>('downloads', 'folder')
     assert(!folder.custom && !folder.missing && folder.path === folder.defaultPath, `the default folder is used (${JSON.stringify(folder)})`)
-    ctx.tabs.openInternal('apex://settings/downloads')
+    ctx.tabs.openInternal('atelier://settings/downloads')
     await ctx.chrome.until(`return document.querySelector('#downloads-folder') && document.body.innerText.includes(${JSON.stringify(join(folder.path))})`, 8000, 'Settings › Downloads')
   },
 }
@@ -178,7 +178,7 @@ export const downloadShots: ShotSpec[] = [
   {
     name: 'downloads-page',
     async run(ctx) {
-      ctx.tabs.openInternal('apex://downloads')
+      ctx.tabs.openInternal('atelier://downloads')
       await ctx.chrome.until(`return document.querySelector('.sp-page .dl-page__item, .sp-page .ui-state')`, 8000, 'the Downloads page')
       await ctx.shot('downloads-page')
     },
@@ -186,7 +186,7 @@ export const downloadShots: ShotSpec[] = [
   {
     name: 'downloads-settings',
     async run(ctx) {
-      ctx.tabs.openInternal('apex://settings/downloads')
+      ctx.tabs.openInternal('atelier://settings/downloads')
       await ctx.chrome.until(`return document.querySelector('#downloads-folder')`, 8000, 'Settings › Downloads')
       await ctx.shot('downloads-settings')
     },

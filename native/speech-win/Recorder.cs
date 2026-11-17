@@ -1,14 +1,14 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex-speech.exe: a session's recording. Each source is written as a 16 kHz
+// atelier-speech.exe: a session's recording. Each source is written as a 16 kHz
 // WAV part beside the target (pauses are simply not written; system audio is
 // padded to keep time, so every part starts at the session's start), and on
-// stop the parts are mixed into the one AAC .m4a file Apex asked for, through
+// stop the parts are mixed into the one AAC .m4a file Atelier asked for, through
 // Media Foundation. The parts are removed once it is written; when it can't
-// be, they stay, so `recover` can try again on Apex's next run. A crash, a
+// be, they stay, so `recover` can try again on Atelier's next run. A crash, a
 // force quit or Windows ending the session leaves them too: their WAV headers
 // still say empty (NAudio writes the sizes on close), so `recover` repairs
 // them before it merges.
@@ -16,7 +16,7 @@ using NAudio.MediaFoundation;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 
-namespace Apex.Speech;
+namespace Atelier.Speech;
 
 internal sealed class Recorder(string target) : IDisposable
 {

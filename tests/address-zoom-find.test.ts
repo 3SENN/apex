@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -33,12 +33,12 @@ describe('zoom (SH-45, SH-38)', () => {
   it('keys web pages by host and local files together', () => {
     expect(zoomKey('https://Docs.Example.com/a?b')).toBe('docs.example.com')
     expect(zoomKey('file:///tmp/a.html')).toBe('file')
-    expect(zoomKey('apex://settings')).toBeNull()
+    expect(zoomKey('atelier://settings')).toBeNull()
     expect(zoomKey('not a url')).toBeNull()
   })
 
   it('saves per-host levels to zoom.json, dropping 100%', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-zoom-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-zoom-'))
     dirs.push(dir)
     const store = ZoomStore.forDataDir(dir)
     expect(store.persistent).toBe(true)
@@ -53,7 +53,7 @@ describe('zoom (SH-45, SH-38)', () => {
   })
 
   it('keeps private sessions in memory only', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-zoom-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-zoom-'))
     dirs.push(dir)
     const store = new ZoomStore(null)
     store.set('example.com', 150)
@@ -101,7 +101,7 @@ describe('links, peek and loading (SH-46, SH-43, SS-01)', () => {
   it('peeks only web pages and files', () => {
     expect(canPeek('https://example.com/')).toBe(true)
     expect(canPeek('file:///tmp/a.pdf')).toBe(true)
-    expect(canPeek('apex://settings')).toBe(false)
+    expect(canPeek('atelier://settings')).toBe(false)
     expect(canPeek('javascript:alert(1)')).toBe(false)
   })
 

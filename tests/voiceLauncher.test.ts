@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -100,7 +100,7 @@ describe('the launcher’s global shortcut', () => {
     const s = new LauncherShortcut({
       backend: b,
       wanted: () => ({ on: state.on, accelerator: state.accelerator }),
-      apexFocused: () => state.focused,
+      atelierFocused: () => state.focused,
       onPress: () => undefined,
       smoke: opts.smoke ?? false,
       onChange,
@@ -108,7 +108,7 @@ describe('the launcher’s global shortcut', () => {
     return { s, b, state, onChange }
   }
 
-  it('is registered only while no Apex window has focus', () => {
+  it('is registered only while no Atelier window has focus', () => {
     const { s, b, state } = setup({ focused: true })
     s.reconcile()
     expect(b.held.size).toBe(0)
@@ -142,7 +142,7 @@ describe('the launcher’s global shortcut', () => {
     expect(s.status().conflict).toBe(false)
   })
 
-  it('a probe from Settings tries once without keeping the keys while Apex has focus', () => {
+  it('a probe from Settings tries once without keeping the keys while Atelier has focus', () => {
     const { s, b } = setup({ focused: true })
     s.probe()
     expect(b.register).toHaveBeenCalledTimes(1)

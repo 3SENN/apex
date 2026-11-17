@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,9 +7,9 @@ import { CONNECTOR_CATEGORIES, DIRECTORY_ID, type DirectoryEntry } from '@shared
 import entries from './directory.json'
 
 // The curated connector directory (SK-13): official remote MCP
-// endpoints from each vendor's own docs, described in Apex's words and
-// grouped in Apex's categories. No logos ship with it: icons are favicons
-// fetched at runtime, or Apex's generic category icons.
+// endpoints from each vendor's own docs, described in Atelier's words and
+// grouped in Atelier's categories. No logos ship with it: icons are favicons
+// fetched at runtime, or Atelier's generic category icons.
 
 export type DirectoryProblem = { id: string; problem: string }
 

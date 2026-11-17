@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import { log } from '../log'
 
 // The seam between the update machine and whatever fetches updates, so tests
 // and smoke never touch the network. ElectronUpdaterBackend (electron-updater
-// on GitHub Releases) is the real one; the fake is chosen when APEX_SMOKE=1
+// on GitHub Releases) is the real one; the fake is chosen when ATELIER_SMOKE=1
 // and in tests.
 //
 // Failures always arrive as an 'error' event; check() and download() resolve
@@ -174,9 +174,9 @@ class ElectronUpdaterBackend extends EventEmitter<UpdaterBackendEvents> implemen
 
 /**
  * The real backend: electron-updater with GitHub Releases from the packaged
- * app-update.yml. It never downloads on its own (Apex asks first unless
+ * app-update.yml. It never downloads on its own (Atelier asks first unless
  * autoDownloadUpdates is on), installs a ready update on quit, never
- * downgrades, and logs through Apex's redacting log.
+ * downgrades, and logs through Atelier's redacting log.
  */
 export async function createElectronUpdaterBackend(): Promise<UpdaterBackend> {
   // Loaded lazily so tests and unpackaged runs never load electron-updater.

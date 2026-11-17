@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -47,5 +47,5 @@ export function parseTweakExport(text: string): ImportedTweak[] {
 /** The file name an export suggests: one site's name, or all of them. */
 export function exportName(tweaks: readonly Pick<Tweak, 'host'>[]): string {
   const only = tweaks.length === 1 ? tweaks[0]?.host.replace(/[^a-z0-9.-]/gi, '-') : null
-  return only ? `${only}.apex-tweak.json` : 'apex-tweaks.json'
+  return only ? `${only}.atelier-tweak.json` : 'atelier-tweaks.json'
 }

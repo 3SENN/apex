@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -20,10 +20,10 @@ import type { ShotSpec, SmokeCheck, SmokeContext } from './types'
 // noopener and noreferrer, a feature-less window.open, the full-page redirect
 // and form_post flows, FedCM's feature detection, WebAuthn's feature detection
 // and how fast its calls settle, and a provider iframe's cookies and Storage
-// Access API. APEX_SMOKE_SIGNIN_OUT=<file> writes everything measured as JSON.
+// Access API. ATELIER_SMOKE_SIGNIN_OUT=<file> writes everything measured as JSON.
 
 const TOKEN = 'tok-5e1f'
-/** A sign-in provider's host for the cookie checks: *.localhost is loopback, and APEX_SMOKE_SIGNIN_HOSTS makes it Microsoft's in the registry. */
+/** A sign-in provider's host for the cookie checks: *.localhost is loopback, and ATELIER_SMOKE_SIGNIN_HOSTS makes it Microsoft's in the registry. */
 const IDP_HOST = 'idp.localhost'
 
 const SITE = `<!doctype html><html><head><title>Site</title></head><body><h1>Site</h1><script>
@@ -187,7 +187,7 @@ async function measurePopups(ctx: SmokeContext, report: Report): Promise<void> {
   const wc = tab.view.webContents
   try {
     // 1. The OAuth popup: another origin, posts the token to its opener, closes itself.
-    const first = await scriptedOpen(tab, `${provider}/signin/popup?step=1&post=1&close=1&origin=${encodeURIComponent(site)}`, 'apex-oauth', 'popup,width=480,height=600')
+    const first = await scriptedOpen(tab, `${provider}/signin/popup?step=1&post=1&close=1&origin=${encodeURIComponent(site)}`, 'atelier-oauth', 'popup,width=480,height=600')
     const popupWindow = first.opened ? popups.all().find((p) => p.page === first.opened) : undefined
     const popupInfo: Record<string, unknown> = { result: first.result, opened: Boolean(first.opened), inPopupWindow: Boolean(popupWindow), asTab: Boolean(first.opened && ctx.tabs.byWebContents(first.opened)) }
     await waitFor(() => js<boolean>(wc, `window.__msgs.length > 0`), 5000, 'the token message').catch(() => undefined)
@@ -200,10 +200,10 @@ async function measurePopups(ctx: SmokeContext, report: Report): Promise<void> {
     await js(wc, `window.__msgs = []; window.__wins = []`)
 
     // 2. A named window is reused: the second open navigates the first popup.
-    const named = await scriptedOpen(tab, `${provider}/signin/popup?step=1`, 'apex-named', 'popup,width=420,height=500')
+    const named = await scriptedOpen(tab, `${provider}/signin/popup?step=1`, 'atelier-named', 'popup,width=420,height=500')
     const countBefore = allWebContents.getAllWebContents().length
     gestures.note(wc.id)
-    await js(wc, `window.__open(${JSON.stringify(`${provider}/signin/popup?step=2&post=1&origin=${encodeURIComponent(site)}`)}, 'apex-named', 'popup,width=420,height=500')`, true)
+    await js(wc, `window.__open(${JSON.stringify(`${provider}/signin/popup?step=2&post=1&origin=${encodeURIComponent(site)}`)}, 'atelier-named', 'popup,width=420,height=500')`, true)
     await waitFor(() => js<boolean>(wc, `window.__msgs.some((m) => m.data && m.data.step === '2')`), 5000, 'the reused window to report').catch(() => undefined)
     report.named = {
       opened: Boolean(named.opened),
@@ -228,7 +228,7 @@ async function measurePopups(ctx: SmokeContext, report: Report): Promise<void> {
     }
 
     // 4. window.open without features: Chrome opens a tab that keeps its opener.
-    const plain = await scriptedOpen(tab, `${provider}/signin/popup?step=plain&post=1&origin=${encodeURIComponent(site)}`, 'apex-plain', '')
+    const plain = await scriptedOpen(tab, `${provider}/signin/popup?step=plain&post=1&origin=${encodeURIComponent(site)}`, 'atelier-plain', '')
     await waitFor(() => js<boolean>(wc, `window.__msgs.length > 0`), 3000, 'the plain window message').catch(() => undefined)
     report.plainOpen = {
       result: plain.result,
@@ -339,8 +339,8 @@ async function measureApis(ctx: SmokeContext, report: Report): Promise<void> {
 async function measureStorage(ctx: SmokeContext, report: Report): Promise<void> {
   const { site, provider } = origins(ctx)
   const idp = provider.replace('//localhost', `//${IDP_HOST}`)
-  const hostsBefore = process.env.APEX_SMOKE_SIGNIN_HOSTS
-  process.env.APEX_SMOKE_SIGNIN_HOSTS = [hostsBefore, `${IDP_HOST}=microsoft`].filter(Boolean).join(',')
+  const hostsBefore = process.env.ATELIER_SMOKE_SIGNIN_HOSTS
+  process.env.ATELIER_SMOKE_SIGNIN_HOSTS = [hostsBefore, `${IDP_HOST}=microsoft`].filter(Boolean).join(',')
   const before = ctx.settings.get().blockThirdPartyCookies
   try {
     // Each provider sets its session cookie as a page of its own first.
@@ -391,8 +391,8 @@ async function measureStorage(ctx: SmokeContext, report: Report): Promise<void> 
     report.storage = { cookieSet, defaultBlocking: before, allowed, blockedPlain, blockedProvider }
   } finally {
     ctx.settings.update({ blockThirdPartyCookies: before })
-    if (hostsBefore === undefined) delete process.env.APEX_SMOKE_SIGNIN_HOSTS
-    else process.env.APEX_SMOKE_SIGNIN_HOSTS = hostsBefore
+    if (hostsBefore === undefined) delete process.env.ATELIER_SMOKE_SIGNIN_HOSTS
+    else process.env.ATELIER_SMOKE_SIGNIN_HOSTS = hostsBefore
   }
 }
 
@@ -407,7 +407,7 @@ async function measureAll(ctx: SmokeContext): Promise<Report> {
   await measureRedirects(ctx, report)
   await measureApis(ctx, report)
   await measureStorage(ctx, report)
-  const out = process.env.APEX_SMOKE_SIGNIN_OUT
+  const out = process.env.ATELIER_SMOKE_SIGNIN_OUT
   if (out) writeFileSync(out, JSON.stringify(report, null, 2))
   return report
 }

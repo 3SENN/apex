@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -65,11 +65,11 @@ final class Canonicalizer {
   }
 }
 
-/// The microphone, on the device Apex chose.
+/// The microphone, on the device Atelier chose.
 final class MicCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
   private let session = AVCaptureSession()
   private let output = AVCaptureAudioDataOutput()
-  private let queue = DispatchQueue(label: "com.sennechin.apex.speech.mic")
+  private let queue = DispatchQueue(label: "com.sennechin.atelier.speech.mic")
   private let onBuffer: (CMSampleBuffer) -> Void
   private let onInterrupted: (Bool) -> Void
   private var observers: [NSObjectProtocol] = []
@@ -85,7 +85,7 @@ final class MicCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
     session.beginConfiguration()
     guard session.canAddInput(input) else {
       session.commitConfiguration()
-      throw NSError(domain: "apex-speech", code: 2, userInfo: [NSLocalizedDescriptionKey: "The microphone can't be used."])
+      throw NSError(domain: "atelier-speech", code: 2, userInfo: [NSLocalizedDescriptionKey: "The microphone can't be used."])
     }
     session.addInput(input)
     output.audioSettings = [
@@ -99,7 +99,7 @@ final class MicCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
     output.setSampleBufferDelegate(self, queue: queue)
     guard session.canAddOutput(output) else {
       session.commitConfiguration()
-      throw NSError(domain: "apex-speech", code: 3, userInfo: [NSLocalizedDescriptionKey: "The microphone can't be read."])
+      throw NSError(domain: "atelier-speech", code: 3, userInfo: [NSLocalizedDescriptionKey: "The microphone can't be read."])
     }
     session.addOutput(output)
     session.commitConfiguration()
@@ -112,7 +112,7 @@ final class MicCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
     session.startRunning()
     guard session.isRunning else {
       stop()
-      throw NSError(domain: "apex-speech", code: 4, userInfo: [NSLocalizedDescriptionKey: "The microphone is in use or unavailable."])
+      throw NSError(domain: "atelier-speech", code: 4, userInfo: [NSLocalizedDescriptionKey: "The microphone is in use or unavailable."])
     }
   }
 
@@ -139,7 +139,7 @@ final class SystemAudioCapture: NSObject, SCStreamOutput, SCStreamDelegate {
   private let apps: [String]
   private let onBuffer: (CMSampleBuffer) -> Void
   private let onStopped: (Error) -> Void
-  private let queue = DispatchQueue(label: "com.sennechin.apex.speech.system-audio")
+  private let queue = DispatchQueue(label: "com.sennechin.atelier.speech.system-audio")
 
   init(apps: [String] = [], onBuffer: @escaping (CMSampleBuffer) -> Void, onStopped: @escaping (Error) -> Void) {
     self.apps = apps
@@ -155,7 +155,7 @@ final class SystemAudioCapture: NSObject, SCStreamOutput, SCStreamDelegate {
     // An app's windows may be minimised or on another Space, so all of them count when filtering by app.
     let content = try await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: apps.isEmpty)
     guard let display = content.displays.first else {
-      throw NSError(domain: "apex-speech", code: 1, userInfo: [NSLocalizedDescriptionKey: "No display is available for audio capture."])
+      throw NSError(domain: "atelier-speech", code: 1, userInfo: [NSLocalizedDescriptionKey: "No display is available for audio capture."])
     }
     let included = content.applications.filter { matches($0.bundleIdentifier) }
     let filter = included.isEmpty

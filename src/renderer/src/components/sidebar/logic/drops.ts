@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@
 import { omniboxToUrl, type EngineRef } from '@shared/url'
 
 /** Our own row drags carry this type; they are moves, not drops of text. */
-export const ENTRY_MIME = 'application/x-apex-entry'
+export const ENTRY_MIME = 'application/x-atelier-entry'
 
 /** Whether a drag carries something a tab can open (and isn't one of our own rows). */
 export function hasDroppable(types: readonly string[]): boolean {

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,18 +7,18 @@ import { readFile } from 'node:fs/promises'
 import { extname, resolve, sep } from 'node:path'
 import { app, protocol } from 'electron'
 import { ARTIFACT_SCHEME, FILE_SCHEME } from '@shared/files'
-import { APEX_APP_SCHEME } from '@shared/apps'
+import { ATELIER_APP_SCHEME } from '@shared/apps'
 import { PACK_SCHEME } from '@shared/packs'
 
 // Meeting audio and the mic test, served with Range, on the chrome and float sessions only
-export const MEDIA_SCHEME = 'apex-media'
+export const MEDIA_SCHEME = 'atelier-media'
 
-// The chrome UI is served from app://apex/ instead of file://, so the
+// The chrome UI is served from app://atelier/ instead of file://, so the
 // GrantFileProtocolExtraPrivileges fuse can stay off and the UI gets a real
 // origin with a strict Content-Security-Policy.
 
 export const APP_SCHEME = 'app'
-export const APP_HOST = 'apex'
+export const APP_HOST = 'atelier'
 export const APP_ORIGIN = `${APP_SCHEME}://${APP_HOST}`
 
 /**
@@ -34,13 +34,13 @@ const CSP = [
   "default-src 'self'",
   "script-src 'self' 'wasm-unsafe-eval'",
   "style-src 'self' 'unsafe-inline'",
-  // Apex-file: serves the viewer's images and media.
-  "img-src 'self' data: https: http: apex-file:",
+  // Atelier-file: serves the viewer's images and media.
+  "img-src 'self' data: https: http: atelier-file:",
   "font-src 'self' data:",
   "connect-src 'self'",
-  // The pdf.js worker; one media-src directive, which apex-media: joins
+  // The pdf.js worker; one media-src directive, which atelier-media: joins
   "worker-src 'self'",
-  "media-src 'self' apex-file: apex-media:",
+  "media-src 'self' atelier-file: atelier-media:",
   "object-src 'none'",
   "base-uri 'none'",
   "frame-ancestors 'none'",
@@ -91,7 +91,7 @@ export const PRIVILEGED_SCHEMES: Electron.CustomScheme[] = [
   { scheme: FILE_SCHEME, privileges: { standard: true, secure: true, stream: true, supportFetchAPI: true } },
   { scheme: ARTIFACT_SCHEME, privileges: { standard: true, secure: true } },
   // Agent-built apps, served from their own locked-down partition; never a secure-context peer of app://
-  { scheme: APEX_APP_SCHEME, privileges: { standard: true, secure: true } },
+  { scheme: ATELIER_APP_SCHEME, privileges: { standard: true, secure: true } },
   // ── packs privileged scheme ── (docs/packs.md: each pack's files from its own locked-down partition; standard, so pack code can import its own modules; stream, so an app's audio and video seek; codeCache, so a big game's scripts compile once, docs/apps.md)
   { scheme: PACK_SCHEME, privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true, codeCache: true } },
 ]
@@ -119,15 +119,15 @@ export function handleAppProtocol(root: string): void {
   })
 }
 
-// Apps are served only inside their own persist:apex-app-<id> partition, by src/main/apps/protocol.ts
-/** What any other session answers for apex-app://: a plain page, never the app. */
-export function apexAppElsewhere(): Response {
+// Apps are served only inside their own persist:atelier-app-<id> partition, by src/main/apps/protocol.ts
+/** What any other session answers for atelier-app://: a plain page, never the app. */
+export function atelierAppElsewhere(): Response {
   const body = '<!doctype html><meta charset="utf-8"><meta name="color-scheme" content="light dark"><title>App</title><p style="font:15px system-ui;margin:40px">This app opens from Workspace › Apps.</p>'
   return new Response(body, { status: 404, headers: { 'content-type': 'text/html; charset=utf-8', 'content-security-policy': "default-src 'none'; style-src 'unsafe-inline'", 'x-content-type-options': 'nosniff' } })
 }
 
 /** Registers that answer on a web, private or profile session (the apps feature calls it from Feature.session). */
-export function handleApexAppElsewhere(session: Electron.Session): void {
-  if (session.protocol.isProtocolHandled(APEX_APP_SCHEME)) return
-  session.protocol.handle(APEX_APP_SCHEME, () => apexAppElsewhere())
+export function handleAtelierAppElsewhere(session: Electron.Session): void {
+  if (session.protocol.isProtocolHandled(ATELIER_APP_SCHEME)) return
+  session.protocol.handle(ATELIER_APP_SCHEME, () => atelierAppElsewhere())
 }

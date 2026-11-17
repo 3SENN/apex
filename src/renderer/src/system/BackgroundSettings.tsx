@@ -1,16 +1,16 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The Settings › General rows: open Apex when you log in (read
+// The Settings › General rows: open Atelier when you log in (read
 // live from the OS, never stored), and keep running in the menu bar,
 // notification area or system tray when all windows are closed. The second
 // row is hidden on a Linux desktop without a tray.
 import { useState, type ReactElement } from 'react'
 import type { SettingsPatch, SettingsView } from '@shared/ipc'
 import type { LoginItemState } from '@shared/system'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { useEvent, useResource } from '../settings/data'
 import { Card, Section } from '../settings/kit'
 import { Button, ErrorState, SkeletonRows, Switch } from '../ui'
@@ -31,7 +31,7 @@ function statusNote(state: LoginItemState, win: boolean): MessageKey | null {
 
 export function BackgroundSettings({ settings, update }: { settings: SettingsView; update(patch: SettingsPatch): void | Promise<void> }): ReactElement {
   const t = useT()
-  const kind = platformKind(apex.platform)
+  const kind = platformKind(atelier.platform)
   const labels = backgroundLabels(kind)
   const system = useResource(async () => {
     const [login, tray] = await Promise.all([call('system', 'loginItem'), call('system', 'trayAvailable')])

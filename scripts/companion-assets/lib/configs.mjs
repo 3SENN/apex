@@ -1,5 +1,5 @@
 /* Copyright (c) 2026 Senne Chin. All rights reserved.
- * Part of the Apex Companion Art: licensed under the Apex Companion Art License
+ * Part of the Atelier Companion Art: licensed under the Atelier Companion Art License
  * (ART-LICENSE.md), not under the Mozilla Public License. */
 
 // The JSON rule files: compatibility, hat placement, pupils, randomization,
@@ -99,7 +99,7 @@ function hatConfig(heads) {
   return out
 }
 
-/** Pip's look: official Apex's default companion, which the app takes from presets.json (scripts/branding.mjs). */
+/** Pip's look: official Atelier's default companion, which the app takes from presets.json (scripts/branding.mjs). */
 const PIP_LOOK = {
   rig: 'A',
   parts: { head: 'head-round', ears: null, hair: 'hair-tuft', hat: null, eyeAccessory: null, earAccessory: null, prop: null },

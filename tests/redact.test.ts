@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -36,7 +36,7 @@ describe('redact', () => {
     expect(redact('GET https://example.com/path/page?token=abc&x=1 done')).toBe('GET https://example.com/path/page done')
     expect(redact('see https://example.com/#access_token=xyz')).toBe('see https://example.com/')
     expect(redact('wss://user:pass@host.example/socket?k=v')).toBe('wss://host.example/socket')
-    expect(redact('apex://chat/123?highlight=a')).toBe('apex://chat/123')
+    expect(redact('atelier://chat/123?highlight=a')).toBe('atelier://chat/123')
     expect(redact('plain text? no url # here')).toBe('plain text? no url # here')
   })
 

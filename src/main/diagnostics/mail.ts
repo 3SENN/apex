@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { MAILTO_BODY_MAX } from '@shared/diagnostics'
 import { mainT } from '../i18n/mainT'
 
-// Problem-report email drafts (OV-30). Apex has no server: a report is
+// Problem-report email drafts (OV-30). Atelier has no server: a report is
 // a file you attach yourself, so the draft says where it is. mailto can't
 // attach files, and some mail apps cut long bodies, so the body stays under
 // MAILTO_BODY_MAX characters. With no support address built in, the draft

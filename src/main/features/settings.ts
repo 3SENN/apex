@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -92,9 +92,9 @@ function focusTarget(ctx: AppContext, target: NotificationTarget): void {
   const win = (target.windowId !== undefined ? ctx.windows.get(target.windowId) : undefined) ?? ctx.windows.focused()
   if (!win) return
   focusWindow(win)
-  if (target.chatId) win.tabs.openInternal(`apex://chat/${target.chatId}`)
+  if (target.chatId) win.tabs.openInternal(`atelier://chat/${target.chatId}`)
   else if (target.tabId && win.tabs.find(target.tabId)) win.tabs.activate(target.tabId)
-  else if (target.url?.startsWith('apex://')) win.tabs.openInternal(target.url)
+  else if (target.url?.startsWith('atelier://')) win.tabs.openInternal(target.url)
   else if (target.url && /^https?:\/\//.test(target.url)) win.tabs.create(target.url)
 }
 
@@ -104,7 +104,7 @@ export function notifyRoutineResult(routine: { name: string }, run: { ok: boolea
     category: 'routine-results',
     title: mainT(run.ok ? 'settings.notify.routine.ready' : 'settings.notify.routine.failed', { name: routine.name }),
     body: mainT('settings.notify.routine.body'),
-    target: run.chatId ? { chatId: run.chatId } : { url: 'apex://routines' },
+    target: run.chatId ? { chatId: run.chatId } : { url: 'atelier://routines' },
   })
 }
 
@@ -153,7 +153,7 @@ function startNotifications(rt: Runtime): void {
       const win = ctx.windows.focused()
       if (!win) return
       focusWindow(win)
-      win.tabs.openInternal(target.url?.startsWith('apex://') ? target.url : 'apex://settings/notifications')
+      win.tabs.openInternal(target.url?.startsWith('atelier://') ? target.url : 'atelier://settings/notifications')
     },
     onFirstShown: () => showTipOnce(rt, 'first-notification', mainT('settings.tip.firstNotification')),
   })
@@ -333,7 +333,7 @@ function openClearDialog(rt: Runtime, win: WindowContext | null): void {
     })
     .catch(() => {
       // Until the overlay host lands, the dialog opens on the Privacy page.
-      target.tabs.openInternal('apex://settings/privacy?clear=1')
+      target.tabs.openInternal('atelier://settings/privacy?clear=1')
     })
 }
 

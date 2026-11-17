@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // A pack's keys on its page (docs/apps.md › Keys): each secret the manifest
-// asks for, the hosts Apex sends it to, and whether it has a value. The value
+// asks for, the hosts Atelier sends it to, and whether it has a value. The value
 // goes to main once and never comes back here: the field only ever writes.
 import { useEffect, useRef, useState, type ReactElement } from 'react'
 import type { PackSummary } from '@shared/packs'
@@ -36,7 +36,7 @@ function KeyRow({ packId, secret, enabled, focus }: { packId: string; secret: Pa
   const [busy, setBusy] = useState<'save' | 'clear' | null>(null)
   const input = useRef<HTMLInputElement>(null)
 
-  // Opened from an app (apex.secrets.request): straight to the field it asked for.
+  // Opened from an app (atelier.secrets.request): straight to the field it asked for.
   useEffect(() => {
     if (!focus || !input.current) return
     input.current.scrollIntoView({ block: 'center' })

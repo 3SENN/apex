@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The animated intro (ON-02, the "dawn"): the Apex logo (Pip's head) pops in with a spark, a
+// The animated intro (ON-02, the "dawn"): the Atelier logo (Pip's head) pops in with a spark, a
 // horizon glow rises, the companion pops up through a floor ring and waves,
 // then the welcome line. Light and dark staging come from the welcome's
 // tokens; reduced motion skips straight to the line. Around the companion,
@@ -101,7 +101,7 @@ export function Intro({ intro, setIntro, introSounds, onWave, onReady, onContinu
     <>
       {intro.phase !== 'mark' && <StepScene tiles={INTRO_TILES} />}
       <StepFrame
-        title={t('firstRun.welcomeIntro.meetApex')}
+        title={t('firstRun.welcomeIntro.meetAtelier')}
         subtitle={t('firstRun.welcomeIntro.aBrowserWithA')}
         actions={<Button ref={button} variant="brand" onClick={onContinue}>{t('firstRun.welcomeIntro.getStarted')}</Button>}
         after={

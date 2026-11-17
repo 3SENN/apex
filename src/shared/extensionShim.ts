@@ -1,20 +1,20 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The protocol between Apex's extension preloads (src/preload/extensionWorker.ts
+// The protocol between Atelier's extension preloads (src/preload/extensionWorker.ts
 // and extensionFrame.ts) and main's shim router (src/main/extensions/shim.ts).
 // Calls go one way as invoke(op, payload); events come back on one
 // channel as (name, ...args). Main validates every payload with zod and
 // checks which extension the sender belongs to.
 
 /** Extension service workers and pages → main. */
-export const EXT_SHIM_INVOKE = 'apex-ext:invoke'
+export const EXT_SHIM_INVOKE = 'atelier-ext:invoke'
 /** Main → extension service workers and pages. */
-export const EXT_SHIM_EVENT = 'apex-ext:event'
+export const EXT_SHIM_EVENT = 'atelier-ext:event'
 /** The Chrome Web Store page → main (exact origin, main frame only). */
-export const WEB_STORE_INVOKE = 'apex-webstore:invoke'
+export const WEB_STORE_INVOKE = 'atelier-webstore:invoke'
 
 export const EXT_SHIM_OPS = [
   'action.setBadgeText',

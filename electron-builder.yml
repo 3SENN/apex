@@ -1,18 +1,18 @@
-# Copyright (c) 2026 The Apex Authors. All rights reserved.
+# Copyright (c) 2026 The Atelier Authors. All rights reserved.
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at https://mozilla.org/MPL/2.0/.
 #
-# Written out for the official branding (Apex, branding/official/). The config
+# Written out for the official branding (Atelier, branding/official/). The config
 # `npm run package` and release.mjs use, electron-builder.config.mjs, swaps in
-# the active branding (scripts/branding.mjs, APEX_OFFICIAL_BRANDING): its name
-# wherever "Apex" names the app below, its bundle id, and the same files from
+# the active branding (scripts/branding.mjs, ATELIER_OFFICIAL_BRANDING): its name
+# wherever "Atelier" names the app below, its bundle id, and the same files from
 # its own folder (scripts/release/builderConfig.mjs, brandedConfig).
 #
-# The app id: APEX_BUNDLE_ID when set, else the branding's (scripts/release/bundle.mjs).
+# The app id: ATELIER_BUNDLE_ID when set, else the branding's (scripts/release/bundle.mjs).
 # userData is named after productName, not this, so each branding keeps its own profile.
-appId: com.sennechin.apex
-productName: Apex
+appId: com.sennechin.atelier
+productName: Atelier
 directories:
   buildResources: build
   output: dist
@@ -20,7 +20,7 @@ files:
   - out/**
   - package.json
 asar: true
-# Lets macOS list Apex as a web browser, so "Make Apex your default
+# Lets macOS list Atelier as a web browser, so "Make Atelier your default
 # browser" on the getting-started page works in the installed app. Links
 # from other apps arrive through the open-url handler in src/main/index.ts.
 # (macOS Info.plist and the Linux desktop entry; on Windows build/installer.nsh
@@ -31,9 +31,9 @@ protocols:
       - http
       - https
     role: Viewer
-# Apex's hardening: no Node from the environment or the command line, an
+# Atelier's hardening: no Node from the environment or the command line, an
 # asar-only app with integrity checks, encrypted cookies, and
-# GrantFileProtocolExtraPrivileges off (Apex serves its UI from the
+# GrantFileProtocolExtraPrivileges off (Atelier serves its UI from the
 # privileged app:// scheme, so file:// needs no extra rights).
 electronFuses:
   runAsNode: false
@@ -53,7 +53,7 @@ extraResources:
   - from: branding/official/resources
     to: resources
 # GitHub Releases, as a draft for the person to publish. scripts/release/release.mjs
-# fills in the owner and repo from APEX_RELEASE_OWNER and APEX_RELEASE_REPO; without
+# fills in the owner and repo from ATELIER_RELEASE_OWNER and ATELIER_RELEASE_REPO; without
 # them no update feed is written and the app's updater stays off.
 publish:
   provider: github
@@ -74,44 +74,44 @@ mac:
   hardenedRuntime: true
   gatekeeperAssess: false
   # No restricted keys in either file. The Developer ID + browser passkeys mode
-  # (APEX_PROVISIONING_PROFILE) signs the app with a generated file instead and
+  # (ATELIER_PROVISIONING_PROFILE) signs the app with a generated file instead and
   # embeds the profile that grants it (scripts/release/entitlements.mjs).
   entitlements: build/entitlements.mac.plist
   entitlementsInherit: build/entitlements.mac.inherit.plist
   minimumSystemVersion: '13.0'
-  # Unsigned unless the env names an identity (APEX_SIGN_IDENTITY, CSC_NAME or
+  # Unsigned unless the env names an identity (ATELIER_SIGN_IDENTITY, CSC_NAME or
   # CSC_LINK; electron-builder.config.mjs resolves a name to one SHA-1), so a
   # plain `npm run package` never signs with whatever the keychain holds.
   identity: null
-  # Double-clicking an exported companion opens Apex's import review (the
-  # open-file handler in src/main/index.ts). Apex only reads these files.
+  # Double-clicking an exported companion opens Atelier's import review (the
+  # open-file handler in src/main/index.ts). Atelier only reads these files.
   fileAssociations:
-    - ext: apexcompanion
-      name: Apex companion
-      description: A companion exported from Apex
+    - ext: ateliercompanion
+      name: Atelier companion
+      description: A companion exported from Atelier
       role: Viewer
-      icon: branding/official/apexcompanion
-    # Packs (docs/packs.md): double-clicking one opens its install review on apex://packs.
+      icon: branding/official/ateliercompanion
+    # Packs (docs/packs.md): double-clicking one opens its install review on atelier://packs.
     # The icon is a group picture of companions (scripts/app-icons/art.mjs packDocument).
-    - ext: apexpack
-      name: Apex pack
-      description: A pack of skills, tools and more for Apex
+    - ext: atelierpack
+      name: Atelier pack
+      description: A pack of skills, tools and more for Atelier
       role: Viewer
-      icon: branding/official/apexpack
+      icon: branding/official/atelierpack
     # Apps (docs/apps.md): the same archive, for a pack that holds an app or game.
     # It shares the pack icon until it gets its own.
-    - ext: apexapp
-      name: Apex app
-      description: An app or game for Apex
+    - ext: atelierapp
+      name: Atelier app
+      description: An app or game for Atelier
       role: Viewer
-      icon: branding/official/apexpack
+      icon: branding/official/atelierpack
     # Worlds (docs/apps.md › Worlds): the same archive, for a pack that holds only worlds.
-    - ext: apexworld
-      name: Apex world
-      description: A world to walk around in, for Apex
+    - ext: atelierworld
+      name: Atelier world
+      description: A world to walk around in, for Atelier
       role: Viewer
-      icon: branding/official/apexpack
-    # Web files Apex can open; other apps stay the owners.
+      icon: branding/official/atelierpack
+    # Web files Atelier can open; other apps stay the owners.
     - ext: [html, htm, xhtml, shtml]
       name: Web page
       role: Viewer
@@ -125,44 +125,44 @@ mac:
       name: WebP image
       role: Viewer
       rank: Alternate
-  # Usage descriptions for the permissions Apex and its helpers ask for
+  # Usage descriptions for the permissions Atelier and its helpers ask for
   extendInfo:
     NSCameraUsageDescription: Websites you allow can use your camera, for example in a video call.
-    NSMicrophoneUsageDescription: Apex uses your microphone when you dictate, talk to your companion or record a meeting, and for websites you allow, for example in a call.
+    NSMicrophoneUsageDescription: Atelier uses your microphone when you dictate, talk to your companion or record a meeting, and for websites you allow, for example in a call.
     NSBluetoothAlwaysUsageDescription: Websites you allow can connect to Bluetooth devices you choose.
     NSLocationWhenInUseUsageDescription: Websites you allow can see your approximate location, for example to show what is nearby.
-    # macOS attributes the speech helper's requests to Apex and can stop it without this key
-    NSSpeechRecognitionUsageDescription: Apex turns your speech into text when you dictate, talk to your companion or record a meeting. Languages without on-device recognition are sent to Apple to be transcribed.
-    # The Calendar helper (native/calendar) asks in Apex's name, so these name Apex. Read-only, and only after you switch each kind on.
-    NSCalendarsFullAccessUsageDescription: Apex reads your calendar, only after you turn it on, so your companion can see what is coming up and remind you before a meeting starts. Apex never adds or changes events.
-    NSCalendarsUsageDescription: Apex reads your calendar, only after you turn it on, so your companion can see what is coming up and remind you before a meeting starts. Apex never adds or changes events.
-    NSRemindersFullAccessUsageDescription: Apex reads your reminders, only after you turn them on, so your companion can help you plan around them. Apex never adds or changes reminders.
-    NSRemindersUsageDescription: Apex reads your reminders, only after you turn them on, so your companion can help you plan around them. Apex never adds or changes reminders.
-    # Watched folders: macOS asks before Apex reads a folder you choose to watch.
-    NSDesktopFolderUsageDescription: Apex reads files in a Desktop folder you chose to share with your companion.
-    NSDocumentsFolderUsageDescription: Apex reads files in a Documents folder you chose to share with your companion.
-    NSDownloadsFolderUsageDescription: Apex reads files in a Downloads folder you chose to share with your companion.
-    NSRemovableVolumesUsageDescription: Apex reads files on a removable drive you chose to share with your companion.
-    NSNetworkVolumesUsageDescription: Apex reads files on a network drive you chose to share with your companion.
+    # macOS attributes the speech helper's requests to Atelier and can stop it without this key
+    NSSpeechRecognitionUsageDescription: Atelier turns your speech into text when you dictate, talk to your companion or record a meeting. Languages without on-device recognition are sent to Apple to be transcribed.
+    # The Calendar helper (native/calendar) asks in Atelier's name, so these name Atelier. Read-only, and only after you switch each kind on.
+    NSCalendarsFullAccessUsageDescription: Atelier reads your calendar, only after you turn it on, so your companion can see what is coming up and remind you before a meeting starts. Atelier never adds or changes events.
+    NSCalendarsUsageDescription: Atelier reads your calendar, only after you turn it on, so your companion can see what is coming up and remind you before a meeting starts. Atelier never adds or changes events.
+    NSRemindersFullAccessUsageDescription: Atelier reads your reminders, only after you turn them on, so your companion can help you plan around them. Atelier never adds or changes reminders.
+    NSRemindersUsageDescription: Atelier reads your reminders, only after you turn them on, so your companion can help you plan around them. Atelier never adds or changes reminders.
+    # Watched folders: macOS asks before Atelier reads a folder you choose to watch.
+    NSDesktopFolderUsageDescription: Atelier reads files in a Desktop folder you chose to share with your companion.
+    NSDocumentsFolderUsageDescription: Atelier reads files in a Documents folder you chose to share with your companion.
+    NSDownloadsFolderUsageDescription: Atelier reads files in a Downloads folder you chose to share with your companion.
+    NSRemovableVolumesUsageDescription: Atelier reads files on a removable drive you chose to share with your companion.
+    NSNetworkVolumesUsageDescription: Atelier reads files on a network drive you chose to share with your companion.
     # Meetings capture call audio through ScreenCaptureKit (Screen Recording), not Core Audio taps, so
     # macOS doesn't show this one today; it stays (harmless) for when a tap is used, and verify checks it.
-    NSAudioCaptureUsageDescription: Apex records the sound of a meeting you choose to capture, so it can transcribe what everyone says. Nothing is recorded until you start.
+    NSAudioCaptureUsageDescription: Atelier records the sound of a meeting you choose to capture, so it can transcribe what everyone says. Nothing is recorded until you start.
     # macOS 15+ asks before an app reaches devices on your network; a browser does whenever a page does.
-    NSLocalNetworkUsageDescription: Pages you open in Apex can reach devices and services on your local network, such as a printer, a smart-home hub or a local development server.
+    NSLocalNetworkUsageDescription: Pages you open in Atelier can reach devices and services on your local network, such as a printer, a smart-home hub or a local development server.
   extraResources:
     # The speech helper (scripts/build-speech-helper.mjs), next to the app.
-    - from: native/speech/build/apex-speech
-      to: apex-speech
+    - from: native/speech/build/atelier-speech
+      to: atelier-speech
     # The trackpad haptics addon (scripts/build-native.mjs), loaded from
     # Resources/native by native/haptics/index.js; unpacked so it can be signed.
-    - from: native/haptics/build/apex_haptics.node
-      to: native/apex_haptics.node
+    - from: native/haptics/build/atelier_haptics.node
+      to: native/atelier_haptics.node
     # The Calendar and Reminders helper (scripts/build-calendar-helper.mjs); skipped while absent
-    - from: native/calendar/build/apex-calendar
-      to: apex-calendar
+    - from: native/calendar/build/atelier-calendar
+      to: atelier-calendar
     # ── translate helper ── (TR-05: scripts/build-translate-helper.mjs; on-device page translation)
-    - from: native/translate/build/apex-translate
-      to: apex-translate
+    - from: native/translate/build/atelier-translate
+      to: atelier-translate
     # Builds with the private internal/ folder may add resources of their own
     # (internal/build.json, added by scripts/release/builderConfig.mjs).
 dmg:
@@ -188,15 +188,15 @@ win:
   icon: branding/official/icon.ico
   extraResources:
     # The Windows speech helper, built only in CI (scripts/release/release.mjs).
-    - from: native/speech-win/build/apex-speech.exe
-      to: apex-speech.exe
+    - from: native/speech-win/build/atelier-speech.exe
+      to: atelier-speech.exe
     # Document icons for build/installer.nsh's associations.
     - from: branding/official/html-document.ico
       to: html-document.ico
-    - from: branding/official/apexcompanion.ico
-      to: apexcompanion.ico
-    - from: branding/official/apexpack.ico
-      to: apexpack.ico
+    - from: branding/official/ateliercompanion.ico
+      to: ateliercompanion.ico
+    - from: branding/official/atelierpack.ico
+      to: atelierpack.ico
 nsis:
   # Per user (build/installer.nsh forces the mode), with a choice of folder.
   oneClick: false
@@ -206,7 +206,7 @@ nsis:
   allowToChangeInstallationDirectory: true
   createDesktopShortcut: true
   createStartMenuShortcut: true
-  shortcutName: Apex
+  shortcutName: Atelier
   installerIcon: branding/official/icon.ico
   uninstallerIcon: branding/official/icon.ico
   installerSidebar: branding/official/installerSidebar.bmp
@@ -225,21 +225,21 @@ linux:
   mimeTypes:
     - text/html
   fileAssociations:
-    - ext: apexcompanion
-      name: Apex companion
-      mimeType: application/x-apexcompanion
-    - ext: apexpack
-      name: Apex pack
-      mimeType: application/x-apexpack
-    - ext: apexapp
-      name: Apex app
-      mimeType: application/x-apexapp
-    - ext: apexworld
-      name: Apex world
-      mimeType: application/x-apexworld
+    - ext: ateliercompanion
+      name: Atelier companion
+      mimeType: application/x-ateliercompanion
+    - ext: atelierpack
+      name: Atelier pack
+      mimeType: application/x-atelierpack
+    - ext: atelierapp
+      name: Atelier app
+      mimeType: application/x-atelierapp
+    - ext: atelierworld
+      name: Atelier world
+      mimeType: application/x-atelierworld
   desktop:
     entry:
-      StartupWMClass: Apex
+      StartupWMClass: Atelier
 deb:
   # electron-builder's defaults, plus the tray (AppIndicator). libsecret keeps
   # safeStorage working, libnotify the notifications.

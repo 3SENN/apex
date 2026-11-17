@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Packs (docs/packs.md): apex://packs, the review sheet, the chat card,
+// Packs (docs/packs.md): atelier://packs, the review sheet, the chat card,
 // Settings › Extensions' Packs section, the permission lines and main's
 // errors and problems.
 export const packs = {
@@ -18,7 +18,7 @@ export const packs = {
   'packs.tab.browse': 'Browse',
   'packs.link.label': 'Install from a link',
   'packs.link.button': 'Review',
-  'packs.link.hint': 'The address of an .apexpack, .apexapp or .apexworld file, such as a GitHub release download.',
+  'packs.link.hint': 'The address of an .atelierpack, .atelierapp or .atelierworld file, such as a GitHub release download.',
   'packs.installed.empty.title': 'No packs yet',
   'packs.row.toggle': '{name} pack',
   'packs.badge.problems': 'Problems',
@@ -32,7 +32,7 @@ export const packs = {
   'packs.count.panels': '{count, plural, one {# panel} other {# panels}}',
   'packs.count.apps': '{count, plural, one {# app} other {# apps}}',
   'packs.shareApp.title': 'Share {name}',
-  'packs.shareApp.description': 'Saves an .apexapp anyone with {brand} can open, with this picture inside it and next to it.',
+  'packs.shareApp.description': 'Saves an .atelierapp anyone with {brand} can open, with this picture inside it and next to it.',
   'packs.shareApp.cancel': 'Cancel',
   'packs.shareApp.save': 'Save…',
   'packs.shareApp.noteLabel': 'A note for whoever gets it',

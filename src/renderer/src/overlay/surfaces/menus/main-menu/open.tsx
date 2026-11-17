@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import type { SettingsView } from '@shared/ipc'
 import { menuBarTarget, type MainMenuSurfaceProps } from '@shared/menuBase'
 import type { OverlayResult } from '@shared/overlay'
 import type { SpendView } from '@shared/pricing'
-import { apex, call, errorText } from '../../../../api'
+import { atelier, call, errorText } from '../../../../api'
 import { toast } from '../../../../ui'
 import { openInChrome, pressAnchor } from '../../../kit/chromeHost'
 import { anchorFromElement } from '../../../useSurface'
@@ -34,12 +34,12 @@ async function openInHost(props: MainMenuSurfaceProps, where: ReturnType<typeof 
   const results: OverlayResult[] = []
   let settle: ((r: OverlayResult) => void) | null = null
   // Subscribed before opening, so a result can never arrive unheard.
-  const off = apex.overlay.onResult((r) => {
+  const off = atelier.overlay.onResult((r) => {
     if (settle && r.instanceId === openId) settle(r)
     else results.push(r)
   })
   try {
-    const { instanceId } = await apex.overlay.open('main-menu', where, props)
+    const { instanceId } = await atelier.overlay.open('main-menu', where, props)
     openId = instanceId
     const early = results.find((r) => r.instanceId === instanceId)
     if (early) return early
@@ -52,7 +52,7 @@ async function openInHost(props: MainMenuSurfaceProps, where: ReturnType<typeof 
 /** Rows the chrome answers itself; the rest run in main. */
 export async function runMainMenuChoice(id: string, opener: Pick<MainMenuOpener, 'renameWindow'>, anchor?: HTMLElement): Promise<void> {
   if (id === 'rename-window') return opener.renameWindow()
-  if (id === 'add-api-key') return call('pages', 'open', 'apex://settings/model')
+  if (id === 'add-api-key') return call('pages', 'open', 'atelier://settings/model')
   try {
     // Windows and Linux: a Menu bar row pops that top-level native menu beside the opener (SH-59).
     const target = menuBarTarget(id)
@@ -71,7 +71,7 @@ export async function runMainMenuChoice(id: string, opener: Pick<MainMenuOpener,
 export async function openMainMenu(anchor: HTMLElement, opener: MainMenuOpener): Promise<void> {
   // A second press on the anchor closes the menu instead of opening another.
   if (openId) {
-    apex.overlay.close(openId)
+    atelier.overlay.close(openId)
     return
   }
   // Still fetching the model from an earlier press, or it just closed from this press.

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { isSignInHost, isSignInUrl, overrideSignInIdentity, providerIdentity, SIGN_IN_PROVIDERS, signInIdentityFor, signInProviderAt, signInProviderFor } from '@shared/signInHosts'
 
 // The sign-in provider registry: which pages are a provider's sign-in, and the
-// identity Apex presents there (Chromium for every provider; Firefox for
+// identity Atelier presents there (Chromium for every provider; Firefox for
 // Google only while Experiments' "Google sign-in: present as Firefox" is on).
 
 const providerOf = (url: string): string | null => signInProviderFor(url)?.id ?? null
@@ -82,7 +82,7 @@ describe('sign-in providers', () => {
     expect(isSignInUrl('https://accounts.google.com/')).toBe(true)
     expect(isSignInUrl('http://accounts.google.com/')).toBe(false)
     expect(isSignInUrl('not a url')).toBe(false)
-    expect(isSignInUrl('apex://newtab')).toBe(false)
+    expect(isSignInUrl('atelier://newtab')).toBe(false)
     expect(signInProviderAt('github.com', '/LOGIN')?.id).toBe('github')
     expect(signInProviderAt('github.com', '/')).toBeNull()
   })
@@ -116,19 +116,19 @@ describe('sign-in providers', () => {
 })
 
 describe('smoke-only sign-in hosts', () => {
-  const saved = { smoke: process.env.APEX_SMOKE, hosts: process.env.APEX_SMOKE_SIGNIN_HOSTS }
+  const saved = { smoke: process.env.ATELIER_SMOKE, hosts: process.env.ATELIER_SMOKE_SIGNIN_HOSTS }
   afterEach(() => {
-    if (saved.smoke === undefined) delete process.env.APEX_SMOKE
-    else process.env.APEX_SMOKE = saved.smoke
-    if (saved.hosts === undefined) delete process.env.APEX_SMOKE_SIGNIN_HOSTS
-    else process.env.APEX_SMOKE_SIGNIN_HOSTS = saved.hosts
+    if (saved.smoke === undefined) delete process.env.ATELIER_SMOKE
+    else process.env.ATELIER_SMOKE = saved.smoke
+    if (saved.hosts === undefined) delete process.env.ATELIER_SMOKE_SIGNIN_HOSTS
+    else process.env.ATELIER_SMOKE_SIGNIN_HOSTS = saved.hosts
   })
 
-  it('add whole hosts to a provider, on http too, only under APEX_SMOKE', () => {
-    process.env.APEX_SMOKE_SIGNIN_HOSTS = 'accounts.google.localhost=google, login.ms.localhost=microsoft, bad.localhost=nobody'
-    delete process.env.APEX_SMOKE
+  it('add whole hosts to a provider, on http too, only under ATELIER_SMOKE', () => {
+    process.env.ATELIER_SMOKE_SIGNIN_HOSTS = 'accounts.google.localhost=google, login.ms.localhost=microsoft, bad.localhost=nobody'
+    delete process.env.ATELIER_SMOKE
     expect(providerOf('http://accounts.google.localhost:5000/x')).toBeNull()
-    process.env.APEX_SMOKE = '1'
+    process.env.ATELIER_SMOKE = '1'
     expect(providerOf('http://accounts.google.localhost:5000/x')).toBe('google')
     expect(signInIdentityFor('http://accounts.google.localhost:5000/x')).toBe('chromium')
     expect(providerOf('https://login.ms.localhost/')).toBe('microsoft')

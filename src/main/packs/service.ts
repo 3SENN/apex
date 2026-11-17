@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -99,7 +99,7 @@ export interface PacksServiceDeps {
   trusted: TrustedKeys
   app: AppContext
   services(): Services | null
-  /** A companion as .apexcompanion text, its own skills included, never memory (index.ts binds the companion service). */
+  /** A companion as .ateliercompanion text, its own skills included, never memory (index.ts binds the companion service). */
   companionText(id: string): string | null
   fetch?: typeof fetch
   now?: () => number
@@ -145,7 +145,7 @@ export function createPacksService(deps: PacksServiceDeps): Omit<Ns, 'openedRevi
   /** Developer mode: the review of a folder, which installing links rather than copies. */
   reviewFolder(dir: string): PackReview
   exportArchive(id: string, from: 'installed' | 'draft', shared?: PackShared | null): { name: string; data: Buffer }
-  /** One of your worlds as an .apexworld: a signed pack holding just the world (docs/apps.md › Worlds). */
+  /** One of your worlds as an .atelierworld: a signed pack holding just the world (docs/apps.md › Worlds). */
   exportWorld(ref: string): { name: string; data: Buffer }
   /** Installs what the organisation's policy force-installs; the problems, if any. */
   applyPolicy(): Promise<string[]>
@@ -395,7 +395,7 @@ export function createPacksService(deps: PacksServiceDeps): Omit<Ns, 'openedRevi
     // A folder in developer mode pins nothing: its signed release later starts its own trust.
     if (r.source.kind !== 'dev') deps.trusted.pin(r.manifest.id, r.fingerprint)
     runtime.tools.reset(r.manifest.id)
-    store.log(r.manifest.id, { level: 'info', source: 'apex', message: `Installed ${r.manifest.version} from ${r.source.kind}${r.source.url ? ` (${r.source.url})` : ''}.` })
+    store.log(r.manifest.id, { level: 'info', source: 'atelier', message: `Installed ${r.manifest.version} from ${r.source.kind}${r.source.url ? ` (${r.source.url})` : ''}.` })
     return summary(pack)
   }
 
@@ -425,7 +425,7 @@ export function createPacksService(deps: PacksServiceDeps): Omit<Ns, 'openedRevi
     const signature = theirs ? (kept && kept.hash === hash && verifyPackSignature(hash, kept) ? kept : null) : installed && installed.entry.signature === 'unsigned' ? null : deps.author.sign(hash)
     const manifest = validatePack(files)
     const version = manifest.ok ? manifest.pack.manifest.version : '0.0.0'
-    // A pack with an app travels as .apexapp, one with nothing but worlds as .apexworld (docs/apps.md › Sharing); the archive is the same.
+    // A pack with an app travels as .atelierapp, one with nothing but worlds as .atelierworld (docs/apps.md › Sharing); the archive is the same.
     const c = manifest.ok ? manifest.pack.manifest.contributes : {}
     const onlyWorlds = (c.worlds?.length ?? 0) > 0 && Object.entries(c).every(([k, v]) => k === 'worlds' || !Array.isArray(v) || v.length === 0)
     const ext = (c.apps?.length ?? 0) > 0 ? PACK_APP_FILE_EXTENSION : onlyWorlds ? PACK_WORLD_FILE_EXTENSION : PACK_FILE_EXTENSION
@@ -559,18 +559,18 @@ export function createPacksService(deps: PacksServiceDeps): Omit<Ns, 'openedRevi
         store.install(files, { source: pack.entry.source, signature: keyId ? 'signed' : 'unsigned', keyId, enable: pack.entry.enabled, signatureFile: valid })
         deps.trusted.pin(next.id, fingerprint)
         runtime.tools.reset(next.id)
-        store.log(next.id, { level: 'info', source: 'apex', message: `Updated to ${next.version}.` })
+        store.log(next.id, { level: 'info', source: 'atelier', message: `Updated to ${next.version}.` })
       } else {
         store.setUpdate(pack.manifest.id, { version: next.version, url, added })
       }
     } catch (err) {
-      store.log(pack.manifest.id, { level: 'warn', source: 'apex', message: `Update check failed: ${err instanceof Error ? err.message : String(err)}` })
+      store.log(pack.manifest.id, { level: 'warn', source: 'atelier', message: `Update check failed: ${err instanceof Error ? err.message : String(err)}` })
     }
   }
 
   const checkUpdates = async (): Promise<PackSummary[]> => {
     // The indexes first, so a pack one of them withdrew gets no update offered; only for people who installed from one,
-    // so no one else's Apex starts fetching an index in the background.
+    // so no one else's Atelier starts fetching an index in the background.
     if (store.all().some((p) => p.entry.source.kind === 'index')) await browse()
     for (const pack of store.all()) if (!pack.firstParty && !pack.entry.withdrawn && pack.manifest.updateUrl) await checkUpdate(pack)
     store.noteUpdateCheck()
@@ -851,7 +851,7 @@ export function createPacksService(deps: PacksServiceDeps): Omit<Ns, 'openedRevi
         if (err instanceof SecretsUnavailable) throw new PackFileError(mainT('packs.error.secretKeychain'))
         throw err
       }
-      store.log(id, { level: 'info', source: 'apex', message: `You entered ${secret.name} (${secret.id}).` })
+      store.log(id, { level: 'info', source: 'atelier', message: `You entered ${secret.name} (${secret.id}).` })
       runtime.secretChanged(id, secret.id)
       return summary(store.require(id))
     },
@@ -877,7 +877,7 @@ export function createPacksService(deps: PacksServiceDeps): Omit<Ns, 'openedRevi
       const pack = store.require(id)
       const secret = need(pack.manifest.secrets?.find((k) => k.id === secretId), mainT('packs.error.missingItem'))
       store.secrets.clear(id, secret.id)
-      store.log(id, { level: 'info', source: 'apex', message: `You removed ${secret.name} (${secret.id}).` })
+      store.log(id, { level: 'info', source: 'atelier', message: `You removed ${secret.name} (${secret.id}).` })
       runtime.secretChanged(id, secret.id)
       return summary(store.require(id))
     },
@@ -1040,16 +1040,16 @@ function companionName(data: Buffer | undefined): string | null {
 
 /** Model-facing rules for building a pack (docs/packs.md is the full spec). */
 export const BUILD_CONTEXT = [
-  `You are building a pack for ${BRAND_NAME} for the person with the pack tools: create_pack, write_pack_file, read_pack_file, test_pack, propose_pack and list_packs. Call apex_inspect first: it lists what window.apex offers now, the surfaces, and the services and events of the packs that are running. Build only on what it lists as available.`,
-  'A pack is a folder with apex-pack.json (format "apex-pack", manifestVersion 1, or 2 for a pack with apps; id, name, version, description, contributes, permissions) and its files.',
-  `What a pack can contribute: skills (folders with SKILL.md: YAML front matter with name and description, then instructions), routines (templates: id, name, prompt, schedule), tweaks (id, match hosts, css and/or js files), themes (id, name, accent #rrggbb), companions (.apexcompanion JSON, no memory; a companion's own skills go in its file's skills, [{ name, description, instructions, steps?, files? }], so only that companion gets them, while skills in contributes.skills go to every companion), connectors (id, name, and a remote MCP url or a local command), panels (id, title, html file; sidebar: true adds a sidebar row that opens it beside the page; icon: a .png or .svg up to 64 KB), apps (id, name, root: its folder, default "app", entry: its page inside root, default "index.html", build "kit" or "bundled", kind "game" or "tool", optional icon and sidebar: true), cards for the new tab page (id, title, module, open: a run; the module exports async function run() and returns a string or up to 5 short lines, which ${BRAND_NAME} draws), commands (id, title, run) and menus (id, title, context page|selection|link, run). A run is skill:<name>, panel:<id>, app:<id> or tool:<name>.`,
-  `Apps (games and bigger tools in a tab) and packs that work together (services, events) have their own guide parts: call apex_inspect({ guide: "apps" }) first when the person asks for an app, and "design" for how it should look (${BRAND_NAME} UI), then the parts it needs (kit, cast, ai, servers, local-server for a web server of the app’s own (phones as controllers), worlds, services, files, assets, notifications, sharing). A key never goes in a pack’s files: the servers part says how the person enters theirs. For an app, start from a starter with create_pack({ starter }) and verify it with test_pack({ playtest }) before you propose it.`,
-  'Tools: { name, description, inputSchema (JSON Schema object), module (a .js file) }. The module exports async function run(input, ctx) and returns a string or JSON. Panels and tools run sandboxed with no network of their own; they call window.apex: apex.storage.get/set/remove/keys, apex.page.info() / text() / query(selector) (only on hosts in permissions.sites), apex.fetch(url, init) (only to hosts in permissions.network), apex.notify({title, body}) (permissions.notifications), apex.ask(prompt, {system}) (permissions.model), apex.clipboard.write(text) (permissions.clipboard), apex.open(url) and apex.log(...).',
+  `You are building a pack for ${BRAND_NAME} for the person with the pack tools: create_pack, write_pack_file, read_pack_file, test_pack, propose_pack and list_packs. Call atelier_inspect first: it lists what window.atelier offers now, the surfaces, and the services and events of the packs that are running. Build only on what it lists as available.`,
+  'A pack is a folder with atelier-pack.json (format "atelier-pack", manifestVersion 1, or 2 for a pack with apps; id, name, version, description, contributes, permissions) and its files.',
+  `What a pack can contribute: skills (folders with SKILL.md: YAML front matter with name and description, then instructions), routines (templates: id, name, prompt, schedule), tweaks (id, match hosts, css and/or js files), themes (id, name, accent #rrggbb), companions (.ateliercompanion JSON, no memory; a companion's own skills go in its file's skills, [{ name, description, instructions, steps?, files? }], so only that companion gets them, while skills in contributes.skills go to every companion), connectors (id, name, and a remote MCP url or a local command), panels (id, title, html file; sidebar: true adds a sidebar row that opens it beside the page; icon: a .png or .svg up to 64 KB), apps (id, name, root: its folder, default "app", entry: its page inside root, default "index.html", build "kit" or "bundled", kind "game" or "tool", optional icon and sidebar: true), cards for the new tab page (id, title, module, open: a run; the module exports async function run() and returns a string or up to 5 short lines, which ${BRAND_NAME} draws), commands (id, title, run) and menus (id, title, context page|selection|link, run). A run is skill:<name>, panel:<id>, app:<id> or tool:<name>.`,
+  `Apps (games and bigger tools in a tab) and packs that work together (services, events) have their own guide parts: call atelier_inspect({ guide: "apps" }) first when the person asks for an app, and "design" for how it should look (${BRAND_NAME} UI), then the parts it needs (kit, cast, ai, servers, local-server for a web server of the app’s own (phones as controllers), worlds, services, files, assets, notifications, sharing). A key never goes in a pack’s files: the servers part says how the person enters theirs. For an app, start from a starter with create_pack({ starter }) and verify it with test_pack({ playtest }) before you propose it.`,
+  'Tools: { name, description, inputSchema (JSON Schema object), module (a .js file) }. The module exports async function run(input, ctx) and returns a string or JSON. Panels and tools run sandboxed with no network of their own; they call window.atelier: atelier.storage.get/set/remove/keys, atelier.page.info() / text() / query(selector) (only on hosts in permissions.sites), atelier.fetch(url, init) (only to hosts in permissions.network), atelier.notify({title, body}) (permissions.notifications), atelier.ask(prompt, {system}) (permissions.model), atelier.clipboard.write(text) (permissions.clipboard), atelier.open(url) and atelier.log(...).',
   'Permissions: { sites: [], network: [], pageScripts: false, notifications: false, model: false, clipboard: false }. Ask for the least the pack needs: every tweak host must be in sites, a tweak with js needs pageScripts, and only panels and tools may use network, model, notifications or clipboard. Reading sites together with any network host is shown to the person as a serious warning, so avoid it unless the pack truly needs it.',
   'Write plain, readable JavaScript modules: no npm packages, no bundlers, no minified code, no TypeScript. Use only relative imports inside the pack. Pack pages run no inline code: put every script in a .js file (<script type="module" src="panel.js">) and attach handlers with addEventListener, never onclick="…". Panels follow prefers-color-scheme for light and dark, work with the keyboard, and label their controls. Scripts, pages and SVG together stay under 1 MB.',
-  'apex.open(url) only opens addresses on hosts in permissions.network. In test_pack, apex.fetch reaches only localhost and hosts an installed version of the same pack may already use, apex.ask returns a stand-in answer unless the installed version may ask the model, and test pages open signed out (no cookies).',
+  'atelier.open(url) only opens addresses on hosts in permissions.network. In test_pack, atelier.fetch reaches only localhost and hosts an installed version of the same pack may already use, atelier.ask returns a stand-in answer unless the installed version may ask the model, and test pages open signed out (no cookies).',
   `Limits: ${PACK_LIMITS.files} files, ${PACK_LIMITS.fileBytes / 1024 / 1024} MB per file, ${PACK_LIMITS.packBytes / 1024 / 1024} MB per pack; a pack with an app may hold ${APP_PACK_LIMITS.files} files, ${APP_PACK_LIMITS.fileBytes / 1024 / 1024} MB per file and ${APP_PACK_LIMITS.packBytes / 1024 / 1024} MB in all. Ids: ${PACK_ID_PATTERN.source}.`,
-  `For a working example, call read_pack_file on the draft after create_pack, or ask list_packs: the "${'apex-example-reading-time'}" pack that comes with ${BRAND_NAME} has a skill, a panel, a command and a tool.`,
+  `For a working example, call read_pack_file on the draft after create_pack, or ask list_packs: the "${'atelier-example-reading-time'}" pack that comes with ${BRAND_NAME} has a skill, a panel, a command and a tool.`,
   'Work in steps: create_pack, write the files, then test_pack (fix every problem it reports and run each tool once), then propose_pack. You can never install or turn on a pack yourself: the person reviews the permissions in the card and installs it. Say in two or three sentences what the pack does and what it asks for.',
   `Built-in skills are a pack too ("${BUILTIN_SKILLS_PACK_ID}"); it can't be changed.`,
 ].join('\n')

@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Tweaks (TWK-01 to TWK-06): apex://tweaks, the Tweaks section of site info,
+// Tweaks (TWK-01 to TWK-06): atelier://tweaks, the Tweaks section of site info,
 // the in-page element picker (main formats its words) and main's errors.
 export const tweaks = {
   'tweaks.page.title': 'Tweaks',

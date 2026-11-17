@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -20,7 +20,7 @@ import { floatApi, floatInvoke, useFloatEvent } from '../api'
 // chat starts through meetings.discuss with the meeting attached), view the
 // summary, open Meetings, or dismiss. With no engine ready it says the
 // transcript is saved and the summary follows. A meeting recorded as audio
-// only says the recording is saved (and why, when Apex couldn't transcribe
+// only says the recording is saved (and why, when Atelier couldn't transcribe
 // it) and opens it; there is nothing to discuss yet.
 
 function useCompanions(enabled: boolean): { list: Companion[]; active: Companion | null } {

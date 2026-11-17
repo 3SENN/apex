@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { useEffect, useState } from 'react'
 import type { AppEvent } from '@shared/services'
-import { apex } from '../../api'
+import { atelier } from '../../api'
 import { useLatest } from '../../ui'
 
 // Small hooks over main's app events for the sidebar's key-state and drag
@@ -18,7 +18,7 @@ export function useAppEvent<K extends AppEvent['type']>(type: K, handler: (event
   const latest = useLatest(handler)
   useEffect(
     () =>
-      apex.onAppEvent((event) => {
+      atelier.onAppEvent((event) => {
         if (event.type === type) latest.current?.(event as EventOf<K>)
       }),
     [type, latest],

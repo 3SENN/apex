@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Apex's words for every speech error and warning (MV-08), each with what to
+// Atelier's words for every speech error and warning (MV-08), each with what to
 // do about it: open the right System Settings pane, try again, or choose
 // another language or microphone. Pure, so every code is unit-tested.
 import { decodeSpeechError, isSpeechErrorCode, type PermissionKind, type SpeechErrorCode, type SpeechPurpose } from '@shared/speech'

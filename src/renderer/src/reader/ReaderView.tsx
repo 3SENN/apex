@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,7 +10,7 @@ import type { TabInfo } from '@shared/ipc'
 import { currentLocale } from '@shared/i18n/core'
 import { articleForChat, type ReaderArticle } from '@shared/reader'
 import { READER_FONTS, READER_RATES, READER_THEMES, READER_WIDTHS, nextTextSize, type ReaderFont, type ReaderTheme, type ReaderWidth } from '@shared/readerPrefs'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { pushQuote } from '../chat/quoteInbox'
 import { useSettingsView } from '../chat/hooks'
 import { useCompanions, useShell } from '../components/shellContext'
@@ -24,7 +24,7 @@ import './reader.css'
 
 // The reader view (RD-02, RD-05, RD-06): drawn by the chrome over the tab's
 // pane while main keeps the page hidden underneath. A calm column of text in
-// Apex's tokens, with a small floating bar for the text and page settings,
+// Atelier's tokens, with a small floating bar for the text and page settings,
 // read aloud, asking the companion and leaving.
 
 const scrolls = new ScrollMemory()
@@ -113,8 +113,8 @@ function ReaderPage({ tab, article }: { tab: TabInfo; article: ReaderArticle }):
   const memoryKey = ScrollMemory.key(tab.id, article.url)
 
   const look = readerLook({ font: settings.readerFont, size: settings.readerTextSize, width: settings.readerWidth, theme: settings.readerTheme }, appTheme)
-  const save = (patch: Parameters<typeof apex.settings.set>[0]): void => {
-    void apex.settings.set(patch).catch((err: unknown) => toast.show({ message: errorText(err), tone: 'error' }))
+  const save = (patch: Parameters<typeof atelier.settings.set>[0]): void => {
+    void atelier.settings.set(patch).catch((err: unknown) => toast.show({ message: errorText(err), tone: 'error' }))
   }
 
   // Focus goes to the article so Space and the arrows scroll it; the place is kept per tab.
@@ -168,8 +168,8 @@ function ReaderPage({ tab, article }: { tab: TabInfo; article: ReaderArticle }):
     (href: string, e: MouseEvent<HTMLAnchorElement>) => {
       e.preventDefault()
       const background = e.metaKey || e.ctrlKey || e.button === 1
-      if (background) void apex.tabs.create(href, { background: !e.shiftKey, afterId: tab.id })
-      else void apex.nav.go(tab.id, href)
+      if (background) void atelier.tabs.create(href, { background: !e.shiftKey, afterId: tab.id })
+      else void atelier.nav.go(tab.id, href)
     },
     [tab.id],
   )

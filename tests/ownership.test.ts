@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,7 +10,7 @@ import { describe, expect, it } from 'vitest'
 import { MemoryService, memoryCommandPaths, routeMemoryPath, sharedToAgent } from '../src/main/memory'
 import { ConnectorStore, RoutineStore, SkillStore } from '../src/main/stores'
 
-const tmp = (): string => mkdtempSync(join(tmpdir(), 'apex-owner-'))
+const tmp = (): string => mkdtempSync(join(tmpdir(), 'atelier-owner-'))
 
 describe('ownership migration', () => {
   it('marks skills, routines and connectors saved before owners as shared', () => {

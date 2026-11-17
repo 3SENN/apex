@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,19 +7,19 @@ import { useEffect, useState } from 'react'
 import type { AppEvent } from '@shared/services'
 import { t } from '@shared/i18n/core'
 
-// Read window.apex on each use, not at load: the floats' page (float.html)
+// Read window.atelier on each use, not at load: the floats' page (float.html)
 // shares chunks with the chrome and gets its stand-in (voice/floatShim.ts)
 // only after those chunks have run, so a load-time read stopped it drawing.
-export const apex: Window['apex'] = new Proxy({} as Window['apex'], {
-  get: (_target, key) => (window.apex as unknown as Record<PropertyKey, unknown> | undefined)?.[key],
+export const atelier: Window['atelier'] = new Proxy({} as Window['atelier'], {
+  get: (_target, key) => (window.atelier as unknown as Record<PropertyKey, unknown> | undefined)?.[key],
 })
-export const call: Window['apex']['invoke'] = ((...args: Parameters<Window['apex']['invoke']>) => window.apex.invoke(...args)) as Window['apex']['invoke']
+export const call: Window['atelier']['invoke'] = ((...args: Parameters<Window['atelier']['invoke']>) => window.atelier.invoke(...args)) as Window['atelier']['invoke']
 
 /** Subscribes to one kind of app event from main. */
 export function useAppEvent<T extends AppEvent['type']>(type: T, listener: (event: Extract<AppEvent, { type: T }>) => void): void {
   useEffect(
     () =>
-      apex.onAppEvent((event) => {
+      atelier.onAppEvent((event) => {
         if (event.type === type) listener(event as Extract<AppEvent, { type: T }>)
       }),
     // The listener is captured once per event type.

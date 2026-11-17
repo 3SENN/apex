@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,7 +10,7 @@ import { call, errorText } from '../../api'
 import { Button, ErrorState, SkeletonText } from '../../ui'
 
 // PDFs (OV-32) with pdf.js and its bundled worker. The bytes come from the
-// viewer over IPC (the chrome can't fetch apex-file:), pages are drawn a few
+// viewer over IPC (the chrome can't fetch atelier-file:), pages are drawn a few
 // at a time onto canvases sized to the column, and pdf.js never evaluates code
 // or loads fonts.
 
@@ -36,7 +36,7 @@ function PdfPage({ pdf, index, count, width }: { pdf: PdfDocument; index: number
         el.width = Math.max(1, Math.floor(viewport.width))
         el.height = Math.max(1, Math.floor(viewport.height))
         el.style.width = `${Math.floor(viewport.width / ratio)}px`
-        // Paper is white in both themes: this is the page itself, not Apex's UI.
+        // Paper is white in both themes: this is the page itself, not Atelier's UI.
         task = page.render({ canvas: el, viewport, background: '#ffffff' })
         task.promise.catch(() => {
           if (!cancelled) setFailed(true)

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,7 +14,7 @@ vi.mock('electron', () => {
   const noop: unknown = new Proxy(function () {}, {
     get: (_t, key) => {
       if (key === 'isPackaged') return false
-      if (key === 'getAppPath' || key === 'getPath') return () => '/nonexistent/apex-d0'
+      if (key === 'getAppPath' || key === 'getPath') return () => '/nonexistent/atelier-d0'
       return key === 'then' || key === Symbol.toPrimitive ? undefined : noop
     },
     apply: () => noop,
@@ -157,19 +157,19 @@ describe('routes and helpers', () => {
 
   it('parses the routine, workspace, guides and flags routes', () => {
     expect(parseInternalUrl(routineUrl('r1', true))).toEqual({ page: 'routines', id: 'r1', section: 'edit', item: null })
-    expect(parseInternalUrl('apex://routines/new')).toEqual({ page: 'routines', id: 'new', section: null, item: null })
-    expect(parseInternalUrl('apex://routines/r1/other')).toBeNull()
+    expect(parseInternalUrl('atelier://routines/new')).toEqual({ page: 'routines', id: 'new', section: null, item: null })
+    expect(parseInternalUrl('atelier://routines/r1/other')).toBeNull()
     expect(parseInternalUrl(workspaceUrl('projects', 'p1'))).toEqual({ page: 'workspace', section: 'projects', id: 'p1', item: null })
-    expect(parseInternalUrl('apex://workspace/elsewhere')).toBeNull()
-    expect(parseInternalUrl('apex://workspace')).toEqual({ page: 'workspace', section: null, id: null, item: null })
-    expect(parseInternalUrl('apex://guides/first-steps')).toEqual({ page: 'guides', id: 'first-steps', section: null, item: null })
-    expect(parseInternalUrl('apex://flags')).toEqual({ page: 'flags', section: null, id: null, item: null })
+    expect(parseInternalUrl('atelier://workspace/elsewhere')).toBeNull()
+    expect(parseInternalUrl('atelier://workspace')).toEqual({ page: 'workspace', section: null, id: null, item: null })
+    expect(parseInternalUrl('atelier://guides/first-steps')).toEqual({ page: 'guides', id: 'first-steps', section: null, item: null })
+    expect(parseInternalUrl('atelier://flags')).toEqual({ page: 'flags', section: null, id: null, item: null })
     expect(internalQuery(skillUrl('s1', 'docs/a b.md'), 'file')).toBe('docs/a b.md')
-    expect(internalQuery('apex://routines?view=runs', 'view')).toBe('runs')
+    expect(internalQuery('atelier://routines?view=runs', 'view')).toBe('runs')
   })
 
-  it('keeps apps off apex:// pages', () => {
-    expect(appRunUrl('a1')).toBe('apex-app://a1/')
+  it('keeps apps off atelier:// pages', () => {
+    expect(appRunUrl('a1')).toBe('atelier-app://a1/')
     expect(isAppRunUrl(appRunUrl('a1'))).toBe(true)
     expect(parseInternalUrl(appRunUrl('a1'))).toBeNull()
   })
@@ -234,7 +234,7 @@ const inert = (): unknown => {
 // Runs last: the real features register tools, export sources and trash
 // adapters as they start, which the registry tests above must not see.
 describe('feature service schemas match every feature method', () => {
-  const dataDir = mkdtempSync(join(tmpdir(), 'apex-d0-'))
+  const dataDir = mkdtempSync(join(tmpdir(), 'atelier-d0-'))
   const ctx = {
     dataDir,
     smoke: false,

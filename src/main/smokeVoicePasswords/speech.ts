@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,7 +14,7 @@ import type { ShotSpec, SmokeCheck, SmokeContext } from '../smokeBrowser/types'
 // permission, and the level test with the helper's scripted levels. Offline
 // only; the shots run in both themes.
 
-const PAGE = 'apex://settings/transcription'
+const PAGE = 'atelier://settings/transcription'
 const CHECKLIST = `document.querySelector('.sk-checklist')`
 const TEST = `document.querySelector('.sk-test')`
 
@@ -23,10 +23,10 @@ async function withFreshSetup(ctx: SmokeContext, body: () => Promise<void>): Pro
   const before: TranscriptionSettings = ctx.settings.get().transcription
   smokeSpeechPermissions.set({ microphone: 'not-determined', speech: 'not-determined', screen: 'denied' })
   ctx.settings.update({ transcription: { setupDismissed: false } })
-  // Main remembers whether Apex asked for Screen Recording; start from never asked.
+  // Main remembers whether Atelier asked for Screen Recording; start from never asked.
   screenAccess().forgetAsked()
   // Another page first, so Transcription mounts afresh and reads the scripted report.
-  ctx.tabs.openInternal('apex://settings/you')
+  ctx.tabs.openInternal('atelier://settings/you')
   await ctx.chrome.until(`return !document.querySelector('.sk-page')`, 5000, 'Settings to leave Transcription')
   try {
     await body()
@@ -74,7 +74,7 @@ const levels: SmokeCheck = {
     await ctx.chrome.click(/^Stop$/, TEST)
     await ctx.chrome.until(`return ${TEST}?.innerText.includes('Last test')`, 8000, 'the last test')
     const info = await ctx.chrome.invoke<{ exists: boolean; url: string | null }>('transcription', 'testInfo')
-    assert(info.exists && info.url === 'apex-media://speech/test', 'the test recording is kept for playback')
+    assert(info.exists && info.url === 'atelier-media://speech/test', 'the test recording is kept for playback')
     await ctx.chrome.click(/^Delete$/, TEST)
     await ctx.chrome.until(`return ${TEST}?.innerText.includes('No test yet')`, 5000, 'the test to be deleted')
   },
@@ -89,7 +89,7 @@ const model: SmokeCheck = {
     smokeSpeechAssets.set('supported')
     try {
       // Another page first, so Transcription mounts afresh and asks again.
-      ctx.tabs.openInternal('apex://settings/you')
+      ctx.tabs.openInternal('atelier://settings/you')
       await ctx.chrome.until(`return !document.querySelector('[data-settings-anchor="transcription-mic"]')`, 5000, 'Settings to leave Transcription')
       ctx.tabs.openInternal(PAGE)
       await ctx.chrome.until(`return ${MODEL}?.dataset.state === 'offer'`, 8000, 'the offer to prepare on-device speech')

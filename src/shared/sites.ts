@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -125,7 +125,7 @@ export interface SiteInfo {
   sessionDevices?: GrantedDevice[]
 }
 
-/** Apex's own kinds for failed loads (navErrors.ts maps did-fail-load codes to these). */
+/** Atelier's own kinds for failed loads (navErrors.ts maps did-fail-load codes to these). */
 export type PageErrorKind =
   | 'offline'
   | 'not-found'
@@ -271,7 +271,7 @@ export interface ScreenSource {
 
 export interface ScreenSources {
   sources: ScreenSource[]
-  /** macOS Screen Recording: windows and screens need it, tabs don't ('relaunch': allowed, takes effect after Apex restarts). */
+  /** macOS Screen Recording: windows and screens need it, tabs don't ('relaunch': allowed, takes effect after Atelier restarts). */
   screenAccess: 'granted' | 'denied' | 'not-determined' | 'relaunch' | 'unsupported'
 }
 

@@ -1,12 +1,12 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // The Calendar and Reminders helper's main side. Opt-in and read-only:
-// each kind needs Apex's switch and macOS's permission. The helper
+// each kind needs Atelier's switch and macOS's permission. The helper
 // (native/calendar, Swift and EventKit) answers one command per run in JSON
-// lines; tests and smoke point APEX_CALENDAR_HELPER at a fake. It implements
+// lines; tests and smoke point ATELIER_CALENDAR_HELPER at a fake. It implements
 // the meetings CalendarSource (setCalendarSource once events are on) and
 // emits 'meeting-soon' for the meeting card (MV-09) and alert (ST-20).
 import { BRAND_NAME } from '@shared/branding'
@@ -106,15 +106,15 @@ export function toEvent(line: Extract<HelperLine, { type: 'event' }>): CalendarE
 
 export function calendarHelperPath(o: { packaged: boolean; resourcesPath: string; appPath: string; platform?: NodeJS.Platform; env?: NodeJS.ProcessEnv }): string | null {
   const env = o.env ?? process.env
-  const override = env.APEX_CALENDAR_HELPER
+  const override = env.ATELIER_CALENDAR_HELPER
   if (override) {
-    // A fused build can't run a script as Node: launching itself on one starts a whole second Apex.
-    // Only a smoke run that lends its own Node (APEX_SMOKE_NODE) may point a packaged app at the fake.
-    if (o.packaged && isScript(override) && !(env.APEX_SMOKE === '1' && env.APEX_SMOKE_NODE)) return null
+    // A fused build can't run a script as Node: launching itself on one starts a whole second Atelier.
+    // Only a smoke run that lends its own Node (ATELIER_SMOKE_NODE) may point a packaged app at the fake.
+    if (o.packaged && isScript(override) && !(env.ATELIER_SMOKE === '1' && env.ATELIER_SMOKE_NODE)) return null
     return existsSync(override) ? override : null
   }
   if ((o.platform ?? process.platform) !== 'darwin') return null
-  const path = o.packaged ? join(o.resourcesPath, 'apex-calendar') : join(o.appPath, 'native', 'calendar', 'build', 'apex-calendar')
+  const path = o.packaged ? join(o.resourcesPath, 'atelier-calendar') : join(o.appPath, 'native', 'calendar', 'build', 'atelier-calendar')
   return existsSync(path) ? path : null
 }
 
@@ -125,7 +125,7 @@ function command(helper: string, args: string[]): { file: string; args: string[]
   if (isScript(helper)) {
     // A fused build can't run as Node (the RunAsNode fuse is off), so the packaged
     // smoke run lends its own Node for the fake helper. Honoured only under smoke.
-    const node = process.env.APEX_SMOKE === '1' ? process.env.APEX_SMOKE_NODE : undefined
+    const node = process.env.ATELIER_SMOKE === '1' ? process.env.ATELIER_SMOKE_NODE : undefined
     if (node) return { file: node, args: [helper, ...args], env: { ...process.env } }
     return { file: process.execPath, args: [helper, ...args], env: { ...process.env, ELECTRON_RUN_AS_NODE: '1' } }
   }
@@ -278,7 +278,7 @@ export class CalendarService extends EventEmitter<{ 'meeting-soon': [event: Cale
     return calendarReadable(this.#snapshot(), kind)
   }
 
-  /** Whether a kind is switched on in Apex (permission aside), for offering its tool. */
+  /** Whether a kind is switched on in Atelier (permission aside), for offering its tool. */
   enabled(kind: CalendarKind): boolean {
     return this.#run !== null && this.#file.enabled[kind]
   }

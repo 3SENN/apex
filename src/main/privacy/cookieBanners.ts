@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Cookie banners (privacy pack, Settings › Privacy › Hide cookie banners).
-// Apex's own small list of the consent tools most sites use, written here
+// Atelier's own small list of the consent tools most sites use, written here
 // from each tool's public markup: the elements that make up its banner, its
 // Reject all (or Only necessary) button when it has an unambiguous one, and
 // the class it puts on the page to stop it scrolling. Main turns the list

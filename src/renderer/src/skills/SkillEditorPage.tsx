@@ -1,18 +1,18 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex://skills/<id> (SK-03): one skill as a page. Its fields, its steps and
+// atelier://skills/<id> (SK-03): one skill as a page. Its fields, its steps and
 // its supporting files; Save (asking before changes are thrown away), Use,
 // Export, Reveal in Finder, Duplicate and Delete. A built-in skill opens
-// read-only with "Duplicate to edit". apex://skills/new starts a blank one.
+// read-only with "Duplicate to edit". atelier://skills/new starts a blank one.
 import { useEffect, useRef, useState, type ReactElement } from 'react'
 import { ArrowLeft, Copy, Download, FolderOpen, MoreHorizontal, Play, Trash2, WandSparkles } from 'lucide-react'
 import { SHARED_OWNER } from '@shared/chats'
 import type { Skill } from '@shared/skills'
 import { chatUrl, skillUrl } from '@shared/url'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { useT } from '../i18n/useT'
 import { Badge, Button, EmptyState, IconButton, RelativeTime, showMenu, useConfirm, useToast } from '../ui'
 import { ExportDialog } from '../ui/ExportDialog'
@@ -90,7 +90,7 @@ export function SkillEditorPage({ tabId, skillId, file = null, owner = SHARED_OW
       const ok = await confirm({ title: t('skills.editor.discardTitle'), message: t('skills.editor.discardBody'), confirmLabel: t('skills.editor.discard'), cancelLabel: t('skills.editor.keep'), destructive: true })
       if (!ok) return
     }
-    void apex.nav.go(tabId, url)
+    void atelier.nav.go(tabId, url)
   }
   const fail = (err: unknown): void => void toast.show({ tone: 'error', message: errorText(err) })
 
@@ -107,7 +107,7 @@ export function SkillEditorPage({ tabId, skillId, file = null, owner = SHARED_OW
       const saved = await call('skills', 'save', skillFormInput(form, skill?.id))
       apply(saved)
       toast.show({ tone: 'success', message: isNew ? t('skills.page.created', { name: saved.name }) : t('skills.editor.saved', { name: saved.name }) })
-      if (isNew) void apex.nav.go(tabId, skillUrl(saved.id))
+      if (isNew) void atelier.nav.go(tabId, skillUrl(saved.id))
     } catch (err) {
       const message = errorText(err)
       if (/already exists|name/i.test(message)) setErrors({ name: message })
@@ -131,7 +131,7 @@ export function SkillEditorPage({ tabId, skillId, file = null, owner = SHARED_OW
     try {
       const copy = await call('skills', 'duplicate', skill.id)
       toast.show({ tone: 'success', message: t('skills.page.duplicated', { name: copy.name }) })
-      void apex.nav.go(tabId, skillUrl(copy.id))
+      void atelier.nav.go(tabId, skillUrl(copy.id))
     } catch (err) {
       fail(err)
     }
@@ -143,7 +143,7 @@ export function SkillEditorPage({ tabId, skillId, file = null, owner = SHARED_OW
     try {
       await call('skills', 'remove', skill.id)
       toast.show({ message: t('skills.page.deleted', { name: skill.name }) })
-      void apex.nav.go(tabId, 'apex://skills')
+      void atelier.nav.go(tabId, 'atelier://skills')
     } catch (err) {
       fail(err)
     }
@@ -192,7 +192,7 @@ export function SkillEditorPage({ tabId, skillId, file = null, owner = SHARED_OW
           title={t('skills.editor.missing')}
           description={t('skills.editor.missingHint')}
           action={
-            <Button variant="secondary" icon={<ArrowLeft />} onClick={() => void apex.nav.go(tabId, 'apex://skills')}>
+            <Button variant="secondary" icon={<ArrowLeft />} onClick={() => void atelier.nav.go(tabId, 'atelier://skills')}>
               {t('skills.editor.back')}
             </Button>
           }
@@ -213,7 +213,7 @@ export function SkillEditorPage({ tabId, skillId, file = null, owner = SHARED_OW
           }
         }}
       >
-        <button type="button" className="sp-back" onClick={() => void leave('apex://skills')}>
+        <button type="button" className="sp-back" onClick={() => void leave('atelier://skills')}>
           <ArrowLeft aria-hidden /> {t('skills.editor.back')}
         </button>
         <header className="sk-editor__head">

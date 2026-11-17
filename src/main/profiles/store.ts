@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -15,7 +15,7 @@ import { writeAtomic } from '../settings'
 import { PROFILES_FILE } from './paths'
 
 // profiles.json (SH-64): { id, name, hue, createdAt } per profile. The
-// default profile is always there (the original data folder, persist:apex-web); the
+// default profile is always there (the original data folder, persist:atelier-web); the
 // file only records its name and colour once someone changes them.
 
 const record = z

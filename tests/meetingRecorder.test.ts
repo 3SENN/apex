@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -235,7 +235,7 @@ describe('recorder lifecycle', () => {
     expect(h.summarizer.request).toHaveBeenCalledWith(id)
     expect(h.recorder.wrapUp()).toMatchObject({ phase: 'ready', summarized: true, title: 'Weekly planning' })
     expect(h.recorder.status().state).toBe('idle')
-    // Apex was in view: no notification.
+    // Atelier was in view: no notification.
     expect(h.notes).toEqual([])
   })
 
@@ -280,13 +280,13 @@ describe('recorder lifecycle', () => {
     expect(h.recorder.wrapUp()).toMatchObject({ phase: 'ready', summarized: false })
   })
 
-  it('notifies a ready summary only when Apex is out of view', async () => {
+  it('notifies a ready summary only when Atelier is out of view', async () => {
     const h = harness()
     h.inView.value = false
     const id = await h.recorder.start({ kind: 'meeting' })
     await h.recorder.stop()
     await vi.runAllTimersAsync()
-    expect(h.notes).toEqual([expect.objectContaining({ title: 'Meeting notes ready', target: `apex://meetings/${id}` })])
+    expect(h.notes).toEqual([expect.objectContaining({ title: 'Meeting notes ready', target: `atelier://meetings/${id}` })])
   })
 
   it('warns about missing system audio and a fallback mic, and shows reconnecting until restored', async () => {
@@ -385,7 +385,7 @@ describe('audio only', () => {
     expect(h.wraps.filter(Boolean).at(-1)).toMatchObject({ meetingId: id, phase: 'ready', audioOnly: 'chosen' })
   })
 
-  it('falls back to audio only when Speech Recognition is off for Apex', async () => {
+  it('falls back to audio only when Speech Recognition is off for Atelier', async () => {
     const h = harness()
     h.broker.setPermissions({ microphone: 'granted', speech: 'not-determined', screen: 'granted' })
     h.broker.request = async () => ({ microphone: 'granted', speech: 'denied', screen: 'granted' })
@@ -517,7 +517,7 @@ describe('widget visibility', () => {
     appHidden,
     window: { activeTabId: 't1', splitTabIds: [], railUrl: null, activeInternalUrl: null, hasTab: (id) => ['t1', 't2'].includes(id), ...over },
   })
-  const meetings = (url: string): boolean => url.startsWith('apex://meetings')
+  const meetings = (url: string): boolean => url.startsWith('atelier://meetings')
 
   it('wants the widget only while recording out of view, or for the wrap-up', () => {
     expect(widgetWanted({ state: 'recording', originInView: false, wrapUp: false })).toBe(true)
@@ -531,7 +531,7 @@ describe('widget visibility', () => {
     expect(originInView({ tabId: 't1' }, view(), meetings)).toBe(true)
     expect(originInView({ tabId: 't2' }, view(), meetings)).toBe(false)
     expect(originInView({ tabId: 't2' }, view({ splitTabIds: ['t1', 't2'] }), meetings)).toBe(true)
-    expect(originInView({ tabId: 't1' }, view({ railUrl: 'apex://chats' }), meetings)).toBe(false)
+    expect(originInView({ tabId: 't1' }, view({ railUrl: 'atelier://chats' }), meetings)).toBe(false)
     expect(originInView({ tabId: 't9' }, view({ activeTabId: 't9' }), meetings)).toBe(false)
     // Unfocused or minimised windows report no window; a hidden app is out of view.
     expect(originInView({ tabId: 't1' }, { appHidden: false, window: null }, meetings)).toBe(false)
@@ -539,8 +539,8 @@ describe('widget visibility', () => {
   })
 
   it('counts a recording started elsewhere in view while Meetings is on screen', () => {
-    expect(originInView({ tabId: null }, view({ railUrl: 'apex://meetings' }), meetings)).toBe(true)
-    expect(originInView({ tabId: null }, view({ activeInternalUrl: 'apex://meetings/abc' }), meetings)).toBe(true)
+    expect(originInView({ tabId: null }, view({ railUrl: 'atelier://meetings' }), meetings)).toBe(true)
+    expect(originInView({ tabId: null }, view({ activeInternalUrl: 'atelier://meetings/abc' }), meetings)).toBe(true)
     expect(originInView({ tabId: null }, view(), meetings)).toBe(false)
   })
 

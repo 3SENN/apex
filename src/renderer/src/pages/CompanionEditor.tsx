@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -203,7 +203,7 @@ interface PresetGalleryProps {
   onDetails?(preset: CompanionPreset): void
 }
 
-/** Apex’s preset companions with their look, name and tagline. Picking one never overwrites a companion; callers add a new one. */
+/** Atelier’s preset companions with their look, name and tagline. Picking one never overwrites a companion; callers add a new one. */
 export function PresetGallery({ presets, selectedId = null, onPick, compact = false, label = tx('settings.look.presets'), onDetails }: PresetGalleryProps) {
   const t = useT()
   return (

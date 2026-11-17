@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,14 +9,14 @@ import type { HapticKind } from '@shared/haptics'
 import type { HapticPattern, HapticsAddon, HapticsStubReason } from '../../../native/haptics'
 import { errorMessage, log } from '../log'
 
-// Trackpad haptics (SH-41): loads native/haptics' apex_haptics.node
+// Trackpad haptics (SH-41): loads native/haptics' atelier_haptics.node
 // with process.dlopen (macOS only), rate-limits to one tick per 80 ms and
 // honours settings.haptics. Anywhere the addon can't load it is a no-op, so
 // callers never branch. The loader mirrors native/haptics/index.js, which
 // can't be bundled into main (it is CommonJS outside node_modules).
 
 export const HAPTIC_MIN_INTERVAL_MS = 80
-export const HAPTICS_BINARY = 'apex_haptics.node'
+export const HAPTICS_BINARY = 'atelier_haptics.node'
 
 // The service spells AppKit's levelChange in kebab case.
 const PATTERN: Record<HapticKind, HapticPattern> = { alignment: 'alignment', 'level-change': 'levelChange', generic: 'generic' }

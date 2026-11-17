@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -154,7 +154,7 @@ export function captureRoutineOutcomes(store: RoutineOutcomeSource): () => void 
   return () => void store.off('changed', onChanged)
 }
 
-/** The speech helper exited: its code and whether Apex asked it to. For the speech HelperLink's 'exit'. */
+/** The speech helper exited: its code and whether Atelier asked it to. For the speech HelperLink's 'exit'. */
 export function captureSpeechExit(code: number | null, expected: boolean): void {
   if (expected && (code === 0 || code === null)) log.info('speech', 'The speech helper quit', { code })
   else log.warn('speech', 'The speech helper stopped unexpectedly', { code, expected })

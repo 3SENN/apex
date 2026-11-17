@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -65,7 +65,7 @@ describe('backgroundMode hooks', () => {
     expect(backgroundMode.startHidden()).toBe(false)
   })
 
-  it('delegate to the runtime, which can keep Apex running', () => {
+  it('delegate to the runtime, which can keep Atelier running', () => {
     let quit = 0
     backgroundMode.install({ windowAllClosed: () => true, startHidden: () => true })
     backgroundMode.windowAllClosed(() => quit++)

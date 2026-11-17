@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// One installed pack, in its sheet on apex://packs (docs/packs.md): Open and
+// One installed pack, in its sheet on atelier://packs (docs/packs.md): Open and
 // on or off first, then what needs you (an update, a problem, a service it
 // waits for), what's inside (with Open, Add routine, Add companion, Add
 // connector and Use accent), its keys and sign-ins, and what it can do. Where
@@ -15,7 +15,7 @@ import { Columns2, Download, Palette, Plus, Share2, Trash2, Wand2, ExternalLink,
 import { packAccentChoice } from '@shared/theme'
 import type { PackDetail as PackDetailData, PackReview, PackSummary } from '@shared/packs'
 import { packAppRef, packPanelRef, showOf, type SidebarAppShow } from '@shared/sidebarApps'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { setAppShow } from '../apps/library'
 import { useSettingsView } from '../companion-card/useLoaded'
 import { useT } from '../i18n/useT'
@@ -75,7 +75,7 @@ export function PackDetail({ pack, onReview, focusKey, audited = false }: { pack
     if (ok) await run('remove', () => call('packs', 'remove', pack.id), t('packs.remove.done', { name: pack.name }))
   }
 
-  const useAccent = (themeId: string): Promise<void> => run(`theme:${themeId}`, () => apex.settings.set({ accent: packAccentChoice(pack.id, themeId) }), t('packs.theme.used'))
+  const useAccent = (themeId: string): Promise<void> => run(`theme:${themeId}`, () => atelier.settings.set({ accent: packAccentChoice(pack.id, themeId) }), t('packs.theme.used'))
 
   const inside = pack.worlds.length + pack.apps.length + pack.panels.length + pack.routines.length + pack.companions.length + pack.connectors.length + pack.themes.length + pack.cards.length > 0
 
@@ -255,7 +255,7 @@ export function PackDetail({ pack, onReview, focusKey, audited = false }: { pack
                       async () => {
                         // Its page opens next, for a token or a sign-in when the server needs one.
                         const connectorId = await call('packs', 'addConnector', pack.id, c.id)
-                        await call('pages', 'open', `apex://connectors/${connectorId}`)
+                        await call('pages', 'open', `atelier://connectors/${connectorId}`)
                       },
                       t('packs.thing.connectorAdded', { name: c.name }),
                     )
@@ -526,7 +526,7 @@ export function PackDetail({ pack, onReview, focusKey, audited = false }: { pack
               {t('packs.detail.export')}
             </Button>
           )}
-          {pack.id !== 'apex-builtin-skills' && (
+          {pack.id !== 'atelier-builtin-skills' && (
             <Button size="sm" variant="ghost" icon={<Wand2 />} loading={busy === 'remix'} disabled={pack.problems.length > 0} onClick={() => void run('remix', () => call('packs', 'remix', pack.id))}>
               {t('packs.detail.remix')}
             </Button>

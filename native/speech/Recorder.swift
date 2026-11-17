@@ -1,16 +1,16 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // The recording (ST-18c): each source is written to its own
 // AAC part while the session runs, and on stop the parts are merged into the
-// one compressed audio.m4a Apex asked for. Parts start where their source's
+// one compressed audio.m4a Atelier asked for. Parts start where their source's
 // first audio fell on the session clock, so You and Others stay in step.
 // A part is ADTS AAC, whose frames each stand alone, so a crash, a force quit
 // or a power cut still leaves a readable part (an .m4a is only readable once
 // it is closed). Its start is in its name, so `recover` puts a recording left
-// behind together on Apex's next run.
+// behind together on Atelier's next run.
 
 import AVFoundation
 import Foundation
@@ -182,7 +182,7 @@ enum Merger {
   }
 
   private static func failure(_ code: Int, _ message: String) -> NSError {
-    NSError(domain: "apex-speech", code: code, userInfo: [NSLocalizedDescriptionKey: message])
+    NSError(domain: "atelier-speech", code: code, userInfo: [NSLocalizedDescriptionKey: message])
   }
 
   static func size(of url: URL) -> Int {

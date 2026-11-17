@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Open-in-app links (SH-32/DS-24). Maps a web address onto the desktop app that handles it,
-// from Apex's own small table; the chip offers it only when the app exists
+// from Atelier's own small table; the chip offers it only when the app exists
 // (main checks the scheme with app.getApplicationNameForProtocol).
 
 export interface AppLink {
@@ -28,7 +28,7 @@ export interface AppLinkRule {
 
 const pathOf = (url: URL): string => url.pathname.replace(/^\/+/, '')
 
-/** Apex's table of well-known sites with a desktop app. Only pages the app can open map; the rest return null. */
+/** Atelier's table of well-known sites with a desktop app. Only pages the app can open map; the rest return null. */
 export const APP_LINK_RULES: readonly AppLinkRule[] = [
   {
     key: 'zoom',

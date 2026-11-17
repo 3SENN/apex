@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -15,8 +15,8 @@ import './brand.css'
 // The branding's logo, mark and icon (branding/<id>/renderer/, through the
 // `@branding` alias; scripts/branding.mjs).
 //
-// Official Apex, as on apexbrowser.eu (its brand page has the rules):
-// - the logo is the word with its sprout on the apex of the A (logo.svg). The
+// Official Atelier, as on atelierbrowser.eu (its brand page has the rules):
+// - the logo is the word with its sprout on the tip of the A (logo.svg). The
 //   word takes the text colour; the sprout is violet, a shade lighter on dark grounds.
 // - the mark is Pip with its sprout and two smiling eyes, for where there is
 //   no room for the word.
@@ -35,7 +35,7 @@ const MARK_SET = `${mark32} 32w, ${mark64} 64w, ${mark128} 128w`
 export function BrandMark({ size = 24, className }: { size?: number; className?: string }): ReactElement {
   return (
     <img
-      className={`apex-pip-mark${className ? ` ${className}` : ''}`}
+      className={`atelier-pip-mark${className ? ` ${className}` : ''}`}
       src={size <= 16 ? mark32 : size <= 32 ? mark64 : mark128}
       srcSet={MARK_SET}
       sizes={`${size}px`}
@@ -54,7 +54,7 @@ export function BrandMark({ size = 24, className }: { size?: number; className?:
  * a mark of about the same height.
  */
 export function BrandLogo({ size = 24, className }: { size?: number; className?: string }): ReactElement {
-  const classes = `apex-logo${className ? ` ${className}` : ''}`
+  const classes = `atelier-logo${className ? ` ${className}` : ''}`
   if (WORDMARK) {
     return (
       <svg className={classes} viewBox={`0 0 ${WORDMARK.width} ${WORDMARK.height}`} width={Math.round((size * WORDMARK.width) / WORDMARK.height)} height={size} role="img" aria-label={BRANDING.name}>
@@ -65,9 +65,9 @@ export function BrandLogo({ size = 24, className }: { size?: number; className?:
     )
   }
   return (
-    <span className={`${classes} apex-logo--name`} style={{ height: size, fontSize: Math.round(size * 0.62) }} role="img" aria-label={BRANDING.name}>
+    <span className={`${classes} atelier-logo--name`} style={{ height: size, fontSize: Math.round(size * 0.62) }} role="img" aria-label={BRANDING.name}>
       <BrandMark size={Math.round(size * 0.82)} />
-      <span className="apex-logo__name" aria-hidden="true">
+      <span className="atelier-logo__name" aria-hidden="true">
         {BRANDING.name}
       </span>
     </span>

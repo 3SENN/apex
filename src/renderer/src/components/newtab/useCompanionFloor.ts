@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { useCallback, useEffect, useState } from 'react'
-import { apex, errorText } from '../../api'
+import { atelier, errorText } from '../../api'
 import { useSettingsView } from '../../companion-card/useLoaded'
 import { toast } from '../../ui'
 import { floorShown, takeLegacyFloorSetting } from './newtabLogic'
@@ -22,7 +22,7 @@ export function useCompanionFloor(): { on: boolean; toggle(): void } {
 
   // A window that remembered "off" before this was a setting hands it over once.
   useEffect(() => {
-    if (takeLegacyFloorSetting() === false) void apex.settings.set({ companionFloor: false }).catch(() => undefined)
+    if (takeLegacyFloorSetting() === false) void atelier.settings.set({ companionFloor: false }).catch(() => undefined)
   }, [])
   useEffect(() => setPending(null), [stored])
 
@@ -30,7 +30,7 @@ export function useCompanionFloor(): { on: boolean; toggle(): void } {
   const toggle = useCallback(() => {
     const next = !on
     setPending(next)
-    apex.settings.set({ companionFloor: next }).catch((err: unknown) => {
+    atelier.settings.set({ companionFloor: next }).catch((err: unknown) => {
       setPending(null)
       toast.show({ message: errorText(err), tone: 'error' })
     })

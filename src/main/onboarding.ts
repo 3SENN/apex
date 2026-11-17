@@ -1,13 +1,13 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // The setup flow's store and service (ON-01, ON-11). Progress lives in
 // userData/setup.json (version 1), schema-checked on load: an invalid file,
-// or one from a newer Apex, is reset with a notice shown once. Every step is
+// or one from a newer Atelier, is reset with a notice shown once. Every step is
 // saved as you go, so a restart resumes where you left off. Launch starts
-// the first chat, seeded from the answers; Apex never edits the Dock.
+// the first chat, seeded from the answers; Atelier never edits the Dock.
 import { BRAND_NAME } from '@shared/branding'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'

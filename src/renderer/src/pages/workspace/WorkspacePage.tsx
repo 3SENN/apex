@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The Workspace hub (apex://workspace[/<section>[/<id>]]): one
+// The Workspace hub (atelier://workspace[/<section>[/<id>]]): one
 // centred column with the title and Search everything, four tabs (Home,
 // Projects, Files, Apps) with Recently deleted at the end of their row, and
 // the section below. Tables show under Files; Search and Recently deleted

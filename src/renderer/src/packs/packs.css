@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-/* Packs (docs/packs.md): apex://packs, the review sheet and the chat card. Tokens only, so light and dark follow the theme. */
+/* Packs (docs/packs.md): atelier://packs, the review sheet and the chat card. Tokens only, so light and dark follow the theme. */
 
 /* ── page ── */
 .pk-scroll { flex: 1 1 auto; min-width: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; }

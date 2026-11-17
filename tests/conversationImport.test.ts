@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -12,7 +12,7 @@ import type { ChatContent } from '../src/main/chats'
 import { CHAT_SUMMARY_LINK_DEFAULTS } from '@shared/chats'
 import { chatToMarkdown } from '@shared/exportFormat'
 import type { ImportJob } from '@shared/onboarding'
-import { detectJsonSource, parseApexExport, parseChatGptConversation, parseClaudeConversation, parseConversationsJson, toMillis } from '../src/main/conversationImport/parsers'
+import { detectJsonSource, parseAtelierExport, parseChatGptConversation, parseClaudeConversation, parseConversationsJson, toMillis } from '../src/main/conversationImport/parsers'
 import { readExportBytes, readZip } from '../src/main/conversationImport/read'
 import { createConversationsService, transcriptContext, transcriptText } from '../src/main/conversationImport/service'
 import { FakeHost } from './helpers/fakeHost'
@@ -56,7 +56,7 @@ describe('Claude exports', () => {
   })
 })
 
-describe('detection and Apex exports', () => {
+describe('detection and Atelier exports', () => {
   it('tells the two JSON shapes apart', () => {
     expect(detectJsonSource(fixture('chatgpt.json'))).toBe('chatgpt')
     expect(detectJsonSource(fixture('claude.json'))).toBe('claude')
@@ -65,14 +65,14 @@ describe('detection and Apex exports', () => {
     expect(toMillis('nope')).toBeNull()
   })
 
-  it('round-trips an Apex chat export', () => {
+  it('round-trips an Atelier chat export', () => {
     const summary = { id: 'x', title: 'Weekend plans', createdAt: Date.parse('2024-06-01T09:00:00Z') } as ChatSummary
     const md = chatToMarkdown({ summary, log: [{ type: 'user-message', id: 'u', text: 'Any ideas?' }, { type: 'text-delta', turnId: 't', text: 'A picnic.' }], details: {} } as never, { companionName: 'Pip' })
-    const parsed = parseApexExport(md)!
-    expect(parsed.source).toBe('apex')
+    const parsed = parseAtelierExport(md)!
+    expect(parsed.source).toBe('atelier')
     expect(parsed.title).toBe('Weekend plans')
     expect(parsed.messages.map((m) => [m.role, m.text])).toEqual([['user', 'Any ideas?'], ['assistant', 'A picnic.']])
-    expect(parseApexExport('# just notes')).toBeNull()
+    expect(parseAtelierExport('# just notes')).toBeNull()
   })
 })
 

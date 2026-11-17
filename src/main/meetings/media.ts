@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,14 +10,14 @@ import type { Session } from 'electron'
 import { MEDIA_SCHEME } from '../appProtocol'
 import { log } from '../log'
 
-// The apex-media:// handler: meeting audio and the microphone test, with
+// The atelier-media:// handler: meeting audio and the microphone test, with
 // Range support so <audio> can seek. Only two shapes of address are served,
 // each confined to its own folder, and only on the chrome and float session
 // (the default session); web and profile partitions never get the handler.
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
-/** The file an apex-media address names, or null for anything else or anything that escapes its folder. */
+/** The file an atelier-media address names, or null for anything else or anything that escapes its folder. */
 export function mediaTarget(url: string, dataDir: string): string | null {
   let parsed: URL
   try {
@@ -99,7 +99,7 @@ export function mediaResponse(url: string, rangeHeader: string | null, dataDir: 
   return new Response(body, { status: range ? 206 : 200, headers })
 }
 
-/** Serves apex-media on one session (the chrome and floats share the default one). Returns the undo. */
+/** Serves atelier-media on one session (the chrome and floats share the default one). Returns the undo. */
 export function handleMediaProtocol(ses: Session, dataDir: string): () => void {
   try {
     if (ses.protocol.isProtocolHandled(MEDIA_SCHEME)) ses.protocol.unhandle(MEDIA_SCHEME)
@@ -108,7 +108,7 @@ export function handleMediaProtocol(ses: Session, dataDir: string): () => void {
       return mediaResponse(request.url, request.headers.get('range'), dataDir)
     })
   } catch (err) {
-    log.error('meetings', 'Serving apex-media failed', { error: String(err) })
+    log.error('meetings', 'Serving atelier-media failed', { error: String(err) })
     return () => undefined
   }
   return () => {

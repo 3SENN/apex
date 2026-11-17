@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { useCallback, useEffect, useId, useState, type ReactElement } from 'reac
 import { ChevronDown, ChevronRight, Cookie, Database, Lock, Settings, ShieldAlert, TriangleAlert } from 'lucide-react'
 import { decisionOptions } from '@shared/permissions'
 import type { PermissionDecision, SecurityState, SiteInfo, SitePermission, SiteSettingsPatch } from '@shared/sites'
-import { apex, call, errorText } from '../../../api'
+import { atelier, call, errorText } from '../../../api'
 import { useT } from '../../../i18n/useT'
 import { Button, ErrorState, Select, SkeletonRows, Switch } from '../../../ui'
 import type { SurfaceComponentProps } from '../../types'
@@ -64,7 +64,7 @@ export function SiteInfoPopover({ props, close }: SurfaceComponentProps<{ tabId:
   // Another surface (or the Settings page) changed this site, or its capture moved.
   useEffect(
     () =>
-      apex.onAppEvent((event) => {
+      atelier.onAppEvent((event) => {
         // A changed answer also ends the site's one-time ones (main forgets them), so those are read again too.
         if (event.type === 'site-settings' && info && event.origin === info.origin)
           void call('sites', 'info', props.tabId).then(({ settings, oneTime, sessionDevices }) => setInfo((i) => (i ? { ...i, settings, oneTime, sessionDevices } : i)))
@@ -268,7 +268,7 @@ export function SiteInfoPopover({ props, close }: SurfaceComponentProps<{ tabId:
         <Switch size="sm" label={t('sites.info.forceDark')} description={t('sites.info.forceDarkBody')} checked={info.settings.forceDark} onChange={(forceDark) => void update({ forceDark })} />
       </section>
 
-      {/* TWK-04: the site's tweak (hide elements, focus, customize); nothing on Apex's own pages. */}
+      {/* TWK-04: the site's tweak (hide elements, focus, customize); nothing on Atelier's own pages. */}
       <SiteTweakSection tabId={props.tabId} close={close} />
 
       {/* The site's own JavaScript, images, automatic downloads and insecure content rules. */}
@@ -319,7 +319,7 @@ export function SiteInfoPopover({ props, close }: SurfaceComponentProps<{ tabId:
           type="button"
           className="st-link"
           onClick={() => {
-            void call('pages', 'open', 'apex://settings/sites')
+            void call('pages', 'open', 'atelier://settings/sites')
             close()
           }}
         >

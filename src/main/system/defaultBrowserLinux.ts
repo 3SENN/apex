@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -48,7 +48,7 @@ export function isDefaultBrowserLinuxSync(exec: RunSync = runSync): boolean {
   }
 }
 
-/** Sets Apex as the default, then checks; throws a readable message when the desktop refuses. */
+/** Sets Atelier as the default, then checks; throws a readable message when the desktop refuses. */
 export async function makeDefaultBrowserLinux(exec: Run = run): Promise<boolean> {
   try {
     await exec('xdg-settings', SET_ARGS)

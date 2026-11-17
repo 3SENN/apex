@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -15,15 +15,15 @@ import { currentExtensions, extensionsSmoke } from '../extensions/service'
 import { sleep, waitFor } from '../smokeKit'
 import type { ShotSpec, SmokeCheck, SmokeContext } from '../smokeBrowser/types'
 
-// Apple's iCloud Passwords extension in Apex, offline. The extension comes
-// from a staged copy (APEX_SMOKE_ICLOUD_DIR: the Web Store package and its
-// verified unpacked folder; Apex never bundles it), and Apple's helper is
+// Apple's iCloud Passwords extension in Atelier, offline. The extension comes
+// from a staged copy (ATELIER_SMOKE_ICLOUD_DIR: the Web Store package and its
+// verified unpacked folder; Atelier never bundles it), and Apple's helper is
 // replaced by a fake (tests/fixtures/extensions/native-host/
 // password-helper-fake.mjs) registered in this run's own
 // NativeMessagingHosts folder, the only one a smoke run reads. Checks: the
 // background connects to the helper, the toolbar popup opens at its size
 // and shows the pairing step, the content script answers in a sign-in page
-// and its sign-in iframe, Apex's password offers step aside, and the
+// and its sign-in iframe, Atelier's password offers step aside, and the
 // Settings card's switch installs through the verified Web Store path.
 
 function assert(ok: unknown, message: string): asserts ok {
@@ -31,14 +31,14 @@ function assert(ok: unknown, message: string): asserts ok {
 }
 
 const staged = (): { unpacked: string; crx: string } | null => {
-  const root = process.env.APEX_SMOKE_ICLOUD_DIR
+  const root = process.env.ATELIER_SMOKE_ICLOUD_DIR
   if (!root) return null
   const unpacked = join(root, 'unpacked')
   const crx = join(root, `${ID}.crx`)
   return existsSync(join(unpacked, 'manifest.json')) && existsSync(crx) ? { unpacked, crx } : null
 }
 
-const fixture = (name: string): string => join(process.env.APEX_SMOKE_FIXTURES ?? join(app.getAppPath(), 'tests/fixtures'), 'extensions', name)
+const fixture = (name: string): string => join(process.env.ATELIER_SMOKE_FIXTURES ?? join(app.getAppPath(), 'tests/fixtures'), 'extensions', name)
 
 function extensions() {
   const ext = currentExtensions()
@@ -48,7 +48,7 @@ function extensions() {
 
 function scratchProfile(): { id: string; session: Electron.Session; console: string[] } {
   const id = `smokeicp${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`
-  const s = session.fromPartition(`persist:apex-smoke-${id}`)
+  const s = session.fromPartition(`persist:atelier-smoke-${id}`)
   // The extension worker's console, so a failure says what the extension saw.
   const lines: string[] = []
   s.serviceWorkers.on('console-message', (_e: unknown, d: { message: string }) => {
@@ -75,12 +75,12 @@ interface FakeHelper {
 
 /** Registers the fake helper under Apple's host name in this run's own folder; checks the lookup finds it and nothing else. */
 function installFakeHelper(): FakeHelper {
-  const dir = mkdtempSync(join(tmpdir(), 'apex-smoke-helper-'))
+  const dir = mkdtempSync(join(tmpdir(), 'atelier-smoke-helper-'))
   const logFile = join(dir, 'helper.log')
   const launcher = join(dir, 'PasswordHelperFake')
-  const node = process.env.APEX_SMOKE_NODE ?? process.execPath
+  const node = process.env.ATELIER_SMOKE_NODE ?? process.execPath
   // Hosts start without Electron's switches, so the launcher asks for plain Node itself.
-  writeFileSync(launcher, `#!/bin/sh\nexport APEX_FAKE_HELPER_LOG="${logFile}"\nexport ELECTRON_RUN_AS_NODE=1\nexec "${node}" "${fixture('native-host/password-helper-fake.mjs')}" "$@"\n`)
+  writeFileSync(launcher, `#!/bin/sh\nexport ATELIER_FAKE_HELPER_LOG="${logFile}"\nexport ELECTRON_RUN_AS_NODE=1\nexec "${node}" "${fixture('native-host/password-helper-fake.mjs')}" "$@"\n`)
   chmodSync(launcher, 0o755)
   const hosts = join(app.getPath('userData'), 'NativeMessagingHosts')
   mkdirSync(hosts, { recursive: true })
@@ -148,14 +148,14 @@ async function popupAtPairing(profileId: string, win: HostWindow): Promise<WebCo
 let checkedOnce = false
 const skip = (): boolean => {
   if (staged()) return false
-  if (!checkedOnce) console.log('note  icloud passwords: APEX_SMOKE_ICLOUD_DIR is unset or empty, so the iCloud Passwords checks have nothing to load')
+  if (!checkedOnce) console.log('note  icloud passwords: ATELIER_SMOKE_ICLOUD_DIR is unset or empty, so the iCloud Passwords checks have nothing to load')
   checkedOnce = true
   return true
 }
 
 export const checks: SmokeCheck[] = [
   {
-    name: 'icloud passwords: the staged extension connects to the helper, its popup shows pairing, its content script runs in the sign-in iframe, Apex steps aside',
+    name: 'icloud passwords: the staged extension connects to the helper, its popup shows pairing, its content script runs in the sign-in iframe, Atelier steps aside',
     async run(ctx) {
       if (skip()) return
       const files = staged()!
@@ -179,7 +179,7 @@ export const checks: SmokeCheck[] = [
         assert(helper.log().some((l) => l.cmd === 14), 'the background never said hello to the helper')
         // It turned the browser's password saving off through chrome.privacy (its settings live in storage.sync).
         await waitOr(() => host.passwordSavingHeldOff(profile.id)?.extensionId === ID, 10_000, 'the extension to take over password saving.', profile, helper)
-        assert(apple.status(profile.id).apexStepsAside, 'Apex’s own password offers did not step aside')
+        assert(apple.status(profile.id).atelierStepsAside, 'Atelier’s own password offers did not step aside')
 
         // A sign-in page whose form is also in a cross-origin iframe.
         const { page: url } = servePages(ctx)
@@ -263,18 +263,18 @@ export const checks: SmokeCheck[] = [
         assert(prompts.length === 1 && /iCloud/i.test(prompts[0] ?? ''), `the install asked ${prompts.length} times (${prompts.join(', ')})`)
         const item = host.list(profile.id).find((e) => e.id === ID)
         assert(item?.source === 'store' && item.enabled && item.pinned, 'the store install is not on and pinned')
-        // Apex's copy of a store package carries the content-script prelude (chrome.storage.sync for content scripts).
+        // Atelier's copy of a store package carries the content-script prelude (chrome.storage.sync for content scripts).
         const copy = host.dirOf(profile.id, ID)
         assert(copy, 'the store install has no folder')
         const m = JSON.parse(readFileSync(join(copy, 'manifest.json'), 'utf8')) as { content_scripts?: Array<{ js?: string[] }> }
         assert(m.content_scripts?.length && m.content_scripts.every((e) => e.js?.[0] === CONTENT_COMPAT_FILE), 'the store copy lacks the content-script prelude')
         await wait('waiting-for-code', 'the popup the switch opened to reach the code step')
-        assert(apple.status(profile.id).apexStepsAside, 'Apex did not step aside after the switch')
+        assert(apple.status(profile.id).atelierStepsAside, 'Atelier did not step aside after the switch')
 
         await apple.setOn(profile.id, false)
         await sleep(100)
         const off = apple.status(profile.id)
-        assert(off.state === 'off' && !off.enabled && !off.apexStepsAside, `turning it off left ${JSON.stringify(off)}`)
+        assert(off.state === 'off' && !off.enabled && !off.atelierStepsAside, `turning it off left ${JSON.stringify(off)}`)
       } finally {
         extensionsSmoke.fetchAppleCrx = null
         extensionsSmoke.installPrompt = null

@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex://tweaks (TWK-05): every site's tweak, one opened for editing at a
-// time (apex://tweaks?site=<host> opens that one), a site to add, Allow
+// atelier://tweaks (TWK-05): every site's tweak, one opened for editing at a
+// time (atelier://tweaks?site=<host> opens that one), a site to add, Allow
 // custom scripts with its warning, and export and import as JSON.
 import { useEffect, useId, useState, type FormEvent, type ReactElement } from 'react'
 import { ChevronDown, ChevronRight, Sparkles, Upload, Download } from 'lucide-react'

@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // The settings search index: every settings row, so the command
-// bar and the settings search find it. apex://settings/<page>?highlight=<anchor>
+// bar and the settings search find it. atelier://settings/<page>?highlight=<anchor>
 // scrolls to the row and highlights it for about 2 s. Each area keeps its
 // rows together in its own region.
 import type { SETTINGS_PAGES } from './url'
@@ -62,7 +62,7 @@ export const SETTINGS_INDEX: SettingsIndexEntry[] = [
   { id: 'reduce-motion', page: 'appearance', title: 'settings.appearance.reduceMotion', keywords: ['motion', 'animation', 'reduce motion', 'accessibility'], anchor: 'reduce-motion' },
   { id: 'languages-mode', page: 'languages', title: 'settings.languages.mode', keywords: ['languages', 'system languages', 'preferred languages', 'order'], anchor: 'languages-mode' },
   { id: 'languages-add', page: 'languages', title: 'settings.languages.add', keywords: ['add language', 'locale', 'spellcheck'], anchor: 'languages-add' },
-  { id: 'default-browser', page: 'default-browser', title: 'settings.defaultBrowser.make', keywords: ['default browser', 'make default', 'open links in apex'], anchor: 'default-browser' },
+  { id: 'default-browser', page: 'default-browser', title: 'settings.defaultBrowser.make', keywords: ['default browser', 'make default', 'open links in atelier'], anchor: 'default-browser' },
   { id: 'notifications', page: 'notifications', title: 'settings.notifications.enabled', keywords: ['notifications', 'alerts', 'turn off notifications'], anchor: 'notifications' },
   { id: 'notification-sounds', page: 'notifications', title: 'settings.notifications.sounds', keywords: ['sounds', 'notification sound', 'silent'], anchor: 'notification-sounds' },
   { id: 'notify-needs-you', page: 'notifications', title: 'settings.notifications.category.needsYou', keywords: ['approvals', 'needs you', 'permission requests'], anchor: 'notify-needs-you' },
@@ -77,7 +77,7 @@ export const SETTINGS_INDEX: SettingsIndexEntry[] = [
   { id: 'https-first', page: 'privacy', title: 'privacyPack.index.https', keywords: ['https', 'https-first', 'secure connection', 'http', 'not secure', 'encryption'], anchor: 'https-first' },
   { id: 'cookie-banners', page: 'privacy', title: 'privacyPack.index.cookies', keywords: ['cookie banners', 'cookie consent', 'gdpr', 'consent pop-ups', 'reject cookies', 'annoyances'], anchor: 'cookie-banners' },
   { id: 'site-settings', page: 'privacy', title: 'settings.privacy.sites', keywords: ['site settings', 'permissions', 'camera', 'microphone', 'location', 'pop-ups'], anchor: 'site-settings' },
-  // permissions hub: the row that opens apex://settings/access
+  // permissions hub: the row that opens atelier://settings/access
   { id: 'permissions-hub', page: 'privacy', title: 'permissionsHub.row.title', keywords: ['permissions', 'privacy and security', 'microphone', 'camera', 'location', 'screen recording', 'speech recognition', 'calendars', 'reminders', 'full disk access', 'notifications', 'system settings', 'block', 'quiet notifications'], anchor: 'permissions-hub' },
   { id: 'history', page: 'privacy', title: 'settings.privacy.history.row', keywords: ['history', 'clear history', 'browsing history'], anchor: 'history' },
   { id: 'clear-cache', page: 'privacy', title: 'settings.privacy.cache', keywords: ['cache', 'clear cache', 'cached images'], anchor: 'clear-cache' },
@@ -163,5 +163,5 @@ export const SETTINGS_INDEX: SettingsIndexEntry[] = [
 
 /** The address that opens a row's page with the row highlighted. */
 export function settingsRowUrl(entry: Pick<SettingsIndexEntry, 'page' | 'anchor'>): string {
-  return entry.anchor ? `apex://settings/${entry.page}?highlight=${encodeURIComponent(entry.anchor)}` : `apex://settings/${entry.page}`
+  return entry.anchor ? `atelier://settings/${entry.page}?highlight=${encodeURIComponent(entry.anchor)}` : `atelier://settings/${entry.page}`
 }

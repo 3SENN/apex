@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,7 +11,7 @@ import type { Readable, Writable } from 'node:stream'
 import { SpeechError, type HelperCommand, type HelperLine } from '@shared/speech'
 import { encodeCommand, helperVersionOk, parseHelperLine } from './protocol'
 
-// Runs the native apex-speech helper (protocol v2) and turns its JSON
+// Runs the native atelier-speech helper (protocol v2) and turns its JSON
 // lines into parsed events. The helper starts on first use with a version
 // handshake: an old binary is reported as outdated and never used. A helper
 // that dies is started again once, on the spot; one that keeps dying is left
@@ -34,9 +34,9 @@ export class LineSplitter {
 /** Where the helper lives: next to the app when packaged, in the build folder in development. */
 export function speechHelperPath(opts: { platform: NodeJS.Platform; packaged: boolean; resourcesPath: string; appPath: string }): string | null {
   // Native/speech-win; built in CI on Windows only
-  if (opts.platform === 'win32') return opts.packaged ? join(opts.resourcesPath, 'apex-speech.exe') : join(opts.appPath, 'native', 'speech-win', 'build', 'apex-speech.exe')
+  if (opts.platform === 'win32') return opts.packaged ? join(opts.resourcesPath, 'atelier-speech.exe') : join(opts.appPath, 'native', 'speech-win', 'build', 'atelier-speech.exe')
   if (opts.platform !== 'darwin') return null
-  return opts.packaged ? join(opts.resourcesPath, 'apex-speech') : join(opts.appPath, 'native', 'speech', 'build', 'apex-speech')
+  return opts.packaged ? join(opts.resourcesPath, 'atelier-speech') : join(opts.appPath, 'native', 'speech', 'build', 'atelier-speech')
 }
 
 /** The parts of a child process the link uses, so tests can fake it. */
@@ -50,7 +50,7 @@ export interface HelperProcess {
 
 export type SpawnHelper = (path: string) => HelperProcess
 
-// windowsHide: apex-speech.exe is a console program, which would otherwise open a window of its own.
+// windowsHide: atelier-speech.exe is a console program, which would otherwise open a window of its own.
 export const spawnHelper: SpawnHelper = (path) => spawn(path, [], { stdio: ['pipe', 'pipe', 'ignore'], windowsHide: true })
 
 export type LinkState = 'idle' | 'starting' | 'ready' | 'missing' | 'outdated'

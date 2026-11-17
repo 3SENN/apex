@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@
 // the ground is kept as a tile grid while you paint and written back as the
 // fewest rectangles that cover it.
 import * as THREE from 'three'
-import { PROPS } from 'apex-kit/props.js'
+import { PROPS } from 'atelier-kit/props.js'
 import { t } from './i18n.js'
 import { groundAt, residentSpot } from './stage.js'
 

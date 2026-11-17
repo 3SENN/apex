@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,7 +11,7 @@ import { resourcePath } from './resources'
 
 // The app's name and icon wherever the system shows the app: the menu bar,
 // the Dock, the app switcher, the About panel, notifications, login items and
-// dialogs. Both come from the branding the build was made with (official Apex
+// dialogs. Both come from the branding the build was made with (official Atelier
 // or the unofficial Summit; scripts/branding.mjs). The packaged app's bundle
 // carries the name (electron-builder's productName); a dev run starts
 // Electron's own bundle, which scripts/dev-branding.mjs renames on `predev`

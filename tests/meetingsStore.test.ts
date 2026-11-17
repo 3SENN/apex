@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,7 +14,7 @@ import { mediaResponse, mediaTarget, parseRange } from '../src/main/meetings/med
 import { createMeetingResolver, meetingPromptText } from '../src/main/meetings/resolver'
 
 // The meetings library on disk, crash recovery, search, export, the
-// apex-media handler and the resolver chats use.
+// atelier-media handler and the resolver chats use.
 
 const LABELS = { you: 'You', others: 'Others' }
 const ID_A = '11111111-1111-4111-8111-111111111111'
@@ -25,7 +25,7 @@ let root: string
 let dataDir: string
 
 beforeEach(() => {
-  dataDir = mkdtempSync(join(tmpdir(), 'apex-meetings-'))
+  dataDir = mkdtempSync(join(tmpdir(), 'atelier-meetings-'))
   root = join(dataDir, 'meetings')
 })
 
@@ -257,7 +257,7 @@ describe('MeetingFileStore', () => {
     const d = s.get(m.id) as MeetingDetail
     expect(d.segments.map((x) => x.text)).toEqual(['again'])
     expect(d.hasAudio).toBe(true)
-    expect(d.audioUrl).toBe(`apex-media://meeting/${m.id}/audio`)
+    expect(d.audioUrl).toBe(`atelier-media://meeting/${m.id}/audio`)
     expect(s.storage().count).toBe(1)
     expect(s.storage().bytes).toBeGreaterThan(4096)
     expect(() => s.audioPathFor('../../etc')).toThrow()
@@ -306,15 +306,15 @@ describe('meeting export', () => {
   })
 })
 
-describe('apex-media', () => {
+describe('atelier-media', () => {
   it('serves only meeting audio and the mic test, confined to their folders', () => {
-    expect(mediaTarget(`apex-media://meeting/${ID_A}/audio`, dataDir)).toBe(join(dataDir, 'meetings', ID_A, 'audio.m4a'))
-    expect(mediaTarget('apex-media://speech/test', dataDir)).toBe(join(dataDir, 'speech', 'test.m4a'))
-    expect(mediaTarget('apex-media://meeting/../../secrets/audio', dataDir)).toBeNull()
-    expect(mediaTarget(`apex-media://meeting/${ID_A}/transcript`, dataDir)).toBeNull()
-    expect(mediaTarget('apex-media://meeting/not-a-uuid/audio', dataDir)).toBeNull()
-    expect(mediaTarget(`apex-media://meeting/${ID_A}/audio?x=1`, dataDir)).toBeNull()
-    expect(mediaTarget('apex-media://other/test', dataDir)).toBeNull()
+    expect(mediaTarget(`atelier-media://meeting/${ID_A}/audio`, dataDir)).toBe(join(dataDir, 'meetings', ID_A, 'audio.m4a'))
+    expect(mediaTarget('atelier-media://speech/test', dataDir)).toBe(join(dataDir, 'speech', 'test.m4a'))
+    expect(mediaTarget('atelier-media://meeting/../../secrets/audio', dataDir)).toBeNull()
+    expect(mediaTarget(`atelier-media://meeting/${ID_A}/transcript`, dataDir)).toBeNull()
+    expect(mediaTarget('atelier-media://meeting/not-a-uuid/audio', dataDir)).toBeNull()
+    expect(mediaTarget(`atelier-media://meeting/${ID_A}/audio?x=1`, dataDir)).toBeNull()
+    expect(mediaTarget('atelier-media://other/test', dataDir)).toBeNull()
     expect(mediaTarget('https://example.com/a', dataDir)).toBeNull()
   })
 
@@ -332,7 +332,7 @@ describe('apex-media', () => {
   it('answers a Range request with 206 and the slice', async () => {
     mkdirSync(join(dataDir, 'meetings', ID_A), { recursive: true })
     writeFileSync(join(dataDir, 'meetings', ID_A, 'audio.m4a'), Buffer.from('0123456789'))
-    const url = `apex-media://meeting/${ID_A}/audio`
+    const url = `atelier-media://meeting/${ID_A}/audio`
     const partial = mediaResponse(url, 'bytes=2-5', dataDir)
     expect(partial.status).toBe(206)
     expect(partial.headers.get('content-range')).toBe('bytes 2-5/10')
@@ -342,7 +342,7 @@ describe('apex-media', () => {
     expect(whole.headers.get('accept-ranges')).toBe('bytes')
     expect(await whole.text()).toBe('0123456789')
     expect(mediaResponse(url, 'bytes=20-', dataDir).status).toBe(416)
-    expect(mediaResponse(`apex-media://meeting/${ID_B}/audio`, null, dataDir).status).toBe(404)
+    expect(mediaResponse(`atelier-media://meeting/${ID_B}/audio`, null, dataDir).status).toBe(404)
   })
 })
 

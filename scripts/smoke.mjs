@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Launches the built app in smoke-test mode and exits with its status.
-// A watchdog ends a run that stops making progress (APEX_SMOKE_MAX_MS, 20 min).
+// A watchdog ends a run that stops making progress (ATELIER_SMOKE_MAX_MS, 20 min).
 // The network guard: Chromium writes a net log for the run, and any request to
 // a host outside this machine fails the run (scripts/smoke/netGuard.mjs).
 import { spawn } from 'node:child_process'
@@ -14,13 +14,13 @@ import { join } from 'node:path'
 import electron from 'electron'
 import { externalHosts } from './smoke/netGuard.mjs'
 
-const env = { ...process.env, APEX_SMOKE: '1' }
+const env = { ...process.env, ATELIER_SMOKE: '1' }
 delete env.ELECTRON_RUN_AS_NODE
 delete env.ELECTRON_RENDERER_URL
 
-const logDir = mkdtempSync(join(tmpdir(), 'apex-netlog-'))
+const logDir = mkdtempSync(join(tmpdir(), 'atelier-netlog-'))
 const netLog = join(logDir, 'net-log.json')
-const maxMs = Number(process.env.APEX_SMOKE_MAX_MS) || 20 * 60_000
+const maxMs = Number(process.env.ATELIER_SMOKE_MAX_MS) || 20 * 60_000
 const child = spawn(electron, ['.', `--log-net-log=${netLog}`, '--net-log-capture-mode=Default'], { stdio: 'inherit', env })
 const watchdog = setTimeout(() => {
   console.error(`\nsmoke: no result after ${Math.round(maxMs / 1000)}s, stopping the app`)

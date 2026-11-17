@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The Apps section of apex://workspace,
+// The Apps section of atelier://workspace,
 // lazily imported by sections.ts: websites saved as apps, apps from
 // packs, and every app your companions built, as tiles in groups that show
 // only when they hold something; a detail view with the still, versions and
@@ -32,7 +32,7 @@ import { chosenShow, setAppShow, sidebarMenuItems } from '../../../apps/library'
 import { useSettingsView } from '../../../companion-card/useLoaded'
 
 export interface AppsSectionProps {
-  /** apex://workspace/apps/<id> opens that app's detail. */
+  /** atelier://workspace/apps/<id> opens that app's detail. */
   itemId?: string | null
 }
 

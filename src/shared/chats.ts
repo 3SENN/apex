@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -56,7 +56,7 @@ export interface ChatSummary {
   delegationStatus: DelegationStatus | null
   projectId: string | null
   /** An imported, read-only transcript (CH-31). */
-  imported: { source: 'chatgpt' | 'claude' | 'apex'; originalTitle: string; originalCreatedAt: number | null; importedAt: number } | null
+  imported: { source: 'chatgpt' | 'claude' | 'atelier'; originalTitle: string; originalCreatedAt: number | null; importedAt: number } | null
   /** The routine run this chat is (SK-12's header). */
   routineRun: { runId: string; scheduledFor: number; trigger: 'schedule' | 'manual' | 'catch-up' } | null
 }
@@ -200,7 +200,7 @@ export interface ChatView {
   queued: QueuedMessage[]
   /** Tabs this chat controls right now. */
   tabIds: string[]
-  /** Open tabs the chat acted on since Apex started, controlled or not (the header's tabs list). */
+  /** Open tabs the chat acted on since Atelier started, controlled or not (the header's tabs list). */
   usedTabIds: string[]
   // CH-13, SS-05, CH-14 to CH-18
   /** Index of `log[0]` in the whole saved log: long chats load their newest page first (chats.older pages back). */
@@ -209,7 +209,7 @@ export interface ChatView {
   saveError?: string | null
   /** The run waits at a safe point (agent.pause, the shield's take-over). */
   paused?: boolean
-  /** The file could not be migrated, or a newer Apex saved it. The chat opens read-only with the composer disabled. */
+  /** The file could not be migrated, or a newer Atelier saved it. The chat opens read-only with the composer disabled. */
   notice?: { kind: 'migration-failed' | 'newer-format'; message: string; /** An original in chats/.backup can be restored. */ backup?: boolean } | null
 }
 

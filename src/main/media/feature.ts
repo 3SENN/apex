@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -15,7 +15,7 @@ import { pageMediaMessageSchema } from './report'
 // The media feature (MD-01 to MD-04): the hub, the page helpers' reports, the
 // page menu on media and the window-scoped `media` service. Media keys and
 // the system's Now Playing stay Chromium's own (its audio focus follows the
-// source that started last, which the hub marks `active`); Apex registers no
+// source that started last, which the hub marks `active`); Atelier registers no
 // media-key shortcut that would take them over.
 
 let hub: MediaHub | null = null

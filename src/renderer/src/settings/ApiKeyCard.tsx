@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@
 import { useState, type ReactElement } from 'react'
 import { ExternalLink } from 'lucide-react'
 import type { SettingsView } from '@shared/ipc'
-import { apex, errorText } from '../api'
+import { atelier, errorText } from '../api'
 import { Badge, Button, useConfirm, useToast } from '../ui'
 import { Card, Row, TextInput } from './kit'
 import { useT, t } from '../i18n/useT'
@@ -17,7 +17,7 @@ const CONSOLE_KEYS_URL = 'https://console.anthropic.com/settings/keys'
 
 export function keyStatus(settings: SettingsView): { tone: 'success' | 'info' | 'warning'; label: string; detail: string } {
   if (settings.apiKeySource === 'saved') return { tone: 'success', label: t('settings.apiKeyCard.saved'), detail: t('settings.apiKeyCard.encryptedWithYourSystem') }
-  if (settings.apiKeySource === 'environment') return { tone: 'info', label: t('settings.apiKeyCard.fromEnvironment'), detail: t('settings.apiKeyCard.apexIsUsingAnthropic') }
+  if (settings.apiKeySource === 'environment') return { tone: 'info', label: t('settings.apiKeyCard.fromEnvironment'), detail: t('settings.apiKeyCard.atelierIsUsingAnthropic') }
   return { tone: 'warning', label: t('settings.apiKeyCard.notSet'), detail: t('settings.apiKeyCard.yourCompanionNeedsA') }
 }
 
@@ -34,7 +34,7 @@ export function ApiKeyCard({ settings, onSettings, variant = 'full', onManage }:
     setBusy(true)
     setError(null)
     try {
-      onSettings(await apex.settings.setApiKey(value))
+      onSettings(await atelier.settings.setApiKey(value))
       setKey('')
       toast.show({ tone: 'success', message: value ? t('settings.apiKeyCard.apiKeySaved') : t('settings.apiKeyCard.savedApiKeyRemoved') })
     } catch (err) {
@@ -100,7 +100,7 @@ export function ApiKeyCard({ settings, onSettings, variant = 'full', onManage }:
           ) : (
             <p className="sp-field__hint">
               {t('settings.apiKeyCard.keysStayOnThis')}{' '}
-              <button type="button" className="sp-link" onClick={() => void apex.tabs.create(CONSOLE_KEYS_URL)}>
+              <button type="button" className="sp-link" onClick={() => void atelier.tabs.create(CONSOLE_KEYS_URL)}>
                 {t('settings.apiKeyCard.getAKey')} <ExternalLink size={12} aria-hidden />
               </button>
             </p>

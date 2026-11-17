@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -17,8 +17,8 @@ import { NO_SESSION, PAGE_MEDIA, clampRate, parseSessionDetail, type MediaSessio
 // events whose detail is a string (a string crosses worlds intact). Nothing
 // is reported until the frame has media, and no part goes in on sign-in pages.
 
-const SESSION = 'apex-media-session'
-const ASK = 'apex-media-ask'
+const SESSION = 'atelier-media-session'
+const ASK = 'atelier-media-ask'
 const MEDIA_EVENTS = ['play', 'playing', 'pause', 'ended', 'ratechange', 'volumechange', 'loadedmetadata', 'emptied', 'enterpictureinpicture', 'leavepictureinpicture'] as const
 /** While something plays, the metadata is read again this often (a page may change it in place). */
 const POLL_MS = 4000
@@ -131,7 +131,7 @@ export function installMedia({ mainWorld }: { mainWorld: boolean }): void {
   let session = NO_SESSION
   let seen = false
   let lead: HTMLMediaElement | null = null
-  /** What Apex paused (without a page handler), so Play resumes exactly those. */
+  /** What Atelier paused (without a page handler), so Play resumes exactly those. */
   let held: HTMLMediaElement[] = []
   /** The media element the page menu opened on. */
   let menuTarget: HTMLMediaElement | null = null

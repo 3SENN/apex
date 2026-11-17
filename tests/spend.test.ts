@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -24,7 +24,7 @@ describe('turn cost (DS-18)', () => {
     expect(turnCostUsd('someone-elses-model', usage)).toBe(0)
   })
 
-  it('has rates for every model Apex offers', () => {
+  it('has rates for every model Atelier offers', () => {
     for (const model of MODELS) expect(MODEL_RATES[model], model).toBeDefined()
   })
 
@@ -39,7 +39,7 @@ describe('turn cost (DS-18)', () => {
 
 describe('spend store', () => {
   it('adds turns, saves the month and starts again in a new one', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-spend-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-spend-'))
     let now = new Date(2026, 9, 28).getTime()
     const store = new SpendStore(dir, () => now)
     const seen: number[] = []

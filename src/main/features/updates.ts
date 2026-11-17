@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -31,7 +31,7 @@ export function updatesRuntime(): UpdatesRuntime | null {
   return runtime
 }
 
-/** True while Apex is quitting to install an update: quit confirmations and background mode let it go. */
+/** True while Atelier is quitting to install an update: quit confirmations and background mode let it go. */
 export function isQuittingForUpdate(): boolean {
   return runtime?.controller().quittingForUpdate ?? false
 }
@@ -45,7 +45,7 @@ function whatsNewWindow(rt: UpdatesRuntime, win: WindowContext | null): WindowCo
 
 /**
  * Opens what's new if an update armed it. Only the person closing it records
- * the version; when Apex takes it away (its window closed, a quit) it stays
+ * the version; when Atelier takes it away (its window closed, a quit) it stays
  * armed, moves to the window in front if there is one, and otherwise shows
  * on the next start.
  */

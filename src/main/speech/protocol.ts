@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { z } from 'zod'
 import { HELPER_ERROR_CODES, SPEECH_PROTOCOL_VERSION, type HelperCommand, type HelperLine } from '@shared/speech'
 
-// apex-speech protocol v2: every line the helper prints is checked here
+// atelier-speech protocol v2: every line the helper prints is checked here
 // before main acts on it. Unknown line types are ignored rather than failing,
 // so the helper can add lines (such as `lid`) without a version bump. Extra
 // fields are dropped for the same reason.

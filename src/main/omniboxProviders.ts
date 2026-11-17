@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -36,7 +36,7 @@ export interface AddressSources {
   now?(): number
 }
 
-/** Apex pages a person might type the name of. */
+/** Atelier pages a person might type the name of. */
 const PAGE_IDS = ['chats', 'routines', 'skills', 'connectors', 'history', 'bookmarks', 'downloads', 'settings', 'first-week', 'meetings', 'passwords', /* docs/packs.md */ 'packs'] as const
 
 const ICON = { search: 'search', globe: 'globe', history: 'history', bookmark: 'bookmark', tab: 'tab', command: 'command', settings: 'settings', ask: 'ask', chat: 'chat', page: 'page' } as const
@@ -103,10 +103,10 @@ function pageRows(query: string, group: string): OmniboxRow[] {
   const alias = (id: string): number => (q.length >= 3 && (PAGE_WORDS[id] ?? []).some((w) => w.startsWith(q)) ? 50 : 0)
   return PAGE_IDS.filter((id) => Object.hasOwn(INTERNAL_PAGES, id))
     .map((id) => ({ id, title: internalPageTitle(id) }))
-    .map((p) => ({ p, score: q ? Math.max(textScore(p.title, `apex://${p.id}`, q), alias(p.id)) : 1 }))
+    .map((p) => ({ p, score: q ? Math.max(textScore(p.title, `atelier://${p.id}`, q), alias(p.id)) : 1 }))
     .filter((x) => x.score > 0)
     .sort((a, b) => b.score - a.score)
-    .map(({ p }) => ({ id: `${group}:page:${p.id}`, group, title: p.title, subtitle: `apex://${p.id}`, icon: ICON.page, match: q ? matchRanges(p.title, q) : [], action: { kind: 'open-internal', url: `apex://${p.id}` }, url: `apex://${p.id}` }))
+    .map(({ p }) => ({ id: `${group}:page:${p.id}`, group, title: p.title, subtitle: `atelier://${p.id}`, icon: ICON.page, match: q ? matchRanges(p.title, q) : [], action: { kind: 'open-internal', url: `atelier://${p.id}` }, url: `atelier://${p.id}` }))
 }
 
 function commandRows(sources: AddressSources, query: string, group: string): OmniboxRow[] {
@@ -303,7 +303,7 @@ export function createAddressProviders(sources: AddressSources): OmniboxProvider
         const title = settingsPageTitle(page.id)
         const score = textScore(title, '', q)
         if (score === 0) continue
-        const url = `apex://settings/${page.id}`
+        const url = `atelier://settings/${page.id}`
         rows.push({ score: score - 5, row: { id: `settings:page:${page.id}`, group: OMNIBOX_GROUPS.settings, title, subtitle: t('address.row.settingsPage'), icon: ICON.settings, match: matchRanges(title, q), action: { kind: 'open-internal', url }, url } })
       }
       return rows.sort((a, b) => b.score - a.score).map((r) => r.row)
@@ -315,7 +315,7 @@ export function createAddressProviders(sources: AddressSources): OmniboxProvider
 
 /**
  * Universal search: tabs from every window (most recent first), chats,
- * Apex pages and commands. With no text it lists recent tabs and chats.
+ * Atelier pages and commands. With no text it lists recent tabs and chats.
  */
 export function universalSearch(sources: AddressSources, text: string, filter: UniversalFilter, windowId: number): Array<{ group: string; rows: OmniboxRow[] }> {
   const q = text.trim()

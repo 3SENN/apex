@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,7 +10,7 @@
 export type ThemePreference = 'system' | 'light' | 'dark'
 export type ThemeMode = 'light' | 'dark'
 
-/** Apex's own named accent hues, offered next to "follow the companion". */
+/** Atelier's own named accent hues, offered next to "follow the companion". */
 export const ACCENT_HUES = [
   { id: 'lavender', label: 'Lavender', color: '#6a4bff' },
   { id: 'ocean', label: 'Ocean', color: '#2f6bff' },

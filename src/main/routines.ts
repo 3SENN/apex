@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -102,10 +102,10 @@ export function routinePrompt(routine: Pick<Routine, 'prompt' | 'skillId'>, skil
 }
 
 /**
- * Runs scheduled routines while Apex is open. Routines run in their own
+ * Runs scheduled routines while Atelier is open. Routines run in their own
  * background chats without browser control, so they never take over the
  * tab the user is looking at. Each run gets a record (SK-09) that links to
- * its chat; a run that was missed while Apex was closed runs once, marked
+ * its chat; a run that was missed while Atelier was closed runs once, marked
  * as a catch-up.
  */
 export class RoutineRunner {

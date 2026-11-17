@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // A preset's detail views, one per starter. From the profile
-// (apex://presets/<id>) a skill or routine row opens a sheet with all of it:
+// (atelier://presets/<id>) a skill or routine row opens a sheet with all of it:
 // a skill's description, steps and instructions and the routines that run
 // it; a routine's schedule, what it asks, the skill it runs (a link to that
 // skill's view) and where it reports. Previous and next walk the profile's

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -137,8 +137,8 @@ describe('the capture gating matrix', () => {
     ['outside-hours', { status: { ...capturing, state: 'outside-hours' as const } }],
     ['private', { privateWindow: true }],
     ['agent', { agentControlled: true }],
-    ['not-web', { url: 'apex://settings' }],
-    ['not-web', { url: 'apex-app://abc/' }],
+    ['not-web', { url: 'atelier://settings' }],
+    ['not-web', { url: 'atelier-app://abc/' }],
     ['not-web', { url: 'file:///tmp/a.html' }],
     ['excluded', { url: 'https://www.webmd.com/x' }],
     ['excluded', { url: 'https://a.secret.example/' }],
@@ -192,7 +192,7 @@ describe('ActivityStore', () => {
   let dir: string
   let store: ActivityStore
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), 'apex-activity-'))
+    dir = mkdtempSync(join(tmpdir(), 'atelier-activity-'))
     store = new ActivityStore(dir)
   })
   afterEach(() => {
@@ -260,7 +260,7 @@ describe('ActivityManager capture', () => {
     vi.useFakeTimers()
     now = at(2026, 10, 28, 10)
     vi.setSystemTime(now)
-    base = mkdtempSync(join(tmpdir(), 'apex-am-'))
+    base = mkdtempSync(join(tmpdir(), 'atelier-am-'))
     broadcasts.length = 0
     notes.length = 0
     completions = 0

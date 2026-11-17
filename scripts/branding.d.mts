@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -44,7 +44,7 @@ export interface Branding extends BrandingJson {
   dir: string
 }
 
-/** The __APEX_BRANDING__ define's value (src/shared/branding.ts reads it). */
+/** The __ATELIER_BRANDING__ define's value (src/shared/branding.ts reads it). */
 export interface RuntimeBranding {
   id: BrandingId
   official: boolean
@@ -74,7 +74,7 @@ export function companionProblems(json: unknown, defaultPreset: string): string[
 export function ownCompanion(branding: Branding): Record<string, unknown> | null
 export function brandingCompanion(branding: Branding, repo?: string): RuntimeBranding['companion']
 export function runtimeBranding(env?: Env, repo?: string): RuntimeBranding
-export function brandingDefines(env?: Env, repo?: string): { __APEX_BRANDING__: string }
+export function brandingDefines(env?: Env, repo?: string): { __ATELIER_BRANDING__: string }
 export function brandingAlias(env?: Env, repo?: string): { '@branding': string }
 export function describeBranding(env?: Env, repo?: string): string
 export function missingBrandingFiles(branding: Branding): string[]

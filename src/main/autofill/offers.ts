@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -24,10 +24,10 @@ export interface LoginFacts {
 export type LoginOffer = { mode: 'save' } | { mode: 'update'; id: string } | { mode: 'used'; id: string } | null
 
 /**
- * Apex's own password offers step aside for a password extension: while a
+ * Atelier's own password offers step aside for a password extension: while a
  * running extension holds the browser's password saving off (Apple
  * Passwords does through chrome.privacy) and the person lets it
- * (yieldToPasswordExtension), Apex neither suggests saved or generated
+ * (yieldToPasswordExtension), Atelier neither suggests saved or generated
  * passwords nor offers to save one. Address and card autofill are untouched.
  */
 export function stepAsideForPasswordExtension(settings: AutofillSettings, heldBy: string | null): AutofillSettings {

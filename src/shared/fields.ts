@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -88,7 +88,7 @@ const AUTOCOMPLETE: Record<string, FieldKind> = {
   'tel-local': 'tel',
 }
 
-// Field names that are real autofill tokens but none of Apex's kinds. They
+// Field names that are real autofill tokens but none of Atelier's kinds. They
 // stop the heuristics, so a birthday or a promo field is never guessed as a card.
 const KNOWN_OTHER = new Set([
   'bday', 'bday-day', 'bday-month', 'bday-year', 'sex', 'url', 'photo', 'impp', 'language', 'nickname',

@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import type { ResetResult } from '@shared/storage'
 
-// Reset steps. "Reset Apex" runs every step in order; steps with
+// Reset steps. "Reset Atelier" runs every step in order; steps with
 // `secrets: true` (the saved key, the password vault and wallet) run only when
 // the "also delete the saved key and the password vault" box is ticked.
 

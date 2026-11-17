@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -39,7 +39,7 @@ function heroMenu(view: FirstWeekView): MenuItemSpec[] {
 }
 
 /**
- * The banner at the top: Apex's mark, a heading, a short intro in the
+ * The banner at the top: Atelier's mark, a heading, a short intro in the
  * companion's voice and the companion itself, live and full-body, standing
  * on the right over the ambient field in its colour.
  */

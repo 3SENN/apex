@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The UI sound cues (NS-03): Apex's own short cues, synthesized with
+// The UI sound cues (NS-03): Atelier's own short cues, synthesized with
 // Web Audio at a modest gain (no sound files). The intro sounds use
 // the same voices. Callers decide when a cue may play (ui/sounds.ts). The
 // cue shapes are in chat/logic/cues.ts.

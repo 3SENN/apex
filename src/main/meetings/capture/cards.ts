@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -39,7 +39,7 @@ export interface CardSettings {
  * What a card can offer with these permissions: the ones still missing
  * (Speech Recognition only counts when meetings are transcribed), whether
  * recording works, and whether it would be audio only (Record audio only is
- * chosen, or Speech Recognition is off for Apex). Recording needs the
+ * chosen, or Speech Recognition is off for Atelier). Recording needs the
  * microphone; Speech Recognition macOS never asked about isn't off yet, so
  * that card sets up first, as before (recording would ask for it).
  */

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import { SHARED_OWNER } from '@shared/chats'
 import type { TabInfo } from '@shared/ipc'
 import type { Connector, Skill } from '@shared/services'
 import { isInternalUrl } from '@shared/url'
-import { apex, call } from '../../api'
+import { atelier, call } from '../../api'
 
 // What the + menu and the @ list offer, read from the live stores: the
 // connectors (loaded once, then followed), the web pages that are open, and
@@ -21,7 +21,7 @@ const listeners = new Set<() => void>()
 function start(): void {
   if (started) return
   started = true
-  apex.onAppEvent((e) => {
+  atelier.onAppEvent((e) => {
     if (e.type !== 'connectors') return
     connectors = e.items
     for (const fn of [...listeners]) fn()
@@ -51,7 +51,7 @@ export function useConnectorList(companionId: string): Connector[] | null {
   return all ? all.filter((c) => c.enabled && (c.owner === SHARED_OWNER || c.owner === companionId)) : null
 }
 
-/** Open web pages, most recently used first: Apex's own pages and blank tabs can't be attached. */
+/** Open web pages, most recently used first: Atelier's own pages and blank tabs can't be attached. */
 export function webTabs(tabs: readonly TabInfo[]): TabInfo[] {
   return tabs.filter((t) => /^https?:/.test(t.url) && !isInternalUrl(t.url)).sort((a, b) => b.lastActiveAt - a.lastActiveAt)
 }

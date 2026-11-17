@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import { dirname, isAbsolute, resolve, sep } from 'node:path'
 import { mainT } from '../i18n/mainT'
 
 // Path confinement for the viewer: every file it opens must sit inside
-// one of Apex's own folders, checked on the real path so a symlink inside a
+// one of Atelier's own folders, checked on the real path so a symlink inside a
 // folder can't point the viewer at a file outside it.
 
 export class PathRefused extends Error {

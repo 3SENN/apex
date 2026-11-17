@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -40,7 +40,7 @@ describe('gating', () => {
 
   it('respects exclusions, and only offers on web pages', () => {
     expect(suggestionsAllowed('https://bank.example/', on, 0, (u) => u.includes('bank'))).toBe(false)
-    expect(suggestionsAllowed('apex://settings', on, 0, never)).toBe(false)
+    expect(suggestionsAllowed('atelier://settings', on, 0, never)).toBe(false)
     expect(suggestionsAllowed('file:///Users/x/a.html', on, 0, never)).toBe(false)
     expect(suggestionHost('https://WWW.Figma.com/file/x')).toBe('figma.com')
   })
@@ -65,7 +65,7 @@ describe('matching', () => {
     expect(matchSite('https://app.acme.dev/board', { connectors: [connector({ directoryId: null, name: 'Acme', url: 'https://mcp.acme.dev/' })], directory: [], appLink: null })).toMatchObject({ kind: 'connector', name: 'Acme' })
   })
 
-  it('offers one to three of Apex’s own tasks, none for a connector you still have to connect', () => {
+  it('offers one to three of Atelier’s own tasks, none for a connector you still have to connect', () => {
     const t = (key: string) => key
     expect(tasksFor({ kind: 'app-link', key: 'zoom', app: 'Zoom' }, t).map((x) => x.id)).toEqual(['meetingPrep', 'summarize'])
     expect(tasksFor({ kind: 'app-link', key: 'unknown', app: 'X' }, t).map((x) => x.id)).toEqual(['summarize'])
@@ -99,7 +99,7 @@ describe('SiteSuggestions', () => {
     })
 
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), 'apex-suggest-'))
+    dir = mkdtempSync(join(tmpdir(), 'atelier-suggest-'))
     urls = { t1: 'https://acme.zoom.us/j/123456789', t2: 'https://www.figma.com/design/Ab1/x' }
     sent = []
     opened = []

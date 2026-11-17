@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { useReducer, useRef, useState, type KeyboardEvent, type ReactElement } from 'react'
 import { Check, ChevronLeft, ChevronRight, ExternalLink, MessageCircle } from 'lucide-react'
 import type { LogItem } from '../../agentLog'
-import { apex, call, errorText } from '../../api'
+import { atelier, call, errorText } from '../../api'
 import { useT } from '../../i18n/useT'
 import { Button, cx, toast } from '../../ui'
 import { CompanionAvatar } from '../CompanionAvatar'
@@ -80,7 +80,7 @@ export function QuestionCard({ request, chatId, done }: RequestCardProps): React
       <p className="cd-question__prompt" id={`q-${item.id}-${question.id}`}>{question.prompt}</p>
       {question.detail && <p className="cd-question__detail">{question.detail}</p>}
       {question.link && (
-        <button type="button" className="cd-question__link" disabled={locked} onClick={() => question.link && /^https?:\/\//i.test(question.link.url) && void apex.tabs.create(question.link.url).catch((err: unknown) => toast.show({ message: errorText(err), tone: 'error' }))}>
+        <button type="button" className="cd-question__link" disabled={locked} onClick={() => question.link && /^https?:\/\//i.test(question.link.url) && void atelier.tabs.create(question.link.url).catch((err: unknown) => toast.show({ message: errorText(err), tone: 'error' }))}>
           <ExternalLink size={13} aria-hidden="true" />
           {t('chatTools.question.lookFirst', { title: question.link.title })}
         </button>

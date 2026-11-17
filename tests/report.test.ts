@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -17,7 +17,7 @@ import { systemInfoFrom, systemInfoText, systemLine } from '../src/main/diagnost
 // The report pieces: the size estimate and its limit, the email drafts, the
 // settings summary, names, and the crash sentinel.
 
-const tmp = (): string => mkdtempSync(join(tmpdir(), 'apex-report-'))
+const tmp = (): string => mkdtempSync(join(tmpdir(), 'atelier-report-'))
 const MB = 1024 * 1024
 const zero = { systemBytes: 0, logBytes: 0, chatBytes: 0, screenshotBytes: 0, fileBytes: 0, imageBytes: 0, crashBytes: 0, entries: 0 }
 
@@ -50,11 +50,11 @@ describe('email drafts', () => {
   const longPath = `~/Downloads/${'deep/'.repeat(30)}${BRAND_NAME} problem report 2026-10-29 10.00.zip`
 
   it('keeps the report body under the limit and says where the bundle is', () => {
-    const mail = reportMail({ supportEmail: 'help@apex.example', version: '0.1.0', path: longPath, description: 'x'.repeat(5000), systemLine: `${BRAND_NAME} 0.1.0 (dev) · macOS 26.1` })
+    const mail = reportMail({ supportEmail: 'help@atelier.example', version: '0.1.0', path: longPath, description: 'x'.repeat(5000), systemLine: `${BRAND_NAME} 0.1.0 (dev) · macOS 26.1` })
     expect(mail.body.length).toBeLessThanOrEqual(MAILTO_BODY_MAX)
     expect(mail.body).toContain(`${BRAND_NAME} problem report 2026-10-29 10.00.zip`)
     expect(mail.subject).toBe(`${BRAND_NAME} problem report (0.1.0)`)
-    expect(mail.url.startsWith('mailto:help@apex.example?subject=')).toBe(true)
+    expect(mail.url.startsWith('mailto:help@atelier.example?subject=')).toBe(true)
     // Decoding the URL gives the body back, with CRLF line breaks.
     const body = decodeURIComponent(new URL(mail.url).searchParams.get('body') ?? '')
     expect(body.replace(/\r\n/g, '\n')).toBe(mail.body)
@@ -73,7 +73,7 @@ describe('email drafts', () => {
   })
 
   it('feedback carries the system line and nothing else', () => {
-    const mail = feedbackMail({ supportEmail: 'help@apex.example', version: '1.2.3', systemLine: `${BRAND_NAME} 1.2.3 (beta) · Windows 11` })
+    const mail = feedbackMail({ supportEmail: 'help@atelier.example', version: '1.2.3', systemLine: `${BRAND_NAME} 1.2.3 (beta) · Windows 11` })
     expect(mail.body).toContain(`${BRAND_NAME} 1.2.3 (beta) · Windows 11`)
     expect(mail.body).not.toMatch(/log/i)
     expect(mail.body.length).toBeLessThanOrEqual(MAILTO_BODY_MAX)

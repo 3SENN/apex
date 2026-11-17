@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import { AmbientField, cx, type AmbientFieldHandle } from '../ui'
 import { FLOOR_CORE, type FieldClearing, type FieldMask } from '../ui/logic/ambient'
 import './shapeField.css'
 
-// The companion surfaces' hero background: Apex's shared ambient field
+// The companion surfaces' hero background: Atelier's shared ambient field
 // (ui/AmbientField, the "tide weave") washed in a companion's colour, with
 // the fades and densities the card, the sheets, the first-week banner and
 // the new tab's ground use. The owner paints its own wash under it, except
@@ -40,7 +40,7 @@ export interface ShapeFieldProps {
 }
 
 /**
- * An absolutely positioned, pointer-transparent animated field of Apex's own
+ * An absolutely positioned, pointer-transparent animated field of Atelier's own
  * small glyphs. It pauses off-screen and while the window is hidden,
  * re-tints live on a theme or colour change, is one still frame under
  * Reduce Motion, and gets a fresh arrangement on every mount, so switching

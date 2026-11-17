@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,7 +11,7 @@ import type { CrashState } from '@shared/diagnostics'
 // stored crash dumps. Pure Node; early.ts and the service call it with
 // Electron's paths. The sentinel (userData/running) is written at start-up
 // and removed on a clean quit, so finding it at start means the last run
-// ended some other way. It holds the pid, so a second copy of Apex starting
+// ended some other way. It holds the pid, so a second copy of Atelier starting
 // beside a running one neither reads it as a crash nor removes it.
 
 export const SENTINEL = 'running'
@@ -63,7 +63,7 @@ export function readSentinel(dir: string): SentinelRecord | null {
 export function startSession(dir: string, { pid = process.pid, now = Date.now(), alive = isAlive }: { pid?: number; now?: number; alive?: (pid: number) => boolean } = {}): CrashSession {
   const previous = readSentinel(dir)
   if (previous && previous.pid > 0 && previous.pid !== pid && alive(previous.pid)) {
-    // Another Apex is running with this profile: not a crash, and not ours to remove.
+    // Another Atelier is running with this profile: not a crash, and not ours to remove.
     return { lastExitUnclean: false, at: null, owned: false }
   }
   try {

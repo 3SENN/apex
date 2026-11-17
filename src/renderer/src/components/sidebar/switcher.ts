@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { useEffect, useRef } from 'react'
 import type { TabsSnapshot } from '@shared/ipc'
 import type { RecentCard } from '@shared/overlay/tabs'
-import { apex, call } from '../../api'
+import { atelier, call } from '../../api'
 import { openTabsSurface, resultValue, type OpenSurface } from '../../overlay/surfaces/tabs/open'
 import { cardHost } from './cardContent'
 import { useAppEvent } from './events'
@@ -39,7 +39,7 @@ export function useRecentTabsSwitcher(snapshot: TabsSnapshot, enabled: boolean):
     const open = state.current
     const id = tabId ?? open?.cards[open.selected]?.tabId
     close()
-    if (id) void apex.tabs.activate(id)
+    if (id) void atelier.tabs.activate(id)
   }
   const select = (index: number): void => {
     const open = state.current

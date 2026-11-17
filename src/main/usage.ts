@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 // The usage ledger: one row per model turn in
 // userData/usage.sqlite, on src/main/db.ts. It covers chats, routines, tidy,
 // activity notes, subtasks, imports, help and drafts, including complete()
-// calls and QuickModel calls. Apex shows tokens; on the API-key engine it
+// calls and QuickModel calls. Atelier shows tokens; on the API-key engine it
 // adds a cost estimate, always labelled as one. No credits, plans or quotas.
 import type { DatabaseSync } from 'node:sqlite'
 import { approxCostUsd, roundEstimate } from '@shared/pricing'

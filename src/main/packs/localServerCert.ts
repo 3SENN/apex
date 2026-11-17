@@ -1,12 +1,12 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Apex's certificate for apps' servers on the Wi-Fi (docs/packs.md › A web
+// Atelier's certificate for apps' servers on the Wi-Fi (docs/packs.md › A web
 // server of its own). Phones give motion sensors (and more) only to secure
 // pages, so a server on the Wi-Fi is HTTPS with a self-signed certificate,
-// made once per install and kept in Apex's data folder: a phone accepts it
+// made once per install and kept in Atelier's data folder: a phone accepts it
 // once. It names this computer's LAN addresses; a new address is added (with
 // the ones before it, so moving between home and work doesn't undo a phone's
 // acceptance each time), and a certificate near its end is replaced. RSA 2048

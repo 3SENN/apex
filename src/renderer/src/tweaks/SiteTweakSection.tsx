@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useId, useState, type ReactElement } from 'react'
 import { MousePointerClick, SlidersHorizontal } from 'lucide-react'
 import { tweaksUrl, type TweakTabInfo } from '@shared/tweaks'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { useT } from '../i18n/useT'
 import { Button, Switch } from '../ui'
 import { tweakSummary } from './logic'
@@ -14,8 +14,8 @@ import './tweaks.css'
 
 // The Tweaks section of site info (TWK-04): whether the site is tweaked, what
 // its tweak changes, Hide elements (starts the picker in the page and closes
-// the popover), Focus as a quick switch, and Customize for apex://tweaks.
-// Nothing on Apex's own pages; a line saying why on sign-in pages.
+// the popover), Focus as a quick switch, and Customize for atelier://tweaks.
+// Nothing on Atelier's own pages; a line saying why on sign-in pages.
 
 export function SiteTweakSection({ tabId, close }: { tabId: string; close(): void }): ReactElement | null {
   const t = useT()
@@ -35,7 +35,7 @@ export function SiteTweakSection({ tabId, close }: { tabId: string; close(): voi
   }, [load])
   useEffect(
     () =>
-      apex.onAppEvent((event) => {
+      atelier.onAppEvent((event) => {
         if (event.type === 'tweaks') void load()
       }),
     [load],

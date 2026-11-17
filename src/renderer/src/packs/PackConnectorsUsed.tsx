@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -31,7 +31,7 @@ export function PackConnectorsUsed({ pack }: { pack: PackSummary }): ReactElemen
               <Button
                 size="sm"
                 variant={c.connected ? 'ghost' : 'secondary'}
-                onClick={() => void call('pages', 'open', !c.connected && DIRECTORY_ID.test(c.ref) ? `apex://connectors?connect=${encodeURIComponent(c.ref)}&from=${encodeURIComponent(pack.name)}` : 'apex://connectors')}
+                onClick={() => void call('pages', 'open', !c.connected && DIRECTORY_ID.test(c.ref) ? `atelier://connectors?connect=${encodeURIComponent(c.ref)}&from=${encodeURIComponent(pack.name)}` : 'atelier://connectors')}
               >
                 {t(c.connected ? 'packs.connectorsUsed.manage' : 'packs.connectorsUsed.connect')}
               </Button>

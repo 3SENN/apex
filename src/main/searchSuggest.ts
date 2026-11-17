@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import { log } from './log'
 
 // Search-engine suggestions for the command bar (SH-35). Off by default
 // (settings.searchSuggestions), because every keystroke then goes to the
-// engine. Never for addresses or Apex pages. Fetched in main with a short
+// engine. Never for addresses or Atelier pages. Fetched in main with a short
 // debounce, from an in-memory session with no cookies; aborted when the
 // next keystroke arrives.
 
@@ -65,7 +65,7 @@ export async function readCappedJson(response: Response, max = SUGGEST_BODY_MAX)
 async function sessionFetch(url: string, signal: AbortSignal): Promise<unknown> {
   // Loaded lazily so the module stays importable in tests.
   const { session } = await import('electron')
-  const ses = session.fromPartition('apex-suggest')
+  const ses = session.fromPartition('atelier-suggest')
   const response = await ses.fetch(url, { signal: AbortSignal.any([signal, AbortSignal.timeout(SUGGEST_TIMEOUT_MS)]), credentials: 'omit', headers: { accept: 'application/json' } } as RequestInit)
   return readCappedJson(response)
 }
@@ -75,7 +75,7 @@ export function createSearchSuggest(deps: SearchSuggestDeps): { suggest(text: st
   return {
     async suggest(text, signal) {
       const query = text.trim()
-      if (!deps.enabled() || !query || query.length > 200 || looksLikeAddress(query) || query.startsWith('apex:')) return []
+      if (!deps.enabled() || !query || query.length > 200 || looksLikeAddress(query) || query.startsWith('atelier:')) return []
       const url = engineSuggestUrl(deps.engine(), query)
       if (!url) return []
       try {

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -29,7 +29,7 @@ const tab = (n: number, over: Partial<MenuTab> = {}): MenuTab => ({ id: `t${n}`,
 
 const data = (over: Partial<MenuData> = {}): MenuData => ({
   platform: 'darwin',
-  appName: 'Apex',
+  appName: 'Atelier',
   version: '1.2.3',
   theme: 'system',
   layout: 'sidebar',
@@ -88,7 +88,7 @@ describe('native menus', () => {
     expect(win.file.map((i) => i.id)).toEqual(expect.arrayContaining(['open-settings', 'warn-before-quit', 'quit']))
   })
 
-  it('offers make-default only when Apex is not the default browser', () => {
+  it('offers make-default only when Atelier is not the default browser', () => {
     expect(flattenMenu(baseNativeMenus(state(), data()).app).some((i) => i.id === 'default-browser')).toBe(true)
     expect(flattenMenu(baseNativeMenus(state(), data({ isDefaultBrowser: true })).app).some((i) => i.id === 'default-browser')).toBe(false)
   })
@@ -233,7 +233,7 @@ describe('recent lists', () => {
   })
 
   it('caps visited at 15, web pages only, one per address', () => {
-    const visits = [{ url: 'apex://history', title: 'H' }, ...Array.from({ length: 20 }, (_, i) => ({ url: `https://v.example/${i % 18}`, title: `V${i}` }))]
+    const visits = [{ url: 'atelier://history', title: 'H' }, ...Array.from({ length: 20 }, (_, i) => ({ url: `https://v.example/${i % 18}`, title: `V${i}` }))]
     const out = recentVisits(visits)
     expect(out).toHaveLength(15)
     expect(new Set(out.map((v) => v.url)).size).toBe(15)

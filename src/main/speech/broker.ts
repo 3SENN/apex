@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -53,7 +53,7 @@ export interface BrokerDeps {
   /** How long a reply to a quick question (permissions, devices, locales) may take. */
   replyTimeoutMs?: number
   now?: () => number
-  /** Whether Apex has asked for Screen Recording (macOS can't say "never asked"; ./screenAccess). */
+  /** Whether Atelier has asked for Screen Recording (macOS can't say "never asked"; ./screenAccess). */
   screenPrompt?: { asked(): boolean; markAsked(): void }
   /** The Mac's preferred languages, in order: bilingual meetings' Automatic second language. */
   preferredLanguages?(): string[]

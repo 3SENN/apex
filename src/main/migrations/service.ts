@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -78,7 +78,7 @@ export class Migrations {
     this.#backupDir = join(chatsDir, BACKUP_DIR)
     this.report = new MigrationReportStore(join(deps.dataDir, 'migrations.json'), deps.appVersion ?? '0.0.0', (report) => deps.broadcast?.({ type: 'migrations', report }))
     // Settings and companions read through readVersioned before this runs; a
-    // file listed last time that reads fine now (Apex was updated) leaves the list.
+    // file listed last time that reads fine now (Atelier was updated) leaves the list.
     const files = newerFileOutcomes()
     for (const listed of this.report.get().newer) if (!CHAT_ID.test(listed.id) && !files.some((f) => f.id === listed.id)) this.report.resolve(listed.id)
     for (const outcome of files) this.report.record(outcome)

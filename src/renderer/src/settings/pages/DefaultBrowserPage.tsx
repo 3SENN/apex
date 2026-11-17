@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@
 // explanation in development builds.
 import { useEffect, useState, type ReactElement } from 'react'
 import { CircleCheck, Globe } from 'lucide-react'
-import { apex, call } from '../../api'
+import { atelier, call } from '../../api'
 import { useT } from '../../i18n/useT'
 import { Button, useAsyncAction } from '../../ui'
 import { useResource } from '../data'
@@ -50,7 +50,7 @@ export function DefaultBrowserPage(): ReactElement {
     )
   }
   const s = status.data
-  const platformNote = apex.platform === 'darwin' ? t('settings.defaultBrowser.mac') : apex.platform === 'win32' ? t('settings.defaultBrowser.windows') : null
+  const platformNote = atelier.platform === 'darwin' ? t('settings.defaultBrowser.mac') : atelier.platform === 'win32' ? t('settings.defaultBrowser.windows') : null
   return (
     <>
       {header}

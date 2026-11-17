@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Apple Passwords in Apex (macOS): Apple's own iCloud Passwords extension,
+// Apple Passwords in Atelier (macOS): Apple's own iCloud Passwords extension,
 // downloaded from the Chrome Web Store, fills from iCloud Keychain. This file
 // holds the live status, the Settings section (Settings › Passwords and
 // autofill), the note when another password extension handles passwords, and
@@ -36,7 +36,7 @@ const STATE_KEY: Record<Exclude<ApplePasswordsState, 'unavailable'>, MessageKey>
   ready: 'passwords.apple.state.ready',
   'helper-closed': 'passwords.apple.state.helperClosed',
   'icloud-off': 'passwords.apple.state.icloudOff',
-  'needs-signed-apex': 'passwords.apple.state.needsSignedApex',
+  'needs-signed-atelier': 'passwords.apple.state.needsSignedAtelier',
 }
 
 /** The welcome card's short words once Apple Passwords is on. */
@@ -48,7 +48,7 @@ const WELCOME_KEY: Record<Exclude<ApplePasswordsState, 'unavailable' | 'helper-m
   ready: 'passwords.apple.welcome.ready',
   'helper-closed': 'passwords.apple.welcome.problem',
   'icloud-off': 'passwords.apple.welcome.problem',
-  'needs-signed-apex': 'passwords.apple.welcome.problem',
+  'needs-signed-atelier': 'passwords.apple.welcome.problem',
 }
 
 function statusWords(t: T, s: ApplePasswordsStatus): string {
@@ -127,7 +127,7 @@ export function ApplePasswordsSection({ apple, yieldOn, onYield }: YieldProps): 
           <SwitchRow
             anchor="passwords-apple-yield"
             label={t('passwords.apple.yield')}
-            description={s.apexStepsAside ? `${t('passwords.apple.yieldBody')} ${t('passwords.apple.yieldNow')}` : t('passwords.apple.yieldBody')}
+            description={s.atelierStepsAside ? `${t('passwords.apple.yieldBody')} ${t('passwords.apple.yieldNow')}` : t('passwords.apple.yieldBody')}
             checked={yieldOn}
             onChange={onYield}
           />
@@ -150,7 +150,7 @@ export function PasswordExtensionNote({ apple, yieldOn, onYield }: YieldProps): 
   return (
     <>
       <div className="pw-note">
-        <Row title={t('passwords.apple.other.title', { name })} description={t(s.apexStepsAside ? 'passwords.apple.other.stepsAside' : 'passwords.apple.other.both')} />
+        <Row title={t('passwords.apple.other.title', { name })} description={t(s.atelierStepsAside ? 'passwords.apple.other.stepsAside' : 'passwords.apple.other.both')} />
       </div>
       {!(isMac && s.enabled) && (
         <SwitchRow

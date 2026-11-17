@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -50,7 +50,7 @@ describe('the guide catalogue', () => {
     expect(filterGuides(GUIDES, { category: 'travel' }).map((g) => g.id)).toContain('trip-planning')
     expect(filterGuides(GUIDES, { query: 'price watch' }).map((g) => g.id)).toContain('compare-before-buying')
     expect(filterGuides(GUIDES, { category: 'all' })).toHaveLength(GUIDES.length)
-    expect(guideUrl('a b')).toBe('apex://guides/a%20b')
+    expect(guideUrl('a b')).toBe('atelier://guides/a%20b')
   })
 })
 
@@ -114,7 +114,7 @@ describe('preset extras', () => {
     let current = preset('1')
     let mine = { id: 'c1', name: 'Pip', persona: 'pip', look: structuredClone(look) } as Companion
     const methods = createPresetMethods({
-      dataDir: mkdtempSync(join(tmpdir(), 'apex-presets-')),
+      dataDir: mkdtempSync(join(tmpdir(), 'atelier-presets-')),
       companions: {
         find: (id) => (id === 'c1' ? mine : undefined),
         update: (_id, patch) => {

@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Interface zoom (ST-27). On Apex's own pages ⌘+, ⌘− and ⌘0 scale the
+// Interface zoom (ST-27). On Atelier's own pages ⌘+, ⌘− and ⌘0 scale the
 // whole chrome (its own zoom factor, saved app-wide as settings.uiZoom, 30 to
 // 100%); on a chat page they scale the chat text instead (settings.chatZoom,
 // 30 to 200%), which the chrome applies as a CSS zoom on the chat column.
@@ -15,9 +15,9 @@ export const CHAT_ZOOM_STEPS: readonly number[] = [0.3, 0.5, 0.67, 0.75, 0.8, 0.
 
 export type ZoomTarget = 'ui' | 'chat'
 
-/** Which zoom an Apex page's keys change: the chat text on chat pages, the interface elsewhere. */
+/** Which zoom an Atelier page's keys change: the chat text on chat pages, the interface elsewhere. */
 export function zoomTarget(url: string | null | undefined): ZoomTarget {
-  return url && /^apex:\/\/chat\/[A-Za-z0-9_-]+/.test(url) ? 'chat' : 'ui'
+  return url && /^atelier:\/\/chat\/[A-Za-z0-9_-]+/.test(url) ? 'chat' : 'ui'
 }
 
 /** The next step up or down from `current` (which may sit between steps), clamped to the ends. */

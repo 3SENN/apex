@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,11 +8,11 @@
 // A pack's code is public: everyone who installs it has every file. So a key
 // never goes in a pack. Two things take its place:
 //   - secrets: a key the person enters (their API key, their account's
-//     token). Apex keeps it here, encrypted with the system keychain, and adds
+//     token). Atelier keeps it here, encrypted with the system keychain, and adds
 //     it to requests to the hosts the manifest names; the pack's code never
 //     reads it, and a request anywhere else never carries it.
 //   - env: public values (a server's address, a feature switch) the pack's
-//     pages read as apex.env.
+//     pages read as atelier.env.
 // While you develop, a linked folder's .env and .env.local fill both, for the
 // names the manifest declares and no others: the same folder may hold your
 // server's own .env. Neither file is ever read into a pack (files.ts).

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -100,7 +100,7 @@ describe('the committed icon set', () => {
       // Document icons: fileAssociations name them; electron-builder adds the extension.
       ...(config.mac?.fileAssociations as Array<{ icon?: string }>).flatMap((a) => (a.icon ? [`${a.icon}.icns`] : [])),
       'branding/official/html-document.ico',
-      'branding/official/apexcompanion.ico',
+      'branding/official/ateliercompanion.ico',
     ]
     for (const icon of icons) expect(MANIFEST.files[icon as string], String(icon)).toBeDefined()
     // The Linux hicolor set is a folder of NxN.png.
@@ -109,7 +109,7 @@ describe('the committed icon set', () => {
   })
 
   it('has every file of the unofficial branding the packaging takes, drawn from its one SVG', () => {
-    const config = builderConfig({ APEX_OFFICIAL_BRANDING: '0', APEX_INTERNAL: '0' }, { platform: 'linux' })
+    const config = builderConfig({ ATELIER_OFFICIAL_BRANDING: '0', ATELIER_INTERNAL: '0' }, { platform: 'linux' })
     const files = [
       config.mac.icon,
       config.win.icon,
@@ -128,7 +128,7 @@ describe('the committed icon set', () => {
     expect(config.linux.icon).toBe('branding/unofficial/icons')
     expect(config.extraResources).toContainEqual({ from: 'branding/unofficial/resources', to: 'resources' })
     // The same file names and sizes as the official set, apart from what only the official one has.
-    const official = Object.entries(MANIFEST.files).filter(([path, e]) => e.kind !== 'svg' && !/\/(Apex\.icon|art)\//.test(path))
+    const official = Object.entries(MANIFEST.files).filter(([path, e]) => e.kind !== 'svg' && !/\/(Atelier\.icon|art)\//.test(path))
     for (const [path, entry] of official) expect(UNOFFICIAL.files[path.replace('branding/official/', 'branding/unofficial/')]?.sizes, path).toEqual(entry.sizes)
     for (const [path, entry] of Object.entries(UNOFFICIAL.files)) {
       const buf = read(path)
@@ -156,9 +156,9 @@ describe('the committed icon set', () => {
   })
 
   it('ships a valid Icon Composer document for macOS 26', () => {
-    const doc = JSON.parse(read('branding/official/Apex.icon/icon.json').toString('utf8')) as Record<string, unknown>
+    const doc = JSON.parse(read('branding/official/Atelier.icon/icon.json').toString('utf8')) as Record<string, unknown>
     const text = JSON.stringify(doc)
-    for (const m of text.matchAll(/"image-name":"([^"]+)"/g)) expect(existsSync(join(REPO, 'branding/official/Apex.icon/Assets', m[1]!)), m[1]).toBe(true)
+    for (const m of text.matchAll(/"image-name":"([^"]+)"/g)) expect(existsSync(join(REPO, 'branding/official/Atelier.icon/Assets', m[1]!)), m[1]).toBe(true)
     expect(text).toMatch(/"image-name"/)
   })
 })

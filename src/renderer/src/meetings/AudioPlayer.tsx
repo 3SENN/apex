@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import { Pause, Play } from 'lucide-react'
 import { useT } from '../i18n/useT'
 import { clock } from './logic'
 
-// The meeting's kept audio (MV-13), served by apex-media with Range
+// The meeting's kept audio (MV-13), served by atelier-media with Range
 // so seeking works: play and pause, a seek bar, the time, and playFrom() for
 // the transcript's play-from-line buttons. It reports the time so the line
 // being played can be highlighted.

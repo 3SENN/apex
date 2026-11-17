@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { EventEmitter } from 'node:events'
 import { afterAll, describe, expect, it, vi } from 'vitest'
 
-// Linux has no content protection (FloatManager.keepOutOf): the floats Apex
+// Linux has no content protection (FloatManager.keepOutOf): the floats Atelier
 // shows hide for its own screen captures and come back after, and one about
 // to show waits for the capture.
 
@@ -77,12 +77,12 @@ afterAll(() => {
 function manager(): InstanceType<typeof FloatManager> {
   const m = new FloatManager({
     preload: '',
-    url: () => 'app://apex/float.html',
+    url: () => 'app://atelier/float.html',
     theme: () => ({}) as never,
     companion: () => null,
     reduceMotion: () => false,
     language: () => ({}) as never,
-    apexWindow: () => null,
+    atelierWindow: () => null,
     callService: async () => null,
     smoke: true,
   })
@@ -97,7 +97,7 @@ function ready(win: FakeWindow): void {
 
 const tick = (ms = 0): Promise<void> => new Promise((r) => setTimeout(r, ms))
 
-describe('floats and Apex’s own screen captures without content protection', () => {
+describe('floats and Atelier’s own screen captures without content protection', () => {
   it('knows Linux has none', () => {
     expect(CONTENT_PROTECTION).toBe(false)
   })

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -90,7 +90,7 @@ describe('tab row geometry (DS-36)', () => {
 describe('Open in Library (DS-115)', () => {
   it('narrows Library › Files to one companion and keeps that through the redirect', () => {
     const url = libraryFilesUrl('pip')
-    expect(url).toBe('apex://library/files?companion=pip')
+    expect(url).toBe('atelier://library/files?companion=pip')
     expect(resolveInternalUrl(url)).toBe(url)
     expect(internalQuery(resolveInternalUrl(url)!, 'companion')).toBe('pip')
     expect(destinationOf(url)).toBe('files')
@@ -98,9 +98,9 @@ describe('Open in Library (DS-115)', () => {
   })
 
   it('drops an unsafe companion id and other sections keep their redirect', () => {
-    expect(libraryFilesUrl(null)).toBe('apex://library/files')
-    expect(resolveInternalUrl('apex://library/files?companion=../x')).toBe('apex://library/files')
-    expect(resolveInternalUrl('apex://library/skills?companion=pip')).toBe('apex://skills')
+    expect(libraryFilesUrl(null)).toBe('atelier://library/files')
+    expect(resolveInternalUrl('atelier://library/files?companion=../x')).toBe('atelier://library/files')
+    expect(resolveInternalUrl('atelier://library/skills?companion=pip')).toBe('atelier://skills')
   })
 })
 

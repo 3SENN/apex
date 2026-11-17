@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -15,7 +15,7 @@ import { readChromium, readFirefox } from '../src/main/importer'
 
 describe('reading browser profiles', () => {
   it('reads Chromium bookmarks and history', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-chrome-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-chrome-'))
     writeFileSync(join(dir, 'Bookmarks'), JSON.stringify({
       roots: { bookmark_bar: { type: 'folder', children: [{ type: 'url', name: 'Docs', url: 'https://docs.example/' }] } },
     }))
@@ -31,7 +31,7 @@ describe('reading browser profiles', () => {
   })
 
   it('reads Firefox bookmarks and history from the newest profile', () => {
-    const profiles = mkdtempSync(join(tmpdir(), 'apex-firefox-'))
+    const profiles = mkdtempSync(join(tmpdir(), 'atelier-firefox-'))
     const profile = join(profiles, 'abc.default-release')
     mkdirSync(profile)
     const db = new DatabaseSync(join(profile, 'places.sqlite'))
@@ -49,6 +49,6 @@ describe('reading browser profiles', () => {
   })
 
   it('returns nothing for a missing Firefox profile folder', () => {
-    expect(readFirefox(join(tmpdir(), 'apex-no-such-dir'))).toEqual({ bookmarks: [], history: [] })
+    expect(readFirefox(join(tmpdir(), 'atelier-no-such-dir'))).toEqual({ bookmarks: [], history: [] })
   })
 })

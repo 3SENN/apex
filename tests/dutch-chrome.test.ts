@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -43,6 +43,6 @@ describe('Dutch chrome', () => {
     expect(titles).not.toContain('General')
     expect(dutch[0]?.entries[0]).toMatchObject({ kind: 'page', id: DEFAULT_PAGE, title: 'Jij' })
     const link = dutch.flatMap((g) => g.entries).find((e) => e.kind === 'link')
-    expect(link).toMatchObject({ id: 'connectors', url: 'apex://connectors', title: 'Connectors' })
+    expect(link).toMatchObject({ id: 'connectors', url: 'atelier://connectors', title: 'Connectors' })
   })
 })

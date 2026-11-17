@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -64,7 +64,7 @@ export interface QuickModel {
   /** The reply as it arrives (with the key); other engines answer in one piece. Resolves to all of it. */
   stream(r: QuickRequest, onText: (text: string) => void): Promise<string>
   /**
-   * A conversation with the caller's own tools (docs/apps.md › Apex as the AI
+   * A conversation with the caller's own tools (docs/apps.md › Atelier as the AI
    * engine): the model may call them up to `rounds` times; each call goes to
    * `onTool`, whose answer goes back as the tool's result. With the key, as
    * Messages API tools; on another engine, whose one-shot calls carry no

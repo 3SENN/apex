@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import type { ChatContextPage } from '@shared/chatContext'
 import type { FilesSurfaceProps } from '@shared/overlay/files'
 import { clampSelection, orderChatPages, pagesMenuKey, type PagesMenuEffect, type PagesMenuKey, type PagesMenuState } from '@shared/filesLogic'
 import { t } from '@shared/i18n/core'
-import { apex, call, errorText, hostOf } from '../../../api'
+import { atelier, call, errorText, hostOf } from '../../../api'
 import { IconButton, cx, toast } from '../../../ui'
 import { MenuScrim, Popover, inChromeHost, type Box } from '../../kit'
 import type { SurfaceComponentProps } from '../../types'
@@ -55,7 +55,7 @@ export function PagesMenuSurface({ instanceId, props, anchor, anchorRect, resolv
         setNotice(errorText(err))
       },
     )
-    const off = apex.onAppEvent((e) => {
+    const off = atelier.onAppEvent((e) => {
       if (e.type === 'chat-context' && e.chatId === props.chatId) setPages(orderChatPages(e.pages))
     })
     return () => {
@@ -98,7 +98,7 @@ export function PagesMenuSurface({ instanceId, props, anchor, anchorRect, resolv
         const page = effect.page
         try {
           if (page.tabId) await call('chatContext', 'focus', props.chatId, page.tabId)
-          else await apex.tabs.create(page.url)
+          else await atelier.tabs.create(page.url)
           resolve({ focused: page.tabId ?? page.url })
         } catch (err) {
           setNotice(errorText(err))

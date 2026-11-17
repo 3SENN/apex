@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -126,7 +126,7 @@ export class TrayIcon {
   show(): void {
     if (this.shown) return
     this.#tray = new Tray(this.#image())
-    // Windows and Linux open Apex on a click; macOS shows the menu, as menu-bar extras do.
+    // Windows and Linux open Atelier on a click; macOS shows the menu, as menu-bar extras do.
     if (this.#platform !== 'darwin') this.#tray.on('click', () => this.#onClick())
     if (this.#platform === 'win32') nativeTheme.on('updated', this.#retheme)
   }

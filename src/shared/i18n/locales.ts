@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -17,10 +17,10 @@ export const AVAILABLE_LANGUAGES: ReadonlyArray<{ code: AppLanguage; name: strin
   { code: 'nl', name: 'Nederlands' },
 ]
 
-/** The language codes Apex has a catalogue for, English first (the fallback). */
+/** The language codes Atelier has a catalogue for, English first (the fallback). */
 export const AVAILABLE: readonly AppLanguage[] = AVAILABLE_LANGUAGES.map((l) => l.code)
 
-/** The accented, longer test language for truncation shots (the `pseudo-locale` flag, or APEX_PSEUDO_LOCALE=1). */
+/** The accented, longer test language for truncation shots (the `pseudo-locale` flag, or ATELIER_PSEUDO_LOCALE=1). */
 export const PSEUDO_LOCALE = 'en-XA'
 
 /**
@@ -45,7 +45,7 @@ export function primarySubtag(tag: string): string {
 
 /**
  * The best available language for an ordered preference list: the first
- * preferred tag whose primary subtag Apex has. Exact tags are not needed
+ * preferred tag whose primary subtag Atelier has. Exact tags are not needed
  * (nl-BE and nl-NL both get Dutch). Nothing matching falls back to the first
  * available language, English.
  */
@@ -88,7 +88,7 @@ export function chromiumLang(language: AppLanguage, systemPreferred: readonly st
 
 /**
  * Website languages that follow the system (ST-32) put the app language
- * first, so Accept-Language matches the language Apex speaks: the system's
+ * first, so Accept-Language matches the language Atelier speaks: the system's
  * own tag for it when there is one, then the rest in the system's order.
  */
 export function withAppLanguageFirst(list: readonly string[], language: AppLanguage): string[] {
@@ -98,7 +98,7 @@ export function withAppLanguageFirst(list: readonly string[], language: AppLangu
 }
 
 /**
- * Whether a setting needs a restart before every part of Apex speaks it:
+ * Whether a setting needs a restart before every part of Atelier speaks it:
  * Chromium's context menus and spellcheck UI keep the language they launched
  * in (`launched`), the chrome and main switch at once.
  */

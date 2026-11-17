@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // The newer engine's language models (macOS 26). SpeechTranscriber needs a
-// model per language on this Mac. Apex installs it the first time a language
+// model per language on this Mac. Atelier installs it the first time a language
 // is used, or when Settings › Transcription asks, and reports the progress
 // as `assets` lines so Settings can say "Preparing…" and then "ready":
 //   {"type":"assets","locale":"en-US","state":"downloading","fraction":0.42}
@@ -15,7 +15,7 @@
 import Foundation
 import Speech
 
-/// One `assets` line; `locale` is echoed as Apex sent it (BCP-47).
+/// One `assets` line; `locale` is echoed as Atelier sent it (BCP-47).
 func emitAssets(_ locale: String, _ state: String, _ fraction: Double?) {
   emit(["type": "assets", "locale": bcp47(locale), "state": state, "fraction": orNull(fraction.map { min(1, max(0, $0)) })])
 }
@@ -27,12 +27,12 @@ func localeKey(_ id: String) -> String {
 
 @available(macOS 26.0, *)
 enum ModernSpeech {
-  /// The newer engine runs here (APEX_SPEECH_ENGINE=legacy keeps the older one, for comparing).
+  /// The newer engine runs here (ATELIER_SPEECH_ENGINE=legacy keeps the older one, for comparing).
   static var enabled: Bool {
-    ProcessInfo.processInfo.environment["APEX_SPEECH_ENGINE"] != "legacy" && SpeechTranscriber.isAvailable
+    ProcessInfo.processInfo.environment["ATELIER_SPEECH_ENGINE"] != "legacy" && SpeechTranscriber.isAvailable
   }
 
-  /// The transcriber Apex runs: volatile results while live (faster ones for
+  /// The transcriber Atelier runs: volatile results while live (faster ones for
   /// dictation), and every word's audio time for segment times.
   static func transcriber(_ locale: Locale, live: Bool, dictation: Bool = false) -> SpeechTranscriber {
     var reporting: Set<SpeechTranscriber.ReportingOption> = []
@@ -41,7 +41,7 @@ enum ModernSpeech {
     return SpeechTranscriber(locale: locale, transcriptionOptions: [], reportingOptions: reporting, attributeOptions: [.audioTimeRange, .transcriptionConfidence])
   }
 
-  /// The model's state for `locale` (asked with the live transcriber Apex runs).
+  /// The model's state for `locale` (asked with the live transcriber Atelier runs).
   static func status(_ locale: Locale) async -> AssetInventory.Status {
     await AssetInventory.status(forModules: [transcriber(locale, live: true)])
   }
@@ -161,7 +161,7 @@ actor ModelCatalog {
     }
   }
 
-  /// Apex may hold a few languages; the oldest gives way to a new one.
+  /// Atelier may hold a few languages; the oldest gives way to a new one.
   private static func reserve(_ locale: Locale) async {
     let key = localeKey(locale.identifier(.bcp47))
     let reserved = await AssetInventory.reservedLocales

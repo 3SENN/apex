@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@
 // delegate_task, plus companion_files (CO-08: the chat's own companion
 // folder, read-only). The same definitions serve every engine: the API-key
 // loop lists them in `tools`, and an engine that runs the model elsewhere
-// reaches them through Apex's local MCP server.
+// reaches them through Atelier's local MCP server.
 import { existsSync, readFileSync, statSync } from 'node:fs'
 import { extname } from 'node:path'
 import { z } from 'zod'

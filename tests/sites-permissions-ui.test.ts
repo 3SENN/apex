@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -234,8 +234,8 @@ describe('the permission prompt can’t be answered by accident', () => {
 })
 
 describe('the permission prompt’s markup', async () => {
-  // The ui kit reads window.apex as it loads; the prompt's effects never run in a static render.
-  vi.stubGlobal('window', { apex: { platform: 'darwin', onAppEvent: () => () => undefined } })
+  // The ui kit reads window.atelier as it loads; the prompt's effects never run in a static render.
+  vi.stubGlobal('window', { atelier: { platform: 'darwin', onAppEvent: () => () => undefined } })
   afterAll(() => vi.unstubAllGlobals())
   const promptModule = '../src/renderer/src/overlay/surfaces/sites/PermissionPrompt'
   const { PermissionPrompt } = (await import(/* @vite-ignore */ promptModule)) as { PermissionPrompt: FunctionComponent<Record<string, unknown>> }

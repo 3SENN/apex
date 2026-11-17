@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Settings › Storage (ST-53 to ST-55): what Apex keeps on this computer as
+// Settings › Storage (ST-53 to ST-55): what Atelier keeps on this computer as
 // a total and a stacked bar by category (each feature registers its own), ways
-// to free space (the cache, old chat images, chats by size), and Reset Apex
+// to free space (the cache, old chat images, chats by size), and Reset Atelier
 // in a danger-zone card.
 import { useRef, useState, type ReactElement } from 'react'
 import { Eraser, ImageMinus, MessageSquare, RotateCcw, Trash2 } from 'lucide-react'

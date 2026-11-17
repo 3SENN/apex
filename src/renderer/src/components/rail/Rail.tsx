@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -21,7 +21,7 @@ import { SidebarFooter } from '../sidebar/SidebarFooter'
 import { RAIL_COLLAPSED_WIDTH, RAIL_PREFS_KEY, RAIL_STEP, RAIL_WIDTH, clampRailWidth, parseRailPrefs, recentChats, type RailPrefs } from './logic'
 import './rail.css'
 
-// The navigation rail (SH-63): in the horizontal layout, apex:// pages get a
+// The navigation rail (SH-63): in the horizontal layout, atelier:// pages get a
 // left column with New Chat, the destinations with their live badges, the
 // recent chats and the profile menu. ⌘S collapses it to icons and back; its
 // edge resizes by drag or with ←/→ in 8 px steps; a one-time hint points
@@ -65,7 +65,7 @@ export function Rail({ snapshot, chats, routines, settings, bookmarks }: RailPro
   const collapsed = prefs.collapsed
   const toggle = (): void => update({ collapsed: !collapsed, hintSeen: true })
 
-  // ⌘S: apex:// pages draw in the chrome, so the key reaches it here (pages on the web never see it).
+  // ⌘S: atelier:// pages draw in the chrome, so the key reaches it here (pages on the web never see it).
   useEffect(() => {
     const onKey = (e: KeyboardEvent): void => {
       const mod = isMac ? e.metaKey : e.ctrlKey
@@ -86,13 +86,13 @@ export function Rail({ snapshot, chats, routines, settings, bookmarks }: RailPro
   const activeChat = activeTab ? parseInternalUrl(activeTab.url) : null
 
   return (
-    <nav className={cx('rail', collapsed && 'rail--collapsed', liveWidth !== null && 'rail--resizing')} style={{ width }} aria-label={t('tabs.rail.label')} id="apex-rail">
+    <nav className={cx('rail', collapsed && 'rail--collapsed', liveWidth !== null && 'rail--resizing')} style={{ width }} aria-label={t('tabs.rail.label')} id="atelier-rail">
       <div className="rail__head">
         <button type="button" className="rail__new" onClick={() => void startNewChatPage(snapshot, companionId)} title={collapsed ? t('tabs.rail.newChat') : undefined}>
           <SquarePen size={16} aria-hidden />
           {!collapsed && <span>{t('tabs.rail.newChat')}</span>}
         </button>
-        <IconButton size="sm" label={collapsed ? t('tabs.rail.expand') : t('tabs.rail.collapse')} shortcut="CmdOrCtrl+S" icon={collapsed ? <PanelLeftOpen /> : <PanelLeftClose />} aria-expanded={!collapsed} aria-controls="apex-rail" onClick={toggle} />
+        <IconButton size="sm" label={collapsed ? t('tabs.rail.expand') : t('tabs.rail.collapse')} shortcut="CmdOrCtrl+S" icon={collapsed ? <PanelLeftOpen /> : <PanelLeftClose />} aria-expanded={!collapsed} aria-controls="atelier-rail" onClick={toggle} />
       </div>
       <div className="rail__body">
         <Destinations
@@ -105,7 +105,7 @@ export function Rail({ snapshot, chats, routines, settings, bookmarks }: RailPro
           routineUnread={(chats ?? []).some((c) => c.routineId !== null && c.unread)}
           arrival={null}
           focusId={null}
-          onOpenOptions={() => void call('pages', 'open', 'apex://settings/appearance')}
+          onOpenOptions={() => void call('pages', 'open', 'atelier://settings/appearance')}
           onReset={shell.remountPage}
         />
         {recent.length > 0 && (
@@ -142,7 +142,7 @@ export function Rail({ snapshot, chats, routines, settings, bookmarks }: RailPro
           max={RAIL_WIDTH.max}
           step={RAIL_STEP}
           resetTo={RAIL_WIDTH.default}
-          controls="apex-rail"
+          controls="atelier-rail"
           valueText={(v) => t('core.rail.pixelsWide', { value: Math.round(v) })}
           onChange={(v) => setLiveWidth(clampRailWidth(v))}
           onCommit={(v) => {

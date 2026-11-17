@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex://file?src=…[&edit=1] (OV-32): one file Apex holds, drawn by the
+// atelier://file?src=…[&edit=1] (OV-32): one file Atelier holds, drawn by the
 // shared renderers. Text kinds can be edited (straight away with &edit=1);
 // the header exports, opens HTML, SVG and Markdown as a sandboxed artifact,
 // renames, deletes (to the Trash) and shows the file in Finder. Missing,
@@ -13,7 +13,7 @@ import { useEffect, useMemo, useRef, useState, type ReactElement } from 'react'
 import { Ellipsis, FileLock2, FileX, Pencil, Share, Sparkles } from 'lucide-react'
 import { fileViewerUrl, parseFileViewerUrl, type ViewerDoc } from '@shared/files'
 import { kindLabelKey } from '@shared/fileKinds'
-import { apex, call, errorText, formatBytes } from '../api'
+import { atelier, call, errorText, formatBytes } from '../api'
 import { FilePreview, RenameDialog, SaveFailedNotice, useViewerDoc } from '../files'
 import '../files/files.css'
 import { ViewerVersionHistory } from '../workspace/VersionHistoryPanel'
@@ -109,7 +109,7 @@ function Viewer({ target, startEditing, tabId }: { target: NonNullable<ReturnTyp
       await call('viewer', 'remove', current.token)
       toast.show({ message: t('files.toast.deleted', { name: current.name }) })
       // The file is gone, so its viewer tab goes too.
-      await apex.tabs.close(tabId)
+      await atelier.tabs.close(tabId)
     } catch (err) {
       fail(err)
     }
@@ -266,7 +266,7 @@ function Viewer({ target, startEditing, tabId }: { target: NonNullable<ReturnTyp
           if ((target.kind === 'companion-file' || target.kind === 'memory') && next.name !== doc.name) {
             const parts = target.path.split('/')
             parts[parts.length - 1] = next.name
-            void apex.nav.go(tabId, fileViewerUrl({ ...target, path: parts.join('/') }, { name: next.name }))
+            void atelier.nav.go(tabId, fileViewerUrl({ ...target, path: parts.join('/') }, { name: next.name }))
           }
         }}
       />

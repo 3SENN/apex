@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 // The step template's two halves (stage.ts): StepFrame lays out a
 // step's words, content card and actions in the step column, and StepScene
 // draws the step's illustration around the live companion in its own slot
-// (portalled into the stage WelcomeFlow keeps), as Apex's small tiles with
+// (portalled into the stage WelcomeFlow keeps), as Atelier's small tiles with
 // soft lines to the figure. Decorative: screen readers get the words.
 import { Children, createContext, useContext, type CSSProperties, type ReactElement, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'

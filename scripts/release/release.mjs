@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
-// Builds, packages and verifies an Apex release. docs/release.md is the runbook.
+// Builds, packages and verifies an Atelier release. docs/release.md is the runbook.
 //
 //   node scripts/release/release.mjs                  release for this machine's platform
 //   node scripts/release/release.mjs --publish        and upload to the GitHub draft release
@@ -11,14 +11,14 @@
 //   options: --mac | --win | --linux (must match this machine), --skip-verify
 //
 // A release (not --package-only):
-//   1. refuses any branding but the official one (APEX_OFFICIAL_BRANDING=1;
-//      TRADEMARKS.md), then checks the version against APEX_CHANNEL, the tag
+//   1. refuses any branding but the official one (ATELIER_OFFICIAL_BRANDING=1;
+//      TRADEMARKS.md), then checks the version against ATELIER_CHANNEL, the tag
 //      (in CI), and that src/shared/whatsNew.ts has an entry for it (the
 //      what's-new card);
 //   2. builds the app with the release defines, the native helpers and the
 //      licence list, then packages with electron-builder, signing and
 //      notarizing only with the credentials in env;
-//   3. writes SHA256SUMS and apex-support.json next to the installers;
+//   3. writes SHA256SUMS and atelier-support.json next to the installers;
 //   4. runs verify.mjs: signatures, fuses, Info.plist, resources, and the smoke
 //      test inside the packaged app (which must prove a public build offers
 //      only the API key engine);
@@ -98,7 +98,7 @@ function preflight(version, settings, opts, env) {
   const tag = env.GITHUB_REF_TYPE === 'tag' ? env.GITHUB_REF_NAME : null
   if (tag && tag !== `v${version}`) fail(`the tag ${tag} doesn't match package.json's version ${version}`)
   if (!opts.publish) return
-  if (!settings.repo) fail('publishing needs APEX_RELEASE_OWNER and APEX_RELEASE_REPO')
+  if (!settings.repo) fail('publishing needs ATELIER_RELEASE_OWNER and ATELIER_RELEASE_REPO')
   if (!env.GH_TOKEN && !env.GITHUB_TOKEN) fail('publishing needs GH_TOKEN')
   if (spawnSync('gh', ['--version'], { stdio: 'ignore' }).status !== 0) fail('publishing uploads with the GitHub CLI (gh); install it first')
   // An unsigned macOS or Windows build can't update itself and alarms Gatekeeper and SmartScreen.
@@ -124,7 +124,7 @@ function buildNative(platform, env) {
     // On-device page translation (TR-05) needs Apple's Translation SDK; without it pages still translate with the companion when allowed.
     if (!node('scripts/build-translate-helper.mjs', env, { optional: true })) console.warn('  ! shipping without on-device translation')
   }
-  // The win32 branch of the same script publishes apex-speech.exe with the
+  // The win32 branch of the same script publishes atelier-speech.exe with the
   // .NET 8 SDK, which the Windows CI job has.
   if (platform === 'win32') node('scripts/build-speech-helper.mjs', env)
   // The internal folder's packaging steps, when this build takes it (scripts/internal.mjs, internal/build.json).
@@ -232,13 +232,13 @@ async function main() {
 
   step('Building the app')
   run(bin('electron-vite'), ['build'], env)
-  // The Apex kit apps load (docs/apps.md › The kit), into out/kit/.
+  // The Atelier kit apps load (docs/apps.md › The kit), into out/kit/.
   node('scripts/kit/build.mjs', env)
   step('Building the native helpers')
   buildNative(opts.platform, env)
   step('Writing the licence list')
   node('scripts/licenses.mjs', env)
-  // A release refuses a list that misses a shipped package or carries a licence Apex can't ship.
+  // A release refuses a list that misses a shipped package or carries a licence Atelier can't ship.
   run(process.execPath, [join(REPO, 'scripts/licenses.mjs'), '--check'], env, { optional: opts.packageOnly })
 
   step('Packaging')
@@ -250,7 +250,7 @@ async function main() {
     return
   }
 
-  step('Writing SHA256SUMS and apex-support.json')
+  step('Writing SHA256SUMS and atelier-support.json')
   const { out } = await writeChecksums(DIST, version)
   console.log(`  ${out}`)
   console.log(`  ${writeSupportFeed().out}`)

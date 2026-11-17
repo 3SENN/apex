@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import { firstWeekGuideTitle, guideById } from './firstWeek'
 import { t, type MessageKey } from './i18n/core'
 import { resolveEngine, engineSearchUrl } from './searchEngines'
 import { LIBRARY_FILES_URL, parseFileViewerUrl, type ViewerTarget } from './files'
-import { APEX_APP_SCHEME } from './apps'
+import { ATELIER_APP_SCHEME } from './apps'
 import { WORKSPACE_SECTIONS, type WorkspaceSection } from './workspace'
 
 const USER_SCHEMES = new Set(['http:', 'https:', 'file:'])
@@ -91,7 +91,7 @@ export function isBlankUrl(url: string): boolean {
 
 /**
  * scheme://host[:port] of any URL with a host, or null. Unlike URL.origin it
- * works for Apex's own schemes (app://apex), whose WHATWG origin is "null"
+ * works for Atelier's own schemes (app://atelier), whose WHATWG origin is "null"
  * (as are data: and blob: ones), so the chrome's navigation guards compare
  * real values instead of letting every "null" match.
  */
@@ -131,7 +131,7 @@ function tryParse(text: string): URL | null {
   }
 }
 
-/** Pages the chrome renders itself, addressed as apex://<page>[/...]. The titles are stable: tabs and breadcrumbs use them. */
+/** Pages the chrome renders itself, addressed as atelier://<page>[/...]. The titles are stable: tabs and breadcrumbs use them. */
 export const INTERNAL_PAGES: Record<string, string> = {
   chats: 'All chats',
   chat: 'Chat',
@@ -145,31 +145,31 @@ export const INTERNAL_PAGES: Record<string, string> = {
   downloads: 'Downloads',
   settings: 'Settings',
   welcome: `Welcome to ${BRAND_NAME}`,
-  /** The getting-started plan; apex://first-week/<guide> shows one of its guides. */
+  /** The getting-started plan; atelier://first-week/<guide> shows one of its guides. */
   'first-week': 'Getting started',
-  /** apex://view-source?url=<encoded>. */
+  /** atelier://view-source?url=<encoded>. */
   'view-source': 'Page source',
-  /** apex://file?src=<base64url ViewerTarget>[&edit=1]: the file viewer (OV-32; see shared/files.ts). */
+  /** atelier://file?src=<base64url ViewerTarget>[&edit=1]: the file viewer (OV-32; see shared/files.ts). */
   file: 'File',
-  /** apex://files: the Files destination's short address; it resolves to apex://library/files. */
+  /** atelier://files: the Files destination's short address; it resolves to atelier://library/files. */
   files: 'Files',
-  /** apex://workspace[/<section>[/<id>]]. */
+  /** atelier://workspace[/<section>[/<id>]]. */
   workspace: 'Workspace',
-  /** apex://guides[/<id>] (SH-07). */
+  /** atelier://guides[/<id>] (SH-07). */
   guides: 'Guides',
-  /** apex://presets[/<id>]: the preset companion gallery and a preset's profile. */
+  /** atelier://presets[/<id>]: the preset companion gallery and a preset's profile. */
   presets: 'Companion presets',
-  /** apex://flags: in no nav. */
+  /** atelier://flags: in no nav. */
   flags: 'Experiments',
   /** The log viewer, from Help › Show Logs and About. */
   logs: 'Logs',
   // Queries are read by the pages: passwords?site=<host>, meetings?filter=recordings&q=<text>
   passwords: 'Passwords',
-  /** apex://meetings/<uuid> shows one meeting. */
+  /** atelier://meetings/<uuid> shows one meeting. */
   meetings: 'Meetings',
-  // ── tweaks page ── (TWK-05: apex://tweaks[?site=<host>])
+  // ── tweaks page ── (TWK-05: atelier://tweaks[?site=<host>])
   tweaks: 'Tweaks',
-  // ── packs page ── (docs/packs.md: apex://packs[?pack=<id>|?draft=<id>[&review=1]|?tab=browse|?install=<url>])
+  // ── packs page ── (docs/packs.md: atelier://packs[?pack=<id>|?draft=<id>[&review=1]|?tab=browse|?install=<url>])
   packs: 'Packs',
 }
 
@@ -202,24 +202,24 @@ const INTERNAL_PAGE_KEYS: Record<string, MessageKey> = {
   packs: 'packs.page.title', // docs/packs.md
 }
 
-/** An internal page's title in the app language; Apex for a page it doesn't know. */
+/** An internal page's title in the app language; Atelier for a page it doesn't know. */
 export function internalPageTitle(page: string): string {
   return Object.hasOwn(INTERNAL_PAGE_KEYS, page) ? t(INTERNAL_PAGE_KEYS[page] as MessageKey) : BRAND_NAME
 }
 
 /**
- * Sidebar destination rows, top to bottom (DS-06). Each opens apex://<id> on
+ * Sidebar destination rows, top to bottom (DS-06). Each opens atelier://<id> on
  * the window-level destination surface (DS-99), never as a tab.
  */
 export const DESTINATIONS = ['chats', 'routines', 'connectors', 'skills', 'meetings', 'workspace', 'guides', /* In the overflow by default */ 'files', /* AP-02: the packs you added, in the overflow by default */ 'packs'] as const
 export type Destination = (typeof DESTINATIONS)[number]
 
-/** Whether an apex:// address belongs on the destination surface rather than in a tab. */
+/** Whether an atelier:// address belongs on the destination surface rather than in a tab. */
 export function isDestinationUrl(url: string): boolean {
   return destinationOf(url) !== null
 }
 
-/** The destination an address shows, if any. Library › Files (apex://library/files) is the `files` destination. */
+/** The destination an address shows, if any. Library › Files (atelier://library/files) is the `files` destination. */
 export function destinationOf(url: string): Destination | null {
   const route = parseInternalUrl(url)
   if (!route) return null
@@ -228,7 +228,7 @@ export function destinationOf(url: string): Destination | null {
   return (DESTINATIONS as readonly string[]).includes(route.page) ? (route.page as Destination) : null
 }
 
-/** Settings pages in nav order. apex://settings lands on the first one. */
+/** Settings pages in nav order. atelier://settings lands on the first one. */
 export const SETTINGS_PAGES = [
   { id: 'you', title: 'You' },
   // ST-37 to ST-39
@@ -295,21 +295,21 @@ export function settingsPageTitle(id: string): string {
   return Object.hasOwn(SETTINGS_PAGE_KEYS, id) ? t(SETTINGS_PAGE_KEYS[id as keyof typeof SETTINGS_PAGE_KEYS]) : t('settings.nav.title')
 }
 
-/** Companion card sections, in tab order (apex://companion/<id>/<section>). */
+/** Companion card sections, in tab order (atelier://companion/<id>/<section>). */
 export const COMPANION_SECTIONS = ['general', 'skills', 'routines', 'files', 'memory', 'models'] as const
 
 // Old addresses and the page that now holds them. Library sections moved to
 // their own destinations, and shared memory moved to Settings.
 const LIBRARY_REDIRECTS: Record<string, string> = {
-  chats: 'apex://chats',
-  skills: 'apex://skills',
-  routines: 'apex://routines',
-  connectors: 'apex://connectors',
-  memory: 'apex://settings/memory',
+  chats: 'atelier://chats',
+  skills: 'atelier://skills',
+  routines: 'atelier://routines',
+  connectors: 'atelier://connectors',
+  memory: 'atelier://settings/memory',
   // Library › Files stays in the library.
-  files: 'apex://library/files',
+  files: 'atelier://library/files',
 }
-/** Settings sections that are not nav pages, and the nav page they sit under: apex://settings/sites is the site settings page. */
+/** Settings sections that are not nav pages, and the nav page they sit under: atelier://settings/sites is the site settings page. */
 export const SETTINGS_ALIAS_PARENTS: Record<string, string> = {
   sites: 'privacy',
   // Every permission in one place: this Mac's and the websites' (settings/permissions/PermissionsHubPage).
@@ -345,9 +345,9 @@ export const SETTINGS_PAGE_ALIASES: Record<string, string> = {
 }
 
 const SETTINGS_REDIRECTS: Record<string, string> = {
-  agent: 'apex://settings/model',
-  theme: 'apex://settings/appearance',
-  connectors: 'apex://connectors',
+  agent: 'atelier://settings/model',
+  theme: 'atelier://settings/appearance',
+  connectors: 'atelier://connectors',
 }
 
 export interface InternalRoute {
@@ -367,7 +367,7 @@ const SAFE_ID = /^[A-Za-z0-9_-]{1,128}$/
 const SAFE_SECTION = /^[a-z0-9-]{1,64}$/
 
 export function isInternalUrl(url: string): boolean {
-  return url.startsWith('apex://')
+  return url.startsWith('atelier://')
 }
 
 /**
@@ -375,23 +375,23 @@ export function isInternalUrl(url: string): boolean {
  * history and bookmarks still open them; resolveInternalUrl gives the new address.
  */
 const RENAMED_PAGES: Record<string, string> = {
-  boosts: 'tweaks', // compatibility: apex://boosts before the rename
+  boosts: 'tweaks', // compatibility: atelier://boosts before the rename
 }
 
-/** An apex:// address with a renamed page's old name swapped for its new one; any other as it is. */
+/** An atelier:// address with a renamed page's old name swapped for its new one; any other as it is. */
 function renamedPage(url: string): string {
-  const name = /^apex:\/\/([a-z-]+)(?=[/?#]|$)/.exec(url)?.[1]
-  return name && Object.hasOwn(RENAMED_PAGES, name) ? `apex://${RENAMED_PAGES[name]}${url.slice('apex://'.length + name.length)}` : url
+  const name = /^atelier:\/\/([a-z-]+)(?=[/?#]|$)/.exec(url)?.[1]
+  return name && Object.hasOwn(RENAMED_PAGES, name) ? `atelier://${RENAMED_PAGES[name]}${url.slice('atelier://'.length + name.length)}` : url
 }
 
 /**
- * Parses apex://page[/id][/section][/item]. Returns null for unknown pages and
+ * Parses atelier://page[/id][/section][/item]. Returns null for unknown pages and
  * for ids or sections outside a safe character set, so a crafted address can
  * never reach a store lookup or a file path. Query and fragment are ignored.
  */
 export function parseInternalUrl(url: string): InternalRoute | null {
   if (!isInternalUrl(url)) return null
-  const path = renamedPage(url).slice('apex://'.length).split(/[?#]/)[0] ?? ''
+  const path = renamedPage(url).slice('atelier://'.length).split(/[?#]/)[0] ?? ''
   const parts = path.split('/')
   // Tolerate one trailing slash, nothing else empty.
   if (parts.length > 1 && parts[parts.length - 1] === '') parts.pop()
@@ -407,7 +407,7 @@ export function parseInternalUrl(url: string): InternalRoute | null {
     if (item !== null && !SAFE_ID.test(item)) return null
     return { page, section, id, item }
   }
-  // Apex://workspace/<section>/<id>
+  // Atelier://workspace/<section>/<id>
   if (page === 'workspace') {
     const [section = null, id = null] = rest
     if (rest.length > 2 || (section !== null && !(WORKSPACE_SECTIONS as readonly string[]).includes(section))) return null
@@ -421,8 +421,8 @@ export function parseInternalUrl(url: string): InternalRoute | null {
 }
 
 /**
- * The canonical address for an apex:// URL: library sections redirect to
- * their destination, apex://settings to its first page, and old settings
+ * The canonical address for an atelier:// URL: library sections redirect to
+ * their destination, atelier://settings to its first page, and old settings
  * names to the page that now holds them, and a renamed page's old name to its
  * new one. Returns null for unknown pages.
  */
@@ -432,44 +432,44 @@ export function resolveInternalUrl(url: string): string | null {
   const route = parseInternalUrl(url)
   if (!route) return null
   if (route.page === 'library') {
-    const target = LIBRARY_REDIRECTS[route.section ?? 'chats'] ?? 'apex://chats'
+    const target = LIBRARY_REDIRECTS[route.section ?? 'chats'] ?? 'atelier://chats'
     // DS-115: Library › Files keeps its filter (?companion=<id>).
     const companion = route.section === 'files' ? internalQuery(url, 'companion') : null
     return companion && SAFE_ID.test(companion) ? libraryFilesUrl(companion) : target
   }
   if (route.page === 'files') return LIBRARY_FILES_URL
   if (route.page === 'settings') {
-    if (!route.section) return `apex://settings/${SETTINGS_PAGES[0].id}`
+    if (!route.section) return `atelier://settings/${SETTINGS_PAGES[0].id}`
     return SETTINGS_REDIRECTS[route.section] ?? url
   }
   return url
 }
 
-/** Builds apex://chat/<id>. */
+/** Builds atelier://chat/<id>. */
 export function chatUrl(chatId: string): string {
-  return `apex://chat/${chatId}`
+  return `atelier://chat/${chatId}`
 }
 
-/** Builds apex://library/files, narrowed to one companion's files when given (DS-115). */
+/** Builds atelier://library/files, narrowed to one companion's files when given (DS-115). */
 export function libraryFilesUrl(companionId?: string | null): string {
-  return companionId ? `apex://library/files?companion=${encodeURIComponent(companionId)}` : 'apex://library/files'
+  return companionId ? `atelier://library/files?companion=${encodeURIComponent(companionId)}` : 'atelier://library/files'
 }
 
-/** apex://companion/<id>/general/look: the card with its look editor open (the ring of bubbles around the figure). */
+/** atelier://companion/<id>/general/look: the card with its look editor open (the ring of bubbles around the figure). */
 export const COMPANION_LOOK_ITEM = 'look'
 
 export function companionLookUrl(companionId: string): string {
   return companionUrl(companionId, 'general', COMPANION_LOOK_ITEM)
 }
 
-/** Builds apex://companion/<id>[/<section>[/<item>]]. */
-/** apex://presets, or one preset's profile at apex://presets/<id>. */
+/** Builds atelier://companion/<id>[/<section>[/<item>]]. */
+/** atelier://presets, or one preset's profile at atelier://presets/<id>. */
 export function presetUrl(presetId?: string | null): string {
-  return presetId ? `apex://presets/${encodeURIComponent(presetId)}` : 'apex://presets'
+  return presetId ? `atelier://presets/${encodeURIComponent(presetId)}` : 'atelier://presets'
 }
 
 export function companionUrl(companionId: string, section?: string | null, item?: string | null): string {
-  return `apex://companion/${companionId}${section ? `/${section}${item ? `/${item}` : ''}` : ''}`
+  return `atelier://companion/${companionId}${section ? `/${section}${item ? `/${item}` : ''}` : ''}`
 }
 
 /** Names main looks up for titles: a chat's title, a companion's name. */
@@ -479,7 +479,7 @@ export interface InternalNames {
 }
 
 /**
- * The tab title and breadcrumb for an Apex page ("Chat / <title>",
+ * The tab title and breadcrumb for an Atelier page ("Chat / <title>",
  * "Settings / <page>"). Titles never depend on load state, so the pill and
  * the window title stay put while a page renders.
  */
@@ -541,39 +541,39 @@ export function isInsecureUrl(url: string): boolean {
   return !/^(localhost|127\.\d+\.\d+\.\d+|\[::1\])$/i.test(parsed.hostname)
 }
 
-/** apex://routines/<id>, or its editor (apex://routines/<id>/edit). */
+/** atelier://routines/<id>, or its editor (atelier://routines/<id>/edit). */
 export function routineUrl(id: string, edit?: boolean): string {
-  return `apex://routines/${id}${edit ? '/edit' : ''}`
+  return `atelier://routines/${id}${edit ? '/edit' : ''}`
 }
 
-/** apex://skills/<id>, optionally opened on one of its files (?file=<path>). */
+/** atelier://skills/<id>, optionally opened on one of its files (?file=<path>). */
 export function skillUrl(id: string, file?: string): string {
-  return `apex://skills/${id}${file ? `?file=${encodeURIComponent(file)}` : ''}`
+  return `atelier://skills/${id}${file ? `?file=${encodeURIComponent(file)}` : ''}`
 }
 
-/** apex://workspace/<section>[/<id>]. */
+/** atelier://workspace/<section>[/<id>]. */
 export function workspaceUrl(section: WorkspaceSection, id?: string): string {
-  return `apex://workspace/${section}${id ? `/${id}` : ''}`
+  return `atelier://workspace/${section}${id ? `/${id}` : ''}`
 }
 
-/** Where an agent-built app runs. Never an apex:// page: the agent treats it like one and refuses to act there. */
+/** Where an agent-built app runs. Never an atelier:// page: the agent treats it like one and refuses to act there. */
 export function appRunUrl(appId: string): string {
-  return `${APEX_APP_SCHEME}://${appId}/`
+  return `${ATELIER_APP_SCHEME}://${appId}/`
 }
 
-/** Whether a URL is an agent-built app (apex-app://). */
+/** Whether a URL is an agent-built app (atelier-app://). */
 export function isAppRunUrl(url: string): boolean {
-  return url.startsWith(`${APEX_APP_SCHEME}://`)
+  return url.startsWith(`${ATELIER_APP_SCHEME}://`)
 }
 
-/** One query value of an apex:// address (skills?tab=, workspace?q=, routines?view=, connectors?connect= (read by connectRequestOf)), or null. */
+/** One query value of an atelier:// address (skills?tab=, workspace?q=, routines?view=, connectors?connect= (read by connectRequestOf)), or null. */
 export function internalQuery(url: string, key: string): string | null {
   if (!isInternalUrl(url)) return null
   const query = url.split('#')[0]?.split('?')[1]
   return query === undefined ? null : new URLSearchParams(query).get(key)
 }
 
-/** The name an apex://file tab shows: the `name` hint the opener added, else the target path's last part. */
+/** The name an atelier://file tab shows: the `name` hint the opener added, else the target path's last part. */
 export function fileViewerName(url: string): string | null {
   const parsed = parseFileViewerUrl(url)
   if (!parsed) return null

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -49,7 +49,7 @@ export function fuseProblems(expected, actual) {
 // ---------------------------------------------------------------------------
 // The packaged app's Info.plist and resources.
 
-/** Usage strings a hardened, signed Apex must carry, or macOS refuses (or kills) the request. */
+/** Usage strings a hardened, signed Atelier must carry, or macOS refuses (or kills) the request. */
 export const MAC_USAGE_KEYS = [
   'NSMicrophoneUsageDescription',
   'NSCameraUsageDescription',
@@ -71,11 +71,11 @@ export function plistProblems(plist, { assetCatalog }) {
   const schemes = (plist.CFBundleURLTypes ?? []).flatMap((t) => t.CFBundleURLSchemes ?? [])
   for (const s of ['http', 'https']) if (!schemes.includes(s)) problems.push(`Info.plist doesn't claim the ${s} scheme`)
   const exts = (plist.CFBundleDocumentTypes ?? []).flatMap((t) => t.CFBundleTypeExtensions ?? [])
-  for (const e of ['apexcompanion', 'apexpack', 'html']) if (!exts.includes(e)) problems.push(`Info.plist has no document type for .${e}`)
+  for (const e of ['ateliercompanion', 'atelierpack', 'html']) if (!exts.includes(e)) problems.push(`Info.plist has no document type for .${e}`)
   if (plist.CFBundleIconFile == null) problems.push('Info.plist has no CFBundleIconFile (the .icns fallback)')
   // CFBundleIconName must name the icon in Assets.car, or the Dock shows a generic icon.
-  // The official branding's Apex.icon compiles to "Apex" (afterPack.mjs); electron-builder's own compile says "Icon".
-  if (assetCatalog && plist.CFBundleIconName !== 'Apex' && plist.CFBundleIconName !== 'Icon') problems.push(`Assets.car is there but CFBundleIconName is ${JSON.stringify(plist.CFBundleIconName ?? null)}, not "Apex"`)
+  // The official branding's Atelier.icon compiles to "Atelier" (afterPack.mjs); electron-builder's own compile says "Icon".
+  if (assetCatalog && plist.CFBundleIconName !== 'Atelier' && plist.CFBundleIconName !== 'Icon') problems.push(`Assets.car is there but CFBundleIconName is ${JSON.stringify(plist.CFBundleIconName ?? null)}, not "Atelier"`)
   if (!assetCatalog && plist.CFBundleIconName != null) problems.push('CFBundleIconName is set without an Assets.car')
   return problems
 }
@@ -93,26 +93,26 @@ export function entitlementProblems(entitlements, { mode, embeddedProfile, appId
   if (mode === 'developer-id-passkeys') {
     if (!embeddedProfile) problems.push('Contents/embedded.provisionprofile is missing')
     if (entitlements[BROWSER_PASSKEY_ENTITLEMENT] !== true) problems.push(`the app isn't signed with ${BROWSER_PASSKEY_ENTITLEMENT}`)
-    if (!appId) problems.push("com.apple.application-identifier can't be checked without your Apple Team ID: set APEX_TEAM_ID")
+    if (!appId) problems.push("com.apple.application-identifier can't be checked without your Apple Team ID: set ATELIER_TEAM_ID")
     else if (entitlements['com.apple.application-identifier'] !== appId) problems.push(`com.apple.application-identifier is ${JSON.stringify(entitlements['com.apple.application-identifier'] ?? null)}, not ${appId}`)
   }
   return problems
 }
 
 // ---------------------------------------------------------------------------
-// The native helpers in Contents/Resources. Each asks macOS in Apex's name,
+// The native helpers in Contents/Resources. Each asks macOS in Atelier's name,
 // so each must be signed like the app (notarization refuses one that isn't)
 // and carry, in its embedded Info.plist, the usage strings macOS shows.
 
 /** Each macOS helper: where it sits in Resources, its bundle id suffix, and the usage strings it needs. */
 export const MAC_HELPERS = [
-  { path: 'apex-speech', helper: 'speech', usage: ['NSMicrophoneUsageDescription', 'NSSpeechRecognitionUsageDescription'] },
+  { path: 'atelier-speech', helper: 'speech', usage: ['NSMicrophoneUsageDescription', 'NSSpeechRecognitionUsageDescription'] },
   {
-    path: 'apex-calendar',
+    path: 'atelier-calendar',
     helper: 'calendar',
     usage: ['NSCalendarsFullAccessUsageDescription', 'NSCalendarsUsageDescription', 'NSRemindersFullAccessUsageDescription', 'NSRemindersUsageDescription'],
   },
-  { path: 'apex-translate', helper: 'translate', usage: [] },
+  { path: 'atelier-translate', helper: 'translate', usage: [] },
 ]
 
 /** The embedded Info.plist's XML from `otool -X -s __TEXT __info_plist` (hex lines; a universal binary repeats it per slice), or null. */
@@ -178,19 +178,19 @@ export function expectedResources(platform) {
   const icons = [32, 64, 128, 256, 512].map((s) => `resources/icons/app-${s}.png`)
   if (platform === 'darwin') {
     return {
-      required: [...icons, 'resources/tray/trayTemplate.png', 'resources/tray/trayTemplate@2x.png', 'apex-speech', 'app.asar'],
+      required: [...icons, 'resources/tray/trayTemplate.png', 'resources/tray/trayTemplate@2x.png', 'atelier-speech', 'app.asar'],
       optional: [
         // Haptics have a no-op fallback, so the addon ships whenever it built.
-        { path: 'native/apex_haptics.node', source: 'native/haptics/build/apex_haptics.node' },
-        { path: 'apex-calendar', source: 'native/calendar/build/apex-calendar' },
-        { path: 'apex-translate', source: 'native/translate/build/apex-translate' },
+        { path: 'native/atelier_haptics.node', source: 'native/haptics/build/atelier_haptics.node' },
+        { path: 'atelier-calendar', source: 'native/calendar/build/atelier-calendar' },
+        { path: 'atelier-translate', source: 'native/translate/build/atelier-translate' },
       ],
     }
   }
   if (platform === 'win32') {
     return {
-      required: [...icons, 'resources/tray/tray-light.ico', 'resources/tray/tray-dark.ico', 'html-document.ico', 'apexcompanion.ico', 'apexpack.ico', 'app.asar'],
-      optional: [{ path: 'apex-speech.exe', source: 'native/speech-win/build/apex-speech.exe' }],
+      required: [...icons, 'resources/tray/tray-light.ico', 'resources/tray/tray-dark.ico', 'html-document.ico', 'ateliercompanion.ico', 'atelierpack.ico', 'app.asar'],
+      optional: [{ path: 'atelier-speech.exe', source: 'native/speech-win/build/atelier-speech.exe' }],
     }
   }
   return { required: [...icons, 'resources/tray/tray.png', 'resources/tray/tray@2x.png', 'app.asar'], optional: [] }
@@ -261,7 +261,7 @@ export function checksumLines(files) {
 export const SUPPORT_MESSAGE_MAX = 280
 
 /**
- * apex-support.json (the updater's SupportFeed): versions below `below` are told to
+ * atelier-support.json (the updater's SupportFeed): versions below `below` are told to
  * update. Validated, deduplicated and sorted newest first.
  */
 export function supportFeed(entries) {

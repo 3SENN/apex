@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,14 +9,14 @@
 // macOS 26 draws app icons from an Icon Composer document (light, dark,
 // tinted and clear), compiled by actool into Assets.car and named by
 // CFBundleIconName. When Xcode 26's actool is here, this compiles the
-// branding's Icon Composer document (branding/official/Apex.icon; the
+// branding's Icon Composer document (branding/official/Atelier.icon; the
 // unofficial branding has none) into the bundle; icon.icns stays as
 // CFBundleIconFile for older macOS either way. Without actool the app keeps
 // the .icns only, with a warning, rather than a CFBundleIconName that names
 // nothing (which would give a generic Dock icon).
 //
 // It also finishes naming the helpers: electron-builder renames their files,
-// executables and display names to "Apex Helper (…)" but leaves CFBundleName
+// executables and display names to "Atelier Helper (…)" but leaves CFBundleName
 // as "Electron Helper (…)", so this sets that too.
 
 import { execFileSync } from 'node:child_process'
@@ -26,8 +26,8 @@ import { basename, join } from 'node:path'
 
 import { loadBranding } from '../branding.mjs'
 
-/** The official Icon Composer document's name (Apex.icon); a branding's own document names its icon. */
-export const ICON_NAME = 'Apex'
+/** The official Icon Composer document's name (Atelier.icon); a branding's own document names its icon. */
+export const ICON_NAME = 'Atelier'
 
 /** The branding's Icon Composer document and the icon name it compiles to, or null when the branding has none. */
 export function iconComposer(branding) {
@@ -70,12 +70,12 @@ export function compileIcon(iconDir, outDir, iconName = ICON_NAME) {
   return car
 }
 
-/** "Electron Helper (GPU)" becomes "Apex Helper (GPU)"; any other name stays. */
+/** "Electron Helper (GPU)" becomes "Atelier Helper (GPU)"; any other name stays. */
 export function helperName(name, productName) {
   return name.startsWith('Electron Helper') ? productName + name.slice('Electron'.length) : name
 }
 
-/** Sets CFBundleName of every helper app in `app` to Apex's name; returns how many changed. */
+/** Sets CFBundleName of every helper app in `app` to Atelier's name; returns how many changed. */
 export function nameHelpers(app, productName) {
   const frameworks = join(app, 'Contents', 'Frameworks')
   let changed = 0
@@ -95,7 +95,7 @@ export default async function afterPack(context) {
   if (context.electronPlatformName !== 'darwin') return
   const app = join(context.appOutDir, `${context.packager.appInfo.productFilename}.app`)
   const helpers = nameHelpers(app, context.packager.appInfo.productName)
-  if (helpers > 0) console.log(`  • Apex: named ${helpers} helper app${helpers === 1 ? '' : 's'} ${context.packager.appInfo.productName}`)
+  if (helpers > 0) console.log(`  • Atelier: named ${helpers} helper app${helpers === 1 ? '' : 's'} ${context.packager.appInfo.productName}`)
   const resources = join(app, 'Contents', 'Resources')
   if (existsSync(join(resources, 'Assets.car'))) return // electron-builder compiled an .icon itself
 
@@ -103,14 +103,14 @@ export default async function afterPack(context) {
   if (!icon) return // the branding draws its icon from icon.icns alone
   const version = process.platform === 'darwin' ? actoolVersion() : null
   if (version === null || version < 26) {
-    console.warn(`  • Apex: ${version === null ? 'no actool' : `actool ${version}`} (needs Xcode 26), so the app keeps icon.icns only`)
+    console.warn(`  • Atelier: ${version === null ? 'no actool' : `actool ${version}`} (needs Xcode 26), so the app keeps icon.icns only`)
     return
   }
-  const work = mkdtempSync(join(tmpdir(), 'apex-icon-'))
+  const work = mkdtempSync(join(tmpdir(), 'atelier-icon-'))
   try {
     copyFileSync(compileIcon(icon.dir, work, icon.name), join(resources, 'Assets.car'))
     execFileSync('plutil', ['-replace', 'CFBundleIconName', '-string', icon.name, join(app, 'Contents', 'Info.plist')])
-    console.log(`  • Apex: compiled ${icon.name}.icon into Assets.car (actool ${version})`)
+    console.log(`  • Atelier: compiled ${icon.name}.icon into Assets.car (actool ${version})`)
   } finally {
     rmSync(work, { recursive: true, force: true })
   }

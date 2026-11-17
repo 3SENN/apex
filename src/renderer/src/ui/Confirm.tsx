@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -82,7 +82,7 @@ type Invoke = (service: 'dialogs', method: 'show' | 'answer', ...args: unknown[]
 
 function overlayInvoke(): Invoke | null {
   if (typeof window === 'undefined') return null
-  const api = (window as { apex?: { invoke?: unknown } }).apex
+  const api = (window as { atelier?: { invoke?: unknown } }).atelier
   return typeof api?.invoke === 'function' ? (api.invoke as Invoke) : null
 }
 
@@ -166,12 +166,12 @@ const specs = createQueue<PendingSpec>()
 
 function useMainFallbackDialogs(): void {
   useEffect(() => {
-    const apex = typeof window === 'undefined' ? undefined : window.apex
-    if (typeof apex?.onAppEvent !== 'function') return
-    return apex.onAppEvent((event) => {
+    const atelier = typeof window === 'undefined' ? undefined : window.atelier
+    if (typeof atelier?.onAppEvent !== 'function') return
+    return atelier.onAppEvent((event) => {
       if (event.type === 'dialog-fallback') {
         const { id, spec, origin } = event
-        specs.push({ id: `main:${id}`, spec, origin, answer: (result) => void Promise.resolve(apex.invoke('dialogs', 'answer', id, result)).catch(() => undefined) })
+        specs.push({ id: `main:${id}`, spec, origin, answer: (result) => void Promise.resolve(atelier.invoke('dialogs', 'answer', id, result)).catch(() => undefined) })
       } else if (event.type === 'dialog-fallback-close') {
         specs.remove(`main:${event.id}`)
       }

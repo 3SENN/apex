@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -59,7 +59,7 @@ describe('transcripts and batches', () => {
     expect(planBatches([])).toEqual([])
   })
 
-  it('never reads private chats, routine runs, children or Apex’s own upkeep chats; imported ones count', () => {
+  it('never reads private chats, routine runs, children or Atelier’s own upkeep chats; imported ones count', () => {
     const chats = [
       chat('c1', 'pip'),
       chat('c2', 'pip', { private: true }),
@@ -97,7 +97,7 @@ describe('MemoryJobs', () => {
   const settle = () => new Promise((r) => setTimeout(r, 0))
 
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), 'apex-jobs-'))
+    dir = mkdtempSync(join(tmpdir(), 'atelier-jobs-'))
     host = new FakeHost()
     chats = Array.from({ length: 6 }, (_, i) => chat(`c${i + 1}`, 'pip'))
     notes = [{ path: '/memories/a.md', size: 3, modifiedAt: 1, owner: 'pip', author: 'agent' }]

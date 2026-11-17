@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -230,17 +230,17 @@ export class SkillStore extends EventEmitter<{ changed: [Skill[]] }> {
     this.#changed()
   }
 
-  /** The /names of the skills that come with Apex. */
+  /** The /names of the skills that come with Atelier. */
   builtinNames(): string[] {
     return this.#builtins.map((b) => b.name)
   }
 
-  /** How many skills come with Apex, shown or not (the built-in skills pack's count). */
+  /** How many skills come with Atelier, shown or not (the built-in skills pack's count). */
   builtinCount(): number {
     return this.#builtins.length
   }
 
-  /** Hides or shows the built-in skills (the apex-builtin-skills pack's switch). */
+  /** Hides or shows the built-in skills (the atelier-builtin-skills pack's switch). */
   setBuiltinsHidden(hidden: boolean): void {
     if (this.#builtinsHidden === hidden) return
     this.#builtinsHidden = hidden

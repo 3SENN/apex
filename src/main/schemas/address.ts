@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -19,7 +19,7 @@ export const omniboxActionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('navigate'), url: z.string().min(1).max(8192) }).strict(),
   z.object({ kind: z.literal('switch-tab'), tabId: tabIdSchema }).strict(),
   z.object({ kind: z.literal('command'), id: commandIdSchema }).strict(),
-  z.object({ kind: z.literal('open-internal'), url: z.string().startsWith('apex://').max(2048) }).strict(),
+  z.object({ kind: z.literal('open-internal'), url: z.string().startsWith('atelier://').max(2048) }).strict(),
   z.object({ kind: z.literal('ask'), text: z.string().min(1).max(20_000) }).strict(),
   z.object({ kind: z.literal('web-app'), appId: z.string().min(1).max(64) }).strict(),
 ])

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -16,7 +16,7 @@ import { Swatches, type SwatchOption } from './Swatches'
 import { Package } from 'lucide-react'
 import { shareAsPack } from '../packs/share'
 
-// One tweak, edited in place on apex://tweaks (TWK-03 to TWK-06): what it
+// One tweak, edited in place on atelier://tweaks (TWK-03 to TWK-06): what it
 // hides, its style, custom CSS and (with Allow custom scripts on) its script,
 // where it runs, export and delete. Style and switches save as they change;
 // CSS and the script save with their buttons.

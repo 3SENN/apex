@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // node --test scripts/app-icons/generate.test.mjs
 //
-// Checks Apex's generated icon set: Pip's masters (for the companion and pack
+// Checks Atelier's generated icon set: Pip's masters (for the companion and pack
 // documents) are there and sound, every output exists with the right sizes,
 // the manifest matches the files, the files match what the source draws
 // today, two runs give identical bytes, the mark reads at 16 px, and the
@@ -113,7 +113,7 @@ test('every icon path the build and the tray rely on is present', () => {
     'branding/official/icon.icns',
     'branding/official/icon.ico',
     'branding/official/icon.png',
-    'branding/official/Apex.icon/icon.json',
+    'branding/official/Atelier.icon/icon.json',
     'branding/official/art/pip-head.png',
     'branding/official/art/pip-full.png',
     ...[32, 64, 128].map((s) => `branding/official/renderer/mark-${s}.png`),
@@ -152,8 +152,8 @@ test('the files are current: the source draws exactly these pixels', () => {
 // Determinism, including the release art, in throwaway folders.
 
 test('two runs in separate processes give byte-identical files', () => {
-  const a = mkdtempSync(join(tmpdir(), 'apex-icons-a-'))
-  const b = mkdtempSync(join(tmpdir(), 'apex-icons-b-'))
+  const a = mkdtempSync(join(tmpdir(), 'atelier-icons-a-'))
+  const b = mkdtempSync(join(tmpdir(), 'atelier-icons-b-'))
   try {
     for (const dir of [a, b]) {
       const r = spawnSync(process.execPath, [GENERATOR, '--out', dir, '--release-art', '--quiet'], { encoding: 'utf8' })
@@ -179,7 +179,7 @@ test('two runs in separate processes give byte-identical files', () => {
 })
 
 test('release art has the shapes NSIS and the DMG expect', () => {
-  const dir = mkdtempSync(join(tmpdir(), 'apex-icons-r-'))
+  const dir = mkdtempSync(join(tmpdir(), 'atelier-icons-r-'))
   try {
     generate({ out: dir, releaseArt: true })
     const bmp = readFileSync(join(dir, 'branding/official/installerSidebar.bmp'))
@@ -189,7 +189,7 @@ test('release art has the shapes NSIS and the DMG expect', () => {
     const dmg2 = decodePNG(readFileSync(join(dir, 'branding/official/dmg-background@2x.png')))
     assert.deepEqual([dmg.width, dmg.height, dmg2.width, dmg2.height], [540, 380, 1080, 760])
     assert.equal(alphaAt(dmg, 0, 0), 255, 'DMG background is opaque')
-    for (const p of ['branding/official/html-document.icns', 'branding/official/apexcompanion.icns']) {
+    for (const p of ['branding/official/html-document.icns', 'branding/official/ateliercompanion.icns']) {
       assert.deepEqual(readICNS(readFileSync(join(dir, p))).map((e) => e.type), ICNS_ORDER, p)
     }
   } finally {
@@ -322,8 +322,8 @@ test('the mark reads at 16 px: two eyes in the head, white on the violet tile an
   assert.ok(top.filter(violet).length > 200, 'the sprout is violet')
 })
 
-test('Apex.icon is a valid Icon Composer document', () => {
-  const json = JSON.parse(read('branding/official/Apex.icon/icon.json').toString('utf8'))
+test('Atelier.icon is a valid Icon Composer document', () => {
+  const json = JSON.parse(read('branding/official/Atelier.icon/icon.json').toString('utf8'))
   assert.ok(Array.isArray(json.groups) && json.groups.length >= 1)
   const appearances = json['fill-specializations'].map((s) => s.appearance ?? 'light')
   assert.deepEqual(appearances, ['light', 'dark'])
@@ -331,7 +331,7 @@ test('Apex.icon is a valid Icon Composer document', () => {
   for (const g of json.groups) {
     for (const l of g.layers) {
       names.push(l['image-name'])
-      const file = read(join('branding/official/Apex.icon/Assets', l['image-name']))
+      const file = read(join('branding/official/Atelier.icon/Assets', l['image-name']))
       if (l['image-name'].endsWith('.png')) {
         const img = decodePNG(file)
         assert.deepEqual([img.width, img.height], [1024, 1024])
@@ -403,9 +403,9 @@ const hasTool = (cmd, args) => {
 }
 
 test('iconutil reads icon.icns into a full iconset', { skip: !onMac && 'macOS only' }, () => {
-  const dir = mkdtempSync(join(tmpdir(), 'apex-iconset-'))
+  const dir = mkdtempSync(join(tmpdir(), 'atelier-iconset-'))
   try {
-    const out = join(dir, 'Apex.iconset')
+    const out = join(dir, 'Atelier.iconset')
     execFileSync('iconutil', ['-c', 'iconset', join(REPO, 'branding/official/icon.icns'), '-o', out])
     const files = readdirSync(out).sort()
     assert.deepEqual(files, [
@@ -440,14 +440,14 @@ test('iconutil reads icon.icns into a full iconset', { skip: !onMac && 'macOS on
   }
 })
 
-test('actool compiles Apex.icon into Assets.car', { skip: (!onMac || !hasTool('xcrun', ['--find', 'actool'])) && 'needs Xcode 26' }, () => {
-  const dir = mkdtempSync(join(tmpdir(), 'apex-actool-'))
+test('actool compiles Atelier.icon into Assets.car', { skip: (!onMac || !hasTool('xcrun', ['--find', 'actool'])) && 'needs Xcode 26' }, () => {
+  const dir = mkdtempSync(join(tmpdir(), 'atelier-actool-'))
   try {
     const out = execFileSync(
       'xcrun',
       [
         'actool',
-        join(REPO, 'branding/official/Apex.icon'),
+        join(REPO, 'branding/official/Atelier.icon'),
         '--compile',
         dir,
         '--output-format',
@@ -457,7 +457,7 @@ test('actool compiles Apex.icon into Assets.car', { skip: (!onMac || !hasTool('x
         '--output-partial-info-plist',
         join(dir, 'partial.plist'),
         '--app-icon',
-        'Apex',
+        'Atelier',
         '--include-all-app-icons',
         '--enable-on-demand-resources',
         'NO',
@@ -474,7 +474,7 @@ test('actool compiles Apex.icon into Assets.car', { skip: (!onMac || !hasTool('x
     )
     assert.doesNotMatch(out, /error|warning/i, out)
     assert.ok(existsSync(join(dir, 'Assets.car')), 'Assets.car')
-    assert.match(readFileSync(join(dir, 'partial.plist'), 'utf8'), /<key>CFBundleIconName<\/key>\s*<string>Apex<\/string>/)
+    assert.match(readFileSync(join(dir, 'partial.plist'), 'utf8'), /<key>CFBundleIconName<\/key>\s*<string>Atelier<\/string>/)
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }

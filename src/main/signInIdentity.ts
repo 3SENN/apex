@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -48,7 +48,7 @@ export function firefoxUserAgent(platform: NodeJS.Platform = process.platform, m
 
 // ---- the experiment ----
 
-/** apex://flags: Google's sign-in pages present Firefox instead of Chrome. */
+/** atelier://flags: Google's sign-in pages present Firefox instead of Chrome. */
 export const GOOGLE_FIREFOX_FLAG = 'google-signin-firefox'
 
 /** Applies the identity experiments to the sign-in registry. */

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import type { ChromeCommand, TabInfo, TabsSnapshot } from '@shared/ipc'
 import type { DownloadInfo } from '@shared/services'
 import { isBlankUrl, isInternalUrl, parseInternalUrl } from '@shared/url'
 import { ChevronLeft, ChevronRight, Columns2, Menu, MessageSquareText, PanelLeft, RotateCw } from 'lucide-react'
-import { apex, call } from '../api'
+import { atelier, call } from '../api'
 import { IconButton, cx, showMenu } from '../ui'
 import { AddressPill, openUniversalSearch, type AddressPillHandle } from './AddressPill'
 import { DownloadsButton } from './sidebar/DownloadsButton'
@@ -52,7 +52,7 @@ interface ToolbarProps {
 // SH-32: a private window says so; its tooltip says nothing from it is saved
 function PrivateLabel(): ReactElement | null {
   const ref = useRef<HTMLSpanElement>(null)
-  const isPrivate = apex.initial.window.kind === 'private'
+  const isPrivate = atelier.initial.window.kind === 'private'
   useTooltip(ref, { label: t('core.privateWindow.label'), disabled: !isPrivate })
   if (!isPrivate) return null
   return (
@@ -78,10 +78,10 @@ function HistoryButton({ tab, direction, quiet }: { tab: TabInfo | null; directi
     if (!tab || !enabled) return
     if (e.metaKey || e.ctrlKey || e.button === 1) {
       const [next] = await call('tabs', 'history', tab.id, direction)
-      if (next) void apex.tabs.create(next.url, { afterId: tab.id, background: true })
+      if (next) void atelier.tabs.create(next.url, { afterId: tab.id, background: true })
       return
     }
-    void (back ? apex.nav.back(tab.id) : apex.nav.forward(tab.id))
+    void (back ? atelier.nav.back(tab.id) : atelier.nav.forward(tab.id))
   }
   return (
     <IconButton
@@ -107,7 +107,7 @@ function HistoryButton({ tab, direction, quiet }: { tab: TabInfo | null; directi
 /** Reload; while the page loads the glyph turns and a click stops it. Faded on chat pages. */
 function ReloadButton({ tab, quiet }: { tab: TabInfo | null; quiet: boolean }): ReactElement {
   if (tab?.loading && !quiet) {
-    return <IconButton label={t('core.toolbar.stopLoading')} shortcut="Escape" className="reload-btn reload-btn--loading" icon={<RotateCw />} onClick={() => void apex.nav.stop(tab.id)} />
+    return <IconButton label={t('core.toolbar.stopLoading')} shortcut="Escape" className="reload-btn reload-btn--loading" icon={<RotateCw />} onClick={() => void atelier.nav.stop(tab.id)} />
   }
   return (
     <IconButton
@@ -120,7 +120,7 @@ function ReloadButton({ tab, quiet }: { tab: TabInfo | null; quiet: boolean }): 
       onClick={(e) => {
         if (!tab) return
         if (e.metaKey || e.ctrlKey) void call('tabs', 'duplicate', tab.id)
-        else void apex.nav.reload(tab.id, e.shiftKey)
+        else void atelier.nav.reload(tab.id, e.shiftKey)
       }}
     />
   )
@@ -182,7 +182,7 @@ export const Toolbar = forwardRef<ToolbarHandle, ToolbarProps>(function Toolbar(
   // ⌘D's editor, ⇧⌘A's universal search, the command bar
   useEffect(
     () =>
-      apex.onCommand((received) => {
+      atelier.onCommand((received) => {
         // 'ui:command' carries ChromeCommands; the preload's type is still the older, narrower one.
         const command = received as ChromeCommand
         if (command === 'bookmark-editor') pill.current?.bookmark()

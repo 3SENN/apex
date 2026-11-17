@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,11 +10,11 @@ vi.mock('electron', () => ({ app: { getPath: () => '/tmp' }, BrowserWindow: clas
 
 import type { ChatView } from '@shared/chats'
 import type { AgentEvent } from '@shared/ipc'
-import { APEX_CHAT_EXPORT_VERSION, chatMessages, chatToMarkdown, chatToText, parseApexChatMarkdown } from '@shared/exportFormat'
+import { ATELIER_CHAT_EXPORT_VERSION, chatMessages, chatToMarkdown, chatToText, parseAtelierChatMarkdown } from '@shared/exportFormat'
 import { MAILTO_MAX, createExporter, mailtoUrl, registerExportSource, uniqueName, type ExporterDeps } from '../src/main/exporter'
 import { escapeHtml, htmlDocument, markdownDocument } from '../src/main/exportTemplates/html'
 import { chatNotificationSilent, chatsProjectMethods, registerChatExportSource } from '../src/main/chatFeatures'
-import { parseApexExport } from '../src/main/conversationImport/parsers'
+import { parseAtelierExport } from '../src/main/conversationImport/parsers'
 import { exportActions, exportedName } from '../src/renderer/src/chat/logic/exportDialog'
 
 // CH-36: the Markdown chat format the importer reads back (golden), the HTML
@@ -47,8 +47,8 @@ describe('the Markdown chat format', () => {
     expect(chatToMarkdown(CHAT, { companionName: 'Pip' })).toBe(
       [
         '---',
-        'apex_export: chat',
-        `version: ${APEX_CHAT_EXPORT_VERSION}`,
+        'atelier_export: chat',
+        `version: ${ATELIER_CHAT_EXPORT_VERSION}`,
         'title: "Lisbon weekend"',
         'createdAt: "2026-10-01T09:30:00.000Z"',
         'companion: "Pip"',
@@ -81,25 +81,25 @@ describe('the Markdown chat format', () => {
     )
   })
 
-  it('round-trips through the parser and the Apex importer', () => {
+  it('round-trips through the parser and the Atelier importer', () => {
     const markdown = chatToMarkdown(CHAT, { companionName: 'Pip' })
-    const parsed = parseApexChatMarkdown(markdown)
+    const parsed = parseAtelierChatMarkdown(markdown)
     expect(parsed).toEqual({
       title: 'Lisbon weekend',
       createdAt: CREATED,
       companion: 'Pip',
       messages: chatMessages(CHAT).map((m) => ({ role: m.role, text: m.text, at: m.at })),
     })
-    const imported = parseApexExport(markdown)
-    expect(imported?.source).toBe('apex')
+    const imported = parseAtelierExport(markdown)
+    expect(imported?.source).toBe('atelier')
     expect(imported?.messages.map((m) => m.role)).toEqual(['user', 'assistant', 'user', 'assistant'])
     expect(imported?.messages[2]?.text).toBe('And food?\n### You\nis a heading in my text')
   })
 
-  it('refuses text that is not an Apex export, or from a newer version', () => {
-    expect(parseApexChatMarkdown('# Just notes')).toBeNull()
-    expect(parseApexChatMarkdown('---\napex_export: skill\nversion: 1\n---\n')).toBeNull()
-    expect(parseApexChatMarkdown(`---\napex_export: chat\nversion: ${APEX_CHAT_EXPORT_VERSION + 1}\n---\n`)).toBeNull()
+  it('refuses text that is not an Atelier export, or from a newer version', () => {
+    expect(parseAtelierChatMarkdown('# Just notes')).toBeNull()
+    expect(parseAtelierChatMarkdown('---\natelier_export: skill\nversion: 1\n---\n')).toBeNull()
+    expect(parseAtelierChatMarkdown(`---\natelier_export: chat\nversion: ${ATELIER_CHAT_EXPORT_VERSION + 1}\n---\n`)).toBeNull()
   })
 
   it('shows an expanded skill as its /command, and copies as plain text', () => {

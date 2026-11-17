@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -34,9 +34,9 @@ describe('the dangerous-host list', () => {
     expect(hostOfUrl('nonsense')).toBe('')
   })
 
-  it('ships a list Apex can read', () => {
-    expect(safety.isDangerousHost('dangerous.apex.test')).toBe(true)
-    expect(safety.isDangerousHost('www.dangerous.apex.test')).toBe(true)
+  it('ships a list Atelier can read', () => {
+    expect(safety.isDangerousHost('dangerous.atelier.test')).toBe(true)
+    expect(safety.isDangerousHost('www.dangerous.atelier.test')).toBe(true)
     expect(safety.isDangerousHost('example.com')).toBe(false)
   })
 })
@@ -48,26 +48,26 @@ describe('the dangerous-site layer', () => {
   it('refuses listed pages and frames, and tells the tab why', () => {
     const session = {}
     const layer = safetyLayer(session)
-    expect(layer.onBeforeRequest?.(req('https://dangerous.apex.test/login'))).toEqual({ cancel: true })
-    expect(blockedNavigations.take(5, 'https://dangerous.apex.test/login')).toBe('dangerous')
-    expect(layer.onBeforeRequest?.(req('https://dangerous.apex.test/f', 'subFrame', 6))).toEqual({ cancel: true })
+    expect(layer.onBeforeRequest?.(req('https://dangerous.atelier.test/login'))).toEqual({ cancel: true })
+    expect(blockedNavigations.take(5, 'https://dangerous.atelier.test/login')).toBe('dangerous')
+    expect(layer.onBeforeRequest?.(req('https://dangerous.atelier.test/f', 'subFrame', 6))).toEqual({ cancel: true })
     // A frame doesn't replace the tab's page, so it leaves no reason behind.
-    expect(blockedNavigations.take(6, 'https://dangerous.apex.test/f')).toBeNull()
-    expect(layer.onBeforeRequest?.(req('https://dangerous.apex.test/a.png', 'image'))).toBeNull()
+    expect(blockedNavigations.take(6, 'https://dangerous.atelier.test/f')).toBeNull()
+    expect(layer.onBeforeRequest?.(req('https://dangerous.atelier.test/a.png', 'image'))).toBeNull()
     expect(layer.onBeforeRequest?.(req('https://example.com/'))).toBeNull()
   })
 
   it('lets a host through for the rest of the session after Visit anyway', () => {
     const session = {}
     const other = {}
-    expect(safety.blocks(session, 'https://dangerous.apex.test/')).toBe(true)
-    safety.allowHost(session, 'Dangerous.Apex.Test')
-    expect(safety.blocks(session, 'https://dangerous.apex.test/')).toBe(false)
-    expect(safety.isBypassed(session, 'dangerous.apex.test')).toBe(true)
-    expect(safetyLayer(session).onBeforeRequest?.(req('https://dangerous.apex.test/'))).toBeNull()
+    expect(safety.blocks(session, 'https://dangerous.atelier.test/')).toBe(true)
+    safety.allowHost(session, 'Dangerous.Atelier.Test')
+    expect(safety.blocks(session, 'https://dangerous.atelier.test/')).toBe(false)
+    expect(safety.isBypassed(session, 'dangerous.atelier.test')).toBe(true)
+    expect(safetyLayer(session).onBeforeRequest?.(req('https://dangerous.atelier.test/'))).toBeNull()
     // Only that host, and only in that session.
     expect(safety.blocks(session, 'https://phishing.testing.google.test/')).toBe(true)
-    expect(safety.blocks(other, 'https://dangerous.apex.test/')).toBe(true)
+    expect(safety.blocks(other, 'https://dangerous.atelier.test/')).toBe(true)
   })
 })
 
@@ -98,7 +98,7 @@ describe('classifyDownload', () => {
     const listed = (host: string): boolean => host === 'bad.example'
     expect(classifyDownload(d('report.pdf', { url: 'https://bad.example/r.pdf' }), listed)).toBe('dangerous')
     expect(classifyDownload(d('report.pdf', { referrer: 'https://bad.example/page' }), listed)).toBe('dangerous')
-    expect(safety.classifyDownload(d('report.pdf', { url: 'https://dangerous.apex.test/r.pdf' }))).toBe('dangerous')
+    expect(safety.classifyDownload(d('report.pdf', { url: 'https://dangerous.atelier.test/r.pdf' }))).toBe('dangerous')
     expect(safety.classifyDownload(d('report.pdf'))).toBe('none')
   })
 })

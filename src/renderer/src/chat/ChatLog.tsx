@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -64,7 +64,7 @@ export interface ChatLogProps {
   empty: ReactNode
   /** Above the messages (the panel's API-key notice, for example). */
   lead?: ReactNode
-  /** CH-13: a message to scroll to and highlight (apex://chat/<id>#<message>). */
+  /** CH-13: a message to scroll to and highlight (atelier://chat/<id>#<message>). */
   anchor?: string | null
   /** SS-03's New chat action (a chat too long to go on). */
   onNewChat?(): void
@@ -697,7 +697,7 @@ function ReplyItem({ chatId, item, context }: { chatId: string; item: LogItem; c
           <span>{item.text}</span>
           {item.code === 'too-long' && <CompactAction chatId={chatId} /> /* SS-03: Compact and continue */}
           {mentionsApiKey(item.text) && (
-            <Button size="sm" onClick={() => void call('pages', 'open', 'apex://settings/model')}>{t('chat.log.openSettings')}</Button>
+            <Button size="sm" onClick={() => void call('pages', 'open', 'atelier://settings/model')}>{t('chat.log.openSettings')}</Button>
           )}
         </div>
       )
@@ -802,7 +802,7 @@ function ReplyFooter({ onAct, chatId, block, state, companion, name, running }: 
   const openMemory = (path: string): void => {
     const where = memoryLocation(path, companionId)
     // The companion's own notes are on its card, over the page; shared notes live in Settings.
-    if (where.owner === 'shared' || !companionId) void call('pages', 'open', 'apex://settings/memory')
+    if (where.owner === 'shared' || !companionId) void call('pages', 'open', 'atelier://settings/memory')
     else shell.openCompanionCard(companionId, 'memory')
   }
 
@@ -906,7 +906,7 @@ function ReplyFooter({ onAct, chatId, block, state, companion, name, running }: 
               {details.missing > 0 && <p className="chat-details__note">{t('chat.log.someStepsOfThis')}</p>}
             </dl>
           ) : (
-            <p className="chat-details__note">{t('chat.log.apexDidnTKeep')}</p>
+            <p className="chat-details__note">{t('chat.log.atelierDidnTKeep')}</p>
           )}
           {companion === null && <p className="chat-details__note">{t('chat.log.theCompanionThatWrote')}</p>}
         </div>

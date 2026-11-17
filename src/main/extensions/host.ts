@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -83,7 +83,7 @@ export interface HostDeps {
   contents?(tabId: number): WebContents | null
   /** A frame by its process and routing ids (webFrameMain.fromId), for webNavigation's events. */
   frameById?(processId: number, routingId: number): NavFrame | null
-  /** Apex's own value for a browser setting that chrome.privacy reports when no extension holds it. */
+  /** Atelier's own value for a browser setting that chrome.privacy reports when no extension holds it. */
   browserSetting?(profileId: string, key: PrivacyKey): boolean
 }
 
@@ -178,7 +178,7 @@ class Profile {
     readonly session: Session,
     readonly dir: string,
   ) {
-    this.store = new ExtensionStateStore(join(dir, 'apex-state.json'))
+    this.store = new ExtensionStateStore(join(dir, 'atelier-state.json'))
   }
 }
 
@@ -297,7 +297,7 @@ export class ExtensionsHost {
     if (!known) return false
     // Unsupported extensions stay installed but never run (OV-16): no half-working.
     if (!known.compat.supported) return false
-    // Store installs are Apex's own copy: one installed before the content-script prelude existed gets it now.
+    // Store installs are Atelier's own copy: one installed before the content-script prelude existed gets it now.
     if (profile.store.get(id)?.source === 'store') {
       try {
         applyContentCompat(known.dir)
@@ -419,7 +419,7 @@ export class ExtensionsHost {
     } catch (err) {
       log.warn('extensions', 'Clearing an extension’s data failed', { id, error: err instanceof Error ? err.message : String(err) })
     }
-    // Store installs are Apex's own copy; an unpacked folder is the developer's and stays.
+    // Store installs are Atelier's own copy; an unpacked folder is the developer's and stays.
     if (rec?.source !== 'unpacked') rmSync(join(profile.dir, id), { recursive: true, force: true })
     profile.store.remove(id)
     profile.known.delete(id)
@@ -584,7 +584,7 @@ export class ExtensionsHost {
     const worker = profile.workers.get(id)
     if (worker && !worker.isDestroyed()) return send(worker)
     if (worker) profile.workers.delete(id)
-    // An MV3 worker stops when idle; Chrome wakes it for a click or a command, and so does Apex.
+    // An MV3 worker stops when idle; Chrome wakes it for a click or a command, and so does Atelier.
     const sw = profile.session.serviceWorkers as Partial<Pick<Electron.ServiceWorkers, 'startWorkerForScope'>> | undefined
     if (!sw?.startWorkerForScope || !this.isLoaded(profile.id, id)) return
     sw.startWorkerForScope(`chrome-extension://${id}/`).then(
@@ -1077,7 +1077,7 @@ export class ExtensionsHost {
     }
   }
 
-  /** The folder an extension runs from (Apex's copy for store installs). */
+  /** The folder an extension runs from (Atelier's copy for store installs). */
   dirOf(profileId: string, id: string): string | null {
     return this.#profiles.get(profileId)?.known.get(id)?.dir ?? null
   }
@@ -1114,7 +1114,7 @@ export class ExtensionsHost {
     return out
   }
 
-  #apexValue(profileId: string, key: PrivacyKey): boolean {
+  #atelierValue(profileId: string, key: PrivacyKey): boolean {
     try {
       return this.#deps.browserSetting?.(profileId, key) ?? true
     } catch {
@@ -1126,7 +1126,7 @@ export class ExtensionsHost {
     const { profile } = this.#need(profileId, id)
     this.#requirePermission(profileId, id, 'privacy')
     if (!isPrivacyKey(key)) throw new Error(`Unknown setting ${key}.`)
-    return settingDetails(key, this.#apexValue(profileId, key), this.#holds(profile, key), { id, installedAt: profile.store.get(id)?.installedAt ?? 0 })
+    return settingDetails(key, this.#atelierValue(profileId, key), this.#holds(profile, key), { id, installedAt: profile.store.get(id)?.installedAt ?? 0 })
   }
 
   privacySet(profileId: string, id: string, key: string, details: { value?: unknown; scope?: unknown }): void {
@@ -1154,7 +1154,7 @@ export class ExtensionsHost {
     this.#settingChanged(profile, key)
   }
 
-  /** The running extension whose value of a setting is in force, with that value; null when Apex's own applies. */
+  /** The running extension whose value of a setting is in force, with that value; null when Atelier's own applies. */
   settingController(profileId: string, key: PrivacyKey): { extensionId: string; name: string; value: unknown } | null {
     const profile = this.#profiles.get(profileId)
     if (!profile) return null
@@ -1163,7 +1163,7 @@ export class ExtensionsHost {
     return { extensionId: win.extensionId, name: profile.known.get(win.extensionId)?.name ?? win.extensionId, value: win.value }
   }
 
-  /** The running extension that turned the browser's password saving off, or null: Apex's own password offers step aside for it. */
+  /** The running extension that turned the browser's password saving off, or null: Atelier's own password offers step aside for it. */
   passwordSavingHeldOff(profileId: string): { extensionId: string; name: string } | null {
     const c = this.settingController(profileId, 'services.passwordSavingEnabled')
     return c && c.value === false ? { extensionId: c.extensionId, name: c.name } : null

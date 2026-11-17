@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { useMemo, type ReactElement, type ReactNode } from 'react'
 import { ArrowLeft, Lightbulb } from 'lucide-react'
 import { FIRST_WEEK_GUIDES, guideById, guideUrl } from '@shared/firstWeek'
 import { parseGuide, type GuideBlock, type GuideInline } from '@shared/guideMarkdown'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { toast } from '../ui'
 import { GuideScene } from './scenes'
 import { GuideCard } from './Tutorials'
@@ -17,7 +17,7 @@ import { currentLanguage } from '@shared/i18n/core'
 
 // The guides ship with the chrome as Markdown, bundled at build time.
 const SOURCES = import.meta.glob<string>('./guides/*.md', { query: '?raw', import: 'default', eager: true })
-/** The Dutch guides, read when Apex speaks Dutch; English stands in for one that is missing. */
+/** The Dutch guides, read when Atelier speaks Dutch; English stands in for one that is missing. */
 const SOURCES_NL = import.meta.glob<string>('./guides/nl/*.md', { query: '?raw', import: 'default', eager: true })
 
 /** A guide's Markdown in the app language, with {brand} filled in (src/shared/branding.ts). */
@@ -98,7 +98,7 @@ export function GuidePage({ id, tabId }: { id: string; tabId: string }): ReactEl
   const next = FIRST_WEEK_GUIDES[(index + 1) % FIRST_WEEK_GUIDES.length]
   return (
     <article className="fw-guide">
-      <button type="button" className="fw-guide__back" onClick={() => openPage('apex://first-week')}>
+      <button type="button" className="fw-guide__back" onClick={() => openPage('atelier://first-week')}>
         <ArrowLeft size={15} aria-hidden />
         {t('firstRun.weekGuidePage.gettingStarted')}
       </button>
@@ -112,7 +112,7 @@ export function GuidePage({ id, tabId }: { id: string; tabId: string }): ReactEl
       {next && next.id !== id && (
         <footer className="fw-guide__next">
           <p className="fw-guide__next-label">{t('firstRun.weekGuidePage.upNext')}</p>
-          <GuideCard guide={next} onOpen={() => void apex.nav.go(tabId, guideUrl(next.id))} />
+          <GuideCard guide={next} onOpen={() => void atelier.nav.go(tabId, guideUrl(next.id))} />
         </footer>
       )}
     </article>

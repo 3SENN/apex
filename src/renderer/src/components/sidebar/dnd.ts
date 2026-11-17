@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -31,7 +31,7 @@ export function accepts(zone: Zone, entry: DragEntry | null): boolean {
 }
 
 /** The drag data type of a dragged tab or chat: the overlay's split zones accept it too. */
-export const ENTRY_DRAG_TYPE = 'application/x-apex-entry'
+export const ENTRY_DRAG_TYPE = 'application/x-atelier-entry'
 // dragover can't read dataTransfer contents, so the entry is kept here too.
 let current: DragEntry | null = null
 /** Set when a list took the drop, so the tear-off knows it was only a reorder (SH-30). */

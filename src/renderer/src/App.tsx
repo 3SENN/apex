@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import { DEFAULT_PROFILE, type Companion } from '@shared/companion'
 import type { SettingsView, TabInfo, TabsSnapshot, WindowState } from '@shared/ipc'
 import type { Bookmark, DownloadInfo, PeekState, Routine } from '@shared/services'
 import { chatUrl, isBlankUrl, isInternalUrl, parseInternalUrl } from '@shared/url'
-import { apex, call, errorText } from './api'
+import { atelier, call, errorText } from './api'
 import { AgentPanel } from './components/AgentPanel'
 import { BookmarksBar } from './components/bars/BookmarksBar'
 import { Rail as NavRail } from './components/rail/Rail'
@@ -42,7 +42,7 @@ import { useVoicePanel } from './voice/useVoicePanel'
 import { Button, Dialog, MOTION, UiHost, applyMotionSetting, applyProfileHue, cx, followFrames, toast, useLayerPresence } from './ui'
 import { useT } from './i18n/useT'
 
-const PANEL_OPEN_KEY = 'apex.agentOpen'
+const PANEL_OPEN_KEY = 'atelier.agentOpen'
 const CLOSED_PEEK: PeekState = { open: false, url: '', title: '', loading: false }
 
 function readPanelOpen(): boolean {
@@ -191,11 +191,11 @@ function RenameWindowDialog({ open, current, onClose }: { open: boolean; current
 
 export function App(): ReactElement {
   const t = useT()
-  const [allTabs, setSnapshot] = useState<TabsSnapshot>(apex.initial.tabs)
+  const [allTabs, setSnapshot] = useState<TabsSnapshot>(atelier.initial.tabs)
   // The chrome shows only the active space's tabs (pinned tabs stay in every space).
   const snapshot = useSpaceSnapshot(allTabs)
-  const [settings, setSettings] = useState<SettingsView>(apex.initial.settings)
-  const [windowState, setWindowState] = useState<WindowState>(apex.initial.window)
+  const [settings, setSettings] = useState<SettingsView>(atelier.initial.settings)
+  const [windowState, setWindowState] = useState<WindowState>(atelier.initial.window)
   const [chats, setChats] = useState<ChatSummary[] | null>(null)
   const [companions, setCompanions] = useState<{ list: Companion[]; activeId: string }>({ list: [], activeId: '' })
   const [routines, setRoutines] = useState<Routine[]>([])
@@ -214,12 +214,12 @@ export function App(): ReactElement {
   const slots = useRef<Record<Slot, HTMLDivElement | null>>({ primary: null, secondary: null })
   const peekFrame = useRef<HTMLDivElement>(null)
   const windowWidth = useWindowWidth()
-  const isMac = apex.platform === 'darwin'
+  const isMac = atelier.platform === 'darwin'
 
   useEffect(() => {
     const offs = [
-      apex.tabs.onChanged(setSnapshot),
-      apex.onAppEvent((event) => {
+      atelier.tabs.onChanged(setSnapshot),
+      atelier.onAppEvent((event) => {
         switch (event.type) {
           case 'settings':
             setSettings(event.view)
@@ -256,7 +256,7 @@ export function App(): ReactElement {
     ]
     const warn = (what: string) => (err: unknown): void => console.warn(`${what} could not be loaded:`, errorText(err))
     // The initial state may be a beat old by the time React runs; refresh the parts that move.
-    void apex.settings.get().then(setSettings, warn('Settings'))
+    void atelier.settings.get().then(setSettings, warn('Settings'))
     void call('window', 'state').then(setWindowState, warn('The window state'))
     // The same set the 'chats' event carries: archived chats too (their open pages are not drafts).
     void Promise.all([call('chats', 'list', { limit: 1000 }), call('chats', 'list', { status: 'archived', limit: 1000 })]).then(([live, archived]) => setChats((current) => current ?? [...live, ...archived]), (err: unknown) => {
@@ -270,7 +270,7 @@ export function App(): ReactElement {
     return () => offs.forEach((off) => off())
   }, [])
 
-  // Apex's own Reduce Motion and the profile hue apply live (both are on <html> before the first render).
+  // Atelier's own Reduce Motion and the profile hue apply live (both are on <html> before the first render).
   useLayoutEffect(() => {
     applyMotionSetting(settings.reduceMotion)
     applyProfileHue(settings.profileHue)
@@ -282,7 +282,7 @@ export function App(): ReactElement {
 
   const realActiveTab = snapshot.tabs.find((t) => t.id === snapshot.activeId) ?? null
   // DS-99: a destination shows on its own surface over the content area. The
-  // toolbar and pill read it as the current page ("Apex / ‹page›"); the tab
+  // toolbar and pill read it as the current page ("Atelier / ‹page›"); the tab
   // behind it stays as it was and comes back on Back, ⌘W or any tab or chat.
   const rail = snapshot.rail ?? null
   const activeTab: TabInfo | null = rail && realActiveTab
@@ -340,7 +340,7 @@ export function App(): ReactElement {
 
   useEffect(
     () =>
-      apex.onCommand((command) => {
+      atelier.onCommand((command) => {
         if (command === 'focus-omnibox') toolbar.current?.focusOmnibox()
         else if (command === 'toggle-agent') togglePanel()
         // The panel starts a fresh chat on this command itself; App only opens it.
@@ -428,7 +428,7 @@ export function App(): ReactElement {
       const key = JSON.stringify(layout)
       if (key === lastKey) return
       lastKey = key
-      apex.layout.setLayout(layout)
+      atelier.layout.setLayout(layout)
     }
     layoutReport.current = report
     report()
@@ -473,20 +473,20 @@ export function App(): ReactElement {
   // DS-74: a chat asked on the new tab takes over that tab as its chat page,
   // and the page's composer glides in from where the ask field was.
   const ask = (tabId: string, text: string, companionId: string): void => {
-    void apex.agent.start(text, { companionId: companionId || undefined }).then(
+    void atelier.agent.start(text, { companionId: companionId || undefined }).then(
       (chatId) => {
         const handoff = takeAskHandoff(tabId)
         const rectOf = (r: { left: number; top: number; width: number; height: number }): DOMRect => DOMRect.fromRect({ x: r.left, y: r.top, width: r.width, height: r.height })
         if (handoff) noteComposerOrigin(chatId, rectOf(handoff.rect))
         // DS-73: the figure that stood on the new tab flies into the first reply's face once the chat page shows it.
         if (handoff?.figure) noteStanding(chatId, rectOf(handoff.figure.rect), handoff.figure.image, 4000)
-        void apex.nav.go(tabId, chatUrl(chatId))
+        void atelier.nav.go(tabId, chatUrl(chatId))
       },
       (err: unknown) => toast.show({ message: t('core.app.couldnTStartThe', { value: errorText(err) }), tone: 'error' }),
     )
   }
 
-  // The companion card: from the avatar, or an apex://companion/<id>/<section> tab.
+  // The companion card: from the avatar, or an atelier://companion/<id>/<section> tab.
   const activeRoute = activeTab ? parseInternalUrl(activeTab.url) : null
   const routeCard = activeRoute?.page === 'companion' && activeRoute.id ? { companionId: activeRoute.id, section: activeRoute.section, item: activeRoute.item } : null
   const shownCard = card ?? routeCard
@@ -495,8 +495,8 @@ export function App(): ReactElement {
       setCard(null)
       return
     }
-    // DS-121: in an apex://companion tab, close closes the tab.
-    if (activeTab && routeCard) void apex.tabs.close(activeTab.id)
+    // DS-121: in an atelier://companion tab, close closes the tab.
+    if (activeTab && routeCard) void atelier.tabs.close(activeTab.id)
   }
 
   const bookmarked = activeTab !== null && bookmarks.some((b) => b.url === activeTab.url)
@@ -566,7 +566,7 @@ export function App(): ReactElement {
                 resizing={liveSidebarWidth !== null}
                 trafficLights={trafficRoom}
                 onWidth={setLiveSidebarWidth}
-                onWidthCommit={(sidebarWidth) => void apex.settings.set({ sidebarWidth })}
+                onWidthCommit={(sidebarWidth) => void atelier.settings.set({ sidebarWidth })}
               />
             </ErrorBoundary>
           )}
@@ -600,7 +600,7 @@ export function App(): ReactElement {
               )}
               {/* data-card-region: the area the companion card washes and floats over. */}
               <div className={cx('workspace', inset && 'workspace--inset')} data-card-region>
-                {/* SH-63: the navigation rail beside apex:// pages in the horizontal layout. */}
+                {/* SH-63: the navigation rail beside atelier:// pages in the horizontal layout. */}
                 {navRail && <NavRail snapshot={snapshot} chats={chats} routines={routines} settings={settings} bookmarks={bookmarks} />}
                 <div className={cx('content', (split || unsplitting) && 'content--split', unsplitting && 'content--unsplitting')} style={split ? splitStyle(snapshot.splitRatio) : unsplitting ? splitStyle(lastSplitRatio.current) : undefined}>
                   {rail && (
@@ -619,7 +619,7 @@ export function App(): ReactElement {
                         key={slot}
                         className={cx('pane', split && tabId === snapshot.activeId && 'pane--focused-split', split && (slot === 'primary' ? 'pane--split-left' : 'pane--split-right'), unsplitting && 'pane--split-left', rail && 'pane--behind-rail')}
                         onMouseDown={() => {
-                          if (tabId !== snapshot.activeId) void apex.tabs.activate(tabId)
+                          if (tabId !== snapshot.activeId) void atelier.tabs.activate(tabId)
                         }}
                       >
                         {/* DS-65: a website tab holding a chat shows the chat page with its page beside it. */}

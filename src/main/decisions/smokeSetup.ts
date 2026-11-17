@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,7 +11,7 @@ import { smokeRichChat } from '../agent/smokeClientRichChat'
 import { PER_MESSAGE_EFFORT_BETA } from '../agent/turnDecisions'
 import { decider } from './service'
 
-// DC-15's smoke check (APEX_SMOKE_ONLY=decisions): the effort use is off by
+// DC-15's smoke check (ATELIER_SMOKE_ONLY=decisions): the effort use is off by
 // default; switched on, the stand-in model is sure every message needs no
 // thinking (level 0), so a message on the API key runs at low through an
 // effort-only system message the chat keeps, while the request's own effort

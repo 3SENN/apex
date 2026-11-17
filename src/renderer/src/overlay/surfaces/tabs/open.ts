@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import type { OverlayResult, SurfaceAnchor, SurfaceId, SurfaceProps } from '@shared/overlay'
-import { apex } from '../../../api'
+import { atelier } from '../../../api'
 
 // The chrome's handle on one open tabs surface: its id for updates and
 // close, and its result. Null when the overlay host isn't available (before
@@ -23,7 +23,7 @@ let listening = false
 function listen(): void {
   if (listening) return
   listening = true
-  apex.overlay.onResult((r) => {
+  atelier.overlay.onResult((r) => {
     waiting.get(r.instanceId)?.(r)
     waiting.delete(r.instanceId)
   })
@@ -32,14 +32,14 @@ function listen(): void {
 export async function openTabsSurface<S extends SurfaceId>(surface: S, anchor: SurfaceAnchor, props: SurfaceProps<S>): Promise<OpenSurface | null> {
   listen()
   try {
-    const { instanceId } = await apex.overlay.open(surface, anchor, props)
+    const { instanceId } = await atelier.overlay.open(surface, anchor, props)
     const result = new Promise<OverlayResult>((resolve) => waiting.set(instanceId, resolve))
     return {
       instanceId,
       result,
-      update: (next) => apex.overlay.update(instanceId, next),
+      update: (next) => atelier.overlay.update(instanceId, next),
       close: () => {
-        apex.overlay.close(instanceId)
+        atelier.overlay.close(instanceId)
         waiting.get(instanceId)?.({ instanceId, dismissed: 'closed' })
         waiting.delete(instanceId)
       },

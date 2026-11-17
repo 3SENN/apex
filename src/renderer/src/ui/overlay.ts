@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { useEffect } from 'react'
-import { apex } from '../api'
+import { atelier } from '../api'
 import { createRefCount } from './logic/queues'
 
 // Web pages are native views drawn above the chrome, so anything the chrome
@@ -24,12 +24,12 @@ let legacy = false
 
 function sync(): void {
   if (legacy) {
-    apex.layout.setOverlayOpen(want)
+    atelier.layout.setOverlayOpen(want)
     return
   }
   if (want && coverId === null && !opening) {
     opening = true
-    apex.overlay.open('cover', { kind: 'window', rect: { x: 0, y: 0, width: 0, height: 0 } }, {}).then(
+    atelier.overlay.open('cover', { kind: 'window', rect: { x: 0, y: 0, width: 0, height: 0 } }, {}).then(
       ({ instanceId }) => {
         opening = false
         coverId = instanceId
@@ -42,7 +42,7 @@ function sync(): void {
       },
     )
   } else if (!want && coverId !== null) {
-    apex.overlay.close(coverId)
+    atelier.overlay.close(coverId)
     coverId = null
   }
 }
@@ -51,7 +51,7 @@ let listening = false
 function listen(): void {
   if (listening) return
   listening = true
-  apex.overlay.onResult((r) => {
+  atelier.overlay.onResult((r) => {
     if (r.instanceId !== coverId) return
     coverId = null
     // A cover that timed out or crashed falls back to hiding the pages directly.

@@ -1,14 +1,14 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Builds native/calendar/build/apex-calendar, Apex's read-only Calendar and
+// Builds native/calendar/build/atelier-calendar, Atelier's read-only Calendar and
 // Reminders helper, a universal macOS binary, with Apple's
 // swiftc. electron-builder copies it into the app's Resources next to
-// apex-speech (mac.extraResources). On other platforms there is nothing to build.
-//   APEX_CALENDAR_ARCHS=arm64 node scripts/build-calendar-helper.mjs   one slice, for a quick check
-// APEX_CALENDAR_SIGN_IDENTITY signs with a real identity and the hardened
+// atelier-speech (mac.extraResources). On other platforms there is nothing to build.
+//   ATELIER_CALENDAR_ARCHS=arm64 node scripts/build-calendar-helper.mjs   one slice, for a quick check
+// ATELIER_CALENDAR_SIGN_IDENTITY signs with a real identity and the hardened
 // runtime (the release build does this); without it the binary is signed ad hoc.
 import { execFileSync } from 'node:child_process'
 import { mkdirSync, readdirSync, renameSync, rmSync } from 'node:fs'
@@ -18,13 +18,13 @@ import { fileURLToPath } from 'node:url'
 import { helperInfoPlist } from './release/bundle.mjs'
 
 if (process.platform !== 'darwin') {
-  console.log('apex-calendar: macOS only, skipping.')
+  console.log('atelier-calendar: macOS only, skipping.')
   process.exit(0)
 }
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', 'native', 'calendar')
 const out = join(root, 'build')
-// The bundle id is <APEX_BUNDLE_ID>.calendar (com.sennechin.apex.calendar by default; scripts/release/bundle.mjs).
+// The bundle id is <ATELIER_BUNDLE_ID>.calendar (com.sennechin.atelier.calendar by default; scripts/release/bundle.mjs).
 const infoPlist = helperInfoPlist(join(root, 'Info.plist'), join(out, 'plist'), 'calendar')
 mkdirSync(out, { recursive: true })
 
@@ -32,11 +32,11 @@ const sources = readdirSync(root)
   .filter((name) => name.endsWith('.swift'))
   .sort()
   .map((name) => join(root, name))
-if (!sources.some((file) => file.endsWith('/main.swift'))) throw new Error('apex-calendar: main.swift is missing.')
+if (!sources.some((file) => file.endsWith('/main.swift'))) throw new Error('atelier-calendar: main.swift is missing.')
 
-const archs = (process.env.APEX_CALENDAR_ARCHS ?? 'arm64,x86_64').split(',').map((a) => a.trim()).filter(Boolean)
+const archs = (process.env.ATELIER_CALENDAR_ARCHS ?? 'arm64,x86_64').split(',').map((a) => a.trim()).filter(Boolean)
 const slices = archs.map((arch) => {
-  const target = join(out, `apex-calendar-${arch}`)
+  const target = join(out, `atelier-calendar-${arch}`)
   execFileSync(
     'xcrun',
     [
@@ -53,13 +53,13 @@ const slices = archs.map((arch) => {
   return target
 })
 
-const universal = join(out, 'apex-calendar')
+const universal = join(out, 'atelier-calendar')
 if (slices.length === 1) {
   renameSync(slices[0], universal)
 } else {
   execFileSync('lipo', ['-create', ...slices, '-output', universal], { stdio: 'inherit' })
   for (const slice of slices) rmSync(slice)
 }
-const identity = process.env.APEX_CALENDAR_SIGN_IDENTITY
+const identity = process.env.ATELIER_CALENDAR_SIGN_IDENTITY
 execFileSync('codesign', identity ? ['--force', '--options', 'runtime', '--timestamp', '--sign', identity, universal] : ['--force', '--sign', '-', universal], { stdio: 'inherit' })
-console.log(`apex-calendar: built ${universal} (${archs.join(', ')}) from ${sources.length} files`)
+console.log(`atelier-calendar: built ${universal} (${archs.join(', ')}) from ${sources.length} files`)

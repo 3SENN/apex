@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import { PREVIEW_CSP, sandboxedDocument } from '@shared/filesLogic'
 import { markdownDocument } from '../src/main/artifacts/markdownHtml'
 import { ARTIFACT_CSP, artifactDocument, artifactHeaders, artifactNavigationAllowed, artifactRequestAllowed, withTitle } from '../src/main/artifacts/policy'
 
-// Artifacts: apex-artifact://<fileId>/ in the in-memory apex-artifacts
+// Artifacts: atelier-artifact://<fileId>/ in the in-memory atelier-artifacts
 // partition. Every request but the artifact's own is cancelled, navigation
 // stays on the page, and the document's policy keeps it off the network.
 
@@ -17,15 +17,15 @@ const ID = '9b2f3c1e-4d5a-4b6c-8d7e-0f1a2b3c4d5e'
 
 describe('artifact addresses', () => {
   it('round-trips a Library file id and refuses anything else', () => {
-    expect(artifactUrl(ID.toUpperCase())).toBe(`apex-artifact://${ID}/`)
+    expect(artifactUrl(ID.toUpperCase())).toBe(`atelier-artifact://${ID}/`)
     expect(artifactIdOf(artifactUrl(ID))).toBe(ID)
-    expect(artifactIdOf(`apex-artifact://${ID}/index.html#part`)).toBe(ID)
-    expect(artifactIdOf(`apex-artifact://${ID}/other.js`)).toBeNull()
-    expect(artifactIdOf('apex-artifact://not-an-id/')).toBeNull()
+    expect(artifactIdOf(`atelier-artifact://${ID}/index.html#part`)).toBe(ID)
+    expect(artifactIdOf(`atelier-artifact://${ID}/other.js`)).toBeNull()
+    expect(artifactIdOf('atelier-artifact://not-an-id/')).toBeNull()
     expect(artifactIdOf(`https://${ID}/`)).toBeNull()
     expect(isArtifactUrl(artifactUrl(ID))).toBe(true)
-    expect(isArtifactUrl('apex://file?src=x')).toBe(false)
-    expect(ARTIFACTS_PARTITION).toBe('apex-artifacts')
+    expect(isArtifactUrl('atelier://file?src=x')).toBe(false)
+    expect(ARTIFACTS_PARTITION).toBe('atelier-artifacts')
   })
 })
 
@@ -34,8 +34,8 @@ describe('the artifact request filter', () => {
     const allowed = (url: string): boolean => artifactRequestAllowed({ url, resourceType: 'script' })
     expect(allowed(artifactUrl(ID))).toBe(true)
     expect(allowed('data:image/png;base64,AA==')).toBe(true)
-    expect(allowed('blob:apex-artifact://x/1')).toBe(true)
-    for (const url of ['https://example.test/x.js', 'http://127.0.0.1:9/', 'ws://127.0.0.1/', 'file:///etc/hosts', 'apex://settings', 'apex-file://0123456789abcdef0123456789abcdef/a.png', 'chrome-extension://x/y']) {
+    expect(allowed('blob:atelier-artifact://x/1')).toBe(true)
+    for (const url of ['https://example.test/x.js', 'http://127.0.0.1:9/', 'ws://127.0.0.1/', 'file:///etc/hosts', 'atelier://settings', 'atelier-file://0123456789abcdef0123456789abcdef/a.png', 'chrome-extension://x/y']) {
       expect(allowed(url), url).toBe(false)
     }
   })
@@ -52,9 +52,9 @@ describe('the artifact request filter', () => {
 describe('artifact documents', () => {
   it('carries the sandbox policy on every response', () => {
     expect(ARTIFACT_CSP).toContain("default-src 'none'")
-    expect(ARTIFACT_CSP).toContain("script-src 'unsafe-inline' apex-artifact:")
-    expect(ARTIFACT_CSP).toContain("style-src 'unsafe-inline' apex-artifact:")
-    expect(ARTIFACT_CSP).toContain('img-src apex-artifact: data: blob:')
+    expect(ARTIFACT_CSP).toContain("script-src 'unsafe-inline' atelier-artifact:")
+    expect(ARTIFACT_CSP).toContain("style-src 'unsafe-inline' atelier-artifact:")
+    expect(ARTIFACT_CSP).toContain('img-src atelier-artifact: data: blob:')
     expect(ARTIFACT_CSP).not.toMatch(/connect-src|https?:/)
     const headers = artifactHeaders('text/html; charset=utf-8')
     expect(headers['content-security-policy']).toBe(ARTIFACT_CSP)

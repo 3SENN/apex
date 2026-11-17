@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // This Mac's permissions in one place (Settings › Privacy › Permissions): the
-// macOS permissions Apex uses, what main reads for each without prompting,
+// macOS permissions Atelier uses, what main reads for each without prompting,
 // and the pure rule from a status to the one thing its row offers. Calendars
 // and Reminders come from the calendar service; the rest from
 // systemPermissions.status(). Unit-tested in tests/systemPermissions.test.ts.
@@ -23,22 +23,22 @@ export const SYSTEM_REQUESTABLE: readonly SystemRequestable[] = ['microphone', '
 export interface SystemPermissionsReport {
   /** False off macOS: the page then shows only the website permissions. */
   supported: boolean
-  /** As Electron reads them for Apex itself; 'unknown' when macOS gives no answer. */
+  /** As Electron reads them for Atelier itself; 'unknown' when macOS gives no answer. */
   microphone: Perm | 'unknown'
   camera: Perm | 'unknown'
   /** Through the speech helper; null when the helper isn't part of this build or can't start. */
   speech: Perm | null
   /**
    * macOS reads the Screen Recording grant once per process: `helper` is a
-   * freshly started helper's view, `app` is Apex's own, so a grant the
-   * helper sees and Apex doesn't needs a relaunch.
+   * freshly started helper's view, `app` is Atelier's own, so a grant the
+   * helper sees and Atelier doesn't needs a relaunch.
    */
   screen: { app: 'granted' | 'denied'; helper: 'granted' | 'denied' | null }
   /** Location Services from the helper; null when it doesn't report it. */
   location: Perm | null
-  /** macOS doesn't tell an app whether its notifications are on: 'denied' only when Apex saw them fail. */
+  /** macOS doesn't tell an app whether its notifications are on: 'denied' only when Atelier saw them fail. */
   notifications: 'allowed' | 'denied' | 'unknown'
-  /** Whether Safari's files open (the only thing Apex needs it for); 'unknown' without Safari. */
+  /** Whether Safari's files open (the only thing Atelier needs it for); 'unknown' without Safari. */
   fullDisk: 'granted' | 'denied' | 'unknown'
 }
 
@@ -68,7 +68,7 @@ export const SYSTEM_PRIVACY_PANES: Record<SystemPermission, string> = {
 
 /**
  * What a row says: macOS's answer, 'relaunch' for a Screen Recording grant
- * Apex sees only after restarting, 'unknown' where macOS doesn't tell apps,
+ * Atelier sees only after restarting, 'unknown' where macOS doesn't tell apps,
  * 'managed' for Location without a report, 'unavailable' without the helper.
  */
 export type SystemRowState = 'granted' | 'denied' | 'restricted' | 'not-determined' | 'relaunch' | 'unknown' | 'managed' | 'unavailable'
@@ -86,13 +86,13 @@ export interface SystemRowInput {
   report: SystemPermissionsReport
   /** null while it loads or when the calendar service failed. */
   calendar: CalendarStatus | null
-  /** Main's own Screen Recording answer (speech.screenAccess), which remembers whether Apex asked; null where it isn't offered. */
+  /** Main's own Screen Recording answer (speech.screenAccess), which remembers whether Atelier asked; null where it isn't offered. */
   screenAccess?: ScreenAccess | null
-  /** Without it: Apex already asked for Screen Recording from Settings (macOS prompts only the first time). */
+  /** Without it: Atelier already asked for Screen Recording from Settings (macOS prompts only the first time). */
   screenAsked: boolean
 }
 
-/** A plain macOS answer: ask when it never asked (and Apex can), System Settings when it's off. */
+/** A plain macOS answer: ask when it never asked (and Atelier can), System Settings when it's off. */
 function fromPerm(kind: SystemPermission, perm: Perm | 'unknown', canAsk: boolean): SystemRow {
   if (perm === 'granted') return { kind, state: 'granted', action: 'none' }
   if (perm === 'denied') return { kind, state: 'denied', action: 'open-settings' }
@@ -123,11 +123,11 @@ export function systemPermissionRow(kind: SystemPermission, { report, calendar, 
       if (screenAccess) return fromScreenAccess(screenAccess)
       if (report.screen.app === 'granted') return { kind, state: 'granted', action: 'none' }
       if (report.screen.helper === 'granted') return { kind, state: 'relaunch', action: 'relaunch' }
-      // macOS has no "not asked yet" for Screen Recording: Apex remembers whether it asked.
+      // macOS has no "not asked yet" for Screen Recording: Atelier remembers whether it asked.
       return screenAsked ? { kind, state: 'denied', action: 'open-settings' } : { kind, state: 'not-determined', action: 'allow' }
     }
     case 'location':
-      // Apex can't ask on its own: macOS asks the first time a site you allow wants your location.
+      // Atelier can't ask on its own: macOS asks the first time a site you allow wants your location.
       return report.location === null ? { kind, state: 'managed', action: 'open-settings' } : fromPerm(kind, report.location, false)
     case 'calendars':
     case 'reminders': {

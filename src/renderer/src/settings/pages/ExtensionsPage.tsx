@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 // Settings › Extensions (ST-40): open the Web Store, search, and one
 // row per extension with its icon, name and version, an enable switch, an
 // expandable permissions panel (what it can do, what it may ask for, site
-// access, its shortcuts and any clash with Apex's own keys), revoke one or
+// access, its shortcuts and any clash with Atelier's own keys), revoke one or
 // every optional permission, and Remove, which confirms first and clears
 // what the extension saved. Empty and no-results states; the list follows
 // main's `extensions` event live.
@@ -241,7 +241,7 @@ function PermissionsPanel({ ext, onRevoke }: { ext: ExtensionInfo; onRevoke(perm
   )
 }
 
-/** The Apex shortcut's own name for a clash, or its id when it has none. */
+/** The Atelier shortcut's own name for a clash, or its id when it has none. */
 function clashName(id: string, t: ReturnType<typeof useT>): string {
   const def = SHORTCUTS.find((s) => s.id === id)
   return def ? t(def.label) : id
@@ -270,7 +270,7 @@ function ShortcutsPanel({ ext }: { ext: ExtensionInfo }): ReactElement {
   )
 }
 
-/** Packs (docs/packs.md): Apex's own add-ons, next to the Web Store ones. */
+/** Packs (docs/packs.md): Atelier's own add-ons, next to the Web Store ones. */
 function PacksSection(): ReactElement {
   const t = useT()
   const state = useResource<PacksState>(() => call('packs', 'state'))

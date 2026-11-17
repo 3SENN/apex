@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import type { TabInfo, TabsSnapshot } from '@shared/ipc'
 import type { Bookmark } from '@shared/services'
 import type { TabGroup } from '@shared/tabs'
 import { ArrowDownToLine, Plus, Unlink2, Volume2, VolumeX, X } from 'lucide-react'
-import { apex, call } from '../../api'
+import { atelier, call } from '../../api'
 import { t } from '../../i18n/useT'
 import { tabFace } from './logic/tabFace' // DS-67
 import { MOTION, RelativeTime, Skeleton, StatusDot, cx, usePresenceList, type PresencePhase } from '../../ui'
@@ -122,7 +122,7 @@ function rowEvents(tab: TabInfo, { snapshot, bookmarks, shownTabs, order, onGrou
     onAuxClick: (e: MouseEvent) => {
       if (e.button !== 1) return
       e.preventDefault()
-      void apex.tabs.close(tab.id)
+      void atelier.tabs.close(tab.id)
     },
     onContextMenu: menu ? (e: MouseEvent) => void openTabMenu(e, { tab, snapshot, shown: shownTabs, bookmarks, onGroupCreated }) : undefined,
   }
@@ -247,7 +247,7 @@ export function NewTabRow({ focusable }: { focusable: boolean }): ReactElement {
       className="side-row new-tab-row"
       data-sidebar-row
       tabIndex={focusable ? 0 : -1}
-      onClick={() => void apex.tabs.create(undefined, { position: 'top' }).then(shell.focusAddress)}
+      onClick={() => void atelier.tabs.create(undefined, { position: 'top' }).then(shell.focusAddress)}
       title={t('tabs.sidebarTabs.newTabT')}
     >
       <span className="side-row__icon">
@@ -384,7 +384,7 @@ function TabRow({ item, active, phase, props, handlers, gapBefore, dragging, foc
         </>
       )}
       <TabBadges tab={tab} finished={props.finished.has(tab.id)} companionOfChat={props.companionOfChat} />
-      <TrailingSlot lastUsed={props.showLastUsed ? tab.lastActiveAt : null} closeLabel={t('tabs.sidebarTabs.close', { value: tab.title || 'tab' })} closeTitle="Close tab (⌘W)" onClose={() => void apex.tabs.close(tab.id)} />
+      <TrailingSlot lastUsed={props.showLastUsed ? tab.lastActiveAt : null} closeLabel={t('tabs.sidebarTabs.close', { value: tab.title || 'tab' })} closeTitle="Close tab (⌘W)" onClose={() => void atelier.tabs.close(tab.id)} />
     </div>
   )
 }

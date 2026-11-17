@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -26,7 +26,7 @@ const ID = { dark: 'eimadpbcbfnmbkopoojfekhnkhdbieeh', bw: 'nngceckbapebfimnlnii
 
 let root: string
 beforeEach(() => {
-  root = mkdtempSync(join(tmpdir(), 'apex-extimport-'))
+  root = mkdtempSync(join(tmpdir(), 'atelier-extimport-'))
 })
 afterEach(() => rmSync(root, { recursive: true, force: true }))
 
@@ -141,7 +141,7 @@ describe('reading a Chromium profile’s extensions', () => {
     ])
   })
 
-  it('reads a detected browser’s profile and marks what this Apex profile has', () => {
+  it('reads a detected browser’s profile and marks what this Atelier profile has', () => {
     const home = root
     const arc = join(home, 'Library', 'Application Support', 'Arc', 'User Data')
     mkdirSync(arc, { recursive: true })

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -364,7 +364,7 @@ export const tabsFeature: Feature = {
               pinned: t.pinned,
               audible: info.audible,
               // A tab whose screen is being shared stays awake until capture ends.
-              // An app running a web server (apex.server) stays awake too: sleeping would stop it and drop its phones.
+              // An app running a web server (atelier.server) stays awake too: sleeping would stop it and drop its phones.
               capturing: capture.camera || capture.microphone || capture.screen || captureTracker.isShared(t.id) || isServing(t.view.webContents.id),
               agentControlled: t.agentControlled,
               asleep: tabs.isAsleep(t.id),

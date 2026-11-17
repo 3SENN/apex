@@ -1,17 +1,17 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import type { UpdatesFile } from '@shared/updates'
 
-// The pending-install record (UP-02). Before quitting to install, Apex
+// The pending-install record (UP-02). Before quitting to install, Atelier
 // writes `{pending: {version, startedAt, attempts}}` to updates.json. On the
 // next start the app version tells what happened: unchanged means the
 // install failed (an error with Retry, up to three attempts); the new
 // version means it worked, so the record is cleared and what's new is armed.
 
-/** How long quitAndInstall may take before a still-running Apex calls it stuck. */
+/** How long quitAndInstall may take before a still-running Atelier calls it stuck. */
 export const INSTALL_WATCHDOG_MS = 20_000
 
 export const MAX_INSTALL_ATTEMPTS = 3

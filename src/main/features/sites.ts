@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -59,7 +59,7 @@ interface SitesRuntime {
   webSession: Session | null
   /** Stop's reload checks waiting out the grace, per tab; a new page or a closed tab cancels them. */
   stops: Map<string, ReturnType<typeof setTimeout>>
-  /** Tabs Apex muted because their site's sound is off, so it unmutes only those. */
+  /** Tabs Atelier muted because their site's sound is off, so it unmutes only those. */
   mutedBySite: WeakSet<Electron.WebContents>
   /** Tabs with a sharing bar open. */
   bars: Set<string>
@@ -367,7 +367,7 @@ function setupSitesRuntime(app: AppContext): SitesRuntime {
 }
 
 /** SH-64: another profile's session keeps its site settings in that profile's data folder. */
-const PROFILE_PARTITION = /^persist:apex-profile-(.+)$/
+const PROFILE_PARTITION = /^persist:atelier-profile-(.+)$/
 
 function installSession(s: SitesRuntime, session: Session, info: { private: boolean; partition: string }): void {
   const profileId = PROFILE_PARTITION.exec(info.partition)?.[1]

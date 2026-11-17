@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -113,7 +113,7 @@ describe('the capture tracker', () => {
     expect(changes).toEqual(['t1', 't1'])
   })
 
-  it('ignores reports from tabs Apex never granted anything', () => {
+  it('ignores reports from tabs Atelier never granted anything', () => {
     const t = new CaptureTracker()
     t.report('t9', doc('d1', [1, 1, 1], [1, 1, 1]))
     expect(anyCapture(t.state('t9'))).toBe(false)

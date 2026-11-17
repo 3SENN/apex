@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Settings › Privacy › Permissions › This Mac: one row per macOS permission
-// Apex uses, with what it is for, macOS's answer and the one thing to do
+// Atelier uses, with what it is for, macOS's answer and the one thing to do
 // about it. Allow asks macOS right after the click; a denial links to its
 // pane in System Settings; a Screen Recording grant that waits for a restart
 // offers Relaunch. Every row looks again when the window comes back.
@@ -53,10 +53,10 @@ export function MacPermissionsSection(): ReactElement {
   const ask = useConfirm()
   const report = useResource(() => call('systemPermissions', 'status'))
   const calendar = useResource<CalendarStatus | null>(() => quiet(call('calendar', 'status')))
-  // Main's own Screen Recording answer, where offered: it remembers whether Apex asked.
+  // Main's own Screen Recording answer, where offered: it remembers whether Atelier asked.
   const screen = useResource<ScreenAccess | null>(() => quiet(call('speech', 'screenAccess')))
   // Without it, the same note the Transcription checklist keeps.
-  const [screenAsked, setScreenAsked] = useLocalPreference<'yes' | 'no'>('apex.speech.screenAsked', 'no', ['yes', 'no'])
+  const [screenAsked, setScreenAsked] = useLocalPreference<'yes' | 'no'>('atelier.speech.screenAsked', 'no', ['yes', 'no'])
   const [busy, setBusy] = useState<SystemPermission | null>(null)
   const [opened, setOpened] = useState<ReadonlySet<SystemPermission>>(new Set())
   const [error, setError] = useState<string | null>(null)

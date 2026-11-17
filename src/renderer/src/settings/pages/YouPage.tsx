@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import { BRAND_NAME } from '@shared/branding'
 import { useRef, useState, type ReactElement } from 'react'
 import { ImageUp } from 'lucide-react'
 import type { SettingsView } from '@shared/ipc'
-import { apex, errorText } from '../../api'
+import { atelier, errorText } from '../../api'
 import { Button, SaveStatus, useAutosave } from '../../ui'
 import { ApiKeyCard } from '../ApiKeyCard'
 import { AboutYouSection } from '../sections/AboutYou'
@@ -46,7 +46,7 @@ async function pictureToAvatar(file: Blob): Promise<string> {
 export function YouPage({ settings, onSettings, onOpenPage }: { settings: SettingsView; onSettings(view: SettingsView): void; onOpenPage(id: 'model'): void }): ReactElement {
   const t = useT()
   const [name, setName] = useState(settings.userName)
-  const autosave = useAutosave(name.trim(), async (value) => onSettings(await apex.settings.set({ userName: value })))
+  const autosave = useAutosave(name.trim(), async (value) => onSettings(await atelier.settings.set({ userName: value })))
   const [pictureError, setPictureError] = useState<string | null>(null)
   const [pictureBusy, setPictureBusy] = useState(false)
   const fileInput = useRef<HTMLInputElement>(null)
@@ -58,7 +58,7 @@ export function YouPage({ settings, onSettings, onOpenPage }: { settings: Settin
     if (problem) return
     setPictureBusy(true)
     try {
-      onSettings(await apex.settings.set({ userAvatar: await pictureToAvatar(file) }))
+      onSettings(await atelier.settings.set({ userAvatar: await pictureToAvatar(file) }))
     } catch (err) {
       setPictureError(errorText(err))
     } finally {
@@ -68,7 +68,7 @@ export function YouPage({ settings, onSettings, onOpenPage }: { settings: Settin
   const removePicture = async (): Promise<void> => {
     setPictureError(null)
     try {
-      onSettings(await apex.settings.set({ userAvatar: null }))
+      onSettings(await atelier.settings.set({ userAvatar: null }))
     } catch (err) {
       setPictureError(errorText(err))
     }
@@ -76,7 +76,7 @@ export function YouPage({ settings, onSettings, onOpenPage }: { settings: Settin
 
   return (
     <>
-      <PageHeader title={t('settings.you.you')} description={t('settings.you.howApexRefersTo')} />
+      <PageHeader title={t('settings.you.you')} description={t('settings.you.howAtelierRefersTo')} />
       <Section title={t('settings.you.profile')}>
         <Card>
           <Row title={t('settings.you.name')} description={t('settings.you.yourCompanionsCallYou')} htmlFor="you-name">
@@ -163,7 +163,7 @@ function BudgetRow({ settings, onSettings }: { settings: SettingsView; onSetting
     }
     setError(null)
     if (value === settings.monthlyBudgetUsd) return
-    apex.settings.set({ monthlyBudgetUsd: value }).then(onSettings, (err: unknown) => setError(errorText(err)))
+    atelier.settings.set({ monthlyBudgetUsd: value }).then(onSettings, (err: unknown) => setError(errorText(err)))
   }
   return (
     <Row title={t('settings.you.monthlyBudget')} description={error ?? t('settings.you.inUsDollarsLeave')} htmlFor="you-budget">

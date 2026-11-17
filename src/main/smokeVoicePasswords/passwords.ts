@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -29,14 +29,14 @@ const SMOKE_CSV = [
 ].join('\r\n')
 
 function writeExport(): string {
-  const path = join(mkdtempSync(join(tmpdir(), 'apex-smoke-pw-')), 'Passwords.csv')
+  const path = join(mkdtempSync(join(tmpdir(), 'atelier-smoke-pw-')), 'Passwords.csv')
   writeFileSync(path, SMOKE_CSV)
   return path
 }
 
 const rows = 'return document.querySelectorAll(".sp-page .sp-item").length'
 
-async function openPasswords(ctx: SmokeContext, url = 'apex://passwords'): Promise<void> {
+async function openPasswords(ctx: SmokeContext, url = 'atelier://passwords'): Promise<void> {
   ctx.tabs.openInternal(url)
   await ctx.chrome.until(`return document.querySelector('.pw-lock, .sp-page .sp-item, .sp-page .ui-state')`, 8000, 'the Passwords page')
 }
@@ -87,7 +87,7 @@ const page: SmokeCheck = {
     assert(/^smoke-secret-[12]$/.test(shown), 'the revealed password is the saved one')
 
     // ?site= narrows the list to one site.
-    await openPasswords(ctx, 'apex://passwords?site=localhost')
+    await openPasswords(ctx, 'atelier://passwords?site=localhost')
     await ctx.chrome.until(`return document.querySelectorAll('.sp-page .sp-item').length === 1 && document.querySelector('.pw-site-chip')`, 5000, 'the ?site= filter')
     assert((await ctx.chrome.js<string>(`return document.querySelector('.sp-page .sp-item .sp-item__title-text')?.textContent || ''`)) === 'localhost', 'the filtered row is localhost')
 
@@ -131,7 +131,7 @@ const wallet: SmokeCheck = {
       email: 'smoke@example.invalid',
       tel: '',
     })
-    ctx.tabs.openInternal('apex://settings/passwords')
+    ctx.tabs.openInternal('atelier://settings/passwords')
     await ctx.chrome.until(`return document.body.innerText.includes('ending in 4242') && document.body.innerText.includes('Smoke Test, 1 Example Street')`, 8000, 'the card and address in Settings')
     assert(!(await ctx.chrome.js<boolean>(`return document.body.innerText.includes('4242 4242 4242 4242')`)), 'Settings shows only the last four digits')
   },
@@ -144,7 +144,7 @@ export const shots: ShotSpec[] = [
     name: 'passwords-locked',
     async run(ctx) {
       await ctx.chrome.invoke('passwords', 'lock')
-      await openPasswords(ctx, 'apex://passwords')
+      await openPasswords(ctx, 'atelier://passwords')
       await ctx.chrome.until(`return document.querySelector('.pw-lock[data-state="locked"]')`, 5000, 'the locked tile')
       await ctx.shot('passwords-locked')
     },
@@ -153,7 +153,7 @@ export const shots: ShotSpec[] = [
     name: 'passwords-unlocked',
     async run(ctx) {
       await ctx.chrome.invoke('passwords', 'unlock')
-      await openPasswords(ctx, 'apex://passwords')
+      await openPasswords(ctx, 'atelier://passwords')
       await ctx.chrome.until(`return document.querySelector('.sp-page .sp-item, .sp-page .ui-state')`, 5000, 'the unlocked list')
       await ctx.shot('passwords-unlocked')
       await ctx.chrome.invoke('passwords', 'lock')
@@ -162,7 +162,7 @@ export const shots: ShotSpec[] = [
   {
     name: 'passwords-settings',
     async run(ctx) {
-      ctx.tabs.openInternal('apex://settings/passwords')
+      ctx.tabs.openInternal('atelier://settings/passwords')
       await ctx.chrome.until(`return document.querySelector('[data-settings-anchor="passwords-manager"]')`, 8000, 'Settings › Passwords and autofill')
       await ctx.shot('passwords-settings')
     },
@@ -171,7 +171,7 @@ export const shots: ShotSpec[] = [
     name: 'passwords-import-mapping',
     async run(ctx) {
       smokePasswords.queuePick(writeExport())
-      ctx.tabs.openInternal('apex://settings/passwords')
+      ctx.tabs.openInternal('atelier://settings/passwords')
       await ctx.chrome.click(/^Import…$/, `document.querySelector('[data-settings-anchor="passwords-import"]')`)
       await ctx.chrome.click(/^Choose file…$/, `document.querySelector('[role="dialog"]')`)
       await ctx.chrome.until(`return document.querySelector('.pw-preview')`, 5000, 'the mapping step')

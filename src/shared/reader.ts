@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Reader (RD-01 to RD-06): Apex's calm reading view of a web article. The page
+// Reader (RD-01 to RD-06): Atelier's calm reading view of a web article. The page
 // preload runs Mozilla Readability on a clone of the document and sends the
 // article as a small tree of allowed elements (never HTML), main keeps it per
 // tab, and the chrome draws it over the tab's pane while the page waits
@@ -12,13 +12,13 @@
 /** Page preload ↔ main channels (the preload's isolated world only). */
 export const READER_CHANNEL = {
   /** page → main: whether the page reads as an article ({ url, readerable }). */
-  state: 'apex-reader:state',
+  state: 'atelier-reader:state',
   /** main → page: extract the article now ({ requestId }). */
-  extract: 'apex-reader:extract',
+  extract: 'atelier-reader:extract',
   /** page → main: the extraction's answer. */
-  result: 'apex-reader:result',
+  result: 'atelier-reader:result',
   /** main → page: look again (the address changed inside the page). */
-  check: 'apex-reader:check',
+  check: 'atelier-reader:check',
 } as const
 
 /** The elements a reader article may hold; everything else is unwrapped or dropped. */

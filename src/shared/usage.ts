@@ -1,15 +1,15 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // The token usage ledger.
-// One row per model turn in userData/usage.sqlite. Apex shows tokens, plus a
+// One row per model turn in userData/usage.sqlite. Atelier shows tokens, plus a
 // cost estimate labelled as an estimate on the API-key engine only. There
 // are no credits, plans, quotas or upgrade prompts anywhere.
 
 /** What a model turn was for. `complete()` calls and QuickModel calls are recorded too. */
-export type UsageKind = 'chat' | 'routine' | 'tidy' | 'activity' | 'subtask' | 'import' | 'help' | 'draft' | 'onboarding' | /* apex.ask from a pack (docs/packs.md) */ 'pack' | /* a decision model's answer (docs/decisions.md) */ 'decide'
+export type UsageKind = 'chat' | 'routine' | 'tidy' | 'activity' | 'subtask' | 'import' | 'help' | 'draft' | 'onboarding' | /* atelier.ask from a pack (docs/packs.md) */ 'pack' | /* a decision model's answer (docs/decisions.md) */ 'decide'
 export const USAGE_KINDS = [
   'chat', 'routine', 'tidy', 'activity', 'subtask', 'import', 'help', 'draft', 'onboarding', 'pack', 'decide',
 ] as const satisfies readonly UsageKind[]

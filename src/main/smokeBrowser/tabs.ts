@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -12,7 +12,7 @@ import type { ShotSpec, SmokeCheck, SmokeContext } from './types'
 // The tabs smoke checks and light and dark shots: groups
 // collapse and skip their tabs in ⌘1–8, the selection drives bulk close,
 // split view takes its ratio and the empty pane's chooser, and the strip
-// sizes tabs. Every page is local (about:blank and apex://); nothing
+// sizes tabs. Every page is local (about:blank and atelier://); nothing
 // reaches the network.
 
 function firstWindow(ctx: SmokeContext): WindowContext {

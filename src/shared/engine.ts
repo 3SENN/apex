@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,8 +6,8 @@
 // Contract for the engines that power companions (ST-58 to ST-60). Every
 // build runs chats on your Anthropic API key; a build can add engines of its
 // own through `@internal/engines/shared` (src/stubs/engines/shared.ts adds
-// none). Apex has no plans, credits or quotas: where other apps show those,
-// Apex shows this status.
+// none). Atelier has no plans, credits or quotas: where other apps show those,
+// Atelier shows this status.
 import { EXTRA_ENGINE_IDS, EXTRA_ENGINE_LABELS, type ExtraEngineStatus } from '@internal/engines/shared'
 
 export const ENGINES = ['api-key', ...EXTRA_ENGINE_IDS] as const
@@ -16,8 +16,8 @@ export type EngineId = (typeof ENGINES)[number]
 /** Each engine's name. An added engine's may be a getter that reads the app language, so it is copied as one. */
 export const ENGINE_LABELS: Record<EngineId, string> = Object.defineProperties({ 'api-key': 'Anthropic API key' } as Record<EngineId, string>, Object.getOwnPropertyDescriptors(EXTRA_ENGINE_LABELS))
 
-/** The name Apex's tools go by for an MCP client; tool names become mcp__apex__<tool>. */
-export const MCP_SERVER_NAME = 'apex'
+/** The name Atelier's tools go by for an MCP client; tool names become mcp__atelier__<tool>. */
+export const MCP_SERVER_NAME = 'atelier'
 
 /** Where an engine besides the API key stands, in words every surface can show. */
 export interface EngineSummary {
@@ -34,17 +34,17 @@ export interface EngineSummary {
   tone: 'neutral' | 'success' | 'warning' | 'info'
 }
 
-/** ST-60: which tabs an MCP client outside Apex (Claude Code in a terminal, say) may drive. */
+/** ST-60: which tabs an MCP client outside Atelier (Claude Code in a terminal, say) may drive. */
 export type ExternalTabs = 'own' | 'any'
 
 export interface ExternalAccessStatus {
   enabled: boolean
-  /** The local address the client connects to; null until Apex listens. */
+  /** The local address the client connects to; null until Atelier listens. */
   url: string | null
-  /** The command that adds Apex to Claude Code, with the secret masked. Copy it with engine.copyCommand. */
+  /** The command that adds Atelier to Claude Code, with the secret masked. Copy it with engine.copyCommand. */
   command: string | null
   tabs: ExternalTabs
-  /** Whether the current command was added through Apex (and still matches the secret and port). */
+  /** Whether the current command was added through Atelier (and still matches the secret and port). */
   added: boolean
   /** Tabs it controls right now. */
   activeTabs: number

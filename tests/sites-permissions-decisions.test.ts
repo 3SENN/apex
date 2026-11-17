@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -131,7 +131,7 @@ const escape = { instanceId: 'i', dismissed: 'escape' }
 
 function states(wc: FakeWc, frame: unknown = wc.mainFrame): QueryStates {
   const event: { sender: unknown; senderFrame: unknown; returnValue?: unknown } = { sender: wc, senderFrame: frame }
-  env.ipc.get('apex-page:permissions')!(event)
+  env.ipc.get('atelier-page:permissions')!(event)
   return event.returnValue as QueryStates
 }
 
@@ -156,7 +156,7 @@ beforeEach(() => {
   grants = []
   registry = new TabRegistry()
   session = fakeSession()
-  const dir = mkdtempSync(join(tmpdir(), 'apex-perm-'))
+  const dir = mkdtempSync(join(tmpdir(), 'atelier-perm-'))
   dirs.push(dir)
   sites.attach(session as never, { private: false, dataDir: dir })
   controller = new PermissionController({
@@ -170,7 +170,7 @@ beforeEach(() => {
     systemLocation: async () => location as never,
     openerOf: (wc) => (openers.get(wc.id) as never) ?? null,
   })
-  controller.install(session as never, { private: false, partition: 'persist:apex' })
+  controller.install(session as never, { private: false, partition: 'persist:atelier' })
 })
 
 afterEach(() => {
@@ -267,7 +267,7 @@ describe('frames (permission delegation)', () => {
   })
 })
 
-describe('macOS turned Apex off', () => {
+describe('macOS turned Atelier off', () => {
   it('says so even where the site is allowed, once per page', async () => {
     const tab = openTab('https://meet.example/')
     store().set('https://meet.example', { permissions: { camera: 'allow' } })

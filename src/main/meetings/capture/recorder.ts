@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -44,7 +44,7 @@ export interface RecorderDeps {
   summarizer: MeetingSummarizer
   transcription(): TranscriptionSettings
   systemLocale(): string
-  /** An Apex window is in front; meetings notifications go out only when none is. */
+  /** An Atelier window is in front; meetings notifications go out only when none is. */
   appInView(): boolean
   /** A `meetings` notification (ctx.notify). */
   notify(n: { title: string; body?: string; target?: string }): void
@@ -263,7 +263,7 @@ export class Recorder extends EventEmitter<RecorderEvents> implements MeetingRec
       if (permissions?.[what] === 'not-determined') permissions = await broker.request(what).catch(() => permissions)
     }
     if (permissions?.microphone && permissions.microphone !== 'granted') throw new SpeechError('mic-denied')
-    // Off for Apex; one never asked about (a prompt that couldn't show) is tried, and the start says if it's off.
+    // Off for Atelier; one never asked about (a prompt that couldn't show) is tried, and the start says if it's off.
     const speechOff = permissions?.speech === 'denied' || permissions?.speech === 'restricted'
     const audioOnly: AudioOnlyReason | null = settings.recordOnly ? 'chosen' : speechOff ? 'speech-denied' : audioWanted ? 'chosen' : null
     if (this.isLive()) throw new SpeechError('busy', mainT('capture.error.busy'), 'meeting')
@@ -379,7 +379,7 @@ export class Recorder extends EventEmitter<RecorderEvents> implements MeetingRec
       this.#deps.notify({
         title: mainT('capture.notify.stoppedTitle'),
         body: mainT(reason === 'long' ? 'capture.notify.stoppedLong' : 'capture.notify.stoppedSilent'),
-        target: `apex://meetings/${id}`,
+        target: `atelier://meetings/${id}`,
       })
     }
     void this.#summarize(id)
@@ -407,7 +407,7 @@ export class Recorder extends EventEmitter<RecorderEvents> implements MeetingRec
         this.#updateWrapUp(id, { phase: 'no-engine' })
       } else if (detail?.status === 'summarized') {
         this.#updateWrapUp(id, { phase: 'ready', summarized: true, title: detail.title })
-        if (!this.#deps.appInView()) this.#deps.notify({ title: mainT('capture.notify.summaryTitle'), body: mainT('capture.notify.summaryBody', { title: detail.title }), target: `apex://meetings/${id}` })
+        if (!this.#deps.appInView()) this.#deps.notify({ title: mainT('capture.notify.summaryTitle'), body: mainT('capture.notify.summaryBody', { title: detail.title }), target: `atelier://meetings/${id}` })
       } else {
         this.#updateWrapUp(id, { phase: 'ready', summarized: false })
       }
@@ -437,7 +437,7 @@ export class Recorder extends EventEmitter<RecorderEvents> implements MeetingRec
     if (id) {
       this.#safe(() => this.#deps.store.finish(id, { endedAt: this.#now(), durationMs: this.#banked, audio: null, status: 'failed', error: code }))
       this.#setWrapUp({ meetingId: id, title: this.#title, phase: 'failed', error: code, audioOnly: this.#audioOnly })
-      if (!this.#deps.appInView()) this.#deps.notify({ title: mainT('capture.notify.failedTitle'), body: mainT(this.#audioOnly ? 'capture.notify.failedAudioBody' : 'capture.notify.failedBody'), target: `apex://meetings/${id}` })
+      if (!this.#deps.appInView()) this.#deps.notify({ title: mainT('capture.notify.failedTitle'), body: mainT(this.#audioOnly ? 'capture.notify.failedAudioBody' : 'capture.notify.failedBody'), target: `atelier://meetings/${id}` })
     }
     this.#toIdle()
   }

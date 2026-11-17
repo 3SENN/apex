@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// chrome.storage.sync for extensions in Apex. Electron's binding for
+// chrome.storage.sync for extensions in Atelier. Electron's binding for
 // it exists but every call fails ("sync" is not available), so an extension
-// that keeps its settings there (most do) breaks. Apex has no account sync,
+// that keeps its settings there (most do) breaks. Atelier has no account sync,
 // so sync data stays on this computer, which is what Chrome does when sync
 // is off: here it lives in storage.local under a reserved prefix, with
 // storage.sync's own API, quotas and change events, and storage.local no
@@ -16,19 +16,19 @@
 // `installStorageSync` is serialized into the extension's own world, so it
 // must not reference anything outside itself.
 
-export const STORAGE_SYNC_PREFIX = '__apex_sync__:'
+export const STORAGE_SYNC_PREFIX = '__atelier_sync__:'
 
 export function installStorageSync(): void {
   type Fn = (...args: unknown[]) => unknown
   type Area = Record<string, Fn | unknown>
   type Changes = Record<string, { oldValue?: unknown; newValue?: unknown }>
-  const g = globalThis as unknown as { chrome?: { storage?: Record<string, unknown> }; __apexStorageSync?: boolean }
+  const g = globalThis as unknown as { chrome?: { storage?: Record<string, unknown> }; __atelierStorageSync?: boolean }
   const storage = g.chrome?.storage
   const local = storage?.local as Area | undefined
-  if (!storage || !local || typeof local.get !== 'function' || g.__apexStorageSync) return
-  g.__apexStorageSync = true
+  if (!storage || !local || typeof local.get !== 'function' || g.__atelierStorageSync) return
+  g.__atelierStorageSync = true
 
-  const PREFIX = '__apex_sync__:'
+  const PREFIX = '__atelier_sync__:'
   const QUOTA_BYTES = 102400
   const QUOTA_BYTES_PER_ITEM = 8192
   const MAX_ITEMS = 512

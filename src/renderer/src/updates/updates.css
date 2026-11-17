@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -312,7 +312,7 @@
   white-space: pre-wrap;
 }
 
-/* The logo at the top of About Apex: Pip's head and the wordmark. */
+/* The logo at the top of About Atelier: Pip's head and the wordmark. */
 .about-brand {
   display: flex;
   margin: 0 var(--space-1) var(--space-4);

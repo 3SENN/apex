@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -187,14 +187,14 @@ export function createExporter(deps: ExporterDeps): ExporterService {
 export function electronExporterDeps(getWindow: () => BrowserWindow | null): ExporterDeps {
   // Renders the export in its own in-memory partition, with scripts, plugins and navigation off.
   const withPage = async <T>(html: string, use: (wc: WebContents) => Promise<T>): Promise<T> => {
-    const dir = mkdtempSync(join(app.getPath('temp'), 'apex-export-'))
+    const dir = mkdtempSync(join(app.getPath('temp'), 'atelier-export-'))
     const file = join(dir, 'export.html')
     writeFileSync(file, html, 'utf8')
     const win = new BrowserWindow({
       show: false,
       width: 816,
       height: 1056,
-      webPreferences: { sandbox: true, javascript: false, contextIsolation: true, nodeIntegration: false, webSecurity: true, partition: 'apex-export', spellcheck: false },
+      webPreferences: { sandbox: true, javascript: false, contextIsolation: true, nodeIntegration: false, webSecurity: true, partition: 'atelier-export', spellcheck: false },
     })
     win.webContents.on('will-navigate', (e) => e.preventDefault())
     win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }))

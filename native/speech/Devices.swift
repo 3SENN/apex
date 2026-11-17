@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -45,7 +45,7 @@ enum Locales {
   /// Every language the recognizer supports, marked when it runs on this Mac.
   /// The others send audio to Apple's servers to be transcribed (ST-18).
   /// `analyzer` lists the languages macOS 26's newer engine handles (each
-  /// item says which engine Apex uses); one whose model is `installed`
+  /// item says which engine Atelier uses); one whose model is `installed`
   /// counts as on this Mac too (Models.swift).
   static func report(analyzer: [String] = [], installed: [String] = []) -> [String: Any] {
     let names = Locale.current

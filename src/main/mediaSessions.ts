@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -19,13 +19,13 @@ export const MEDIA_WORLD = 1005
 export const PAUSE_SCRIPT = `(() => {
   const playing = Array.from(document.querySelectorAll('video, audio')).filter((m) => !m.paused && !m.ended)
   for (const m of playing) m.pause()
-  window.__apexCardPaused = playing
+  window.__atelierCardPaused = playing
   return playing.length
 })()`
 
 export const PLAY_SCRIPT = `(() => {
-  const list = (window.__apexCardPaused || []).filter((m) => m.isConnected)
-  window.__apexCardPaused = []
+  const list = (window.__atelierCardPaused || []).filter((m) => m.isConnected)
+  window.__atelierCardPaused = []
   const targets = list.length ? list : Array.from(document.querySelectorAll('video, audio')).filter((m) => m.paused && m.currentTime > 0).slice(0, 1)
   for (const m of targets) m.play().catch(() => undefined)
   return targets.length

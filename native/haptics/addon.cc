@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Apex haptics: the Node-API surface.
+// Atelier haptics: the Node-API surface.
 //
 //   perform(pattern: 'alignment' | 'levelChange' | 'generic'): boolean
 //
@@ -23,17 +23,17 @@ namespace {
 // without copying the whole string.
 constexpr size_t kMaxNameBytes = 16;
 
-bool ParsePattern(const std::string& name, apex_haptics::Pattern* out) {
+bool ParsePattern(const std::string& name, atelier_haptics::Pattern* out) {
   if (name == "alignment") {
-    *out = apex_haptics::Pattern::kAlignment;
+    *out = atelier_haptics::Pattern::kAlignment;
     return true;
   }
   if (name == "levelChange" || name == "level-change") {
-    *out = apex_haptics::Pattern::kLevelChange;
+    *out = atelier_haptics::Pattern::kLevelChange;
     return true;
   }
   if (name == "generic") {
-    *out = apex_haptics::Pattern::kGeneric;
+    *out = atelier_haptics::Pattern::kGeneric;
     return true;
   }
   return false;
@@ -57,7 +57,7 @@ Napi::Value Perform(const Napi::CallbackInfo& info) {
     return env.Undefined();
   }
 
-  apex_haptics::Pattern pattern;
+  atelier_haptics::Pattern pattern;
   if (copied > kMaxNameBytes ||
       !ParsePattern(std::string(buffer, copied), &pattern)) {
     Napi::TypeError::New(
@@ -66,7 +66,7 @@ Napi::Value Perform(const Napi::CallbackInfo& info) {
     return env.Undefined();
   }
 
-  return Napi::Boolean::New(env, apex_haptics::Play(pattern));
+  return Napi::Boolean::New(env, atelier_haptics::Play(pattern));
 }
 
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
@@ -76,4 +76,4 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
 
 }  // namespace
 
-NODE_API_MODULE(apex_haptics, Init)
+NODE_API_MODULE(atelier_haptics, Init)

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -13,11 +13,11 @@ import { CRX_MAX_BYTES } from './crx'
 import { compareVersions, type ExtensionsHost } from './host'
 
 // The Chrome Web Store bridge: the store page's webstorePrivate and
-// management calls, answered by Apex. Only the store's exact origin, in a
-// main frame, of a session Apex attached, is heard (a prefix match would trust
+// management calls, answered by Atelier. Only the store's exact origin, in a
+// main frame, of a session Atelier attached, is heard (a prefix match would trust
 // look-alike hosts). Packages download through the profile's own session,
 // are verified before unpacking, and uninstalling asks first (the store's
-// remove button goes through Apex's confirmation).
+// remove button goes through Atelier's confirmation).
 
 export interface WebStoreDeps {
   host: ExtensionsHost
@@ -188,7 +188,7 @@ export async function runStoreOp(deps: WebStoreDeps, profileId: string, op: WebS
     case 'getReferrerChain':
       return []
     case 'install':
-      // The legacy one-step install skips the prompt; Apex never installs unasked.
+      // The legacy one-step install skips the prompt; Atelier never installs unasked.
       return 'unknown_error'
     case 'management.getAll':
       return host.list(profileId).map((e) => ({ id: e.id, name: e.name, shortName: e.name, description: e.description, version: e.version, enabled: e.enabled, mayDisable: true, type: 'extension', installType: e.source === 'store' ? 'normal' : 'development', isApp: false, offlineEnabled: false, icons: [], permissions: [], hostPermissions: e.hosts }))

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -22,7 +22,7 @@ import type { AgentEvent } from '@shared/ipc'
 // - on demand ("manual", SS-03): a request with the top-level
 //   `compaction: { type: 'summarize' }` under `compact-2026-09-04`, never
 //   combined with context_management. It returns the block alone; later
-//   requests send it first, in place of the messages it summarizes. Apex keeps
+//   requests send it first, in place of the messages it summarizes. Atelier keeps
 //   every message on disk and starts each request at the newest such block.
 
 export const THRESHOLD_BETA = 'compact-2026-01-12'

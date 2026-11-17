@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Bilingual listening (two languages at once): every transcript line says
 // which language it was heard in, and a final says how well its text reads
-// as that language. Apex keeps, for each stretch of speech, the language
+// as that language. Atelier keeps, for each stretch of speech, the language
 // whose text fits best (src/main/speech/bilingual.ts). Apple's language
 // recognizer runs on this Mac.
 

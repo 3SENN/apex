@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -42,7 +42,7 @@ const WINDOW_SCOPED: ReadonlySet<AppEvent['type']> = new Set<AppEvent['type']>([
   'focus-mode',
   'session-notice',
   'window-material',
-  // Opened .apexcompanion files show their review sheet in the first window only.
+  // Opened .ateliercompanion files show their review sheet in the first window only.
   'companion-import',
   'companion-import-error',
 ])
@@ -443,7 +443,7 @@ export type CloseTarget = 'popup' | 'other-window' | 'peek' | 'rail' | 'selectio
 /** What ⌘W closes: a focused popup, then an open peek, then the selection, then the active tab. */
 export function closeTarget(s: { popupFocused: boolean; otherWindowFocused: boolean; windowFocused: boolean; peekOpen: boolean; rail: boolean; selection: number; activeTab: boolean }): CloseTarget {
   if (s.popupFocused) return 'popup'
-  // Another window of Apex's own in front (developer tools, a floating card) closes instead.
+  // Another window of Atelier's own in front (developer tools, a floating card) closes instead.
   if (s.otherWindowFocused) return 'other-window'
   if (!s.windowFocused) return 'none'
   if (s.peekOpen) return 'peek'

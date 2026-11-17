@@ -1,14 +1,14 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// chrome.privacy's browser settings, the part Apex has: password
+// chrome.privacy's browser settings, the part Atelier has: password
 // saving, and address and card autofill. A setting is a ChromeSetting
 // (get/set/clear/onChange) with Chrome's levels of control. Extensions may
 // control password saving: a password manager such as Apple's iCloud
 // Passwords turns it off so the browser's own offers step aside. Address and
-// card autofill stay Apex's to decide, so they are not controllable, and an
+// card autofill stay Atelier's to decide, so they are not controllable, and an
 // extension's attempt to turn them off is refused the way Chrome refuses a
 // setting held by policy.
 
@@ -46,10 +46,10 @@ export function winningHold(holds: readonly SettingHold[]): SettingHold | null {
 }
 
 /** What get() answers one extension: the effective value and how much say it has. */
-export function settingDetails(key: PrivacyKey, apexValue: boolean, holds: readonly SettingHold[], self: { id: string; installedAt: number }): SettingDetails {
-  if (!CONTROLLABLE.has(key)) return { value: apexValue, levelOfControl: 'not_controllable' }
+export function settingDetails(key: PrivacyKey, atelierValue: boolean, holds: readonly SettingHold[], self: { id: string; installedAt: number }): SettingDetails {
+  if (!CONTROLLABLE.has(key)) return { value: atelierValue, levelOfControl: 'not_controllable' }
   const win = winningHold(holds)
-  if (!win) return { value: apexValue, levelOfControl: 'controllable_by_this_extension' }
+  if (!win) return { value: atelierValue, levelOfControl: 'controllable_by_this_extension' }
   if (win.extensionId === self.id) return { value: win.value, levelOfControl: 'controlled_by_this_extension' }
   // A newer extension holds it: an older one can't take it over (Chrome's precedence).
   return { value: win.value, levelOfControl: self.installedAt > win.installedAt ? 'controllable_by_this_extension' : 'controlled_by_other_extensions' }

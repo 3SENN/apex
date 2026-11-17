@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { useSyncExternalStore } from 'react'
 import { EMPTY_MEDIA_STATE, type MediaCommand, type MediaHubState } from '@shared/media'
-import { apex, call, errorText } from '../../api'
+import { atelier, call, errorText } from '../../api'
 import { t } from '../../i18n/useT'
 import { toast } from '../../ui'
 
@@ -32,12 +32,12 @@ function start(): void {
   if (started) return
   started = true
   try {
-    const initial = apex.initial?.settings
+    const initial = atelier.initial?.settings
     if (initial && typeof initial.nowPlayingButton === 'boolean') snapshot = { ...snapshot, button: initial.nowPlayingButton }
   } catch {
     // No initial settings (a float page); the button shows by default.
   }
-  apex.onAppEvent((event) => {
+  atelier.onAppEvent((event) => {
     if (event.type === 'media') set({ state: event.state })
     else if (event.type === 'settings' && typeof event.view.nowPlayingButton === 'boolean' && event.view.nowPlayingButton !== snapshot.button) set({ button: event.view.nowPlayingButton })
   })

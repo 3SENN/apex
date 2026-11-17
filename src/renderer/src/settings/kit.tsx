@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -22,10 +22,10 @@ import './settings.css'
 export const GuidePageContext = createContext<string | null>(null)
 
 export function PageHeader({ title, description, actions, help: helpLink, guide: guideProp, aside }: { title: ReactNode; description?: ReactNode; actions?: ReactNode; help?: { label: string; onOpen(): void }; /* ST-04 */ guide?: string; /** DS-105: a selector pill beside the title (Library's companion pill). */ aside?: ReactNode }): ReactElement {
-  // ST-04: a long page links to its matching guide, apex://guides/<id>
+  // ST-04: a long page links to its matching guide, atelier://guides/<id>
   const pageId = useContext(GuidePageContext)
   const guide = guideProp ?? (pageId ? SETTINGS_GUIDES[pageId] : undefined)
-  const help = helpLink ?? (guide ? { label: t('firstRun.guides.readGuide'), onOpen: () => void window.apex.invoke('pages', 'open', guideUrl(guide)) } : undefined)
+  const help = helpLink ?? (guide ? { label: t('firstRun.guides.readGuide'), onOpen: () => void window.atelier.invoke('pages', 'open', guideUrl(guide)) } : undefined)
   const ref = useRef<HTMLElement>(null)
   useStickyHeaderHeight(ref)
   // DS-100: the text docs link comes before the primary pill.
@@ -267,7 +267,7 @@ export interface ChoiceTile<T extends string> {
   value: T
   title: ReactNode
   description?: ReactNode
-  /** The illustration: Apex's own drawing, from tokens. */
+  /** The illustration: Atelier's own drawing, from tokens. */
   art: ReactNode
 }
 

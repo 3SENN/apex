@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -48,7 +48,7 @@ import { slugifyPackId } from '../src/main/packs/service'
 
 const dirs: string[] = []
 const tmp = (): string => {
-  const d = mkdtempSync(join(tmpdir(), 'apex-packs-test-'))
+  const d = mkdtempSync(join(tmpdir(), 'atelier-packs-test-'))
   dirs.push(d)
   return d
 }
@@ -57,7 +57,7 @@ afterEach(() => {
 })
 
 const manifest = (over: Partial<PackManifest> = {}): PackManifest => ({
-  format: 'apex-pack',
+  format: 'atelier-pack',
   manifestVersion: 1,
   id: 'test-pack',
   name: 'Test pack',
@@ -75,14 +75,14 @@ const SKILL = '---\nname: say-hi\ndescription: Says hi.\n---\n\nSay hi.\n'
 const vault = { encrypt: (b: Buffer) => Buffer.from(b.toString('base64')), decrypt: (b: Buffer) => Buffer.from(b.toString('utf8'), 'base64') }
 
 describe('pack paths, hosts and names', () => {
-  it('accepts only safe relative paths outside __apex/', () => {
+  it('accepts only safe relative paths outside __atelier/', () => {
     expect(isPackPath('tools/read.js')).toBe(true)
     expect(isPackPath('a/b/c.d-e_f.html')).toBe(true)
     expect(isPackPath('../x.js')).toBe(false)
     expect(isPackPath('/abs.js')).toBe(false)
     expect(isPackPath('a//b.js')).toBe(false)
     expect(isPackPath('a/../b.js')).toBe(false)
-    expect(isPackPath('__apex/tool-host.html')).toBe(false)
+    expect(isPackPath('__atelier/tool-host.html')).toBe(false)
     expect(isPackPath('a b.js')).toBe(false)
     expect(isPackPath('..')).toBe(false)
     expect(isPackPath('')).toBe(false)
@@ -106,7 +106,7 @@ describe('pack paths, hosts and names', () => {
     expect(packCoversHost(['a.com', '*.b.com'], 'x.b.com')).toBe(true)
   })
 
-  it('lets apex.fetch reach listed https hosts, and http only on this computer', () => {
+  it('lets atelier.fetch reach listed https hosts, and http only on this computer', () => {
     expect(packFetchAllowed(['api.example.com'], 'https://api.example.com/v1')).toBe(true)
     expect(packFetchAllowed(['api.example.com'], 'http://api.example.com/v1')).toBe(false)
     expect(packFetchAllowed(['api.example.com'], 'https://evil.com/')).toBe(false)
@@ -125,9 +125,9 @@ describe('pack paths, hosts and names', () => {
     expect(packToolName('foo', 'bar_baz')).not.toBe(packToolName('foo-bar', 'baz'))
     expect(packToolName('price-tracker', 'read_price')).toMatch(/^[a-zA-Z0-9_-]{1,64}$/)
     expect(parsePackUrl(packUrl('my-pack', 'panel/index.html'))).toEqual({ packId: 'my-pack', path: 'panel/index.html' })
-    expect(parsePackUrl('apex-pack://my-pack/')).toEqual({ packId: 'my-pack', path: 'index.html' })
+    expect(parsePackUrl('atelier-pack://my-pack/')).toEqual({ packId: 'my-pack', path: 'index.html' })
     expect(parsePackUrl('https://my-pack/')).toBeNull()
-    expect(packsPageUrl({ draft: 'x', review: true })).toBe('apex://packs?draft=x&review=1')
+    expect(packsPageUrl({ draft: 'x', review: true })).toBe('atelier://packs?draft=x&review=1')
   })
 })
 
@@ -183,7 +183,7 @@ describe('validatePack', () => {
       expect(check.ok, check.ok ? '' : check.problems.join('\n')).toBe(true)
     }
     const ids = firstPartyPacks().map((fp) => JSON.parse(fp.files.get(PACK_MANIFEST_FILE)!.toString()).id)
-    expect(ids).toEqual([BUILTIN_SKILLS_PACK_ID, EXAMPLE_PACK_ID, 'apex-worlds'])
+    expect(ids).toEqual([BUILTIN_SKILLS_PACK_ID, EXAMPLE_PACK_ID, 'atelier-worlds'])
   })
 
   it('names what is wrong and where', () => {
@@ -237,7 +237,7 @@ describe('validatePack', () => {
   })
 
   it('never carries a companion’s memory', () => {
-    const file = { format: 'apex-companion', version: 1, name: 'Scout', persona: 'custom', look: {}, instructions: '', memory: [{ path: '/memories/a.md', text: 'secret' }] }
+    const file = { format: 'atelier-companion', version: 1, name: 'Scout', persona: 'custom', look: {}, instructions: '', memory: [{ path: '/memories/a.md', text: 'secret' }] }
     const check = validatePack(pack(manifest({ contributes: { companions: ['c.json'] } }), { 'c.json': JSON.stringify(file) }))
     expect(check.ok).toBe(false)
   })
@@ -279,7 +279,7 @@ describe('archives, hashes and secrets', () => {
     expect(packHash(new Map([...files, ['a.txt', Buffer.from('changed')]]))).not.toBe(packHash(files))
   })
 
-  it('round-trips through an .apexpack with its signature', () => {
+  it('round-trips through an .atelierpack with its signature', () => {
     const author = new AuthorKey(tmp(), vault)
     const sig = author.sign(packHash(files))
     const decoded = decodeArchive(encodeArchive(files, sig))
@@ -397,9 +397,9 @@ describe('the pack store', () => {
   it('keeps state across restarts and notices files changed on disk', () => {
     const dir = tmp()
     const store = new PackStore(dir)
-    store.install(files, { source: { kind: 'link', url: 'https://x.test/p.apexpack' }, signature: 'unsigned', keyId: null, enable: true })
+    store.install(files, { source: { kind: 'link', url: 'https://x.test/p.atelierpack' }, signature: 'unsigned', keyId: null, enable: true })
     const again = new PackStore(dir)
-    expect(again.get('test-pack')?.entry.source).toEqual({ kind: 'link', url: 'https://x.test/p.apexpack' })
+    expect(again.get('test-pack')?.entry.source).toEqual({ kind: 'link', url: 'https://x.test/p.atelierpack' })
     writeFileSync(join(dir, 'packs', 'installed', 'test-pack', 'skills', 'hi', 'SKILL.md'), SKILL.replace('Say hi.', 'Do something else.'))
     const tampered = new PackStore(dir)
     expect(tampered.get('test-pack')?.problems[0]).toMatch(/changed on disk/)
@@ -426,7 +426,7 @@ describe('the pack store', () => {
     store.writeDraftFile('my-draft', 'tools/a.js', 'export async function run() { return 1 }')
     expect(store.readDraftFile('my-draft', 'tools/a.js')).toContain('return 1')
     expect(() => store.writeDraftFile('my-draft', '../escape.js', 'x')).toThrow(/not a file path/)
-    expect(() => store.writeDraftFile('my-draft', '__apex/x.js', 'x')).toThrow(/not a file path/)
+    expect(() => store.writeDraftFile('my-draft', '__atelier/x.js', 'x')).toThrow(/not a file path/)
     expect(() => store.writeDraftFile('nope', 'a.js', 'x')).toThrow(/no draft/)
     expect(store.draft('my-draft').problems).toEqual([])
     store.removeDraft('my-draft')
@@ -456,7 +456,7 @@ describe('the pack store', () => {
 
 describe('sharing', () => {
   it('reads an index and skips entries that don’t parse', () => {
-    const index = parseIndex(JSON.stringify({ format: 'apex-pack-index', name: 'Community', packs: [{ id: 'good', name: 'Good', version: '1.0.0', url: 'https://x.test/g.apexpack', sha256: 'A'.repeat(64) }, { id: 'bad', url: 'ftp://x' }] }))
+    const index = parseIndex(JSON.stringify({ format: 'atelier-pack-index', name: 'Community', packs: [{ id: 'good', name: 'Good', version: '1.0.0', url: 'https://x.test/g.atelierpack', sha256: 'A'.repeat(64) }, { id: 'bad', url: 'ftp://x' }] }))
     expect(index).toMatchObject({ name: 'Community', skipped: 1, packs: [{ id: 'good', sha256: 'a'.repeat(64), description: '' }] })
     expect(() => parseIndex('{}')).toThrow(/isn’t a pack index/)
   })

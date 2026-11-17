@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -48,7 +48,7 @@ export interface TabPort {
   certificateException(): boolean
   /** A modal surface is open in the window: fill popups stay hidden under it (OV-25). */
   modalOpen?(): boolean
-  /** Apex is the focused, visible app. */
+  /** Atelier is the focused, visible app. */
   appInView(): boolean
   topFrame(): FrameHandle
   frames(): FrameHandle[]
@@ -314,20 +314,20 @@ export class AutofillController {
       if (!settings.cards || !this.#cardAllowed(frame)) return null
       const cards = this.#d.wallet().cards()
       if (cards.length === 0) return null
-      return { surface: 'autofill-card', rows: cardRows(cards), active: -1, usernames: new Map(), passwordOnly: false, manageUrl: 'apex://settings/passwords', siteLabel, embeddingSite }
+      return { surface: 'autofill-card', rows: cardRows(cards), active: -1, usernames: new Map(), passwordOnly: false, manageUrl: 'atelier://settings/passwords', siteLabel, embeddingSite }
     }
 
     if (r.formRole === 'address' && isAddressKind(r.kind)) {
       if (!settings.addresses) return null
       const addresses = this.#d.wallet().addresses()
       if (addresses.length === 0) return null
-      return { surface: 'autofill-address', rows: addressRows(addresses), active: -1, usernames: new Map(), passwordOnly: false, manageUrl: 'apex://settings/passwords', siteLabel, embeddingSite }
+      return { surface: 'autofill-address', rows: addressRows(addresses), active: -1, usernames: new Map(), passwordOnly: false, manageUrl: 'atelier://settings/passwords', siteLabel, embeddingSite }
     }
     return null
   }
 
   #manageUrl(site: string): string {
-    return `apex://passwords?site=${encodeURIComponent(site)}`
+    return `atelier://passwords?site=${encodeURIComponent(site)}`
   }
 
   /** Card fill only in a secure context (the frame and the page) without a certificate exception. */
@@ -658,7 +658,7 @@ export class AutofillController {
     void handle.done.then((result) => {
       if (!result || this.#offer?.id !== id) return
       if ('value' in result && result.value === 'import') {
-        this.#d.openUrl('apex://settings/passwords')
+        this.#d.openUrl('atelier://settings/passwords')
         this.dismissImportHint()
       } else if ('value' in result || result.dismissed === 'escape') {
         this.dismissImportHint()
@@ -704,7 +704,7 @@ export class AutofillController {
     if (o.kind === 'card') {
       if (action === 'save' || action === 'update') {
         wallet.saveCard({ number: o.card.number, holder: o.card.holder, expMonth: o.card.expMonth, expYear: o.card.expYear })
-        this.#saved(mainT('autofill.toast.cardSaved'), 'apex://settings/passwords')
+        this.#saved(mainT('autofill.toast.cardSaved'), 'atelier://settings/passwords')
       } else {
         // Each dismissal is a strike; "never" uses them all up at once.
         const strikes = action === 'never' ? 3 : 1
@@ -714,7 +714,7 @@ export class AutofillController {
     }
     if (action === 'save' || action === 'update') {
       wallet.saveAddress(o.address)
-      this.#saved(mainT('autofill.toast.addressSaved'), 'apex://settings/passwords')
+      this.#saved(mainT('autofill.toast.addressSaved'), 'atelier://settings/passwords')
     }
   }
 
@@ -733,10 +733,10 @@ export class AutofillController {
     else if (decision?.kind === 'same') vault.markUsed(decision.id)
     else vault.save(o.url, username, password)
     this.#split.forget(o.url)
-    this.#saved(mainT(decision?.kind === 'update' ? 'autofill.toast.updated' : 'autofill.toast.saved', { site: o.site }), `apex://passwords?site=${encodeURIComponent(o.site)}`)
+    this.#saved(mainT(decision?.kind === 'update' ? 'autofill.toast.updated' : 'autofill.toast.saved', { site: o.site }), `atelier://passwords?site=${encodeURIComponent(o.site)}`)
   }
 
-  /** A toast in the tab, and a passwords notification when Apex isn't in view. */
+  /** A toast in the tab, and a passwords notification when Atelier isn't in view. */
   #saved(text: string, target: string): void {
     this.#d.toast({ kind: 'success', text, tabId: this.tabId })
     if (!this.#d.tab.appInView()) this.#d.notify({ category: 'passwords', title: text, target })

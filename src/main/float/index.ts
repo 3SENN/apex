@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -12,7 +12,7 @@ import { loadFloatShim } from './native'
 export { FloatManager } from './manager'
 export type { FloatManagerDeps } from './manager'
 
-/** The float page for a kind: the dev server under electron-vite dev, app://apex otherwise. */
+/** The float page for a kind: the dev server under electron-vite dev, app://atelier otherwise. */
 export function floatUrl(kind: FloatKind): string {
   const dev = devRendererUrl()
   const base = dev ? dev.replace(/\/$/, '') : APP_ORIGIN

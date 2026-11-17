@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -48,8 +48,8 @@ export function Tutorials(): ReactElement {
       </h2>
       <p className="fw-section__subtitle">
         {t('firstRun.weekTutorials.aFewMinutesEach')}{' '}
-        {/* ON-16: the rest of Apex's guides and bundles */}
-        <button type="button" className="sp-link" onClick={() => call('pages', 'open', 'apex://guides', { newTab: true }).catch((err: unknown) => toast.show({ message: errorText(err), tone: 'error' }))}>
+        {/* ON-16: the rest of Atelier's guides and bundles */}
+        <button type="button" className="sp-link" onClick={() => call('pages', 'open', 'atelier://guides', { newTab: true }).catch((err: unknown) => toast.show({ message: errorText(err), tone: 'error' }))}>
           {t('firstRun.weekTutorials.allGuides')}
         </button>
       </p>

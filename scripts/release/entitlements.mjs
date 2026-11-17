@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,13 +9,13 @@
 //
 //   unsigned               no CSC_LINK or CSC_NAME (the default). Not signed
 //                          by electron-builder; the fuses step re-signs ad hoc.
-//   developer-id           APEX_SIGN_IDENTITY or CSC_NAME (a keychain identity,
+//   developer-id           ATELIER_SIGN_IDENTITY or CSC_NAME (a keychain identity,
 //                          by SHA-1 or name; identity.mjs), or CSC_LINK
 //                          (+ CSC_KEY_PASSWORD): hardened
 //                          runtime, build/entitlements.mac.plist, notarized
 //                          when the APPLE_* credentials are there.
-//   developer-id-passkeys  developer-id plus APEX_PROVISIONING_PROFILE (a
-//                          Developer ID .provisionprofile) and APEX_TEAM_ID
+//   developer-id-passkeys  developer-id plus ATELIER_PROVISIONING_PROFILE (a
+//                          Developer ID .provisionprofile) and ATELIER_TEAM_ID
 //                          (required here, no default). The profile is embedded and
 //                          the app gets a generated entitlements file adding
 //                          Apple's browser passkey entitlement, the application
@@ -61,9 +61,9 @@ export function isRestricted(key) {
 /** Which mode the environment picks. A profile without an identity is an error: an ad hoc build can't carry what it grants. */
 export function signingMode(env = process.env) {
   const signed = signingPlan(env, 'darwin').identity !== null
-  const profile = text(env, 'APEX_PROVISIONING_PROFILE')
+  const profile = text(env, 'ATELIER_PROVISIONING_PROFILE')
   if (profile && !signed) {
-    throw new Error('APEX_PROVISIONING_PROFILE is set, but there is no Developer ID identity (APEX_SIGN_IDENTITY, CSC_NAME or CSC_LINK). An unsigned build never carries the browser passkey entitlement: macOS would refuse to launch it.')
+    throw new Error('ATELIER_PROVISIONING_PROFILE is set, but there is no Developer ID identity (ATELIER_SIGN_IDENTITY, CSC_NAME or CSC_LINK). An unsigned build never carries the browser passkey entitlement: macOS would refuse to launch it.')
   }
   if (!signed) return 'unsigned'
   return profile ? 'developer-id-passkeys' : 'developer-id'
@@ -162,7 +162,7 @@ export function profileProblems(facts, { teamId, bundleId, now = new Date() }) {
   const appId = `${teamId}.${bundleId}`
   if (!facts.platforms.includes('OSX')) problems.push(`it is not a macOS profile (Platform: ${facts.platforms.join(', ') || 'none'})`)
   if (facts.devices || !facts.allDevices) problems.push('it is a development profile. A Developer ID build needs a Developer ID profile (Profiles › + › Developer ID)')
-  if (!facts.teamIds.includes(teamId)) problems.push(`it belongs to team ${facts.teamIds.join(', ') || '(none)'}, not ${teamId} (APEX_TEAM_ID)`)
+  if (!facts.teamIds.includes(teamId)) problems.push(`it belongs to team ${facts.teamIds.join(', ') || '(none)'}, not ${teamId} (ATELIER_TEAM_ID)`)
   const team = facts.entitlements['com.apple.developer.team-identifier']
   if (team !== teamId) problems.push(`it grants com.apple.developer.team-identifier ${JSON.stringify(team ?? null)}, not "${teamId}"`)
   const profileAppId = facts.entitlements['com.apple.application-identifier']
@@ -171,7 +171,7 @@ export function profileProblems(facts, { teamId, bundleId, now = new Date() }) {
     problems.push(
       wildcard
         ? `it is a wildcard profile (${profileAppId}). The browser passkey entitlement needs an explicit App ID: ${bundleId}`
-        : `it is for ${JSON.stringify(profileAppId ?? null)}, not ${appId}. Register the App ID ${bundleId} and make the profile for it (or set APEX_BUNDLE_ID)`,
+        : `it is for ${JSON.stringify(profileAppId ?? null)}, not ${appId}. Register the App ID ${bundleId} and make the profile for it (or set ATELIER_BUNDLE_ID)`,
     )
   }
   if (facts.entitlements[BROWSER_PASSKEY_ENTITLEMENT] !== true) {
@@ -183,7 +183,7 @@ export function profileProblems(facts, { teamId, bundleId, now = new Date() }) {
 
 /** Runs `security cms -D -i` and reads the fields the preflight needs with plutil (macOS only). */
 export function decodeProfile(path, run = execFileSync) {
-  if (!existsSync(path)) throw new Error(`APEX_PROVISIONING_PROFILE points at ${path}, which doesn't exist`)
+  if (!existsSync(path)) throw new Error(`ATELIER_PROVISIONING_PROFILE points at ${path}, which doesn't exist`)
   let xml
   try {
     xml = run('security', ['cms', '-D', '-i', path], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] })
@@ -220,7 +220,7 @@ export function preflightProfile(path, { teamId, bundleId, now = new Date(), dec
   const facts = decode(path)
   const problems = profileProblems(facts, { teamId, bundleId, now })
   if (problems.length) {
-    throw new Error(`The provisioning profile ${path}${facts.name ? ` ("${facts.name}")` : ''} can't sign Apex with browser passkeys:\n${problems.map((p) => `  - ${p}`).join('\n')}`)
+    throw new Error(`The provisioning profile ${path}${facts.name ? ` ("${facts.name}")` : ''} can't sign Atelier with browser passkeys:\n${problems.map((p) => `  - ${p}`).join('\n')}`)
   }
   return { facts, keychainGroup: profileAllowsKeychainGroup(facts, webAuthnGroup(teamId, bundleId)) }
 }
@@ -237,7 +237,7 @@ export function macSigningConfig(env = process.env, { repo = REPO, out = join(re
   const mode = signingMode(env)
   const bundleId = bundleIdFrom(env)
   // Only the passkeys entitlements name the team; unsigned and plain Developer ID builds go without it.
-  const teamId = mode === 'developer-id-passkeys' ? requireTeamId(env, 'The passkeys signing mode (APEX_PROVISIONING_PROFILE)') : teamIdFrom(env)
+  const teamId = mode === 'developer-id-passkeys' ? requireTeamId(env, 'The passkeys signing mode (ATELIER_PROVISIONING_PROFILE)') : teamIdFrom(env)
   const base = readEntitlements(readFileSync(join(repo, BASE_ENTITLEMENTS), 'utf8'))
   const inheritRestricted = Object.keys(readEntitlements(readFileSync(join(repo, INHERIT_ENTITLEMENTS), 'utf8'))).filter(isRestricted)
   if (inheritRestricted.length) throw new Error(`${INHERIT_ENTITLEMENTS} carries ${inheritRestricted.join(', ')}. The nested helpers have no provisioning profile, so they never get restricted entitlements.`)
@@ -249,7 +249,7 @@ export function macSigningConfig(env = process.env, { repo = REPO, out = join(re
   const mac = { hardenedRuntime: true, notarize: plan.notarize !== null }
   if (mode === 'developer-id') return { mode, bundleId, teamId, entitlements: entitlementsFor(mode, { base, teamId, bundleId }), mac }
 
-  const profileEnv = text(env, 'APEX_PROVISIONING_PROFILE')
+  const profileEnv = text(env, 'ATELIER_PROVISIONING_PROFILE')
   const profile = isAbsolute(profileEnv) ? profileEnv : resolve(repo, profileEnv)
   const { keychainGroup } = preflightProfile(profile, { teamId, bundleId, now, decode })
   if (!keychainGroup) log(`the profile doesn't allow the keychain group ${webAuthnGroup(teamId, bundleId)}, so Touch ID passkeys stay off (iCloud Keychain passkeys still work)`)

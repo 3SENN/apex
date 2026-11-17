@@ -1,13 +1,13 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Calls in other apps: which processes have audio
 // running, from Core Audio's process objects (macOS 14.4+), and which of the
-// apps Apex asked about are open (NSWorkspace). Reading either needs no
+// apps Atelier asked about are open (NSWorkspace). Reading either needs no
 // permission and shows no prompt, and nothing is captured: this only tells
-// Apex that, say, Zoom has the microphone open. Apex decides what counts as
+// Atelier that, say, Zoom has the microphone open. Atelier decides what counts as
 // a call (src/main/meetings/capture/desktopCalls.ts).
 //
 // `{"cmd":"watch-calls","apps":[prefixes]}` starts it (and prints a snapshot
@@ -17,7 +17,7 @@
 //    "apps":[{"pid","bundleId","name"}]}
 // `audio` lists every process with the microphone open, and processes
 // playing sound only when they belong to a watched app; this helper's own
-// process is left out (Apex's own recordings).
+// process is left out (Atelier's own recordings).
 
 import AppKit
 import CoreAudio
@@ -176,7 +176,7 @@ final class CallWatch {
       guard input || output else { continue }
       let bundle = bundleId(id)
       let owner = CallWatch.owner(of: pid)
-      // Sound alone is reported only for the apps Apex asked about (a call muted on this side).
+      // Sound alone is reported only for the apps Atelier asked about (a call muted on this side).
       guard input || watched(bundle) || watched(owner?.bundleIdentifier) else { continue }
       out.append([
         "pid": Int(pid), "bundleId": orNull(bundle), "exe": orNull(CallWatch.executable(pid)),

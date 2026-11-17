@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -28,7 +28,7 @@ function unpackedDir(dist, platform, arch) {
 /**
  * The packaged app for this machine: its folder (the .app on macOS), the
  * executable to launch, and its Resources folder. Null when it isn't built.
- * It is named after the branding (Apex.app, or Summit.app; scripts/branding.mjs).
+ * It is named after the branding (Atelier.app, or Summit.app; scripts/branding.mjs).
  */
 export function packagedApp({ dist = DIST, platform = process.platform, arch = hostArch(), productName = loadBranding().name } = {}) {
   const dir = unpackedDir(dist, platform, arch)

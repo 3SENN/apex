@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -13,7 +13,7 @@ import type { AppContext, WindowContext } from '../features/types'
 import { mainT } from '../i18n/mainT'
 import { errorMessage, log } from '../log'
 import { screenAccess } from '../speech/screenAccess'
-import { bringForward, fixMicBlocked, fixScreenBlocked, openInApex, targetWindow } from './apexNav'
+import { bringForward, fixMicBlocked, fixScreenBlocked, openInAtelier, targetWindow } from './atelierNav'
 import { voiceChatTap } from './chatTap'
 import { idleHud, reduceHud, type HudEvent } from './hud'
 import { captureScreen, captureTab, insertText, readFocus, replaceFieldText, type FocusRead, type Shot, type ShotResult } from './platform'
@@ -195,7 +195,7 @@ export class VoiceTurns {
         if (win) {
           win.send({ type: 'voice-open-chat', chatId })
           bringForward(win)
-        } else openInApex(this.#ctx, `apex://chat/${chatId}`)
+        } else openInAtelier(this.#ctx, `atelier://chat/${chatId}`)
         this.close()
         return
       }
@@ -300,7 +300,7 @@ export class VoiceTurns {
       result = await captureScreen(bounds, this.#ctx.smoke, (capture) => this.#ctx.float.keepOutOf(capture))
     } else {
       const tab = win?.tabs.active() ?? null
-      // apex:// pages and the new tab are Apex's own: nothing to show the model.
+      // atelier:// pages and the new tab are Atelier's own: nothing to show the model.
       if (!tab || win?.tabs.isChromeDrawn(tab)) return null
       result = await captureTab(this.#rt.masker(), tab.id)
     }
@@ -508,10 +508,10 @@ export class VoiceTurns {
     const code = this.#hud.error?.code
     // Asks macOS when it never has, else opens the pane for what is off now; holding the keys again retries.
     if (code === 'mic-blocked') void fixMicBlocked(this.#rt.broker(), this.#rt.blockedPane())
-    else if (code === 'no-engine') openInApex(this.#ctx, 'apex://settings/model')
+    else if (code === 'no-engine') openInAtelier(this.#ctx, 'atelier://settings/model')
     else if (code === 'another-recording') {
       const meetingId = this.#rt.recordingMeeting()
-      if (meetingId) openInApex(this.#ctx, `apex://meetings/${meetingId}`)
+      if (meetingId) openInAtelier(this.#ctx, `atelier://meetings/${meetingId}`)
     } else if (!code && (this.#hud.notice === 'screen-missing' || this.#hud.notice === 'screen-relaunch')) void fixScreenBlocked()
     this.close()
   }

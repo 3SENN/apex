@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -16,10 +16,10 @@ import { parseHelperLine } from '../src/main/speech/protocol'
 
 // Calls in desktop apps: the snapshot's attribution,
 // the start and end rules (mic flaps, mutes, quitting), one offer per call,
-// Apex's own microphone never counting, the calendar name, the card and
+// Atelier's own microphone never counting, the calendar name, the card and
 // mute rules, and the helper protocol and broker plumbing.
 
-const OWN = { ownPids: new Set([100, 101]), ownBundles: ['com.sennechin.apex'] }
+const OWN = { ownPids: new Set([100, 101]), ownBundles: ['com.sennechin.atelier'] }
 const TIMING: CallTiming = { startMs: 3000, flapMs: 1500, endMs: 20_000 }
 
 function proc(over: Partial<CallAudioProcess>): CallAudioProcess {
@@ -53,13 +53,13 @@ describe('attributing a snapshot', () => {
     expect(uses.get('slack')).toMatchObject({ input: true, output: true, audio: ['com.tinyspeck.slackmacgap'] })
   })
 
-  it('never counts Apex’s own microphone, by process or by bundle', () => {
+  it('never counts Atelier’s own microphone, by process or by bundle', () => {
     const uses = attributeCalls(
       {
         supported: true,
         audio: [
           proc({ pid: 100, bundleId: 'us.zoom.xos' }),
-          proc({ pid: 700, bundleId: 'com.sennechin.apex.helper', appPid: 100, appBundleId: 'com.sennechin.apex' }),
+          proc({ pid: 700, bundleId: 'com.sennechin.atelier.helper', appPid: 100, appBundleId: 'com.sennechin.atelier' }),
           proc({ pid: 701, bundleId: 'com.google.Chrome.helper', appPid: 101, appBundleId: 'com.google.Chrome' }),
         ],
         apps: [{ pid: 101, bundleId: 'com.google.Chrome.app.meet', name: 'Google Meet' }],
@@ -142,7 +142,7 @@ describe('call tracking', () => {
     expect(at(tracker, zoom({ running: false }), 40_000).map((t) => `${t.type}:${t.call.id}`)).toEqual(['ended:zoom:30000'])
   })
 
-  it('ignores Apex’s own microphone even while another app is open', () => {
+  it('ignores Atelier’s own microphone even while another app is open', () => {
     const tracker = new CallTracker(TIMING)
     at(tracker, { supported: true, audio: [proc({ pid: 101, bundleId: 'us.zoom.xos' })], apps: [ZOOM_APP] }, 0)
     expect(tracker.tick(10_000)).toEqual([])

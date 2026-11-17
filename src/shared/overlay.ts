@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -33,7 +33,7 @@ import { UPDATES_SURFACES, type UpdatesSurfaceProps } from './overlay/updates'
 import { MEDIA_SURFACES, type MediaSurfaceProps } from './overlay/media'
 // TR-11
 import { TRANSLATE_SURFACES, type TranslateSurfaceProps } from './overlay/translate'
-// Apex.server's bar
+// Atelier.server's bar
 import { PACKS_SURFACES, type PacksSurfaceProps } from './overlay/packs'
 
 export type Rect = Bounds

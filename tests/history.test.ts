@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -46,7 +46,7 @@ describe('rankHistory', () => {
 // SH-35: typed counts, the last pick per input, visit times
 describe('HistoryStore command-bar memory', () => {
   const withStore = (fn: (store: HistoryStore, dir: string) => void): void => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-history-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-history-'))
     try {
       const store = new HistoryStore(dir)
       fn(store, dir)
@@ -70,7 +70,7 @@ describe('HistoryStore command-bar memory', () => {
     withStore((store) => {
       const at = Date.UTC(2026, 9, 29)
       store.notePick('  GH ', 'https://github.com/', at)
-      store.notePick('x', 'apex://settings', at)
+      store.notePick('x', 'atelier://settings', at)
       expect(pickKey(' GH ')).toBe(pickKey('gh'))
       expect(store.pickFor('gh', at + 1000)).toBe('https://github.com/')
       expect(store.pickFor('gh', at + 2 * day)).toBeNull()

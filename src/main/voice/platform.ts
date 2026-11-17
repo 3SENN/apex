@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -149,7 +149,7 @@ export function screenAllowed(): boolean {
 
 /**
  * One display, through desktopCapturer, when Screen Recording is granted.
- * `keepOut` (FloatManager.keepOutOf) keeps Apex's floats out of it: content
+ * `keepOut` (FloatManager.keepOutOf) keeps Atelier's floats out of it: content
  * protection on macOS and Windows, hiding them for the capture on Linux.
  * Smoke never captures the real screen.
  */

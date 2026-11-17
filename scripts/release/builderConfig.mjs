@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@
 // and release.mjs build the same thing from the same env:
 //   - the branding (scripts/branding.mjs): the yml is written for the official
 //     one, and brandedConfig swaps in the active branding's name and files;
-//   - appId, from APEX_BUNDLE_ID, else the branding's (bundle.mjs);
+//   - appId, from ATELIER_BUNDLE_ID, else the branding's (bundle.mjs);
 //   - the publish target (config.mjs builderOverrides);
 //   - on macOS, the signing mode and its entitlements and profile
 //     (entitlements.mjs), notarization on or off, the identity resolved
@@ -55,13 +55,13 @@ export function withExtraResources(config, extra) {
 
 /** What electron-builder.yml is written for: the official branding's folder and name. */
 export const OFFICIAL_DIR = 'branding/official/'
-export const OFFICIAL_NAME = 'Apex'
+export const OFFICIAL_NAME = 'Atelier'
 
 /**
  * electron-builder.yml for `branding`: each branding/official/ path from the
- * branding's own folder, and its name wherever the yml says "Apex" (the
+ * branding's own folder, and its name wherever the yml says "Atelier" (the
  * product name, the shortcut, the file types' names, the usage descriptions,
- * the Linux window class). Lower-case apex (file extensions, the helpers'
+ * the Linux window class). Lower-case atelier (file extensions, the helpers'
  * file names) stays, as do the keys. The packaged package.json carries the
  * name too, so app.name, and with it the profile folder, follows the branding.
  * The copyright, the publisher (package.json's author) and the Windows
@@ -70,7 +70,7 @@ export const OFFICIAL_NAME = 'Apex'
 export function brandedConfig(config, branding, repo = REPO) {
   const dir = `${brandingFile(branding, '.', repo)}/`
   const rename = (value) => {
-    if (typeof value === 'string') return value.split(OFFICIAL_DIR).join(dir).replace(/\bApex\b/g, branding.name)
+    if (typeof value === 'string') return value.split(OFFICIAL_DIR).join(dir).replace(/\bAtelier\b/g, branding.name)
     if (Array.isArray(value)) return value.map(rename)
     if (isPlainObject(value)) return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, rename(v)]))
     return value

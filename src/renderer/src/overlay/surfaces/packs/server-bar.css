@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-/* Apex's bar over an app whose web server runs (apex.server): the sharing
+/* Atelier's bar over an app whose web server runs (atelier.server): the sharing
    bar's shape, in the accent rather than the camera's red. */
 
 /* Room for the shadow inside the frame (the overlay view is cut to it, so a

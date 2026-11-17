@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -191,7 +191,7 @@ export async function runReplyTool(name: string, input: unknown, callId: string,
         return 'The user sees a card to connect it. Carry on with what you can do without it.'
       }
       const entry = matchDirectory(service, directory.entries)
-      if (!entry) return `${BRAND_NAME} has no ready-made connector for ${service}. The user can add any MCP server for it in Connectors (apex://connectors). Mention that briefly if it helps.`
+      if (!entry) return `${BRAND_NAME} has no ready-made connector for ${service}. The user can add any MCP server for it in Connectors (atelier://connectors). Mention that briefly if it helps.`
       if (directory.connected.includes(entry.id)) return `${entry.name} is already connected, but this chat started without it. The user can continue in a new chat to use it.`
       ctx.emit({ type: 'connector-needed', id: randomUUID(), turnId: ctx.turnId, directoryId: entry.id, service: entry.name, reason })
       return `The user sees a card to connect ${entry.name}. Carry on with what you can do without it.`

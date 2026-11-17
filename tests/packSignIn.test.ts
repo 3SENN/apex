@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -31,7 +31,7 @@ afterEach(() => {
   for (const d of dirs.splice(0)) rmSync(d, { recursive: true, force: true })
 })
 const tmp = (): string => {
-  const d = mkdtempSync(join(tmpdir(), 'apex-pack-signin-test-'))
+  const d = mkdtempSync(join(tmpdir(), 'atelier-pack-signin-test-'))
   dirs.push(d)
   return d
 }
@@ -39,7 +39,7 @@ const tmp = (): string => {
 const app = (over: Partial<PackApp> = {}): PackApp => ({ id: 'main', name: 'Dashboard', root: 'app', entry: 'index.html', build: 'kit', kind: 'tool', ...over })
 const CORP: PackAuth = { id: 'corp', name: 'Contoso account', issuer: 'https://login.contoso.example', clientId: 'dashboard', scopes: ['openid', 'email', 'api.read'], hosts: ['api.contoso.example'] }
 const manifest = (over: Partial<PackManifest> = {}): PackManifest => ({
-  format: 'apex-pack',
+  format: 'atelier-pack',
   manifestVersion: 2,
   id: 'dashboard',
   name: 'Dashboard',
@@ -158,7 +158,7 @@ describe('signing in', () => {
     return { fetchFn, tokens: () => issued, challenges, bodies }
   }
 
-  /** The browser: follows the authorization page straight back to Apex's loopback redirect, as a provider that remembers you does. */
+  /** The browser: follows the authorization page straight back to Atelier's loopback redirect, as a provider that remembers you does. */
   const browser = (seen: string[]) => (url: string): (() => void) => {
     seen.push(url)
     const u = new URL(url)

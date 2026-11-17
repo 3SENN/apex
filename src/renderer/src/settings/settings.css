@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -1284,7 +1284,7 @@ button.sp-item__main:focus-visible {
   white-space: nowrap;
 }
 
-/* DS-102: a dashed suggestion card, a 32 px Apex glyph tile, a title, two muted lines, dismiss on hover. */
+/* DS-102: a dashed suggestion card, a 32 px Atelier glyph tile, a title, two muted lines, dismiss on hover. */
 .sp-suggest-card {
   position: relative;
   display: flex;

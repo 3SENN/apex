@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -44,10 +44,10 @@ afterEach(() => {
 })
 
 const themePack = (id: string, over: Record<string, unknown> = {}): PackFiles =>
-  new Map([[PACK_MANIFEST_FILE, Buffer.from(JSON.stringify({ format: 'apex-pack', manifestVersion: 1, id, name: id, version: '1.0.0', description: 'A pack.', contributes: { themes: [{ id: 't', name: 'T', accent: '#123456' }] }, permissions: { ...NO_PACK_PERMISSIONS }, ...over }))]])
+  new Map([[PACK_MANIFEST_FILE, Buffer.from(JSON.stringify({ format: 'atelier-pack', manifestVersion: 1, id, name: id, version: '1.0.0', description: 'A pack.', contributes: { themes: [{ id: 't', name: 'T', accent: '#123456' }] }, permissions: { ...NO_PACK_PERMISSIONS }, ...over }))]])
 
 function setup(now = () => Date.UTC(2026, 10, 4, 12, 0, 0)) {
-  const dir = mkdtempSync(join(tmpdir(), 'apex-pack-flows-'))
+  const dir = mkdtempSync(join(tmpdir(), 'atelier-pack-flows-'))
   dirs.push(dir)
   const store = new PackStore(dir)
   const author = new AuthorKey(join(dir, 'packs'), { encrypt: (b: Buffer) => b, decrypt: (b: Buffer) => b })

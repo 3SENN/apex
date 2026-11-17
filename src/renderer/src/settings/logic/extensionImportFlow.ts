@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -46,7 +46,7 @@ export function reportHeadline(report: ExtensionImportReport): 'cancelled' | 'ad
   return report.added.length > 0 ? 'added' : 'none'
 }
 
-/** Tone for the report: success when nothing was left out but "already in Apex", a warning otherwise. */
+/** Tone for the report: success when nothing was left out but "already in Atelier", a warning otherwise. */
 export function reportTone(report: ExtensionImportReport): 'success' | 'warning' | 'info' {
   if (report.cancelled) return 'info'
   const real = report.skipped.filter((s) => s.reason !== 'installed')

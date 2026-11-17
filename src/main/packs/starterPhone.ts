@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -55,11 +55,11 @@ function render() {
     if (phone.moved) phone.el.querySelector('.angles').textContent = 'Tilt ' + Math.round(phone.beta) + '°, ' + Math.round(phone.gamma) + '° · swing ' + phone.swing.toFixed(0)
     for (const key of phone.el.querySelectorAll('.key')) key.classList.toggle('down', phone.held.has(key.dataset.key))
   }
-  apex.test?.ready({ serving: Boolean(status), phones: phones.size })
+  atelier.test?.ready({ serving: Boolean(status), phones: phones.size })
   requestAnimationFrame(render)
 }
 
-apex.server.onConnection((socket) => {
+atelier.server.onConnection((socket) => {
   const phone = { socket, name: socket.query.name || 'Phone', beta: 0, gamma: 0, swing: 0, moved: false, held: new Set(), el: null }
   phone.el = card(phone)
   phones.set(socket.id, phone)
@@ -84,7 +84,7 @@ apex.server.onConnection((socket) => {
   })
 })
 
-apex.server.onStop((reason) => {
+atelier.server.onStop((reason) => {
   status = null
   qr.hidden = true
   say.textContent = reason === 'person' ? 'Sharing stopped. Reload to share again.' : 'The server stopped.'
@@ -93,9 +93,9 @@ apex.server.onStop((reason) => {
 // On the Wi-Fi when it can be (in test_pack, on this computer only).
 let status = null
 try {
-  status = await apex.server.start({ lan: true, root: 'phone' })
+  status = await atelier.server.start({ lan: true, root: 'phone' })
 } catch {
-  status = await apex.server.start({ root: 'phone' }).catch((err) => {
+  status = await atelier.server.start({ root: 'phone' }).catch((err) => {
     say.textContent = err.message
     return null
   })
@@ -125,7 +125,7 @@ html, body { min-height: 100%; }
 .key.down { background: var(--accent); color: var(--text-on-accent); }
 `
 
-/** The phone page: Apex UI from the server, the socket helper, then the page's own script. */
+/** The phone page: Atelier UI from the server, the socket helper, then the page's own script. */
 export const PHONE_PAGE = `<!doctype html>
 <html lang="en">
 <head>
@@ -133,9 +133,9 @@ export const PHONE_PAGE = `<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="color-scheme" content="light dark">
 <title>Controller</title>
-<link rel="stylesheet" href="__apex/kit/1/apex-kit/ui.css">
+<link rel="stylesheet" href="__atelier/kit/1/atelier-kit/ui.css">
 <link rel="stylesheet" href="phone.css">
-<script src="__apex/client.js"></script>
+<script src="__atelier/client.js"></script>
 <script src="phone.js" defer></script>
 </head>
 <body>
@@ -183,7 +183,7 @@ body { padding: max(var(--space-4), env(safe-area-inset-top)) max(var(--space-4)
 `
 
 export const PHONE_SCRIPT = `// The phone: joins the app with a name, turns on motion, and sends what the
-// phone does over its socket (apexServer comes from __apex/client.js, which
+// phone does over its socket (atelierServer comes from __atelier/client.js, which
 // reconnects by itself). The app can buzz it: Android vibrates; an iPhone has
 // no vibration for pages, but Safari gives a light tap when a switch flips.
 (function () {
@@ -218,7 +218,7 @@ export const PHONE_SCRIPT = `// The phone: joins the app with a name, turns on m
   }
   var name = $('name')
   try {
-    name.value = localStorage.getItem('apex-controller-name') || ''
+    name.value = localStorage.getItem('atelier-controller-name') || ''
   } catch (e) {}
 
   // The screen stays on while you play.
@@ -236,9 +236,9 @@ export const PHONE_SCRIPT = `// The phone: joins the app with a name, turns on m
   $('go').addEventListener('click', function () {
     var who = name.value.trim() || 'Phone'
     try {
-      localStorage.setItem('apex-controller-name', who)
+      localStorage.setItem('atelier-controller-name', who)
     } catch (e) {}
-    link = apexServer.connect({ query: { name: who } })
+    link = atelierServer.connect({ query: { name: who } })
     link.onOpen(function () {
       $('status').textContent = words.on
     })

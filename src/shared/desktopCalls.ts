@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Calls in desktop apps: the apps Apex knows, and how
+// Calls in desktop apps: the apps Atelier knows, and how
 // the speech helper's `calls` snapshot (native/speech/CallWatch.swift) maps
 // onto them. The helper only reports facts it can read without a prompt:
 // which processes have the microphone open (Core Audio's process objects,
@@ -123,14 +123,14 @@ function meetApp(apps: readonly CallRunningApp[], browser: string): boolean {
 }
 
 export interface AttributeOptions {
-  /** Apex's own processes (main, renderers, helpers): their microphone use is never a desktop call. */
+  /** Atelier's own processes (main, renderers, helpers): their microphone use is never a desktop call. */
   ownPids: ReadonlySet<number>
-  /** Apex's own bundle ids (each with its helpers). */
+  /** Atelier's own bundle ids (each with its helpers). */
   ownBundles: readonly string[]
 }
 
 /**
- * Pure: which known apps are using audio in a snapshot. Apex's own processes
+ * Pure: which known apps are using audio in a snapshot. Atelier's own processes
  * are left out (its tabs have their own meeting cards), FaceTime's audio
  * service counts for FaceTime while it is open, and a browser's microphone
  * counts for an open Google Meet web app.

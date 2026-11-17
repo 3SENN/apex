@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -38,7 +38,7 @@ export function SummaryCard({ meeting, onSummarize, busy }: { meeting: MeetingDe
           {t('meetings.detail.pending')}
         </p>
         <div className="mt-notes__actions">
-          <Button size="sm" variant="secondary" onClick={() => void call('pages', 'open', 'apex://settings/model')}>
+          <Button size="sm" variant="secondary" onClick={() => void call('pages', 'open', 'atelier://settings/model')}>
             {t('meetings.detail.pendingAction')}
           </Button>
           <Button size="sm" variant="ghost" loading={busy} onClick={onSummarize}>

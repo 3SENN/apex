@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -59,7 +59,7 @@ export function setupConnectors(deps: ConnectorsDeps): ConnectorsSetup {
     void id
     throw new Error(mainT('connectors.error.gone'))
   }
-  // Favicons only for sites Apex already knows: the directory's and your servers' hosts.
+  // Favicons only for sites Atelier already knows: the directory's and your servers' hosts.
   const knownSite = (site: string): boolean =>
     core.directory().some((e) => e.site === site) ||
     store.list().some((c) => {

@@ -1,18 +1,18 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // The open-at-login approval dialog (OV-09): explains the step, opens System
 // Settings › Login Items (Windows: Startup apps) and waits there. Main
-// rechecks when Apex regains focus; once approved it says so and closes.
+// rechecks when Atelier regains focus; once approved it says so and closes.
 // The same content renders as the overlay surface and, while the overlay
 // host isn't available, as an in-chrome modal.
 import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactElement } from 'react'
 import { CircleCheck } from 'lucide-react'
 import type { Rect } from '@shared/overlay'
 import type { LoginItemState } from '@shared/system'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { useEvent } from '../settings/data'
 import { Button, Modal, Spinner } from '../ui'
 import { useT, type MessageKey } from '../i18n/useT'
@@ -99,7 +99,7 @@ function Status({ approval }: { approval: Approval }): ReactElement | null {
 /** Title, explanation, the live status and the two buttons. */
 function ApprovalContent({ onClose, titleId, descId, onLayout }: { onClose(): void; titleId: string; descId: string; onLayout?(): void }): ReactElement {
   const t = useT()
-  const win = platformKind(apex.platform) === 'win'
+  const win = platformKind(atelier.platform) === 'win'
   const approval = useApproval(onClose)
   useLayoutEffect(() => onLayout?.(), [approval.waiting, approval.approved, approval.error])
   const body: MessageKey = win ? 'system.loginItem.body.win' : 'system.loginItem.body.mac'

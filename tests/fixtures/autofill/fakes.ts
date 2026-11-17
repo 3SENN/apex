@@ -9,7 +9,7 @@ import type { Presenter, SurfaceHandle } from '../../../src/main/autofill/presen
 import type { AutofillSurfaceId } from '@shared/overlay/autofill'
 import type { OverlayResult } from '@shared/overlay'
 
-// Apex-written fakes for the autofill tests: frames, a tab, the vault,
+// Atelier-written fakes for the autofill tests: frames, a tab, the vault,
 // the wallet, the authenticator and a presenter that records surfaces.
 
 export class FakeFrame implements FrameHandle {

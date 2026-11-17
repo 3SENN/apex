@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // One second of AAC audio (a half-second tone, then silence) in an .m4a,
-// made for Apex with afconvert. The smoke helper writes it wherever a
+// made for Atelier with afconvert. The smoke helper writes it wherever a
 // recording was asked for, so playback, Range replies, export and storage
 // sizes all have a real file without touching a microphone.
 export const FAKE_M4A_BASE64 =

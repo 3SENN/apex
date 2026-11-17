@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The share image saved inside and next to a shared .apexapp (docs/apps.md ›
+// The share image saved inside and next to a shared .atelierapp (docs/apps.md ›
 // Sharing): the app's own still, 1200×630 like a companion's share image,
 // with its name on a dark band so it reads on any game's colours. The image
 // is a file, not chrome, so its colours are fixed rather than theme tokens.

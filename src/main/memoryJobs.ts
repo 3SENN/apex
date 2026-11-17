@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@
 // tool only) save what is worth remembering; "Reorganize" has one tidy up
 // the notes already there. Private chats are never read; imported ones are.
 // Progress goes out as the `memory-job` event, a job can be cancelled, and
-// one that was running when Apex quit is marked interrupted, with Retry
+// one that was running when Atelier quit is marked interrupted, with Retry
 // picking up at the batch it stopped at. With the decision model on for
 // memory (DC-17), a build first leaves out the chats it is sure hold nothing
 // lasting. Jobs live in userData/memory-jobs.json.
@@ -87,7 +87,7 @@ export function planBatches(transcripts: readonly Transcript[], budget = BATCH_C
   return batches
 }
 
-/** Chats a build may read: saved, not private, not routine runs, delegated children or Apex's own upkeep chats. */
+/** Chats a build may read: saved, not private, not routine runs, delegated children or Atelier's own upkeep chats. */
 export function eligibleChats(chats: readonly ChatSummary[], owner: Owner | 'all', own: ReadonlySet<string>): ChatSummary[] {
   return chats
     .filter((c) => !c.private && !c.draft && !c.routineId && !c.parentChatId && !own.has(c.id))
@@ -165,7 +165,7 @@ export interface MemoryJobsDeps {
   /** versions.snapshot for a note about to be rewritten. */
   snapshot(owner: Owner, path: string, text: string): void
   broadcast(job: MemoryJob): void
-  /** Chats Apex itself started for memory upkeep; builds never read them. Shared with Tidy memory. */
+  /** Chats Atelier itself started for memory upkeep; builds never read them. Shared with Tidy memory. */
   ownChats: Set<string>
 }
 
@@ -179,7 +179,7 @@ export class MemoryJobs {
     this.#deps = deps
     const raw = readJson(deps.file)
     const list = Array.isArray(raw) ? (raw as Stored[]).filter((s) => s && typeof s === 'object' && s.job && typeof s.job.id === 'string') : []
-    // A job that was running when Apex quit can't still be running.
+    // A job that was running when Atelier quit can't still be running.
     this.#jobs = list.map((s) => (s.job.state === 'running' ? { ...s, job: { ...s.job, state: 'interrupted' } } : s))
     for (const s of this.#jobs) if (s.job.chatId) deps.ownChats.add(s.job.chatId)
     if (this.#jobs.some((s, i) => s.job.state !== list[i]?.job.state)) this.#save()

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import type { Bookmark } from '@shared/services'
 import type { SettingsView, TabsSnapshot } from '@shared/ipc'
 import { engineHasOwnAccount } from '@shared/engine'
-import { apex, call, errorText } from '../../api'
+import { atelier, call, errorText } from '../../api'
 import { toast } from '../../ui'
 import type { ShellActions } from '../shellContext'
 import { canAutoGroup, isWebUrl, type MainMenuContext, type ShellMenuContext } from './logic/menus'
@@ -78,7 +78,7 @@ export function runShellMenu(id: string, deps: ShellMenuDeps): boolean {
   switch (id) {
     case 'new-tab':
       // Like ⌘T: the new tab opens with the address field ready.
-      void apex.tabs.create(undefined, { position: sidebarLayout ? 'top' : 'end' }).then(shell.focusAddress)
+      void atelier.tabs.create(undefined, { position: sidebarLayout ? 'top' : 'end' }).then(shell.focusAddress)
       return true
     case 'reopen':
       void call('tabs', 'reopenClosed')
@@ -95,7 +95,7 @@ export function runShellMenu(id: string, deps: ShellMenuDeps): boolean {
       return true
     case 'layout-sidebar':
     case 'layout-horizontal':
-      void apex.settings.set({ layout: id === 'layout-sidebar' ? 'sidebar' : 'horizontal' })
+      void atelier.settings.set({ layout: id === 'layout-sidebar' ? 'sidebar' : 'horizontal' })
       return true
     case 'toggle-sidebar':
       void call('window', 'setSidebarOpen', !sidebarOpen)
@@ -109,25 +109,25 @@ export function runShellMenu(id: string, deps: ShellMenuDeps): boolean {
     case 'theme-system':
     case 'theme-light':
     case 'theme-dark':
-      void apex.settings.set({ theme: id === 'theme-system' ? 'system' : id === 'theme-light' ? 'light' : 'dark' })
+      void atelier.settings.set({ theme: id === 'theme-system' ? 'system' : id === 'theme-light' ? 'light' : 'dark' })
       return true
     case 'appearance-settings':
-      open('apex://settings/appearance')
+      open('atelier://settings/appearance')
       return true
     case 'rename-window':
       shell.renameWindow()
       return true
     case 'profile':
-      open('apex://settings/you')
+      open('atelier://settings/you')
       return true
     case 'api-key':
-      open('apex://settings/model')
+      open('atelier://settings/model')
       return true
     case 'dest-chats':
     case 'dest-routines':
     case 'dest-skills':
     case 'dest-connectors':
-      open(`apex://${id.slice('dest-'.length)}`)
+      open(`atelier://${id.slice('dest-'.length)}`)
       return true
     case 'bookmark':
       // ⌘D semantics: adds only; removing needs the star.
@@ -136,25 +136,25 @@ export function runShellMenu(id: string, deps: ShellMenuDeps): boolean {
     case 'bar-always':
     case 'bar-newtab':
     case 'bar-never':
-      void apex.settings.set({ bookmarksBar: id === 'bar-always' ? 'always' : id === 'bar-newtab' ? 'newtab' : 'never' })
+      void atelier.settings.set({ bookmarksBar: id === 'bar-always' ? 'always' : id === 'bar-newtab' ? 'newtab' : 'never' })
       return true
     case 'bookmarks':
-      open('apex://bookmarks')
+      open('atelier://bookmarks')
       return true
     case 'history':
-      open('apex://history')
+      open('atelier://history')
       return true
     case 'downloads':
-      open('apex://downloads')
+      open('atelier://downloads')
       return true
     case 'find':
       shell.openFind()
       return true
     case 'first-week':
-      open('apex://first-week')
+      open('atelier://first-week')
       return true
     case 'settings':
-      open('apex://settings')
+      open('atelier://settings')
       return true
     default:
       return false

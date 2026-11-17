@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 // The system feature's own small file (userData/system.json): things that happen once, like
-// the "Apex is still running" notice. Not a setting: nothing to change.
+// the "Atelier is still running" notice. Not a setting: nothing to change.
 
 interface SystemFile {
   backgroundNoticeShown: boolean

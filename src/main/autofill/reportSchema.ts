@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import type { FrameReport } from '@shared/autofill'
 import type { FieldKind } from '@shared/fields'
 import { PASSWORD_MAX, USERNAME_MAX } from '@shared/passwords'
 
-// Frame reports come from page renderers, which Apex doesn't trust: every one
+// Frame reports come from page renderers, which Atelier doesn't trust: every one
 // is parsed here before the controller sees it, and anything malformed is
 // dropped without a reply.
 

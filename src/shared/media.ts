@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -18,9 +18,9 @@ export const MEDIA_RATE_MAX = 3
 /** Page channels: page → main reports, main → page commands. Validated with zod in main. */
 export const PAGE_MEDIA = {
   /** page → main: a PageMediaReport for the sending frame, or null when its media is gone. */
-  report: 'apex-page:media',
+  report: 'atelier-page:media',
   /** main → page: a PageMediaCommand for that frame's helper. */
-  command: 'apex-page:media-command',
+  command: 'atelier-page:media-command',
 } as const
 
 /** Media Session actions the controls can ask a page to run. */
@@ -128,7 +128,7 @@ export interface MediaMemory {
   dismissed: ReadonlySet<string>
   /** Tabs listed while they played; they stay listed, paused, while they can resume. */
   known: ReadonlySet<string>
-  /** The tab Apex's controls paused last; it stays listed so it can resume. */
+  /** The tab Atelier's controls paused last; it stays listed so it can resume. */
   held: string | null
 }
 
@@ -272,7 +272,7 @@ export interface AutoPipInput {
  * with sound. The page's report decides when there is one (a quiet passage
  * still counts; audio alone, muted autoplay or a page that forbids it don't);
  * without one, Chromium hearing the tab does, and the page script still
- * looks for such a video. Never for an agent's tab or a page Apex draws.
+ * looks for such a video. Never for an agent's tab or a page Atelier draws.
  */
 export function autoPipEligible(input: AutoPipInput): boolean {
   if (!input.enabled || input.agentControlled || input.chromeDrawn || input.tabMuted) return false
@@ -294,7 +294,7 @@ function largestSide(sizes: string): number {
   return best
 }
 
-/** Artwork Apex may draw: http(s), or a data: image small enough to send around. */
+/** Artwork Atelier may draw: http(s), or a data: image small enough to send around. */
 export function usableArtwork(src: string): boolean {
   if (src.length > MEDIA_ARTWORK_MAX) return false
   return /^https?:\/\//i.test(src) || /^data:image\/(png|jpeg|webp|gif|avif);/i.test(src)

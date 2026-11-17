@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -41,7 +41,7 @@ function originHost(origin: string): string {
   }
 }
 
-/** The sentence a broader scope confirms; main's wording when it is there, Apex's own fallback otherwise. */
+/** The sentence a broader scope confirms; main's wording when it is there, Atelier's own fallback otherwise. */
 function explain(t: T, item: ItemOf<'approval'>, scope: ApprovalScope): string {
   try {
     if (item.action) return scopeExplanation(item.action, item.origin, scope)

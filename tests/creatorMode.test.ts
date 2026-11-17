@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -74,7 +74,7 @@ describe('which chats get the builder', () => {
     const result = await runClientTool('creator_mode', {}, context())
     expect(result.setup).toEqual({ creator: true })
     expect(result.content).toMatch(/Creator mode is on/)
-    expect(result.content).toMatch(/apex_inspect/)
+    expect(result.content).toMatch(/atelier_inspect/)
     expect((await runClientTool('creator_mode', { extra: 1 }, context())).isError).toBe(true)
   })
 })
@@ -149,7 +149,7 @@ describe('tools that join a running chat', () => {
 
   it('leaves a chat that gained no pack exactly as it was, even a Creator chat when a builder tool is new', () => {
     registerClientTool(tool('create_pack', 'packs', (s) => s.creator === true))
-    registerClientTool(tool('apex_inspect', 'packs', (s) => s.creator === true))
+    registerClientTool(tool('atelier_inspect', 'packs', (s) => s.creator === true))
     registerClientTool(tool('use_app', 'packs'))
     const { d, caps, saves } = chat(['create_pack'])
     expect(d.joinTools(base)).toEqual([])

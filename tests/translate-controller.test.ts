@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -160,7 +160,7 @@ describe('the translate controller', () => {
     expect(c.menu('t1')).toEqual({ kind: 'translate', target: 'en' })
     await c.hints('t1', URL, hints({ declared: 'en', sample: '' }))
     expect(c.menu('t1')).toBeNull()
-    c.navigated('t2', 'apex://settings')
+    c.navigated('t2', 'atelier://settings')
     expect(c.menu('t2')).toBeNull()
   })
 
@@ -228,7 +228,7 @@ describe('the translation helper protocol (TR-05)', () => {
   it('asks, translates, detects and maps errors', async () => {
     let spawned = 0
     const helper = new TranslateHelper({
-      path: () => '/fake/apex-translate',
+      path: () => '/fake/atelier-translate',
       spawner: () => {
         spawned++
         return fakeProcess((req) => {

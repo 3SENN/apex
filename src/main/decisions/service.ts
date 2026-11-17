@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -34,7 +34,7 @@ import { claudeDecide } from './claude'
 import { DecisionError, endpointFor, listModels, modelsUrlOf, requestDecision, type Endpoint, type FetchLike } from './client'
 import type { DecisionKeys } from './keys'
 
-// The decider (DC-01, DC-04 to DC-06). Every one of Apex's own decisions
+// The decider (DC-01, DC-04 to DC-06). Every one of Atelier's own decisions
 // calls decide() with the answer its rule already gave; the rule's answer
 // comes straight back unless a decision model is on for that use, the window
 // is not private, the model answers in time and is sure enough (the caller's
@@ -82,7 +82,7 @@ const HEDGE_LEFT_MS = 300
 
 export interface DecideCall<T> {
   use: DecisionUse
-  /** What Apex's rule decided; returned whenever the model does not take over. A slow rule (a Claude call) runs alongside the model. */
+  /** What Atelier's rule decided; returned whenever the model does not take over. A slow rule (a Claude call) runs alongside the model. */
   rule: T | Promise<T>
   /** Built only when the model is consulted. */
   request: () => DecisionRequest
@@ -145,7 +145,7 @@ export function setDecider(next: Decider | null): void {
   current = next ?? RULES_ONLY
 }
 
-/** The app's decider: Apex's rules, plus the decision model where you turned it on. */
+/** The app's decider: Atelier's rules, plus the decision model where you turned it on. */
 export function decider(): Decider {
   return current
 }
@@ -244,7 +244,7 @@ export class Decisions implements Decider {
     this.#now = deps.now ?? Date.now
   }
 
-  // ── Apex's own decisions ──
+  // ── Atelier's own decisions ──
 
   active(use: DecisionUse): boolean {
     const s = this.#d.settings()

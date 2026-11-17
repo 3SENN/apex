@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -21,11 +21,11 @@ function assert(ok: unknown, message: string): asserts ok {
   if (!ok) throw new Error(message)
 }
 
-const temp = (): string => mkdtempSync(join(tmpdir(), 'apex-smoke-c5-'))
+const temp = (): string => mkdtempSync(join(tmpdir(), 'atelier-smoke-c5-'))
 
 export const checks: SmokeCheck[] = [
   {
-    name: 'connectors: public https runs server-side; private, custom-header and local ones run through Apex',
+    name: 'connectors: public https runs server-side; private, custom-header and local ones run through Atelier',
     async run() {
       assert(executionOf({ kind: 'remote', url: 'https://mcp.example.com/mcp', headerName: null }, 'bearer') === 'server', 'a public https server did not route server-side')
       assert(executionOf({ kind: 'remote', url: 'http://127.0.0.1:8123/mcp', headerName: null }, 'none') === 'local', 'a loopback server did not route locally')
@@ -39,7 +39,7 @@ export const checks: SmokeCheck[] = [
       assert(directoryProblems(DIRECTORY).length === 0, `directory problems: ${JSON.stringify(directoryProblems(DIRECTORY))}`)
       const first = DIRECTORY[0]
       assert(first && connectRequestOf(connectorConnectUrl(first.id)) === first.id, 'the connect link did not round-trip')
-      assert(connectRequestOf('apex://connectors?connect=..%2Fx') === null, 'a crafted connect id was accepted')
+      assert(connectRequestOf('atelier://connectors?connect=..%2Fx') === null, 'a crafted connect id was accepted')
     },
   },
   {

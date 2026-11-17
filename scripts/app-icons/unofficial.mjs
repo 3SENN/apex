@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 // The unofficial branding's icons (branding/unofficial/; TRADEMARKS.md), all
 // drawn from one SVG: branding/unofficial/icon.svg, a neutral rounded tile
-// with a plain mark. Nothing of Apex's art is used.
+// with a plain mark. Nothing of Atelier's art is used.
 //
 //   node scripts/app-icons/unofficial.mjs           write the icons (in place)
 //   node scripts/app-icons/unofficial.mjs --check   exit 1 if any is missing or stale
@@ -281,7 +281,7 @@ export const TARGETS = [
   ...LINUX_SIZES.map((s) => ({ path: at(`icons/${s}x${s}.png`), kind: 'png', images: [s], build: () => png('flat', s) })),
   { path: at('html-document.icns'), kind: 'icns', images: ICNS_SIZES, build: () => icns('htmlMac') },
   { path: at('html-document.ico'), kind: 'ico', images: ICO_SIZES, build: () => ico('htmlFlat', ICO_SIZES) },
-  ...['apexcompanion', 'apexpack'].flatMap((name) => [
+  ...['ateliercompanion', 'atelierpack'].flatMap((name) => [
     { path: at(`${name}.icns`), kind: 'icns', images: ICNS_SIZES, build: () => icns('docMac') },
     { path: at(`${name}.ico`), kind: 'ico', images: ICO_SIZES, build: () => ico('docFlat', ICO_SIZES) },
     { path: at(`${name}.png`), kind: 'png', images: [512], build: () => png('docFlat', 512) }

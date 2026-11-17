@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -203,7 +203,7 @@ export const menus = {
   'menus.passkey.title': 'Choose a passkey for {host}',
   'menus.passkey.body': 'More than one account has a passkey on this Mac. Pick the one to sign in with.',
   'menus.passkey.account': 'Account {n}',
-  'menus.pageAction.notOnApexPage': 'That only works on web pages.',
+  'menus.pageAction.notOnAtelierPage': 'That only works on web pages.',
   'menus.pageAction.showInFolder': 'Show in Folder',
   'menus.pageAction.linkCopied': 'Link copied',
   'menus.pageAction.markdownLinkCopied': 'Markdown link copied',

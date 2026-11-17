@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The project editor: name, colour from Apex's project
+// The project editor: name, colour from Atelier's project
 // palette, a description and the standing instructions every new chat in
 // the project starts with. Used by the Projects section and by "New
 // project…" in the chat menus and the Space row.

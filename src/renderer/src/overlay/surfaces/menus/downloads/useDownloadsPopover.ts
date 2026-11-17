@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } from 'react'
 import { fileKind, popoverProps, type Point } from '@shared/downloads'
 import type { DownloadInfo } from '@shared/services'
-import { apex, call } from '../../../../api'
+import { atelier, call } from '../../../../api'
 import { motionReduced, useLatest } from '../../../../ui'
 import { anchorFromElement } from '../../../useSurface'
 
@@ -33,7 +33,7 @@ let listening = false
 function listenForCues(): void {
   if (listening) return
   listening = true
-  apex.onAppEvent((event) => {
+  atelier.onAppEvent((event) => {
     if (event.type !== 'download-started') return
     cues.push({ id: event.id, autoOpen: event.autoOpen, byAgent: event.byAgent, at: Date.now() })
     for (const listener of cueListeners) listener()
@@ -64,7 +64,7 @@ function fly(button: HTMLElement, cue: Cue, downloads: readonly DownloadInfo[]):
   const page = document.querySelector<HTMLElement>('.pane__view')?.getBoundingClientRect()
   const from = page && page.width > 0 && page.height > 0 ? { x: page.left + page.width / 2, y: page.top + page.height * 0.4 } : { x: window.innerWidth / 2, y: window.innerHeight / 2 }
   const anchor = { kind: 'window' as const, rect: { x: 0, y: 0, width: window.innerWidth, height: window.innerHeight } }
-  void apex.overlay.open('download-flight', anchor, { from, to: centre(button.getBoundingClientRect()), kind: d ? fileKind(d.filename, d.mime) : 'file' }).catch(() => undefined)
+  void atelier.overlay.open('download-flight', anchor, { from, to: centre(button.getBoundingClientRect()), kind: d ? fileKind(d.filename, d.mime) : 'file' }).catch(() => undefined)
 }
 
 export interface DownloadsPopoverControl {
@@ -88,12 +88,12 @@ export function useDownloadsPopover(anchor: RefObject<HTMLElement | null>, downl
     const gen = ++generation.current
     setOpen(true)
     try {
-      const { instanceId } = await apex.overlay.open('downloads', anchorFromElement(el), popoverProps(latest.current))
-      if (gen !== generation.current) apex.overlay.close(instanceId)
+      const { instanceId } = await atelier.overlay.open('downloads', anchorFromElement(el), popoverProps(latest.current))
+      if (gen !== generation.current) atelier.overlay.close(instanceId)
       else instance.current = instanceId
     } catch {
       setOpen(false)
-      if (fromClick && gen === generation.current) void call('pages', 'open', 'apex://downloads')
+      if (fromClick && gen === generation.current) void call('pages', 'open', 'atelier://downloads')
     } finally {
       opening.current = false
     }
@@ -104,13 +104,13 @@ export function useDownloadsPopover(anchor: RefObject<HTMLElement | null>, downl
     generation.current++
     instance.current = null
     setOpen(false)
-    if (id) apex.overlay.close(id)
+    if (id) atelier.overlay.close(id)
   }, [])
 
   // Esc, an outside click or a row's action closes it from the overlay side.
   useEffect(
     () =>
-      apex.overlay.onResult((r) => {
+      atelier.overlay.onResult((r) => {
         if (r.instanceId !== instance.current) return
         instance.current = null
         setOpen(false)
@@ -119,7 +119,7 @@ export function useDownloadsPopover(anchor: RefObject<HTMLElement | null>, downl
   )
 
   useEffect(() => {
-    if (instance.current) apex.overlay.update(instance.current, props)
+    if (instance.current) atelier.overlay.update(instance.current, props)
   }, [props])
 
   useEffect(() => () => hide(), [])

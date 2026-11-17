@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -154,7 +154,7 @@ export function RoutineListCard({ item }: LogCardProps<'routine-list'>): ReactEl
         <CalendarClock size={15} aria-hidden="true" className="cd-card__icon" />
         <span className="cd-card__eyebrow">{t('chatTools.routines.title')}</span>
         <span className="cd-card__spacer" />
-        <Button size="sm" variant="ghost" onClick={() => void call('pages', 'open', 'apex://routines').catch(fail)}>{t('chatTools.routines.all')}</Button>
+        <Button size="sm" variant="ghost" onClick={() => void call('pages', 'open', 'atelier://routines').catch(fail)}>{t('chatTools.routines.all')}</Button>
       </div>
       {routines === null ? (
         <SkeletonRows rows={Math.min(3, item.routineIds.length || 1)} label={t('chatTools.routines.loading')} />

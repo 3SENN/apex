@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -137,7 +137,7 @@ export function classifySql(sql: string): SqlVerdict {
   const fn = REFUSED_FUNCTIONS.find((f) => new RegExp(String.raw`\b${f}\s*\(`, 'i').test(body))
   if (fn) return { ok: false, reason: `${fn.toLowerCase()}() is never allowed on tables.` }
   if (/\bsqlite_\w+/i.test(body) && tokens.some((w) => WRITE_VERBS.has(w))) return { ok: false, reason: "SQLite's own tables can't be changed." }
-  if (/\b_apex\w*/i.test(body)) return { ok: false, reason: `${BRAND_NAME}'s own bookkeeping table is off limits.` }
+  if (/\b_atelier\w*/i.test(body)) return { ok: false, reason: `${BRAND_NAME}'s own bookkeeping table is off limits.` }
 
   const first = tokens[0] ?? ''
   const verb = first === 'WITH' ? verbAfterWith(body) : first

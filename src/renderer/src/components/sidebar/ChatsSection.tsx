@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -233,7 +233,7 @@ export function ChatsSection(props: ChatsSectionProps): ReactElement {
       anchor,
     )
     if (id === 'mark-all-read') void call('chats', 'markAllRead')
-    else if (id === 'all-chats') void call('pages', 'open', 'apex://chats')
+    else if (id === 'all-chats') void call('pages', 'open', 'atelier://chats')
     else if (id === 'clear') props.onClear(clearable.map((c) => c.id))
     // Deleting asks first, as deleting from a row's menu does: it can't be undone.
     else if (id === 'delete-all') await runChatMenu('delete', clearable, { snapshot, rename: setEditing, close: props.onClose })
@@ -316,7 +316,7 @@ export function ChatsSection(props: ChatsSectionProps): ReactElement {
               </button>
               <HeaderDots needs={hiddenDots.needs} unread={hiddenDots.unread} />
               <span className="chats-more__spacer" />
-              <button type="button" className="side-link" onClick={() => void call('pages', 'open', 'apex://chats')}>
+              <button type="button" className="side-link" onClick={() => void call('pages', 'open', 'atelier://chats')}>
                 {t('tabs.sidebarChats.allChats')}
               </button>
             </div>

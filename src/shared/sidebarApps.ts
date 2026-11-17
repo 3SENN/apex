@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -36,7 +36,7 @@ export interface AppItem {
   source: string
   /** Where it starts before the person chooses: a pack's sidebar: true starts as a row. */
   defaultShow: SidebarAppShow
-  /** A pack app's status (apex.status.set) while it runs. */
+  /** A pack app's status (atelier.status.set) while it runs. */
   status: PackAppStatus | null
 }
 

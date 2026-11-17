@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 'use strict'
-// Loads Apex's haptics addon (build/apex_haptics.node, from
+// Loads Atelier's haptics addon (build/atelier_haptics.node, from
 // scripts/build-native.mjs). When it can't (not macOS, not built, the
 // wrong architecture, a broken binary), it returns a stub whose perform()
 // accepts the same patterns and does nothing, so callers never branch.
@@ -19,7 +19,7 @@
 const fs = require('node:fs')
 const path = require('node:path')
 
-const BINARY = 'apex_haptics.node'
+const BINARY = 'atelier_haptics.node'
 
 /** The patterns AppKit's NSHapticFeedbackManager offers. */
 const PATTERNS = Object.freeze(['alignment', 'levelChange', 'generic'])

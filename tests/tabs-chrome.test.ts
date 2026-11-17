@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -103,8 +103,8 @@ describe('the recent-tab switcher (SH-29)', () => {
   const host = (url: string): string => new URL(url).hostname
 
   it('lists up to eight cards in MRU order, a split pair as one card and chats with their kind', () => {
-    const tabs = [tab('a'), tab('b'), tab('c', { url: 'apex://chat/123' }), tab('d')]
-    const cards = recentCards(['d', 'b', 'c', 'a'], { tabs, split: { primaryId: 'a', secondaryId: 'b' } }, (u) => (u.startsWith('apex:') ? 'Apex' : host(u)))
+    const tabs = [tab('a'), tab('b'), tab('c', { url: 'atelier://chat/123' }), tab('d')]
+    const cards = recentCards(['d', 'b', 'c', 'a'], { tabs, split: { primaryId: 'a', secondaryId: 'b' } }, (u) => (u.startsWith('atelier:') ? 'Atelier' : host(u)))
     expect(cards.map((c) => [c.tabId, c.kind, c.pages.map((p) => p.tabId).join('+')])).toEqual([
       ['d', 'tab', 'd'],
       ['b', 'split', 'a+b'],
@@ -212,13 +212,13 @@ describe('the horizontal strip (SH-21)', () => {
 })
 
 describe('the rail (SH-63) and the ghost (SH-30)', () => {
-  it('shows on apex:// pages and the destination surface in the horizontal layout only', () => {
+  it('shows on atelier:// pages and the destination surface in the horizontal layout only', () => {
     const web = { tabs: [tab('a')], activeId: 'a', rail: null }
-    const apex = { tabs: [tab('a', { url: 'apex://settings' })], activeId: 'a', rail: null }
+    const atelier = { tabs: [tab('a', { url: 'atelier://settings' })], activeId: 'a', rail: null }
     expect(railShown('horizontal', web)).toBe(false)
-    expect(railShown('horizontal', apex)).toBe(true)
-    expect(railShown('sidebar', apex)).toBe(false)
-    expect(railShown('horizontal', { ...web, rail: { url: 'apex://chats', title: 'All chats', crumbs: [] } })).toBe(true)
+    expect(railShown('horizontal', atelier)).toBe(true)
+    expect(railShown('sidebar', atelier)).toBe(false)
+    expect(railShown('horizontal', { ...web, rail: { url: 'atelier://chats', title: 'All chats', crumbs: [] } })).toBe(true)
   })
 
   it('reads saved prefs defensively and clamps the width', () => {

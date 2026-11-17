@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -166,7 +166,7 @@ export function fillSpots<C extends { id: string }>(world: Pick<WorldDoc, 'resid
 
 /** A guest's ref in one app: stable there, different in every other app and world. */
 export function guestRef(packId: string, appId: string, worldRef: string, residentId: string): string {
-  return createHash('sha256').update(`apex-world-guest\u0000${packId}\u0000${appId}\u0000${worldRef}\u0000${residentId}`).digest('hex').slice(0, 16)
+  return createHash('sha256').update(`atelier-world-guest\u0000${packId}\u0000${appId}\u0000${worldRef}\u0000${residentId}`).digest('hex').slice(0, 16)
 }
 
 /** The system prompt for a guest's line: the world's words about them, held as a description. */

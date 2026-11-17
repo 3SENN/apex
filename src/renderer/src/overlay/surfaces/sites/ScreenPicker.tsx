@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -20,7 +20,7 @@ import { useSiteRequest } from './parts'
 // shares the selected source. Cancel (or Esc) refuses this request. Windows
 // and screens need macOS Screen Recording: opening either the first time
 // asks macOS; after a refusal the picker says how to turn it on, and once it
-// is on but needs a restart it offers Relaunch Apex. Coming back to the
+// is on but needs a restart it offers Relaunch Atelier. Coming back to the
 // window looks again. Main closes the picker when its tab navigates or closes.
 
 const GROUPS: { id: PickerGroup; label: 'sites.picker.tabs' | 'sites.picker.windows' | 'sites.picker.screens'; empty: 'sites.picker.noTabs' | 'sites.picker.noWindows' | 'sites.picker.noScreens'; Icon: typeof Monitor }[] = [

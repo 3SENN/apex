@@ -1,6 +1,6 @@
 ## What changes
 
-<!-- What changes for people using Apex, and why. Link the issue it fixes. -->
+<!-- What changes for people using Atelier, and why. Link the issue it fixes. -->
 
 ## How it was tested
 
@@ -10,4 +10,4 @@
 
 - [ ] `npm run typecheck`, `npm test` and `npm run i18n:check` pass
 - [ ] New UI text is in English and Dutch
-- [ ] New source files carry the MPL-2.0 notice (companion art files: the Apex Companion Art notice)
+- [ ] New source files carry the MPL-2.0 notice (companion art files: the Atelier Companion Art notice)

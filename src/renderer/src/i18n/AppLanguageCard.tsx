@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -12,10 +12,10 @@ import { useResource } from '../settings/data'
 import { Card, Notice, Row, Section } from '../settings/kit'
 import { useT } from './useT'
 
-// The "Apex's language" card on the Languages page (ST-27): System (the
+// The "Atelier's language" card on the Languages page (ST-27): System (the
 // language it resolves to) / English / Nederlands. The chrome relabels at
 // once; Chromium's own menus and the spellcheck panel follow at the next
-// launch, so a language that differs from the one Apex started in offers
+// launch, so a language that differs from the one Atelier started in offers
 // Restart now.
 
 const ENDONYM: Record<AppLanguage, string> = Object.fromEntries(AVAILABLE_LANGUAGES.map((l) => [l.code, l.name])) as Record<AppLanguage, string>

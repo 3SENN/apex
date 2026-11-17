@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { useEffect, useState, type ReactElement } from 'react'
 import { FolderOpen } from 'lucide-react'
 import { t } from '@shared/i18n/core'
-import { apex, call, errorText } from '../../api'
+import { atelier, call, errorText } from '../../api'
 import { openChatFiles } from '../../files/open'
 import { IconButton, toast } from '../../ui'
 import './holdings.css'
@@ -27,7 +27,7 @@ export function useFileCount(chatId: string): number | null {
     load()
     // What a chat holds changes as it reads pages, takes attachments and makes files.
     let timer: ReturnType<typeof setTimeout> | null = null
-    const off = apex.onAppEvent((e) => {
+    const off = atelier.onAppEvent((e) => {
       if (!((e.type === 'chat-context' && e.chatId === chatId) || e.type === 'library-files') || timer) return
       timer = setTimeout(() => {
         timer = null

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -370,7 +370,7 @@ export class CompanionView {
   }
 
   private watchEnvironment(): void {
-    // The system setting or Apex's own (ui/motion.ts mirrors both on <html data-motion>).
+    // The system setting or Atelier's own (ui/motion.ts mirrors both on <html data-motion>).
     const query = window.matchMedia(REDUCED_MOTION_QUERY)
     const onMotion = (): void => {
       this.reducedMotion = query.matches || document.documentElement.dataset.motion === 'reduced'

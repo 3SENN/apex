@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -36,7 +36,7 @@ function launcher(executable) {
 export function smokePackaged({ executable, publicRelease, timeoutMs = TIMEOUT_MS, log = (s) => process.stdout.write(s) }) {
   // The fused app's asar holds no tests/: fixture folders come from the repo.
   const fixtures = join(REPO_ROOT, 'tests', 'fixtures')
-  const env = { ...process.env, APEX_SMOKE: '1', APEX_SMOKE_FIXTURES: fixtures, APEX_SMOKE_NODE: process.execPath, APEX_SMOKE_TLS: process.env.APEX_SMOKE_TLS ?? join(fixtures, 'tls') }
+  const env = { ...process.env, ATELIER_SMOKE: '1', ATELIER_SMOKE_FIXTURES: fixtures, ATELIER_SMOKE_NODE: process.execPath, ATELIER_SMOKE_TLS: process.env.ATELIER_SMOKE_TLS ?? join(fixtures, 'tls') }
   delete env.ELECTRON_RUN_AS_NODE
   delete env.ELECTRON_RENDERER_URL
   const [cmd, args] = launcher(executable)

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -14,7 +14,7 @@ import { Bookmark, Check, Command, Globe, History, KeyRound, MessageSquarePlus, 
 import { COMPANION_NAME_MAX, DEFAULT_PROFILE, type CompanionPreset } from '@shared/companion'
 import { sameLook } from '@shared/companionLogic'
 import { favoriteSuggestions, suggestNames } from '@shared/onboarding'
-import { apex, call, errorText } from '../../api'
+import { atelier, call, errorText } from '../../api'
 import { useActiveCompanion, useCompanionAssets, useCompanions, usePresets } from '../../components/companionData'
 import { cleanName } from '../../companion-card/logic/names'
 import { LayoutPreview } from '../../illustrations'
@@ -68,7 +68,7 @@ export function NameStep({ setup, settings, companion, next, back, ready, previe
     setError(null)
     try {
       let id = companion?.id ?? null
-      // A first run names the companion Apex starts with; later runs add a new one, never overwriting yours.
+      // A first run names the companion Atelier starts with; later runs add a new one, never overwriting yours.
       const firstRun = !settings.onboarded && items.length <= 1
       if (!id && firstRun && active) id = active.id
       if (id) {
@@ -211,7 +211,7 @@ export function EngineStep({ settings, onSettings, companion, next, back, ready 
   useReadyNow(ready)
   const saveKey = (): void => {
     setError(null)
-    apex.settings.setApiKey(key).then(
+    atelier.settings.setApiKey(key).then(
       (view) => {
         onSettings(view)
         setKey('')
@@ -275,7 +275,7 @@ export function LayoutStep({ setup, settings, onSettings, next, back, ready, loo
     setError(null)
     try {
       const patch = { ...((settings as { layout?: string }).layout !== choice ? { layout: choice } : {}), ...(offerEngine ? { searchEngine: engine } : {}) }
-      if (Object.keys(patch).length > 0) onSettings(await apex.settings.set(patch))
+      if (Object.keys(patch).length > 0) onSettings(await atelier.settings.set(patch))
       next({ answers: offerEngine ? { layout: choice, 'search-engine': engine } : { layout: choice } })
     } catch (err) {
       setError(errorText(err))
@@ -428,7 +428,7 @@ export function FavoritesStep({ next, back, ready }: StepProps): ReactElement {
     try {
       // Open each in the background, then pin the new tabs as they appear.
       const pending = new Set(urls.map((u) => new URL(u).hostname))
-      const off = apex.tabs.onChanged((snapshot) => {
+      const off = atelier.tabs.onChanged((snapshot) => {
         for (const tab of snapshot.tabs) {
           let host = ''
           try {
@@ -442,7 +442,7 @@ export function FavoritesStep({ next, back, ready }: StepProps): ReactElement {
           }
         }
       })
-      for (const url of urls) await apex.tabs.create(url, { background: true })
+      for (const url of urls) await atelier.tabs.create(url, { background: true })
       setTimeout(off, 5_000)
       next({ answers: { favorites: urls } })
     } catch (err) {
@@ -452,7 +452,7 @@ export function FavoritesStep({ next, back, ready }: StepProps): ReactElement {
   }
 
   // Around the companion: every picked site and the most visited of the rest, six at most, in their own order
-  // (so picking one doesn't shuffle the tiles), each with its own icon when Apex has it.
+  // (so picking one doesn't shuffle the tiles), each with its own icon when Atelier has it.
   const others = new Set(sites.filter((s) => !picked.has(s.url)).slice(0, Math.max(0, 6 - picked.size)).map((s) => s.url))
   const around = sites.filter((s) => picked.has(s.url) || others.has(s.url)).slice(0, 6)
   const icons = useSiteIcons(around.map((s) => s.host))
@@ -527,7 +527,7 @@ export function LaunchStep({ setup, isMac, tabId, companion, back, ready }: Step
       if (!setup.finishedAt) await finish()
       const result = await call('onboarding', 'launch')
       if (!result.ok) throw new Error(result.error ?? 'The first chat couldn’t start.')
-      void apex.tabs.close(tabId)
+      void atelier.tabs.close(tabId)
     } catch (err) {
       setError(errorText(err))
       setState('failed')
@@ -537,7 +537,7 @@ export function LaunchStep({ setup, isMac, tabId, companion, back, ready }: Step
     try {
       if (!setup.finishedAt) await finish()
     } finally {
-      void apex.tabs.close(tabId)
+      void atelier.tabs.close(tabId)
     }
   }
 
@@ -553,7 +553,7 @@ export function LaunchStep({ setup, isMac, tabId, companion, back, ready }: Step
     >
       {card && (
         <>
-          {isMac && <p className="co-hint co-flush">{t('firstRun.welcomeSteps.toKeepApexIn')}</p>}
+          {isMac && <p className="co-hint co-flush">{t('firstRun.welcomeSteps.toKeepAtelierIn')}</p>}
           {state === 'failed' && (
             <div className="wlx__slow" role="alert">
               <p>{error}</p>

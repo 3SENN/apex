@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // The packs runtime (docs/packs.md › Contributions): turns the enabled packs
-// into entries in the registries Apex already has. Skills go to the skill
+// into entries in the registries Atelier already has. Skills go to the skill
 // store (read-only), tweaks to the tweaks feature's rules, themes to the
 // accent list, tools to the client-tool registry (both engines), commands to
 // the command bar and menu items to the page menu. sync() runs whenever the
@@ -93,7 +93,7 @@ import { packWorldRef, parseWorldRef, type WorldContext, type WorldDoc, type Wor
 import type { LoadedPack, PackStore } from './store'
 import { jsonPayload, resolvePlugins, ServiceRouter, type PluginState, type WaitReason } from './services'
 import { PackToolHost, type ToolOutcome } from './toolHost'
-import { decider } from '../decisions/service' // DC-07: apex.ai.decide
+import { decider } from '../decisions/service' // DC-07: atelier.ai.decide
 
 export interface PacksRuntimeDeps {
   store: PackStore
@@ -104,7 +104,7 @@ export interface PacksRuntimeDeps {
   cast?(): CastSource | null
   /** What sign-ins reach identity providers with (tests pass a fake). */
   fetchFn?: FetchFn
-  /** Apex's bar over an app whose web server runs (apex.server); none in tests. */
+  /** Atelier's bar over an app whose web server runs (atelier.server); none in tests. */
   serverIndicator?: ServerIndicator
 }
 
@@ -116,7 +116,7 @@ export interface CastSource {
 
 /** A companion's ref in one app: stable there, different in every other app, and not the companion's id. */
 export function castRef(packId: string, appId: string, companionId: string): string {
-  return createHash('sha256').update(`apex-cast\u0000${packId}\u0000${appId}\u0000${companionId}`).digest('hex').slice(0, 16)
+  return createHash('sha256').update(`atelier-cast\u0000${packId}\u0000${appId}\u0000${companionId}`).digest('hex').slice(0, 16)
 }
 
 interface TestRun {
@@ -142,7 +142,7 @@ function kitImportMap(major: number): string | null {
   return importMaps.get(major) ?? null
 }
 
-/** apex.ai tiers: a pack asks for fast or smart, never a model name, so packs keep working as models change. */
+/** atelier.ai tiers: a pack asks for fast or smart, never a model name, so packs keep working as models change. */
 const TIER_MODELS: Record<'fast' | 'smart', string> = { fast: QUICK_DEFAULT_MODEL, smart: 'claude-sonnet-5-5' }
 const AI_SYSTEM = 'You answer requests from an app a person installed in their browser. Answer only what is asked, plainly.'
 
@@ -363,7 +363,7 @@ export class PacksRuntime {
           call: (sender, ctx, ref, tool, input) => this.#callConnector(sender, ctx, ref, tool, input),
           connect: (sender, _ctx, ref) => {
             const win = this.#app.windows.fromWebContents(sender.id) ?? this.#app.windows.focused()
-            win?.tabs.openInternal(DIRECTORY_REF.test(ref) ? `apex://connectors?connect=${encodeURIComponent(ref)}&from=${encodeURIComponent(_ctx.manifest.name)}` : 'apex://connectors', { newTab: true })
+            win?.tabs.openInternal(DIRECTORY_REF.test(ref) ? `atelier://connectors?connect=${encodeURIComponent(ref)}&from=${encodeURIComponent(_ctx.manifest.name)}` : 'atelier://connectors', { newTab: true })
             return null
           },
         },
@@ -410,7 +410,7 @@ export class PacksRuntime {
         },
       },
     })
-    const onTheme = (): void => void this.router.emit('apex.theme', { dark: nativeTheme.shouldUseDarkColors })
+    const onTheme = (): void => void this.router.emit('atelier.theme', { dark: nativeTheme.shouldUseDarkColors })
     nativeTheme.on('updated', onTheme)
     this.#stops.push(() => nativeTheme.off('updated', onTheme), () => this.router.dispose())
     this.#stops.push(
@@ -435,10 +435,10 @@ export class PacksRuntime {
     return this.#store.file(packId, path) !== null || this.#store.diskPath(packId, path) !== null
   }
 
-  /** What each page under test last reported with apex.test.ready, by webContents id. */
+  /** What each page under test last reported with atelier.test.ready, by webContents id. */
   readonly testStates = new Map<number, unknown>()
 
-  // ---- apex.cast (docs/apps.md › The cast) ----
+  // ---- atelier.cast (docs/apps.md › The cast) ----
 
   /** Asks who plays; replaced in smoke runs. Resolves to the picked companion's index in `names`, or null for done or cancel. */
   castPrompt = async (input: { app: string; names: string[]; more: boolean; contents: WebContents }): Promise<number | null> => {
@@ -450,7 +450,7 @@ export class PacksRuntime {
     return answer.response < Math.min(input.names.length, 8) ? answer.response : null
   }
 
-  // ---- apex.server (docs/packs.md › A web server of its own) ----
+  // ---- atelier.server (docs/packs.md › A web server of its own) ----
 
   /** The apps' web servers, one per app page that started one. */
   readonly servers: LocalServers
@@ -538,7 +538,7 @@ export class PacksRuntime {
     return { url: packsPageUrl({ pack: packId, open: app.id }) }
   }
 
-  // ---- the model packs use (docs/apps.md › Apex as the AI engine; AiProvider for organisations) ----
+  // ---- the model packs use (docs/apps.md › Atelier as the AI engine; AiProvider for organisations) ----
 
   #gateway: { key: string; quick: QuickModel } | null = null
 
@@ -615,7 +615,7 @@ Say it in ${languageName(language)}.`
     return ownEntry(saved, Date.now())
   }
 
-  /** Opens a place's app, with the residents there as its cast (apex.world.context() in that app). */
+  /** Opens a place's app, with the residents there as its cast (atelier.world.context() in that app). */
   #enterPlace(sender: WebContents, ref: string, placeId: string): { opened: boolean; missing?: { pack: string; app: string }; installed?: boolean } {
     const world = this.worldDoc(ref)
     if (!world) throw new Error('That world isn’t here any more.')
@@ -651,12 +651,12 @@ Say it in ${languageName(language)}.`
     return { opened: true }
   }
 
-  /** Saves a world as an .apexworld; set by the feature (it needs a save dialog and the author key). */
+  /** Saves a world as an .atelierworld; set by the feature (it needs a save dialog and the author key). */
   worldShare: (ref: string, contents: WebContents) => Promise<string | null> = async () => {
     throw new Error('Sharing worlds isn’t ready yet.')
   }
 
-  /** apex.worlds (the world viewer) and apex.world.context (any app). */
+  /** atelier.worlds (the world viewer) and atelier.world.context (any app). */
   async #worlds(sender: WebContents, ctx: PackContext, op: WorldsOp, args: unknown[]): Promise<unknown> {
     switch (op) {
       case 'world.context':
@@ -715,7 +715,7 @@ Say it in ${languageName(language)}.`
     }
   }
 
-  // ---- apex.notifications (scheduled) ----
+  // ---- atelier.notifications (scheduled) ----
 
   readonly #timers = new Map<string, ReturnType<typeof setTimeout>>()
 
@@ -739,7 +739,7 @@ Say it in ${languageName(language)}.`
     return null
   }
 
-  /** Arms a timer for every running pack's notifications; one missed while Apex was closed fires if it's less than an hour late. */
+  /** Arms a timer for every running pack's notifications; one missed while Atelier was closed fires if it's less than an hour late. */
   #armSchedules(): void {
     for (const t of this.#timers.values()) clearTimeout(t)
     this.#timers.clear()
@@ -777,7 +777,7 @@ Say it in ${languageName(language)}.`
   /** Smoke: scheduled notifications that fired (nothing is shown in a smoke run). */
   readonly firedForSmoke: Array<{ packId: string; id: string }> = []
 
-  // ---- apex.files (docs/apps.md › Assets › Your own files) ----
+  // ---- atelier.files (docs/apps.md › Assets › Your own files) ----
 
   /** The system pickers; replaced in smoke runs, where nobody is there to pick. */
   pickers = {
@@ -805,7 +805,7 @@ Say it in ${languageName(language)}.`
     const bytes = (data: unknown): Buffer => (typeof data === 'string' ? Buffer.from(data, 'utf8') : Buffer.from(data as Uint8Array))
     const inFolder = (rel: unknown): string => {
       const folder = this.#store.get(ctx.packId)?.entry.folder
-      if (!folder || !existsSync(folder)) throw new Error('Ask for a folder with apex.files.folder() first.')
+      if (!folder || !existsSync(folder)) throw new Error('Ask for a folder with atelier.files.folder() first.')
       const safe = safeRelativePath(String(rel))
       if (safe === null) throw new Error('That path isn’t inside the folder.')
       const full = resolve(folder, ...(safe ? safe.split('/') : []))
@@ -914,7 +914,7 @@ Say it in ${languageName(language)}.`
     }
   }
 
-  // ---- apex.ai (docs/apps.md › Apex as the AI engine) ----
+  // ---- atelier.ai (docs/apps.md › Atelier as the AI engine) ----
 
   /** A reply that fits the pack's JSON Schema: structured output where the engine can, checked here, asked again once. */
   async #aiJson(ctx: PackContext, r: AiRequest & { schema: Record<string, unknown> }): Promise<unknown> {
@@ -941,7 +941,7 @@ Say it in ${languageName(language)}.`
     throw new Error('The model’s answer didn’t fit the schema. Try again, or simplify the schema.')
   }
 
-  /** One message of an apex.ai.session: the model may call the page's own tools, which answer through the page. */
+  /** One message of an atelier.ai.session: the model may call the page's own tools, which answer through the page. */
   async #aiTurn(sender: WebContents, r: AiTurn): Promise<{ text: string; history: unknown[] }> {
     const history = parseHistory(r.history)
     history.push({ role: 'user', content: r.text })
@@ -1037,7 +1037,7 @@ Say it in ${languageName(language)}.`
     return this.#store.isActive(packId) ? (this.#state().waiting.get(packId) ?? []) : []
   }
 
-  /** The running packs' manifests (apex_inspect, use_app). */
+  /** The running packs' manifests (atelier_inspect, use_app). */
   runningManifests(): Array<{ id: string; name: string; manifest: PackManifest }> {
     return this.#running().map((p) => ({ id: p.manifest.id, name: p.manifest.name, manifest: p.manifest }))
   }
@@ -1098,7 +1098,7 @@ Say it in ${languageName(language)}.`
     return this.callService(ctx.packId, service, method, input)
   }
 
-  /** apex.status.set from an app's page: shown on its sidebar row and tab, until it clears it or its last page closes. */
+  /** atelier.status.set from an app's page: shown on its sidebar row and tab, until it clears it or its last page closes. */
   #setStatus(sender: WebContents, ctx: PackContext, status: PackAppStatus | null): void {
     if (ctx.mode === 'test') return
     const app = this.sandbox.appOf(sender.getURL())
@@ -1132,7 +1132,7 @@ Say it in ${languageName(language)}.`
     if (!at) return null
     const manifest = this.#manifestFor(at.packId, at.mode)
     if (!manifest) return null
-    // What the person granted later (apex.permissions.request) counts like what the manifest asks for;
+    // What the person granted later (atelier.permissions.request) counts like what the manifest asks for;
     // a pack loaded from a folder may also reach this computer while you develop (your own server on localhost).
     const granted = at.mode === 'installed' ? this.#store.get(at.packId)?.entry.granted : null
     const local = at.mode === 'installed' && this.#store.devFolder(at.packId) ? { network: ['localhost', '127.0.0.1'] } : null
@@ -1149,7 +1149,7 @@ Say it in ${languageName(language)}.`
    * The hosts a pack's app may connect to straight: `now`, the manifest's and
    * what the person granted (and this computer for a linked folder); `ever`,
    * now plus the optional hosts it may ask for, which its CSP names so a grant
-   * works without a reload. In a test, what apex.fetch may reach there.
+   * works without a reload. In a test, what atelier.fetch may reach there.
    */
   networkOf(packId: string, mode: PackMode): { now: string[]; ever: string[] } {
     const manifest = this.#manifestFor(packId, mode)
@@ -1236,7 +1236,7 @@ Say it in ${languageName(language)}.`
     })
   }
 
-  /** apex.connectors.call: one tool, as the person set it; "ask" asks them now, every time. */
+  /** atelier.connectors.call: one tool, as the person set it; "ask" asks them now, every time. */
   async #callConnector(sender: WebContents, ctx: PackContext, ref: string, toolName: string, input: unknown): Promise<{ text: string; data: unknown; isError: boolean }> {
     const rt = this.#connectors()
     if (!rt?.forApp || !rt.callForApp) throw new Error(mainT('packs.error.connectorsUnavailable'))
@@ -1371,7 +1371,7 @@ Say it in ${languageName(language)}.`
     this.#store.log(packId, { level: 'info', source: 'audit', message: kind === 'key' ? `key sent to ${host}` : kind === 'signIn' ? `sign-in sent to ${host}` : `connected to ${host}` })
   }
 
-  /** apex.env: the manifest's public values, with a linked folder's .env for those names. */
+  /** atelier.env: the manifest's public values, with a linked folder's .env for those names. */
   envOf(packId: string, mode: PackMode): Record<string, string> {
     const manifest = this.#manifestFor(packId, mode)
     const folder = mode === 'installed' ? this.#store.devFolder(packId) : null
@@ -1384,7 +1384,7 @@ Say it in ${languageName(language)}.`
 
   readonly #secretWaits = new Map<string, { promise: Promise<{ set: boolean }>; resolve(v: { set: boolean }): void; timer: ReturnType<typeof setTimeout>; from: number }>()
 
-  /** apex.secrets.request: opens the pack's page at the key, and answers once the person saves it (or after ten minutes). */
+  /** atelier.secrets.request: opens the pack's page at the key, and answers once the person saves it (or after ten minutes). */
   async #requestSecret(sender: WebContents, ctx: PackContext, id: string): Promise<{ set: boolean }> {
     if (ctx.mode === 'test') return { set: false }
     if (!(ctx.manifest.secrets ?? []).some((s) => s.id === id)) throw new Error(`${id} is not in this pack’s secrets.`)
@@ -1454,7 +1454,7 @@ Say it in ${languageName(language)}.`
     return this.waiting(packId).flatMap((r) => (r.kind === 'pack' ? [r.id] : []))
   }
 
-  /** apex.permissions.request: some of the manifest's optionalPermissions, asked for once a feature needs them. */
+  /** atelier.permissions.request: some of the manifest's optionalPermissions, asked for once a feature needs them. */
   async #requestPermissions(sender: WebContents, ctx: PackContext, raw: PackOptionalPermissions): Promise<{ granted: boolean }> {
     if (ctx.mode === 'test') return { granted: false }
     const pack = this.#store.get(ctx.packId)
@@ -1626,7 +1626,7 @@ Say it in ${languageName(language)}.`
     const files = new Map<string, Map<string, Buffer>>()
     for (const pack of active) {
       for (const s of pack.skills) {
-        // A pack never takes over /name from a skill that comes with Apex.
+        // A pack never takes over /name from a skill that comes with Atelier.
         if (builtinNames.has(s.doc.name)) {
           note(pack.manifest.id, mainT('packs.problem.skillBuiltin', { name: s.doc.name }))
           continue
@@ -1836,7 +1836,7 @@ Say it in ${languageName(language)}.`
     if (win.kind === 'private') throw new Error(mainT('packs.error.private'))
     // Every app has its own row; its id can't clash with a command's, which has no colon.
     if (commandId.startsWith('app:')) {
-      // One of Apex's own apps that is off (Worlds): opening it is asking for it.
+      // One of Atelier's own apps that is off (Worlds): opening it is asking for it.
       const pack = this.#store.get(packId)
       if (pack?.firstParty && !pack.entry.enabled && pack.problems.length === 0) this.#store.setEnabled(packId, true)
       this.openApp(packId, commandId.slice(4), win)

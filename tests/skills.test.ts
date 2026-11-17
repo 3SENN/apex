@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -21,7 +21,7 @@ import { FakeHost } from './helpers/fakeHost'
 
 let dir: string
 beforeEach(() => {
-  dir = mkdtempSync(join(tmpdir(), 'apex-skillsd-'))
+  dir = mkdtempSync(join(tmpdir(), 'atelier-skillsd-'))
 })
 afterEach(() => rmSync(dir, { recursive: true, force: true }))
 
@@ -62,7 +62,7 @@ function harness(options: { trash?: (id: string) => void } = {}): Harness {
 }
 
 describe('Save as skill from a chat', () => {
-  it('drafts with the quick model, from the transcript, with Apex’s own prompt', async () => {
+  it('drafts with the quick model, from the transcript, with Atelier’s own prompt', async () => {
     const h = harness()
     h.host.completeReplies = ['{"name":"flight-compare","description":"Compares flights for a trip.","instructions":"Find flights and compare them.","steps":[{"title":"Search","instructions":"Search three sites."}]}']
     const draft = await h.service.draftFromChat('chat-1')

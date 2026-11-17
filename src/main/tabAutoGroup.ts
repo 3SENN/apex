@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -144,7 +144,7 @@ export function planTabGroups(candidates: readonly GroupableTab[], groups: reado
 /**
  * The model's sure place for each tab (the first AUTO_GROUP_ASK_MAX), a few
  * at a time; nothing is asked while it is off for tabs. A private window
- * passes `isPrivate`, so its tabs never leave Apex and the rule decides.
+ * passes `isPrivate`, so its tabs never leave Atelier and the rule decides.
  */
 export async function askPlaces(tabs: readonly GroupableTab[], groupNames: readonly string[], isPrivate: boolean, place: typeof tabPlace = tabPlace, budgetMs = AUTO_GROUP_BUDGET_MS): Promise<Map<string, TabPlace>> {
   const answers = new Map<string, TabPlace>()

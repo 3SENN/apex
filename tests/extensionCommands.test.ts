@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -16,7 +16,7 @@ import { ExtensionsHost, unpackedId, type HostDeps } from '../src/main/extension
 import { readManifest } from '../src/main/extensions/manifest'
 import { shortcuts } from '../src/main/shortcuts'
 
-// Manifest commands become Apex runtime shortcuts unless a
+// Manifest commands become Atelier runtime shortcuts unless a
 // built-in already holds the key, and the clash shows on the extension's
 // row. Also the popup's anchor geometry under its toolbar button.
 
@@ -102,7 +102,7 @@ describe('ExtensionsHost commands', () => {
   let host: ExtensionsHost
 
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), 'apex-ext-cmd-'))
+    dir = mkdtempSync(join(tmpdir(), 'atelier-ext-cmd-'))
     disposed = []
     registered = []
     const deps: HostDeps = {
@@ -116,7 +116,7 @@ describe('ExtensionsHost commands', () => {
       askInstall: async () => false,
       askNative: async () => 'deny',
       toast: () => {},
-      // The real registry decides clashes against Apex's own shortcuts.
+      // The real registry decides clashes against Atelier's own shortcuts.
       registerShortcut: (def) => {
         const result = shortcuts.registerRuntime(def)
         if (result.ok) {
@@ -137,11 +137,11 @@ describe('ExtensionsHost commands', () => {
     rmSync(dir, { recursive: true, force: true })
   })
 
-  it('registers free keys and shows the clash on the row when Apex owns the key', async () => {
+  it('registers free keys and shows the clash on the row when Atelier owns the key', async () => {
     const id = await host.loadUnpacked('default', FIXTURE)
     const item = host.list('default').find((e) => e.id === id)!
     const accel = (name: string) => item.commands.find((c) => c.name === name)
-    // ⇧⌘N (or Ctrl+Shift+N) opens a private window in Apex, so the extension's command doesn't get it.
+    // ⇧⌘N (or Ctrl+Shift+N) opens a private window in Atelier, so the extension's command doesn't get it.
     expect(accel('Start a note')).toMatchObject({ clash: 'new-private-window' })
     expect(accel('Open the extension')).toMatchObject({ clash: null })
     expect(accel('No key')).toEqual({ name: 'No key', shortcut: null, clash: null })

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,11 +6,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { IDLE_CAPTURE, type CaptureStatus } from '@shared/meetingCapture'
 import type { MeetingDetail, MeetingKind, MeetingSummary } from '@shared/meetings'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { useEvent } from '../settings/data'
 import { appendSegments } from './logic'
 
-// Live data for apex://meetings: the list (kept in step with 'meetings'),
+// Live data for atelier://meetings: the list (kept in step with 'meetings'),
 // one meeting (with 'meeting-live' lines as they arrive) and the recorder's
 // status for the live row and the start pill.
 
@@ -139,7 +139,7 @@ export function useCaptureStatus(): CaptureStatus {
   useEffect(() => {
     let alive = true
     void call('meetingCapture', 'status').then((s) => alive && setStatus(s), () => undefined)
-    const off = apex.onAppEvent((e) => {
+    const off = atelier.onAppEvent((e) => {
       if (e.type === 'meeting-capture') setStatus(e.status)
     })
     return () => {

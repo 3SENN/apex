@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { useEffect, useRef, type ReactElement } from 'react'
 import { AppWindow, Bell, Bluetooth, Cable, Camera, Clipboard, Coffee, ExternalLink, FolderOpen, MapPin, Mic, MonitorUp, Network, Piano, Speaker, Type, Usb, Cpu } from 'lucide-react'
 import type { AppEvent } from '@shared/services'
 import type { SitePermission } from '@shared/sites'
-import { apex } from '../../../api'
+import { atelier } from '../../../api'
 
 // Small pieces the site surfaces share: a glyph per permission, and the hook a
 // surface uses to follow its request in main (closed early, or a device list
@@ -47,7 +47,7 @@ export function useSiteRequest(requestId: string, handlers: { onClosed(): void; 
   latest.current = handlers
   useEffect(
     () =>
-      apex.onAppEvent((event) => {
+      atelier.onAppEvent((event) => {
         if (event.type !== 'site-request' || event.requestId !== requestId) return
         if (event.closed) latest.current.onClosed()
         else latest.current.onChange?.(event)

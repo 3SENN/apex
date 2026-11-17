@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -52,7 +52,7 @@ describe('Dock design clamping', () => {
 
 describe('the Dock icon service', () => {
   it('saves, reloads, resets (keeping the companion) and applies', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-dock-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-dock-'))
     const set = vi.fn(() => true)
     const a = createDockIconService({ dataDir: dir, setIcon: set })
     a.save({ ...DEFAULT_DOCK_DESIGN, companionId: 'c1', rotate: 400, smile: true })
@@ -66,7 +66,7 @@ describe('the Dock icon service', () => {
   })
 
   it('ignores a corrupt file', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-dock-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-dock-'))
     writeFileSync(join(dir, 'dock-icon.json'), 'nope')
     expect(createDockIconService({ dataDir: dir }).design()).toEqual(DEFAULT_DOCK_DESIGN)
   })

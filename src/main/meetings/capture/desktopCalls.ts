@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import type { HelperLine, SpeechBroker } from '@shared/speech'
 
 // Calls in desktop apps: when Zoom, Teams, FaceTime,
 // Webex, a Slack huddle, Discord or a Google Meet web app starts a call,
-// Apex offers to take notes, and a recording started from that offer wraps
+// Atelier offers to take notes, and a recording started from that offer wraps
 // up when the call ends.
 //
 // Detection: the speech helper (native/speech/CallWatch.swift) reports which
@@ -29,7 +29,7 @@ import type { HelperLine, SpeechBroker } from '@shared/speech'
 // a moment before a call counts (an app checking its microphone isn't a
 // call), short gaps don't restart that wait, a call keeps going through a
 // mute while the app still plays sound and ends a while after both stop or
-// at once when the app quits, Apex's own processes never count, and each
+// at once when the app quits, Atelier's own processes never count, and each
 // call is offered once.
 
 export interface CallTiming {
@@ -42,7 +42,7 @@ export interface CallTiming {
 }
 
 export const CALL_TIMING: CallTiming = { startMs: 3_000, flapMs: 1_500, endMs: 20_000 }
-/** APEX_SMOKE: the same rules, faster. */
+/** ATELIER_SMOKE: the same rules, faster. */
 export const SMOKE_CALL_TIMING: CallTiming = { startMs: 200, flapMs: 100, endMs: 400 }
 
 export interface DesktopCall {

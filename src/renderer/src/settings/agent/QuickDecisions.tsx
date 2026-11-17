@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Settings › Quick decisions (docs/decisions.md): an optional decision model
-// next to Apex's own rules, never fixed to one provider or one model. You
+// next to Atelier's own rules, never fixed to one provider or one model. You
 // connect any providers (each with its own key, sealed on this computer) and
 // any servers of your own, pick the models to use from what they offer (with
 // prices where they list them), and put them in order: the first answers, the

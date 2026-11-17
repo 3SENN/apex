@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Vector geometry for Apex's icon art: a small path model (move, line,
+// Vector geometry for Atelier's icon art: a small path model (move, line,
 // cubic, close), the shape helpers the art needs (rounded polygons, the
 // squircle tile, stroke outlines with round caps and joins), flattening to
 // polygons for the rasterizer, and serialisation to SVG path data.
@@ -254,7 +254,7 @@ export function roundedPolygon(points, radii) {
 }
 
 /**
- * Apex's tile: a superellipse (|x|^n + |y|^n = 1) filling the box, a soft
+ * Atelier's tile: a superellipse (|x|^n + |y|^n = 1) filling the box, a soft
  * square with continuous corners. Sampled densely; exact enough at 1024 px.
  */
 export function squircle(x, y, w, h, exponent = 5, samples = 512) {

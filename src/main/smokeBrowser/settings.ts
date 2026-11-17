@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -15,10 +15,10 @@ import type { ShotSpec, SmokeCheck, SmokeContext } from './types'
 
 const PAGES = ['general', 'appearance', 'languages', 'default-browser', 'notifications', 'privacy', 'import', 'storage', 'about', ...(process.platform === 'darwin' ? ['dock-icon'] : [])]
 
-/** Opens apex://settings/<section> in the settings tab and waits for its address to settle on `page`. */
+/** Opens atelier://settings/<section> in the settings tab and waits for its address to settle on `page`. */
 async function openSettings(ctx: SmokeContext, section: string, page = section.split('?')[0] ?? section): Promise<void> {
-  ctx.tabs.openInternal(`apex://settings/${section}`)
-  await waitFor(() => ctx.tabs.snapshot().tabs.some((t) => t.url.startsWith(`apex://settings/${page}`)), 5000, `Settings › ${page}`)
+  ctx.tabs.openInternal(`atelier://settings/${section}`)
+  await waitFor(() => ctx.tabs.snapshot().tabs.some((t) => t.url.startsWith(`atelier://settings/${page}`)), 5000, `Settings › ${page}`)
   // The page loads its data and measures before a shot.
   await sleep(400)
 }

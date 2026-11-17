@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@
 import { useEffect, useId, useState, type ReactElement } from 'react'
 import { ChevronLeft, ChevronRight, ExternalLink, FileText, Globe, Image, NotebookPen, Trash2 } from 'lucide-react'
 import { localDayBounds, localDayKey, type ActivityItem, type ActivityItemKind } from '@shared/activity'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { useT } from '../i18n/useT'
 import { SearchField } from '../settings/kit'
 import { Button, EmptyState, ErrorState, IconButton, Select, SkeletonRows, cx, useToast } from '../ui'
@@ -152,7 +152,7 @@ export function Inspector({ refreshKey }: { refreshKey: number }): ReactElement 
               </div>
               {item.url && (
                 <div className="sp-item__actions">
-                  <Button size="sm" variant="ghost" icon={<ExternalLink />} onClick={() => void apex.tabs.create(item.url as string)}>
+                  <Button size="sm" variant="ghost" icon={<ExternalLink />} onClick={() => void atelier.tabs.create(item.url as string)}>
                     {t('memory.activity.openUrl')}
                   </Button>
                 </div>

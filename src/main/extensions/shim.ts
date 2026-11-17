@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,7 +10,7 @@ import { log } from '../log'
 import type { ExtensionsHost, ShimCaller } from './host'
 import { PRIVACY_SETTINGS } from './privacySettings'
 
-// The main side of Apex's chrome.* shims: calls from an extension's
+// The main side of Atelier's chrome.* shims: calls from an extension's
 // service worker (ServiceWorkerMain.ipc, so the sender is the worker itself)
 // and from its pages (ipcMain, checked against the frame's origin and the
 // session). Each op's payload is validated with zod before the host sees it.
@@ -26,7 +26,7 @@ const privacyKey = z.enum(PRIVACY_SETTINGS)
 const scope = z.enum(['regular', 'regular_only', 'incognito_persistent', 'incognito_session_only']).optional()
 const frameRef = z.number().int().min(0).max(2 ** 31)
 const menuId = z.union([z.string().min(1).max(512), z.number().int()])
-/** Menu item properties: plain data (Apex drops onclick functions in the shim). */
+/** Menu item properties: plain data (Atelier drops onclick functions in the shim). */
 const menuProps = z.record(z.string().max(64), z.unknown())
 const ruleIds = z.array(z.string().max(512)).max(1000).optional()
 

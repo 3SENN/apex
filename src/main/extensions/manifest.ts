@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { join, normalize, sep } from 'node:path'
 
-// The slice of a Chrome manifest Apex reads: names, icons, the
+// The slice of a Chrome manifest Atelier reads: names, icons, the
 // action, permissions, commands and the bits the compatibility check looks
 // at. Everything else stays Electron's business.
 

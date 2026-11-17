@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Packs' overlay surface: Apex's bar over an app whose web server runs
-// (apex.server, docs/packs.md › A web server of its own).
+// Packs' overlay surface: Atelier's bar over an app whose web server runs
+// (atelier.server, docs/packs.md › A web server of its own).
 
 export const PACKS_SURFACES = ['server-bar'] as const
 

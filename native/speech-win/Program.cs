@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex-speech.exe: Apex's Windows speech helper.
+// atelier-speech.exe: Atelier's Windows speech helper.
 // It speaks protocol v2 exactly as the macOS helper does
 // (native/speech), so src/main/speech runs it unchanged:
 //
@@ -21,7 +21,7 @@
 using System.Text;
 using NAudio.MediaFoundation;
 
-namespace Apex.Speech;
+namespace Atelier.Speech;
 
 internal static class Program
 {
@@ -157,7 +157,7 @@ internal sealed class Controller
 
     private Session Current() => session ?? throw Commands.Invalid("Nothing is recording.");
 
-    /// <summary>A recording a session never finished (Apex crashed, was force quit, or Windows ended the session): put back together from its parts.</summary>
+    /// <summary>A recording a session never finished (Atelier crashed, was force quit, or Windows ended the session): put back together from its parts.</summary>
     private static void Recover(string id, string path)
     {
         try

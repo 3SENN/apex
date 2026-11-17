@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Help topics (ON-17): the Help menu groups six topics; choosing one starts
-// a chat about it, grounded in Apex's own help notes (shipped here as
+// a chat about it, grounded in Atelier's own help notes (shipped here as
 // Markdown, bundled as text) inside a <help_notes> context block.
 import { withBrand } from '@shared/branding'
 import { HELP_TOPICS, HELP_TOPIC_IDS, helpQuestion, type HelpService, type HelpTopic, type HelpTopicId } from '@shared/help'
@@ -29,7 +29,7 @@ export const HELP_NOTES: Record<HelpTopicId, string> = {
 }
 
 export function helpContext(topic: HelpTopic): string {
-  return `<help_notes topic="${topic.id}">\nApex's own help notes about ${topic.title.toLowerCase()}. Answer from them; say so when they don't cover a question.\n\n${HELP_NOTES[topic.id].trim()}\n</help_notes>`
+  return `<help_notes topic="${topic.id}">\nAtelier's own help notes about ${topic.title.toLowerCase()}. Answer from them; say so when they don't cover a question.\n\n${HELP_NOTES[topic.id].trim()}\n</help_notes>`
 }
 
 export function createHelpService(deps: { host: Pick<AgentHostApi, 'startChat'>; activeCompanionId(): string }): HelpService {

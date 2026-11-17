@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -81,44 +81,44 @@ export const UI = {
 } as const
 
 export const PAGE = {
-  command: 'apex-page:command',
-  reply: 'apex-page:reply',
-  agentState: 'apex-page:agent-state',
+  command: 'atelier-page:command',
+  reply: 'atelier-page:reply',
+  agentState: 'atelier-page:agent-state',
   // Payloads below, zod-validated in main
   /** page → main: ⌥-hover, long-press and ⇧-click on links. */
-  links: 'apex-page:links',
+  links: 'atelier-page:links',
   /** page → main: the page's text selection for the selection chip. */
-  selection: 'apex-page:selection',
+  selection: 'atelier-page:selection',
   /** page → main, sendSync: alert, confirm and prompt from any frame of the tab. */
-  dialog: 'apex-page:dialog',
+  dialog: 'atelier-page:dialog',
   /** page → main: scroll, throttled to about 60 ms. */
-  scroll: 'apex-page:scroll',
+  scroll: 'atelier-page:scroll',
   /** main → page: privacy configuration. */
-  config: 'apex-page:config',
+  config: 'atelier-page:config',
   /** page → main: which capture tracks are live ({ camera, microphone, screen }). */
-  capture: 'apex-page:capture',
+  capture: 'atelier-page:capture',
   /** main → page: the sharing bar's Stop, with the kinds to end. */
-  captureStop: 'apex-page:capture-stop',
+  captureStop: 'atelier-page:capture-stop',
   // ── sign-in compatibility page channel ── (window geometry: windowGeometry.ts)
   /** page → main, sendSync: the host window's bounds, asked only while Chromium reports none; main → page: the bounds again as the window moves; page → main 'settled': Chromium has its own now. */
-  window: 'apex-page:window',
+  window: 'atelier-page:window',
   // ── translate page channels ── (TR-07: payloads in shared/translate.ts, zod-validated in main/translate)
   /** page → main: the page's language hints and a text sample (PageLanguageHints). */
-  translateHints: 'apex-page:translate-hints',
+  translateHints: 'atelier-page:translate-hints',
   /** main → page: start, restore or send hints again (PageTranslateCommand). */
-  translate: 'apex-page:translate',
+  translate: 'atelier-page:translate',
   /** page → main, invoke: one batch of texts (PageTranslateBatch → PageTranslateBatchReply). */
-  translateBatch: 'apex-page:translate-batch',
+  translateBatch: 'atelier-page:translate-batch',
   /** page → main: progress, done, failed, restored (PageTranslateReport). */
-  translateReport: 'apex-page:translate-report',
+  translateReport: 'atelier-page:translate-report',
   // ── tweaks page channels ── (TWK-01: payloads in shared/tweaks.ts, zod-validated in main/tweaks)
   /** page → main: 'get' (sendSync at document start: PageTweakRules | null), and the picker's 'hide', 'undo', 'done' (PageTweakMessage). */
-  tweaks: 'apex-page:tweaks',
+  tweaks: 'atelier-page:tweaks',
   /** main → page: new rules, picking on or off, the picker's count (PageTweakPush). */
-  tweaksPush: 'apex-page:tweaks-push',
+  tweaksPush: 'atelier-page:tweaks-push',
   // ── permissions pass page channel ── (preload/page/permissionStatus.ts)
   /** page → main, sendSync at document start: this frame's permission states (QueryStates in shared/permissions.ts); main → page: the states again when an answer changes. */
-  permissions: 'apex-page:permissions',
+  permissions: 'atelier-page:permissions',
 } as const
 
 export interface TabInfo {
@@ -141,7 +141,7 @@ export interface TabInfo {
   muted: boolean
   /** When the tab was last activated (ms since epoch); drives the recent-activity sort. */
   lastActiveAt: number
-  /** Breadcrumb for apex:// pages ("Chat", "<title>"); null for websites and the new tab. */
+  /** Breadcrumb for atelier:// pages ("Chat", "<title>"); null for websites and the new tab. */
   crumbs: string[] | null
   windowId: number
   loadStage: LoadStage
@@ -302,11 +302,11 @@ export interface Settings extends ExtraEngineSettings {
   userAvatar: string | null
   /** Your own colour for the chrome's ground and footer; never the companion's. */
   profileHue: ProfileHue
-  /** Apex's own Reduce Motion, on top of the system setting: either one stills every animation. */
+  /** Atelier's own Reduce Motion, on top of the system setting: either one stills every animation. */
   reduceMotion: boolean
   /** The engine new chats use (ST-58): your API key, or another engine the build offers. A companion can override it. */
   engine: EngineId
-  /** ST-60: MCP clients outside Apex (Claude Code in a terminal, say) may use its browser tools. Off by default. */
+  /** ST-60: MCP clients outside Atelier (Claude Code in a terminal, say) may use its browser tools. Off by default. */
   externalAccess: boolean
   /** ST-60: only the tabs such a session opens ('own'), or any open tab ('any'). */
   externalTabs: ExternalTabs
@@ -377,7 +377,7 @@ export interface Settings extends ExtraEngineSettings {
   introSounds: boolean
   /** CH-29: tips while a chat works. */
   chatTips: boolean
-  /** Apex://flags values by flag id. */
+  /** Atelier://flags values by flag id. */
   flags: Record<string, string>
   // Registered with app scope in settingsRegistry.ts
   /** Files and documents (code execution with document skills). Off by default; applies to new chats. */
@@ -415,11 +415,11 @@ export interface ProxySettings {
   bypass: string
 }
 
-/** What apex.settings.set accepts: any subset, with the sidebar options merged field by field. */
+/** What atelier.settings.set accepts: any subset, with the sidebar options merged field by field. */
 // A patch merges these one level deep
 export type NestedSettingsGroup = 'voice' | 'transcription' | 'autofill' | 'meetingCards'
 
-/** What apex.settings.set accepts: any subset, with the sidebar options and the nested groups merged field by field. */
+/** What atelier.settings.set accepts: any subset, with the sidebar options and the nested groups merged field by field. */
 export type SettingsPatch = Partial<Omit<Settings, 'sidebar' | NestedSettingsGroup>> & {
   sidebar?: Partial<Omit<SidebarOptions, 'destinations'>> & { destinations?: Partial<Record<Destination, boolean>> }
 } & { [K in NestedSettingsGroup]?: Partial<Settings[K]> }
@@ -496,7 +496,7 @@ export interface MemoryChange {
 /**
  * Commands main sends to the chrome from menus and shortcuts.
  * 'new-chat': ⇧⌘E, open a fresh chat in the side panel beside the page.
- * 'reload-page': ⌘R on an apex:// page or the new tab; remount that page.
+ * 'reload-page': ⌘R on an atelier:// page or the new tab; remount that page.
  */
 export type MenuCommand = 'focus-omnibox' | 'toggle-agent' | 'find' | 'new-chat' | 'reload-page'
   /** Help › Report a Problem… (⇧⌘H) opens the problem report. */

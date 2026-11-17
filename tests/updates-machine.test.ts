@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -138,7 +138,7 @@ interface Harness {
 
 function harness(options: Partial<Omit<ControllerDeps, 'running'>> & { auto?: boolean; dir?: string; running?: UpdateRestartRunning } = {}): Harness {
   const { auto, dir: given, running, ...over } = options
-  const dir = given ?? mkdtempSync(join(tmpdir(), 'apex-updates-'))
+  const dir = given ?? mkdtempSync(join(tmpdir(), 'atelier-updates-'))
   const fake = new FakeUpdaterBackend()
   const clock = new ManualClock(Date.UTC(2026, 9, 29))
   const store = new UpdatesStore(dir)
@@ -341,7 +341,7 @@ describe('the update controller', () => {
   })
 
   it('reads the pending record on start: a new version clears it, the same version is a failed install', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-updates-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-updates-'))
     new UpdatesStore(dir).update({ pending: { version: '1.0.0', startedAt: 1, attempts: 1 }, lastSeenVersion: '0.9.0' })
     const ok = harness({ dir })
     ok.ctl.start()
@@ -419,7 +419,7 @@ describe("what's new in the controller", () => {
   })
 
   it('shows once after an update, and dismissing records the version', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-updates-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-updates-'))
     new UpdatesStore(dir).update({ lastSeenVersion: '0.9.0' })
     const h = harness({ dir, entries })
     h.ctl.start()

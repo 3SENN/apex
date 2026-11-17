@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // What a turn costs on your own Anthropic key, for the footer gauge and the
-// main menu's meter (DS-18, DS-93). Apex sells nothing: this only adds up
+// main menu's meter (DS-18, DS-93). Atelier sells nothing: this only adds up
 // what your key spent, from the token counts each reply reports. Rates are
 // US dollars per million tokens, first-party API list prices (October 2026);
 // cache writes are the 5-minute rate.
@@ -39,7 +39,7 @@ export interface TokenUsage {
   cacheWriteTokens: number
 }
 
-/** The cost of one turn in US dollars; 0 for a model Apex has no rates for. */
+/** The cost of one turn in US dollars; 0 for a model Atelier has no rates for. */
 export function turnCostUsd(model: string, usage: TokenUsage): number {
   // A reply served by a dated or fallback id still prices as its family.
   const rates = MODEL_RATES[model] ?? Object.entries(MODEL_RATES).find(([id]) => model.startsWith(`${id}-`))?.[1]
@@ -76,7 +76,7 @@ export function formatUsd(usd: number): string {
 
 /**
  * The usage meter's estimate for one turn on the API-key engine,
- * in US dollars, or null for a model Apex has no rates for. Always shown as
+ * in US dollars, or null for a model Atelier has no rates for. Always shown as
  * an estimate; other engines show tokens only.
  */
 export function approxCostUsd(model: string, usage: TokenUsage): number | null {

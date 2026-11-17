@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -21,7 +21,7 @@ const cipher: VaultCipher = {
   decrypt: (data) => Buffer.from(data.toString().split('').reverse().join(''), 'base64').toString(),
 }
 const NOW = new Date(2026, 9, 29)
-const walletAt = (dir = mkdtempSync(join(tmpdir(), 'apex-wallet-'))): WalletStore => new WalletStore(dir, cipher, () => NOW)
+const walletAt = (dir = mkdtempSync(join(tmpdir(), 'atelier-wallet-'))): WalletStore => new WalletStore(dir, cipher, () => NOW)
 // Well-known test numbers from the card networks' documentation.
 const VISA = '4242 4242 4242 4242'
 const AMEX = '378282246310005'
@@ -102,7 +102,7 @@ describe('addresses', () => {
 
 describe('cards', () => {
   it('stores the number encrypted and never shows it in views', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-wallet-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-wallet-'))
     const wallet = walletAt(dir)
     const view = wallet.saveCard({ number: VISA, holder: 'Sam Lee', expMonth: 12, expYear: 2030 })
     expect(view).toEqual({ id: view.id, brand: 'visa', last4: '4242', expMonth: 12, expYear: 2030, holder: 'Sam Lee' })
@@ -144,7 +144,7 @@ describe('cards', () => {
   })
 
   it('keeps fingerprints stable across reopening, and wipes everything', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-wallet-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-wallet-'))
     const first = walletAt(dir).fingerprint(VISA)
     expect(walletAt(dir).fingerprint(VISA)).toBe(first)
     const wallet = walletAt(dir)
@@ -159,7 +159,7 @@ describe('cards', () => {
   })
 
   it('shows an unavailable state when the keychain is gone, never a crash', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-wallet-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-wallet-'))
     walletAt(dir).saveCard({ number: VISA, holder: 'Sam', expMonth: 12, expYear: 2030 })
     const locked = new WalletStore(dir, { ...cipher, available: () => false }, () => NOW)
     expect(locked.available()).toBe(false)

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -169,7 +169,7 @@ export function upgradeChatFile(ref: ChatFileRef, now = Date.now()): ChatFileRes
   const { record, from } = upgraded
   if (from === CHAT_FORMAT_VERSION) return { status: 'current', record, outcome: null, error: null }
   try {
-    // The original first, exactly as the older Apex wrote it; only then the new file.
+    // The original first, exactly as the older Atelier wrote it; only then the new file.
     writeBackupOnce(ref.backupDir, ref.id, from, text)
     writeAtomic(ref.file, JSON.stringify(record))
   } catch (err) {

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -16,7 +16,7 @@ vi.mock('electron', () => ({
   dialog: {},
 }))
 
-import { APEX_APP_PARTITION_PREFIX, APP_CSP, APP_HTML_MAX, APP_VERSIONS_MAX, appIdOf, appVersionUrl, parseAppUrl, validateAppHtml } from '../src/shared/apps'
+import { ATELIER_APP_PARTITION_PREFIX, APP_CSP, APP_HTML_MAX, APP_VERSIONS_MAX, appIdOf, appVersionUrl, parseAppUrl, validateAppHtml } from '../src/shared/apps'
 import { appRunUrl } from '../src/shared/url'
 import type { AgentEvent } from '../src/shared/ipc'
 import { buildBrief } from '../src/main/apps/brief'
@@ -28,7 +28,7 @@ import { clientTool, resetClientToolsForTests, type ClientToolContext, type Tool
 import { bindWorkspace, trashAdapter } from '../src/main/workspace/adapters'
 
 // Agent-built apps, their HTML rules, the
-// apex-app:// sandbox's responses and paths, versions, and build_app.
+// atelier-app:// sandbox's responses and paths, versions, and build_app.
 
 const ID = '0f8fad5b-d9cb-469f-a165-70867728950e'
 const page = (body = '<p>Hi</p>'): string => `<!doctype html><html><head><style>p{color:red}</style></head><body>${body}<script>document.title='x'</script></body></html>`
@@ -67,27 +67,27 @@ describe('validateAppHtml', () => {
   })
 })
 
-describe('apex-app addresses', () => {
+describe('atelier-app addresses', () => {
   it('parses an app and a version, and nothing else', () => {
-    expect(parseAppUrl(`apex-app://${ID}/`)).toEqual({ appId: ID, versionId: null })
+    expect(parseAppUrl(`atelier-app://${ID}/`)).toEqual({ appId: ID, versionId: null })
     expect(parseAppUrl(appVersionUrl(ID, 'v-1'))).toEqual({ appId: ID, versionId: 'v-1' })
     expect(appIdOf(appRunUrl(ID))).toBe(ID)
     for (const bad of [
-      `apex-app://${ID}/other.html`,
-      `apex-app://${ID}/../x`,
-      `apex-app://${ID}/%2e%2e/secret`,
-      `apex-app://${ID}/?version=../../etc`,
-      `apex-app://not-an-id/`,
-      `apex-app://user:pw@${ID}/`,
+      `atelier-app://${ID}/other.html`,
+      `atelier-app://${ID}/../x`,
+      `atelier-app://${ID}/%2e%2e/secret`,
+      `atelier-app://${ID}/?version=../../etc`,
+      `atelier-app://not-an-id/`,
+      `atelier-app://user:pw@${ID}/`,
       `https://${ID}/`,
-      'apex-app://',
+      'atelier-app://',
       'garbage',
     ])
       expect(parseAppUrl(bad), bad).toBeNull()
   })
 
   it('names each partition after its app', () => {
-    expect(`${APEX_APP_PARTITION_PREFIX}${ID}`).toBe(`persist:apex-app-${ID}`)
+    expect(`${ATELIER_APP_PARTITION_PREFIX}${ID}`).toBe(`persist:atelier-app-${ID}`)
   })
 })
 
@@ -95,7 +95,7 @@ describe('the sandbox responses', () => {
   let dir: string
   let store: AppStore
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), 'apex-apps-'))
+    dir = mkdtempSync(join(tmpdir(), 'atelier-apps-'))
     store = new AppStore(dir)
   })
   afterEach(() => rmSync(dir, { recursive: true, force: true }))
@@ -119,7 +119,7 @@ describe('the sandbox responses', () => {
     // Before the first save the draft runs.
     expect(serveApp(store, app.id, appRunUrl(app.id)).status).toBe(200)
     expect(serveApp(store, ID, appRunUrl(app.id)).status).toBe(404)
-    expect(serveApp(store, app.id, `apex-app://${app.id}/x.js`).status).toBe(404)
+    expect(serveApp(store, app.id, `atelier-app://${app.id}/x.js`).status).toBe(404)
     expect(serveApp(store, app.id, appVersionUrl(app.id, 'missing')).status).toBe(404)
   })
 
@@ -135,7 +135,7 @@ describe('versions', () => {
   let dir: string
   let store: AppStore
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), 'apex-apps-'))
+    dir = mkdtempSync(join(tmpdir(), 'atelier-apps-'))
     store = new AppStore(dir)
   })
   afterEach(() => rmSync(dir, { recursive: true, force: true }))
@@ -185,7 +185,7 @@ describe('the apps service and build_app', () => {
   let service: ReturnType<typeof createAppsService>
 
   beforeAll(() => {
-    dir = mkdtempSync(join(tmpdir(), 'apex-apps-svc-'))
+    dir = mkdtempSync(join(tmpdir(), 'atelier-apps-svc-'))
     store = new AppStore(dir)
     service = createAppsService({
       store,

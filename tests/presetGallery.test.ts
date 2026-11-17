@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,17 +9,17 @@ import { EN } from '@shared/i18n/en'
 import { NL } from '@shared/i18n/nl'
 import { companionFromPreset, presetStats, routineSkill } from '../src/renderer/src/companion-card/logic/presetProfile'
 
-// The preset gallery (apex://presets) and a preset's profile.
+// The preset gallery (atelier://presets) and a preset's profile.
 
 describe('preset routes', () => {
   it('addresses the gallery and one profile', () => {
-    expect(presetUrl()).toBe('apex://presets')
-    expect(presetUrl('pip')).toBe('apex://presets/pip')
-    expect(parseInternalUrl('apex://presets')).toMatchObject({ page: 'presets', id: null })
-    expect(parseInternalUrl('apex://presets/pip')).toMatchObject({ page: 'presets', id: 'pip' })
-    expect(parseInternalUrl('apex://presets/../etc')).toBeNull()
+    expect(presetUrl()).toBe('atelier://presets')
+    expect(presetUrl('pip')).toBe('atelier://presets/pip')
+    expect(parseInternalUrl('atelier://presets')).toMatchObject({ page: 'presets', id: null })
+    expect(parseInternalUrl('atelier://presets/pip')).toMatchObject({ page: 'presets', id: 'pip' })
+    expect(parseInternalUrl('atelier://presets/../etc')).toBeNull()
     expect(INTERNAL_PAGES.presets).toBeTruthy()
-    expect(internalTitle('apex://presets/pip').title).toBe(INTERNAL_PAGES.presets)
+    expect(internalTitle('atelier://presets/pip').title).toBe(INTERNAL_PAGES.presets)
   })
 })
 

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -245,9 +245,9 @@ describe('the layout audit pages and sizes', () => {
     expect(names).toContain('connectors')
     expect(names).not.toContain('chat')
     expect(names).not.toContain('library')
-    const all = layoutPages({ chatId: 'c1', companionId: 'pip', fileUrl: 'apex://file?src=x', sourceUrl: 'apex://view-source?url=y' })
-    expect(all.find((p) => p.name === 'chat')?.url).toBe('apex://chat/c1')
-    expect(all.find((p) => p.name === 'companion')?.url).toBe('apex://companion/pip')
+    const all = layoutPages({ chatId: 'c1', companionId: 'pip', fileUrl: 'atelier://file?src=x', sourceUrl: 'atelier://view-source?url=y' })
+    expect(all.find((p) => p.name === 'chat')?.url).toBe('atelier://chat/c1')
+    expect(all.find((p) => p.name === 'companion')?.url).toBe('atelier://companion/pip')
     expect(new Set(all.map((p) => p.name)).size).toBe(all.length)
   })
 

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import type { Companion } from '@shared/companion'
 import { SHARED_OWNER } from '@shared/services'
 import type { Skill } from '@shared/skills'
 import { skillUrl } from '@shared/url'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { Button, Dialog, ErrorState, IconButton, RelativeTime, Select, confirm, menuSeparator, showMenu, toast } from '../ui'
 import { t } from '../i18n/useT'
 import { SKILL_USE_FILTERS, skillUseMatches, type SkillUseFilter } from './logic/listTemplate'
@@ -42,17 +42,17 @@ export function SkillsTab({ companion, focusId, onOpenChat }: SkillsTabProps) {
   const all = skills.data ?? []
   const own = all.filter((s) => s.owner === companion.id && matches(s, query))
   const shared = all.filter((s) => s.owner === SHARED_OWNER && s.source !== 'builtin' && matches(s, query))
-  // The skills that ship with Apex, read-only.
+  // The skills that ship with Atelier, read-only.
   const builtins = all.filter((s) => s.source === 'builtin' && matches(s, query))
   // A shared skill with the same name as one of this companion's is hidden behind it in chats.
   const ownNames = new Set(all.filter((s) => s.owner === companion.id).map((s) => s.name))
 
   const use = (skill: Skill): void => {
-    apex.agent.start(`/${skill.name}`, { companionId: companion.id }).then(onOpenChat, (err: unknown) => toast.show({ message: errorText(err), tone: 'error' }))
+    atelier.agent.start(`/${skill.name}`, { companionId: companion.id }).then(onOpenChat, (err: unknown) => toast.show({ message: errorText(err), tone: 'error' }))
   }
   const buildInChat = (): void => {
     const prompt = t('coCard.skills.helpMeWriteA', { name: companion.name })
-    apex.agent.start(prompt, { companionId: companion.id }).then(onOpenChat, (err: unknown) => toast.show({ message: errorText(err), tone: 'error' }))
+    atelier.agent.start(prompt, { companionId: companion.id }).then(onOpenChat, (err: unknown) => toast.show({ message: errorText(err), tone: 'error' }))
   }
   const openCreateMenu = async (): Promise<void> => {
     const anchor = createButton.current

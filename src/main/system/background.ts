@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,13 +6,13 @@
 import type { BackgroundDecision, BackgroundPolicyInput } from '@shared/system'
 
 // Background mode. backgroundPolicy is pure: what happens
-// when the last window closes, or when Apex starts at login. The lifecycle
+// when the last window closes, or when Atelier starts at login. The lifecycle
 // hooks below are what app start-up (index.ts, then app.ts) delegates
 // to; until the system feature installs its runtime they keep the plain
 // behaviour, so tests and early start-up need nothing.
 
 export function backgroundPolicy(input: BackgroundPolicyInput): BackgroundDecision {
-  // ⌘Q (or Quit Apex) always really quits.
+  // ⌘Q (or Quit Atelier) always really quits.
   if (input.quitting) return 'quit'
   if (input.windowCount > 0) return 'none'
   if (input.runInBackground) return input.platform === 'darwin' ? 'hide-dock' : 'stay-in-tray'
@@ -22,7 +22,7 @@ export function backgroundPolicy(input: BackgroundPolicyInput): BackgroundDecisi
   return input.openedAtLogin ? 'none' : 'quit'
 }
 
-/** True when a decision keeps Apex running without a window. */
+/** True when a decision keeps Atelier running without a window. */
 export function keepsRunning(decision: BackgroundDecision): boolean {
   return decision === 'stay-in-tray' || decision === 'hide-dock'
 }

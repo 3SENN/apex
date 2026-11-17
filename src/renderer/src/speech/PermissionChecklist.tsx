@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@
 // Screen Recording, in order. The first step not done is open, with why it is
 // needed and one button: Allow asks the OS the first time; after a refusal it
 // opens the right Privacy pane. The owner polls, so steps tick themselves.
-// Whether Apex has asked for Screen Recording comes from main (macOS can't say).
+// Whether Atelier has asked for Screen Recording comes from main (macOS can't say).
 import { useState, type ReactElement } from 'react'
 import { Check, CircleDashed, Lock, TriangleAlert } from 'lucide-react'
 import { t, type MessageKey } from '@shared/i18n/core'
@@ -32,7 +32,7 @@ export interface PermissionChecklistProps {
   requesting: PermissionKind | null
   request(kind: PermissionKind): Promise<SpeechPermissions | null>
   openSettings(kind: PermissionKind): void
-  /** Whether Apex has asked macOS for Screen Recording (main remembers; useScreenAccess). */
+  /** Whether Atelier has asked macOS for Screen Recording (main remembers; useScreenAccess). */
   screenAsked: boolean
   /** Offered once the microphone and speech are allowed: carry on without Screen Recording. */
   onSkipScreen?(): void

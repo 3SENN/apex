@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -22,7 +22,7 @@ export interface ShortcutDef {
   group: ShortcutGroup
   /** Always goes to the browser, even when a page would handle the key. */
   overridesPage: boolean
-  when: 'any' | 'website' | 'apex-page'
+  when: 'any' | 'website' | 'atelier-page'
   /** On an agent-controlled tab, waits and shows a take-over-first toast. */
   waitsForTakeOver?: boolean
 }

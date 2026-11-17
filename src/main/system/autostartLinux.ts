@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,12 +7,12 @@ import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node
 import { join } from 'node:path'
 import { LAUNCH_AT_LOGIN_FLAG } from '@shared/system'
 
-// Linux "Open Apex when you log in": an XDG autostart entry,
-// $XDG_CONFIG_HOME/autostart/apex.desktop (~/.config by default). An AppImage
+// Linux "Open Atelier when you log in": an XDG autostart entry,
+// $XDG_CONFIG_HOME/autostart/atelier.desktop (~/.config by default). An AppImage
 // runs from a temporary mount, so Exec points at $APPIMAGE, the file the
 // person keeps; a deb install points at its executable.
 
-export const AUTOSTART_FILE = 'apex.desktop'
+export const AUTOSTART_FILE = 'atelier.desktop'
 
 export function autostartDir(env: Readonly<Record<string, string | undefined>>, home: string): string {
   const config = env.XDG_CONFIG_HOME && env.XDG_CONFIG_HOME.startsWith('/') ? env.XDG_CONFIG_HOME : join(home, '.config')
@@ -49,12 +49,12 @@ export function autostartContent(entry: AutostartEntry): string {
     `Name=${line(entry.name)}`,
     `Comment=${line(entry.comment)}`,
     `Exec=${execArg(entry.launcher)} ${LAUNCH_AT_LOGIN_FLAG}`,
-    'Icon=apex',
+    'Icon=atelier',
     'Terminal=false',
     `StartupWMClass=${line(entry.name)}`,
     'X-GNOME-Autostart-enabled=true',
-    // Marks the file as Apex's own, so it is never mistaken for one the person wrote.
-    'X-Apex-Autostart=1',
+    // Marks the file as Atelier's own, so it is never mistaken for one the person wrote.
+    'X-Atelier-Autostart=1',
     '',
   ].join('\n')
 }

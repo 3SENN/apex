@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import { writeAtomic } from '../settings'
 
 // Connector icons: a site's own favicon, fetched at runtime through
 // the default profile's session and cached on disk, or null so the page
-// draws Apex's generic category icon. Off in smoke and tests, so no fetch
+// draws Atelier's generic category icon. Off in smoke and tests, so no fetch
 // ever leaves the machine there.
 
 const HIT_TTL = 7 * 24 * 3600_000

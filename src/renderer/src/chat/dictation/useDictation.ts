@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { HELPER_ERROR_CODES, type SpeechErrorCode, type SpeechSessionEvent, type SpeechStatus } from '@shared/speech'
-import { apex, call, errorText } from '../../api'
+import { atelier, call, errorText } from '../../api'
 import { useLatest } from '../../ui'
 import { dictationErrorCopy, permissionStep, type DictationState, type ErrorCopy } from './logic'
 
@@ -127,7 +127,7 @@ export function useDictation(onFinal?: (text: string) => void): Dictation {
 
   useEffect(
     () =>
-      apex.onAppEvent((e) => {
+      atelier.onAppEvent((e) => {
         if (e.type === 'speech-status') setAvailable(e.status.available)
         if (e.type !== 'speech-session' || e.purpose !== 'dictation') return
         if (session.current === e.id) handle(e.event)
@@ -262,6 +262,6 @@ export function runErrorAction(error: DictationError, retry: () => void): void {
   const action = error.copy.action
   if (!action) return
   if (action.kind === 'privacy') void call('speech', 'openPrivacySettings', action.what).catch(() => undefined)
-  else if (action.kind === 'settings') void call('pages', 'open', 'apex://settings/transcription').catch(() => undefined)
+  else if (action.kind === 'settings') void call('pages', 'open', 'atelier://settings/transcription').catch(() => undefined)
   else retry()
 }

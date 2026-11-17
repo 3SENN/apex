@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -17,10 +17,10 @@ describe('isWebPartition', () => {
     expect(isWebPartition('')).toBe(true)
     expect(isWebPartition('persist:profile-work')).toBe(true)
     expect(isWebPartition('private-1')).toBe(true)
-    expect(isWebPartition('apex-preprocess')).toBe(false)
-    expect(isWebPartition('apex-artifacts')).toBe(false)
-    expect(isWebPartition('persist:apex-app-notes')).toBe(false)
-    expect(isWebPartition('apex-artifacts-extra')).toBe(true)
+    expect(isWebPartition('atelier-preprocess')).toBe(false)
+    expect(isWebPartition('atelier-artifacts')).toBe(false)
+    expect(isWebPartition('persist:atelier-app-notes')).toBe(false)
+    expect(isWebPartition('atelier-artifacts-extra')).toBe(true)
   })
 })
 

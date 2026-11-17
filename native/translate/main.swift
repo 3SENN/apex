@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex-translate: Apex's on-device page translation helper (TR-05). Apex
+// atelier-translate: Atelier's on-device page translation helper (TR-05). Atelier
 // starts it when a page is first translated and keeps it running while it is
 // in use. It reads one JSON request per line on stdin and answers each with
 // one JSON line on stdout (src/main/translate/helper.ts checks them with zod):
@@ -29,7 +29,7 @@ let textsMax = 128
 let textMax = 5000
 let detectMax = 4000
 
-let output = DispatchQueue(label: "apex.translate.output")
+let output = DispatchQueue(label: "atelier.translate.output")
 
 func emit(_ object: [String: Any]) {
   output.sync {
@@ -44,7 +44,7 @@ func fail(_ id: Int, _ code: String, _ message: String) {
   emit(["id": id, "type": "error", "code": code, "message": message])
 }
 
-/// A BCP-47 tag Apex sent; anything else is refused before it reaches the framework.
+/// A BCP-47 tag Atelier sent; anything else is refused before it reaches the framework.
 func validTag(_ value: Any?) -> String? {
   guard let tag = value as? String, tag.count >= 2, tag.count <= 35,
         tag.range(of: "^[A-Za-z]{2,3}(-[A-Za-z0-9]{2,8}){0,3}$", options: .regularExpression) != nil else { return nil }
@@ -61,7 +61,7 @@ func statusName(_ status: LanguageAvailability.Status) -> String {
   }
 }
 
-/// One session per language pair, made once and reused (the models stay loaded while Apex translates).
+/// One session per language pair, made once and reused (the models stay loaded while Atelier translates).
 final class Sessions: @unchecked Sendable {
   /// TranslationSession values; typed as AnyObject so the store itself needs no availability.
   private var cache: [String: AnyObject] = [:]

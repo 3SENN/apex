@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // The Dock icon designer (ST-10; macOS): a live icon canvas, a
-// companion picker and a background picker (match the companion, Apex's
+// companion picker and a background picker (match the companion, Atelier's
 // swatches, or a custom colour from a pad with a hue slider and a hex
 // field). Drag the head to move it, drag the eyes to aim the gaze, click the
 // mouth to toggle a smile; the handles rotate, turn and scale it. Keys:

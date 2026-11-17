@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -111,7 +111,7 @@ export const FEATURES: Feature[] = [
   createTranslateFeature(),
   // ── system permissions feature ── (this Mac's permissions in one report; asks only after a click on Allow)
   createSystemPermissionsFeature(),
-  // ── quick decisions feature ── (DC-01 to DC-12: an optional decision model next to Apex's own rules)
+  // ── quick decisions feature ── (DC-01 to DC-12: an optional decision model next to Atelier's own rules)
   createDecisionsFeature(),
   // ── packs feature ── (docs/packs.md: installed packs, their sandbox and bridge, the builder tools; after tweaks and skills, whose stores it feeds)
   createPacksFeature(),

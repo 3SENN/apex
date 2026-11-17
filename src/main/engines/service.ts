@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -21,11 +21,11 @@ import type { AgentBackend } from './backend'
 
 // Engines in one place (ST-58 to ST-60): which engine new chats use, the
 // API key's state, the engines a build adds (./extras.ts), the local MCP
-// server their chats reach Apex's tools on, and the opt-in route that lets
-// Claude Code, or any MCP client, in the person's own terminal use Apex's
+// server their chats reach Atelier's tools on, and the opt-in route that lets
+// Claude Code, or any MCP client, in the person's own terminal use Atelier's
 // browser tools (mcp/external.ts).
 //
-// Bring your own model: every engine runs on the person's own account. Apex
+// Bring your own model: every engine runs on the person's own account. Atelier
 // never holds, proxies or meters that access.
 
 export type { EngineSettings } from './extras'
@@ -128,7 +128,7 @@ export class EngineService extends EventEmitter<{ changed: [EngineStatus] }> {
   /** ST-60: runs `claude mcp add …` for you when Claude Code is found on this computer. */
   async addToClaudeCode(): Promise<{ ok: boolean; message: string }> {
     const program = await this.#claudeProgram()
-    if (!program) return { ok: false, message: mainT('chat.mainService.apexCanTFind') }
+    if (!program) return { ok: false, message: mainT('chat.mainService.atelierCanTFind') }
     const url = await this.#outsideUrl()
     const args = this.outside.addArgs(url)
     if (!args) return { ok: false, message: mainT('chat.mainService.turnOnAccessFor') }
@@ -139,7 +139,7 @@ export class EngineService extends EventEmitter<{ changed: [EngineStatus] }> {
     if (result.code === 0) {
       this.outside.markAdded(url)
       this.#changed()
-      return { ok: true, message: mainT('chat.mainService.apexIsAddedTo') }
+      return { ok: true, message: mainT('chat.mainService.atelierIsAddedTo') }
     }
     const output = `${result.stdout}\n${result.stderr}`.trim()
     if (/already exists/i.test(output)) {

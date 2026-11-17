@@ -1,6 +1,6 @@
 # Governance
 
-Apex is a young project. Like many open-source projects at this stage, it has one founding maintainer who looks after
+Atelier is a young project. Like many open-source projects at this stage, it has one founding maintainer who looks after
 its direction, and it is open to everyone who wants to help.
 
 ## Roles
@@ -9,8 +9,8 @@ its direction, and it is open to everyone who wants to help.
   packs, or sending pull requests. You don't need permission to contribute.
 - **Maintainers** review and merge pull requests, triage issues and look after parts of the project. Maintainers are
   invited from contributors who have made sustained, high-quality contributions and work well with others.
-- **The project lead**, Senne Chin, created Apex, has the final say on its direction, releases and design, and looks
-  after the Apex brand and trademarks.
+- **The project lead**, Senne Chin, created Atelier, has the final say on its direction, releases and design, and looks
+  after the Atelier brand and trademarks.
 
 Maintainers and the project lead are listed in [.github/CODEOWNERS](.github/CODEOWNERS).
 
@@ -27,7 +27,7 @@ Maintainers and the project lead are listed in [.github/CODEOWNERS](.github/CODE
 
 ## Releases and the brand
 
-Official Apex builds, their signing and their release channel are made by the project lead. The Apex name, logo and
+Official Atelier builds, their signing and their release channel are made by the project lead. The Atelier name, logo and
 characters are trademarks (see [TRADEMARKS.md](TRADEMARKS.md)); the companion art has its own licence
 ([ART-LICENSE.md](ART-LICENSE.md)). Everything else is open source under the [MPL-2.0](LICENSE).
 

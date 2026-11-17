@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
-// The branding's name and icon for a dev run (macOS): Apex, or Summit for the
-// unofficial branding (scripts/branding.mjs, APEX_OFFICIAL_BRANDING).
+// The branding's name and icon for a dev run (macOS): Atelier, or Summit for the
+// unofficial branding (scripts/branding.mjs, ATELIER_OFFICIAL_BRANDING).
 //
 //   node scripts/dev-branding.mjs     runs from `predev` and after `postinstall`
 //
@@ -12,7 +12,7 @@
 // Info.plist and icon say "Electron": the menu bar, the Dock, the app
 // switcher, the About panel, notifications, login items and dialogs all read
 // them. This renames that bundle after the branding (its helpers too, so
-// Activity Monitor lists "Apex Helper (Renderer)") and copies the branding's
+// Activity Monitor lists "Atelier Helper (Renderer)") and copies the branding's
 // icon.icns over its icon. The packaged app gets the same names from
 // electron-builder (productName) and needs none of this. Switching brandings
 // renames the bundle again on the next `npm run dev`.
@@ -33,7 +33,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 import { loadBranding } from './branding.mjs'
 
 /** The official branding's name; brandDevApp names the bundle after the active branding. */
-export const APP_NAME = 'Apex'
+export const APP_NAME = 'Atelier'
 const DEV_NAME = 'Electron'
 const HERE = dirname(fileURLToPath(import.meta.url))
 const REPO = resolve(HERE, '..')
@@ -66,7 +66,7 @@ export function brandInfoPlist(text, name = APP_NAME) {
 }
 
 /**
- * A helper's Info.plist: "Electron Helper (GPU)" becomes "Apex Helper (GPU)",
+ * A helper's Info.plist: "Electron Helper (GPU)" becomes "Atelier Helper (GPU)",
  * and a helper named after another branding ("Summit Helper (GPU)") is renamed
  * too; other names stay.
  */
@@ -95,7 +95,7 @@ function readPlistText(path) {
  * default). Returns the files it changed (empty when everything already
  * matched) or why it skipped.
  */
-export function brandDevApp({ repo = REPO, platform = process.platform, refresh = refreshBundle, branding: given, others = ['Apex', 'Summit'] } = {}) {
+export function brandDevApp({ repo = REPO, platform = process.platform, refresh = refreshBundle, branding: given, others = ['Atelier', 'Summit'] } = {}) {
   if (platform !== 'darwin') return { changed: [], skipped: 'not macOS' }
   const bundle = join(repo, 'node_modules', 'electron', 'dist', 'Electron.app')
   const plistPath = join(bundle, 'Contents', 'Info.plist')

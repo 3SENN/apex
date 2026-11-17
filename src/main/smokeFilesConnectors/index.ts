@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -15,7 +15,7 @@ import * as profiles from './profiles'
 
 // The files and connectors smoke group's checks and screenshot specs: profiles,
 // attachments, files, connectors, the rich chat turn, the composer and
-// extensions (APEX_SMOKE_ONLY=FILES-CONNECTORS runs only these).
+// extensions (ATELIER_SMOKE_ONLY=FILES-CONNECTORS runs only these).
 // Nothing leaves the machine: the Messages and Files APIs, compaction and
 // code execution are stubbed by the offline client, MCP and OAuth servers
 // are local fixtures, and favicons stay off.

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -19,7 +19,7 @@ import { SWEEP_COMPLETE } from '@shared/i18n/locales'
 const ROOT = join(__dirname, '..', 'src', 'renderer', 'src')
 const ATTRIBUTES = new Set(['title', 'aria-label', 'placeholder', 'alt', 'label', 'description', 'tooltip', 'aria-valuetext', 'aria-description', 'hint', 'message', 'heading', 'confirmLabel', 'cancelLabel', 'emptyText', 'subtitle', 'caption', 'trailing'])
 /** Names and marks that read the same in every language. */
-const ALLOWED_TEXT = new Set(['Apex', 'Claude', 'Anthropic', 'Markdown', 'JavaScript', 'GitHub', 'ChatGPT'])
+const ALLOWED_TEXT = new Set(['Atelier', 'Claude', 'Anthropic', 'Markdown', 'JavaScript', 'GitHub', 'ChatGPT'])
 /** Keys as printed on the keyboard, and command names typed as they are. */
 const KEYS_AND_COMMANDS = new Set(['esc', 'Esc', 'Tab', 'Enter', 'Return', 'Space', 'Shift', 'npx'])
 /** Text that isn't language: addresses, hosts, paths, identifiers, code samples and key prefixes. */
@@ -103,7 +103,7 @@ describe('no hard-coded strings', () => {
   it('finds text, attributes and template literals, and skips symbols and names', () => {
     const found = scanTsx(
       'x.tsx',
-      `const a = <div title="Close panel" aria-label={'Open it'} placeholder={\`Search \${x}\`} alt="">Hello there<b>·</b>{' '}Apex<i title={t('k')}>{t('x')}</i><input placeholder="https://example.com/mcp" /><input placeholder="API_KEY" /><b>ChatGPT:</b><kbd>esc</kbd></div>`,
+      `const a = <div title="Close panel" aria-label={'Open it'} placeholder={\`Search \${x}\`} alt="">Hello there<b>·</b>{' '}Atelier<i title={t('k')}>{t('x')}</i><input placeholder="https://example.com/mcp" /><input placeholder="API_KEY" /><b>ChatGPT:</b><kbd>esc</kbd></div>`,
     )
     expect(found.map((f) => `${f.kind}:${f.text}`)).toEqual(['title:Close panel', 'aria-label:Open it', 'placeholder:Search ', 'text:Hello there'])
   })

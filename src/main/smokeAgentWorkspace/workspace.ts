@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -33,14 +33,14 @@ async function rejects(fn: () => Promise<unknown>, label: string): Promise<void>
 
 /** A temp folder with a note, a sub folder and a symlink that points outside it. */
 function fixtureFolder(): { root: string; outside: string; cleanup(): void } {
-  const base = mkdtempSync(join(tmpdir(), 'apex-smoke-ws-'))
+  const base = mkdtempSync(join(tmpdir(), 'atelier-smoke-ws-'))
   const root = join(base, 'Kitchen plans')
   const outside = join(base, 'outside')
   mkdirSync(join(root, 'quotes'), { recursive: true })
   mkdirSync(outside)
   writeFileSync(join(root, 'notes.md'), '# Kitchen\nThe oak worktop quote came in under budget.\n')
   writeFileSync(join(root, 'quotes', 'tiles.txt'), 'Tiles: 42 boxes of terracotta.\n')
-  writeFileSync(join(outside, 'secret.txt'), 'not for Apex')
+  writeFileSync(join(outside, 'secret.txt'), 'not for Atelier')
   try {
     symlinkSync(outside, join(root, 'escape'), 'dir')
   } catch {
@@ -161,7 +161,7 @@ export const checks: SmokeCheck[] = [
       const under: Record<string, string | null> = { home: 'home', projects: 'projects', files: 'files', apps: 'apps', tables: 'files', search: null, trash: null }
       let first = true
       for (const [section, tab] of Object.entries(under)) {
-        ctx.tabs.openInternal(`apex://workspace/${section}`)
+        ctx.tabs.openInternal(`atelier://workspace/${section}`)
         // The hub is a destination: it shows on the rail, over the active tab (whose own page stays mounted behind).
         const seen = `const page = document.querySelector('.pane--rail .ws-page')
            const tabs = page ? [...page.querySelectorAll('.ws-tabsrow [role="tab"]')] : []
@@ -178,7 +178,7 @@ export const checks: SmokeCheck[] = [
       // The search field above the tabs: Enter shows the results.
       // The field of the Home section on the rail: the section before it (Recently deleted) has a field too, and a
       // section change empties it, so typing there before Home shows (a slow machine) would search for nothing.
-      ctx.tabs.openInternal('apex://workspace')
+      ctx.tabs.openInternal('atelier://workspace')
       const field = `document.querySelector('.pane--rail .ws-page[data-section="home"] .ws-top .ws-search input')`
       await ctx.chrome.until(`return ${field} || null`, 8000, 'the hub search field')
       await ctx.chrome.js(`const input = ${field}
@@ -188,11 +188,11 @@ export const checks: SmokeCheck[] = [
         return true`)
       await ctx.chrome.until(`return ${field}?.value === 'worktop' || null`, 3000, 'the hub field to hold the words')
       await ctx.chrome.js(`${field}.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true })); return true`)
-      await waitFor(() => ctx.tabs.rail()?.startsWith('apex://workspace/search?q=worktop') === true, 8000, 'the search view from the hub field')
+      await waitFor(() => ctx.tabs.rail()?.startsWith('atelier://workspace/search?q=worktop') === true, 8000, 'the search view from the hub field')
       // An old Timeline address goes to History's timeline.
-      ctx.tabs.openInternal('apex://workspace/timeline?scope=week')
-      await waitFor(() => ctx.tabs.all().some((t) => t.internalUrl?.startsWith('apex://history?view=timeline&scope=week') === true), 8000, 'the old Timeline address to open History')
-      for (const t of ctx.tabs.all()) if (t.internalUrl?.startsWith('apex://history')) ctx.tabs.close(t.id)
+      ctx.tabs.openInternal('atelier://workspace/timeline?scope=week')
+      await waitFor(() => ctx.tabs.all().some((t) => t.internalUrl?.startsWith('atelier://history?view=timeline&scope=week') === true), 8000, 'the old Timeline address to open History')
+      for (const t of ctx.tabs.all()) if (t.internalUrl?.startsWith('atelier://history')) ctx.tabs.close(t.id)
       ctx.tabs.leaveRail()
     },
   },
@@ -203,7 +203,7 @@ export const shots: ShotSpec[] = [
     name: 'workspace-home',
     async run(ctx) {
       await withProject(ctx, async () => {
-        ctx.tabs.openInternal('apex://workspace')
+        ctx.tabs.openInternal('atelier://workspace')
         await ctx.chrome.until(`return document.querySelector('.ws-home .ws-tile')`, 8000, 'the hub home')
         await ctx.shot('workspace-home')
       })
@@ -213,10 +213,10 @@ export const shots: ShotSpec[] = [
     name: 'workspace-projects',
     async run(ctx) {
       await withProject(ctx, async (project) => {
-        ctx.tabs.openInternal('apex://workspace/projects')
+        ctx.tabs.openInternal('atelier://workspace/projects')
         await ctx.chrome.until(`return document.querySelector('.ws-table tbody tr')`, 8000, 'the project list')
         await ctx.shot('workspace-projects')
-        ctx.tabs.openInternal(`apex://workspace/projects/${project.id}`)
+        ctx.tabs.openInternal(`atelier://workspace/projects/${project.id}`)
         await ctx.chrome.until(`return document.querySelector('.ws-project__instructions')`, 8000, 'a project page')
         await ctx.shot('workspace-project')
         await ctx.chrome.js(`document.querySelector('.space-row')?.click(); return true`)
@@ -231,10 +231,10 @@ export const shots: ShotSpec[] = [
     name: 'workspace-files',
     async run(ctx) {
       await withFolder(ctx, async (folder) => {
-        ctx.tabs.openInternal('apex://workspace/files')
+        ctx.tabs.openInternal('atelier://workspace/files')
         await ctx.chrome.until(`return document.querySelector('.ws-table tbody tr')`, 8000, 'the shared folders')
         await ctx.shot('workspace-files')
-        ctx.tabs.openInternal(`apex://workspace/files/${folder.id}`)
+        ctx.tabs.openInternal(`atelier://workspace/files/${folder.id}`)
         await ctx.chrome.until(`return document.querySelector('.ws-crumbs') && document.querySelector('.ws-table tbody tr')`, 8000, 'a shared folder')
         await ctx.shot('workspace-folder')
       })
@@ -245,7 +245,7 @@ export const shots: ShotSpec[] = [
     async run(ctx) {
       await withFolder(ctx, async () => {
         await waitIndexed(ctx, 'worktop')
-        ctx.tabs.openInternal('apex://workspace/search?q=worktop')
+        ctx.tabs.openInternal('atelier://workspace/search?q=worktop')
         await ctx.chrome.until(`return document.querySelector('.ws-hit mark')`, 8000, 'search results with the match marked')
         await ctx.shot('workspace-search')
       })
@@ -256,7 +256,7 @@ export const shots: ShotSpec[] = [
     async run(ctx) {
       await withProject(ctx, async (project) => {
         await ctx.chrome.invoke('projects', 'remove', project.id)
-        ctx.tabs.openInternal('apex://workspace/trash')
+        ctx.tabs.openInternal('atelier://workspace/trash')
         await ctx.chrome.until(`return document.querySelector('.ws-table tbody tr')`, 8000, 'Recently deleted')
         await ctx.shot('workspace-trash')
       })

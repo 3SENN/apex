@@ -1,24 +1,24 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { useEffect, useState } from 'react'
 import { accentVariables } from '@shared/accent'
-import type { ApexFloatApi, FloatEvent } from '@shared/float'
+import type { AtelierFloatApi, FloatEvent } from '@shared/float'
 import type { ThemeState } from '@shared/theme'
 
-// The float page's side of window.apexFloat: the theme on <html>, the
-// live payload and level events. A float never sees window.apex.
+// The float page's side of window.atelierFloat: the theme on <html>, the
+// live payload and level events. A float never sees window.atelier.
 
 declare global {
   interface Window {
-    apexFloat?: ApexFloatApi
+    atelierFloat?: AtelierFloatApi
   }
 }
 
 /** The bridge, or null when the page was opened outside a float window. */
-export const floatApi: ApexFloatApi | null = typeof window !== 'undefined' ? (window.apexFloat ?? null) : null
+export const floatApi: AtelierFloatApi | null = typeof window !== 'undefined' ? (window.atelierFloat ?? null) : null
 
 /** Sets data-theme and the companion accent variables, as the chrome's theme.ts does. */
 export function applyFloatTheme(theme: ThemeState): void {

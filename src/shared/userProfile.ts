@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -52,7 +52,7 @@ export interface UserProfile {
   /** What you want help with, in short phrases. */
   goals: string[]
   habits: ProfileHabit[]
-  /** Apps you use, as you named them; the ones Apex can connect are matched in the plan. */
+  /** Apps you use, as you named them; the ones Atelier can connect are matched in the plan. */
   apps: string[]
   replyStyle: ReplyStyle | null
 }

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,14 +10,14 @@ import type { MigrationOutcome } from '@shared/migrations'
 import { log } from '../log'
 
 // The guard for versioned JSON files. Settings and
-// companions read through it, so going back to an older Apex never silently
+// companions read through it, so going back to an older Atelier never silently
 // loses what a newer one saved: a file newer than this build understands is
 // copied to <name>.newer-v<N>.json before the store falls back to what it
 // can read, the log says so, and the migration report lists it.
 //
 // Kept free of settings.ts and the chat store, which import it.
 
-/** The format each guarded file is written in. A newer Apex raises these. */
+/** The format each guarded file is written in. A newer Atelier raises these. */
 export const VERSIONED_FILES = {
   /** settings.json: `formatVersion` (absent before read as 1). */
   settings: 1,
@@ -77,7 +77,7 @@ export function readVersioned<T>(path: string, current: number, parse: (raw: unk
   }
 }
 
-/** Files read through readVersioned that a newer Apex saved, for the report. */
+/** Files read through readVersioned that a newer Atelier saved, for the report. */
 export function newerFileOutcomes(): MigrationOutcome[] {
   return [...newerFiles.values()]
 }

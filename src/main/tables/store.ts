@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // CSV tables in SQLite: one file per owner,
 // userData/tables/<owner>.sqlite, each real table registered in a small
-// _apex_tables list (id, name, dates). Apex reads and changes its own
+// _atelier_tables list (id, name, dates). Atelier reads and changes its own
 // tables through this store; the agent goes through the guard (sqlGuard.ts)
 // and, for reads, a separate read-only connection (query.ts).
 import { randomUUID } from 'node:crypto'
@@ -19,7 +19,7 @@ import type { DatabaseSync } from '../db'
 export type DbOpener = (path: string, options?: { readOnly?: boolean }) => DatabaseSync
 
 const OWNER = /^[A-Za-z0-9-]{1,64}$/
-const META = '_apex_tables'
+const META = '_atelier_tables'
 
 /** A quoted identifier (names are sanitised already; quoting keeps SQLite's own words safe). */
 export const q = (name: string): string => `"${name.replace(/"/g, '""')}"`
@@ -148,7 +148,7 @@ export class TableStore {
   reconcile(owner: string): void {
     const db = this.db(owner)
     const now = Date.now()
-    const real = db.prepare(`SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE '\\_apex%' ESCAPE '\\'`).all() as Array<{ name: string }>
+    const real = db.prepare(`SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE '\\_atelier%' ESCAPE '\\'`).all() as Array<{ name: string }>
     const known = new Set((db.prepare(`SELECT name FROM ${META}`).all() as Array<{ name: string }>).map((r) => r.name))
     const names = new Set(real.map((r) => r.name))
     for (const name of names) if (!known.has(name)) db.prepare(`INSERT INTO ${META} (id, name, created_at, updated_at) VALUES (?, ?, ?, ?)`).run(randomUUID(), name, now, now)

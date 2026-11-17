@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Search engines (ST-31): the catalogue Apex ships, custom engines (a
+// Search engines (ST-31): the catalogue Atelier ships, custom engines (a
 // name plus an https template with %s), and where suggestions come from.
 // settings.searchEngine holds an id; an id that is neither built in nor a
 // saved custom engine falls back to the first engine.
@@ -56,7 +56,7 @@ export function templateProblem(template: string): TemplateProblem | null {
   if (text.length > CUSTOM_ENGINE_TEMPLATE_MAX || /\s/.test(text)) return 'invalid'
   let parsed: URL
   try {
-    parsed = new URL(text.replace(/%s/g, 'apex'))
+    parsed = new URL(text.replace(/%s/g, 'atelier'))
   } catch {
     return 'invalid'
   }

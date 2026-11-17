@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// A pack's files on disk and in .apexpack archives (docs/packs.md › Sharing).
-// The archive is a zip of the pack's files plus __apex/signature.json. The
+// A pack's files on disk and in .atelierpack archives (docs/packs.md › Sharing).
+// The archive is a zip of the pack's files plus __atelier/signature.json. The
 // pack hash is SHA-256 over the sorted "path NUL sha256(file)" lines, so it
 // names the content, not the zip. Reading enforces the limits before
 // inflating anything, so an oversized or hostile archive costs nothing. A pack
@@ -187,7 +187,7 @@ export function writePackFolder(target: string, files: PackFiles): void {
 
 export const signatureSchema = z
   .object({
-    format: z.literal('apex-pack-signature'),
+    format: z.literal('atelier-pack-signature'),
     version: z.literal(1),
     hash: z.string().regex(/^[0-9a-f]{64}$/),
     keyId: z.string().regex(/^[0-9a-f]{16}$/),
@@ -205,7 +205,7 @@ export interface PackShared {
   image: Buffer | null
 }
 
-const shareSchema = z.object({ format: z.literal('apex-pack-share'), version: z.literal(1), note: z.string().max(PACK_SHARE_NOTE_MAX).nullable() }).strict()
+const shareSchema = z.object({ format: z.literal('atelier-pack-share'), version: z.literal(1), note: z.string().max(PACK_SHARE_NOTE_MAX).nullable() }).strict()
 const PNG_MAGIC = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])
 
 /** Whether bytes start like a PNG: the only image Share… carries. */
@@ -221,7 +221,7 @@ export function encodeArchive(files: PackFiles, signature: PackSignature | null,
   for (const p of [...files.keys()].sort()) entries[p] = [new Uint8Array(files.get(p) as Buffer), { level: 6 }]
   if (signature) entries[PACK_SIGNATURE_FILE] = [new TextEncoder().encode(JSON.stringify(signature, null, 2)), { level: 6 }]
   const note = shared?.note?.trim().slice(0, PACK_SHARE_NOTE_MAX) || null
-  if (note) entries[PACK_SHARE_FILE] = [new TextEncoder().encode(JSON.stringify({ format: 'apex-pack-share', version: 1, note }, null, 2)), { level: 6 }]
+  if (note) entries[PACK_SHARE_FILE] = [new TextEncoder().encode(JSON.stringify({ format: 'atelier-pack-share', version: 1, note }, null, 2)), { level: 6 }]
   if (shared?.image && isPng(shared.image) && shared.image.length <= PACK_SHARE_IMAGE_MAX) entries[PACK_SHARE_IMAGE_FILE] = [new Uint8Array(shared.image), { level: 0 }]
   return Buffer.from(zipSync(entries))
 }
@@ -276,7 +276,7 @@ export function peekArchiveManifest(archive: Buffer): string | null {
   return text
 }
 
-/** Unzips an .apexpack or .apexapp: its files, the signature it carries (null when unsigned or unreadable) and what Share… added. */
+/** Unzips an .atelierpack or .atelierapp: its files, the signature it carries (null when unsigned or unreadable) and what Share… added. */
 export function decodeArchive(archive: Buffer, limits?: PackFileLimits): { files: PackFiles; signature: PackSignature | null; shared: PackShared } {
   if (archive.length > APP_PACK_LIMITS.packBytes + 1024 * 1024) throw new PackFileError('This pack file is too large.')
   const peeked = parseManifestText(peekArchiveManifest(archive))

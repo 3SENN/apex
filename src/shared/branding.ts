@@ -1,32 +1,32 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The branding this build was made with: official Apex, or the unofficial
+// The branding this build was made with: official Atelier, or the unofficial
 // Summit every build from source gets unless official branding is switched on
 // (TRADEMARKS.md; scripts/branding.mjs decides it, from branding/<id>/branding.json).
-// The build sets __APEX_BRANDING__; code reads the names through BRANDING, and
+// The build sets __ATELIER_BRANDING__; code reads the names through BRANDING, and
 // user-facing text through the catalogues' {brand} placeholder, which t()
 // fills in from here.
 //
 // Without the define (a tool that bundles shared code on its own), it is the
-// unofficial branding: nothing claims the Apex marks unless a build asks for them.
+// unofficial branding: nothing claims the Atelier marks unless a build asks for them.
 import type { CompanionPreset } from './companion'
 
-declare const __APEX_BRANDING__: unknown
+declare const __ATELIER_BRANDING__: unknown
 
 export type BrandingId = 'official' | 'unofficial'
 
 export interface Branding {
   id: BrandingId
-  /** Whether this is the official Apex branding. */
+  /** Whether this is the official Atelier branding. */
   official: boolean
   /** The product name: the app, its bundle and its profile folder. */
   name: string
   /** The name in running text, as Firefox's -brand-short-name ({brand} in the catalogues). */
   shortName: string
-  /** The app id (APEX_BUNDLE_ID can still replace it; src/shared/release.ts). */
+  /** The app id (ATELIER_BUNDLE_ID can still replace it; src/shared/release.ts). */
   bundleId: string
   /** The copyright line, as Brave's "Copyright © … The Brave Authors" (Settings › About). */
   copyright: string
@@ -39,7 +39,7 @@ export interface Branding {
    * before presets.json's: the unofficial branding's neutral companion. Null when the default is one of presets.json's.
    */
   ownPreset: CompanionPreset | null
-  /** Presets from presets.json this branding doesn't offer (the unofficial branding leaves out all six of Apex's characters). */
+  /** Presets from presets.json this branding doesn't offer (the unofficial branding leaves out all six of Atelier's characters). */
   hiddenPresets: readonly string[]
   /** Whether the logo is a drawn wordmark (branding/<id>/renderer/logo.svg); else the name beside the mark. */
   wordmark: boolean
@@ -51,7 +51,7 @@ const UNOFFICIAL: Branding = {
   name: 'Summit',
   shortName: 'Summit',
   bundleId: 'dev.summit.browser',
-  copyright: 'Copyright © 2026 The Apex Authors',
+  copyright: 'Copyright © 2026 The Atelier Authors',
   trademarkInfo: '',
   companion: { id: 'companion', name: 'Companion', look: null },
   ownPreset: null,
@@ -98,7 +98,7 @@ export function brandingFrom(raw: unknown): Branding {
   }
 }
 
-export const BRANDING: Branding = brandingFrom(typeof __APEX_BRANDING__ === 'object' ? __APEX_BRANDING__ : undefined)
+export const BRANDING: Branding = brandingFrom(typeof __ATELIER_BRANDING__ === 'object' ? __ATELIER_BRANDING__ : undefined)
 
 /** The app's name in running text ({brand} in the catalogues). */
 export const BRAND_NAME: string = BRANDING.shortName
@@ -116,7 +116,7 @@ export function presetOffered(id: string, branding: Branding = BRANDING): boolea
 /**
  * The presets this branding offers: its own companion first when it has one,
  * then presets.json's in their order, less the ones it leaves out. The
- * unofficial branding offers its own neutral companion and none of Apex's six.
+ * unofficial branding offers its own neutral companion and none of Atelier's six.
  */
 export function offeredPresets(presets: readonly CompanionPreset[], branding: Branding = BRANDING): CompanionPreset[] {
   const own = branding.ownPreset

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@
 // en-XA pseudo-locale and the missing-key fallback.
 //
 // The app's name is never written into a message: messages say {brand}, which
-// format() fills in from the branding (Apex, or Summit for the unofficial
+// format() fills in from the branding (Atelier, or Summit for the unofficial
 // branding; src/shared/branding.ts), like Firefox's -brand-short-name. No call
 // site passes it.
 import { BRAND_NAME } from '../branding'

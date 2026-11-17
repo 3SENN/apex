@@ -1,19 +1,19 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// View source: apex://view-source?url=<encoded>. The page fetches the
+// View source: atelier://view-source?url=<encoded>. The page fetches the
 // document through main; these pure helpers build the address, pretty-print
 // markup and split a line into tokens for colouring.
 
 export function viewSourceUrl(url: string): string {
-  return `apex://view-source?url=${encodeURIComponent(url)}`
+  return `atelier://view-source?url=${encodeURIComponent(url)}`
 }
 
-/** The page address an apex://view-source URL shows, if it is a web page. */
-export function viewSourceTarget(apexUrl: string): string | null {
-  const match = /^apex:\/\/view-source\/?\?(.*)$/i.exec(apexUrl)
+/** The page address an atelier://view-source URL shows, if it is a web page. */
+export function viewSourceTarget(atelierUrl: string): string | null {
+  const match = /^atelier:\/\/view-source\/?\?(.*)$/i.exec(atelierUrl)
   if (!match) return null
   const target = new URLSearchParams(match[1]).get('url')
   if (!target) return null

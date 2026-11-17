@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -13,17 +13,17 @@ import { releaseSettings, viteDefines } from './scripts/release/config.mjs'
 // `@internal/<area>` is the private internal/ folder when it is here, else the
 // stubs in src/stubs/ (scripts/internal.mjs, docs/architecture.md).
 // `@branding` is the active branding's folder, branding/official or
-// branding/unofficial (scripts/branding.mjs; APEX_OFFICIAL_BRANDING).
+// branding/unofficial (scripts/branding.mjs; ATELIER_OFFICIAL_BRANDING).
 const shared = { '@shared': resolve('src/shared'), ...internalAlias(), ...brandingAlias() }
 
-// RELEASE in src/shared/release.ts; docs/release.md. APEX_PUBLIC_RELEASE=1 also
+// RELEASE in src/shared/release.ts; docs/release.md. ATELIER_PUBLIC_RELEASE=1 also
 // takes `@internal/engines` from the stubs, so a public release offers only the
 // API key engine (scripts/internal.mjs, docs/architecture.md › Engines).
-// __APEX_BRANDING__ is the branding's names, bundle id and default companion (src/shared/branding.ts).
+// __ATELIER_BRANDING__ is the branding's names, bundle id and default companion (src/shared/branding.ts).
 const release = { ...viteDefines(releaseSettings(process.env, process.platform)), ...internalDefines(), ...brandingDefines() }
 
 // The renderer's HTML pages say %BRAND_NAME% where the app's name goes (their titles before the UI sets one).
-const brandHtml = { name: 'apex-branding-html', transformIndexHtml: (html: string): string => html.replaceAll('%BRAND_NAME%', loadBranding().name) }
+const brandHtml = { name: 'atelier-branding-html', transformIndexHtml: (html: string): string => html.replaceAll('%BRAND_NAME%', loadBranding().name) }
 
 export default defineConfig({
   main: {
@@ -61,7 +61,7 @@ export default defineConfig({
           extensionFrame: resolve('src/preload/extensionFrame.ts'),
           // Sign-in compatibility: the chrome surface, a session frame preload on every browsing session (src/main/chromeSurface.ts).
           chromeSurface: resolve('src/preload/chromeSurface.ts'),
-          // Packs (docs/packs.md): window.apex in each pack's partition, registered as a session frame preload.
+          // Packs (docs/packs.md): window.atelier in each pack's partition, registered as a session frame preload.
           pack: resolve('src/preload/pack.ts'),
         },
       },

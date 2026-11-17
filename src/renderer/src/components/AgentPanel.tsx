@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState, useSyncExternalStore, type ReactEleme
 import { ChevronsUpDown, Maximize2, PanelLeftClose, PanelRightClose } from 'lucide-react'
 import type { MenuItemSpec } from '@shared/menu'
 import { PANEL_WIDTH } from '@shared/ipc'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import '../chat/chat.css'
 import { ChatChip, ChatMoreButton } from '../chat/ChatHeader'
 import { ChatSkeleton } from '../chat/ChatLog'
@@ -39,7 +39,7 @@ export interface AgentPanelProps {
 // The panel remembers its chat across ⌘J (it unmounts while closed) and
 // chrome reloads. ⇧⌘E always starts it on a fresh chat; the listener is
 // registered at import, so it runs before App opens the panel.
-const PANEL_CHAT_KEY = 'apex.panel-chat'
+const PANEL_CHAT_KEY = 'atelier.panel-chat'
 let panelChat: string | null = readPanelChat()
 /** The last chat App asked for; kept here so reopening the panel doesn't undo a switch made inside it. */
 let appliedRequest: string | null = null
@@ -76,7 +76,7 @@ function setPanelChat(id: string | null): void {
   for (const listener of panelListeners) listener()
 }
 
-apex.onCommand((command) => {
+atelier.onCommand((command) => {
   if (command === 'new-chat') setPanelChat(null)
 })
 
@@ -147,7 +147,7 @@ export function AgentPanel({ chatId, companionId, onExpand, onClose }: AgentPane
         valueText={(v) => t('chat.agentPanel.pixelsWide', { v })}
         onChange={setWidth}
         onDragChange={setDragging}
-        onCommit={(value) => void apex.settings.set({ panelWidth: value })}
+        onCommit={(value) => void atelier.settings.set({ panelWidth: value })}
       />
       {attached ? (
         <ChatView
@@ -163,7 +163,7 @@ export function AgentPanel({ chatId, companionId, onExpand, onClose }: AgentPane
         <div className="chat-view chat-view--panel">
           <PanelBar onClose={onClose} />
           <div className="chat-view__state">
-            <ErrorState title={t('chat.agentPanel.couldnTStartA')} message={t('chat.agentPanel.apexCouldNotCreate')} onRetry={() => setFailed(false)} />
+            <ErrorState title={t('chat.agentPanel.couldnTStartA')} message={t('chat.agentPanel.atelierCouldNotCreate')} onRetry={() => setFailed(false)} />
           </div>
         </div>
       ) : (
@@ -233,7 +233,7 @@ function PanelHeader({ chatId, context, onAttach, onExpand, onClose }: PanelHead
         newChat()
         return
       case 'all':
-        void call('pages', 'open', 'apex://chats')
+        void call('pages', 'open', 'atelier://chats')
         return
       case 'pop-out':
         try {
@@ -244,7 +244,7 @@ function PanelHeader({ chatId, context, onAttach, onExpand, onClose }: PanelHead
         }
         return
       case 'dock':
-        void apex.settings.set({ panelDock: dock === 'left' ? 'right' : 'left' })
+        void atelier.settings.set({ panelDock: dock === 'left' ? 'right' : 'left' })
         return
     }
   }
@@ -276,11 +276,11 @@ function PanelHeader({ chatId, context, onAttach, onExpand, onClose }: PanelHead
       return
     }
     if (picked === 'dock') {
-      void apex.settings.set({ panelDock: dock === 'left' ? 'right' : 'left' })
+      void atelier.settings.set({ panelDock: dock === 'left' ? 'right' : 'left' })
       return
     }
     if (picked === 'new') newChat()
-    else if (picked === 'all') void call('pages', 'open', 'apex://chats')
+    else if (picked === 'all') void call('pages', 'open', 'atelier://chats')
     else if (picked?.startsWith('chat:')) onAttach(picked.slice(5))
   }
 

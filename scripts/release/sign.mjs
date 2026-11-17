@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -45,7 +45,7 @@ function nonMachOFile(path) {
 }
 
 export default async function sign(opts) {
-  console.log(`  • Apex signing: codesign with ${opts.identity}`)
+  console.log(`  • Atelier signing: codesign with ${opts.identity}`)
   const ignore = opts.ignore === undefined ? [] : Array.isArray(opts.ignore) ? opts.ignore : [opts.ignore]
   const options = { ...opts, ignore: [...ignore, nonMachOFile] }
   for (let attempt = 1; ; attempt++) {

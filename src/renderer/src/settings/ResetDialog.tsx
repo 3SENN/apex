@@ -1,12 +1,12 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Reset Apex (ST-55): lists every registered reset step, an off-by-default
+// Reset Atelier (ST-55): lists every registered reset step, an off-by-default
 // box that adds the `secrets` steps (the saved key, later the password
 // vault), and a phrase to type before the button wakes up. A real run
-// relaunches Apex into the welcome flow, so success never comes back here.
+// relaunches Atelier into the welcome flow, so success never comes back here.
 import { useEffect, useId, useState, type ReactElement } from 'react'
 import { call } from '../api'
 import { useT } from '../i18n/useT'

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -525,7 +525,7 @@ export class OverlayHost {
     // The chrome blurs at once; the stills follow as soon as they are captured.
     send({ type: 'window-veil', on: true, stills: [] })
     const zoom = this.#zoom()
-    // Apex pages are drawn by the chrome itself, so only web pages need a still.
+    // Atelier pages are drawn by the chrome itself, so only web pages need a still.
     const web = opts.tabs.visibleIds().filter((id) => {
       const tab = opts.tabs.find(id)
       return tab !== undefined && !opts.tabs.isChromeDrawn(tab)
@@ -572,7 +572,7 @@ export class OverlayHost {
 
   /** Overlay views only ever show the UI: no navigation away, no new windows. */
   #lockDown(wc: WebContents): void {
-    const uiOrigin = uiOriginOf(this.#opts?.uiUrl ?? 'app://apex')
+    const uiOrigin = uiOriginOf(this.#opts?.uiUrl ?? 'app://atelier')
     wc.on('will-navigate', (event) => {
       if (uiOrigin === null || uiOriginOf(event.url) !== uiOrigin) event.preventDefault()
     })
@@ -585,7 +585,7 @@ export class OverlayHost {
   /** Readiness, queued messages and crash recovery for one tier's renderer (SS-08). */
   #guardTier(tier: OverlayTier, wc: WebContents): Tier {
     const t: Tier = { tier, wc, ready: false, queue: [], budget: new CrashBudget() }
-    const uiOrigin = uiOriginOf(this.#opts?.uiUrl ?? 'app://apex')
+    const uiOrigin = uiOriginOf(this.#opts?.uiUrl ?? 'app://atelier')
     wc.on('did-start-loading', () => {
       t.ready = false
     })

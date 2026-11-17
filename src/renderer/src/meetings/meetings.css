@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-/* Apex://meetings and apex://meetings/<id>: MV-12, MV-13, DS-105; tokens only, light and dark */
+/* Atelier://meetings and atelier://meetings/<id>: MV-12, MV-13, DS-105; tokens only, light and dark */
 
 .mt-tabular {
   font-variant-numeric: tabular-nums;
@@ -309,7 +309,7 @@
   font-size: var(--text-sm);
 }
 
-/* ── empty state: Apex's still explainer in the 416×234 slot ── */
+/* ── empty state: Atelier's still explainer in the 416×234 slot ── */
 .mt-explainer {
   display: flex;
   flex-direction: column;

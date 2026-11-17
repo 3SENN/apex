@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -94,7 +94,7 @@ export interface DialogSurfaceProps {
   spec: DialogSpec
   scope: 'window' | 'tab'
   area: Rect
-  /** Page dialogs say which site asked, so a page can't pass itself off as Apex. */
+  /** Page dialogs say which site asked, so a page can't pass itself off as Atelier. */
   origin?: string
 }
 
@@ -138,7 +138,7 @@ export interface TaskRow {
   canEnd: boolean
 }
 
-/** What apex://view-source loads. */
+/** What atelier://view-source loads. */
 export interface ViewSourceResult {
   url: string
   /** The document's text, capped at VIEW_SOURCE_MAX_BYTES. */

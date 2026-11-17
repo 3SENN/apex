@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -81,7 +81,7 @@ export function createSystemPresenter(deps: PresenterDeps): SystemPresenter {
       note = new Notification({
         title: spec.title.slice(0, 200),
         body: spec.body.slice(0, 1000),
-        // NS-03: Apex's own chat cue plays instead of the system sound while chat sounds are on.
+        // NS-03: Atelier's own chat cue plays instead of the system sound while chat sounds are on.
         silent: notificationSilent(spec, s.notifications.sounds) || chatNotificationSilent(s, spec.category),
         timeoutType: spec.sticky ? 'never' : 'default',
         urgency: spec.category === 'needs-you' ? 'critical' : 'normal',
@@ -151,7 +151,7 @@ export function createSystemPresenter(deps: PresenterDeps): SystemPresenter {
 let lastFailure = false
 
 /**
- * Whether the system lets Apex notify. Electron can't read the per-app
+ * Whether the system lets Atelier notify. Electron can't read the per-app
  * setting on macOS, so there it stays 'unknown' (the page then points to
  * System Settings); a notification the system refused (Windows reports it)
  * turns it to 'denied' until one shows again.

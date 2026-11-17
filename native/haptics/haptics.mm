@@ -1,16 +1,16 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Apex haptics on macOS: hands a pattern to AppKit's default haptic
+// Atelier haptics on macOS: hands a pattern to AppKit's default haptic
 // performer, which plays it on a Force Touch trackpad and does nothing on
 // hardware without one.
 #import <AppKit/AppKit.h>
 
 #include "haptics.h"
 
-namespace apex_haptics {
+namespace atelier_haptics {
 
 namespace {
 
@@ -51,4 +51,4 @@ bool Play(Pattern pattern) {
   return true;
 }
 
-}  // namespace apex_haptics
+}  // namespace atelier_haptics

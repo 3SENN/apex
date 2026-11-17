@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@
 // matrix, kept pure so every row of it is tested. Nothing is recorded while
 // off, paused or outside the set hours, in a private window, from a tab the
 // agent drives (that covers private chats), on a page that isn't a website
-// (apex://, apex-app://, file://), on an excluded site, or on a page with
+// (atelier://, atelier-app://, file://), on an excluded site, or on a page with
 // password or payment fields (the guarded-field check).
 import type { ActivityStatus } from '@shared/activity'
 import { exclusionFor, type Exclusions } from '@shared/exclusions'

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -51,7 +51,7 @@ import { chromiumProfiles, detectBrowsers, profileReader, runImport, type Import
 // @ts-expect-error: a plain .mjs build script without type declarations.
 import { collectLicenses, licenseOf } from '../scripts/licenses.mjs'
 
-const tempDir = (): string => mkdtempSync(join(tmpdir(), 'apex-l7-'))
+const tempDir = (): string => mkdtempSync(join(tmpdir(), 'atelier-l7-'))
 
 describe('interface zoom (ST-27)', () => {
   it('keeps chrome pages within 30–100% and chat pages within 30–200%', () => {
@@ -70,11 +70,11 @@ describe('interface zoom (ST-27)', () => {
     expect(stepZoom(1, -1, UI_ZOOM_STEPS)).toBe(0.9)
     expect(stepZoom(0.3, -1, UI_ZOOM_STEPS)).toBe(0.3)
     expect(stepZoom(0.85, 1, UI_ZOOM_STEPS)).toBe(0.9)
-    expect(zoomTarget('apex://chat/abc-123')).toBe('chat')
-    expect(zoomTarget('apex://settings/appearance')).toBe('ui')
-    expect(zoomPatch('apex://chat/abc', { uiZoom: 1, chatZoom: 1 }, 1)).toEqual({ patch: { chatZoom: 1.1 }, value: 1.1 })
-    expect(zoomPatch('apex://settings', { uiZoom: 0.8, chatZoom: 1 }, -1)).toEqual({ patch: { uiZoom: 0.75 }, value: 0.75 })
-    expect(zoomPatch('apex://settings', { uiZoom: 0.5, chatZoom: 1 }, 0).value).toBe(1)
+    expect(zoomTarget('atelier://chat/abc-123')).toBe('chat')
+    expect(zoomTarget('atelier://settings/appearance')).toBe('ui')
+    expect(zoomPatch('atelier://chat/abc', { uiZoom: 1, chatZoom: 1 }, 1)).toEqual({ patch: { chatZoom: 1.1 }, value: 1.1 })
+    expect(zoomPatch('atelier://settings', { uiZoom: 0.8, chatZoom: 1 }, -1)).toEqual({ patch: { uiZoom: 0.75 }, value: 0.75 })
+    expect(zoomPatch('atelier://settings', { uiZoom: 0.5, chatZoom: 1 }, 0).value).toBe(1)
   })
 })
 
@@ -105,7 +105,7 @@ describe('clear browsing data (ST-36)', () => {
   const history = [
     { url: 'https://a.example/page', lastVisit: now - 30 * 60_000 },
     { url: 'https://b.example/', lastVisit: now - 3 * 24 * 3_600_000 },
-    { url: 'apex://settings', lastVisit: now - 1000 },
+    { url: 'atelier://settings', lastVisit: now - 1000 },
     { url: 'not a url', lastVisit: now },
   ]
 

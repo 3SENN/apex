@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -140,7 +140,7 @@ export function createPopupWindow(options: BrowserWindowConstructorOptions & { w
   }
   layout()
   window.on('resize', layout)
-  // The strip only ever shows Apex's UI.
+  // The strip only ever shows Atelier's UI.
   const uiOrigin = uiOriginOf(deps.uiUrl)
   strip.webContents.on('will-navigate', (event) => {
     if (uiOrigin === null || uiOriginOf(event.url) !== uiOrigin) event.preventDefault()

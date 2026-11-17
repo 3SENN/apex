@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import { Ban, CircleAlert, Clock, LockOpen, Repeat, SearchX, ServerCrash, Shield
 import type { TabInfo } from '@shared/ipc'
 import type { PageErrorDetails } from '@shared/safety'
 import { searchUrl } from '@shared/url'
-import { apex, call, errorText, useAppEvent } from '../../api'
+import { atelier, call, errorText, useAppEvent } from '../../api'
 import { useCompanions } from '../../components/shellContext'
 import { FaceAvatar } from '../../companion/FaceAvatar'
 import { useCompanionImage } from '../../companion/images'
@@ -17,7 +17,7 @@ import { Button, Spinner, cx, formatAbsolute, useToast } from '../../ui'
 import { ACTION_LABEL, displayHostOf, errorCopy, originOf, type ErrorAction, type ErrorView } from './logic'
 import './errors.css'
 
-// The page Apex draws in a tab's pane when its page failed, crashed or was
+// The page Atelier draws in a tab's pane when its page failed, crashed or was
 // stopped on purpose (SS-07). It is not a
 // route: the failed address stays the tab's URL, so the pill and history
 // keep it, and main hides the page view while this shows. The companion
@@ -132,13 +132,13 @@ export function PageErrorView({ tab, searchEngine }: { tab: TabInfo; searchEngin
         void run(action, () => call('pageErrors', 'retry', tab.id))
         return
       case 'back':
-        void run(action, () => apex.nav.back(tab.id))
+        void run(action, () => atelier.nav.back(tab.id))
         return
       case 'back-to-safety':
         void run(action, () => call('pageErrors', 'leave', tab.id))
         return
       case 'search':
-        void run(action, () => apex.nav.go(tab.id, searchUrl(host, searchEngine)))
+        void run(action, () => atelier.nav.go(tab.id, searchUrl(host, searchEngine)))
         return
       // Privacy pack (HTTPS-First): Continue to site remembers the site and loads the http address; Go back leaves (or closes to a blank page).
       case 'continue-insecure':

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -41,7 +41,7 @@ function markDocument(): void {
 export function I18nProvider({ children }: { children: ReactNode }): ReactNode {
   // Synchronous on the first render, so no English frame shows before Dutch.
   useState(() => {
-    const initial = window.apex?.initial?.settings
+    const initial = window.atelier?.initial?.settings
     if (initial) apply(initial)
     return null
   })
@@ -50,7 +50,7 @@ export function I18nProvider({ children }: { children: ReactNode }): ReactNode {
   useEffect(() => {
     // Listeners run before React renders the settings change, so the whole
     // tree re-renders with the new catalogue in one pass.
-    const off = window.apex.onAppEvent((event) => {
+    const off = window.atelier.onAppEvent((event) => {
       if (event.type === 'settings') apply(event.view)
     })
     let live = true

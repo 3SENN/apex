@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -28,7 +28,7 @@ import { DevEnv, PackSecrets, SecretsUnavailable, keyIn, packEnv, parseDotEnv, w
 
 const dirs: string[] = []
 const tmp = (): string => {
-  const d = mkdtempSync(join(tmpdir(), 'apex-pack-servers-test-'))
+  const d = mkdtempSync(join(tmpdir(), 'atelier-pack-servers-test-'))
   dirs.push(d)
   return d
 }
@@ -39,7 +39,7 @@ afterEach(() => {
 const app = (over: Partial<PackApp> = {}): PackApp => ({ id: 'main', name: 'Board', root: 'app', entry: 'index.html', build: 'kit', kind: 'tool', ...over })
 const KEY: PackSecret = { id: 'ACME_KEY', name: 'Acme API key', description: 'From acme.example › Settings.', hosts: ['api.acme.example'], header: 'Authorization', prefix: 'Bearer ' }
 const manifest = (over: Partial<PackManifest> = {}): PackManifest => ({
-  format: 'apex-pack',
+  format: 'atelier-pack',
   manifestVersion: 2,
   id: 'board',
   name: 'Board',
@@ -151,7 +151,7 @@ describe('keys on requests', () => {
     expect(withSecretHeaders(undefined, valueOf, 'https://api.acme.example/', {})).toBeNull()
   })
 
-  it('adds the key on apex.fetch hop by hop, so a redirect to another host goes without it', async () => {
+  it('adds the key on atelier.fetch hop by hop, so a redirect to another host goes without it', async () => {
     const sent: Array<{ url: string; headers: Record<string, string> }> = []
     const doFetch = vi.fn(async (url: string, init: RequestInit) => {
       sent.push({ url, headers: init.headers as Record<string, string> })
@@ -218,7 +218,7 @@ describe('a linked folder’s .env', () => {
     writeFileSync(join(dir, 'app', 'index.html'), '<p>hi</p>')
     for (const name of ['.env', '.env.local', '.env.production', '.npmrc']) writeFileSync(join(dir, name), 'X=1')
     writeFileSync(join(dir, 'app', '.env'), 'X=1')
-    expect([...readPackFolder(dir).keys()].sort()).toEqual([PACK_MANIFEST_FILE, 'app/index.html'])
+    expect([...readPackFolder(dir).keys()].sort()).toEqual([PACK_MANIFEST_FILE, 'app/index.html'].sort())
   })
 })
 

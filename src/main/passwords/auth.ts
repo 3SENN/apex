@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -13,13 +13,13 @@ export type AuthResult = 'ok' | 'cancelled' | 'unavailable'
 
 export interface AuthDeps {
   platform: NodeJS.Platform
-  /** APEX_SMOKE: every prompt says yes, and nothing real is shown. */
+  /** ATELIER_SMOKE: every prompt says yes, and nothing real is shown. */
   smoke: boolean
   /** systemPreferences.canPromptTouchID / promptTouchID on macOS. */
   touchId?: { can(): boolean; prompt(reason: string): Promise<void> }
   /** The speech helper's device-owner check (Touch ID or the login password). */
   helper?: { authenticate(reason: string): Promise<AuthResult> }
-  /** Off macOS: an Apex confirm dialog. Resolves true for Continue; rejects when no window can show it. */
+  /** Off macOS: an Atelier confirm dialog. Resolves true for Continue; rejects when no window can show it. */
   confirm?(reason: string): Promise<boolean>
 }
 
@@ -30,7 +30,7 @@ function isCancel(err: unknown): boolean {
 
 /**
  * Touch ID when the Mac can prompt for it, then the helper's device-owner
- * check, then, on other platforms, an Apex confirm dialog. 'ok' in smoke.
+ * check, then, on other platforms, an Atelier confirm dialog. 'ok' in smoke.
  * Prompts never stack: a second request while one is showing shares it.
  */
 export function createAuthenticator(deps: AuthDeps): Authenticator {

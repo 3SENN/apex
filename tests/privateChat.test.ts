@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -66,7 +66,7 @@ function fakeClient(script: (request: Request, n: number) => Turn) {
 const presets: CompanionPreset[] = [{ id: 'nova', name: 'Nova', tagline: '', personality: 'Curious.', look: DEFAULT_LOOK }]
 
 function harness(script: (request: Request, n: number) => Turn) {
-  const dir = mkdtempSync(join(tmpdir(), 'apex-private-'))
+  const dir = mkdtempSync(join(tmpdir(), 'atelier-private-'))
   const companions = new CompanionStore(dir, { presets: () => presets })
   const chats = new ChatStore(dir, FIRST_COMPANION_ID)
   const events: ChatAgentEvent[] = []

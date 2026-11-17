@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // SKILL.md (SK-03): YAML front matter with the name and description, the
 // instructions as the body, and a skill's ordered steps (the
-// merged Workflows) after it as marked sections. Front matter keys Apex
+// merged Workflows) after it as marked sections. Front matter keys Atelier
 // doesn't know are kept exactly as written, so a folder from elsewhere
 // round-trips. Only the small YAML subset skill files use is read: plain,
 // quoted and block-scalar values.
@@ -27,7 +27,7 @@ export const frontMatterSchema = z.object({
   description: z.string().min(1, { error: () => mainT('skills.mainFormat.addADescriptionOne') }).max(SKILL_DESCRIPTION_MAX, { error: () => mainT('skills.mainFormat.keepTheDescriptionTo', { SKILL_DESCRIPTION_MAX }) }),
 })
 
-const STEP_MARK = /^<!-- apex:step (\{.*\}) -->$/
+const STEP_MARK = /^<!-- atelier:step (\{.*\}) -->$/
 
 function quote(value: string): string {
   // Plain values stay readable; anything YAML could misread is quoted.
@@ -157,7 +157,7 @@ export function serializeSkillDocument(doc: Pick<SkillDocument, 'name' | 'descri
   const head = ['---', `name: ${doc.name}`, `description: ${quote(doc.description.replace(/\s+/g, ' ').trim())}`, ...(doc.extra ?? []), '---']
   const parts = [head.join('\n'), '', doc.instructions.trim()]
   for (const step of doc.steps) {
-    parts.push('', `<!-- apex:step ${JSON.stringify({ id: step.id, title: step.title })} -->`, step.instructions.trim())
+    parts.push('', `<!-- atelier:step ${JSON.stringify({ id: step.id, title: step.title })} -->`, step.instructions.trim())
   }
   return `${parts.join('\n').trimEnd()}\n`
 }

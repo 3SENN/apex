@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -19,7 +19,7 @@ import type { ShotSpec, SmokeCheck, SmokeContext } from './types'
 // expanded into its tab, beside the tab's own page (CH-03, DS-65). Replies
 // come from the offline stand-in and pages from the 127.0.0.1 fixture server.
 
-const chatPage = (id: string): string => `apex://chat/${id}`
+const chatPage = (id: string): string => `atelier://chat/${id}`
 const PANEL_SHOWN = `document.querySelector('.panel-frame:not([data-state="closing"]) .chat-panel')`
 
 type Rect = { x: number; y: number; width: number; height: number }

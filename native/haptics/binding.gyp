@@ -1,16 +1,16 @@
-# Copyright (c) 2026 The Apex Authors. All rights reserved.
+# Copyright (c) 2026 The Atelier Authors. All rights reserved.
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at https://mozilla.org/MPL/2.0/.
 #
-# Apex haptics addon. Build it with scripts/build-native.mjs, which runs
+# Atelier haptics addon. Build it with scripts/build-native.mjs, which runs
 # node-gyp against the installed Electron's headers. On macOS it links
 # AppKit; elsewhere it compiles a no-op, though the build script only
 # builds it on macOS and the JS loader (index.js) stubs it everywhere else.
 {
   'targets': [
     {
-      'target_name': 'apex_haptics',
+      'target_name': 'atelier_haptics',
       'sources': ['addon.cc'],
       'dependencies': [
         "<!(node -p \"require('node-addon-api').targets\"):node_addon_api",

@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex.server (docs/packs.md › A web server of its own): what main, the
-// preload and the tests share about the small web server Apex runs for an
+// atelier.server (docs/packs.md › A web server of its own): what main, the
+// preload and the tests share about the small web server Atelier runs for an
 // app. Pure: the checks every request and socket passes before anything
 // reaches the app's page.
 
@@ -37,11 +37,11 @@ export const SERVER_LIMITS = {
 } as const
 
 /** Where served pages open their socket to the app, under the server's base. */
-export const SERVER_SOCKET_PATH = '__apex/socket'
+export const SERVER_SOCKET_PATH = '__atelier/socket'
 /** The helper served pages may load: one socket that reconnects by itself. */
-export const SERVER_CLIENT_PATH = '__apex/client.js'
-/** Apex UI and the kit, for served pages that want to look like Apex. */
-export const SERVER_KIT_PATH = '__apex/kit/'
+export const SERVER_CLIENT_PATH = '__atelier/client.js'
+/** Atelier UI and the kit, for served pages that want to look like Atelier. */
+export const SERVER_KIT_PATH = '__atelier/kit/'
 
 export const SERVER_TOKEN_PATTERN = /^[A-Za-z0-9_-]{22}$/
 export const SERVER_SOCKET_ID_PATTERN = /^s[0-9a-f]{12}$/
@@ -50,7 +50,7 @@ export const SERVER_REQUEST_ID_PATTERN = /^r[0-9a-f]{12}$/
 /** The pack event (PACK_IPC.event) that carries a batch of server events to the app's page, in order. */
 export const SERVER_EVENT_BATCH = 'server.batch'
 
-/** What apex.server.start and status answer. */
+/** What atelier.server.start and status answer. */
 export interface PackServerStatus {
   running: boolean
   /** The address on this computer. */
@@ -208,7 +208,7 @@ export function requestHeaders(headers: Record<string, string | string[] | undef
 }
 
 /**
- * The response headers an app may set; Apex sets the rest (no CORS, so other
+ * The response headers an app may set; Atelier sets the rest (no CORS, so other
  * pages can't read the answers; no framing by other sites). A redirect stays
  * on this server.
  */

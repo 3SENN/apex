@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // The Timeline with insights, the
-// History page's Timeline view (apex://history?view=timeline). A month
+// History page's Timeline view (atelier://history?view=timeline). A month
 // calendar with day and week scope (?scope=day|week&date=YYYY-MM-DD),
 // sessions split on gaps over 20 minutes, top sites and active time,
 // thumbnails when they're on, possible to-dos and insights when you opted
@@ -17,7 +17,7 @@ import { isFlagOn } from '@shared/flags'
 import type { Insight, TimelineDay, TimelineSession } from '@shared/timeline'
 import { activeLabel, monthGrid, monthOf, parseTimelineQuery, scopeDays, scopeRange, timeLabel, timelineUrl, totals, dateLabel, type TimelineScope } from '../../../activity/logic'
 import '../../../activity/activity.css'
-import { apex, call, errorText } from '../../../api'
+import { atelier, call, errorText } from '../../../api'
 import { useT } from '../../../i18n/useT'
 import { Button, EmptyState, ErrorState, IconButton, SegmentedControl, SkeletonRows, cx } from '../../../ui'
 import { MonthCalendar } from './MonthCalendar'
@@ -68,7 +68,7 @@ export default function TimelineSection({ tabId, url, heading = true }: Timeline
 
   const go = (next: { scope: TimelineScope; day: string }): void => {
     setLocal(next)
-    if (tabId) void apex.nav.go(tabId, timelineUrl(next.scope, next.day))
+    if (tabId) void atelier.nav.go(tabId, timelineUrl(next.scope, next.day))
   }
 
   // Activity memory's settings say whether notes, thumbnails and insights apply.
@@ -77,7 +77,7 @@ export default function TimelineSection({ tabId, url, heading = true }: Timeline
   useEffect(() => {
     let live = true
     call('activity', 'settings').then((s) => live && setActivity(s), () => undefined)
-    apex.settings.get().then((s) => live && setFlags(s.flags ?? {}), () => undefined)
+    atelier.settings.get().then((s) => live && setFlags(s.flags ?? {}), () => undefined)
     return () => {
       live = false
     }
@@ -145,7 +145,7 @@ export default function TimelineSection({ tabId, url, heading = true }: Timeline
       {activity && !activity.enabled && (
         <div className="tl-note" role="note">
           <span>{t('memory.timeline.activityOff')}</span>
-          <button type="button" className="tl-link" onClick={() => void call('pages', 'open', 'apex://settings/activity')}>
+          <button type="button" className="tl-link" onClick={() => void call('pages', 'open', 'atelier://settings/activity')}>
             {t('memory.timeline.openSettings')}
           </button>
         </div>
@@ -243,7 +243,7 @@ export default function TimelineSection({ tabId, url, heading = true }: Timeline
               <ul className="tl-gallery__grid">
                 {thumbs.map((thumb) => (
                   <li key={`${thumb.at}-${thumb.url}`}>
-                    <button type="button" className="tl-thumb" onClick={() => void apex.tabs.create(thumb.url)} aria-label={`${thumb.url.replace(/^https?:\/\//, '')}, ${timeLabel(thumb.at)}`}>
+                    <button type="button" className="tl-thumb" onClick={() => void atelier.tabs.create(thumb.url)} aria-label={`${thumb.url.replace(/^https?:\/\//, '')}, ${timeLabel(thumb.at)}`}>
                       <img src={thumb.media} alt="" loading="lazy" />
                       <span className="tl-thumb__time">{timeLabel(thumb.at)}</span>
                     </button>

@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { useEffect, useState, type ReactElement } from 'react'
 import { AppWindow, Bookmark, Brain, ChevronRight, Globe, MousePointer2, Plug, Search, Wrench } from 'lucide-react'
-import { apex } from '../api'
+import { atelier } from '../api'
 import { t } from '../i18n/useT'
 import { cx } from '../ui'
 import { useSettingsView, useTabs } from './hooks'
@@ -141,7 +141,7 @@ function WorkStep({ item, live, now }: { item: ToolItem; live: boolean; now: num
   )
 }
 
-/** DS-55: Apex's glyph for a kind of work, on a tile when no site or connector shows. */
+/** DS-55: Atelier's glyph for a kind of work, on a tile when no site or connector shows. */
 const WORK_GLYPH: Record<StepKind, ReactElement> = {
   page: <Globe />,
   search: <Search />,
@@ -205,7 +205,7 @@ export function Reasoning({ turnId, text }: { turnId: string; text: string }): R
     const next = !shown
     reasoningShown.set(turnId, next)
     setLocal(next)
-    void apex.settings.set({ showReasoning: next }).catch(() => undefined)
+    void atelier.settings.set({ showReasoning: next }).catch(() => undefined)
   }
   return (
     <div className={cx('chat-thinking', shown && 'chat-thinking--open')}>

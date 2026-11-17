@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import { mkdtempSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { app, session } from 'electron'
-import { APEX_APP_PARTITION_PREFIX, APP_CSP, type AppSummary, type AppVersion } from '@shared/apps'
+import { ATELIER_APP_PARTITION_PREFIX, APP_CSP, type AppSummary, type AppVersion } from '@shared/apps'
 import type { CalendarStatus } from '@shared/calendar'
 import type { FlagState } from '@shared/flags'
 import type { AgentEvent } from '@shared/ipc'
@@ -53,7 +53,7 @@ const PROBE_APP = `<!doctype html><html><head><meta charset="utf-8"><title>probe
 })()
 </script></body></html>`
 
-/** An app built the way the design notes ask: Apex UI's components and tokens, every state, no colours of its own (APP-UI). */
+/** An app built the way the design notes ask: Atelier UI's components and tokens, every state, no colours of its own (APP-UI). */
 const TIP_APP = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Tip splitter</title>
 <style>.result { margin-top: var(--space-6); }</style></head>
 <body><main class="ax-app">
@@ -119,14 +119,14 @@ const fakeCtx = (asked: unknown[], answer: AgentRequestResponse | null = null): 
 })
 
 function fixtureCsv(): string {
-  const dir = mkdtempSync(join(tmpdir(), 'apex-smoke-d6-csv-'))
+  const dir = mkdtempSync(join(tmpdir(), 'atelier-smoke-d6-csv-'))
   const path = join(dir, 'harvest.csv')
   writeFileSync(path, 'Crop;Kilos;Price per kilo;Field\nApples;1200;1.85;North\nPears;640;2.1;East\nPlums;;3.4;South\n', 'utf8')
   return path
 }
 
 async function importFixture(ctx: SmokeContext): Promise<TableSummary> {
-  process.env.APEX_SMOKE_TABLE_CSV = fixtureCsv()
+  process.env.ATELIER_SMOKE_TABLE_CSV = fixtureCsv()
   const preview = await ctx.chrome.invoke<CsvPreview>('tables', 'pickCsv')
   return ctx.chrome.invoke<TableSummary>('tables', 'confirmImport', preview.token, { name: `harvest ${Date.now() % 100000}`, columns: preview.columns })
 }
@@ -156,8 +156,8 @@ function suggestionPage(ctx: SmokeContext): string {
 }
 
 function fakeHelperPath(): string {
-  // A packaged run has no tests/ inside its asar: smoke-packaged.mjs points APEX_SMOKE_FIXTURES at the repo's.
-  return join(process.env.APEX_SMOKE_FIXTURES ?? join(app.getAppPath(), 'tests', 'fixtures'), 'calendar', 'fake-helper.mjs')
+  // A packaged run has no tests/ inside its asar: smoke-packaged.mjs points ATELIER_SMOKE_FIXTURES at the repo's.
+  return join(process.env.ATELIER_SMOKE_FIXTURES ?? join(app.getAppPath(), 'tests', 'fixtures'), 'calendar', 'fake-helper.mjs')
 }
 
 export const checks: SmokeCheck[] = [
@@ -176,15 +176,15 @@ export const checks: SmokeCheck[] = [
       await ctx.chrome.invoke('apps', 'open', built.appId)
       const tab = await (async () => {
         let found: ReturnType<SmokeContext['tabs']['all']>[number] | undefined
-        await waitFor(() => (found = ctx.tabs.all().find((t) => t.view.webContents.getURL().startsWith(`apex-app://${built.appId}`))) !== undefined, 'the app tab')
+        await waitFor(() => (found = ctx.tabs.all().find((t) => t.view.webContents.getURL().startsWith(`atelier-app://${built.appId}`))) !== undefined, 'the app tab')
         return found!
       })()
       // The response carries the strict CSP (the app's session exists once the app has opened).
-      const response = await session.fromPartition(`${APEX_APP_PARTITION_PREFIX}${built.appId}`).fetch(`apex-app://${built.appId}/`)
+      const response = await session.fromPartition(`${ATELIER_APP_PARTITION_PREFIX}${built.appId}`).fetch(`atelier-app://${built.appId}/`)
       assert(response.headers.get('content-security-policy') === APP_CSP, 'the app response lacks the CSP header')
-      // APP-UI: Apex UI first in the head, in the colours of the companion that built it.
+      // APP-UI: Atelier UI first in the head, in the colours of the companion that built it.
       const served = await response.text()
-      assert(/<head>\s*<style data-apex-ui>/.test(served) && served.includes('@layer apex.tokens') && served.includes('--companion-accent-light:'), 'the app is served without Apex UI and its companion’s accent')
+      assert(/<head>\s*<style data-atelier-ui>/.test(served) && served.includes('@layer atelier.tokens') && served.includes('--companion-accent-light:'), 'the app is served without Atelier UI and its companion’s accent')
       assert(tab.sandbox !== undefined, 'the app tab is not in its sandbox session')
       await waitFor(() => tab.view.webContents.getTitle().startsWith('net:'), 'the probe to report')
       assert(tab.view.webContents.getTitle() === 'net:blocked popup:blocked', `the sandbox let something through: ${tab.view.webContents.getTitle()}`)
@@ -227,7 +227,7 @@ export const checks: SmokeCheck[] = [
         assert(restart, 'no restart-required flag')
         const after = await ctx.chrome.invoke<FlagState[]>('flags', 'set', restart.id, restart.values.find((v) => v !== restart.value) ?? restart.value)
         assert(after.find((f) => f.id === restart.id)?.pendingRestart === true, 'the restart flag is not pending')
-        ctx.tabs.openInternal('apex://flags')
+        ctx.tabs.openInternal('atelier://flags')
         await ctx.chrome.until(`return document.querySelector('.pl-flags') && document.body.innerText.includes('Relaunch')`, 8000, 'the relaunch banner')
       })
     },
@@ -235,15 +235,15 @@ export const checks: SmokeCheck[] = [
   {
     name: 'the calendar card shows unavailable without a helper; with the fake helper calendar_events returns fixture events',
     async run(ctx) {
-      const before = process.env.APEX_CALENDAR_HELPER
+      const before = process.env.ATELIER_CALENDAR_HELPER
       try {
-        process.env.APEX_CALENDAR_HELPER = join(tmpdir(), 'no-such-calendar-helper')
+        process.env.ATELIER_CALENDAR_HELPER = join(tmpdir(), 'no-such-calendar-helper')
         const missing = await ctx.chrome.invoke<CalendarStatus>('calendar', 'status')
         assert(missing.available === false, 'available without a helper')
-        ctx.tabs.openInternal('apex://settings/permissions')
+        ctx.tabs.openInternal('atelier://settings/permissions')
         await ctx.chrome.until(`return document.querySelector('.pl-access') && document.body.innerText.includes(${JSON.stringify(`Not available in this version of ${BRAND_NAME}`)})`, 8000, 'the unavailable state')
 
-        process.env.APEX_CALENDAR_HELPER = fakeHelperPath()
+        process.env.ATELIER_CALENDAR_HELPER = fakeHelperPath()
         const on = await ctx.chrome.invoke<CalendarStatus>('calendar', 'setEnabled', 'events', true)
         assert(on.available && on.events === 'granted' && on.enabled.events, 'the fake helper did not grant events')
         const result = await clientTool('calendar_events')!.run({}, fakeCtx([]))
@@ -251,8 +251,8 @@ export const checks: SmokeCheck[] = [
         assert((await ctx.chrome.invoke<boolean>('transcription', 'calendarAvailable')) === true, 'the calendar source was not set')
         await ctx.chrome.invoke('calendar', 'setEnabled', 'events', false)
       } finally {
-        if (before === undefined) delete process.env.APEX_CALENDAR_HELPER
-        else process.env.APEX_CALENDAR_HELPER = before
+        if (before === undefined) delete process.env.ATELIER_CALENDAR_HELPER
+        else process.env.ATELIER_CALENDAR_HELPER = before
         await ctx.chrome.invoke('calendar', 'status').catch(() => undefined)
       }
     },
@@ -267,8 +267,8 @@ export const checks: SmokeCheck[] = [
         await ctx.chrome.invoke('siteSuggestions', 'update', { enabled: false, offSites: [], snoozedUntil: null })
         assert((await ctx.chrome.invoke<SiteSuggestion | null>('siteSuggestions', 'current', tab.id)) === null, 'a suggestion while off')
         // Open in app needs no opt-in; smoke records the launch instead of making it.
-        assert((await ctx.chrome.invoke<{ app: string } | null>('siteSuggestions', 'appLink', tab.id))?.app === 'Apex Test App', 'no app link for the fixture host')
-        assert((await ctx.chrome.invoke<boolean>('siteSuggestions', 'openInApp', tab.id)) === true && smokeOpened.some((u) => u.startsWith('apex-smoke://open/d6-orchard')), 'open in app did not run')
+        assert((await ctx.chrome.invoke<{ app: string } | null>('siteSuggestions', 'appLink', tab.id))?.app === 'Atelier Test App', 'no app link for the fixture host')
+        assert((await ctx.chrome.invoke<boolean>('siteSuggestions', 'openInApp', tab.id)) === true && smokeOpened.some((u) => u.startsWith('atelier-smoke://open/d6-orchard')), 'open in app did not run')
 
         await ctx.chrome.invoke('siteSuggestions', 'update', { enabled: true })
         const suggestion = await ctx.chrome.invoke<SiteSuggestion | null>('siteSuggestions', 'current', tab.id)
@@ -332,7 +332,7 @@ export const checks: SmokeCheck[] = [
         await waitFor(() => ctx.tabs.activeId() === reopened.id, 'the new tab to be reused')
         ctx.tabs.close(other.id)
 
-        ctx.tabs.openInternal('apex://workspace/apps')
+        ctx.tabs.openInternal('atelier://workspace/apps')
         await ctx.chrome.until(`return [...document.querySelectorAll('.wa-tile')].some((el) => el.textContent.includes('Orchard')) || null`, 8000, 'the app in Workspace › Apps')
         await ctx.shot('workspace-web-apps')
         ctx.tabs.close(reopened.id)
@@ -342,7 +342,7 @@ export const checks: SmokeCheck[] = [
     },
   },
   {
-    name: 'APP-UI: an app built with Apex UI passes the design check, and build_app looks at its draft in light and dark',
+    name: 'APP-UI: an app built with Atelier UI passes the design check, and build_app looks at its draft in light and dark',
     async run(ctx) {
       assert(lintAppDesign(TIP_APP).length === 0, `the sample app fails the design check: ${lintAppDesign(TIP_APP).join(' ')}`)
       const id = ctx.host.start('smoke-d6: build the tip splitter')
@@ -354,8 +354,8 @@ export const checks: SmokeCheck[] = [
         assert(preview.images.length === 2, `the preview has ${preview.images.length} images, not light and dark`)
         assert(preview.images[0]!.data !== preview.images[1]!.data, 'light and dark look the same')
         assert(preview.errors.length === 0, `the draft logged errors: ${preview.errors.join('; ')}`)
-        if (process.env.APEX_SMOKE_SHOTS) {
-          for (const [i, scheme] of (['light', 'dark'] as const).entries()) writeFileSync(join(process.env.APEX_SMOKE_SHOTS, `apps-apex-ui-preview-${scheme}.jpg`), Buffer.from(preview.images[i]!.data, 'base64'))
+        if (process.env.ATELIER_SMOKE_SHOTS) {
+          for (const [i, scheme] of (['light', 'dark'] as const).entries()) writeFileSync(join(process.env.ATELIER_SMOKE_SHOTS, `apps-atelier-ui-preview-${scheme}.jpg`), Buffer.from(preview.images[i]!.data, 'base64'))
         }
       } finally {
         await ctx.chrome.invoke('apps', 'remove', built.appId).catch(() => undefined)
@@ -395,7 +395,7 @@ export const checks: SmokeCheck[] = [
         await ctx.chrome.until(`return !(${sidebarHas('button', 'Figma').slice(7)}) || null`, 5000, 'Figma to leave the sidebar')
 
         // The library: every kind under its own heading, with a mark on what's in the sidebar.
-        ctx.tabs.openInternal('apex://workspace/apps')
+        ctx.tabs.openInternal('atelier://workspace/apps')
         await ctx.chrome.until(`return document.querySelector('.wa__title') && [...document.querySelectorAll('.wa__title')].map((el) => el.textContent).join('|')`, 8000, 'Workspace › Apps')
         const headings = (await ctx.chrome.js<string>(`return [...document.querySelectorAll('.wa__title')].map((el) => el.textContent).join('|')`)).split('|')
         // A group shows only when it holds something; those that show keep this order.
@@ -423,7 +423,7 @@ export const checks: SmokeCheck[] = [
       try {
         await ctx.chrome.until(`return Boolean(${packsRow}) || null`, 5000, 'the Packs row in the sidebar')
         await ctx.chrome.js(`${packsRow}.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, button: 0 })); return true`)
-        await waitFor(() => ctx.tabs.rail() === 'apex://packs', 'Packs on the destination surface')
+        await waitFor(() => ctx.tabs.rail() === 'atelier://packs', 'Packs on the destination surface')
         await ctx.chrome.until(`return (document.querySelector('.pane--rail')?.innerText ?? '').includes(${JSON.stringify(`Add apps, games, worlds, skills and looks to ${BRAND_NAME}`)}) || null`, 8000, 'the Packs page saying what a pack is')
         await ctx.shot('packs-from-sidebar')
         ctx.tabs.leaveRail()
@@ -440,22 +440,22 @@ export const checks: SmokeCheck[] = [
       const tools = menuContributions('main-menu:tools').flatMap((c) => c.build({} as MenuState))
       assert(tools.some((i) => i.id === 'packs-open' && i.label === 'Packs' && i.icon === 'package'), 'the main menu has no Packs row')
       await runMenu('main-menu:tools', 'packs-open')
-      await waitFor(() => ctx.tabs.rail() === 'apex://packs', 'Packs from the main menu')
+      await waitFor(() => ctx.tabs.rail() === 'atelier://packs', 'Packs from the main menu')
       ctx.tabs.leaveRail()
       await runMenu('extensions', 'packs-browse')
-      await waitFor(() => ctx.tabs.rail() === 'apex://packs?tab=browse', 'Browse from the Extensions menu')
+      await waitFor(() => ctx.tabs.rail() === 'atelier://packs?tab=browse', 'Browse from the Extensions menu')
       ctx.tabs.leaveRail()
 
       // Workspace › Apps: Get more apps, next to New app, opens Discover.
-      ctx.tabs.openInternal('apex://workspace/apps')
+      ctx.tabs.openInternal('atelier://workspace/apps')
       const more = `[...document.querySelectorAll('button')].find((b) => b.textContent.trim() === 'Get more apps')`
       await ctx.chrome.until(`return Boolean(${more}) || null`, 8000, 'Get more apps in Workspace › Apps')
       await ctx.chrome.js(`${more}.click(); return true`)
-      await waitFor(() => ctx.tabs.rail() === 'apex://packs?tab=browse', 'Discover from Get more apps')
+      await waitFor(() => ctx.tabs.rail() === 'atelier://packs?tab=browse', 'Discover from Get more apps')
       ctx.tabs.leaveRail()
 
       // Settings: Extensions and packs, with Packs first.
-      ctx.tabs.openInternal('apex://settings/extensions')
+      ctx.tabs.openInternal('atelier://settings/extensions')
       // Settings may still show the page an earlier check left open, until it switches.
       let seen: { title: string; first: string } | null = null
       await waitFor(
@@ -484,15 +484,15 @@ export const shots: ShotSpec[] = [
       const id = ctx.host.start('smoke-d6: build an app for the shot')
       await waitFor(() => ctx.host.view(id).log.some((e) => e.type === 'app-built'), 'the app-built card', 10_000)
       const built = ctx.host.view(id).log.find((e): e is Extract<AgentEvent, { type: 'app-built' }> => e.type === 'app-built')!
-      ctx.tabs.openInternal(`apex://chat/${id}`)
+      ctx.tabs.openInternal(`atelier://chat/${id}`)
       await new Promise((r) => setTimeout(r, 600))
       await ctx.shot('apps-preview-card')
       await ctx.chrome.invoke('apps', 'saveDraft', built.appId, built.versionId)
-      ctx.tabs.openInternal('apex://workspace/apps')
+      ctx.tabs.openInternal('atelier://workspace/apps')
       await ctx.chrome.until(`return document.querySelector('.pl-tile')`, 8000, 'the apps grid')
       await ctx.shot('workspace-apps')
       const detail = await ctx.chrome.invoke<AppSummary & { versions: AppVersion[] }>('apps', 'get', built.appId)
-      ctx.tabs.openInternal(`apex://workspace/apps/${detail.id}`)
+      ctx.tabs.openInternal(`atelier://workspace/apps/${detail.id}`)
       await ctx.chrome.js(`document.querySelector('.pl-tile')?.click(); return true`)
       await ctx.chrome.until(`return document.querySelector('.pl-versions')`, 8000, 'the app detail')
       await ctx.shot('workspace-app-detail')
@@ -503,7 +503,7 @@ export const shots: ShotSpec[] = [
     name: 'workspace-tables',
     async run(ctx) {
       const table = await importFixture(ctx)
-      ctx.tabs.openInternal('apex://workspace/tables')
+      ctx.tabs.openInternal('atelier://workspace/tables')
       await ctx.chrome.until(`return document.querySelector('.pl-list__row')`, 8000, 'the tables list')
       await ctx.shot('workspace-tables')
       await ctx.chrome.js(`document.querySelector('.pl-list__row')?.click(); return true`)
@@ -528,7 +528,7 @@ export const shots: ShotSpec[] = [
         const restart = (await ctx.chrome.invoke<FlagState[]>('flags', 'list')).find((f) => f.requiresRestart)
         if (restart) await ctx.chrome.invoke('flags', 'set', restart.id, restart.values.find((v) => v !== restart.value) ?? restart.value)
         await ctx.chrome.invoke('flags', 'set', 'tables', 'off')
-        ctx.tabs.openInternal('apex://flags')
+        ctx.tabs.openInternal('atelier://flags')
         await ctx.chrome.until(`return document.querySelector('.pl-flag--locked')`, 8000, 'the flags page')
         await ctx.shot('flags-page')
       })
@@ -537,18 +537,18 @@ export const shots: ShotSpec[] = [
   {
     name: 'this-mac-settings',
     async run(ctx) {
-      const before = process.env.APEX_CALENDAR_HELPER
+      const before = process.env.ATELIER_CALENDAR_HELPER
       try {
-        process.env.APEX_CALENDAR_HELPER = fakeHelperPath()
+        process.env.ATELIER_CALENDAR_HELPER = fakeHelperPath()
         await ctx.chrome.invoke('calendar', 'setEnabled', 'events', true)
-        ctx.tabs.openInternal('apex://settings/permissions')
+        ctx.tabs.openInternal('atelier://settings/permissions')
         await ctx.chrome.until(`return document.querySelector('.pl-access__row [role="switch"], .pl-access__row input')`, 8000, 'the This Mac card')
         await ctx.chrome.js(`document.querySelector('.pl-access')?.scrollIntoView({ block: 'center' }); return true`)
         await ctx.shot('this-mac-settings')
         await ctx.chrome.invoke('calendar', 'setEnabled', 'events', false)
       } finally {
-        if (before === undefined) delete process.env.APEX_CALENDAR_HELPER
-        else process.env.APEX_CALENDAR_HELPER = before
+        if (before === undefined) delete process.env.ATELIER_CALENDAR_HELPER
+        else process.env.ATELIER_CALENDAR_HELPER = before
       }
     },
   },

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -15,12 +15,12 @@ import type { ExtensionsHost, HostObservation, NativeSeen } from '../src/main/ex
 import { stepAsideForPasswordExtension } from '../src/main/autofill/offers'
 
 // Apple Passwords (iCloud Keychain) on macOS: the card's status comes only
-// from what Apex observes (Apple's helper on disk, the extension running,
+// from what Atelier observes (Apple's helper on disk, the extension running,
 // its toolbar icon, the helper's replies on the native port), turning it on
-// installs from the Web Store with one confirmation, and Apex's own password
+// installs from the Web Store with one confirmation, and Atelier's own password
 // offers step aside while it holds password saving. Fakes only.
 
-const dir = mkdtempSync(join(tmpdir(), 'apex-apple-passwords-'))
+const dir = mkdtempSync(join(tmpdir(), 'atelier-apple-passwords-'))
 afterAll(() => rmSync(dir, { recursive: true, force: true }))
 
 const base = (over: Partial<ApplePasswordsInputs> = {}): ApplePasswordsInputs => ({
@@ -56,9 +56,9 @@ describe('the status', () => {
     expect(applePasswordsState(base({ lastHelperCmd: 10 }))).toBe('icloud-off')
   })
 
-  it('asks for a signed Apex when macOS refuses to launch the helper, and only then', () => {
+  it('asks for a signed Atelier when macOS refuses to launch the helper, and only then', () => {
     const refused = { open: false, replied: false, closedWithError: 'Native host has exited.', launchRefused: true }
-    expect(applePasswordsState(base({ port: refused }))).toBe('needs-signed-apex')
+    expect(applePasswordsState(base({ port: refused }))).toBe('needs-signed-atelier')
     // Signed with the browser passkey entitlement, the helper may start: a closed port is the helper's own doing.
     expect(applePasswordsState(base({ port: refused, signedAsBrowser: true }))).toBe('helper-closed')
     expect(applePasswordsState(base({ port: { ...refused, launchRefused: false } }))).toBe('helper-closed')
@@ -100,7 +100,7 @@ describe('Apple’s helper on disk', () => {
     expect(checkHelper([own, chrome])).toEqual({ manifest: false, binary: false, allowsExtension: false, path: null })
     write(chrome, { name: HOST, path: bin, type: 'stdio', allowed_origins: [`chrome-extension://${ID}/`, 'chrome-extension://mfbcdcnpokpoajjciilocoachedjkima/'] })
     expect(checkHelper([own, chrome])).toEqual({ manifest: true, binary: true, allowsExtension: true, path: bin })
-    // Apex's own folder wins, as in the host lookup.
+    // Atelier's own folder wins, as in the host lookup.
     write(own, { name: HOST, path: join(dir, 'gone'), type: 'stdio', allowed_origins: [`chrome-extension://${ID}/`] })
     expect(checkHelper([own, chrome])).toMatchObject({ manifest: true, binary: false })
     write(own, { name: HOST, path: bin, type: 'stdio', allowed_origins: ['chrome-extension://aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/'] })
@@ -187,13 +187,13 @@ describe('turning it on, pairing and turning it off', () => {
     f.set({ port: { open: true, replied: true, closedWithError: null } })
     const status = await apple.setOn('default', true)
     expect(f.calls).toEqual([`allow ${ID} ${HOST}`, 'enabled true', 'pin true'])
-    expect(status).toMatchObject({ state: 'not-paired', installed: true, enabled: true, apexStepsAside: false })
+    expect(status).toMatchObject({ state: 'not-paired', installed: true, enabled: true, atelierStepsAside: false })
     await new Promise((r) => setTimeout(r, 20))
     expect(popups).toEqual(['default'])
     apple.dispose()
   })
 
-  it('follows the helper’s replies to “waiting for the code”, then the icon to “ready”, with Apex stepping aside', async () => {
+  it('follows the helper’s replies to “waiting for the code”, then the icon to “ready”, with Atelier stepping aside', async () => {
     const f = fakeHost()
     const emitted: string[] = []
     const apple = createApplePasswords({ host: f.host, mac: true, hostDirs: helperDirs(), fetchCrx: async () => Buffer.alloc(0), openPopup: () => {}, yieldSetting: () => true, emit: (_p, s) => void emitted.push(s.state) })
@@ -203,7 +203,7 @@ describe('turning it on, pairing and turning it off', () => {
     f.observe({ type: 'native', profileId: 'default', extensionId: ID, host: HOST, event: 'message', message: { cmd: 14, capabilities: {} } })
     expect(apple.status('default').state).toBe('not-paired')
     f.observe({ type: 'native', profileId: 'default', extensionId: ID, host: HOST, event: 'message', message: { cmd: 2, payload: { QID: 'm0', PAKE: 'x' } } })
-    expect(apple.status('default')).toMatchObject({ state: 'waiting-for-code', apexStepsAside: true, otherController: null })
+    expect(apple.status('default')).toMatchObject({ state: 'waiting-for-code', atelierStepsAside: true, otherController: null })
     f.set({ icon: 'images/PasswordsToolbar_icon32.png' })
     f.observe({ type: 'native', profileId: 'default', extensionId: ID, host: HOST, event: 'message', message: { cmd: 2, payload: { QID: 'm2', PAKE: 'y' } } })
     expect(apple.status('default').state).toBe('ready')
@@ -247,12 +247,12 @@ describe('turning it on, pairing and turning it off', () => {
     const f = fakeHost()
     f.set({ held: { extensionId: 'c'.repeat(32), name: 'Other Vault' } })
     const apple = createApplePasswords({ host: f.host, mac: true, hostDirs: helperDirs(), fetchCrx: async () => Buffer.alloc(0), openPopup: () => {}, yieldSetting: () => false, emit: () => {} })
-    expect(apple.status('default')).toMatchObject({ otherController: 'Other Vault', apexStepsAside: false })
+    expect(apple.status('default')).toMatchObject({ otherController: 'Other Vault', atelierStepsAside: false })
     apple.dispose()
   })
 })
 
-describe('Apex’s own password offers step aside', () => {
+describe('Atelier’s own password offers step aside', () => {
   const settings: AutofillSettings = { offerLogins: true, offerSave: true, offerGenerated: true, addresses: true, addressAuth: true, cards: true, cardAuth: true, importHintDismissed: false, passwordsImported: false, yieldToPasswordExtension: true }
 
   it('turns off fill, generated and save offers for passwords only, and only while the person lets it', () => {

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -55,7 +55,7 @@ const LATIN = /[A-Za-zÀ-ɏ]/gu
 const TRADITIONAL_ONLY = /[這們個來說時會對國學與為後過發還開關問題實經裡麼樣種從現點應義讓體電腦網頁]/gu
 const SIMPLIFIED_ONLY = /[这们个来说时会对国学与为后过发还开关问题实经里么样种从现点应义让体电脑网页]/gu
 
-/** The most common short words of each Latin-script language, Apex's own lists. */
+/** The most common short words of each Latin-script language, Atelier's own lists. */
 const STOPWORDS: Record<string, string> = {
   en: 'the and of to in is that for it with as was on are be this by have from or not but at you an they which we his her their has been were will would can all there what',
   fr: 'le la les de des du et est un une pour dans que qui sur pas au aux avec par plus ce cette sont nous vous il elle ils ne se son sa ses ou mais été être',

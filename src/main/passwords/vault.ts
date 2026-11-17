@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import { join } from 'node:path'
 import { originMatchesSite, siteOfOrigin, type CredentialQuery, type CredentialView, type ImportReport } from '@shared/passwords'
 import { mainT } from '../i18n/mainT'
 
-// Apex's password vault. The whole vault is one blob encrypted with the OS
+// Atelier's password vault. The whole vault is one blob encrypted with the OS
 // keychain (Electron safeStorage in production, injected so it can be
 // tested). Credentials match by exact origin: a password saved for
 // https://accounts.example.com is never offered on another origin. Nothing

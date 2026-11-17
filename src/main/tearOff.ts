@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -146,7 +146,7 @@ export interface TearOffDeps {
   /** Why the zones are off for this tab (agent control, a replying chat). */
   splitBlock(win: WindowContext, tabId: string): SplitZonesBlock
   broadcast(event: AppEvent): void
-  /** Apex's own Reduce Motion setting (the system one is read here too). */
+  /** Atelier's own Reduce Motion setting (the system one is read here too). */
   reduceMotion?: () => boolean
   /** Smoke steers the pointer (screen px); null leaves it to the real one. */
   cursor?: () => Point | null

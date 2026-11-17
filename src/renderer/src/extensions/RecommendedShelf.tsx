@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,12 +9,12 @@
 // package, shows the store's own install prompt (what it can do) and
 // installs it; the row turns to Installed as the extensions list updates.
 // Apple's password extension on macOS opens Settings › Passwords, where
-// Apex's built-in switch sets it up.
+// Atelier's built-in switch sets it up.
 import { useMemo, useState, type ReactElement, type ReactNode } from 'react'
 import { Check, CloudOff, KeyRound, Languages, Moon, PenLine, ShieldCheck } from 'lucide-react'
 import { PASSWORDS_SETTINGS_URL, RECOMMENDED_CATEGORY_LABELS, recommendedFor, recommendedState, type RecommendedCategory, type RecommendedExtension } from '@shared/recommendedExtensions'
 import type { ExtensionImportReport } from '@shared/browserImport'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { useT } from '../i18n/useT'
 import { Button } from '../ui'
 import { useExtensions } from './useExtensions'
@@ -35,7 +35,7 @@ export function RecommendedShelf({ compact = false }: { compact?: boolean }): Re
   const [adding, setAdding] = useState<ReadonlySet<string>>(new Set())
   const [status, setStatus] = useState<string | null>(null)
   const installed = useMemo(() => new Set(items.map((e) => e.id)), [items])
-  const shelf = useMemo(() => recommendedFor(apex.platform), [])
+  const shelf = useMemo(() => recommendedFor(atelier.platform), [])
 
   const describe = (rec: RecommendedExtension, report: ExtensionImportReport): string | null => {
     if (report.cancelled) return null

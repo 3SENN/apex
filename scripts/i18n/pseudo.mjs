@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 // The en-XA pseudo-locale preview: `node scripts/i18n/pseudo.mjs "Some text"` prints the
 // pseudo form; `--key <key>` prints one catalogue entry; `--json` writes the
-// whole pseudo catalogue to stdout. In the app, turn on apex://flags ›
-// Pseudo-locale or start with APEX_PSEUDO_LOCALE=1. Node strips the types of
+// whole pseudo catalogue to stdout. In the app, turn on atelier://flags ›
+// Pseudo-locale or start with ATELIER_PSEUDO_LOCALE=1. Node strips the types of
 // src/shared/i18n/pseudo.ts, which imports nothing.
 import { dirname, join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'

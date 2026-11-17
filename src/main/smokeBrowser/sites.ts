@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -17,7 +17,7 @@ import { errorChecks, errorShots } from './sitesErrors'
 // info, the screen picker, the device chooser, the sharing bar and Site
 // settings. Pages come from the 127.0.0.1 fixture server only.
 
-const PAGE = '<!doctype html><title>Apex sites fixture</title><body style="font:16px system-ui;padding:24px">A page that asks for things.</body>'
+const PAGE = '<!doctype html><title>Atelier sites fixture</title><body style="font:16px system-ui;padding:24px">A page that asks for things.</body>'
 
 /** Opens the fixture page in a new tab and waits for it to load. */
 async function fixtureTab(ctx: SmokeContext, activate = true): Promise<Tab> {
@@ -168,7 +168,7 @@ export const shots: ShotSpec[] = [
   {
     name: 'sites-settings',
     async run(ctx) {
-      ctx.tabs.openInternal('apex://settings/sites')
+      ctx.tabs.openInternal('atelier://settings/sites')
       await ctx.chrome.until(`return document.querySelector('.ss-add')`, 8000, 'Settings › Sites')
       await ctx.shot('sites-settings')
     },

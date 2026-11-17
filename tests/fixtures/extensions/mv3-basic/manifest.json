@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Apex Fixture Notes",
+  "name": "Atelier Fixture Notes",
   "version": "1.2.0",
   "description": "A small MV3 fixture with a popup, commands and permissions.",
   "icons": { "16": "icon.png", "48": "icon.png" },

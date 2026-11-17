@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { useEffect } from 'react'
-import { apex, call } from '../api'
+import { atelier, call } from '../api'
 import { openSurface } from '../overlay/useSurface'
 
 // The chrome-side hook for the update cards. Main opens the restart card,
@@ -15,7 +15,7 @@ import { openSurface } from '../overlay/useSurface'
 export function UpdatesLayer(): null {
   useEffect(
     () =>
-      apex.onCommand((command) => {
+      atelier.onCommand((command) => {
         if (command !== 'whats-new') return
         void showWhatsNew()
       }),

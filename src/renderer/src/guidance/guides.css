@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -197,7 +197,7 @@
 /* ── the Guides gallery ── Category chips with counts, then one shelf per category: a heading, round
    previous/next arrows and a paging strip of book cards. Paging moves the
    strip one pitch in about 450 ms, ease-in-out; the centre card grows and is
-   raised, cards cut by an edge fade. Apex's own tints, per category. */
+   raised, cards cut by an edge fade. Atelier's own tints, per category. */
 
 .gd-chips {
   display: flex;
@@ -450,7 +450,7 @@
   -webkit-line-clamp: 4;
 }
 
-/* Apex's own shapes: two soft rings and a rounded square in the tint, low in the corner. */
+/* Atelier's own shapes: two soft rings and a rounded square in the tint, low in the corner. */
 .gd-book__art {
   position: absolute;
   right: -28px;

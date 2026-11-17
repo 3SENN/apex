@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Suggested routines (DS-102): Apex's own starter set, plus,
+// Suggested routines (DS-102): Atelier's own starter set, plus,
 // only when proactive.routines is on, ideas from local signals (prompts you
 // repeat, sites you open most mornings). Each opens the editor filled in;
 // dismissing one keeps it away.
@@ -60,7 +60,7 @@ export function RoutineSuggestions({ onPick, refreshKey = null }: RoutineSuggest
         ))}
       </TileGrid>
       <div className="sp-guide-pill">
-        <Button variant="secondary" onClick={() => void call('pages', 'open', 'apex://guides')}>
+        <Button variant="secondary" onClick={() => void call('pages', 'open', 'atelier://guides')}>
           {t('skills.suggest.guides')}
         </Button>
       </div>

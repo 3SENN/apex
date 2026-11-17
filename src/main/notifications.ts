@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -37,7 +37,7 @@ export function shouldNotify(
     categories: Record<string, boolean>
     mutedChat(id: string): boolean
     chatInView(id: string): boolean
-    /** An Apex window is in front. Without a chat, a notification then has nothing to add (the chrome shows it). */
+    /** An Atelier window is in front. Without a chat, a notification then has nothing to add (the chrome shows it). */
     appFocused?: boolean
   },
 ): boolean {
@@ -48,7 +48,7 @@ export function shouldNotify(
   return true
 }
 
-/** Whether the notification plays the system sound: only with Sounds on, and never for a silent request (one that plays Apex's own cue). */
+/** Whether the notification plays the system sound: only with Sounds on, and never for a silent request (one that plays Atelier's own cue). */
 export function notificationSilent(spec: Pick<NotifySpec, 'silent'>, soundsOn: boolean): boolean {
   return Boolean(spec.silent) || !soundsOn
 }
@@ -67,7 +67,7 @@ export function targetKey(target: NotificationTarget): string | null {
   return null
 }
 
-/** NS-03: with chat sounds on, Apex's own cue replaces the system sound for chat notifications. */
+/** NS-03: with chat sounds on, Atelier's own cue replaces the system sound for chat notifications. */
 export function chatNotificationSilent(settings: { chatSounds?: boolean }, category: NotificationCategory): boolean {
   return settings.chatSounds === true && (category === 'needs-you' || category === 'chat-updates')
 }

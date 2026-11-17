@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import type { OverlayOpenMessage, Rect } from '@shared/overlay'
-import { apex } from '../../api'
+import { atelier } from '../../api'
 
 // What one overlay renderer shows: every instance main asked it to mount,
 // whether it is exiting, and the rect each frame drew. Subscribed when the
@@ -54,7 +54,7 @@ export function setHostedRect(instanceId: string, rect: Rect | null): void {
 export function removeHosted(instanceId: string): void {
   if (!instances.delete(instanceId)) return
   publish()
-  apex.overlay.removed(instanceId)
+  atelier.overlay.removed(instanceId)
 }
 
 function sameRect(a: Rect | null, b: Rect | null): boolean {
@@ -67,7 +67,7 @@ let started = false
 export function startHostedStore(): void {
   if (started) return
   started = true
-  apex.overlay.onOpen((message) => {
+  atelier.overlay.onOpen((message) => {
     const existing = instances.get(message.instanceId)
     instances.set(message.instanceId, {
       message,
@@ -78,7 +78,7 @@ export function startHostedStore(): void {
     })
     publish()
   })
-  apex.overlay.onClose(({ instanceId }) => {
+  atelier.overlay.onClose(({ instanceId }) => {
     const i = instances.get(instanceId)
     if (!i || i.closing) return
     instances.set(instanceId, { ...i, closing: true })

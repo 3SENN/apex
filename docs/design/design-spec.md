@@ -1,11 +1,11 @@
 # Design spec: layout, motion and interplay
 
-This document specifies Apex's layout, structure, motion, background animation, and the way its surfaces work together. It turns each of these into a testable requirement.
+This document specifies Atelier's layout, structure, motion, background animation, and the way its surfaces work together. It turns each of these into a testable requirement.
 
 **Conventions.**
 - **Measurements:** CSS px in a 1470×923 design window, with y = 0 at the window's top edge. The sheet is x 300–1470. The content area under the bars is y 78–923 (1170×845).
-- **Colour:** colours are given as roles and relative steps (lighter, darker, one step, a few levels on a 0–255 grey scale). Apex keeps the values in its colour tokens.
-- **Motion:** every timing here has a tolerance of ±50 ms, and "within one frame" means 50 ms or less. Apex keeps these timings in its motion tokens ([DS-81](#ds-81)).
+- **Colour:** colours are given as roles and relative steps (lighter, darker, one step, a few levels on a 0–255 grey scale). Atelier keeps the values in its colour tokens.
+- **Motion:** every timing here has a tolerance of ±50 ms, and "within one frame" means 50 ms or less. Atelier keeps these timings in its motion tokens ([DS-81](#ds-81)).
 - **Dark mode:** layout, sizes and type are identical to light mode. Dark notes give tone relationships as relative steps, and the dark tokens hold the values.
 
 **Precedence.**
@@ -15,7 +15,7 @@ This document specifies Apex's layout, structure, motion, background animation, 
 - **Dark mode:** every item needs a designed dark version, checked in screenshots, before it counts as done.
 
 **Item format.**
-- Each item has an id, an area tag (`shell`, `card`, `chat`, `companion` or `motion`), the behaviour Apex must have, the Apex files to change, and a test where one isn't obvious.
+- Each item has an id, an area tag (`shell`, `card`, `chat`, `companion` or `motion`), the behaviour Atelier must have, the Atelier files to change, and a test where one isn't obvious.
 - Ids run in document order within each section.
 - Paths are relative to `src/renderer/src` unless they start with `src/`.
 
@@ -81,7 +81,7 @@ The window shell covers the sidebar, the toolbar, the address pill, the bookmark
 - **Address pill:** 527×32 at (622, 4). That is exactly 45% of the sheet's width, centred on the sheet's midline (x 885). With the sidebar collapsed it is 662 wide and centred at x 735.
   - It is a rounded rectangle with a radius of about 8, not a capsule.
   - It has a flat neutral fill, with no border, no shadow, and no companion or profile colour.
-  - Its text is centred, about 14 px regular, and two-tone: the prefix (the page kind, or "Apex" on destination surfaces) in mid-grey, then the slash and the title in the light tone.
+  - Its text is centred, about 14 px regular, and two-tone: the prefix (the page kind, or "Atelier" on destination surfaces) in mid-grey, then the slash and the title in the light tone.
   - Internal pages show no favicon or lock. Site info and the star appear only on websites.
 - **Right cluster:**
   - Empty on chat pages, destination surfaces and the new tab.
@@ -132,7 +132,7 @@ The window shell covers the sidebar, the toolbar, the address pill, the bookmark
   - Edge badges jump to an active or needs-input row that is out of view.
 - **Destinations are a surface, not tabs.**
   - A destination row swaps the content area. The chip moves and the content blanks in the same frame, and the page appears in one step 200–300 ms later. There is no slide or fade.
-  - While a destination shows, no tab or chat row is active, the destination never appears in the Tabs list, and the pill reads "Apex / ‹page›".
+  - While a destination shows, no tab or chat row is active, the destination never appears in the Tabs list, and the pill reads "Atelier / ‹page›".
   - A destination chosen from the overflow dropdown behaves the same way and makes the overflow row active.
   - Details are in [Destination pages](#destination-pages).
 - **Destination and new-tab rows.**
@@ -339,7 +339,7 @@ The window shell covers the sidebar, the toolbar, the address pill, the bookmark
   - *Files:* `components/AddressPill.tsx`, `styles.css` (`.pill`, `.toolbar__center`).
 - <a id="ds-22"></a>**DS-22** `shell` **Breadcrumb tones.**
   - The prefix (the section or host) is in mid-grey, and the slash and title are in the light tone, both regular weight.
-  - On destination surfaces the prefix is "Apex".
+  - On destination surfaces the prefix is "Atelier".
   - *Before:* a semibold host, and `.pill__crumb--last` in the primary tone at weight 600, which reverses this order.
   - *Files:* `AddressPill.tsx`, `components/address.ts`, `styles.css`.
 - <a id="ds-23"></a>**DS-23** `shell` **Pill editing.**
@@ -351,7 +351,7 @@ The window shell covers the sidebar, the toolbar, the address pill, the bookmark
   - *Before:* an accent ring plus a halo, and `useOverlay` hides the page while editing.
   - *Files:* `AddressPill.tsx`, `styles.css` (`.pill--editing`, `.suggestions`).
 - <a id="ds-24"></a>**DS-24** `shell` **Contextual right cluster.**
-  - **Apex pages:** empty on chat pages, destination surfaces and the new tab. Internal tab pages (settings, history, bookmarks, downloads) get at most one 32 px utility button at the far right, 8 px in: the extensions button.
+  - **Atelier pages:** empty on chat pages, destination surfaces and the new tab. Internal tab pages (settings, history, bookmarks, downloads) get at most one 32 px utility button at the far right, 8 px in: the extensions button.
   - **Websites:** a chat-about-this-page button that toggles the side panel (⌘J) and carries the working and approval indicators.
   - **While a chat shows pages beside it:** a thin divider, then that chat's pages with expand and hide.
   - **Split:** the split button shows only while the view is split.
@@ -399,7 +399,7 @@ The window shell covers the sidebar, the toolbar, the address pill, the bookmark
   - The sidebar's search button, and its shortcut, open a palette centred on the window (not the sheet), about a quarter of the way down.
   - **Card:** about 640 wide, radius about 20, slightly translucent near-white, a large soft shadow, and no dim over the page.
   - **Input:** about 20 px, with a light shortcut hint at the right.
-  - **Filters:** 24 px chips under the input: tabs and chats, plus Apex's pages.
+  - **Filters:** 24 px chips under the input: tabs and chats, plus Atelier's pages.
   - **Results:** 40 px rows on a 44 px pitch, each with a 20 px icon and a label. The first row is preselected with a neutral fill and a muted go-hint with an arrow.
   - It appears within one frame, and Escape closes it at once. The chats header's search action opens it filtered to chats.
   - It reuses the [SH-35](feature-spec.md#sh-35) palette component and its keyboard model.
@@ -445,7 +445,7 @@ The window shell covers the sidebar, the toolbar, the address pill, the bookmark
   - *Files:* new `ui/Popover.tsx` and `ui/MenuList.tsx`, `ui/menu.ts`, `ui/overlay.ts`, `ui/ui.css`, `ui/logic/keys.ts`.
   - *Test:* keyboard navigation (arrows, Home and End, type to filter, Escape), and every menu stays inside the window in a 600 px-tall window.
 - <a id="ds-95"></a>**DS-95** `shell` **Dark tooltips.**
-  - Icon buttons across Apex (chrome, chat header, composer, footer, details panel, settings and the card header) use one tooltip instead of the native `title`.
+  - Icon buttons across Atelier (chrome, chat header, composer, footer, details panel, settings and the card header) use one tooltip instead of the native `title`.
   - **Look:** near-black, radius 8, a thin lighter edge and a 13 px white label. Shortcuts render as small lighter key-cap chips.
   - **Delay:** about 500 ms over chrome controls and about 1 s over controls inside pages. It appears at once after the delay.
   - **Placement:** centred 6–8 px below the anchor; above it for footer, composer and start-surface controls; shifted to stay inside the window near its edges.
@@ -465,7 +465,7 @@ The window shell covers the sidebar, the toolbar, the address pill, the bookmark
   - *Before:* the tab is inserted after the active tab.
   - *Files:* `src/main/tabs.ts` (`create` placement), `components/sidebar/logic/order.ts`, `Sidebar.tsx`.
   - *Implements:* [SH-08](feature-spec.md#sh-08) as written.
-- <a id="ds-98"></a>**DS-98** `shell` **Pill rest tone on Apex surfaces** (optional).
+- <a id="ds-98"></a>**DS-98** `shell` **Pill rest tone on Atelier surfaces** (optional).
   - On destination surfaces and an unfocused new tab, the pill may rest at its hover step.
   - Adopt it only if it reads well beside [DS-21](#ds-21).
   - *Files:* `AddressPill.tsx`, `styles.css`.
@@ -476,7 +476,7 @@ The window shell covers the sidebar, the toolbar, the address pill, the bookmark
   - Stone is a very low-chroma warm grey in light mode and a warm charcoal slate in dark mode, clearly not a cool hue.
   - The sheet is a slightly warm "paper" white in light mode and a warm near-black in dark mode. It is the lightest plane in light mode and the darkest in dark mode, with the dark ground one step above it.
 - **One non-companion accent.** Links, progress, text selection, focus rings and the selected settings row all use the profile hue.
-- **Raised chip.** A half-pixel inner highlight on all four sides plus a soft shadow about 2 px down, defined as Apex tokens (`--chip-rim`, `--shadow-chip`).
+- **Raised chip.** A half-pixel inner highlight on all four sides plus a soft shadow about 2 px down, defined as Atelier tokens (`--chip-rim`, `--shadow-chip`).
 - **Footer gauge.** The avatar ring shows this month's API spend against your budget, or a full ring when no budget is set. The main menu's meter row shows the same figure.
 - **Icons (lucide).**
   - Toolbar: `PanelLeft`, `ChevronLeft` and `ChevronRight`, `RotateCw`.
@@ -486,7 +486,7 @@ The window shell covers the sidebar, the toolbar, the address pill, the bookmark
   - Elsewhere: `Folder` for bookmark folders and `CircleArrowUp` for the update capsule.
 - **Wording.**
   - Labels: New Tab, All chats, Routines, Skills, Connectors, Meetings, More, Chats, Your tabs, Restart to update, Add API key.
-  - Breadcrumbs stay "Chat / ‹title›" and "Settings / ‹page›". Destination surfaces read "Apex / ‹page›".
+  - Breadcrumbs stay "Chat / ‹title›" and "Settings / ‹page›". Destination surfaces read "Atelier / ‹page›".
   - Palette placeholder: "Jump to a tab or chat". The search button's tooltip uses the same words.
 - **Tooltips.** A warm-up: once one tooltip has shown, the next one shows without the delay for about 1 s.
 - **Motion.**
@@ -505,7 +505,7 @@ This section covers the destinations (All chats, Routines, Connectors, Skills, M
 
 ### Layout
 
-**A surface, not a tab.** A destination fills the content area under the bars. While it shows, no tab or chat row is active, it never appears in the Tabs list, and the pill reads "Apex / ‹page›".
+**A surface, not a tab.** A destination fills the content area under the bars. While it shows, no tab or chat row is active, it never appears in the Tabs list, and the pill reads "Atelier / ‹page›".
 
 **Shared template** (Routines, the connectors page, Skills and Meetings):
 - **Column:** 838 wide at x 466–1304, that is min(838, sheet − 2 × gutter), centred on the sheet.
@@ -558,15 +558,15 @@ This section covers the destinations (All chats, Routines, Connectors, Skills, M
 ### Requirements
 
 - <a id="ds-99"></a>**DS-99** `shell` **Destinations are a separate surface, not tabs.** This is the highest-impact change in this document.
-  - Choosing a destination, or typing its `apex://` address, sets a window-level destination state.
+  - Choosing a destination, or typing its `atelier://` address, sets a window-level destination state.
   - The content area shows that page while the active tab's view is hidden but kept.
-  - No tab or chat row is active; the destination row (or the overflow row) gets the chip. The pill reads "Apex / ‹page›".
+  - No tab or chat row is active; the destination row (or the overflow row) gets the chip. The pill reads "Atelier / ‹page›".
   - Clicking any tab or chat row leaves the destination surface and restores that tab.
   - Destination pages never appear in the Tabs list. Middle-click and "open in new tab" keep their current behaviour.
   - *Before:* `openInternal` creates or reuses a tab, so an "All chats" row appears among the tabs.
   - *Files:* `src/main/tabs.ts` (`openInternal`; add `rail` to the snapshot), `src/shared/ipc.ts` (`TabsSnapshot.rail`), `src/shared/url.ts`, `App.tsx` (render the destination page in `.content`), `components/sidebar/Sidebar.tsx` (`currentDest` from the snapshot; `focusId`), `Destinations.tsx`, `components/address.ts`, `src/main/menu.ts`.
   - *Test:* clicking a destination leaves the tab count unchanged and shows no active tab row; clicking a tab row then restores that tab with its scroll position.
-  - *Supersedes:* "Each row opens its apex:// page and reuses one tab per destination" in [SH-07](feature-spec.md#sh-07).
+  - *Supersedes:* "Each row opens its atelier:// page and reuses one tab per destination" in [SH-07](feature-spec.md#sh-07).
 - <a id="ds-100"></a>**DS-100** `shell` **Destination page template.**
   - **Column:** min(838, sheet − 64), centred on the sheet.
   - **Header:** the title (about 18 px semibold), a muted 14–15 px subtitle, a text docs link with an arrow-out glyph, then a neutral ink primary pill (36 tall, radius 18, a 15 px leading glyph; it inverts in dark mode per [DS-138](#ds-138)).
@@ -586,7 +586,7 @@ This section covers the destinations (All chats, Routines, Connectors, Skills, M
   - *Refines:* [CH-45](feature-spec.md#ch-45) (presentation only; the groups, search, sorts and filters stay).
 - <a id="ds-102"></a>**DS-102** `shell` **Routines page.**
   - Two segments (yours and past runs), the search field and the filter button.
-  - With no routines (and below the list otherwise), a muted section label and a two-column grid of 411×112 suggestion cards with 14 px gaps: a dashed hairline border, radius 16, a 32 px Apex glyph tile, a title, a two-line muted description, and a dismiss button on hover.
+  - With no routines (and below the list otherwise), a muted section label and a two-column grid of 411×112 suggestion cards with 14 px gaps: a dashed hairline border, radius 16, a 32 px Atelier glyph tile, a title, a two-line muted description, and a dismiss button on hover.
   - A centred outlined guide pill below the grid.
   - *Files:* `pages/RoutinesPage.tsx`, `settings/logic/routines.ts` (suggestions), `settings/settings.css`.
 - <a id="ds-103"></a>**DS-103** `shell` **Connectors page as a grid.**
@@ -607,7 +607,7 @@ This section covers the destinations (All chats, Routines, Connectors, Skills, M
 
 ### Design choices: destination pages
 
-- **Words.** Titles, subtitles, segment and button labels keep their existing wording. The docs link opens Apex's help.
+- **Words.** Titles, subtitles, segment and button labels keep their existing wording. The docs link opens Atelier's help.
 - **Icons (lucide).** `ArrowUpRight` for the docs link, `ListFilter` for the filter button, `ArrowUpDown` for sort, and each destination's own row icon, drawn at 30 px in line weight, for its empty state.
 - **Routine suggestions.** The set from `settings/logic/routines.ts`, each with a 32 px glyph tile.
 - **Library selector.** The selector pill picks whose files to show: a companion's face, its name and a chevron.
@@ -690,7 +690,7 @@ The figure, its typing reaction and the send handoff live in [Companion presence
   - **Centre:** the live companion standing about 40 px above the composer, inside a square hit area, with a small pencil badge ([DS-74](#ds-74)).
   - **Composer:** the shared start variant, its top at 40% of the content height, with the tray ([DS-108](#ds-108)) and the ideas card ([DS-109](#ds-109)) below it.
   - **Bottom-right:** one 38 px keep-awake button ([DS-112](#ds-112)).
-  - **Background:** Apex's floor, or the start surface's plain page when the floor is off. Nothing in it animates.
+  - **Background:** Atelier's floor, or the start surface's plain page when the floor is off. Nothing in it animates.
   - New chat from any surface lands here. No chat record exists until the first send (the usual draft rules apply).
   - **Remove** the greeting heading, the lead line, the monogram shortcut grid, the hint line, and the arrows and dots.
   - *Built:* the shared start surface. The empty chat page drops its header bar when the switcher pill can show in its place (`showsChatHeader` in `components/startSurfaceLogic.ts`); the switcher and corner buttons then sit 16 px from the top, as on the new tab. The side panel keeps its header (`tests/emptyChatHeader.test.ts`).
@@ -736,7 +736,7 @@ The figure, its typing reaction and the send handoff live in [Companion presence
 
 ### Design choices: start surface
 
-- **Icons (lucide).** `Sofa` for the floor toggle (Apex's floor is "the Lounge"), `Bell` for notifications, `Coffee` for keep-awake, `Lightbulb` for the ideas header, `ChevronLeft` and `ChevronRight` for paging, `ArrowRight` for the see-all link, `Plus` for the add segment and `CircleHelp` for the help chip.
+- **Icons (lucide).** `Sofa` for the floor toggle (Atelier's floor is "the Lounge"), `Bell` for notifications, `Coffee` for keep-awake, `Lightbulb` for the ideas header, `ChevronLeft` and `ChevronRight` for paging, `ArrowRight` for the see-all link, `Plus` for the add segment and `CircleHelp` for the help chip.
 - **Tray chips.** Skills, Routines, Connectors and Help.
 - **Ideas.** Built locally from your skills, routines and recent tabs, plus a fixed starter set.
 - **Keep-awake.** Uses `prevent-app-suspension`, and only while a companion run is active.
@@ -913,7 +913,7 @@ The figure, its typing reaction and the send handoff live in [Companion presence
 
 - <a id="ds-29"></a>**DS-29** `card` **Backdrop over the content area only.**
   - With the card open, the sidebar, toolbar, address pill and bookmarks bar stay pixel-identical: no blur, full contrast, and clickable.
-  - Only the content area is blurred, at about 10 px, including the page still Apex shows while the native view is hidden.
+  - Only the content area is blurred, at about 10 px, including the page still Atelier shows while the native view is hidden.
   - **Light mode:** it is also lifted slightly (about 3% brighter) toward the page background, with no ink or purple tint. Text becomes unreadable while block shapes stay recognisable.
   - **Dark mode:** blur only, with no veil. The tone stays at the page grey.
   - **Reduce Transparency:** an opaque wash in the page tone replaces the blur, in both modes.
@@ -1069,7 +1069,7 @@ The figure, its typing reaction and the send handoff live in [Companion presence
   - **Content:** starts 8 px below the search row. Rows are 54 px tall, 20 px in (12 px outside the title's inset), with 1 px dividers and a light grey rounded fill on hover.
   - **Empty states:** a single muted 14 px line.
   - **Loading:** a four-row skeleton (an icon square, a bar, a right bar and a round button), under the [DS-106](#ds-106) rule.
-  - *Before:* the action button uses Apex's accent colour, there is no help button, and skills are separate bordered cards.
+  - *Before:* the action button uses Atelier's accent colour, there is no help button, and skills are separate bordered cards.
   - *Files:* `companion-card/SkillsTab.tsx`, `RoutinesTab.tsx`, `FilesTab.tsx`, `MemoryTab.tsx`, `ModelsTab.tsx`, `card.css` (`.co-tab*`, `.co-search`, `.co-list`), `ui/States.tsx`.
 - <a id="ds-114"></a>**DS-114** `card` **Skills rows and the shared group.**
   - Each row: a 16 px glyph at +20, the name at +56 (with an ellipsis), a muted 12–13 px last-used column at about 56% of the row width, a 74×28 white hairline pill for the Use action, and a 26 px round ⋯ button.
@@ -1086,7 +1086,7 @@ The figure, its typing reaction and the send handoff live in [Companion presence
   - A dismissible explainer strip (542×72, very light grey, rounded) with three glyph-and-text columns.
   - A 160×40 two-segment control for the two memory views.
   - A day-grouped timeline: an 88 px right-aligned date column, a 24 px rail with 14 px nodes and a dashed connector, and a content column with a medium title and muted text.
-  - Apex fills it from its own note history (`logic/notes.ts`, `logic/history.ts`).
+  - Atelier fills it from its own note history (`logic/notes.ts`, `logic/history.ts`).
   - *Files:* `MemoryTab.tsx`, `card.css`.
 - <a id="ds-117"></a>**DS-117** `card` **Models rows.**
   - Each setting (model, effort) becomes a 60 px row: a 32 px grey rounded tile with a glyph, a 14 px title over a muted one-line description, and a 200×32 hairline pill picker on the right.
@@ -1117,11 +1117,11 @@ The figure, its typing reaction and the send handoff live in [Companion presence
     - brow size, height and tilt;
     - accessory size and height.
   - They show as labelled sliders: an ink filled track left of the thumb, a light track to its right, and a round thumb.
-  - The rig applies them. They stay backward-compatible in `.apexcompanion` export and import: missing values mean the defaults.
+  - The rig applies them. They stay backward-compatible in `.ateliercompanion` export and import: missing values mean the defaults.
   - *Files:* `src/shared/companion.ts` (`CompanionLook.adjust`), `src/shared/companionLogic.ts` (`normalizeLook`), `companion/character.ts`, `companion/face.ts`, `companion-card/logic/share.ts`, `pages/CompanionEditor.tsx`.
   - *Test:* normalisation clamps the values, and an old file imports unchanged.
 - <a id="ds-121"></a>**DS-121** `card` **Full-tab variant.**
-  - An `apex://companion/<id>` tab renders the same component as a page filling the content area: no card border, radius or backdrop, and close closes the tab.
+  - An `atelier://companion/<id>` tab renders the same component as a page filling the content area: no card border, radius or backdrop, and close closes the tab.
   - The vertical metrics are identical. Horizontal elements stretch, and the figure keeps its fixed size.
   - *Before:* the route opens the floating card over the page.
   - *Files:* `App.tsx` (`routeCard`), `pages/CompanionCard.tsx`, `pages/InternalPage.tsx`, `card.css`.
@@ -1137,7 +1137,7 @@ The figure, its typing reaction and the send handoff live in [Companion presence
 ### Design choices: companion card
 
 - **Hero wash.** The companion's skin or head colour mixed into the card surface, nearly flat, easing to the card colour over the hero's last ~130 px.
-- **Primary pill.** The darkest look colour (outfit or hair), darkened automatically until white text passes 4.5:1. The label is "Export…", which writes the `.apexcompanion` file and the share image.
+- **Primary pill.** The darkest look colour (outfit or hair), darkened automatically until white text passes 4.5:1. The label is "Export…", which writes the `.ateliercompanion` file and the share image.
 - **Neutrals.**
   - The underline and active label use `--text-primary`.
   - The backdrop is about a 10 px blur, plus, in light mode, a slight lift toward `--bg-base`.
@@ -1716,7 +1716,7 @@ This section covers how the companion appears and behaves across every surface: 
 
 **Onboarding.**
 - **Background:** a radial wash in the companion's colour, two layers of the pattern field (fine and coarse) that crossfade by step, and a light gradient rising from the bottom.
-- **Intro stage:** a staged reveal of the Apex mark and the companion ([Design choices: presence](#presence-design-choices)).
+- **Intro stage:** a staged reveal of the Atelier mark and the companion ([Design choices: presence](#presence-design-choices)).
 - **Steps:** one persistent companion moves between placements (centred or beside the content) and switches between full body and bust. Speech bubbles with tails carry its lines.
 
 ### Behaviour and motion
@@ -1905,7 +1905,7 @@ This section covers how the companion appears and behaves across every surface: 
   - The companion stands on a soft contact shadow faintly tinted with its own colour, softened in dark mode.
   - Greeting, as a one-time speech bubble: "Hey, it's Pip. What are we tackling?"
   - Starters live in the ideas card ([DS-109](#ds-109)).
-- **Welcome intro, a "dawn."** A horizon glow rises from below and the Apex mark draws itself. The companion pops up through a floor ring and waves, using the existing wave clip, while small accent sparkles drift upward.
+- **Welcome intro, a "dawn."** A horizon glow rises from below and the Atelier mark draws itself. The companion pops up through a floor ring and waves, using the existing wave clip, while small accent sparkles drift upward.
 - **Celebration.** A wave plus a ring of sparkles.
 - **Speech bubbles.** A rounded rectangle with a two-dot thought tail and a word-by-word fade. Topic glyphs come from lucide.
 - **Handoff.** The figure morphs into the gutter face along a gentle arc, in about 460 ms with deceleration.
@@ -2014,7 +2014,7 @@ The layout is identical in dark mode. What changes is the plane order and the to
 **Pattern field.**
 - Sizes swell and shrink with one smooth, slow wave (one swell takes about 8 s), with no short repeat. Shapes vanish below one threshold and cap at full size above another, leaving calm gaps and dense bands.
 - It keeps drifting in dark mode, at about a third of light mode's contrast.
-- Apex uses only this one wave.
+- Atelier uses only this one wave.
 - It pauses when off-screen, when the window is hidden, or when its owner pauses it (an onboarding layer that isn't showing). It caps pixel density.
 - Under Reduce Motion it shows one still frame ([DS-85](#ds-85)).
 
@@ -2068,7 +2068,7 @@ Further motion classes:
   - **Durations:** pop (60 ms or less, for menus and popovers), quick (about 100 ms), short or layout (about 150 ms), medium (about 300 ms, with a settle of about 600 ms) and long (about 450 ms).
   - **Curves:** one strong decelerate curve for nearly everything; an accelerating exit curve for the card close and the editor narrowing; ease-in-out only for paging; and one JS spring preset only for floor physics (hops, perching, throws).
   - **Specific values:** the card in about 140 ms ease-out and out in about 180 ms accelerating; the underline glide and tab icon in about 150 ms; the editor widening in about 250 ms and narrowing in about 300 ms; the figure's scale settling in about 400–600 ms; option panels fading in about 150 ms.
-  - **Switch:** a single `useMotion()` reads the OS setting OR an Apex setting (Settings › Appearance › Reduce motion).
+  - **Switch:** a single `useMotion()` reads the OS setting OR an Atelier setting (Settings › Appearance › Reduce motion).
   - *Test:* with either one on, every token and the spring resolve to instant.
   - *Files:* `styles.css` (`--dur-*`, `--motion-*`), new `ui/motion.ts`, `ui/hooks.ts`, `settings/pages/BrowsingPages.tsx` (Appearance), `src/shared/ipc.ts` (setting).
 - <a id="ds-82"></a>**DS-82** `motion` **Exit animations.**
@@ -2103,7 +2103,7 @@ Further motion classes:
   - **Colour changes:** it re-tints within a frame when the theme or companion colour changes, with no remount flash.
   - Shapes run from about 10% to 85% of the cell, on the lattice and glyphs in [Design choices: motion](#motion-design-choices).
   - *Files:* new `ui/AmbientField.tsx`, with the pure wave maths in `ui/logic/ambient.ts` and unit tests.
-- <a id="ds-86"></a>**DS-86** `motion` **Use the field everywhere Apex has ambient life.**
+- <a id="ds-86"></a>**DS-86** `motion` **Use the field everywhere Atelier has ambient life.**
   - Behind: the card hero ([DS-39](#ds-39)), the new-companion sheet, the import review hero and the editor stage.
   - Welcome: two layers (fine and coarse) that crossfade by step, with the hidden layer paused.
   - Preset thumbnails: one still frame each.
@@ -2123,7 +2123,7 @@ Further motion classes:
   | Flights, word reveal, sweeps, the arrival cue | Skipped |
   | Reduce Transparency | The backdrop blur becomes an opaque wash in the page tone, in both modes |
 
-  - *Test:* with the Apex switch on, record the new tab, the card and a running chat in both modes: nothing moves except the caret, text and blinks.
+  - *Test:* with the Atelier switch on, record the new tab, the card and a running chat in both modes: nothing moves except the caret, text and blinks.
   - *Files:* `ui/motion.ts`, `companion/view.ts` (replace `timeScale` 0.5 with no bob or tracking), `ui/AmbientField.tsx`, `components/newtab/floorSim.ts`.
 - <a id="ds-88"></a>**DS-88** `motion` **Theme and colour apply live, in one frame.**
   - **Chrome:** `applyTheme` sets `data-theme-switching` and suppresses transitions for two animation frames, so every region repaints at once with no crossfade. The segmented thumb (`.ui-segmented__thumb`) is exempt and glides in about 180 ms.

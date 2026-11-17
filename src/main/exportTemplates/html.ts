@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@
 // chat, skill, transcript or generated document. Markdown goes through the
 // same parser the chat uses, and every piece of text is escaped, so nothing
 // from a reply ever becomes markup. The document carries its own light and
-// dark palette (it is opened outside Apex), with no scripts and no remote loads.
+// dark palette (it is opened outside Atelier), with no scripts and no remote loads.
 import { parseMarkdown, safeHref, type Block, type Inline } from '../../renderer/src/chat/logic/markdown'
 
 const ESCAPES: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }
@@ -81,7 +81,7 @@ export function markdownToHtml(markdown: string): string {
 }
 
 // The exported page's own palette: a document opened in any browser, so it
-// defines its colours once per scheme instead of borrowing Apex's tokens.
+// defines its colours once per scheme instead of borrowing Atelier's tokens.
 const STYLE = `
 :root { color-scheme: light dark; --ink: #1d1c1a; --muted: #6b6862; --line: #e4e1dc; --paper: #ffffff; --wash: #f6f4f1; --link: #2f5fb3; }
 @media (prefers-color-scheme: dark) { :root { --ink: #ecebe8; --muted: #a29f99; --line: #3a3835; --paper: #1f1e1c; --wash: #2a2927; --link: #8fb3f0; } }

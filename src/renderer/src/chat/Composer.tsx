@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import { SUGGESTION_DRAFT_EVENT, type SuggestionDraftDetail } from '../suggestio
 import { ArrowUp, Check, ChevronDown, ListEnd, Mic, Square } from 'lucide-react'
 import { SHARED_OWNER } from '@shared/chats'
 import type { Companion, QueuedMessage } from '@shared/services'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { signalPresence } from '../companion/presence'
 import { Button, Spinner, cx, toast, useConfirm, useMotion } from '../ui'
 import { showPopoverMenu } from '../ui/Popover'
@@ -266,7 +266,7 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
     setGone(null)
     if (!message) return
     driving.claim()
-    void apex.agent.send(chatId, message).catch((err: unknown) => {
+    void atelier.agent.send(chatId, message).catch((err: unknown) => {
       setGone(message)
       toast.show({ message: errorText(err), tone: 'error' })
     })
@@ -362,7 +362,7 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
     // The pending line shows within a frame, before main confirms the run.
     if (!running) markSent(chatId)
     try {
-      await apex.agent.send(chatId, outgoing, attachments.length > 0 ? attachments : undefined)
+      await atelier.agent.send(chatId, outgoing, attachments.length > 0 ? attachments : undefined)
       if (outgoing !== message) clearQuote()
     } catch (err) {
       markSent(chatId, false)
@@ -425,7 +425,7 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
 
   const stop = async (): Promise<void> => {
     driving.claim()
-    const unsent = await apex.agent.stop(chatId)
+    const unsent = await atelier.agent.stop(chatId)
     // Messages that never went out come back to the composer.
     if (unsent.length > 0) setText([text.trim(), ...unsent].filter(Boolean).join('\n\n'))
   }
@@ -459,7 +459,7 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
     }
     if (!picked) return
     if (picked === 'manage') {
-      void call('pages', 'open', 'apex://settings/companions')
+      void call('pages', 'open', 'atelier://settings/companions')
       return
     }
     const [kind, value = ''] = picked.split(/:(.*)/s)

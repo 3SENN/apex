@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Guides contract: the Guides destination
-// (apex://guides, SH-07's Guides row). Apex's own guides,
+// (atelier://guides, SH-07's Guides row). Atelier's own guides,
 // each optionally bundling skills, routines (installed paused) and
 // connector suggestions behind a Try it button.
 import type { RoutineDraft } from './routines'
@@ -61,9 +61,9 @@ export function filterGuides<T extends Pick<Guide, 'title' | 'summary' | 'catego
   })
 }
 
-/** apex://guides or apex://guides/<id>. */
+/** atelier://guides or atelier://guides/<id>. */
 export function guideUrl(id?: string): string {
-  return id ? `apex://guides/${encodeURIComponent(id)}` : 'apex://guides'
+  return id ? `atelier://guides/${encodeURIComponent(id)}` : 'atelier://guides'
 }
 
 /**

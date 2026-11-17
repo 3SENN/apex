@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex-speech.exe: the microphone through Windows.Media.SpeechRecognition, in
+// atelier-speech.exe: the microphone through Windows.Media.SpeechRecognition, in
 // continuous dictation. Windows' dictation topic runs on Microsoft's online
 // speech service (Settings › Privacy › Speech), so `started` reports
 // onDevice false while it transcribes; it always listens to the default
@@ -11,7 +11,7 @@
 using Windows.Globalization;
 using Windows.Media.SpeechRecognition;
 
-namespace Apex.Speech;
+namespace Atelier.Speech;
 
 internal sealed class MicRecognizer : IAsyncDisposable
 {
@@ -57,7 +57,7 @@ internal sealed class MicRecognizer : IAsyncDisposable
         var recognizer = new SpeechRecognizer(language);
         try
         {
-            recognizer.Constraints.Add(new SpeechRecognitionTopicConstraint(SpeechRecognitionScenario.Dictation, "apex-dictation"));
+            recognizer.Constraints.Add(new SpeechRecognitionTopicConstraint(SpeechRecognitionScenario.Dictation, "atelier-dictation"));
             var compiled = await recognizer.CompileConstraintsAsync();
             if (compiled.Status != SpeechRecognitionResultStatus.Success) throw FromStatus(compiled.Status);
             // Long silences in a meeting are normal; Completed restarts it anyway.

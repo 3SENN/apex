@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,11 +6,11 @@
 import { chmodSync, copyFileSync, rmSync, writeFileSync } from 'node:fs'
 import { extname, join } from 'node:path'
 
-// A node script installed as a program Apex can start, the way it would find
+// A node script installed as a program Atelier can start, the way it would find
 // one on this platform. Elsewhere that is a copy with the executable bit,
 // whose #! line names node. Windows runs no #! line, so there the script sits
 // next to an npm-style .cmd shim, as `npm i -g` installs a CLI (claude.cmd,
-// npx.cmd): Apex then starts it through the same path a real install takes.
+// npx.cmd): Atelier then starts it through the same path a real install takes.
 
 /** npm's cmd-shim for a script in the same folder, as it writes C:\Program Files\nodejs\npx.cmd. */
 export function npmShim(script: string): string {

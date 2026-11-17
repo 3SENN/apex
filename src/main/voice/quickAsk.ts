@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -13,7 +13,7 @@ import type { AppContext } from '../features/types'
 import { mainT } from '../i18n/mainT'
 import { errorMessage, log } from '../log'
 import { screenAccess } from '../speech/screenAccess'
-import { fixMicBlocked, fixScreenBlocked, openInApex } from './apexNav'
+import { fixMicBlocked, fixScreenBlocked, openInAtelier } from './atelierNav'
 import { matchesChord } from './keys'
 import { closedLauncher, launcherKeyAction, reduceLauncher, type LauncherEvent } from './launcher'
 import { captureScreen, type Shot } from './platform'
@@ -23,7 +23,7 @@ import type { VoiceRuntime } from './runtime'
 // The quick-ask launcher (MV-02, MV-03): a float at the bottom centre
 // of the cursor's display that listens straight away, shows the words as
 // they come, and sends them to a new chat in a foreground tab. Opened by the
-// global shortcut (outside Apex) or voice.launcherToggle.
+// global shortcut (outside Atelier) or voice.launcherToggle.
 
 /** How long "working" shows before the launcher steps aside for the chat. */
 const WORKING_MS = 700
@@ -77,7 +77,7 @@ export class QuickAsk {
   toggle(): void {
     const meetingId = this.#rt.recordingMeeting()
     if (meetingId && !this.#open) {
-      openInApex(this.#ctx, `apex://meetings/${meetingId}`)
+      openInAtelier(this.#ctx, `atelier://meetings/${meetingId}`)
       return
     }
     const action = launcherKeyAction(this.#open, this.#payload)
@@ -113,7 +113,7 @@ export class QuickAsk {
     const v = this.#ctx.settings.get().voice
     this.#open = true
     this.#shot = null
-    // Only an app outside Apex gets focus back; inside Apex it stays where it was.
+    // Only an app outside Atelier gets focus back; inside Atelier it stays where it was.
     this.#frontPid = null
     if (!BrowserWindow.getFocusedWindow()) {
       this.#frontPid = await this.#rt
@@ -143,7 +143,7 @@ export class QuickAsk {
     this.#apply({ type: 'shot', screenshot: this.#shot?.thumbnail ?? null, blocked, relaunch, attach })
   }
 
-  /** Inside the launcher the launcher key arrives as a key event (the global shortcut is off while Apex has focus). */
+  /** Inside the launcher the launcher key arrives as a key event (the global shortcut is off while Atelier has focus). */
   #wireKeys(): void {
     const win = this.#ctx.float.window('launcher')
     if (!win || this.#keysWired === win.webContents.id) return
@@ -251,7 +251,7 @@ export class QuickAsk {
       log.warn('voice', 'launcher send failed', { error: errorMessage(err) })
       return this.#fail('failed')
     }
-    if (!openInApex(this.#ctx, chatUrl(chatId))) return this.#fail('failed')
+    if (!openInAtelier(this.#ctx, chatUrl(chatId))) return this.#fail('failed')
     this.#apply({ type: 'sent' })
     this.#frontPid = null
     setTimeout(() => this.hide(false), WORKING_MS)
@@ -283,10 +283,10 @@ export class QuickAsk {
       })
       return
     }
-    if (code === 'no-engine') openInApex(this.#ctx, 'apex://settings/model')
+    if (code === 'no-engine') openInAtelier(this.#ctx, 'atelier://settings/model')
     else if (code === 'another-recording') {
       const meetingId = this.#rt.recordingMeeting()
-      if (meetingId) openInApex(this.#ctx, `apex://meetings/${meetingId}`)
+      if (meetingId) openInAtelier(this.#ctx, `atelier://meetings/${meetingId}`)
     } else if (this.#payload.screenshotBlocked) return void this.#fixScreen()
     else return void this.#listen()
     this.hide(false)

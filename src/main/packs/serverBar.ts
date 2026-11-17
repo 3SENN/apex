@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Apex's bar over an app whose web server runs (docs/packs.md › A web server
+// Atelier's bar over an app whose web server runs (docs/packs.md › A web server
 // of its own): trusted UI the app can't draw or hide, like the sharing bar
 // over a page that uses the camera. It sits at the top of the app's tab,
 // says whether the server is on this computer or shared on the Wi-Fi and how

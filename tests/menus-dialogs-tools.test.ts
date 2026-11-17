@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -78,7 +78,7 @@ describe('link to highlight', () => {
   })
 
   it('refuses when there is no link to make', () => {
-    expect(textFragmentUrl('apex://chats', 'x')).toBeNull()
+    expect(textFragmentUrl('atelier://chats', 'x')).toBeNull()
     expect(textFragmentUrl('https://a.test/', '   ')).toBeNull()
     expect(textFragmentUrl('not a url', 'x')).toBeNull()
   })
@@ -86,7 +86,7 @@ describe('link to highlight', () => {
 
 describe('QR code', () => {
   it('draws a square code as SVG and as a bitmap', () => {
-    const m = qrMatrix('https://apex.test/page')
+    const m = qrMatrix('https://atelier.test/page')
     expect(m.length).toBeGreaterThanOrEqual(21)
     expect(m.every((row) => row.length === m.length)).toBe(true)
     // Finder pattern corner.
@@ -94,7 +94,7 @@ describe('QR code', () => {
     const svg = qrSvg(m)
     expect(svg.startsWith('<svg')).toBe(true)
     expect(svg).toContain(`viewBox="0 0 ${m.length + 8} ${m.length + 8}"`)
-    expect(qrDataUrl('https://apex.test').startsWith('data:image/svg+xml')).toBe(true)
+    expect(qrDataUrl('https://atelier.test').startsWith('data:image/svg+xml')).toBe(true)
     const bmp = qrBitmap(m, 2)
     expect(bmp.width).toBe((m.length + 8) * 2)
     expect(bmp.data.length).toBe(bmp.width * bmp.height * 4)
@@ -109,11 +109,11 @@ describe('QR code', () => {
 describe('view source', () => {
   it('round-trips the address and only accepts web pages', () => {
     const url = viewSourceUrl('https://a.test/x?y=1&z=2')
-    expect(url).toBe('apex://view-source?url=https%3A%2F%2Fa.test%2Fx%3Fy%3D1%26z%3D2')
+    expect(url).toBe('atelier://view-source?url=https%3A%2F%2Fa.test%2Fx%3Fy%3D1%26z%3D2')
     expect(viewSourceTarget(url)).toBe('https://a.test/x?y=1&z=2')
-    expect(viewSourceTarget('apex://view-source?url=file%3A%2F%2F%2Fetc%2Fpasswd')).toBeNull()
-    expect(viewSourceTarget('apex://view-source')).toBeNull()
-    expect(viewSourceTarget('apex://history')).toBeNull()
+    expect(viewSourceTarget('atelier://view-source?url=file%3A%2F%2F%2Fetc%2Fpasswd')).toBeNull()
+    expect(viewSourceTarget('atelier://view-source')).toBeNull()
+    expect(viewSourceTarget('atelier://history')).toBeNull()
   })
 
   it('pretty-prints markup and keeps script text as it came', () => {

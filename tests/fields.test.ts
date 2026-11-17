@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -22,7 +22,7 @@ import {
 import { guardOfDescription, guardOfName } from '../src/main/autofill/agentGuard'
 import type { ElementDescription } from '@shared/ipc'
 
-// The page-field classifier against an Apex-written corpus, plus the
+// The page-field classifier against an Atelier-written corpus, plus the
 // form roles, guards and fill helpers built on it.
 
 interface Case {

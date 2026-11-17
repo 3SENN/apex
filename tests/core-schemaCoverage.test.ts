@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -55,7 +55,7 @@ const inert = (): unknown => {
 // Other features extend AppContext; the core features read only these fields.
 function fakeApp(): AppContext {
   return ({
-    dataDir: '/tmp/apex-test',
+    dataDir: '/tmp/atelier-test',
     settings: { get: () => ({}), view: () => ({}), on: () => undefined, off: () => undefined } as unknown as AppContext['settings'],
     agent: inert() as AppContext['agent'],
     windows: { list: () => [], focused: () => null, get: () => undefined, open: () => 1, openChat: () => 1, recentlyClosed: () => [], reopen: () => false } as unknown as AppContext['windows'],

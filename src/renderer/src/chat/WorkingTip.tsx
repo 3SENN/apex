@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { useEffect, useMemo, useState, type ReactElement } from 'react'
 import { Lightbulb, X } from 'lucide-react'
 import { tipsFor, type Tip } from '@shared/tips'
-import { apex, call } from '../api'
+import { atelier, call } from '../api'
 import { useT } from '../i18n/useT'
 import { IconButton, cx } from '../ui'
 import { useSettingsView } from './hooks'
@@ -30,7 +30,7 @@ function loadGuidance(): void {
     },
     () => undefined,
   )
-  apex.onAppEvent((event) => {
+  atelier.onAppEvent((event) => {
     if (event.type !== 'guidance') return
     dismissed = event.state.dismissedTips
     for (const l of listeners) l()
@@ -86,7 +86,7 @@ export function WorkingTip({ state }: { state: ChatState }): ReactElement | null
       <span className="ui-sr-only">{t('chatTools.tip.label')}: </span>
       <span className="cd-tip__text">{tip.text}</span>
       {tip.link && (
-        <button type="button" className="cd-tip__link" onClick={() => void call('pages', 'open', tip.link?.url ?? 'apex://guides').catch(() => undefined)}>{tip.link.label}</button>
+        <button type="button" className="cd-tip__link" onClick={() => void call('pages', 'open', tip.link?.url ?? 'atelier://guides').catch(() => undefined)}>{tip.link.label}</button>
       )}
       <IconButton size="sm" label={t('chatTools.tip.dismiss')} icon={<X />} className="cd-tip__close" onClick={() => dismissTip(tip.id)} />
     </p>

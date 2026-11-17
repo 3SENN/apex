@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -11,7 +11,7 @@ import type { ChatStore } from './chats'
 import { assert, captureWindow, sleep, waitFor, type Chrome } from './smokeKit'
 import type { TabManager } from './tabs'
 
-// Smoke checks for the getting-started page (apex://first-week): it opens
+// Smoke checks for the getting-started page (atelier://first-week): it opens
 // once when setup finishes, shows the plan with show more and less, and a
 // starter card starts a chat that the offline stand-in answers. With a
 // screenshot folder it also saves first-week.png (and the expanded plan and
@@ -22,13 +22,13 @@ export interface FirstWeekSmokeDeps {
   tabs: TabManager
   host: AgentHost
   chats: ChatStore
-  /** APEX_SMOKE_SHOTS, when set. */
+  /** ATELIER_SMOKE_SHOTS, when set. */
   dir: string | null
 }
 
 type Check = (name: string, fn: () => Promise<string>) => Promise<void>
 
-const firstWeekTabs = (tabs: TabManager): string[] => tabs.all().filter((t) => t.internalUrl?.startsWith('apex://first-week')).map((t) => t.id)
+const firstWeekTabs = (tabs: TabManager): string[] => tabs.all().filter((t) => t.internalUrl?.startsWith('atelier://first-week')).map((t) => t.id)
 const cards = `document.querySelectorAll('.fw-plan__grid .fw-card').length`
 const pillText = `(document.querySelector('.fw-pill')?.textContent || '').trim()`
 
@@ -108,7 +108,7 @@ export async function runFirstWeekChecks(deps: FirstWeekSmokeDeps, check: Check)
       chatId = chats.list().find((c) => !before.has(c.id))?.id ?? ''
       return Boolean(chatId)
     }, 8000, 'the new chat')
-    await waitFor(() => tabs.active()?.internalUrl === `apex://chat/${chatId}`, 5000, 'the chat page to open')
+    await waitFor(() => tabs.active()?.internalUrl === `atelier://chat/${chatId}`, 5000, 'the chat page to open')
     await waitFor(() => {
       const log = host.view(chatId).log as Array<{ type: string; text?: string }>
       return log.some((e) => e.type === 'text-delta' && (e.text ?? '').includes('offline stand-in'))
@@ -122,7 +122,7 @@ export async function runFirstWeekChecks(deps: FirstWeekSmokeDeps, check: Check)
 
   if (dir) {
     await check('screenshot of a guide', async () => {
-      const tab = tabs.create('apex://first-week/meet-your-companion')
+      const tab = tabs.create('atelier://first-week/meet-your-companion')
       await chrome.until(`return document.querySelector('.fw-guide .fw-doc h1')`, 5000, 'the guide')
       await shoot('first-week-guide', 900)
       tabs.close(tab.id)

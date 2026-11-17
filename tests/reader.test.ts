@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -210,7 +210,7 @@ describe('reader state per tab (RD-03)', () => {
 })
 
 describe('reader view state (RD-02, RD-05)', () => {
-  it('resolves the page colours against Apex’s mode', () => {
+  it('resolves the page colours against Atelier’s mode', () => {
     expect(readerSurface('auto', 'dark')).toBe('dark')
     expect(readerSurface('auto', 'light')).toBe('light')
     expect(readerSurface('sepia', 'dark')).toBe('sepia')

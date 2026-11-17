@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// apex-kit/character.js (docs/apps.md › The kit): a companion in an app's own
+// atelier-kit/character.js (docs/apps.md › The kit): a companion in an app's own
 // three.js scene, built by the same runtime that draws companions in the
 // chrome (src/renderer/src/companion), so a companion looks the same in
 // every app. The app adds `object3d` to its scene, calls `update(dt)` each
@@ -43,7 +43,7 @@ export interface KitCharacter {
 /** The clips a companion's rigs carry (docs/companion-system.md), and the walk and run every companion has. */
 export const clips: readonly string[] = [...CLIPS, ...MOTIONS]
 
-/** Builds a companion from a look (what apex.cast gives an app, or a look a friend's game sent). */
+/** Builds a companion from a look (what atelier.cast gives an app, or a look a friend's game sent). */
 export async function character(look: CompanionLook, options: { mood?: CompanionMood } = {}): Promise<KitCharacter> {
   const assets = await loadCompanionAssets()
   const normal = normalizeLook(look, assets.compatibility)

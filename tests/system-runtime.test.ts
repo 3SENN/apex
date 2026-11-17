@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -148,7 +148,7 @@ function setup(o: { platform?: 'darwin' | 'win32' | 'linux'; runInBackground?: b
 }
 
 beforeEach(() => {
-  dataDir = mkdtempSync(join(tmpdir(), 'apex-system-'))
+  dataDir = mkdtempSync(join(tmpdir(), 'atelier-system-'))
   fx.trays.length = 0
   fx.handlers.clear()
   vi.clearAllMocks()
@@ -282,8 +282,8 @@ describe('second launches', () => {
 
   it('sends companion files to the import review', async () => {
     const { runtime } = setup({ windows: [fakeWindow(1)] })
-    runtime.handleLaunch({ urls: [], companionFiles: ['/home/me/Ada.apexcompanion'], background: false })
-    await vi.waitFor(() => expect(fx.app.emit).toHaveBeenCalledWith('open-file', expect.anything(), '/home/me/Ada.apexcompanion'))
+    runtime.handleLaunch({ urls: [], companionFiles: ['/home/me/Ada.ateliercompanion'], background: false })
+    await vi.waitFor(() => expect(fx.app.emit).toHaveBeenCalledWith('open-file', expect.anything(), '/home/me/Ada.ateliercompanion'))
   })
 
   it(`ignores a login launch meeting a running ${BRAND_NAME}`, async () => {

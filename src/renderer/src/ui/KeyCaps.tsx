@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import type { ReactElement } from 'react'
 import { formatKeys, shortcutById, type ShortcutId } from '@shared/shortcuts'
-import { apex } from '../api'
+import { atelier } from '../api'
 import { cx } from './logic/format'
 import { shortcutParts } from './logic/shortcut'
 
@@ -25,14 +25,14 @@ export interface KeyCapsProps {
 }
 
 /** The caps for a table row on this platform, or [] when the id is unknown. */
-export function capsFor(shortcutId: string | null | undefined, platform: string = apex.platform): string[] {
+export function capsFor(shortcutId: string | null | undefined, platform: string = atelier.platform): string[] {
   if (!shortcutId) return []
   const def = shortcutById(shortcutId as ShortcutId)
   return def ? formatKeys(def, platform) : []
 }
 
 export function KeyCaps({ shortcutId, accelerator, keys, tone = 'default', className }: KeyCapsProps): ReactElement | null {
-  const caps = keys ?? (shortcutId ? capsFor(shortcutId) : accelerator ? shortcutParts(accelerator, apex.platform === 'darwin') : [])
+  const caps = keys ?? (shortcutId ? capsFor(shortcutId) : accelerator ? shortcutParts(accelerator, atelier.platform === 'darwin') : [])
   if (caps.length === 0) return null
   return (
     <span className={cx('ui-keycaps', tone === 'inverse' && 'ui-keycaps--inverse', className)} aria-hidden="true">

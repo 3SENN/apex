@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -55,10 +55,10 @@ describe('the mux order', () => {
     const s = fakeSession()
     const hook = vi.fn(() => null)
     const off = webRequestHooks.add({ onBeforeRequest: hook }, { sessions: 'all' })
-    webRequest.lockdown(s, ({ url }) => url.startsWith('apex-artifact:'))
+    webRequest.lockdown(s, ({ url }) => url.startsWith('atelier-artifact:'))
     const layers = layersFor(s, false, noCore)
     expect(layers).toHaveLength(1)
-    expect(runBeforeRequest(layers, req({ url: 'apex-artifact://x/index.html' }))).toEqual({})
+    expect(runBeforeRequest(layers, req({ url: 'atelier-artifact://x/index.html' }))).toEqual({})
     expect(runBeforeRequest(layers, req({ url: 'https://exfil.example/' }))).toEqual({ cancel: true })
     expect(hook).not.toHaveBeenCalled()
     expect(webRequest.lockdownFor(fakeSession())).toBeUndefined()

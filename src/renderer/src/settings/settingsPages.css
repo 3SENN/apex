@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -239,7 +239,7 @@
   background: var(--bg-subtle);
 }
 
-/* ---- Appearance: Apex's own drawings of the two layouts (ST-25) ---- */
+/* ---- Appearance: Atelier's own drawings of the two layouts (ST-25) ---- */
 
 .sp-layout-art {
   display: flex;
@@ -435,7 +435,7 @@
 
 /* ---- Storage (ST-53, ST-54) ---- */
 
-/* Eight slots in Apex's own palette; each holds its contrast on both grounds. */
+/* Eight slots in Atelier's own palette; each holds its contrast on both grounds. */
 .sp-page {
   --storage-1: light-dark(#5b6ee1, #8b9bff);
   --storage-2: light-dark(#d9822b, #f2a65a);
@@ -545,7 +545,7 @@
   white-space: nowrap;
 }
 
-/* ---- Reset Apex (ST-55) ---- */
+/* ---- Reset Atelier (ST-55) ---- */
 
 .sp-reset {
   display: flex;

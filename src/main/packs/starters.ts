@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,10 +6,10 @@
 // Starters for apps a companion builds (docs/apps.md › Companions as
 // builders): create_pack({ starter }) begins a draft from one of these, so
 // the first version already follows the rules: readable modules on the kit,
-// light and dark, keyboard use, and the test hook (apex.test.ready) that
+// light and dark, keyboard use, and the test hook (atelier.test.ready) that
 // test_pack's playtest reads. Each is small enough to read in one go. Pages
-// link Apex UI (the kit's ui.css, APP-UI) first, so they look like Apex.
-const KIT_UI = '/__apex/kit/1/apex-kit/ui.css'
+// link Atelier UI (the kit's ui.css, APP-UI) first, so they look like Atelier.
+const KIT_UI = '/__atelier/kit/1/atelier-kit/ui.css'
 import { BRAND_NAME } from '@shared/branding'
 import type { PackApp, PackManifest } from '@shared/packs'
 import { NO_PACK_PERMISSIONS } from '@shared/packs'
@@ -45,9 +45,9 @@ html, body { height: 100%; }
 `
 
 const GAME_3D = `// A companion on a stage: the arrow keys (or WASD) move it, and it cheers
-// when it reaches the star. three.js and apex-kit come from the ${BRAND_NAME} kit.
+// when it reaches the star. three.js and atelier-kit come from the ${BRAND_NAME} kit.
 import * as THREE from 'three'
-import { character } from 'apex-kit/character.js'
+import { character } from 'atelier-kit/character.js'
 
 const app = document.getElementById('app')
 const hud = Object.assign(document.createElement('div'), { className: 'hud', textContent: 'Find the star' })
@@ -77,7 +77,7 @@ camera.position.set(0, 4, 7.5)
 camera.lookAt(0, 0.5, 0)
 
 // The person's companion plays (the manifest's cast); a plain block stands in if there is none.
-const [me] = await apex.cast.members()
+const [me] = await atelier.cast.members()
 const player = me ? await character(me.look, { mood: 'idle' }) : null
 const body = player ? player.object3d : new THREE.Mesh(new THREE.BoxGeometry(0.6, 1, 0.6), new THREE.MeshToonMaterial({ color: new THREE.Color(token('--accent')) }))
 scene.add(body)
@@ -122,7 +122,7 @@ function frame(now) {
     hud.textContent = 'Stars: ' + score
     player?.setMood('happy')
     setTimeout(() => player?.setMood('idle'), 1200)
-    void apex.status.set({ text: score + ' stars', badge: score })
+    void atelier.status.set({ text: score + ' stars', badge: score })
     placeStar()
   }
   if ((blinkIn -= dt) < 0) {
@@ -131,7 +131,7 @@ function frame(now) {
   }
   player?.update(dt)
   renderer.render(scene, camera)
-  apex.test?.ready({ score, x: body.position.x, z: body.position.z })
+  atelier.test?.ready({ score, x: body.position.x, z: body.position.z })
   requestAnimationFrame(frame)
 }
 requestAnimationFrame(frame)
@@ -186,7 +186,7 @@ function frame(now) {
   if (Math.hypot(player.x - dot.x, player.y - dot.y) < player.r + dot.r) {
     score++
     hud.textContent = 'Score: ' + score
-    void apex.status.set({ text: 'Score ' + score, badge: score })
+    void atelier.status.set({ text: 'Score ' + score, badge: score })
     moveDot()
   }
   ctx.fillStyle = paint.page
@@ -199,7 +199,7 @@ function frame(now) {
   ctx.beginPath()
   ctx.arc(player.x, player.y, player.r, 0, Math.PI * 2)
   ctx.fill()
-  apex.test?.ready({ score, x: Math.round(player.x), y: Math.round(player.y) })
+  atelier.test?.ready({ score, x: Math.round(player.x), y: Math.round(player.y) })
   requestAnimationFrame(frame)
 }
 requestAnimationFrame(frame)
@@ -218,18 +218,18 @@ go.addEventListener('click', async () => {
   go.disabled = true
   out.textContent = ''
   try {
-    await apex.ai.stream(text, { tier: 'fast', onText: (piece) => (out.textContent += piece) })
+    await atelier.ai.stream(text, { tier: 'fast', onText: (piece) => (out.textContent += piece) })
   } catch (err) {
     out.textContent = err.message
   } finally {
     go.disabled = false
-    apex.test?.ready({ answered: out.textContent.length > 0 })
+    atelier.test?.ready({ answered: out.textContent.length > 0 })
   }
 })
-apex.test?.ready({ answered: false })
+atelier.test?.ready({ answered: false })
 `
 
-const SORTER = `// A sorter on ${BRAND_NAME}'s quick decisions (apex.ai.decide): one line per message,
+const SORTER = `// A sorter on ${BRAND_NAME}'s quick decisions (atelier.ai.decide): one line per message,
 // each gets a topic and an urgency with how sure the model is. No text is
 // written, so it runs in about a tenth of a second on the person's decision
 // model, or on their Claude engine when they have none. Unsure answers are
@@ -254,7 +254,7 @@ go.addEventListener('click', async () => {
     row.textContent = line + ' …'
     out.append(row)
     try {
-      const { answers, source } = await apex.ai.decide(line, {
+      const { answers, source } = await atelier.ai.decide(line, {
         topic: { type: 'choice', instructions: 'What is this message about?', criteria: TOPICS },
         urgency: { type: 'score', instructions: 'How soon does it need an answer?', criteria: URGENCY },
       })
@@ -270,9 +270,9 @@ go.addEventListener('click', async () => {
     }
   }
   go.disabled = false
-  apex.test?.ready({ sorted })
+  atelier.test?.ready({ sorted })
 })
-apex.test?.ready({ sorted: 0 })
+atelier.test?.ready({ sorted: 0 })
 `
 
 const STORY = `// A story told with the person's companion: the model can roll dice through
@@ -283,8 +283,8 @@ app.innerHTML = '<div class="ax-stack"><div id="log" class="log" aria-live="poli
 const log = document.getElementById('log')
 const input = document.getElementById('in')
 const go = document.getElementById('go')
-const [me] = await apex.cast.members()
-const session = apex.ai.session({
+const [me] = await atelier.cast.members()
+const session = atelier.ai.session({
   system: 'You narrate a short, kind adventure in the second person. Keep each turn under 90 words. Use roll_dice when luck decides.',
   tier: 'smart',
   tools: [{ name: 'roll_dice', description: 'Rolls a six-sided die.', input: { type: 'object', properties: {} }, run: () => 1 + Math.floor(Math.random() * 6) }],
@@ -298,15 +298,15 @@ go.addEventListener('click', async () => {
   try {
     const story = await session.send(text)
     log.textContent += story + '\\n'
-    if (me) log.textContent += me.name + ': ' + (await apex.cast.speak(me.ref, { situation: story.slice(0, 400) })) + '\\n'
+    if (me) log.textContent += me.name + ': ' + (await atelier.cast.speak(me.ref, { situation: story.slice(0, 400) })) + '\\n'
   } catch (err) {
     log.textContent += err.message + '\\n'
   } finally {
     go.disabled = false
-    apex.test?.ready({ turns: session.history().length })
+    atelier.test?.ready({ turns: session.history().length })
   }
 })
-apex.test?.ready({ turns: 0 })
+atelier.test?.ready({ turns: 0 })
 `
 
 /** A starter's files and manifest for a new draft. */
@@ -317,11 +317,11 @@ export function starterFiles(starter: Starter, base: Pick<PackManifest, 'id' | '
     ...NO_PACK_PERMISSIONS,
     ...(starter === 'tool' || starter === 'story' || starter === 'sorter' ? { model: true } : {}),
     ...(starter === 'story' ? { speak: true } : {}),
-    // Its own web server on the Wi-Fi, for the phone page (apex.server).
+    // Its own web server on the Wi-Fi, for the phone page (atelier.server).
     ...(starter === 'phone-controller' ? { server: { lan: true } } : {}),
   }
   const manifest: PackManifest = {
-    format: 'apex-pack',
+    format: 'atelier-pack',
     manifestVersion: 2,
     id: base.id,
     name: base.name,
@@ -333,7 +333,7 @@ export function starterFiles(starter: Starter, base: Pick<PackManifest, 'id' | '
   }
   const main = starter === 'game-3d' ? GAME_3D : starter === 'game-2d' ? GAME_2D : starter === 'tool' ? TOOL : starter === 'phone-controller' ? PHONE_APP : starter === 'sorter' ? SORTER : STORY
   const files = new Map([
-    ['apex-pack.json', Buffer.from(`${JSON.stringify(manifest, null, 2)}\n`)],
+    ['atelier-pack.json', Buffer.from(`${JSON.stringify(manifest, null, 2)}\n`)],
     ['app/index.html', Buffer.from(PAGE(base.name))],
     ['app/style.css', Buffer.from(starter === 'phone-controller' ? PHONE_APP_STYLE : STYLE)],
     ['app/main.js', Buffer.from(main)],

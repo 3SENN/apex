@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -111,7 +111,7 @@ export function DownloadSettingsPage({ settings, update }: SettingsPageProps): R
       <Section>
         <Card>
           <Row id="downloads-list" title={t('downloads.settings.list')} description={t('downloads.settings.listDetail')}>
-            <Button size="sm" icon={<Download />} onClick={() => void call('pages', 'open', 'apex://downloads')}>
+            <Button size="sm" icon={<Download />} onClick={() => void call('pages', 'open', 'atelier://downloads')}>
               {t('downloads.settings.open')}
             </Button>
           </Row>

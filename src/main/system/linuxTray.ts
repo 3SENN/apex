@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -8,7 +8,7 @@ import { execFile } from 'node:child_process'
 // Linux tray support varies: Electron's tray is a StatusNotifierItem, shown
 // only when the session runs a StatusNotifierWatcher (KDE, or GNOME with the
 // AppIndicator extension); some panels still take the older XEmbed tray.
-// Without either, background mode would leave Apex running invisibly, so the
+// Without either, background mode would leave Atelier running invisibly, so the
 // row is hidden (trayAvailable() false).
 
 /** Panels that host tray icons even without a watcher on the bus. */

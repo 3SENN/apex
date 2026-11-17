@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -23,7 +23,7 @@ import { CompanionStore } from '../src/main/companions'
 const FIXTURES = join(__dirname, 'fixtures', 'chats')
 const fixtureText = (...path: string[]): string => readFileSync(join(FIXTURES, ...path), 'utf8')
 const fixture = (...path: string[]): Record<string, unknown> => JSON.parse(fixtureText(...path)) as Record<string, unknown>
-const tempDir = (): string => mkdtempSync(join(tmpdir(), 'apex-migrations-'))
+const tempDir = (): string => mkdtempSync(join(tmpdir(), 'atelier-migrations-'))
 
 afterEach(() => resetNewerFiles())
 
@@ -147,7 +147,7 @@ describe('the runner', () => {
     expect(readdirSync(backupDir)).toEqual([`${ID}.v0.json`])
   })
 
-  it('never writes a file a newer Apex saved, and still shows what it can', () => {
+  it('never writes a file a newer Atelier saved, and still shows what it can', () => {
     const text = fixtureText('newer', 'v9.json')
     const { file, backupDir, ref } = setup(text)
     const result = upgradeChatFile(ref)

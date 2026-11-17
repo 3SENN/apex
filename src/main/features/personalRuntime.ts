@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -59,7 +59,7 @@ export interface Wallet {
 }
 
 export interface Authenticator {
-  /** Touch ID, then the helper's device-owner check, then (off macOS) an Apex confirm dialog; 'ok' in smoke. */
+  /** Touch ID, then the helper's device-owner check, then (off macOS) an Atelier confirm dialog; 'ok' in smoke. */
   authenticate(reason: string): Promise<'ok' | 'cancelled' | 'unavailable'>
 }
 
@@ -83,7 +83,7 @@ export interface AppNotice {
   category: 'meetings' | 'passwords'
   title: string
   body?: string
-  /** An apex:// address to open when the notification is clicked. */
+  /** An atelier:// address to open when the notification is clicked. */
   target?: string
 }
 
@@ -96,7 +96,7 @@ export interface PersonalAppContext {
   quick: QuickModel
   notify(n: AppNotice): void
   signal(id: GettingStartedSignal): void
-  /** APEX_SMOKE: fake helper, Authenticator 'ok', no globalShortcut, short meeting-card delay. */
+  /** ATELIER_SMOKE: fake helper, Authenticator 'ok', no globalShortcut, short meeting-card delay. */
   smoke: boolean
   personal: PersonalRuntime
 }

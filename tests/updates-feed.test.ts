@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -63,8 +63,8 @@ describe('the support feed', () => {
 
   it('fetches without credentials or a referrer, and gives up quietly', async () => {
     const ok = vi.fn(async () => new Response(JSON.stringify({ schema: 1, unsupported: [] }), { status: 200 }))
-    const url = supportFeedUrl({ owner: 'me', name: 'apex' })
-    expect(url).toBe('https://github.com/me/apex/releases/latest/download/apex-support.json')
+    const url = supportFeedUrl({ owner: 'me', name: 'atelier' })
+    expect(url).toBe('https://github.com/me/atelier/releases/latest/download/atelier-support.json')
     expect(await fetchSupportFeed(url, ok as unknown as typeof fetch)).toEqual({ schema: 1, unsupported: [] })
     const init = (ok.mock.calls[0] as unknown as [string, RequestInit])[1]
     expect(init).toMatchObject({ credentials: 'omit', referrerPolicy: 'no-referrer' })
@@ -97,7 +97,7 @@ describe('free space', () => {
   })
 
   it('reads the volume of the nearest existing folder', async () => {
-    const free = await freeBytes(join(tmpdir(), 'apex-missing', 'deeper'))
+    const free = await freeBytes(join(tmpdir(), 'atelier-missing', 'deeper'))
     expect(typeof free).toBe('number')
     expect(updaterCacheDir({ platform: 'darwin', home: '/Users/a' })).toBe(join('/Users/a/Library/Caches'))
     expect(updaterCacheDir({ platform: 'linux', home: '/home/a' })).toBe(join('/home/a/.cache'))
@@ -140,7 +140,7 @@ describe('updates.json', () => {
   })
 
   it('persists a snooze across a reload, and reads a damaged file as empty', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-updates-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-updates-'))
     const store = new UpdatesStore(dir)
     store.update({ unsupportedSnoozeUntil: 12345 })
     expect(new UpdatesStore(dir).get().unsupportedSnoozeUntil).toBe(12345)

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -18,7 +18,7 @@ afterEach(() => {
 })
 
 function setup(live: Map<string, Buffer> = new Map()) {
-  const dir = mkdtempSync(join(tmpdir(), 'apex-versions-'))
+  const dir = mkdtempSync(join(tmpdir(), 'atelier-versions-'))
   dirs.push(dir)
   let now = 1_000_000
   const target: VersionTarget = {

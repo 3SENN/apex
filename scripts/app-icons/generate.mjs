@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
-// Apex's app icon set, generated from code: the official branding's art,
+// Atelier's app icon set, generated from code: the official branding's art,
 // written into branding/official/ (the unofficial branding's plain icons come
 // from scripts/app-icons/unofficial.mjs).
 //
@@ -14,13 +14,13 @@
 //   node scripts/app-icons/generate.mjs --previews <dir>  write the logo variants and size sheets for review
 //
 // The logo is the brand mark: Pip drawn flat, with its sprout and two smiling
-// eyes, as vector shapes in art.mjs (the same grid as apexbrowser.eu's
+// eyes, as vector shapes in art.mjs (the same grid as atelierbrowser.eu's
 // mark.svg). The app icon is the mark in white on a flat violet tile. The
 // companion and pack documents show the companions themselves: render-pip.mjs
 // renders those with the app's own companion renderer into branding/official/art/,
 // where they are committed. The art lives in art.mjs (the mark, the tile, trays,
 // documents, installer art, the in-app mark) and iconbundle.mjs
-// (Apex.icon for Icon Composer). lib/ holds a small rasterizer with
+// (Atelier.icon for Icon Composer). lib/ holds a small rasterizer with
 // area-averaged bitmap resampling, and the PNG, ICNS, ICO and BMP writers, so
 // nothing here needs Electron, a GPU, ImageMagick or macOS. The same sources
 // give the same pixels on every machine.
@@ -33,14 +33,14 @@
 //
 // Outputs (under branding/official/) and who reads them:
 //   icon.icns                  macOS app icon, 16 to 1024 px (fallback before macOS 26)
-//   Apex.icon/                 macOS 26 Icon Composer document (light, dark, tinted, clear)
+//   Atelier.icon/                 macOS 26 Icon Composer document (light, dark, tinted, clear)
 //   icon.ico                   Windows app, installer and uninstaller icon
 //   icon.png                   1024 px, electron-builder's common icon
 //   icons/NxN.png              Linux hicolor set
-//   html-document.ico          Windows icon for .html files Apex opens
-//   apexcompanion.ico          Windows icon for exported companions
-//   apexpack.ico               Windows icon for packs (docs/packs.md): the group picture
-//   resources/icons/app-N.png  runtime: the standard Apex icon (the Dock's fallback in development)
+//   html-document.ico          Windows icon for .html files Atelier opens
+//   ateliercompanion.ico          Windows icon for exported companions
+//   atelierpack.ico               Windows icon for packs (docs/packs.md): the group picture
+//   resources/icons/app-N.png  runtime: the standard Atelier icon (the Dock's fallback in development)
 //   renderer/mark-N.png        the in-app mark (BrandMark)
 //   renderer/app-icon-128.png  the standard icon in Settings › Dock icon
 //   resources/tray/trayTemplate.png, trayTemplate@2x.png
@@ -52,8 +52,8 @@
 //   svg/*.svg                  the art as SVG, for review and editing tools
 // With --release-art (`npm run icons`; electron-builder.yml packages these, and a
 // plain run keeps them current once they exist):
-//   html-document.icns, apexcompanion.icns, apexcompanion.png,
-//   apexpack.icns, apexpack.png
+//   html-document.icns, ateliercompanion.icns, ateliercompanion.png,
+//   atelierpack.icns, atelierpack.png
 //   dmg-background.png, dmg-background@2x.png  (540×380 pt window)
 //   installerSidebar.bmp  (NSIS welcome and finish pages, 164×314)
 
@@ -145,10 +145,10 @@ export const TARGETS = [
   { path: `${OFFICIAL}/icon.ico`, kind: 'ico', images: ICO_SIZES, build: () => ico('flat', ICO_SIZES) },
   { path: `${OFFICIAL}/icon.png`, kind: 'png', images: [1024], build: () => png('flat', 1024) },
   ...LINUX_SIZES.map((s) => ({ path: `${OFFICIAL}/icons/${s}x${s}.png`, kind: 'png', images: [s], build: () => png('flat', s) })),
-  ...BUNDLE_FILES.map(([p, kind]) => ({ path: `${OFFICIAL}/Apex.icon/${p}`, kind, images: kind === 'png' ? [1024] : [], build: () => iconBundleFile(p) })),
+  ...BUNDLE_FILES.map(([p, kind]) => ({ path: `${OFFICIAL}/Atelier.icon/${p}`, kind, images: kind === 'png' ? [1024] : [], build: () => iconBundleFile(p) })),
   { path: `${OFFICIAL}/html-document.ico`, kind: 'ico', images: ICO_SIZES, build: () => ico('htmlFlat', ICO_SIZES) },
-  { path: `${OFFICIAL}/apexcompanion.ico`, kind: 'ico', images: ICO_SIZES, build: () => ico('companionFlat', ICO_SIZES) },
-  { path: `${OFFICIAL}/apexpack.ico`, kind: 'ico', images: ICO_SIZES, build: () => ico('packFlat', ICO_SIZES) },
+  { path: `${OFFICIAL}/ateliercompanion.ico`, kind: 'ico', images: ICO_SIZES, build: () => ico('companionFlat', ICO_SIZES) },
+  { path: `${OFFICIAL}/atelierpack.ico`, kind: 'ico', images: ICO_SIZES, build: () => ico('packFlat', ICO_SIZES) },
   ...RESOURCE_SIZES.map((s) => ({ path: `${OFFICIAL}/resources/icons/app-${s}.png`, kind: 'png', images: [s], build: () => png('mac', s) })),
   ...MARK_SIZES.map((s) => ({ path: `${OFFICIAL}/renderer/mark-${s}.png`, kind: 'png', images: [s], build: () => png('mark', s) })),
   { path: `${OFFICIAL}/renderer/app-icon-128.png`, kind: 'png', images: [128], build: () => png('mac', 128) },
@@ -158,19 +158,19 @@ export const TARGETS = [
   { path: `${OFFICIAL}/resources/tray/tray-dark.ico`, kind: 'ico', images: TRAY_ICO_SIZES, build: () => ico('trayDark', TRAY_ICO_SIZES) },
   { path: `${OFFICIAL}/resources/tray/tray.png`, kind: 'png', images: [LINUX_TRAY.size], build: () => png('flat', LINUX_TRAY.size) },
   { path: `${OFFICIAL}/resources/tray/tray@2x.png`, kind: 'png', images: [LINUX_TRAY.size * 2], build: () => png('flat', LINUX_TRAY.size * 2) },
-  { path: `${OFFICIAL}/svg/apex-icon-mac.svg`, kind: 'svg', images: [], build: () => svg('mac', 1024, 'Apex') },
-  { path: `${OFFICIAL}/svg/apex-icon-mac-dark.svg`, kind: 'svg', images: [], build: () => svg('macDark', 1024, 'Apex') },
-  { path: `${OFFICIAL}/svg/apex-icon-flat.svg`, kind: 'svg', images: [], build: () => svg('flat', 1024, 'Apex') },
-  { path: `${OFFICIAL}/svg/tray-template.svg`, kind: 'svg', images: [], build: () => svg('template', MAC_TRAY.size * 2, 'Apex') },
+  { path: `${OFFICIAL}/svg/atelier-icon-mac.svg`, kind: 'svg', images: [], build: () => svg('mac', 1024, 'Atelier') },
+  { path: `${OFFICIAL}/svg/atelier-icon-mac-dark.svg`, kind: 'svg', images: [], build: () => svg('macDark', 1024, 'Atelier') },
+  { path: `${OFFICIAL}/svg/atelier-icon-flat.svg`, kind: 'svg', images: [], build: () => svg('flat', 1024, 'Atelier') },
+  { path: `${OFFICIAL}/svg/tray-template.svg`, kind: 'svg', images: [], build: () => svg('template', MAC_TRAY.size * 2, 'Atelier') },
   { path: `${OFFICIAL}/svg/html-document.svg`, kind: 'svg', images: [], build: () => svg('htmlMac', 1024, 'HTML document') },
-  { path: `${OFFICIAL}/svg/apexcompanion.svg`, kind: 'svg', images: [], build: () => svg('companionMac', 1024, 'Apex companion') },
-  { path: `${OFFICIAL}/svg/apexpack.svg`, kind: 'svg', images: [], build: () => svg('packMac', 1024, 'Apex pack') },
+  { path: `${OFFICIAL}/svg/ateliercompanion.svg`, kind: 'svg', images: [], build: () => svg('companionMac', 1024, 'Atelier companion') },
+  { path: `${OFFICIAL}/svg/atelierpack.svg`, kind: 'svg', images: [], build: () => svg('packMac', 1024, 'Atelier pack') },
   // The installer and document art electron-builder.yml packages; written with --release-art.
   { path: `${OFFICIAL}/html-document.icns`, kind: 'icns', images: ICNS_SIZES, release: true, build: () => icns('htmlMac') },
-  { path: `${OFFICIAL}/apexcompanion.icns`, kind: 'icns', images: ICNS_SIZES, release: true, build: () => icns('companionMac') },
-  { path: `${OFFICIAL}/apexcompanion.png`, kind: 'png', images: [512], release: true, build: () => png('companionFlat', 512) },
-  { path: `${OFFICIAL}/apexpack.icns`, kind: 'icns', images: ICNS_SIZES, release: true, build: () => icns('packMac') },
-  { path: `${OFFICIAL}/apexpack.png`, kind: 'png', images: [512], release: true, build: () => png('packFlat', 512) },
+  { path: `${OFFICIAL}/ateliercompanion.icns`, kind: 'icns', images: ICNS_SIZES, release: true, build: () => icns('companionMac') },
+  { path: `${OFFICIAL}/ateliercompanion.png`, kind: 'png', images: [512], release: true, build: () => png('companionFlat', 512) },
+  { path: `${OFFICIAL}/atelierpack.icns`, kind: 'icns', images: ICNS_SIZES, release: true, build: () => icns('packMac') },
+  { path: `${OFFICIAL}/atelierpack.png`, kind: 'png', images: [512], release: true, build: () => png('packFlat', 512) },
   { path: `${OFFICIAL}/dmg-background.png`, kind: 'png', images: [[art.DMG.width, art.DMG.height]], release: true, build: () => dmg(1) },
   { path: `${OFFICIAL}/dmg-background@2x.png`, kind: 'png', images: [[art.DMG.width * 2, art.DMG.height * 2]], release: true, build: () => dmg(2) },
   { path: `${OFFICIAL}/installerSidebar.bmp`, kind: 'bmp', images: [[art.SIDEBAR.width, art.SIDEBAR.height]], release: true, build: () => sidebar() }
@@ -180,7 +180,7 @@ let bundle = null
 function iconBundleFile(p) {
   bundle ??= buildIconBundle()
   const c = bundle.get(p)
-  if (c == null) throw new Error(`Apex.icon has no ${p}`)
+  if (c == null) throw new Error(`Atelier.icon has no ${p}`)
   return c
 }
 
@@ -364,7 +364,7 @@ function parseArgs(argv) {
   return opts
 }
 
-const ABOUT = 'Apex app icons, generated by scripts/app-icons/generate.mjs. sha256 is the file; content is the decoded pixels (or text).'
+const ABOUT = 'Atelier app icons, generated by scripts/app-icons/generate.mjs. sha256 is the file; content is the decoded pixels (or text).'
 
 /**
  * Generates (or checks) every target under `out`. Returns

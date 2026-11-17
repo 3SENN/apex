@@ -1,17 +1,17 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // The platform feature module (`platform` in FEATURES): sandboxed agent apps,
-// CSV tables, apex://flags, the Calendar and Reminders helper, app links
+// CSV tables, atelier://flags, the Calendar and Reminders helper, app links
 // and site suggestions.
 import { mkdtempSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { app as electronApp, shell, type Session } from 'electron'
 import { APP_LINK_RULES, type AppLinkRule } from '@shared/appLinks'
-import { APEX_APP_PARTITION_PREFIX, parseAppUrl, type AppSummary } from '@shared/apps'
+import { ATELIER_APP_PARTITION_PREFIX, parseAppUrl, type AppSummary } from '@shared/apps'
 import { isAppRunUrl } from '@shared/url'
 import { DEFAULT_ACTIVITY_SETTINGS } from '@shared/activity'
 import { isExcluded } from '@shared/exclusions'
@@ -19,7 +19,7 @@ import { isFlagOn } from '@shared/flags'
 import type { Services } from '@shared/services'
 import type { SuggestionConnector } from '@shared/siteSuggestions'
 import { contributeToolSetup, type ToolSetup } from '../agent/tools/registry'
-import { handleApexAppElsewhere } from '../appProtocol'
+import { handleAtelierAppElsewhere } from '../appProtocol'
 import { CalendarService, calendarHelperPath } from '../calendar'
 import { openDb } from '../db'
 import { createFlags } from '../flags'
@@ -72,7 +72,7 @@ export const smokeOpened: string[] = []
 export const appsSmoke: { preview: ((appId: string, versionId: string) => Promise<DraftPreview>) | null } = { preview: null }
 
 /** A test-only app link for the smoke fixture server. */
-const SMOKE_LINK: AppLinkRule = { key: 'smoke', app: 'Apex Test App', scheme: 'apex-smoke', hosts: ['127.0.0.1', 'localhost'], map: (url) => `apex-smoke://open${url.pathname}` }
+const SMOKE_LINK: AppLinkRule = { key: 'smoke', app: 'Atelier Test App', scheme: 'atelier-smoke', hosts: ['127.0.0.1', 'localhost'], map: (url) => `atelier-smoke://open${url.pathname}` }
 
 /** Registers the platform's client tools; the feature calls it with its stores. Kept under its contract name. */
 export function registerPlatformTools(deps?: { apps: Parameters<typeof registerAppTools>[0]; tables: Parameters<typeof registerTableTools>[0]; calendar: CalendarService }): void {
@@ -103,7 +103,7 @@ export function createPlatformFeatures(): Feature {
     name: 'platform',
     app(ctx: AppContext) {
       const services = (): Services | null => boundServices
-      const exportDir = ctx.smoke ? mkdtempSync(join(tmpdir(), 'apex-smoke-d6-')) : null
+      const exportDir = ctx.smoke ? mkdtempSync(join(tmpdir(), 'atelier-smoke-d6-')) : null
 
       // Flags.
       const flags = createFlags({ settings: ctx.settings, broadcast: ctx.broadcast, relaunch: ctx.smoke ? () => log.info('flags', 'relaunch skipped in smoke') : undefined })
@@ -111,7 +111,7 @@ export function createPlatformFeatures(): Feature {
       // Apps.
       const appStore = new AppStore(ctx.dataDir)
       appStoreRef = appStore
-      // APP-UI: every app is served with Apex UI in the colours of the companion that made it.
+      // APP-UI: every app is served with Atelier UI in the colours of the companion that made it.
       const appAccent = (appId: string): string | null => {
         const companions = services()?.companions.list() ?? []
         let app: AppSummary | null = null
@@ -150,7 +150,7 @@ export function createPlatformFeatures(): Feature {
         dataDir: ctx.dataDir,
         broadcast: ctx.broadcast,
         // Smoke picks the fixture through the environment instead of a dialog.
-        pickPath: ctx.smoke ? () => process.env.APEX_SMOKE_TABLE_CSV ?? null : undefined,
+        pickPath: ctx.smoke ? () => process.env.ATELIER_SMOKE_TABLE_CSV ?? null : undefined,
         savePath: exportDir ? (name) => join(exportDir, `${name}.csv`) : undefined,
       })
 
@@ -245,8 +245,8 @@ export function createPlatformFeatures(): Feature {
       }
     },
     session(session, info) {
-      // Every other session answers apex-app:// with a plain page; only an app's own partition serves it.
-      if (!info.partition.startsWith(APEX_APP_PARTITION_PREFIX)) handleApexAppElsewhere(session)
+      // Every other session answers atelier-app:// with a plain page; only an app's own partition serves it.
+      if (!info.partition.startsWith(ATELIER_APP_PARTITION_PREFIX)) handleAtelierAppElsewhere(session)
     },
     window(win) {
       win.tabs.on('navigated', (tab, nav) => {
@@ -258,7 +258,7 @@ export function createPlatformFeatures(): Feature {
     },
     tab(tab, win) {
       hardenTab(tab)
-      // An apex-app:// address opened as a plain tab (a link, Workspace's file
+      // An atelier-app:// address opened as a plain tab (a link, Workspace's file
       // opener) reopens in its own sandbox: the web session never serves apps.
       if (!tab.sandbox && sandbox && isAppRunUrl(tab.requestedUrl)) {
         const target = parseAppUrl(tab.requestedUrl)

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -58,13 +58,13 @@ describe('details panel: files and the slot below the card (DS-49, DS-123)', () 
   })
 
   it('offers a way to connect when the chat cannot reply', () => {
-    expect(detailsPrompt({ canSend: false, engine: 'api-key', spend: null })).toEqual({ kind: 'api-key', url: 'apex://settings/model' })
+    expect(detailsPrompt({ canSend: false, engine: 'api-key', spend: null })).toEqual({ kind: 'api-key', url: 'atelier://settings/model' })
   })
 
   it('mentions your own budget only once it is mostly used, and never on another engine', () => {
     const spend = (usd: number, budgetUsd: number | null) => ({ usd, budgetUsd })
     expect(detailsPrompt({ canSend: true, engine: 'api-key', spend: spend(5, 10) })).toBeNull()
-    expect(detailsPrompt({ canSend: true, engine: 'api-key', spend: spend(8.5, 10) })).toEqual({ kind: 'budget', url: 'apex://settings/you', usd: 8.5, budgetUsd: 10 })
+    expect(detailsPrompt({ canSend: true, engine: 'api-key', spend: spend(8.5, 10) })).toEqual({ kind: 'budget', url: 'atelier://settings/you', usd: 8.5, budgetUsd: 10 })
     expect(detailsPrompt({ canSend: true, engine: 'api-key', spend: spend(50, null) })).toBeNull()
     expect(detailsPrompt({ canSend: true, engine: 'another-engine', spend: spend(9, 10) })).toBeNull()
     expect(detailsPrompt({ canSend: true, engine: 'api-key', spend: null })).toBeNull()

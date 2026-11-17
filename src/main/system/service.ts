@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -43,7 +43,7 @@ export interface SystemDeps {
   routines: RoutineRunInfo
   /** The MeetingRecorder (ctx.personal.recorder): "Recording a meeting", with Stop. */
   meetings: MeetingRecorder
-  /** The WindowManager: Open Apex, New Window, and the window count for backgroundPolicy. */
+  /** The WindowManager: Open Atelier, New Window, and the window count for backgroundPolicy. */
   windows: WindowManager
   /** Unread and needs-you counts for the tray and the taskbar. */
   attention: AttentionFeed
@@ -136,7 +136,7 @@ export class SystemRuntime {
   openLoginItemsSettings(): void {
     const url = LOGIN_ITEMS_URL[this.platform]
     if (!url) throw new Error(mainT('system.general.openAtLogin.unpackaged'))
-    // Smoke never leaves Apex; it checks the request instead.
+    // Smoke never leaves Atelier; it checks the request instead.
     if (this.#deps.smoke) {
       this.record.opened.push(url)
       return
@@ -166,7 +166,7 @@ export class SystemRuntime {
     return backgroundPolicy({ platform: this.platform, runInBackground: this.runInBackground(), windowCount: this.#visibleWindows().length, quitting: this.#quitting, openedAtLogin: o.openedAtLogin })
   }
 
-  /** The last window closed. True when Apex keeps running; false and the caller quits. */
+  /** The last window closed. True when Atelier keeps running; false and the caller quits. */
   windowAllClosed(): boolean {
     const decision = this.decide({ openedAtLogin: false })
     log.info('system', 'Last window closed', { decision })
@@ -207,7 +207,7 @@ export class SystemRuntime {
     if (notice) this.#stillRunningNotice()
   }
 
-  /** The one-time "still running" notice, the first time Apex stays in the background. */
+  /** The one-time "still running" notice, the first time Atelier stays in the background. */
   #stillRunningNotice(): void {
     const state = this.#systemState()
     if (state.backgroundNoticeShown) return
@@ -216,7 +216,7 @@ export class SystemRuntime {
     if (this.#deps.smoke || !Notification.isSupported()) return
     const body = mainT(this.platform === 'darwin' ? 'system.background.stillRunning.mac' : this.platform === 'win32' ? 'system.background.stillRunning.win' : 'system.background.stillRunning.linux')
     const note = new Notification({ title: mainT('system.background.stillRunning.title'), body, silent: true })
-    note.on('click', () => void this.openApex())
+    note.on('click', () => void this.openAtelier())
     note.show()
   }
 
@@ -227,8 +227,8 @@ export class SystemRuntime {
     await app.dock?.show().catch(() => undefined)
   }
 
-  /** Open Apex: the existing window (hidden ones too), else the last closed one, else a new one. */
-  async openApex(): Promise<WindowContext | null> {
+  /** Open Atelier: the existing window (hidden ones too), else the last closed one, else a new one. */
+  async openAtelier(): Promise<WindowContext | null> {
     await this.#showDock()
     const existing = this.#appWindows()
     const win = this.#deps.windows.focused() ?? existing[0] ?? null
@@ -260,7 +260,7 @@ export class SystemRuntime {
   syncTray(): void {
     const want = this.runInBackground()
     if (want && !this.#tray?.shown) {
-      this.#tray ??= new TrayIcon({ platform: this.platform, onClick: () => void this.openApex() })
+      this.#tray ??= new TrayIcon({ platform: this.platform, onClick: () => void this.openAtelier() })
       this.#tray.show()
       this.#timer = setInterval(() => this.renderTray(), TRAY_REFRESH_MS)
       this.#timer.unref?.()
@@ -312,7 +312,7 @@ export class SystemRuntime {
     switch (item.id) {
       case TRAY_IDS.open:
       case TRAY_IDS.needsYou:
-        await this.openApex()
+        await this.openAtelier()
         return
       case TRAY_IDS.newWindow: {
         await this.#showDock()
@@ -320,13 +320,13 @@ export class SystemRuntime {
           try {
             this.#deps.windows.open('normal')
           } catch {
-            await this.openApex()
+            await this.openAtelier()
           }
         }
         return
       }
       case TRAY_IDS.newChat: {
-        const win = await this.openApex()
+        const win = await this.openAtelier()
         // The chrome takes New Chat as a menu command until the command is registered.
         if (!(await this.#command('new-chat')) && win && !win.chrome.isDestroyed()) win.chrome.send(UI.command, 'new-chat')
         return
@@ -368,12 +368,12 @@ export class SystemRuntime {
   // ---- second launches ----
 
   handleLaunch(targets: LaunchTargets): void {
-    // A login launch meeting a running Apex changes nothing.
+    // A login launch meeting a running Atelier changes nothing.
     if (targets.urls.length === 0 && targets.companionFiles.length === 0) {
-      if (!targets.background) void this.openApex()
+      if (!targets.background) void this.openAtelier()
       return
     }
-    void this.openApex().then(() => {
+    void this.openAtelier().then(() => {
       // Outside links never land in a private or chat window (the window manager's rule for open-url).
       const urls = [...targets.urls]
       let target = linkWindow(this.#deps.windows.focused(), this.#appWindows())
@@ -423,7 +423,7 @@ export class SystemRuntime {
       this.#quitAt = Date.now()
     })
     on('activate', (_e: unknown, hasVisibleWindows: boolean) => {
-      if (!hasVisibleWindows && this.#visibleWindows().length === 0) void this.openApex()
+      if (!hasVisibleWindows && this.#visibleWindows().length === 0) void this.openAtelier()
     })
     on('second-instance', (_e: unknown, argv: string[], cwd: string) => {
       this.handleLaunch(parseLaunchArgs(argv, { cwd, platform: this.platform, isFile: isFile }))
@@ -435,7 +435,7 @@ export class SystemRuntime {
       this.#recheckLoginItem()
     })
     on('browser-window-created', (_e: unknown, win: BrowserWindow) => {
-      // Floats and overlay children are windows too; only Apex's own windows bring the Dock back.
+      // Floats and overlay children are windows too; only Atelier's own windows bring the Dock back.
       win.once('show', () => {
         if (!this.#appWindows().some((w) => w.window === win)) return
         void this.#showDock()

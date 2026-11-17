@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -120,7 +120,7 @@ describe('manual outcomes', () => {
 const presets: CompanionPreset[] = [{ id: 'nova', name: 'Nova', tagline: '', personality: 'Curious.', look: DEFAULT_LOOK }]
 
 function setup(model = 'claude-opus-5-5') {
-  const dir = mkdtempSync(join(tmpdir(), 'apex-compact-'))
+  const dir = mkdtempSync(join(tmpdir(), 'atelier-compact-'))
   const chats = new ChatStore(dir, FIRST_COMPANION_ID)
   const events: ChatAgentEvent[] = []
   const smoke = createSmokeClient()

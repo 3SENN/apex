@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -72,7 +72,7 @@ export class RoutineRunStore extends EventEmitter<{ changed: [string | null] }> 
     super()
     this.#db = openDb(path)
     migrate(this.#db, 'routine-runs', STEPS)
-    // Runs that were going when Apex quit never finished.
+    // Runs that were going when Atelier quit never finished.
     this.#db.prepare("UPDATE runs SET status = 'stopped', finished_at = started_at WHERE status = 'running'").run()
   }
 

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -144,13 +144,13 @@ describe('chat export', () => {
 
   it('makes safe file names', () => {
     expect(exportFileName('Trip: Lisbon / Porto?', 'md')).toBe('Trip Lisbon Porto.md')
-    expect(exportFileName('   ', 'apexcompanion')).toBe('Untitled.apexcompanion')
+    expect(exportFileName('   ', 'ateliercompanion')).toBe('Untitled.ateliercompanion')
   })
 })
 
 describe('chat store', () => {
   it('migrates an old index: companion, model from the chat file, missing summary fields', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-chats-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-chats-'))
     mkdirSync(join(dir, 'chats'))
     writeFileSync(join(dir, 'chats', 'index.json'), JSON.stringify([{ id: ID(1), title: 'Old chat', createdAt: 1, updatedAt: 2, routineId: null }, { id: 'bad', title: 'x' }]))
     writeFileSync(join(dir, 'chats', `${ID(1)}.json`), JSON.stringify({ ...content(ID(1)), capabilities: { model: 'claude-sonnet-5-5', browser: true, webTools: true, memory: true, connectorIds: [] } }))
@@ -164,7 +164,7 @@ describe('chat store', () => {
   })
 
   it('saves, updates flags without touching content, duplicates and removes', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-chats-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-chats-'))
     const store = new ChatStore(dir, 'companion-1')
     const events: number[] = []
     store.on('changed', (items) => events.push(items.length))
@@ -195,7 +195,7 @@ describe('chat store', () => {
   })
 
   it('answers tool calls left without results by a quit or crash, so the next request is valid', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-chats-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-chats-'))
     const store = new ChatStore(dir, 'companion-1')
     const dangling = content(ID(1))
     dangling.messages = [
@@ -226,7 +226,7 @@ describe('chat store', () => {
   })
 
   it('keeps updatedAt when asked, for ratings', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-chats-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-chats-'))
     const store = new ChatStore(dir, 'companion-1')
     store.save(content(ID(1)), { created: summary(1) })
     store.update([ID(1)], { updatedAt: 5 })
@@ -264,7 +264,7 @@ describe('chat service schemas', () => {
 // Older attachments and capabilities on load.
 describe('older attachment normalization', () => {
   it('turns older AttachmentView entries into AttachmentRef, keeps store refs, and fills the capability fields', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-chats-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-chats-'))
     mkdirSync(join(dir, 'chats'))
     writeFileSync(join(dir, 'chats', 'index.json'), JSON.stringify([{ id: ID(1), title: 'Old chat', createdAt: 1, updatedAt: 2, companionId: 'companion-1' }]))
     const cRef = { id: 'a-1', kind: 'pdf', name: 'Report.pdf', state: 'ready', error: null, size: 10, mediaType: 'application/pdf', thumbnail: null }

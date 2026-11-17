@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -10,7 +10,7 @@ import type { Bounds } from '@shared/ipc'
 // element's content box. Main only accepts the answer from the asked frame's
 // real parent, so a page posting nonces can't move a popup.
 
-const PROBE_KEY = '__apexAutofillProbe'
+const PROBE_KEY = '__atelierAutofillProbe'
 
 /** In the child: hands the nonce to the parent frame. */
 export function postProbe(nonce: string): void {

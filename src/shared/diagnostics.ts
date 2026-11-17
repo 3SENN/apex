@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Logs, crash reports, the problem report and feedback (OV-30). Nothing
-// here is ever sent anywhere by Apex: reports are files you choose to email yourself.
+// here is ever sent anywhere by Atelier: reports are files you choose to email yourself.
 
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error'
 

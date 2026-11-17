@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import { describeHost } from '@shared/domains'
 import type { LoadStage } from '@shared/tabs'
 import { isBlankUrl, isInsecureUrl, isInternalUrl } from '@shared/url'
 
-export type PillKind = 'web' | 'apex' | 'blank' | 'other'
+export type PillKind = 'web' | 'atelier' | 'blank' | 'other'
 
 export interface PillParts {
   kind: PillKind
@@ -19,7 +19,7 @@ export interface PillParts {
   detail: string | null
   /** Plain http, except on this machine. */
   insecure: boolean
-  /** Apex pages: "Chat", "<title>". */
+  /** Atelier pages: "Chat", "<title>". */
   crumbs: string[] | null
   /** The host mixes scripts or looks like a popular domain: it shows as punycode, in the warning tone. */
   lookalike: boolean
@@ -47,7 +47,7 @@ export function hasDetail(url: URL): boolean {
 
 export function pillParts(url: string, title: string, crumbs: string[] | null): PillParts {
   if (isBlankUrl(url)) return { kind: 'blank', host: '', detail: null, insecure: false, crumbs: null, lookalike: false }
-  if (isInternalUrl(url)) return { kind: 'apex', host: '', detail: null, insecure: false, crumbs: crumbs && crumbs.length ? crumbs : [BRAND_NAME], lookalike: false }
+  if (isInternalUrl(url)) return { kind: 'atelier', host: '', detail: null, insecure: false, crumbs: crumbs && crumbs.length ? crumbs : [BRAND_NAME], lookalike: false }
   let parsed: URL
   try {
     parsed = new URL(url)

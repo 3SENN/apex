@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
-// Verifies a packaged Apex before it ships:
+// Verifies a packaged Atelier before it ships:
 //   - the Resources folder holds the icons, the tray, the native helpers, app.asar
 //     and (with a release repo) app-update.yml,
-//     and the asar carries licenses.json (served at app://apex/licenses.json);
+//     and the asar carries licenses.json (served at app://atelier/licenses.json);
 //   - macOS: Info.plist has the usage strings, the URL and document types, a
 //     matching icon and the bundle id; codesign verifies; the entitlements fit
 //     the signing mode (no restricted key without its profile); each native
@@ -76,7 +76,7 @@ function macProblems(app, { signed, notarized, dmgs, settings }) {
   if (plist.CFBundleIdentifier !== settings.bundleId) problems.push(`Info.plist's CFBundleIdentifier is ${plist.CFBundleIdentifier}, not ${settings.bundleId}`)
   // Restricted entitlements only with the profile that grants them (entitlements.mjs).
   const ents = readEntitlements(spawnSync('codesign', ['-d', '--entitlements', '-', '--xml', app.app], { encoding: 'utf8' }).stdout)
-  // The app id <TEAMID>.<bundle id> is checked only in the passkeys mode, which needs APEX_TEAM_ID.
+  // The app id <TEAMID>.<bundle id> is checked only in the passkeys mode, which needs ATELIER_TEAM_ID.
   const teamId = teamIdFrom(process.env)
   problems.push(...entitlementProblems(ents, { mode: signingMode(process.env), embeddedProfile: existsSync(join(app.app, 'Contents', 'embedded.provisionprofile')), appId: teamId ? `${teamId}.${settings.bundleId}` : null }))
   // Ad hoc (unsigned) builds must verify too: Apple silicon kills a broken signature.

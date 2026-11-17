@@ -13,4 +13,4 @@
 {"session":"m1","source":"system","type":"restored"}
 {"fatal":false,"type":"error","session":"m1","source":"mic","message":"The microphone was disconnected.","code":"device-missing"}
 {"text":"Great, thanks everyone.","source":"mic","session":"m1","endMs":6200,"startMs":4800,"type":"final"}
-{"audio":{"bytes":482113,"path":"/Users/someone/Library/Application Support/Apex/meetings/m1.m4a"},"durationMs":6420,"type":"stopped","session":"m1"}
+{"audio":{"bytes":482113,"path":"/Users/someone/Library/Application Support/Atelier/meetings/m1.m4a"},"durationMs":6420,"type":"stopped","session":"m1"}

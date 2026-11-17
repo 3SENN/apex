@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -43,7 +43,7 @@ export function systemInfoFrom(input: SystemInfoInput): Record<string, string> {
   }
 }
 
-/** "Apex 0.1.0 (dev) · macOS 26.1 · arm64 · Electron 45.1.0 · Chromium 142…", for emails and the clipboard. */
+/** "Atelier 0.1.0 (dev) · macOS 26.1 · arm64 · Electron 45.1.0 · Chromium 142…", for emails and the clipboard. */
 export function systemLine(info: Record<string, string>): string {
   const parts = [`${info.app ?? BRAND_NAME}${info.channel ? ` (${info.channel})` : ''}`, info.os, info.arch, info.electron && `Electron ${info.electron}`, info.chrome && `Chromium ${info.chrome}`]
   return parts.filter(Boolean).join(' · ')

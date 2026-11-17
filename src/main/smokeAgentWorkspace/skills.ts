@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -149,7 +149,7 @@ export const shots: ShotSpec[] = [
   {
     name: 'skills-page',
     async run(ctx) {
-      ctx.tabs.openInternal('apex://skills?tab=builtin')
+      ctx.tabs.openInternal('atelier://skills?tab=builtin')
       await ctx.chrome.until(`return document.querySelector('.sk-card')`, 8000, 'the Skills page')
       await ctx.shot('skills-page')
     },
@@ -159,7 +159,7 @@ export const shots: ShotSpec[] = [
     async run(ctx) {
       const [first] = await ctx.chrome.invoke<Skill[]>('skills', 'list', { source: 'builtin' })
       assert(first, 'no built-in skill')
-      ctx.tabs.openInternal(`apex://skills/${first.id}`)
+      ctx.tabs.openInternal(`atelier://skills/${first.id}`)
       await ctx.chrome.until(`return document.querySelector('.sk-editor .sk-steps')`, 8000, 'the skill editor')
       await ctx.shot('skills-editor')
     },
@@ -169,13 +169,13 @@ export const shots: ShotSpec[] = [
     async run(ctx) {
       const r = await makeRoutine(ctx, 'Smoke routine brief')
       try {
-        ctx.tabs.openInternal('apex://routines')
+        ctx.tabs.openInternal('atelier://routines')
         await ctx.chrome.until(`return document.querySelector('.sp-item') && document.querySelector('.rt-suggest')`, 8000, 'the Routines page')
         await ctx.shot('routines-page')
-        ctx.tabs.openInternal(`apex://routines/${r.id}`)
+        ctx.tabs.openInternal(`atelier://routines/${r.id}`)
         await ctx.chrome.until(`return document.querySelector('.rt-detail .rt-facts')`, 8000, 'the routine detail page')
         await ctx.shot('routines-detail')
-        ctx.tabs.openInternal(`apex://routines/${r.id}/edit`)
+        ctx.tabs.openInternal(`atelier://routines/${r.id}/edit`)
         await ctx.chrome.until(`return document.querySelector('.rt-editor .rt-timing')`, 8000, 'the routine editor')
         await ctx.shot('routines-editor')
         await ctx.chrome.escape()

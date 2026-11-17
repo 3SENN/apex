@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -27,15 +27,15 @@ export function ChipTray({ compact = false }: { compact?: boolean }): ReactEleme
   const logos = connected.filter((c) => c.logo).slice(0, LOGOS_SHOWN)
   return (
     <div className={['nt-tray', compact && 'nt-tray--compact'].filter(Boolean).join(' ')} role="toolbar" aria-label={t('tabs.newTabChipTray.startWith')}>
-      <button type="button" className="nt-chip" onClick={() => open('apex://skills')}>
+      <button type="button" className="nt-chip" onClick={() => open('atelier://skills')}>
         <WandSparkles aria-hidden />
         <span className="nt-chip__label">{t('tabs.newTabChipTray.skills')}</span>
       </button>
-      <button type="button" className="nt-chip" onClick={() => open('apex://routines')}>
+      <button type="button" className="nt-chip" onClick={() => open('atelier://routines')}>
         <Repeat aria-hidden />
         <span className="nt-chip__label">{t('tabs.newTabChipTray.routines')}</span>
       </button>
-      <button type="button" className="nt-chip" onClick={() => open('apex://connectors')} aria-label={connected.length > 0 ? `Connectors, ${connected.length} connected` : t('tabs.newTabChipTray.connectors')}>
+      <button type="button" className="nt-chip" onClick={() => open('atelier://connectors')} aria-label={connected.length > 0 ? `Connectors, ${connected.length} connected` : t('tabs.newTabChipTray.connectors')}>
         {logos.length > 0 ? (
           <span className="nt-chip__logos" aria-hidden="true">
             {logos.map((c) => (
@@ -48,7 +48,7 @@ export function ChipTray({ compact = false }: { compact?: boolean }): ReactEleme
         <span className="nt-chip__label">{t('tabs.newTabChipTray.connectors')}</span>
       </button>
       {/* DS-108: in the side panel's compact tray the help chip keeps to its glyph (its label stays for screen readers), so it never runs past the tray's edge. */}
-      <button type="button" className="nt-chip nt-chip--help" onClick={() => open('apex://guides')}>
+      <button type="button" className="nt-chip nt-chip--help" onClick={() => open('atelier://guides')}>
         <CircleHelp aria-hidden />
         <span className="nt-chip__label">{t('tabs.newTabChipTray.help')}</span>
       </button>

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 import { useId, useRef, useState, type FormEvent, type ReactElement } from 'react'
 import { ArrowUpRight, Eye, EyeOff } from 'lucide-react'
 import type { ConnectorV2, DirectoryEntry } from '@shared/connectors'
-import { apex, call, errorText } from '../api'
+import { atelier, call, errorText } from '../api'
 import { useT } from '../i18n/useT'
 import { Field, Notice, TextInput } from '../settings/kit'
 import { Button, Dialog, IconButton, Spinner } from '../ui'
@@ -15,7 +15,7 @@ import { GoogleSetupSteps } from './GoogleSetup'
 
 // Connecting a directory entry (SK-13, CH-41): one-click sign-in
 // where the service offers it, a token where it doesn't (or when sign-in
-// can't register Apex), and the fields some services need. The page's
+// can't register Atelier), and the fields some services need. The page's
 // dialog and the chat's connect card share this form.
 
 export type ConnectPhase = { phase: 'idle' } | { phase: 'connecting' } | { phase: 'failed'; message: string } | { phase: 'done'; connector: ConnectorV2 }
@@ -190,7 +190,7 @@ export function ConnectDialog({ entry, onClose, onConnected }: ConnectDialogProp
         }}
       />
       <p className="cx-docs-link">
-        <button type="button" className="cx-link" onClick={() => void apex.tabs.create(entry.docsUrl)}>
+        <button type="button" className="cx-link" onClick={() => void atelier.tabs.create(entry.docsUrl)}>
           {t('connectors.connect.docs')} <ArrowUpRight size={13} aria-hidden />
         </button>
       </p>

@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { useEffect, useState, type RefObject } from 'react'
-import { apex } from '../../api'
+import { atelier } from '../../api'
 
 // ⌘F in a chat (CH-37). Main's intercept of the 'find' command sends
 // 'find-in-chat' while a chat page is the active tab; a key handler covers ⌘F
@@ -46,7 +46,7 @@ let started = false
 export function startChatFind(): void {
   if (started) return
   started = true
-  apex.onCommand((command) => {
+  atelier.onCommand((command) => {
     if ((command as string) !== 'find-in-chat') return
     const target = pick(true)
     if (target) openFor(target)

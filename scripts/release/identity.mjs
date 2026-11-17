@@ -1,16 +1,16 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Which Developer ID Application identity signs Apex (docs/release.md, Signing).
+// Which Developer ID Application identity signs Atelier (docs/release.md, Signing).
 //
-// APEX_SIGN_IDENTITY (or CSC_NAME) names it by SHA-1 hash or by name. A name
+// ATELIER_SIGN_IDENTITY (or CSC_NAME) names it by SHA-1 hash or by name. A name
 // can match more than one identity: a keychain can hold a renewed
 // "Developer ID Application: Your Name (TEAMID)" certificate next to the one it
 // replaces, and electron-builder would take whichever `security find-identity`
 // lists first. So a name is resolved here to one hash before electron-builder
-// sees it: the only match, or the preferred hash (APEX_SIGN_IDENTITY when it is
+// sees it: the only match, or the preferred hash (ATELIER_SIGN_IDENTITY when it is
 // one) when it is among the matches, or an error that lists the hashes to
 // choose from. codesign is then always called with a hash and never sees an
 // ambiguous name.
@@ -46,14 +46,14 @@ export function keychainIdentities(run = execFileSync) {
   }
 }
 
-/** What you asked for: APEX_SIGN_IDENTITY, else CSC_NAME; '' when neither (CSC_LINK, or unsigned). */
+/** What you asked for: ATELIER_SIGN_IDENTITY, else CSC_NAME; '' when neither (CSC_LINK, or unsigned). */
 export function requestedIdentity(env = process.env) {
-  return text(env, 'APEX_SIGN_IDENTITY') || text(env, 'CSC_NAME')
+  return text(env, 'ATELIER_SIGN_IDENTITY') || text(env, 'CSC_NAME')
 }
 
-/** The preferred certificate: APEX_SIGN_IDENTITY when it is a SHA-1 (upper case), else ''. There is no default. */
+/** The preferred certificate: ATELIER_SIGN_IDENTITY when it is a SHA-1 (upper case), else ''. There is no default. */
 export function preferredIdentity(env = process.env) {
-  const v = text(env, 'APEX_SIGN_IDENTITY')
+  const v = text(env, 'ATELIER_SIGN_IDENTITY')
   return HASH.test(v) ? v.toUpperCase() : ''
 }
 
@@ -73,10 +73,10 @@ export function resolveIdentity(requested, identities, { preferred = '' } = {}) 
   const name = want.startsWith(DEVELOPER_ID_PREFIX) ? want : `${DEVELOPER_ID_PREFIX}${want}`
   const matches = identities.filter((i) => i.name === name)
   if (matches.length === 1) return matches[0]
-  if (matches.length === 0) throw new Error(`no "${name}" identity in the keychain. Import the certificate, or set APEX_SIGN_IDENTITY to its SHA-1`)
+  if (matches.length === 0) throw new Error(`no "${name}" identity in the keychain. Import the certificate, or set ATELIER_SIGN_IDENTITY to its SHA-1`)
   const pick = preferred ? matches.find((i) => i.hash === preferred.trim().toUpperCase()) : undefined
   if (pick) return pick
-  throw new Error(`"${name}" is ambiguous: ${matches.length} identities carry it (${matches.map((i) => i.hash).join(', ')}). Set APEX_SIGN_IDENTITY to the SHA-1 of the one to sign with`)
+  throw new Error(`"${name}" is ambiguous: ${matches.length} identities carry it (${matches.map((i) => i.hash).join(', ')}). Set ATELIER_SIGN_IDENTITY to the SHA-1 of the one to sign with`)
 }
 
 /**

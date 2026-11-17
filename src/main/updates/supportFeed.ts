@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { z } from 'zod'
 import type { SupportFeed } from '@shared/updates'
 
 // Unsupported versions (UP-02): an optional static list in the release feed,
-// `apex-support.json`, marks versions below a floor as unsupported. It is
+// `atelier-support.json`, marks versions below a floor as unsupported. It is
 // fetched only when updates are enabled, with no identifiers in the request,
 // and anything malformed is ignored.
 
@@ -99,14 +99,14 @@ export function unsupportedFor(feed: SupportFeed | null, version: string): { bel
 
 /** The feed's address on the latest GitHub release. */
 export function supportFeedUrl(repo: { owner: string; name: string }): string {
-  return `https://github.com/${encodeURIComponent(repo.owner)}/${encodeURIComponent(repo.name)}/releases/latest/download/apex-support.json`
+  return `https://github.com/${encodeURIComponent(repo.owner)}/${encodeURIComponent(repo.name)}/releases/latest/download/atelier-support.json`
 }
 
 export const SUPPORT_FEED_MAX_BYTES = 64 * 1024
 
 /**
  * Fetches and parses the feed. Plain fetch: no cookies, no referrer and no
- * Apex identifiers. Any failure (offline, 404, too big, bad JSON) is null.
+ * Atelier identifiers. Any failure (offline, 404, too big, bad JSON) is null.
  */
 export async function fetchSupportFeed(url: string, fetcher: typeof fetch = fetch, timeoutMs = 15_000): Promise<SupportFeed | null> {
   try {

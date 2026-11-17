@@ -8,14 +8,14 @@ Plan a trip from what I tell you: where, when, who is coming and what we enjoy. 
 
 Plan at a human pace: no more than two or three main things a day, with time to eat and rest. Put things that are close together on the same day. Note opening days and anything that needs booking ahead.
 
-<!-- apex:step {"id":"frame","title":"Frame the trip"} -->
+<!-- atelier:step {"id":"frame","title":"Frame the trip"} -->
 Sum up the trip in two lines: dates, base, budget level and the kind of days we want.
 
-<!-- apex:step {"id":"days","title":"Plan each day"} -->
+<!-- atelier:step {"id":"days","title":"Plan each day"} -->
 For each day: morning, afternoon and evening, with rough travel times between stops and one rainy-day alternative.
 
-<!-- apex:step {"id":"book","title":"List what to book"} -->
+<!-- atelier:step {"id":"book","title":"List what to book"} -->
 A checklist of tickets, tables and transport to book, earliest deadline first, with links.
 
-<!-- apex:step {"id":"pack","title":"Packing and practical notes"} -->
+<!-- atelier:step {"id":"pack","title":"Packing and practical notes"} -->
 A short packing list for the weather and plans, plus practical notes such as plugs, money and local transport passes.

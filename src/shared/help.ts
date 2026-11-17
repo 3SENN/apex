@@ -1,10 +1,10 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Help topics. Asking about one starts
-// a chat whose first message carries Apex's own help notes for that topic.
+// a chat whose first message carries Atelier's own help notes for that topic.
 
 import { BRAND_NAME } from './branding'
 export const HELP_TOPIC_IDS = ['getting-started', 'chats-companions', 'skills-routines', 'meetings', 'connectors', 'troubleshooting'] as const

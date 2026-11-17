@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -57,7 +57,7 @@ function selectValue(el: HTMLSelectElement, wanted: string, kind: FieldKind): bo
   return true
 }
 
-// Main never sends these, and a page can't make Apex write them either.
+// Main never sends these, and a page can't make Atelier write them either.
 const NEVER_FILLED = new Set<FieldKind>(['cc-csc', 'otp'])
 
 /** The value one field should get, or null to leave it. */

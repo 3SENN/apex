@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -604,7 +604,7 @@ export function mainMenuItems(state: MenuState, data: MenuData, owners?: Map<str
 }
 
 /**
- * Windows and Linux have no global menu bar and Apex's window has no native
+ * Windows and Linux have no global menu bar and Atelier's window has no native
  * one, so the main menu offers every top-level menu (SH-59): choosing a row
  * pops that native menu beside the anchor. macOS keeps its menu bar.
  */

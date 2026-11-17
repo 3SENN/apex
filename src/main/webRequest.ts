@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import type { OnBeforeRequestListenerDetails, OnBeforeSendHeadersListenerDetails
 
 // The single owner of session.webRequest handlers. No other
 // module calls session.webRequest.on*: features add hooks here, and sandbox
-// partitions (apex-preprocess, apex-artifacts and the apps' apex-app-*) are
+// partitions (atelier-preprocess, atelier-artifacts and the apps' atelier-app-*) are
 // locked down here. The mux installs the handlers on every session through
 // Feature.session, in a fixed order: ad blocking, privacy, per-site content,
 // these hooks, then lockdown. Electron keeps one listener per event, so the

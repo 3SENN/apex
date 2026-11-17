@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { contextBridge, ipcRenderer } from 'electron'
 import { PAGE } from '@shared/ipc'
 
 // The capture tracker. The tab's camera, microphone and screen
-// icons start when Apex grants them; this narrows them to the tracks the
+// icons start when Atelier grants them; this narrows them to the tracks the
 // page still holds, so an ended call clears its icons without a reload. Each
 // document, in every frame, gets a small wrapper in the page's own world
 // that counts the captures getUserMedia and getDisplayMedia hand out and

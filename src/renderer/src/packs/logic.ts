@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@
 import type { MessageKey } from '@shared/i18n/core'
 import type { PackContributionCounts, PackDraftSummary, PackPermissionLine, PackSource, PackSummary } from '@shared/packs'
 
-/** Yours first (by name), then the ones that come with Apex. */
+/** Yours first (by name), then the ones that come with Atelier. */
 export function sortPacks(packs: readonly PackSummary[]): PackSummary[] {
   return [...packs].sort((a, b) => {
     const fa = a.source.kind === 'first-party' ? 1 : 0

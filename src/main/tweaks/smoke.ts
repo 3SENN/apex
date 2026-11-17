@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -13,7 +13,7 @@ import type { SmokeGroup, SmokeContext } from '../smokeBrowser/types'
 import type { Tab } from '../tabs'
 import { tweakStore, startPicking } from './feature'
 
-// Tweaks end to end on the smoke server (APEX_SMOKE_ONLY=TWEAKS): a hidden
+// Tweaks end to end on the smoke server (ATELIER_SMOKE_ONLY=TWEAKS): a hidden
 // element stored for 127.0.0.1 hides it on a local page before the page's
 // own script runs; a CSS change reaches the open page without a reload; the
 // picker hides what a click picks and Esc ends it; and a tweak covering
@@ -57,13 +57,13 @@ async function hidesAndPicks(ctx: SmokeContext): Promise<void> {
     assert((await js<boolean>(wc, 'window.__adHiddenAtLoad')) === true, 'the hidden element was still showing when the page’s own script ran')
     assert((await display(wc, '#ad')) === 'none', `the hidden element shows (display ${await display(wc, '#ad')})`)
     assert((await display(wc, '#keep')) !== 'none', 'an element nobody picked is hidden')
-    if (process.env.APEX_TWEAKS_SHOT) {
-      // Site info with its Tweak section, for a look at it alongside apex://tweaks.
+    if (process.env.ATELIER_TWEAKS_SHOT) {
+      // Site info with its Tweak section, for a look at it alongside atelier://tweaks.
       await sitesSmoke.openSiteInfo(tab)
       await waitFor(() => sitesSmoke.surfaces(tab as Tab).includes('site-info'), 5000, 'site info to open')
       await new Promise((done) => setTimeout(done, 800))
       await settleOverlays()
-      writeFileSync(process.env.APEX_TWEAKS_SHOT.replace(/\.png$/, '-info.png'), (await captureWindow(ctx.chrome.ui, ctx.tabs)).toPNG())
+      writeFileSync(process.env.ATELIER_TWEAKS_SHOT.replace(/\.png$/, '-info.png'), (await captureWindow(ctx.chrome.ui, ctx.tabs)).toPNG())
       ctx.chrome.ui.focus()
       wc.focus()
     }
@@ -81,7 +81,7 @@ async function hidesAndPicks(ctx: SmokeContext): Promise<void> {
     // Through the chrome's own call, as site info's Hide elements makes it.
     assert((await ctx.chrome.invoke<{ host: string | null; tweak: { id: string } | null }>('tweaks', 'forTab', tab.id)).tweak?.id === tweak.id, 'site info found no tweak for the page')
     assert(await ctx.chrome.invoke<boolean>('tweaks', 'hideElements', tab.id), 'the picker did not start on a web page')
-    await waitFor(() => js<boolean>(wc, 'Boolean(document.querySelector("apex-tweak-picker"))'), 5000, 'the picker to appear')
+    await waitFor(() => js<boolean>(wc, 'Boolean(document.querySelector("atelier-tweak-picker"))'), 5000, 'the picker to appear')
     const r = await js<{ x: number; y: number }>(wc, '(() => { const b = document.querySelector(".target").getBoundingClientRect(); return { x: Math.round(b.left + b.width / 2), y: Math.round(b.top + b.height / 2) } })()')
     wc.sendInputEvent({ type: 'mouseMove', x: r.x, y: r.y })
     await new Promise((done) => setTimeout(done, 120))
@@ -92,7 +92,7 @@ async function hidesAndPicks(ctx: SmokeContext): Promise<void> {
     assert(hidden.length === 2 && hidden.includes('#ad'), `the picker stored ${JSON.stringify(hidden)}`)
     wc.sendInputEvent({ type: 'keyDown', keyCode: 'Escape' })
     wc.sendInputEvent({ type: 'keyUp', keyCode: 'Escape' })
-    await waitFor(() => js<boolean>(wc, '!document.querySelector("apex-tweak-picker")'), 5000, 'Esc to end the picker')
+    await waitFor(() => js<boolean>(wc, '!document.querySelector("atelier-tweak-picker")'), 5000, 'Esc to end the picker')
 
     // Still hidden after a reload, from the stored selectors alone.
     wc.reload()
@@ -102,17 +102,17 @@ async function hidesAndPicks(ctx: SmokeContext): Promise<void> {
 
     // A script runs only with Allow custom scripts on, in its own world: the page's DOM, not its globals.
     // It runs at document start, before <html> exists, so it waits for the page's content like any early script.
-    store.update(tweak.id, { js: 'window.__tweakGlobal = 1; document.addEventListener("DOMContentLoaded", () => { document.documentElement.dataset.apexTweak = "ran" })', jsEnabled: true })
+    store.update(tweak.id, { js: 'window.__tweakGlobal = 1; document.addEventListener("DOMContentLoaded", () => { document.documentElement.dataset.atelierTweak = "ran" })', jsEnabled: true })
     const reload = async (what: string): Promise<void> => {
       wc.reload()
       await waitForPage(wc, what, 10000, (at) => at.includes('/tweaks/page'))
       await waitFor(() => js<boolean>(wc, 'document.readyState === "complete"').catch(() => false), 8000, `${what} to finish`)
     }
     await reload('the fixture with scripts not allowed')
-    assert((await js<string | null>(wc, 'document.documentElement.dataset.apexTweak ?? null')) === null, 'a tweak script ran with Allow custom scripts off')
+    assert((await js<string | null>(wc, 'document.documentElement.dataset.atelierTweak ?? null')) === null, 'a tweak script ran with Allow custom scripts off')
     store.setScriptsAllowed(true)
     await reload('the fixture with scripts allowed')
-    assert((await js<string | null>(wc, 'document.documentElement.dataset.apexTweak ?? null')) === 'ran', 'the tweak script did not run')
+    assert((await js<string | null>(wc, 'document.documentElement.dataset.atelierTweak ?? null')) === 'ran', 'the tweak script did not run')
     assert((await js<string>(wc, 'typeof window.__tweakGlobal')) === 'undefined', 'the tweak script ran in the page’s own world')
   } finally {
     close(ctx, tab)
@@ -146,7 +146,7 @@ async function staysOffSignIn(ctx: SmokeContext): Promise<void> {
   }
 }
 
-/** apex://tweaks?site=<host> opens that tweak; Show again on a hidden element brings it back. */
+/** atelier://tweaks?site=<host> opens that tweak; Show again on a hidden element brings it back. */
 async function pageEdits(ctx: SmokeContext): Promise<void> {
   const store = tweakStore()
   assert(store, 'the tweaks store is not running')
@@ -154,13 +154,13 @@ async function pageEdits(ctx: SmokeContext): Promise<void> {
   try {
     const { tweak } = store.addHidden('tweak-fixture.localhost', '.cookie-banner', 'div.cookie-banner · We use cookies')
     store.update(tweak.id, { style: { font: 'serif', tint: 'fern', focus: true }, css: 'body { line-height: 1.6 !important; }' })
-    ctx.tabs.openInternal('apex://tweaks?site=tweak-fixture.localhost')
+    ctx.tabs.openInternal('atelier://tweaks?site=tweak-fixture.localhost')
     await ctx.chrome.until('return Boolean(document.querySelector(".twk-editor")) && document.querySelector(".twk-hide__label")?.textContent.includes("cookie")', 10_000, 'the tweak editor with its hidden element')
     const overflow = await ctx.chrome.js<boolean>('const s = document.querySelector(".twk-scroll"); return s.scrollWidth > s.clientWidth + 1')
-    assert(!overflow, 'apex://tweaks scrolls sideways')
+    assert(!overflow, 'atelier://tweaks scrolls sideways')
     await ctx.shot('tweaks-page')
-    // APEX_TWEAKS_SHOT=<file.png>: this page alone, without the full shot tour.
-    if (process.env.APEX_TWEAKS_SHOT) writeFileSync(process.env.APEX_TWEAKS_SHOT, (await captureWindow(ctx.chrome.ui, ctx.tabs)).toPNG())
+    // ATELIER_TWEAKS_SHOT=<file.png>: this page alone, without the full shot tour.
+    if (process.env.ATELIER_TWEAKS_SHOT) writeFileSync(process.env.ATELIER_TWEAKS_SHOT, (await captureWindow(ctx.chrome.ui, ctx.tabs)).toPNG())
     await ctx.chrome.click(/^Show again$/, 'document.querySelector(".twk-editor")')
     await waitFor(() => (store.get(tweak.id)?.hidden.length ?? 1) === 0, 5000, 'Show again to bring the element back')
   } finally {
@@ -175,7 +175,7 @@ export const tweaksSmoke: SmokeGroup = {
   checks: [
     { name: 'a tweak hides a picked element on a local page, and the picker hides a clicked one', run: hidesAndPicks },
     { name: 'tweaks stay off sign-in pages', run: staysOffSignIn },
-    { name: 'apex://tweaks opens a site’s tweak and shows hidden elements again', run: pageEdits },
+    { name: 'atelier://tweaks opens a site’s tweak and shows hidden elements again', run: pageEdits },
   ],
   shots: [],
 }

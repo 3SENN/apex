@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 // Quitting mid-recording (index.ts installs it as the first 'before-quit'
 // listener after the private-chat question): the recording is stopped first,
 // so what was recorded is saved (for an audio-only meeting the audio is the
-// meeting; cancelling would throw it away), then Apex quits again. A quit
+// meeting; cancelling would throw it away), then Atelier quits again. A quit
 // asked again while it saves waits for the same save; a quit someone else
 // holds, or an update's (it stops the recording itself), goes by untouched.
 

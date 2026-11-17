@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -28,13 +28,13 @@ import { fakeAdapter } from './fixtures/extensions/fakeAdapter'
 
 const PM = join(__dirname, 'fixtures/extensions/password-manager')
 const NOTES = join(__dirname, 'fixtures/extensions/mv3-basic')
-const dir = mkdtempSync(join(tmpdir(), 'apex-ext-apis-'))
+const dir = mkdtempSync(join(tmpdir(), 'atelier-ext-apis-'))
 afterAll(() => rmSync(dir, { recursive: true, force: true }))
 
 type Sent = { id: string; args: unknown[] }
 
 async function setup(opts: { contents?: Map<number, WebContents>; session?: Session } = {}) {
-  const apex = { passwordSaving: true, addresses: true, cards: true }
+  const atelier = { passwordSaving: true, addresses: true, cards: true }
   const sent: Sent[] = []
   let report: ((e: { versionId: number; runningStatus: string }) => void) | null = null
   const scopes = new Map<number, string>()
@@ -68,7 +68,7 @@ async function setup(opts: { contents?: Map<number, WebContents>; session?: Sess
     clashesWith: () => null,
     chromeVersion: '156.0.0.0',
     contents: (id) => opts.contents?.get(id) ?? null,
-    browserSetting: (_p, key) => (key === 'services.passwordSavingEnabled' ? apex.passwordSaving : key === 'services.autofillAddressEnabled' ? apex.addresses : apex.cards),
+    browserSetting: (_p, key) => (key === 'services.passwordSavingEnabled' ? atelier.passwordSaving : key === 'services.autofillAddressEnabled' ? atelier.addresses : atelier.cards),
   })
   host.attach(session, 'default')
   const pm = await host.loadUnpacked('default', PM)
@@ -79,11 +79,11 @@ async function setup(opts: { contents?: Map<number, WebContents>; session?: Sess
   })
   const worker = (extensionId: string): ShimCaller => ({ extensionId, send: () => {}, webContents: null, keepAlive: () => () => {} })
   const op = (extensionId: string, name: string, payload: unknown): Promise<unknown> => runShimOp(host, 'default', worker(extensionId), name, payload)
-  return { host, pm, notes, sent, worker, op, apex, session, events: (id: string) => sent.filter((s) => s.id === id).map((s) => s.args) }
+  return { host, pm, notes, sent, worker, op, atelier, session, events: (id: string) => sent.filter((s) => s.id === id).map((s) => s.args) }
 }
 
 describe('a password manager’s manifest', () => {
-  it('runs in Apex: privacy, declarativeContent, webNavigation, contextMenus and native messaging are all there', () => {
+  it('runs in Atelier: privacy, declarativeContent, webNavigation, contextMenus and native messaging are all there', () => {
     expect(classifyCompat(readManifest(PM)!)).toEqual({ supported: true, reason: null, missing: [] })
     for (const op of ['privacy.get', 'privacy.set', 'privacy.clear', 'webNavigation.getFrame', 'webNavigation.getAllFrames', 'declarativeContent.addRules', 'contextMenus.create']) expect(EXT_SHIM_OPS).toContain(op)
     for (const e of ['webNavigation.onBeforeNavigate', 'webNavigation.onCompleted', 'windows.onFocusChanged', 'privacy.onChange', 'contextMenus.onClicked']) expect(EXT_LISTEN_EVENTS).toContain(e)

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -29,7 +29,7 @@ import { UserProfileStore } from '../src/main/userProfile'
 import { DESTINATIONS, type Destination } from '../src/shared/url'
 import { FakeHost } from './helpers/fakeHost'
 
-const tempDir = (): string => mkdtempSync(join(tmpdir(), 'apex-setup-'))
+const tempDir = (): string => mkdtempSync(join(tmpdir(), 'atelier-setup-'))
 
 /** Your profile's deps with a fake quick model (`reply` answers each json call) and recorded writes. */
 function profileDeps(dir: string, reply: (system: string, prompt: string) => unknown = () => ({ say: 'Hi!', chips: [], multi: false, done: false }), ready = true) {
@@ -103,7 +103,7 @@ describe('setup persistence', () => {
     expect(loadSetupState({ version: 1, step: 'nowhere' }, 1).notice).toBe(NOTICE_INVALID)
   })
 
-  it('resets a file from a newer Apex with its own notice', () => {
+  it('resets a file from a newer Atelier with its own notice', () => {
     const dir = tempDir()
     writeFileSync(join(dir, 'setup.json'), JSON.stringify({ version: 2, step: 'launch' }))
     const store = new SetupStore({ dataDir: dir })
@@ -235,7 +235,7 @@ describe('history suggestions', () => {
       { url: 'https://www.example.com/a', visits: 3 },
       { url: 'https://example.com/b', visits: 2 },
       { url: 'https://news.site/x', visits: 9 },
-      { url: 'apex://settings', visits: 50 },
+      { url: 'atelier://settings', visits: 50 },
       { url: 'not a url', visits: 1 },
     ]
     expect(hostVisits(items)).toEqual({ 'example.com': 5, 'news.site': 9 })

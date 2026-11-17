@@ -1,15 +1,15 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Organisation policies for packs and apps (docs/apps.md › Apps for
 // organisations), read the way Chrome reads its enterprise policies: Group
-// Policy on Windows (HKLM, then HKCU, under SOFTWARE\Policies\Apex), a
-// configuration profile on macOS (com.apex.browser), /etc/apex/policies.json
+// Policy on Windows (HKLM, then HKCU, under SOFTWARE\Policies\Atelier), a
+// configuration profile on macOS (com.atelier.browser), /etc/atelier/policies.json
 // on Linux. Nothing is read in the way of start-up: the read runs in the
 // background and a policy applies the moment it is found. Without a policy,
-// Apex behaves exactly as it does for everyone: every rule here is a no-op.
+// Atelier behaves exactly as it does for everyone: every rule here is a no-op.
 //
 // What a policy can say:
 //   PackIndexes              the indexes Browse shows; no others can be added (an entry may carry a sign-in: a private index)
@@ -21,7 +21,7 @@
 //   PackSideloading          false: no installs from files, links or folders, only from indexes
 //   AppConfig                per pack: env values, secrets and sign-ins (issuer, client, scopes) the organisation sets
 //   PackAuditLog             each pack's log records what it used and where it connected, and can't be cleared
-//   AiProvider               the organisation's own model gateway (Anthropic-compatible) that apex.ai uses instead of the person's account
+//   AiProvider               the organisation's own model gateway (Anthropic-compatible) that atelier.ai uses instead of the person's account
 import { BRAND_NAME } from '@shared/branding'
 import { existsSync, readFileSync } from 'node:fs'
 import { z } from 'zod'
@@ -59,7 +59,7 @@ const PARTS = {
       pageScripts: z.boolean(),
       secrets: z.boolean(),
       localConnectors: z.boolean(),
-      // apex.server: false for no web servers at all; serverLan false for none on the Wi-Fi (this computer only).
+      // atelier.server: false for no web servers at all; serverLan false for none on the Wi-Fi (this computer only).
       server: z.boolean(),
       serverLan: z.boolean(),
       // The connectors packs may use, by directory id or server name ([] for none).
@@ -119,7 +119,7 @@ export interface PackPolicy {
   /** Each pack's log records the permissions it used and the hosts it reached, and can't be cleared. */
   audit: boolean
   appConfig: Record<string, PackAppConfig>
-  /** The organisation's model gateway: apex.ai for packs goes there, with its key or token, instead of the person's account. */
+  /** The organisation's model gateway: atelier.ai for packs goes there, with its key or token, instead of the person's account. */
   aiProvider: PackAiProvider | null
 }
 
@@ -132,7 +132,7 @@ export interface PackIndexAuth {
 }
 
 export interface PackAiProvider {
-  /** An Anthropic-compatible endpoint: Apex posts to <url>/v1/messages. */
+  /** An Anthropic-compatible endpoint: Atelier posts to <url>/v1/messages. */
   url: string
   key: string | null
   token: string | null
@@ -227,7 +227,7 @@ export function ceilingProblems(ceiling: PackPolicy['ceiling'], m: Pick<PackMani
  * (`run`), or null. Blocked, not allowed and beyond the permission ceiling
  * hold for both; where a pack may come from (sideloading, the indexes) only
  * for installing, as in Chrome, so a pack already here keeps working.
- * Force-installed packs and packs Apex brings are always let in.
+ * Force-installed packs and packs Atelier brings are always let in.
  */
 export function policyRefusal(policy: PackPolicy, m: Pick<PackManifest, 'id' | 'permissions' | 'optionalPermissions' | 'secrets' | 'contributes'>, keyId: string | null, source: PackSource, forced = false, when: 'install' | 'run' = 'install'): string | null {
   if (!policy.managed || forced || source.kind === 'first-party') return null
@@ -248,7 +248,7 @@ export async function readPolicy(deps: { platform?: NodeJS.Platform; env?: NodeJ
   const env = deps.env ?? process.env
   try {
     // Smoke runs (a throwaway profile) read a file instead, so the checks can be managed.
-    if (deps.smoke && env.APEX_SMOKE_POLICY_FILE) return parsePolicy(JSON.parse(readFileSync(env.APEX_SMOKE_POLICY_FILE, 'utf8')) as Record<string, unknown>, env.APEX_SMOKE_POLICY_FILE)
+    if (deps.smoke && env.ATELIER_SMOKE_POLICY_FILE) return parsePolicy(JSON.parse(readFileSync(env.ATELIER_SMOKE_POLICY_FILE, 'utf8')) as Record<string, unknown>, env.ATELIER_SMOKE_POLICY_FILE)
     if (platform === 'win32') {
       const read = deps.readValues ?? (await import('../system/registry')).readValues
       // The machine's policy wins over the user's, as in Chrome.
@@ -259,13 +259,13 @@ export async function readPolicy(deps: { platform?: NodeJS.Platform; env?: NodeJ
     }
     if (platform === 'darwin') {
       const user = env.USER ?? ''
-      const files = [`/Library/Managed Preferences/com.apex.browser.plist`, ...(user ? [`/Library/Managed Preferences/${user}/com.apex.browser.plist`] : [])].filter((f) => existsSync(f))
+      const files = [`/Library/Managed Preferences/com.atelier.browser.plist`, ...(user ? [`/Library/Managed Preferences/${user}/com.atelier.browser.plist`] : [])].filter((f) => existsSync(f))
       if (files.length === 0) return { policy: NO_POLICY, problems: [] }
       const plist = deps.plist ?? readPlist
       const raw = Object.assign({}, ...(await Promise.all(files.reverse().map(plist))).filter((v) => v && typeof v === 'object')) as Record<string, unknown>
       return parsePolicy(raw, files[files.length - 1] as string)
     }
-    const file = '/etc/apex/policies.json'
+    const file = '/etc/atelier/policies.json'
     if (!existsSync(file)) return { policy: NO_POLICY, problems: [] }
     return parsePolicy(JSON.parse(readFileSync(file, 'utf8')) as Record<string, unknown>, file)
   } catch (err) {

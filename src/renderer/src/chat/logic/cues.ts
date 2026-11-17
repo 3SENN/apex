@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The cue shapes (NS-03): the notes of Apex's own short UI sounds, pure
+// The cue shapes (NS-03): the notes of Atelier's own short UI sounds, pure
 // so tests and the settings preview read them. ui/audio.ts plays them with
 // Web Audio; ui/sounds.ts and logic/sounds.ts decide when.
 
@@ -32,7 +32,7 @@ export interface Note {
 /** Quiet by default: cues sit well under speech and music. */
 export const MASTER_GAIN = 0.12
 
-// Apex's own cue shapes: soft sine and triangle voices, short envelopes.
+// Atelier's own cue shapes: soft sine and triangle voices, short envelopes.
 const CUES: Record<Exclude<CueSpec['id'], 'done'>, Note[]> = {
   sent: [{ freq: 880, at: 0, dur: 0.06, wave: 'sine', level: 0.5, glideTo: 990 }],
   reply: [{ freq: 740, at: 0, dur: 0.09, wave: 'sine', level: 0.6 }],

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -65,8 +65,8 @@ export interface OnboardingMethods {
 
 // ── Importing conversations ──
 
-export type ConversationSource = 'chatgpt' | 'claude' | 'apex'
-export const CONVERSATION_SOURCES = ['chatgpt', 'claude', 'apex'] as const satisfies readonly ConversationSource[]
+export type ConversationSource = 'chatgpt' | 'claude' | 'atelier'
+export const CONVERSATION_SOURCES = ['chatgpt', 'claude', 'atelier'] as const satisfies readonly ConversationSource[]
 
 export interface ConversationPick {
   token: string
@@ -207,7 +207,7 @@ export function applySetupPatch(state: SetupState, patch: SetupPatch, now: numbe
   }
 }
 
-// ── Name suggestions (ON-05): Apex's own short names, never one of its six characters' (TRADEMARKS.md) ──
+// ── Name suggestions (ON-05): Atelier's own short names, never one of its six characters' (TRADEMARKS.md) ──
 
 export const SETUP_NAMES = [
   'Pico', 'Nova', 'Juno', 'Wren', 'Milo', 'Tavi', 'Fern', 'Lumo', 'Bix', 'Skye',
@@ -490,7 +490,7 @@ export const DEFAULT_DOCK_DESIGN: DockIconDesign = {
   smile: false,
 }
 
-/** Apex's own background swatches. */
+/** Atelier's own background swatches. */
 export const DOCK_SWATCHES: ReadonlyArray<{ id: string; label: string; hex: string }> = [
   { id: 'dawn', label: 'Dawn', hex: '#f6b58e' },
   { id: 'meadow', label: 'Meadow', hex: '#9fd8a8' },
@@ -665,7 +665,7 @@ export interface ClipFrame {
   holdMs: number
 }
 
-/** Apex's own clip timings, built from the still renderer's moods and blink frame. */
+/** Atelier's own clip timings, built from the still renderer's moods and blink frame. */
 export const CLIP_FRAMES: Readonly<Record<SetupClipId, readonly ClipFrame[]>> = {
   typing: [
     { mood: 'working', holdMs: 420 },

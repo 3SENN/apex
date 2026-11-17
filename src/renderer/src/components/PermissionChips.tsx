@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -7,7 +7,7 @@ import { useState, type ReactElement } from 'react'
 import { Ban, BellOff, BellRing, CameraOff, MapPinOff, MicOff, ShieldAlert } from 'lucide-react'
 import type { PermissionChipAnswer } from '@shared/overlay/sites'
 import type { PermissionActivity, SitePermission } from '@shared/sites'
-import { apex, call } from '../api'
+import { atelier, call } from '../api'
 import { useT } from '../i18n/useT'
 import { anchorFromElement, openSurface } from '../overlay/useSurface'
 import { openSiteInfo } from '../overlay/surfaces/sites/open'
@@ -48,7 +48,7 @@ export function PermissionChips({ tabId, activity }: { tabId: string; activity: 
     else if (answer.action === 'open-settings') {
       const pane = macosPane(chip.perms)
       if (pane) void call('sites', 'openSystemSettings', pane)
-    } else if (answer.action === 'reload') void apex.nav.reload(tabId)
+    } else if (answer.action === 'reload') void atelier.nav.reload(tabId)
   }
 
   const onClick = (chip: PermissionChip, el: HTMLElement): void => {

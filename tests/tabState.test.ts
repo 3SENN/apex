@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -60,8 +60,8 @@ describe('visible tab order', () => {
   })
 
   it('reads the chat id of a chat page', () => {
-    expect(chatIdOf('apex://chat/abc-123')).toBe('abc-123')
-    expect(chatIdOf('apex://chats')).toBeNull()
+    expect(chatIdOf('atelier://chat/abc-123')).toBe('abc-123')
+    expect(chatIdOf('atelier://chats')).toBeNull()
     expect(chatIdOf(null)).toBeNull()
   })
 })
@@ -73,9 +73,9 @@ describe('closed tabs', () => {
     expect(stack.size).toBe(0)
     stack.push({ url: 'https://a.example/', title: 'A', pinned: false, index: 0 })
     stack.push({ url: 'https://b.example/', title: 'B', pinned: true, index: 1 })
-    stack.push({ url: 'apex://chats', title: 'All chats', pinned: false, index: 2 })
+    stack.push({ url: 'atelier://chats', title: 'All chats', pinned: false, index: 2 })
     expect(stack.size).toBe(2)
-    expect(stack.pop()?.url).toBe('apex://chats')
+    expect(stack.pop()?.url).toBe('atelier://chats')
     expect(stack.pop()?.pinned).toBe(true)
     expect(stack.pop()).toBeNull()
   })
@@ -96,30 +96,30 @@ describe('closed tabs', () => {
 
 describe('pinned tabs', () => {
   it('round-trips and keeps only restorable addresses', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-pinned-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-pinned-'))
     const store = new PinnedTabsStore(dir)
     expect(store.load()).toEqual([])
     store.save([
       { url: 'https://mail.example/', title: 'Mail' },
-      { url: 'apex://chats', title: 'All chats' },
+      { url: 'atelier://chats', title: 'All chats' },
       { url: 'file:///etc/passwd', title: 'no' },
-      { url: 'apex://nope', title: 'no' },
+      { url: 'atelier://nope', title: 'no' },
     ])
-    expect(store.load()).toEqual([{ url: 'https://mail.example/', title: 'Mail' }, { url: 'apex://chats', title: 'All chats' }])
+    expect(store.load()).toEqual([{ url: 'https://mail.example/', title: 'Mail' }, { url: 'atelier://chats', title: 'All chats' }])
   })
 
   it('survives a corrupt file', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'apex-pinned-'))
+    const dir = mkdtempSync(join(tmpdir(), 'atelier-pinned-'))
     writeFileSync(join(dir, 'pinned-tabs.json'), '{oops')
     expect(new PinnedTabsStore(dir).load()).toEqual([])
     writeFileSync(join(dir, 'pinned-tabs.json'), JSON.stringify([{ url: 'https://ok.example/', title: 'Ok' }, { url: 42 }, 'x']))
     expect(new PinnedTabsStore(dir).load()).toEqual([{ url: 'https://ok.example/', title: 'Ok' }])
   })
 
-  it('restores only web pages and known Apex pages', () => {
+  it('restores only web pages and known Atelier pages', () => {
     expect(isRestorableUrl('https://a.example/')).toBe(true)
-    expect(isRestorableUrl('apex://chat/abc')).toBe(true)
+    expect(isRestorableUrl('atelier://chat/abc')).toBe(true)
     expect(isRestorableUrl('javascript:alert(1)')).toBe(false)
-    expect(isRestorableUrl('apex://chat/../../x')).toBe(false)
+    expect(isRestorableUrl('atelier://chat/../../x')).toBe(false)
   })
 })

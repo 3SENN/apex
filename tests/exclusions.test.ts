@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -44,7 +44,7 @@ describe('exclusions', () => {
   })
 
   it('never records anything that is not an http(s) page', () => {
-    for (const url of ['apex://settings', 'apex-app://abc/', 'file:///Users/me/a.txt', 'about:blank', 'not a url']) expect(isExcluded(url, none)).toBe(true)
+    for (const url of ['atelier://settings', 'atelier-app://abc/', 'file:///Users/me/a.txt', 'about:blank', 'not a url']) expect(isExcluded(url, none)).toBe(true)
     expect(isExcluded('http://example.com', none)).toBe(false)
   })
 

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -6,7 +6,7 @@
 // Settings › Languages (ST-32): follow the system, or an ordered list of up
 // to ten for websites and spellcheck. Edits stay local until Save, which is
 // enabled only after a change; main applies the list live to every session.
-// Apex's own language sits on top (AppLanguageCard), and languages are
+// Atelier's own language sits on top (AppLanguageCard), and languages are
 // named in the app language rather than Chromium's.
 import { useEffect, useId, useMemo, useState, type ReactElement } from 'react'
 import { ArrowDown, ArrowUp, Languages, X } from 'lucide-react'
@@ -55,7 +55,7 @@ export function LanguagesPage({ settings, update }: SettingsPageProps): ReactEle
   const save = useAsyncAction(() => update({ languages: { mode: 'custom', list: draft } }), { success: t('settings.languages.saved') })
   const suggestions = searchLanguages(query, draft, name)
   const join = (list: readonly string[]): string => list.map(name).join(', ')
-  // The system's own order comes from main; the chrome's navigator only knows Apex's locale.
+  // The system's own order comes from main; the chrome's navigator only knows Atelier's locale.
   const about = useResource(() => call('about', 'info'))
   const system = about.data?.systemLanguages.length ? about.data.systemLanguages : [...navigator.languages]
 

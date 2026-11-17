@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -30,10 +30,10 @@ describe('reduceAgentLog', () => {
 
   it('tracks approvals and their resolution', () => {
     const log = fold([
-      { type: 'approval', approvalId: 'a1', description: 'Apex agent wants to click "Buy".', origin: 'https://shop.test' },
+      { type: 'approval', approvalId: 'a1', description: 'Atelier agent wants to click "Buy".', origin: 'https://shop.test' },
       { type: 'approval-resolved', approvalId: 'a1', allowed: false },
     ])
-    expect(log.items).toEqual([{ kind: 'approval', id: 'a1', description: 'Apex agent wants to click "Buy".', origin: 'https://shop.test', resolved: false }])
+    expect(log.items).toEqual([{ kind: 'approval', id: 'a1', description: 'Atelier agent wants to click "Buy".', origin: 'https://shop.test', resolved: false }])
   })
 
   it('shows errors as notices and keeps status', () => {

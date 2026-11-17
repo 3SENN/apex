@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -41,7 +41,7 @@ vi.mock('electron', () => {
       ...events(),
       isPackaged: false,
       getVersion: () => '1.0.0',
-      getName: () => 'Apex',
+      getName: () => 'Atelier',
       getPath: () => '/tmp',
       getAppPath: () => '/tmp',
       getLocale: () => 'en-US',
@@ -67,7 +67,7 @@ vi.mock('electron', () => {
 
 const dirs: string[] = []
 const tempDir = (): string => {
-  const dir = mkdtempSync(join(tmpdir(), 'apex-e0-'))
+  const dir = mkdtempSync(join(tmpdir(), 'atelier-e0-'))
   dirs.push(dir)
   return dir
 }
@@ -93,13 +93,13 @@ describe('RELEASE', () => {
   })
 
   it('parses the defines', () => {
-    expect(releaseFrom({ channel: 'beta', publicRelease: '1', updates: 'true', supportEmail: 'a@b.c', website: 'https://x.y', repo: 'me/apex' })).toEqual({
+    expect(releaseFrom({ channel: 'beta', publicRelease: '1', updates: 'true', supportEmail: 'a@b.c', website: 'https://x.y', repo: 'me/atelier' })).toEqual({
       channel: 'beta',
       publicRelease: true,
       updatesEnabled: true,
       supportEmail: 'a@b.c',
       website: 'https://x.y',
-      repo: { owner: 'me', name: 'apex' },
+      repo: { owner: 'me', name: 'atelier' },
     })
   })
 
@@ -129,9 +129,9 @@ describe('release and platform surfaces, routes, commands and strings', () => {
     }
   })
 
-  it('routes apex://logs', () => {
+  it('routes atelier://logs', () => {
     expect(INTERNAL_PAGES.logs).toBeTruthy()
-    expect(parseInternalUrl('apex://logs')?.page).toBe('logs')
+    expect(parseInternalUrl('atelier://logs')?.page).toBe('logs')
   })
 
   it('binds Report a Problem to ⇧⌘H and knows the menu-only commands', () => {
@@ -166,9 +166,9 @@ describe('release and platform shapes', () => {
   })
 
   it('resolves runtime resources for packaged and dev builds', () => {
-    const o = { resourcesPath: '/App/Contents/Resources', appPath: '/src/apex', branding: 'official' }
+    const o = { resourcesPath: '/App/Contents/Resources', appPath: '/src/atelier', branding: 'official' }
     expect(resolveResourcePath({ ...o, packaged: true }, ['tray', 'tray.png'])).toBe(join('/App/Contents/Resources/resources/tray/tray.png'))
-    expect(resolveResourcePath({ ...o, packaged: false }, ['icons', 'app-32.png'])).toBe(join('/src/apex/branding/official/resources/icons/app-32.png'))
+    expect(resolveResourcePath({ ...o, packaged: false }, ['icons', 'app-32.png'])).toBe(join('/src/atelier/branding/official/resources/icons/app-32.png'))
   })
 })
 

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -287,7 +287,7 @@ export const tabs = {
   'tabs.sidebar.searchTabsAndChats': 'Zoek in tabbladen en chats',
   'tabs.sidebar.sidebar': 'Zijbalk',
   'tabs.sidebar.sidebarOptions': 'Opties voor zijbalk',
-  'tabs.sidebarCardContent.apex': '{brand} · {title}',
+  'tabs.sidebarCardContent.atelier': '{brand} · {title}',
   'tabs.sidebarChatActions.chatArchivedFindIt': 'Chat gearchiveerd. Je vindt hem in Alle chats.',
   'tabs.sidebarChatActions.chatsArchived': '{length} chats gearchiveerd.',
   'tabs.sidebarChatActions.couldnTArchive': 'Kon niet archiveren',

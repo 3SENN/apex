@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -12,7 +12,7 @@ import type { ConnectorStore, RoutineStore, SkillStore } from './stores'
 
 // What happens around a companion beyond its own record: its skills (steps and
 // supporting text files too), routines, connectors and memory folder follow it
-// when it is duplicated, shared or deleted, and .apexcompanion files are
+// when it is duplicated, shared or deleted, and .ateliercompanion files are
 // checked and previewed before they are added. Dialogs and the Trash are
 // main's job (src/main/index.ts).
 
@@ -105,7 +105,7 @@ export class CompanionService {
     memory.removeOwner(id)
   }
 
-  /** The .apexcompanion JSON for a companion, with the parts the exporter chose. */
+  /** The .ateliercompanion JSON for a companion, with the parts the exporter chose. */
   exportText(id: string, options: CompanionExportOptions = {}): string {
     const { store, routines, memory } = this.#deps
     const companion = store.get(id)

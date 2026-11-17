@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -32,7 +32,7 @@ import type { TabManager } from '../src/main/tabs'
 // decision model is a fake that reads its scripted answers with the real
 // questions' cutoffs; no network, no model.
 
-const root = mkdtempSync(join(tmpdir(), 'apex-dc-setup-'))
+const root = mkdtempSync(join(tmpdir(), 'atelier-dc-setup-'))
 
 // ---- a decider whose model answers per use ----
 
@@ -220,7 +220,7 @@ describe('DC-15 effort per message: model off', () => {
     }
     const input = {
       capabilities: caps,
-      system: 'Apex.',
+      system: 'Atelier.',
       effort: 'high' as Effort,
       connectors: [],
       messages: [{ role: 'user' as const, content: 'hi' }],

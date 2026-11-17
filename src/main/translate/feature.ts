@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -28,7 +28,7 @@ import { pageBatchSchema, pageHintsSchema, pageReportSchema } from './schemas'
 /** Language & Region in System Settings, where Apple's translation languages are downloaded. */
 const LANGUAGE_SETTINGS_URL = 'x-apple.systempreferences:com.apple.Localization-Settings.extension'
 
-/** A language's name in Apex's own language ('fr' → French, or Frans in Dutch). */
+/** A language's name in Atelier's own language ('fr' → French, or Frans in Dutch). */
 function languageLabel(tag: string): string {
   try {
     return new Intl.DisplayNames([mainLanguage().locale, 'en'], { type: 'language' }).of(tag) ?? tag

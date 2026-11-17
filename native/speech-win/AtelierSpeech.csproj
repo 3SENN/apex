@@ -1,9 +1,9 @@
-<!-- Copyright (c) 2026 The Apex Authors. All rights reserved.
+<!-- Copyright (c) 2026 The Atelier Authors. All rights reserved.
      This Source Code Form is subject to the terms of the Mozilla Public
      License, v. 2.0. If a copy of the MPL was not distributed with this file,
      You can obtain one at https://mozilla.org/MPL/2.0/. -->
 <!--
-  apex-speech.exe: Apex's Windows speech helper.
+  atelier-speech.exe: Atelier's Windows speech helper.
   It speaks the same JSON-lines protocol v2 as the macOS helper (native/speech).
   Build with `node scripts/build-speech-helper.mjs` on Windows (see README.md).
 -->
@@ -14,13 +14,13 @@
     <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
     <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
     <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
-    <AssemblyName>apex-speech</AssemblyName>
-    <RootNamespace>Apex.Speech</RootNamespace>
+    <AssemblyName>atelier-speech</AssemblyName>
+    <RootNamespace>Atelier.Speech</RootNamespace>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>12</LangVersion>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <!-- One self-contained file: Apex ships no .NET runtime beside it. -->
+    <!-- One self-contained file: Atelier ships no .NET runtime beside it. -->
     <SelfContained>true</SelfContained>
     <PublishSingleFile>true</PublishSingleFile>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>

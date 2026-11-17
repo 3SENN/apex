@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// The Worlds pack (docs/apps.md › Worlds): Apex's world viewer and editor,
-// built as a kit app on the same surfaces any pack has (apex.worlds,
-// apex.cast, the kit's props and world modules), with one world to start in.
+// The Worlds pack (docs/apps.md › Worlds): Atelier's world viewer and editor,
+// built as a kit app on the same surfaces any pack has (atelier.worlds,
+// atelier.cast, the kit's props and world modules), with one world to start in.
 // It is off until the person wants it (Packs, or Open on a world), so the
 // browser looks and runs as before: no sidebar row, nothing loaded.
 // Its files live in src/firstParty/worlds/ as plain, readable modules and are

@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -296,7 +296,7 @@ export interface ImportedEngine {
   template: string
 }
 
-/** Chromium's keywords table: '{searchTerms}' becomes Apex's '%s'; Google's own placeholders are dropped. */
+/** Chromium's keywords table: '{searchTerms}' becomes Atelier's '%s'; Google's own placeholders are dropped. */
 export function chromiumEngine(row: { short_name: string; url: string }): ImportedEngine | null {
   return engineFrom(row.short_name, row.url)
 }

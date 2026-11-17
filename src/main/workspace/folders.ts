@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// Watched folders (CH-43): local folders you let Apex read, or
+// Watched folders (CH-43): local folders you let Atelier read, or
 // read and edit, for all chats or one chat, optionally for one companion.
 // Grants live in workspace.sqlite. Every path is confined twice: the
 // relative path may not climb out, and the realpath of the nearest existing
@@ -105,7 +105,7 @@ export interface FolderFile {
 export interface FolderStoreOptions {
   db: DatabaseSync
   now?: () => number
-  /** Folders that may never be granted (Apex's own data folder). */
+  /** Folders that may never be granted (Atelier's own data folder). */
   blocked?: string[]
   /** Before a write: records the text about to be saved (versions.snapshot). */
   snapshot?(ref: FileRef, text: string, label: 'saved'): void

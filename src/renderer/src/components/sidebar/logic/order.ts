@@ -1,11 +1,11 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Pure ordering rules for the sidebar and the strip: the pinned grid, tab and
 // chat sorting, "no reshuffle under the pointer", and the order ⌘1–8 follow.
-// No DOM or window.apex here, so it is unit-tested directly.
+// No DOM or window.atelier here, so it is unit-tested directly.
 import type { ChatSummary } from '@shared/chats'
 import type { ChatSort as SidebarChatSort, OrderEntry, SidebarSections, TabInfo, TabSort } from '@shared/ipc'
 import { parseInternalUrl } from '@shared/url'
@@ -21,7 +21,7 @@ export function pinnedColumns(count: number): number {
   return empty(3) < empty(4) ? 3 : 4
 }
 
-/** The chat a tab shows as a page (apex://chat/<id>), or null. */
+/** The chat a tab shows as a page (atelier://chat/<id>), or null. */
 export function chatIdOfUrl(url: string): string | null {
   const route = parseInternalUrl(url)
   return route?.page === 'chat' ? route.id : null

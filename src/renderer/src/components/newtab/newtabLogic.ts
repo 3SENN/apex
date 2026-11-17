@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -17,7 +17,7 @@ export interface Box {
   height: number
 }
 
-const FLOOR_KEY = 'apex.newtab.companionFloor'
+const FLOOR_KEY = 'atelier.newtab.companionFloor'
 
 /** The old per-window value of "Companions on New Tab": on unless it was turned off. */
 export function parseFloorSetting(value: string | null | undefined): boolean {
@@ -46,7 +46,7 @@ export function floorShown(settings: { companionFloor?: boolean } | null | undef
   return settings?.companionFloor !== false
 }
 
-/** Flights take longer the farther they go, within Apex's 450–750 ms. */
+/** Flights take longer the farther they go, within Atelier's 450–750 ms. */
 export function flightDuration(distance: number): number {
   return Math.round(Math.max(450, Math.min(750, 450 + distance * 0.45)))
 }
@@ -185,12 +185,12 @@ export function buildIdeaPages(sources: IdeaSources): IdeaPage[] {
 
   const skills = keep(sources.skills.map((s): Idea => ({ id: `skill:${s.id}`, label: `/${s.name}`, prompt: `/${s.name} `, oneShot: false, glyph: 'wand' })))
   if (skills.length > 0) {
-    pages.push({ id: 'skills', title: t('tabs.newTabLogic.yourSkills'), description: t('tabs.newTabLogic.skillsYouTaughtYour'), seeAll: { label: t('tabs.newTabLogic.seeAllSkills'), url: 'apex://skills' }, ideas: skills.slice(0, IDEAS_PER_PAGE) })
+    pages.push({ id: 'skills', title: t('tabs.newTabLogic.yourSkills'), description: t('tabs.newTabLogic.skillsYouTaughtYour'), seeAll: { label: t('tabs.newTabLogic.seeAllSkills'), url: 'atelier://skills' }, ideas: skills.slice(0, IDEAS_PER_PAGE) })
   }
 
   const routines = keep(sources.routines.filter((r) => r.prompt.trim()).map((r): Idea => ({ id: `routine:${r.id}`, label: t('tabs.newTabLogic.runNow', { value: shortTitle(r.name, 30) }), prompt: r.prompt, oneShot: true, glyph: 'repeat' })))
   if (routines.length > 0) {
-    pages.push({ id: 'routines', title: t('tabs.newTabLogic.yourRoutines'), description: t('tabs.newTabLogic.runOneOfYour'), seeAll: { label: t('tabs.newTabLogic.seeAllRoutines'), url: 'apex://routines' }, ideas: routines.slice(0, IDEAS_PER_PAGE) })
+    pages.push({ id: 'routines', title: t('tabs.newTabLogic.yourRoutines'), description: t('tabs.newTabLogic.runOneOfYour'), seeAll: { label: t('tabs.newTabLogic.seeAllRoutines'), url: 'atelier://routines' }, ideas: routines.slice(0, IDEAS_PER_PAGE) })
   }
   return pages
 }

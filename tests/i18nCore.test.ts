@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -42,7 +42,7 @@ describe('i18n core', () => {
     setLanguage('nl')
     expect(t('core.closeWindow.detail', { count: 1 })).toBe('Er is 1 tabblad open.')
     expect(t('core.closeWindow.detail', { count: 4 })).toBe('Er zijn 4 tabbladen open.')
-    expect(t('menus.app.quit', { name: 'Apex' })).toBe('Stop Apex')
+    expect(t('menus.app.quit', { name: 'Atelier' })).toBe('Stop Atelier')
   })
 
   it('falls back to English for a missing key and logs it once', () => {

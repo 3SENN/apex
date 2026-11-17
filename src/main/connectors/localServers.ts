@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -224,7 +224,7 @@ export function resolveCommand(command: string, PATH: string, isExecutable: (p: 
 }
 
 /**
- * The few inherited variables a server needs; Apex's own (Electron's,
+ * The few inherited variables a server needs; Atelier's own (Electron's,
  * editors') are left out. Windows programs need more of the system's own:
  * Node can't open a socket without SystemRoot, npx can't find its cache
  * without APPDATA.

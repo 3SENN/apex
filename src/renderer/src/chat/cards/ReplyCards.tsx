@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -9,7 +9,7 @@ import { formatSize } from '@shared/downloads'
 import { fileViewerUrl } from '@shared/files'
 import { t } from '@shared/i18n/core'
 import type { MemoryChange } from '@shared/ipc'
-import { apex, call, errorText } from '../../api'
+import { atelier, call, errorText } from '../../api'
 import { anchorFromElement, openSurface } from '../../overlay/useSurface'
 import { Button, Spinner, cx, toast } from '../../ui'
 import { NextSteps } from '../RequestBlocks'
@@ -175,13 +175,13 @@ export function TabOpenedCard({ item }: LogCardProps<'tab-opened'>): ReactElemen
         <span className="cc-tab__detail">{state === 'closed' ? t('composer.card.tab.closed') : `${t('composer.card.tab.opened')} · ${hostLabel(item.url)}`}</span>
       </span>
       {state === 'open' && (
-        <Button size="sm" onClick={() => void apex.tabs.activate(item.tabId)}>
+        <Button size="sm" onClick={() => void atelier.tabs.activate(item.tabId)}>
           {t('composer.card.tab.switch')}
         </Button>
       )}
       {state === 'active' && <span className="cc-tab__current">{t('composer.card.tab.current')}</span>}
       {state === 'closed' && /^https?:/.test(item.url) && (
-        <Button size="sm" variant="ghost" onClick={() => void apex.tabs.create(item.url)}>
+        <Button size="sm" variant="ghost" onClick={() => void atelier.tabs.create(item.url)}>
           {t('composer.card.tab.reopen')}
         </Button>
       )}

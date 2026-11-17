@@ -1,9 +1,9 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// How Apex's viewer reads a file: its media type from the name, how
+// How Atelier's viewer reads a file: its media type from the name, how
 // it previews, which code language it is, and Markdown front matter. Pure,
 // so main (the viewer service) and the chrome (the shared renderers, the
 // chat files modal) agree.

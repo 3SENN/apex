@@ -14,7 +14,7 @@ Er zijn drie makkelijke manieren:
 
 Elke chat staat in de zijbalk onder het gezicht van zijn companion. Dat gezicht laat zien hoe het met de chat gaat: bezig, wacht op jou, klaar of vastgelopen. Chats die klaar zijn terwijl je ergens anders was, blijven gemarkeerd tot je ze bekijkt.
 
-Open [Alle chats](apex://chats) om alles te doorzoeken wat je hebt gevraagd, de chats waar je op terugkomt vast te zetten en de rest te archiveren.
+Open [Alle chats](atelier://chats) om alles te doorzoeken wat je hebt gevraagd, de chats waar je op terugkomt vast te zetten en de rest te archiveren.
 
 ## Tabbladen die de chat opent
 

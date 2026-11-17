@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -24,7 +24,7 @@ import type { ShotSpec, SmokeCheck } from '../smokeBrowser/types'
 // the problem report opened by the report-problem command (⇧⌘H) and saved
 // with ⌘↩ into a stand-in Downloads folder (nothing is revealed and no
 // email app opens: the desktop shell is a recorder), the crash state and
-// apex://logs. Offline only.
+// atelier://logs. Offline only.
 
 interface ShellRecord {
   revealed: string[]
@@ -33,7 +33,7 @@ interface ShellRecord {
 
 /** Swaps the desktop for a recorder with its own Downloads folder for the run of `fn`. */
 async function withRecorder<T>(fn: (record: ShellRecord, downloads: string) => Promise<T>): Promise<T> {
-  const downloads = mkdtempSync(join(tmpdir(), 'apex-smoke-downloads-'))
+  const downloads = mkdtempSync(join(tmpdir(), 'atelier-smoke-downloads-'))
   const record: ShellRecord = { revealed: [], opened: [] }
   const fake: DiagnosticsShell = {
     showItemInFolder: (path) => void record.revealed.push(path),
@@ -110,12 +110,12 @@ export const checks: SmokeCheck[] = [
     name: 'diagnostics: the logger writes redacted JSON lines to userData/logs and finds them again',
     async run(ctx) {
       const marker = `diagnostics-smoke-${Date.now().toString(36)}`
-      const secret = `apex-smoke-secret-${Math.random().toString(36).slice(2, 12)}`
+      const secret = `atelier-smoke-secret-${Math.random().toString(36).slice(2, 12)}`
       registerSecret(secret)
       log.info('diagnostics', `${marker} key=${secret} sk-ant-api03-SMOKExxxxxxxxxxxxxxxx https://example.test/a?q=private#part`)
       logger.flushSync()
       const file = logger.file
-      assert(file && file.includes(join('logs', 'apex.log')), `the log file is ${String(file)}`)
+      assert(file && file.includes(join('logs', 'atelier.log')), `the log file is ${String(file)}`)
       const text = readFileSync(file, 'utf8')
       const line = text.split('\n').find((l) => l.includes(marker))
       assert(line, 'the marker line was not written')
@@ -157,7 +157,7 @@ export const checks: SmokeCheck[] = [
           const files = unzipSync(new Uint8Array(readFileSync(zipPath)))
           const names = Object.keys(files)
           for (const name of ['report.json', 'description.txt']) assert(names.includes(name), `the zip lacks ${name}`)
-          assert(names.some((n) => /^logs\/apex(\.\d)?\.log$/.test(n)), `the zip has no logs: ${names.join(', ')}`)
+          assert(names.some((n) => /^logs\/atelier(\.\d)?\.log$/.test(n)), `the zip has no logs: ${names.join(', ')}`)
           assert(!names.includes('screenshot.png') && !names.includes('chat.md'), 'the zip holds parts that were not switched on')
           const part = (name: string): string => strFromU8(files[name] ?? new Uint8Array())
           const report = JSON.parse(part('report.json')) as { schema: number; engineKind: string; settingsSummary: Record<string, unknown> }
@@ -185,14 +185,14 @@ export const checks: SmokeCheck[] = [
     },
   },
   {
-    name: 'diagnostics: the crash state answers, and apex://logs lists lines and filters them',
+    name: 'diagnostics: the crash state answers, and atelier://logs lists lines and filters them',
     async run(ctx) {
       const state = await ctx.chrome.invoke<CrashState>('diagnostics', 'crashState')
       assert(typeof state.lastExitUnclean === 'boolean' && typeof state.dumps === 'number', `crash state ${JSON.stringify(state)}`)
       const marker = `diagnostics-logs-${Date.now().toString(36)}`
       log.warn('diagnostics', `${marker} shown on the logs page`)
-      ctx.tabs.openInternal('apex://logs', { newTab: true })
-      await ctx.chrome.until<boolean>(`return document.querySelectorAll('.dg-log-row').length > 0`, 8000, 'log rows on apex://logs')
+      ctx.tabs.openInternal('atelier://logs', { newTab: true })
+      await ctx.chrome.until<boolean>(`return document.querySelectorAll('.dg-log-row').length > 0`, 8000, 'log rows on atelier://logs')
       await ctx.chrome.type('.dg-logs__toolbar input', marker)
       await ctx.chrome.until<boolean>(
         `const rows = [...document.querySelectorAll('.dg-log-row')]; return rows.length === 1 && rows[0].textContent.includes(${JSON.stringify(marker)})`,
@@ -221,8 +221,8 @@ export const shots: ShotSpec[] = [
     name: 'e2 logs page',
     async run(ctx) {
       log.info('diagnostics', 'Logs page shot')
-      ctx.tabs.openInternal('apex://logs', { newTab: true })
-      await ctx.chrome.until<boolean>(`return document.querySelectorAll('.dg-log-row').length > 0`, 8000, 'log rows on apex://logs')
+      ctx.tabs.openInternal('atelier://logs', { newTab: true })
+      await ctx.chrome.until<boolean>(`return document.querySelectorAll('.dg-log-row').length > 0`, 8000, 'log rows on atelier://logs')
       await sleep(300)
       await ctx.shot('diagnostics-logs')
     },

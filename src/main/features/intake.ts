@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -24,7 +24,7 @@ import type { AppContext, Feature } from './types'
 // ctx.content.chatFiles, and adapts the app (tabs, the page bridge, chats, skills,
 // meetings, connector records, the files library) to the intake.
 
-/** A web page Apex can read; apex:// pages, artifact tabs and blank tabs are refused. */
+/** A web page Atelier can read; atelier:// pages, artifact tabs and blank tabs are refused. */
 const READABLE = /^(https?|file):/i
 const PDF_URL = /\.pdf($|[?#])/i
 
@@ -184,7 +184,7 @@ function hostFor(ctx: AppContext): IntakeHost {
 
 /** The running intake, for the intake smoke checks (main-only reads such as prepared files). */
 let running: ReturnType<typeof setupIntake> | null = null
-export const intakeSmokeHooks = (): ReturnType<typeof setupIntake> | null => (process.env.APEX_SMOKE === '1' ? running : null)
+export const intakeSmokeHooks = (): ReturnType<typeof setupIntake> | null => (process.env.ATELIER_SMOKE === '1' ? running : null)
 
 export function createIntakeFeature(): Feature {
   const undo: (() => void)[] = []

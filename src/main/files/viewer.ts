@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -17,10 +17,10 @@ import { TokenRegistry } from './tokens'
 import type { ViewerDeletion } from './types'
 import { mainT } from '../i18n/mainT'
 
-// The viewer service (OV-32). It opens anything Apex holds, through one
+// The viewer service (OV-32). It opens anything Atelier holds, through one
 // token per open document: Library files, companion files, memory, skills,
 // meeting transcripts, chat files, attachments, and local files the person
-// picked this session. Every path is confined to Apex's own folders (real
+// picked this session. Every path is confined to Atelier's own folders (real
 // paths, so symlinks can't escape); nothing else on disk opens.
 
 const OWNER_ID = /^[A-Za-z0-9-]{1,64}$/
@@ -42,7 +42,7 @@ export interface ViewerDeps {
   now?: () => number
 }
 
-/** What a target resolved to: a real file, or text Apex keeps elsewhere (a skill record, a transcript). */
+/** What a target resolved to: a real file, or text Atelier keeps elsewhere (a skill record, a transcript). */
 export interface ViewerSource {
   target: ViewerTarget
   name: string
@@ -236,7 +236,7 @@ export class Viewer {
     if (!live) return doc
     if (src.path || src.text !== null) {
       if (previewable === 'image' || previewable === 'svg' || previewable === 'pdf' || previewable === 'audio' || previewable === 'video' || previewable === 'binary' || previewable === 'unknown') {
-        doc.url = `apex-file://${token}/${encodeURIComponent(src.name)}`
+        doc.url = `atelier-file://${token}/${encodeURIComponent(src.name)}`
       }
     }
     try {
@@ -389,7 +389,7 @@ export class Viewer {
     return new Uint8Array(readFileSync(src.path))
   }
 
-  /** What apex-file://<token>/ serves: a real file, or text kept elsewhere. */
+  /** What atelier-file://<token>/ serves: a real file, or text kept elsewhere. */
   served(token: string): { path: string | null; text: string | null; mediaType: string; name: string } | null {
     const src = this.#tokens.get(token)
     if (!src || (!src.path && src.text === null)) return null
@@ -450,7 +450,7 @@ function readSkillRecord(file: string, id: string): { name: string; description:
       if (s.id === id && typeof s.name === 'string' && typeof s.instructions === 'string') return { name: s.name, description: typeof s.description === 'string' ? s.description : '', instructions: s.instructions }
     }
   } catch {
-    // No skills file yet, or one Apex can't read: the skill shows as missing.
+    // No skills file yet, or one Atelier can't read: the skill shows as missing.
   }
   return null
 }

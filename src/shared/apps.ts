@@ -1,16 +1,16 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Agent-built sandboxed apps. Each app is a single HTML document run at
-// apex-app://<appId>/ in its own locked-down partition (persist:apex-app-<id>):
+// atelier-app://<appId>/ in its own locked-down partition (persist:atelier-app-<id>):
 // no network, no popups, a strict CSP, and the agent never acts there.
 import type { Owner } from './services'
 
-export const APEX_APP_SCHEME = 'apex-app'
-/** Each app runs in its own persistent, locked-down partition: persist:apex-app-<id>. */
-export const APEX_APP_PARTITION_PREFIX = 'persist:apex-app-'
+export const ATELIER_APP_SCHEME = 'atelier-app'
+/** Each app runs in its own persistent, locked-down partition: persist:atelier-app-<id>. */
+export const ATELIER_APP_PARTITION_PREFIX = 'persist:atelier-app-'
 
 export interface AppSummary {
   id: string
@@ -52,7 +52,7 @@ export const APP_HTML_MAX = 2 * 1024 * 1024
 /** Versions kept per app; the oldest that is neither current nor the draft goes first. */
 export const APP_VERSIONS_MAX = 30
 
-/** Sent with every apex-app response: inline code and data URLs only, nothing reaches the network. */
+/** Sent with every atelier-app response: inline code and data URLs only, nothing reaches the network. */
 export const APP_CSP = [
   "default-src 'none'",
   "script-src 'unsafe-inline'",
@@ -92,7 +92,7 @@ export function validateAppHtml(html: string): { ok: true } | { ok: false; reaso
   return { ok: true }
 }
 
-/** apex-app://<id>/, or apex-app://<id>/?version=<v> for one version. Any other path is not part of an app. */
+/** atelier-app://<id>/, or atelier-app://<id>/?version=<v> for one version. Any other path is not part of an app. */
 export function parseAppUrl(url: string): { appId: string; versionId: string | null } | null {
   let parsed: URL
   try {
@@ -100,7 +100,7 @@ export function parseAppUrl(url: string): { appId: string; versionId: string | n
   } catch {
     return null
   }
-  if (parsed.protocol !== `${APEX_APP_SCHEME}:`) return null
+  if (parsed.protocol !== `${ATELIER_APP_SCHEME}:`) return null
   const appId = parsed.hostname
   if (!APP_ID.test(appId) || (parsed.pathname !== '/' && parsed.pathname !== '')) return null
   if (parsed.username || parsed.password || parsed.port) return null
@@ -111,7 +111,7 @@ export function parseAppUrl(url: string): { appId: string; versionId: string | n
 
 /** Where one version of an app runs (the preview of a draft). */
 export function appVersionUrl(appId: string, versionId: string): string {
-  return `${APEX_APP_SCHEME}://${appId}/?version=${encodeURIComponent(versionId)}`
+  return `${ATELIER_APP_SCHEME}://${appId}/?version=${encodeURIComponent(versionId)}`
 }
 
 /** The app id an address belongs to, or null. */

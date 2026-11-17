@@ -1,4 +1,4 @@
-/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+/* Copyright (c) 2026 The Atelier Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -193,11 +193,11 @@ describe('message links and paging (CH-13)', () => {
     { kind: 'assistant', id: 'turn-1', text: 'hello', thinking: '' },
   ]
   it('reads the message from the fragment', () => {
-    expect(messageAnchor('apex://chat/abc#u1')).toBe('u1')
-    expect(messageAnchor('apex://chat/abc#turn%2D1')).toBe('turn-1')
-    expect(messageAnchor('apex://chat/abc')).toBeNull()
-    expect(messageAnchor('apex://chat/abc#')).toBeNull()
-    expect(messageAnchor('apex://chat/abc#<script>')).toBeNull()
+    expect(messageAnchor('atelier://chat/abc#u1')).toBe('u1')
+    expect(messageAnchor('atelier://chat/abc#turn%2D1')).toBe('turn-1')
+    expect(messageAnchor('atelier://chat/abc')).toBeNull()
+    expect(messageAnchor('atelier://chat/abc#')).toBeNull()
+    expect(messageAnchor('atelier://chat/abc#<script>')).toBeNull()
   })
   it('finds it, pages back for it, or gives up', () => {
     expect(hasMessage(items, 'turn-1')).toBe(true)
