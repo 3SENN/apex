@@ -5,6 +5,7 @@
 
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { app } from 'electron'
 import type { CallsSnapshot } from '@shared/desktopCalls'
 import type { CaptureStatus, CardPayload, RecordingPayload } from '@shared/meetingCapture'
 import type { MeetingDetail } from '@shared/meetings'
@@ -119,7 +120,10 @@ const recordFlow: SmokeCheck = {
 }
 
 // Desktop calls: the fake helper's `calls` snapshots stand in for Zoom; nothing real is watched or recorded.
-const ZOOM_PID = 4242
+// Zoom's pid can never be one of Apex's own processes, which the watcher leaves out: a small one can be, on a
+// fresh CI Mac whose pids start low (4242 failed there now and then). 4194307 is above the largest pid macOS
+// (99999) and Linux (2^22) hand out, and Windows pids are multiples of 4.
+const ZOOM_PID = 4_194_307
 const zoomCall = (input: boolean): CallsSnapshot => ({
   supported: true,
   audio: [{ pid: ZOOM_PID, bundleId: 'us.zoom.xos', exe: 'zoom.us', appPid: ZOOM_PID, appBundleId: 'us.zoom.xos', input, output: true }],
@@ -133,6 +137,7 @@ const desktopCall: SmokeCheck = {
     const h = hooks()
     try {
       assert(h.calls.supported() === true, 'the helper reported whether calls can be watched')
+      assert(!app.getAppMetrics().some((m) => m.pid === ZOOM_PID) && process.pid !== ZOOM_PID, 'the stand-in Zoom pid is one of Apex’s own')
       smokeSpeechHelper.push({ type: 'calls', ...zoomCall(true) })
       await waitFor(() => h.card()?.payload.mode === 'app', 5000, 'the desktop call card')
       const card = h.card()

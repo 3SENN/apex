@@ -7,7 +7,7 @@ import { BRAND_NAME } from '@shared/branding'
 import { createServer, type Server } from 'node:http'
 import type { AddressInfo } from 'node:net'
 import { mkdirSync, readFileSync } from 'node:fs'
-import { BrowserWindow, app, nativeImage, type WebContents } from 'electron'
+import { BrowserWindow, app, nativeImage, screen, type WebContents } from 'electron'
 import type { CompanionPreset } from '@shared/companion'
 import type { ViewportInfo } from '@shared/ipc'
 import { NOT_EXECUTED, runToolCalls, type ResultBlock } from './agent/browserTool'
@@ -196,6 +196,16 @@ export async function runSmoke(deps: SmokeDeps): Promise<number> {
     throw new Error('expected an error, got success')
   }
 
+  // APEX_SMOKE_WINDOW=1024x700 runs in a window that size: a CI runner's screen is small (1024x768), and a check
+  // that passes in a big window can fail there.
+  const forced = /^(\d+)x(\d+)$/.exec(process.env.APEX_SMOKE_WINDOW ?? '')
+  const smokeWindow = BrowserWindow.fromWebContents(ui)
+  if (forced) smokeWindow?.setContentSize(Number(forced[1]), Number(forced[2]))
+  if (smokeWindow) {
+    const [w, h] = smokeWindow.getContentSize()
+    const area = screen.getDisplayMatching(smokeWindow.getBounds()).workAreaSize
+    console.log(`smoke: window ${w}x${h} in a ${area.width}x${area.height} work area`)
+  }
   try {
     await waitFor(() => tabs.contentBounds().width > 0 && tabs.active() !== null, 15_000).catch(async (err: unknown) => {
       // Say what the chrome drew, so a render failure is not just a timeout.

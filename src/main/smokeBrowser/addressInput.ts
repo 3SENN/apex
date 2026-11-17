@@ -38,15 +38,45 @@ async function webTab(ctx: SmokeContext, path: string, title: string): Promise<T
   return tab
 }
 
-/** A real click on the middle of an element in a webContents (CSS px of its top frame). */
+/** The last click clickOn made, for a failure to say where it landed. */
+let lastClick: { doc: Chrome; selector: string; at: { x: number; y: number } } | null = null
+
+/** What is at the last click's point now, and whether the pill is still editing (pill--covered). */
+async function lastClickReport(): Promise<string> {
+  if (!lastClick) return 'no click'
+  const { doc, selector, at } = lastClick
+  return doc
+    .js<unknown>(
+      `const hit = document.elementFromPoint(${at.x}, ${at.y}); const el = document.querySelector(${JSON.stringify(selector)})
+       return { at: ${JSON.stringify(at)}, hit: hit ? hit.tagName + '.' + String(hit.className).slice(0, 60) : null, onTarget: !!(el && hit && el.contains(hit)), pill: document.querySelector('.pill')?.className ?? null, focused: document.hasFocus() }`,
+    )
+    .then((v) => JSON.stringify(v), (err: unknown) => `unknown (${String(err)})`)
+}
+
+/**
+ * A real click on the middle of an element in a webContents (CSS px of its top frame), once it holds still (two
+ * looks 50 ms apart agree) and nothing covers that point: a click measured mid-reflow lands beside it.
+ */
 async function clickOn(doc: Chrome, selector: string, modifiers: Mod[] = []): Promise<void> {
-  const r = await doc.until<{ x: number; y: number; width: number; height: number }>(
-    `const el = document.querySelector(${JSON.stringify(selector)}); if (!el || el.getClientRects().length === 0) return null
-     const r = el.getBoundingClientRect(); return { x: r.left, y: r.top, width: r.width, height: r.height }`,
-    5000,
-    `${selector} to show`,
-  )
-  const at = { x: Math.round(r.x + Math.min(r.width / 2, 40)), y: Math.round(r.y + r.height / 2) }
+  type Box = { x: number; y: number; width: number; height: number }
+  let prev: Box | null = null
+  let r: Box | null = null
+  await waitFor(async () => {
+    const now = await doc
+      .js<Box | null>(
+        `const el = document.querySelector(${JSON.stringify(selector)}); if (!el || el.getClientRects().length === 0) return null
+         const r = el.getBoundingClientRect(); const hit = document.elementFromPoint(r.left + Math.min(r.width / 2, 40), r.top + r.height / 2)
+         return hit && el.contains(hit) ? { x: r.left, y: r.top, width: r.width, height: r.height } : null`,
+      )
+      .catch(() => null)
+    const still = prev !== null && now !== null && now.x === prev.x && now.y === prev.y && now.width === prev.width && now.height === prev.height
+    prev = now
+    if (still) r = now
+    return still
+  }, 5000, `${selector} to show, uncovered and still`)
+  const box = r as unknown as Box
+  const at = { x: Math.round(box.x + Math.min(box.width / 2, 40)), y: Math.round(box.y + box.height / 2) }
+  lastClick = { doc, selector, at }
   const wc = doc.ui
   wc.focus()
   wc.sendInputEvent({ type: 'mouseMove', ...at })
@@ -88,7 +118,9 @@ const FIELD = `const f = document.querySelector('.cb-field__input'); if (!f) ret
 
 /** Waits for the command bar to open over the pill and returns its document (the interactive overlay). */
 async function barOpened(ctx: SmokeContext, what: string): Promise<Chrome> {
-  await waitFor(() => addressSmoke.surfaces().includes('command-bar'), 5000, `the command bar (${what})`)
+  await waitFor(() => addressSmoke.surfaces().includes('command-bar'), 5000, `the command bar (${what})`).catch(async (err: unknown) => {
+    throw new Error(`${err instanceof Error ? err.message : String(err)} Open: ${addressSmoke.surfaces().join(', ') || 'nothing'}; last click ${await lastClickReport()}`)
+  })
   const doc = await docWith(ctx.chrome, '.cb-field__input', 5000, 'the command bar field', { overlayOnly: true })
   await doc.until(`const f = document.querySelector('.cb-field__input'); return f && document.activeElement === f ? true : null`, 3000, 'the field to take focus')
   return doc

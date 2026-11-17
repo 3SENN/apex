@@ -74,6 +74,8 @@
   padding-right: calc(var(--space-2) + var(--window-controls-width));
 }
 
-:root[data-window-controls='overlay'] .chat-panel__header {
+/* The side panel sits under the toolbar, clear of the controls, except when
+   the bars are away (focus mode, a page in full screen) and it docks right. */
+:root[data-window-controls='overlay'] .app--page-fullscreen .panel-frame:not([data-dock='left']) .chat-panel__header {
   padding-right: calc(var(--space-2) + var(--window-controls-width));
 }
