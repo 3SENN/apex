@@ -17,6 +17,13 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    ignore:
+      # @types/node follows the Node inside Electron (Node 24 for Electron 45), not the newest Node.
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
+      # three.js is the version the Apex kit promises to apps (docs/apps.md › The kit); it moves with the kit, on purpose.
+      - dependency-name: 'three'
+      - dependency-name: '@types/three'
     groups:
       minor-and-patch:
         update-types: [minor, patch]
