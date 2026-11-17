@@ -107,7 +107,10 @@ function appRelease(env: Env, platform: string) {
 
 describe('release settings from env', () => {
   it('defaults to a safe dev build', () => {
-    const s = releaseSettings({}, 'darwin')
+    // The official branding, stated, so the result doesn't depend on whether this checkout has internal/.
+    const OFFICIAL = { APEX_OFFICIAL_BRANDING: '1' }
+    expect(releaseSettings({ APEX_OFFICIAL_BRANDING: '0' }, 'darwin').bundleId).toBe('dev.summit.browser')
+    const s = releaseSettings(OFFICIAL, 'darwin')
     expect(s).toEqual({
       channel: 'dev',
       publicRelease: false,
@@ -118,7 +121,7 @@ describe('release settings from env', () => {
       signing: { platform: 'darwin', identity: null, notarize: null },
       bundleId: 'com.sennechin.apex',
     })
-    expect(appRelease({}, 'darwin').release).toEqual(RELEASE)
+    expect(appRelease(OFFICIAL, 'darwin').release).toEqual(RELEASE)
   })
 
   it('round-trips through the defines into RELEASE', () => {

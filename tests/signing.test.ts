@@ -302,7 +302,7 @@ describe('electron-builder’s assembled config', () => {
   it('drops only the Touch ID keychain group when the profile doesn’t allow it, and refuses a bad profile', () => {
     const out = join(tmp(), 'ents.plist')
     const notes: string[] = []
-    macSigningConfig({ ...PASSKEYS, APEX_PROVISIONING_PROFILE: '/p' }, { out, decode: () => goodProfile({}, { 'keychain-access-groups': undefined }), log: (m) => notes.push(m) })
+    macSigningConfig({ ...PASSKEYS, APEX_OFFICIAL_BRANDING: '1', APEX_PROVISIONING_PROFILE: '/p' }, { out, decode: () => goodProfile({}, { 'keychain-access-groups': undefined }), log: (m) => notes.push(m) })
     expect(readEntitlements(readFileSync(out, 'utf8'))).not.toHaveProperty('keychain-access-groups')
     expect(notes.join()).toMatch(/Touch ID passkeys stay off/)
     const bad = join(tmp(), 'never.plist')
@@ -311,7 +311,7 @@ describe('electron-builder’s assembled config', () => {
   })
 
   it('leaves other platforms’ configs without mac signing changes', () => {
-    const config = builderConfig({ ...ID, APEX_PROVISIONING_PROFILE: '/p' }, { platform: 'linux' })
+    const config = builderConfig({ ...ID, APEX_OFFICIAL_BRANDING: '1', APEX_PROVISIONING_PROFILE: '/p' }, { platform: 'linux' })
     expect(config.appId).toBe('com.sennechin.apex')
     expect(config.mac.identity).toBeNull()
     expect(mergeConfig({ a: [1], b: { c: 1 } }, { a: [2], b: { d: 2 } })).toEqual({ a: [2], b: { c: 1, d: 2 } })
@@ -606,7 +606,7 @@ APPLE_KEYCHAIN_PROFILE=example-notary   # a notarytool profile
     // The ambiguous name in CSC_NAME is never the one used: the file's hash is.
     expect(signingIdentity(env, { identities: IDENTITIES })).toBe(CURRENT)
     const out = join(tmp(), 'ents.plist')
-    const config = builderConfig({ ...env, APEX_PROVISIONING_PROFILE: '/p' }, { platform: 'darwin', identities: IDENTITIES, out, decode: () => goodProfile() })
+    const config = builderConfig({ ...env, APEX_OFFICIAL_BRANDING: '1', APEX_PROVISIONING_PROFILE: '/p' }, { platform: 'darwin', identities: IDENTITIES, out, decode: () => goodProfile() })
     expect(config.mac).toMatchObject({ identity: CURRENT, notarize: true, entitlements: out })
     expect(readEntitlements(readFileSync(out, 'utf8'))['com.apple.application-identifier']).toBe(`${TEAM}.com.sennechin.apex`)
   })
