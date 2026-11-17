@@ -9,6 +9,8 @@ how it gets merged.
   template: what you did, what you expected, what happened, your Apex version and platform.
 - **Features and bigger changes:** open an issue or a [discussion](https://github.com/3SENN/apex/discussions) before
   writing code, so we can agree on the approach. Product behaviour is specified in [docs/design](docs/design/).
+- **Questions and chat:** ask in [GitHub Discussions](https://github.com/3SENN/apex/discussions) or on
+  [Discord](https://discord.gg/sKUTVCYAZY).
 - **Security problems:** never in public. See [SECURITY.md](SECURITY.md).
 
 ## Setting up

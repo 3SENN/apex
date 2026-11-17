@@ -84,6 +84,7 @@ the environment; nothing personal is committed.
 
 ## Documentation
 
+- [Building on Apex](docs/developers.md): the vision, and what developers and creators can build
 - [Architecture](docs/architecture.md): how Apex is put together, its security model and its tests
 - [Design specs](docs/design/): the product and design specifications, and the ids used in code comments
 - [Packs](docs/packs.md) and [apps](docs/apps.md): building and sharing add-ons
@@ -96,6 +97,16 @@ Contributions are welcome: code, translations, docs, testing on your platform, a
 Apex. Read [CONTRIBUTING.md](CONTRIBUTING.md) to get started and follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 Where Apex is heading is in [ROADMAP.md](ROADMAP.md), and how decisions are made is in [GOVERNANCE.md](GOVERNANCE.md).
 Report security issues privately as described in [SECURITY.md](SECURITY.md).
+
+## Community
+
+- **[Discord](https://discord.gg/sKUTVCYAZY):** chat with the community, get help, show what you built.
+- **[GitHub Discussions](https://github.com/3SENN/apex/discussions):** questions, ideas and proposals.
+- **[YouTube](https://www.youtube.com/@GetApexBrowser):** demos and walkthroughs.
+- **[X](https://x.com/3Senn):** news and updates.
+
+Apex is created by [Senne Chin](https://www.linkedin.com/in/senne-chin-abb063241/), a 22-year-old enthusiast, and
+published through Chinnovations, his sole proprietorship for personal projects.
 
 ## How Apex is funded
 

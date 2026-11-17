@@ -11,3 +11,6 @@ contact_links:
   - name: Questions and ideas
     url: https://github.com/3SENN/apex/discussions
     about: Ask a question or talk through an idea before opening an issue.
+  - name: Chat on Discord
+    url: https://discord.gg/sKUTVCYAZY
+    about: Talk with the community, get help and show what you built.
