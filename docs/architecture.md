@@ -189,7 +189,7 @@ trademark rights ([TRADEMARKS.md](../TRADEMARKS.md)):
 Each folder has a `branding.json` (names, bundle id, publisher, copyright line, trademark line, default preset, the
 branding's own companion file if it has one, presets left out, icon files) and the same files under the same names. As in Brave, the copyright line is "Copyright © 2026 The
 Apex Authors" in both; as Firefox's `trademarkInfo`, the official branding's trademark line ("{brand}, the {brand}
-logo and sprout mark, and the {brand} characters are trademarks of Senne Chin.") shows in Settings › About, translated through the catalogues, and the unofficial
+logo and sprout mark, and the {brand} characters are trademarks of Chinnovations.") shows in Settings › About, translated through the catalogues, and the unofficial
 one is empty. **`scripts/branding.mjs`** decides which one a build takes: `APEX_OFFICIAL_BRANDING=1` or `0`, else
 official only when the private `internal/` folder is in use. The release workflow sets it to 1; CI and every other
 checkout build Summit. From there:

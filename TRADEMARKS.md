@@ -1,7 +1,7 @@
 # Trademark policy
 
 Apex, the Apex logo and sprout mark, and Apex's six companion characters (Pip, Juniper, Bolt, Mochi, Sage and Pepper)
-are trademarks of Senne Chin.
+are trademarks of Senne Chin, trading as Chinnovations (the Netherlands).
 
 Apex is open source: its code is licensed under the [Mozilla Public License 2.0](LICENSE). The companion art (the
 characters' parts, rigs, faces and presets, and the images of Apex characters in `branding/official/`) is licensed under

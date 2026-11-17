@@ -69,7 +69,7 @@ describe('the branding names the app', () => {
     const unofficial = readBranding('unofficial')
     for (const branding of [official, unofficial]) expect(branding.copyright).toBe('Copyright © 2026 The Apex Authors')
     // Only the official branding claims marks; Summit is a placeholder, not an Apex trademark.
-    expect(official.trademarkInfo).toBe('{brand}, the {brand} logo and sprout mark, and the {brand} characters are trademarks of Senne Chin.')
+    expect(official.trademarkInfo).toBe('{brand}, the {brand} logo and sprout mark, and the {brand} characters are trademarks of Chinnovations.')
     expect(unofficial.trademarkInfo).toBe('')
     expect(official.publisher).toBeTruthy()
     expect(unofficial.publisher).toBeTruthy()
@@ -81,7 +81,7 @@ describe('the branding names the app', () => {
       const config = builderConfig({ APEX_OFFICIAL_BRANDING: flag, APEX_INTERNAL: '0' }, { platform: 'linux' })
       expect(config.copyright).toBe(branding.copyright)
       expect(config.extraMetadata.author).toBe(branding.publisher)
-      if (branding.trademarkInfo) expect(config.win.legalTrademarks).toBe('Apex, the Apex logo and sprout mark, and the Apex characters are trademarks of Senne Chin.')
+      if (branding.trademarkInfo) expect(config.win.legalTrademarks).toBe('Apex, the Apex logo and sprout mark, and the Apex characters are trademarks of Chinnovations.')
       else expect(config.win.legalTrademarks).toBeUndefined()
     }
   })
@@ -90,7 +90,7 @@ describe('the branding names the app', () => {
     const official = readBranding('official').trademarkInfo
     // The catalogue's English line is the official branding's, so the Dutch one translates the same sentence.
     expect(EN['updates.about.trademarkInfo']).toBe(official)
-    expect(NL['updates.about.trademarkInfo']).toMatch(/\{brand\}.*handelsmerken van Senne Chin/)
+    expect(NL['updates.about.trademarkInfo']).toMatch(/\{brand\}.*handelsmerken van Chinnovations/)
     const translate = (key: 'updates.about.trademarkInfo'): string => `[${key}]`
     expect(trademarkLine(official, translate)).toBe('[updates.about.trademarkInfo]')
     expect(trademarkLine('', translate)).toBe('')

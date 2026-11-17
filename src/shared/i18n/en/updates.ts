@@ -96,6 +96,6 @@ export const updates = {
   'updates.about.privacyTitle': 'Privacy',
   'updates.about.privacyBody': 'What {brand} keeps on this computer, and every service it can contact. No analytics.',
   'updates.about.openPrivacy': 'Open the privacy notice',
-  'updates.about.trademarkInfo': '{brand}, the {brand} logo and sprout mark, and the {brand} characters are trademarks of Senne Chin.',
+  'updates.about.trademarkInfo': '{brand}, the {brand} logo and sprout mark, and the {brand} characters are trademarks of Chinnovations.',
   'updates.about.panelCredits': 'The browser you make your own.',
 } as const

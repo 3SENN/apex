@@ -1,8 +1,11 @@
 # Apex Companion Art License
 
-Version 1.0
+Version 1.1
 
-Copyright © 2026 Senne Chin. All rights reserved, except as granted below.
+Copyright © 2026 Senne Chin, trading as Chinnovations (the Netherlands). All rights reserved, except as granted below.
+
+In this licence, "Chinnovations" means Senne Chin, trading as Chinnovations, and whoever the rights in the Companion
+Art pass to (section 7).
 
 Apex's code, including the companion engine, is open source under the [Mozilla Public License 2.0](LICENSE). The
 companion art is not: it is licensed under these terms, so that the Apex characters stay Apex's while everyone can
@@ -44,7 +47,7 @@ Free of charge, worldwide, you may:
 
 ## 3. What you may not do
 
-Without written permission, you may not:
+Without written permission from Chinnovations, you may not:
 
 1. use the Companion Art, or characters made from it, in other software, or in a build of Apex that you distribute
    as your own product (a fork), modified or not: a fork or another product brings its own character designs in place
@@ -64,13 +67,23 @@ rights beyond saying truthfully that something is made for Apex or uses Apex cha
 
 ## 5. Contributions
 
-When you contribute to the Companion Art, you confirm that you have the right to do so, and you grant Senne Chin and
-the Apex project a perpetual, worldwide, royalty-free, irrevocable licence to use, modify and distribute your
-contribution under this licence and any later version of it.
+When you contribute to the Companion Art, you confirm that you have the right to do so. You keep the copyright in
+your contribution, and you grant Chinnovations a perpetual, worldwide, non-exclusive, royalty-free and irrevocable
+licence to use, reproduce, modify, distribute and sublicense it, under this licence, any later version of it or other
+terms Chinnovations chooses. Chinnovations may transfer this licence together with the Companion Art.
 
 ## 6. No warranty, and ending the licence
 
 The Companion Art is provided "as is", without warranty of any kind. If you break these terms, your rights under this
 licence end automatically; they come back if you stop within 30 days of being told.
 
-Questions or requests for permission: [contact@chinnovations.nl](mailto:contact@chinnovations.nl).
+## 7. Who holds this licence, and new versions
+
+Chinnovations may transfer the Companion Art, with its rights under this licence, for example to a company that
+continues Apex or to a buyer of Apex. Whoever receives them takes Chinnovations' place in this licence, and the
+permissions you already have stay valid.
+
+Chinnovations may publish new versions of this licence, each with its own version number. Companion Art you received
+under one version stays available to you under that version, and you may also follow any later version.
+
+Questions or requests for permission: Chinnovations, [contact@chinnovations.nl](mailto:contact@chinnovations.nl).

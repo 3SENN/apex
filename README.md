@@ -121,7 +121,7 @@ ecosystem. None of it depends on advertising or on collecting your data; see [PR
   characters in `branding/official/`): the [Apex Companion Art License](ART-LICENSE.md). Create and share characters
   for Apex, in packs, apps and worlds too, and share builds to test changes for Apex; don't use them outside Apex or
   in a fork you distribute.
-- **Trademarks:** the Apex name, logo and sprout mark and the six Apex characters are trademarks of Senne Chin; see
+- **Trademarks:** the Apex name, logo and sprout mark and the six Apex characters are trademarks of Chinnovations; see
   [TRADEMARKS.md](TRADEMARKS.md).
 
 Third-party licences are listed in the app under Settings › About.

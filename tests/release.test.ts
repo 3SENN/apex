@@ -527,7 +527,7 @@ describe('the licence list', () => {
 
   it('lists the companion art under its own licence, with its text, beside the MPL code', () => {
     const own = ownLicenses(REPO)
-    expect(own).toEqual([{ name: 'Apex Companion Art', version: '1.0', license: 'LicenseRef-Apex-Companion-Art', text: read('ART-LICENSE.md') }])
+    expect(own).toEqual([{ name: 'Apex Companion Art', version: '1.1', license: 'LicenseRef-Apex-Companion-Art', text: read('ART-LICENSE.md') }])
     expect(licenseVerdict(own[0]!.license)).toBe('ok')
     // A checkout without ART-LICENSE.md (a fork with art of its own) lists none.
     expect(ownLicenses(join(REPO, 'tests'))).toEqual([])

@@ -98,6 +98,6 @@ export const updates = {
   'updates.about.privacyTitle': 'Privacy',
   'updates.about.privacyBody': 'Wat {brand} op deze computer bewaart, en elke dienst waarmee het verbinding kan maken. Geen analytics.',
   'updates.about.openPrivacy': 'Open de privacyverklaring',
-  'updates.about.trademarkInfo': '{brand}, het {brand}-logo en het spruitbeeldmerk, en de {brand}-personages zijn handelsmerken van Senne Chin.',
+  'updates.about.trademarkInfo': '{brand}, het {brand}-logo en het spruitbeeldmerk, en de {brand}-personages zijn handelsmerken van Chinnovations.',
   'updates.about.panelCredits': 'De browser die je helemaal van jou maakt.',
 } as const satisfies Dutch<typeof en>
