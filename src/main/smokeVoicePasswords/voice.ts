@@ -74,6 +74,16 @@ async function withVoice(ctx: SmokeContext, patch: Partial<VoiceSettings>, run: 
   }
 }
 
+/** waitFor, with the HUD as it was when the wait gave up in the message. */
+async function waitForHud(p: VoiceProbe, condition: () => boolean, ms: number, what: string): Promise<void> {
+  try {
+    await waitFor(condition, ms, what)
+  } catch (err) {
+    const h = p.hud()
+    throw new Error(`${err instanceof Error ? err.message : String(err)} (state ${h.state}, target ${h.target}, error ${h.error?.code ?? 'none'}, inserted ${h.inserted ?? 'none'}, heard ${JSON.stringify(h.settled)})`)
+  }
+}
+
 /** Where the system's pointer rests and where the HUD is, and whether the one is on the other (screen DIP). */
 function pointerOnHud(p: VoiceProbe): { on: boolean; where: string } {
   const win = p.float.window('voice-hud')
@@ -188,18 +198,26 @@ const dictation: SmokeCheck = {
     try {
       await wc.executeJavaScript(`document.getElementById('voice-field').focus(); true`)
       await withVoice(ctx, { target: 'auto', screenshot: false, rewriteField: false }, async () => {
+        // Each hold lasts until the words are in, as a person keeps holding while they speak: a slow
+        // machine can take longer than the hold to start the session, and a turn that heard nothing
+        // ends in no-speech instead of reaching the field.
         voiceSmoke.say('remember the oat milk')
         await hold(ctx, wc, 450, async () => {
-          await waitFor(() => p.hud().target === 'field', 3000, 'the HUD to aim at the field')
+          await waitForHud(p, () => p.hud().target === 'field', 3000, 'the HUD to aim at the field')
+          await waitForHud(p, () => p.hud().settled.includes('oat milk'), 3000, 'the words to settle')
         })
-        await waitFor(() => p.hud().inserted === 'typed', 6000, 'the text to be typed in')
+        await waitForHud(p, () => p.hud().inserted === 'typed', 6000, 'the text to be typed in')
         const value = await wc.executeJavaScript(`document.getElementById('voice-field').value`)
         assert(String(value).includes('remember the oat milk'), `the field holds the words (got ${JSON.stringify(value)})`)
         // A password field never takes dictation.
         await wc.executeJavaScript(`document.getElementById('voice-secret').focus(); true`)
         voiceSmoke.say('not for this field')
-        await hold(ctx, wc, 450)
-        await waitFor(() => p.hud().state === 'error' && p.hud().error?.code === 'no-field', 4000, 'the no-field error on a password field')
+        await hold(ctx, wc, 450, async () => {
+          // An error still shows the field it refused (hudTarget), so 'field' means the focus was read.
+          await waitForHud(p, () => p.hud().target === 'field', 3000, 'the HUD to aim at the password field')
+          await waitForHud(p, () => p.hud().settled.includes('this field'), 3000, 'the words to settle')
+        })
+        await waitForHud(p, () => p.hud().state === 'error' && p.hud().error?.code === 'no-field', 4000, 'the no-field error on a password field')
         const secret = await wc.executeJavaScript(`document.getElementById('voice-secret').value`)
         assert(secret === '', 'nothing was typed into the password field')
       })
