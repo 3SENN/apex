@@ -24,6 +24,45 @@ async function rect(ui: WebContents, selector: string): Promise<Rect | null> {
 
 const centre = (r: Rect): { x: number; y: number } => ({ x: Math.round(r.x + r.width / 2), y: Math.round(r.y + r.height / 2) })
 
+/**
+ * A row ready to press: scrolled into its list's view (in a small window, as on a CI runner's screen, a new row
+ * can sit below the fold, behind the sidebar's footer), at rest after its fold-in animation, and hit by a press
+ * at its centre. Returns its rect.
+ */
+async function restingRow(ui: WebContents, selector: string, timeoutMs: number, what: string): Promise<Rect> {
+  let prev: (Rect & { hit: boolean }) | null = null
+  await waitFor(async () => {
+    const now = (await ui.executeJavaScript(
+      `(() => { const el = document.querySelector(${JSON.stringify(selector)}); if (!el) return null
+        el.scrollIntoView({ block: 'nearest', behavior: 'instant' })
+        const r = el.getBoundingClientRect(); const hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)
+        return { x: r.x, y: r.y, width: r.width, height: r.height, hit: !!hit && el.contains(hit) } })()`,
+      true,
+    )) as (Rect & { hit: boolean }) | null
+    const settled = prev !== null && now !== null && now.hit && Math.abs(now.x - prev.x) < 0.5 && Math.abs(now.y - prev.y) < 0.5 && Math.abs(now.height - prev.height) < 0.5
+    prev = now
+    if (!settled) await sleep(120)
+    return settled
+  }, timeoutMs, what).catch((err: unknown) => {
+    throw new Error(`${err instanceof Error ? err.message : String(err)} (last ${JSON.stringify(prev)})`)
+  })
+  const { hit: _hit, ...r } = prev as unknown as Rect & { hit: boolean }
+  return r
+}
+
+/** What was under the press when a drag didn't start: the row, the viewport and the element hit there. */
+async function underPress(ui: WebContents, selector: string, at: { x: number; y: number }): Promise<string> {
+  return String(
+    await ui
+      .executeJavaScript(
+        `(() => { const el = document.querySelector(${JSON.stringify(selector)}); const r = el?.getBoundingClientRect(); const hit = document.elementFromPoint(${at.x}, ${at.y})
+          return JSON.stringify({ at: ${JSON.stringify(at)}, row: r ? { x: r.x, y: r.y, w: r.width, h: r.height } : null, viewport: [innerWidth, innerHeight], hit: hit ? (hit.closest('[data-drop-id]')?.getAttribute('data-drop-id') ?? '') + ' ' + hit.tagName + '.' + String(hit.className).slice(0, 60) : null, rowHit: !!(el && hit && el.contains(hit)) }) })()`,
+        true,
+      )
+      .catch((err: unknown) => `unknown (${String(err)})`),
+  )
+}
+
 const pinByDrag: SmokeCheck = {
   name: 'a dragged tab drops onto the pin target, which floats in without moving the rows under the pointer',
   async run(ctx) {
@@ -39,18 +78,10 @@ const pinByDrag: SmokeCheck = {
     try {
       await waitFor(async () => (await rect(ui, row)) !== null, 5000, 'the new tab’s row in the sidebar')
       // A new row folds in with a short animation; measure it once it has settled.
-      let prev: Rect | null = null
-      await waitFor(async () => {
-        const now = await rect(ui, row)
-        const settled = prev !== null && now !== null && Math.abs(now.y - prev.y) < 0.5 && Math.abs(now.height - prev.height) < 0.5
-        prev = now
-        if (!settled) await sleep(120)
-        return settled
-      }, 5000, 'the new row to settle')
+      const before = await restingRow(ui, row, 5000, 'the new row to settle')
       dbg.attach('1.3')
       attached = true
       await dbg.sendCommand('Input.setInterceptDrags', { enabled: true })
-      const before = (await rect(ui, row)) as Rect
       const from = centre(before)
       let data: unknown = null
       const onMessage = (_e: unknown, method: string, params: { data?: unknown }): void => {
@@ -60,7 +91,9 @@ const pinByDrag: SmokeCheck = {
       try {
         await dbg.sendCommand('Input.dispatchMouseEvent', { type: 'mousePressed', x: from.x, y: from.y, button: 'left', clickCount: 1 })
         for (let i = 1; i <= 6; i++) await dbg.sendCommand('Input.dispatchMouseEvent', { type: 'mouseMoved', x: from.x + i * 3, y: from.y + i * 2, button: 'left', buttons: 1 })
-        await waitFor(() => data !== null, 3000, 'the tab drag to start')
+        await waitFor(() => data !== null, 3000, 'the tab drag to start').catch(async (err: unknown) => {
+          throw new Error(`${err instanceof Error ? err.message : String(err)} (${await underPress(ui, row, from)})`)
+        })
         dragging = true
         last = from
         await dbg.sendCommand('Input.dispatchDragEvent', { type: 'dragEnter', x: from.x, y: from.y, data })
@@ -139,22 +172,17 @@ const splitByDrag: SmokeCheck = {
       const origin = win.window.getContentBounds()
       steerTabDrag({ x: Math.round(origin.x + page.x + page.width * 0.85), y: Math.round(origin.y + page.y + page.height / 2) })
     }
+    let step = 'the drop'
     const startDrag = async (id: string): Promise<void> => {
       const row = `.sidebar [data-drop-row][data-drop-id="${id}"]`
       // New rows fold in with a short animation: press once the row has settled, or the press lands on its neighbour.
-      let prev: Rect | null = null
-      await waitFor(async () => {
-        const now = await rect(ui, row)
-        const settled = prev !== null && now !== null && Math.abs(now.y - prev.y) < 0.5 && Math.abs(now.height - prev.height) < 0.5
-        prev = now
-        if (!settled) await sleep(120)
-        return settled
-      }, 5000, 'the tab’s row to settle in the sidebar')
-      const from = centre(prev as unknown as Rect)
+      const from = centre(await restingRow(ui, row, 5000, 'the tab’s row to settle in the sidebar'))
       data = null
       await dbg.sendCommand('Input.dispatchMouseEvent', { type: 'mousePressed', x: from.x, y: from.y, button: 'left', clickCount: 1 })
       for (let i = 1; i <= 6; i++) await dbg.sendCommand('Input.dispatchMouseEvent', { type: 'mouseMoved', x: from.x + i * 3, y: from.y + i * 2, button: 'left', buttons: 1 })
-      await waitFor(() => data !== null, 3000, 'the tab drag to start')
+      await waitFor(() => data !== null, 3000, 'the tab drag to start').catch(async (err: unknown) => {
+        throw new Error(`${err instanceof Error ? err.message : String(err)} (${step}: ${await underPress(ui, row, from)})`)
+      })
       dragging = true
       steerRight()
       await waitFor(zonesShown, 3000, 'the split zones over the page')
@@ -215,6 +243,7 @@ const splitByDrag: SmokeCheck = {
       await zonesGone('after the drop')
 
       // 2. Escape over the zones: the source's drag ends, no drop comes, nothing splits.
+      step = 'Escape'
       ctx.tabs.closeSplit()
       ctx.tabs.activate(base.id)
       await startDrag(other.id)
@@ -226,6 +255,7 @@ const splitByDrag: SmokeCheck = {
       await zonesGone('after Escape')
 
       // 3. A lost dragend: the zones' first real pointer move ends the drag as a cancel.
+      step = 'the lost dragend'
       await startDrag(other.id)
       const z = await dragOverZones()
       await odbg.sendCommand('Input.dispatchDragEvent', { type: 'dragCancel', x: 0, y: 0, data })
@@ -288,24 +318,20 @@ const splitFromReveal: SmokeCheck = {
         return (await rect(overlay, '.sidebar-reveal')) !== null
       }, 6000, 'the floating sidebar to open')
       const row =`.sidebar-reveal .tab-row[data-tab-ids~="${dragged.id}"]`
-      let prev: Rect | null = null
-      await waitFor(async () => {
-        const now = await rect(overlay, row)
-        const settled = prev !== null && now !== null && Math.abs(now.x - prev.x) < 0.5 && Math.abs(now.y - prev.y) < 0.5
-        prev = now
-        if (!settled) await sleep(120)
-        return settled
-      }, 6000, 'the dragged tab’s row in the floating sidebar, at rest').catch(async (err: unknown) => {
-        const seen = await overlay.executeJavaScript(`(() => { const r = document.querySelector('.sidebar-reveal'); return JSON.stringify({ reveal: !!r, rows: r ? [...r.querySelectorAll('.tab-row')].map((e) => e.dataset.tabIds) : null, open: ${JSON.stringify(win.overlay.openSurfaces().map((s) => s.surface))} }) })()`, true).catch(() => 'unknown')
-        throw new Error(`${err instanceof Error ? err.message : String(err)} (dragged ${dragged.id}, last ${JSON.stringify(prev)}, ${seen})`)
-      })
-      const from = centre(prev as unknown as Rect)
+      const from = centre(
+        await restingRow(overlay, row, 6000, 'the dragged tab’s row in the floating sidebar, at rest').catch(async (err: unknown) => {
+          const seen = await overlay.executeJavaScript(`(() => { const r = document.querySelector('.sidebar-reveal'); return JSON.stringify({ reveal: !!r, rows: r ? [...r.querySelectorAll('.tab-row')].map((e) => e.dataset.tabIds) : null, open: ${JSON.stringify(win.overlay.openSurfaces().map((s) => s.surface))} }) })()`, true).catch(() => 'unknown')
+          throw new Error(`${err instanceof Error ? err.message : String(err)} (dragged ${dragged.id}, ${seen})`)
+        }),
+      )
       dbg.attach('1.3')
       await dbg.sendCommand('Input.setInterceptDrags', { enabled: true })
       dbg.on('message', onMessage)
       await dbg.sendCommand('Input.dispatchMouseEvent', { type: 'mousePressed', x: from.x, y: from.y, button: 'left', clickCount: 1 })
       for (let i = 1; i <= 6; i++) await dbg.sendCommand('Input.dispatchMouseEvent', { type: 'mouseMoved', x: from.x + i * 3, y: from.y + i * 2, button: 'left', buttons: 1 })
-      await waitFor(() => data !== null, 3000, 'the tab drag to start in the floating sidebar')
+      await waitFor(() => data !== null, 3000, 'the tab drag to start in the floating sidebar').catch(async (err: unknown) => {
+        throw new Error(`${err instanceof Error ? err.message : String(err)} (${await underPress(overlay, row, from)})`)
+      })
       dragging = true
       const page = win.tabs.layoutBounds().primary
       const origin = win.window.getContentBounds()

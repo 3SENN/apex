@@ -366,8 +366,10 @@ async function builds(ctx: SmokeContext): Promise<void> {
     res.end(`<!doctype html><p>cookie:${req.headers.cookie ?? 'none'}</p>`)
   })
   const tested = await test.run({ id: DRAFT, tests: [{ tool: 'add', input: { a: 2, b: 3 } }, { tool: 'peek', input: {}, url: `${ctx.server.http}/packs/whoami` }] }, toolCtx())
-  const report = JSON.parse(tested.content) as { ok: boolean; results: Array<{ ok: boolean; result?: string }> }
-  assert(report.ok && report.results[0]?.result === '{"sum":5}', `test_pack: ${tested.content.slice(0, 400)}`)
+  const report = JSON.parse(tested.content) as { ok: boolean; results: Array<{ tool: string; ok: boolean; result?: string; error?: string }>; log?: string[] }
+  // A failure names the test that failed and the draft's log, not the report's opening lines.
+  const failed = report.results.filter((r) => !r.ok)
+  assert(report.ok && report.results[0]?.result === '{"sum":5}', `test_pack: ${failed.length ? JSON.stringify(failed) : tested.content.slice(0, 400)}; log ${JSON.stringify(report.log ?? [])}`)
   assert(report.results[1]?.result === 'cookie:none', `a test page carried your cookies: ${report.results[1]?.result}`)
   await session.defaultSession.cookies.remove(ctx.server.http, 'apexsmoke')
   assert(!clientTool(packToolName(DRAFT, 'add')), 'a tested draft left its tool registered')

@@ -50,6 +50,11 @@ const reveal: SmokeCheck = {
         'the floating sidebar to come to rest',
       )
       await sleep(200)
+      // The view shows once main has the surface's frame from the overlay renderer, which can trail the drawing on a
+      // slow machine: wait for it, and if it never shows, say whether the reveal is still open.
+      await waitFor(() => win.overlay.interactiveBounds() !== null, 3000, 'the overlay view to show').catch(() => {
+        throw new Error(`the overlay view is not showing (open: ${win.overlay.openSurfaces().map((s) => s.surface).join(', ') || 'nothing'}; sidebar ${win.chromeWindow.state().sidebarOpen ? 'shown' : 'hidden'})`)
+      })
       const view = win.overlay.interactiveBounds()
       const r = box as unknown as { x: number; y: number; width: number; height: number }
       assert(view, 'the overlay view is not showing')
