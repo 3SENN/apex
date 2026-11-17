@@ -129,12 +129,13 @@ jobs:
 
       # xvfb is the display and openbox its window manager, as every Linux
       # desktop has one (without it windows aren't managed: no focus rules,
-      # no frames). Ubuntu 24.04's AppArmor blocks the unprivileged user
-      # namespaces Chromium's sandbox needs, so allow them for the run.
+      # no frames). xdotool parks the pointer (below). Ubuntu 24.04's AppArmor
+      # blocks the unprivileged user namespaces Chromium's sandbox needs, so
+      # allow them for the run.
       - name: Prepare a display and the sandbox
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends xvfb openbox
+          sudo apt-get install -y --no-install-recommends xvfb openbox xdotool
           sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
 
       - name: Install dependencies
@@ -152,12 +153,15 @@ jobs:
           npm test
 
       # The same steps as `npm run smoke`, with the kit (pack apps' import map and Apex UI), under the display.
+      # xvfb's pointer starts at the screen's centre, over the page, where no person's rests while a check
+      # opens a surface under it (one that appears there can take that for a move): it waits in the
+      # bottom-right corner instead, off the 1280x900 window, as a pointer left beside the window would.
       - name: Smoke test
         run: |
           unset ELECTRON_RUN_AS_NODE
           npx electron-vite build
           node scripts/kit/build.mjs
-          xvfb-run -a sh -c 'openbox & sleep 1; exec node scripts/smoke.mjs'
+          xvfb-run -a sh -c 'openbox & sleep 1; xdotool mousemove 1279 1023; exec node scripts/smoke.mjs'
 
   # Optional: a Developer ID build of the macOS app, signed (and notarized when
   # the notarization secrets are there), checked and thrown away. It needs the
