@@ -1,0 +1,136 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* The toast (OV-05): a compact pill at the top centre of the tab. It
+   inverts the surface colour so it reads over any page, in both themes; the
+   error variant is wider and tinted. The entrance is a short drop that
+   collapses to a plain appearance under Reduce Motion (the tokens go to 0). */
+
+.tst {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  max-width: min(420px, calc(var(--ov-vw, 100vw) - 32px));
+  padding: 6px 8px 6px 12px;
+  border-radius: var(--toast-radius);
+  background: var(--toast-bg);
+  color: var(--toast-fg);
+  box-shadow: var(--toast-shadow);
+  font-size: var(--text-md);
+  line-height: 1.35;
+  -webkit-app-region: no-drag;
+  animation: tst-in var(--motion-enter) var(--ease-out);
+}
+
+.tst[data-state='closing'] {
+  pointer-events: none;
+  animation: tst-out var(--motion-exit) var(--ease-exit) forwards;
+}
+
+.tst--error {
+  max-width: min(520px, calc(var(--ov-vw, 100vw) - 32px));
+  background: var(--toast-error-bg);
+  color: var(--toast-error-fg);
+}
+
+.tst--two-line {
+  align-items: flex-start;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.tst__icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+}
+
+.tst__icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.tst__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  padding-right: 4px;
+}
+
+.tst__title {
+  font-weight: 550;
+  overflow-wrap: anywhere;
+}
+
+.tst__detail {
+  color: var(--toast-fg-muted);
+  font-size: var(--text-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tst--error .tst__detail {
+  color: inherit;
+  opacity: 0.8;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.tst__action,
+.tst__close {
+  flex: none;
+  height: 24px;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--toast-action);
+  font: inherit;
+  font-weight: 650;
+  cursor: default;
+}
+
+.tst__action {
+  padding: 0 8px;
+}
+
+.tst__close {
+  display: grid;
+  width: 24px;
+  place-items: center;
+  opacity: 0.75;
+}
+
+.tst__close svg {
+  width: 14px;
+  height: 14px;
+}
+
+.tst__action:hover,
+.tst__close:hover {
+  background: var(--toast-action-hover);
+  opacity: 1;
+}
+
+.tst__action:focus-visible,
+.tst__close:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 1px;
+}
+
+@keyframes tst-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes tst-out {
+  to {
+    opacity: 0;
+  }
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Copyright (c) 2026 The Apex Authors. All rights reserved.
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this file,
+     You can obtain one at https://mozilla.org/MPL/2.0/. -->
+<plist version="1.0">
+<dict>
+  <key>CFBundleIdentifier</key>
+  <string>com.sennechin.apex.calendar</string>
+  <key>CFBundleName</key>
+  <string>Apex Calendar</string>
+  <key>NSCalendarsFullAccessUsageDescription</key>
+  <string>Apex reads your calendar, only after you turn it on, so your companion can see what is coming up. Apex never adds or changes events.</string>
+  <key>NSCalendarsUsageDescription</key>
+  <string>Apex reads your calendar, only after you turn it on, so your companion can see what is coming up. Apex never adds or changes events.</string>
+  <key>NSRemindersFullAccessUsageDescription</key>
+  <string>Apex reads your reminders, only after you turn them on, so your companion can help you plan. Apex never adds or changes reminders.</string>
+  <key>NSRemindersUsageDescription</key>
+  <string>Apex reads your reminders, only after you turn them on, so your companion can help you plan. Apex never adds or changes reminders.</string>
+</dict>
+</plist>

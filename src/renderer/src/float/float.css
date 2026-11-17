@@ -1,0 +1,805 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* Floating windows: transparent panels over every Space. Each view is a
+   card drawn with the shared tokens, so light and dark come from styles.css. */
+
+html,
+body.float-body,
+body.float-body #root {
+  height: auto;
+  background: transparent;
+}
+
+body.float-body {
+  overflow: hidden;
+  user-select: none;
+}
+
+.float-root {
+  display: inline-block;
+  width: 100%;
+}
+
+.float-card {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  background: var(--bg-raised);
+  color: var(--text-primary);
+  border: var(--hairline, 1px) solid var(--border-default);
+  box-shadow: var(--shadow-overlay);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: float-enter var(--motion-enter) var(--ease-out);
+}
+
+.float-error__text,
+.float-placeholder__text {
+  margin: 0;
+  flex: 1;
+  color: var(--text-secondary);
+}
+
+.float-button {
+  font: inherit;
+  padding: 4px 10px;
+  border-radius: var(--radius-md);
+  border: var(--hairline, 1px) solid var(--border-default);
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.float-button:hover {
+  background: var(--bg-muted);
+}
+
+.float-button:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+@keyframes float-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+:root[data-motion='reduced'] .float-card {
+  animation: none;
+}
+
+/* The HUD and the launcher: the live companion bust on the left, the words
+   and controls on the right. Companion colours come in as --voice-co-*-light
+   and -dark and are picked with light-dark(), so both themes follow. */
+.voice-float-pad {
+  padding: 10px;
+  --voice-co: light-dark(var(--voice-co-light, var(--accent)), var(--voice-co-dark, var(--accent)));
+  --voice-co-text: light-dark(var(--voice-co-text-light, var(--text-on-accent)), var(--voice-co-text-dark, var(--text-on-accent)));
+  --voice-co-soft: light-dark(var(--voice-co-soft-light, var(--accent-soft)), var(--voice-co-soft-dark, var(--accent-soft)));
+}
+
+.voice-hud,
+.voice-launcher {
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px 10px 6px;
+  border-radius: var(--radius-xl, 18px);
+  font-family: var(--font);
+  font-size: var(--text-md);
+  line-height: 1.4;
+}
+
+.voice-bust {
+  flex: none;
+  width: 96px;
+  height: 96px;
+  margin: -4px 0 -6px;
+}
+
+.voice-hud__body,
+.voice-launcher__main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 4px;
+}
+
+.voice-hud__head,
+.voice-launcher__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+}
+
+.voice-hud__status,
+.voice-launcher__status {
+  flex: 1;
+  margin: 0;
+  min-width: 0;
+  color: var(--text-secondary);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.voice-hud__status--error,
+.voice-launcher__status--error {
+  color: var(--danger);
+  white-space: normal;
+}
+
+.voice-hud--listening .voice-hud__status {
+  color: var(--voice-co);
+}
+
+.voice-hud__transcript {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--text-lg);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  max-height: 7.2em;
+  overflow: hidden;
+  user-select: text;
+}
+
+.voice-hud__transcript--quoted {
+  font-size: var(--text-md);
+  padding: 6px 8px;
+  border-radius: var(--radius-md);
+  background: var(--bg-subtle);
+}
+
+.voice-hud__live {
+  color: var(--text-tertiary);
+}
+
+.voice-hud__answer {
+  max-height: 220px;
+  overflow: auto;
+  color: var(--text-primary);
+  user-select: text;
+}
+
+.voice-md p,
+.voice-md ul,
+.voice-md ol {
+  margin: 0 0 6px;
+}
+
+.voice-md ul,
+.voice-md ol {
+  padding-left: 18px;
+}
+
+.voice-md__heading {
+  font-weight: 600;
+}
+
+.voice-md code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  padding: 0 3px;
+  border-radius: var(--radius-xs, 4px);
+  background: var(--bg-subtle);
+}
+
+.voice-md__link {
+  color: var(--text-link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.voice-hud__sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.voice-hud__source {
+  max-width: 160px;
+  padding: 1px 8px;
+  border-radius: var(--radius-pill, 999px);
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.voice-hud__notice,
+.voice-hud__hint,
+.voice-launcher__hints {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+}
+
+.voice-hud__queue {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.voice-hud__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.voice-hud__actions:empty {
+  display: none;
+}
+
+.voice-hud__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--text-sm);
+}
+
+.voice-hud__action--primary {
+  background: var(--voice-co);
+  border-color: transparent;
+  color: var(--voice-co-text);
+}
+
+.voice-hud__action--primary:hover {
+  background: var(--voice-co);
+  filter: brightness(0.96);
+}
+
+.voice-link-button {
+  font: inherit;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-link);
+  cursor: pointer;
+}
+
+.voice-link-button:focus-visible,
+.voice-icon-button:focus-visible,
+.voice-chip:focus-visible,
+.voice-send:focus-visible,
+.voice-launcher__input:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.voice-icon-button {
+  position: relative;
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.voice-icon-button:hover:not(:disabled) {
+  background: var(--bg-hover, var(--bg-muted));
+  color: var(--text-primary);
+}
+
+.voice-icon-button:disabled {
+  color: var(--text-disabled);
+  cursor: default;
+}
+
+/* The countdown ring around Close drains over the payload's countdownMs. */
+.voice-ring {
+  position: absolute;
+  inset: 0;
+  width: 28px;
+  height: 28px;
+  transform: rotate(-90deg);
+  fill: none;
+  stroke: var(--voice-co);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 0;
+  animation-name: voice-ring-drain;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+.voice-ring--still {
+  animation: none;
+  opacity: 0.5;
+}
+
+@keyframes voice-ring-drain {
+  to {
+    stroke-dashoffset: 100;
+  }
+}
+
+.voice-level {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 16px;
+}
+
+.voice-level__bar {
+  width: 3px;
+  height: 16px;
+  border-radius: 2px;
+  background: var(--voice-co);
+  transform-origin: center;
+  transition: transform 70ms linear;
+}
+
+.voice-level--still {
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--bg-muted);
+  overflow: hidden;
+}
+
+.voice-level__fill {
+  display: block;
+  height: 100%;
+  background: var(--voice-co);
+}
+
+/* Launcher */
+.voice-launcher__input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 34px;
+  margin: 0;
+  padding: 6px 2px;
+  border: 0;
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--text-lg);
+  line-height: 1.35;
+  resize: none;
+  user-select: text;
+}
+
+.voice-launcher__input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.voice-launcher__input--live {
+  color: var(--text-secondary);
+}
+
+.voice-launcher__bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.voice-launcher__spacer {
+  flex: 1;
+}
+
+.voice-launcher__fix {
+  display: flex;
+}
+
+.voice-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px 0 4px;
+  border: var(--hairline, 1px) solid var(--border-default);
+  border-radius: var(--radius-pill, 999px);
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.voice-chip:not(:has(img)) {
+  padding-left: 10px;
+}
+
+.voice-chip--on {
+  border-color: transparent;
+  background: var(--voice-co-soft);
+  color: var(--text-primary);
+}
+
+.voice-chip:hover:not(:disabled) {
+  background: var(--bg-hover, var(--bg-muted));
+}
+
+.voice-chip:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.voice-chip__thumb {
+  width: 30px;
+  height: 20px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.voice-send {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--voice-co);
+  color: var(--voice-co-text);
+  cursor: pointer;
+}
+
+.voice-send:disabled {
+  background: var(--bg-muted);
+  color: var(--text-disabled);
+  cursor: default;
+}
+
+.voice-launcher__dot {
+  margin: 0 6px;
+}
+
+.voice-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border: var(--hairline, 1px) solid var(--border-default);
+  border-radius: 4px;
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  font-family: var(--font);
+  font-size: 10px;
+}
+
+:root[data-motion='reduced'] .voice-level__bar {
+  transition: none;
+}
+
+/* Both size themselves: the float window follows the content (FloatRoot
+   measures it), so the widget can grow into the wrap-up. */
+.float-root[data-kind='meeting-card'],
+.float-root[data-kind='recording'] {
+  width: max-content;
+}
+
+/* Meeting card (MV-09): neutral raised card, ink primary action. */
+.mc-card,
+.wu {
+  width: 360px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  padding: 12px 12px 12px 14px;
+}
+
+.mc-head,
+.wu-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.mc-glyph,
+.wu-glyph {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-md);
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+}
+
+.mc-card[data-mode='continue'] .mc-glyph {
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.wu[data-phase='failed'] .wu-glyph {
+  background: var(--status-error-soft);
+  color: var(--status-error);
+}
+
+.mc-titles,
+.wu-titles {
+  flex: 1;
+  min-width: 0;
+}
+
+.mc-title,
+.wu-title {
+  margin: 0;
+  font-size: var(--text-md);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mc-sub,
+.wu-heading {
+  margin: 2px 0 0;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.mc-body,
+.wu-body {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.mc-missing {
+  margin: -2px 0 0;
+  padding-left: 18px;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.mc-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mc-actions[hidden] {
+  display: none;
+}
+
+.mc-error {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--status-error);
+}
+
+.mc-countdown {
+  height: 3px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-muted);
+  overflow: hidden;
+}
+
+.mc-countdown__fill {
+  display: block;
+  height: 100%;
+  background: var(--warning);
+  transform-origin: left center;
+  transition: transform 250ms linear;
+}
+
+.mc-countdown__fill[data-snap] {
+  transition: none;
+}
+
+.mc-menu {
+  display: flex;
+  flex-direction: column;
+  padding: 4px;
+  border-radius: var(--radius-md);
+  background: var(--bg-subtle);
+  border: var(--hairline, 1px) solid var(--border-subtle);
+}
+
+.mc-menu__item {
+  font: inherit;
+  font-size: var(--text-sm);
+  text-align: left;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.mc-menu__item:hover,
+.mc-menu__item:focus-visible {
+  background: var(--bg-hover);
+}
+
+.mc-menu__item:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: -2px;
+}
+
+/* Wrap-up (MV-11) */
+.wu-discuss {
+  display: flex;
+  gap: 4px;
+}
+
+.wu-discuss__main {
+  flex: 1;
+  justify-content: flex-start;
+}
+
+.wu-picker {
+  max-height: 104px;
+  overflow-y: auto;
+}
+
+.wu-picker__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Recording widget (MV-10): 48 px tall, at least 220 wide. */
+.rw {
+  min-width: 220px;
+  height: 48px;
+  padding: 0 6px 0 4px;
+  gap: 6px;
+  border-radius: var(--radius-pill);
+}
+
+.rw-handle {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 14px;
+  height: 32px;
+  color: var(--text-tertiary);
+  opacity: 0;
+  cursor: grab;
+  /* The handle is the drag region; it needs no pointer events of its own (found while building the floats). */
+  -webkit-app-region: drag;
+  transition: opacity var(--dur-fast) var(--ease-standard);
+}
+
+.rw:hover .rw-handle {
+  opacity: 1;
+}
+
+.rw-dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--status-error);
+  animation: rw-pulse 1.6s var(--ease-standard) infinite;
+}
+
+.rw[data-state='paused'] .rw-dot,
+.rw[data-state='starting'] .rw-dot,
+.rw[data-state='stopping'] .rw-dot {
+  background: var(--text-tertiary);
+  animation: none;
+}
+
+.rw-time {
+  flex: none;
+  min-width: 40px;
+  font-size: var(--text-md);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+.rw[data-state='paused'] .rw-time {
+  color: var(--text-secondary);
+}
+
+.rw-warn {
+  flex: none;
+  display: grid;
+  place-items: center;
+  color: var(--warning);
+}
+
+button.rw-warn {
+  padding: 2px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  cursor: pointer;
+}
+
+button.rw-warn:hover {
+  background: var(--bg-muted);
+}
+
+button.rw-warn:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.rw-note {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.rw-bars {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  height: 18px;
+  min-width: 26px;
+}
+
+.rw-bars i {
+  display: block;
+  width: 3px;
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--text-secondary);
+  transform-origin: center;
+  transition: transform 90ms linear;
+}
+
+.rw-bars[data-snap] i {
+  transition: none;
+}
+
+.rw-controls {
+  flex: none;
+  display: inline-flex;
+  gap: 2px;
+  -webkit-app-region: no-drag;
+}
+
+@keyframes rw-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+:root[data-motion='reduced'] .rw-dot,
+:root[data-motion='reduced'] .rw-handle,
+:root[data-motion='reduced'] .mc-countdown__fill,
+:root[data-motion='reduced'] .rw-bars i {
+  animation: none;
+  transition: none;
+}

@@ -1,0 +1,119 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* Settings › Privacy › Site settings: the per-site editor, cookie data rows and
+   the cookie exceptions. Tokens only, so light and dark come from the token block. */
+
+.ss-site {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.ss-host {
+  font-weight: 550;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.ss-editor {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-3) var(--space-8);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  background: var(--bg-subtle);
+}
+
+.ss-editor__title {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ss-editor__title:first-of-type {
+  margin-top: 0;
+}
+
+.ss-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-1) var(--space-4);
+}
+
+.ss-perm {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 32px;
+  color: var(--text-secondary);
+}
+
+.ss-perm__label {
+  min-width: 0;
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ss-add {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+}
+
+.ss-add__label {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.ss-add > input,
+.ss-add > .ui-input {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+.ss-add__error {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--danger);
+}
+
+.ss-empty {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--border-subtle);
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+}
+
+.ss-exceptions {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.ss-exception {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 40px;
+  padding: var(--space-1) var(--space-4);
+}
+
+.ss-exception + .ss-exception {
+  border-top: 1px solid var(--border-subtle);
+}

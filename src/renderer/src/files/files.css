@@ -1,0 +1,692 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* The shared file previews (OV-32, CH-28), the file viewer page,
+   Library › Files, quick look and the artifact strip. Every colour is a
+   light-dark token, so both themes follow `color-scheme`. */
+
+:root {
+  --fv-paper: light-dark(#ffffff, #1d1b19);
+  --fv-well: light-dark(#f5f3ef, #262321);
+  --fv-rule: light-dark(rgba(40, 32, 20, 0.1), rgba(255, 248, 236, 0.1));
+  --fv-gutter: light-dark(#a39d93, #6f6a63);
+  --fv-keyword: light-dark(#8a3a8f, #dba7e3);
+  --fv-string: light-dark(#2f7a3c, #9fd5a3);
+  --fv-number: light-dark(#a3520f, #f0b27a);
+  --fv-key: light-dark(#1f638f, #8ec7ea);
+  --fv-comment: var(--src-comment, light-dark(#7d786f, #8a847b));
+  --fv-tag: var(--src-tag, light-dark(#8a3f9e, #d6a4e6));
+  --fv-attr: var(--src-attr, light-dark(#9a5a12, #e7b77a));
+  --fv-thumb: light-dark(#ece9e3, #2c2926);
+  --fv-thumb-ink: light-dark(#8d877d, #8b857c);
+  --fv-glow: var(--accent);
+}
+
+/* ── Preview body ── */
+
+.fv-preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3, 12px);
+  min-width: 0;
+  color: var(--text-primary);
+}
+
+.fv-preview--compact {
+  gap: var(--space-2, 8px);
+}
+
+.fv-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--radius-md, 10px);
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  font-size: var(--text-sm, 13px);
+}
+
+.fv-notice svg {
+  flex: none;
+  width: 15px;
+  height: 15px;
+}
+
+.fv-notice--writing {
+  background: var(--status-working-soft, var(--bg-subtle));
+}
+
+.fv-notice--error {
+  background: var(--danger-soft, var(--bg-subtle));
+  color: var(--danger, var(--text-primary));
+}
+
+.fv-notice__action {
+  margin-left: auto;
+}
+
+.fv-front {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 16px;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--fv-rule);
+  border-radius: var(--radius-md, 10px);
+  background: var(--fv-well);
+  font-size: var(--text-sm, 13px);
+}
+
+.fv-front__title {
+  grid-column: 1 / -1;
+  margin: 0 0 4px;
+  color: var(--text-tertiary);
+  font-size: var(--text-xs, 12px);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.fv-front dt {
+  color: var(--text-secondary);
+}
+
+.fv-front dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.fv-md {
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.fv-code,
+.fv-text {
+  margin: 0;
+  padding: 12px 0;
+  overflow: auto;
+  border: 1px solid var(--fv-rule);
+  border-radius: var(--radius-md, 10px);
+  background: var(--fv-well);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 12.5px;
+  line-height: 1.6;
+  tab-size: 2;
+}
+
+.fv-text {
+  padding: 12px 14px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.fv-code__lines {
+  display: table;
+  min-width: 100%;
+  counter-reset: fv-line;
+}
+
+.fv-code__line {
+  display: table-row;
+  white-space: pre;
+}
+
+.fv-code__line::before {
+  display: table-cell;
+  padding: 0 12px 0 14px;
+  color: var(--fv-gutter);
+  text-align: right;
+  user-select: none;
+  content: counter(fv-line);
+  counter-increment: fv-line;
+}
+
+.fv-code__text {
+  display: table-cell;
+  padding-right: 14px;
+}
+
+.fv-tok--comment { color: var(--fv-comment); font-style: italic; }
+.fv-tok--string { color: var(--fv-string); }
+.fv-tok--number { color: var(--fv-number); }
+.fv-tok--keyword { color: var(--fv-keyword); font-weight: 600; }
+.fv-tok--key { color: var(--fv-key); }
+.fv-tok--tag { color: var(--fv-tag); }
+.fv-tok--attr { color: var(--fv-attr); }
+
+.fv-frame {
+  width: 100%;
+  min-height: 420px;
+  height: 64vh;
+  border: 1px solid var(--fv-rule);
+  border-radius: var(--radius-md, 10px);
+  /* The page's own paper: white in both themes is the page, not Apex's UI. */
+  background: #ffffff;
+}
+
+.fv-preview--compact .fv-frame {
+  min-height: 260px;
+  height: 46vh;
+}
+
+.fv-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  border: 1px solid var(--fv-rule);
+  border-radius: var(--radius-md, 10px);
+  background:
+    repeating-conic-gradient(var(--fv-well) 0% 25%, var(--fv-paper) 0% 50%) 0 0 / 16px 16px;
+}
+
+.fv-image img {
+  display: block;
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+}
+
+.fv-preview--compact .fv-image img {
+  max-height: 48vh;
+}
+
+.fv-media {
+  display: flex;
+  justify-content: center;
+  padding: 12px;
+  border: 1px solid var(--fv-rule);
+  border-radius: var(--radius-md, 10px);
+  background: var(--fv-well);
+}
+
+.fv-media video {
+  max-width: 100%;
+  max-height: 66vh;
+  border-radius: var(--radius-sm, 6px);
+  background: #000000;
+}
+
+.fv-media audio {
+  width: min(520px, 100%);
+}
+
+.fv-sheet {
+  overflow: auto;
+  max-height: 68vh;
+  border: 1px solid var(--fv-rule);
+  border-radius: var(--radius-md, 10px);
+  background: var(--fv-paper);
+}
+
+.fv-preview--compact .fv-sheet {
+  max-height: 46vh;
+}
+
+.fv-sheet table {
+  border-collapse: collapse;
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.fv-sheet th,
+.fv-sheet td {
+  max-width: 280px;
+  padding: 5px 10px;
+  overflow: hidden;
+  border-right: 1px solid var(--fv-rule);
+  border-bottom: 1px solid var(--fv-rule);
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fv-sheet thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--fv-well);
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.fv-sheet tbody th {
+  position: sticky;
+  left: 0;
+  background: var(--fv-well);
+  color: var(--fv-gutter);
+  font-weight: 500;
+  text-align: right;
+}
+
+.fv-sheet__meta {
+  color: var(--text-tertiary);
+  font-size: var(--text-xs, 12px);
+}
+
+.fv-pdf {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--fv-rule);
+  border-radius: var(--radius-md, 10px);
+  background: var(--fv-well);
+}
+
+.fv-pdf__page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}
+
+.fv-pdf__page canvas {
+  max-width: 100%;
+  height: auto !important;
+  box-shadow: var(--shadow-sm);
+  background: #ffffff;
+}
+
+.fv-pdf__page figcaption {
+  color: var(--text-tertiary);
+  font-size: var(--text-xs, 12px);
+}
+
+.fv-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 40px 16px;
+  border: 1px dashed var(--fv-rule);
+  border-radius: var(--radius-md, 10px);
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.fv-placeholder__icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--fv-thumb);
+  color: var(--fv-thumb-ink);
+}
+
+.fv-placeholder__icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.fv-placeholder__name {
+  color: var(--text-primary);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.fv-placeholder__meta {
+  color: var(--text-tertiary);
+  font-size: var(--text-sm, 13px);
+}
+
+.fv-editor {
+  width: 100%;
+  min-height: 60vh;
+  padding: 14px;
+  resize: vertical;
+  border: 1px solid var(--border-default, var(--fv-rule));
+  border-radius: var(--radius-md, 10px);
+  background: var(--fv-paper);
+  color: var(--text-primary);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.fv-editor:focus-visible {
+  outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color, var(--accent));
+  outline-offset: 1px;
+}
+
+/* ── The viewer page (apex://file) ── */
+
+.fv-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  background: var(--bg-base, var(--bg-window));
+}
+
+.fv-page__header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--fv-rule);
+  background: var(--bg-base, var(--bg-window));
+}
+
+.fv-page__title {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  gap: 2px;
+}
+
+.fv-page__name {
+  margin: 0;
+  overflow: hidden;
+  font-size: 16px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fv-page__sub {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-tertiary);
+  font-size: var(--text-xs, 12px);
+}
+
+.fv-page__actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+}
+
+.fv-page__body {
+  width: min(960px, 100%);
+  margin: 0 auto;
+  padding: 20px 24px 48px;
+  box-sizing: border-box;
+}
+
+/* The version history panel beside the viewer. */
+.fv-page__split {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.fv-page__split > .fv-page__body {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+}
+
+.fv-page__state {
+  padding-top: 12vh;
+}
+
+/* ── Library › Files cards ── */
+
+.lf-grid {
+  /* DS-105: 265×269 cards with 16 px gaps, left-aligned in the wide template. */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(265px, 100%), 265px));
+  gap: 16px;
+  margin: 0 0 28px;
+  padding: 0;
+  list-style: none;
+}
+
+.lf-group__label {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 4px 0 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.lf-group__count {
+  color: var(--text-tertiary);
+  font-size: var(--text-sm, 13px);
+  font-weight: 500;
+}
+
+/* A recessed frame holding a raised preview, the name, one muted line and the kind chip. */
+.lf-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 269px;
+  border: 1px solid var(--border-card, var(--fv-rule));
+  border-radius: 18px;
+  background: var(--bg-subtle);
+  transition: box-shadow var(--dur-fast, 120ms) var(--ease-standard, ease), border-color var(--dur-fast, 120ms) var(--ease-standard, ease);
+}
+
+.lf-card:hover {
+  border-color: var(--border-default, var(--fv-rule));
+  box-shadow: var(--shadow-sm);
+}
+
+.lf-card:focus-within {
+  border-color: var(--focus-ring-color, var(--accent));
+}
+
+.lf-card__open {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  padding: 6px 6px 12px;
+  border: 0;
+  border-radius: inherit;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.lf-card__open:focus-visible {
+  outline: none;
+}
+
+.lf-card__thumb {
+  display: grid;
+  flex: 1 1 auto;
+  min-height: 0;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--border-card, var(--fv-rule));
+  border-radius: 13px;
+  background: var(--bg-raised);
+  color: var(--fv-thumb-ink);
+}
+
+/* The kind glyph sits in a soft rounded tile, Apex's own. */
+.lf-card__glyph {
+  display: grid;
+  width: 60px;
+  height: 60px;
+  place-items: center;
+  border-radius: 16px;
+  background: var(--fv-thumb);
+}
+
+.lf-card__glyph svg {
+  width: 28px;
+  height: 28px;
+}
+
+.lf-card__name {
+  overflow: hidden;
+  margin: 12px 8px 0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 20px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lf-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  margin: 2px 8px 0;
+  overflow: hidden;
+  color: var(--text-tertiary);
+  font-size: var(--text-sm, 13px);
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+.lf-card__source {
+  overflow: hidden;
+  min-width: 0;
+  text-overflow: ellipsis;
+}
+
+.lf-card__source:not(:empty)::before {
+  content: '· ';
+}
+
+.lf-card__foot {
+  display: flex;
+  align-items: center;
+  min-height: 28px;
+  margin: 8px 40px 0 8px;
+}
+
+.lf-card__more {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+}
+
+.lf-card__state {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* DS-105: the selector pill beside the title. */
+.lf-selector {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  max-width: 260px;
+  padding: 0 10px 0 12px;
+  border: 1px solid var(--border-default);
+  border-radius: 16px;
+  background: var(--bg-raised);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--text-md);
+  cursor: pointer;
+}
+
+.lf-selector:has(.lf-selector__face) {
+  padding-left: 6px;
+}
+
+.lf-selector:hover {
+  background: var(--bg-hover);
+}
+
+.lf-selector > svg {
+  flex: none;
+  color: var(--text-tertiary);
+}
+
+.lf-selector__face {
+  display: inline-flex;
+  flex: none;
+}
+
+.lf-selector__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lf-card--writing .lf-card__thumb {
+  animation: lf-breathe 1.6s var(--ease-standard, ease-in-out) infinite alternate;
+}
+
+@keyframes lf-breathe {
+  from { opacity: 1; }
+  to { opacity: 0.55; }
+}
+
+:root[data-motion='reduced'] .lf-card--writing .lf-card__thumb {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lf-card--writing .lf-card__thumb {
+    animation: none;
+  }
+}
+
+.lf-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 220px;
+}
+
+/* ── Rename dialog ── */
+
+.fv-rename__error {
+  margin: 6px 0 0;
+  color: var(--danger);
+  font-size: var(--text-sm, 13px);
+}
+
+/* ── Artifact strip (in the toolbar while an artifact tab is active) ── */
+
+.fv-artifact-strip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 360px;
+  height: 28px;
+  padding: 0 4px 0 10px;
+  border: 1px solid var(--border-subtle, var(--fv-rule));
+  border-radius: var(--radius-pill, 999px);
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  font-size: var(--text-xs, 12px);
+}
+
+.fv-artifact-strip__label {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 5px;
+  font-weight: 600;
+}
+
+.fv-artifact-strip__label svg {
+  width: 13px;
+  height: 13px;
+}
+
+.fv-artifact-strip__name {
+  overflow: hidden;
+  color: var(--text-primary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

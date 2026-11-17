@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Apex Fixture Notes",
+  "version": "1.2.0",
+  "description": "A small MV3 fixture with a popup, commands and permissions.",
+  "icons": { "16": "icon.png", "48": "icon.png" },
+  "action": { "default_popup": "popup.html", "default_title": "Fixture notes" },
+  "background": { "service_worker": "background.js" },
+  "permissions": ["storage", "tabs", "contextMenus", "nativeMessaging"],
+  "optional_permissions": ["bookmarks", "history"],
+  "host_permissions": ["https://*.example.com/*"],
+  "optional_host_permissions": ["https://notes.example.org/*"],
+  "commands": {
+    "_execute_action": { "suggested_key": { "default": "Ctrl+Shift+Y", "mac": "Command+Shift+Y" } },
+    "new-note": { "description": "Start a note", "suggested_key": { "default": "Ctrl+Shift+N" } },
+    "quiet": { "description": "No key" }
+  }
+}

@@ -1,0 +1,237 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* The Workspace hub, its sections, version history, folder access and
+   the Space row. Colours come from Apex's tokens; the project palette is
+   defined here for light and dark. No entrance motion on the hub;
+   the few transitions honour reduced motion. */
+
+:root {
+  --ws-card-border: light-dark(var(--border-default), var(--border-subtle));
+  --ws-head-band: light-dark(var(--bg-muted), var(--bg-subtle));
+  --ws-row-hover: var(--bg-hover);
+  --ws-row-selected: var(--row-selected);
+  --ws-hit-bg: color-mix(in srgb, var(--status-needs-input) 22%, transparent);
+  --ws-hit-text: var(--text-primary);
+
+  /* Project colours: Apex's palette ids, a step lighter in dark mode. */
+  --ws-project-graphite: light-dark(#6f6a63, #aaa49c);
+  --ws-project-berry: light-dark(#b0476d, #e489aa);
+  --ws-project-honey: light-dark(#a8730f, #e3b457);
+  --ws-project-fern: light-dark(#3d8a4e, #7cc78e);
+  --ws-project-lagoon: light-dark(#2c7c9c, #72bfdc);
+  --ws-project-iris: light-dark(#6150c2, #a89bf0);
+  --ws-project-coral: light-dark(#bf553b, #ef957e);
+  --ws-project-sage: light-dark(#5c7a67, #a0bcaa);
+}
+
+.ws-dot { display: inline-block; flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--ws-dot, var(--ws-project-graphite)); }
+.ws-dot--graphite { --ws-dot: var(--ws-project-graphite); }
+.ws-dot--berry { --ws-dot: var(--ws-project-berry); }
+.ws-dot--honey { --ws-dot: var(--ws-project-honey); }
+.ws-dot--fern { --ws-dot: var(--ws-project-fern); }
+.ws-dot--lagoon { --ws-dot: var(--ws-project-lagoon); }
+.ws-dot--iris { --ws-dot: var(--ws-project-iris); }
+.ws-dot--coral { --ws-dot: var(--ws-project-coral); }
+.ws-dot--sage { --ws-dot: var(--ws-project-sage); }
+.ws-dot--none { background: transparent; box-shadow: inset 0 0 0 1.5px var(--text-tertiary); }
+
+/* ── The hub frame: one centred column with the title and Search everything,
+   the four tabs with Recently deleted at the end of their row, then the
+   section. The page scrolls as a whole. ── */
+.ws-page { height: 100%; min-height: 0; overflow-x: hidden; overflow-y: auto; background: var(--bg-sheet); color: var(--text-primary); font-size: var(--text-md); scrollbar-gutter: stable; }
+.ws-frame { display: flex; flex-direction: column; box-sizing: border-box; max-width: 1120px; min-height: 100%; margin: 0 auto; padding: 36px 32px 48px; }
+.ws-top { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 24px; margin-bottom: 16px; }
+.ws-top__title { flex: 1 1 auto; margin: 0; font-size: var(--text-2xl); font-weight: 600; letter-spacing: -0.015em; }
+.ws-top__search { flex: 0 1 360px; min-width: 0; }
+.ws-tabsrow { display: flex; align-items: center; gap: 8px; border-bottom: var(--hairline) solid var(--border-default); }
+.ws-tabsrow .ui-tabs { flex: 1 1 auto; min-width: 0; margin-left: -12px; border-bottom: 0; overflow-x: auto; scrollbar-width: none; }
+.ws-tabsrow .ui-tabs__tab { height: 42px; font-size: var(--text-lg); font-weight: 500; }
+.ws-tabsrow .ui-tabs__tab[aria-selected='true'] { font-weight: 600; }
+.ws-trash-link { flex: none; color: var(--text-secondary); }
+.ws-trash-link[aria-current='page'] { color: var(--text-primary); background: var(--bg-hover); }
+.ws-trash-link__count { display: inline-grid; place-items: center; min-width: 18px; height: 18px; margin-left: 6px; padding: 0 5px; border-radius: var(--radius-pill); background: var(--bg-muted); color: var(--text-secondary); font-size: var(--text-xs); font-weight: 600; }
+.ws-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.ws-main__panel { flex: 1; display: flex; flex-direction: column; min-width: 0; outline-offset: 4px; }
+
+/* A section: its head (a back arrow and title on a project, a folder, an app
+   or a table; on the tab's own view only a light row of the subtitle and the
+   actions) and its body. */
+.ws-card { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.ws-section { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.ws-card__head { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; min-height: 64px; padding: 18px 0 6px; }
+.ws-card__head--bar { min-height: 0; padding: 16px 0 0; }
+.ws-card__head--bar .ws-card__title { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.ws-card__head--bar .ws-card__subtitle { margin: 0; }
+.ws-card__titles { flex: 1 1 240px; min-width: 0; }
+.ws-card__title { margin: 0; font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ws-card__subtitle { margin: 3px 0 0; color: var(--text-secondary); font-size: var(--text-md); }
+.ws-card__actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; flex: none; margin-left: auto; }
+.ws-card__body { flex: 1; min-width: 0; padding: 18px 0 24px; }
+.ws-card__body--flush { padding: 0; }
+
+/* A block inside a section (Shared folders, Companion files, Tables): a small
+   heading with its own action at the end. */
+.ws-block { margin-top: 32px; }
+.ws-block:first-child { margin-top: 0; }
+.ws-block__head { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+.ws-block__title { flex: 1 1 auto; margin: 0; font-size: var(--text-lg); font-weight: 600; }
+.ws-block__hint { margin: -6px 0 12px; color: var(--text-tertiary); }
+
+@media (max-width: 640px) {
+  .ws-frame { padding: 20px 16px 32px; }
+  .ws-top__search { flex-basis: 100%; }
+}
+
+.ws-toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.ws-toolbar__grow { flex: 1; min-width: 0; }
+.ws-search { display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border: var(--hairline) solid var(--border-default); border-radius: var(--radius-pill); background: var(--bg-raised); color: var(--text-tertiary); }
+.ws-search:focus-within { border-color: var(--border-strong); }
+.ws-search svg { width: 16px; height: 16px; flex: none; }
+.ws-search input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--text-primary); font: inherit; font-size: var(--text-lg); }
+.ws-search input::placeholder { color: var(--text-tertiary); }
+.ws-round { display: inline-grid; place-items: center; flex: none; width: 36px; height: 36px; border: var(--hairline) solid var(--border-default); border-radius: 50%; background: var(--bg-raised); color: var(--text-secondary); cursor: pointer; }
+.ws-round:hover { background: var(--bg-hover); color: var(--text-primary); }
+.ws-round:focus-visible { outline: 2px solid var(--focus-ring-chrome); outline-offset: 2px; }
+.ws-round svg { width: 16px; height: 16px; }
+.ws-round[data-active] { color: var(--text-primary); border-color: var(--border-strong); }
+
+/* ── Tables (Projects, Files, Recently deleted) ── */
+.ws-table { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
+.ws-table thead th { position: sticky; top: 0; z-index: 1; height: 40px; padding: 0 12px; background: var(--ws-head-band); color: var(--text-secondary); font-size: var(--text-md); font-weight: 500; text-align: left; white-space: nowrap; }
+.ws-table thead th:first-child { border-top-left-radius: var(--radius-md); border-bottom-left-radius: var(--radius-md); }
+.ws-table thead th:last-child { border-top-right-radius: var(--radius-md); border-bottom-right-radius: var(--radius-md); }
+.ws-table td { height: 48px; padding: 0 12px; border-bottom: var(--hairline) solid var(--border-subtle); color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ws-table tbody tr { cursor: default; }
+.ws-table tbody tr:hover td { background: var(--ws-row-hover); }
+.ws-table tbody tr[aria-selected='true'] td { background: var(--ws-row-selected); }
+.ws-table tbody tr:focus-visible { outline: 2px solid var(--focus-ring-chrome); outline-offset: -2px; }
+.ws-table .ws-col-check { width: 44px; }
+.ws-table .ws-col-num { width: 110px; }
+.ws-table .ws-col-time { width: 140px; }
+.ws-table .ws-col-kind { width: 150px; }
+.ws-table .ws-col-more { width: 52px; text-align: right; }
+.ws-name { display: flex; align-items: center; gap: 10px; min-width: 0; color: var(--text-primary); }
+.ws-name > span:last-child { overflow: hidden; text-overflow: ellipsis; }
+.ws-name__tile { display: inline-grid; place-items: center; flex: none; width: 30px; height: 30px; border: var(--hairline) solid var(--border-default); border-radius: var(--radius-sm); background: var(--bg-subtle); color: var(--text-secondary); }
+.ws-name__tile svg { width: 15px; height: 15px; }
+.ws-link { padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; overflow: hidden; text-overflow: ellipsis; }
+.ws-link:hover { text-decoration: underline; }
+.ws-link:focus-visible { outline: 2px solid var(--focus-ring-chrome); outline-offset: 2px; border-radius: 3px; }
+.ws-pill { display: inline-flex; align-items: center; gap: 5px; height: 22px; padding: 0 8px; border-radius: var(--radius-pill); background: var(--bg-muted); color: var(--text-secondary); font-size: var(--text-sm); }
+.ws-muted { color: var(--text-tertiary); }
+
+.ws-bulk { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; min-height: 32px; }
+.ws-bulk__count { color: var(--text-secondary); margin-right: auto; }
+
+/* ── Files: the list and, beside it, a file's version history ── */
+.ws-files { flex: 1; min-height: 0; display: flex; }
+
+/* ── Breadcrumbs ── */
+.ws-crumbs { display: flex; align-items: center; flex-wrap: wrap; gap: 2px; margin: 0 0 14px; padding: 0; list-style: none; color: var(--text-secondary); }
+.ws-crumbs li { display: flex; align-items: center; gap: 2px; }
+.ws-crumbs li + li::before { content: '/'; margin: 0 4px; color: var(--text-tertiary); }
+.ws-crumbs button { padding: 2px 6px; border: 0; border-radius: var(--radius-xs); background: none; color: inherit; font: inherit; cursor: pointer; }
+.ws-crumbs button:hover { background: var(--bg-hover); color: var(--text-primary); }
+.ws-crumbs [aria-current='page'] { color: var(--text-primary); font-weight: 500; }
+
+/* ── Home ── */
+.ws-home { display: grid; gap: 28px; }
+.ws-home__section h3 { display: flex; align-items: center; justify-content: space-between; margin: 0 0 10px; font-size: var(--text-lg); font-weight: 600; }
+.ws-home__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.ws-tile { display: flex; flex-direction: column; gap: 6px; min-width: 0; padding: 14px; border: var(--hairline) solid var(--border-default); border-radius: var(--radius-md); background: var(--bg-raised); color: var(--text-primary); font: inherit; text-align: left; cursor: pointer; }
+.ws-tile:hover { border-color: var(--border-strong); }
+.ws-tile:focus-visible { outline: 2px solid var(--focus-ring-chrome); outline-offset: 2px; }
+.ws-tile__title { display: flex; align-items: center; gap: 8px; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.ws-tile__meta { color: var(--text-tertiary); font-size: var(--text-sm); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.ws-home__empty { color: var(--text-tertiary); }
+.ws-home__starts { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+
+/* ── Search ── */
+.ws-results { display: grid; gap: 22px; }
+.ws-results__group h3 { margin: 0 0 6px; font-size: var(--text-lg); font-weight: 600; }
+.ws-hit { display: grid; grid-template-columns: 30px 1fr auto; align-items: start; gap: 10px; width: 100%; padding: 9px 10px; border: 0; border-radius: var(--radius-sm); background: none; color: var(--text-primary); font: inherit; text-align: left; cursor: pointer; }
+.ws-hit:hover { background: var(--ws-row-hover); }
+.ws-hit:focus-visible { outline: 2px solid var(--focus-ring-chrome); outline-offset: -2px; }
+.ws-plain-list { margin: 0; padding: 0; list-style: none; }
+.ws-hit__body { display: block; min-width: 0; }
+.ws-hit__title { display: block; }
+.ws-hit__title { font-weight: 500; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.ws-hit__snippet { margin-top: 2px; color: var(--text-secondary); font-size: var(--text-md); line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ws-hit__time { color: var(--text-tertiary); font-size: var(--text-sm); white-space: nowrap; }
+.ws-hit mark { background: var(--ws-hit-bg); color: var(--ws-hit-text); border-radius: 3px; padding: 0 1px; }
+.ws-index { display: flex; align-items: center; gap: 10px; color: var(--text-tertiary); font-size: var(--text-sm); }
+
+/* ── Project detail ── */
+.ws-project__meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ws-project__instructions { margin: 0 0 20px; padding: 12px 14px; border-radius: var(--radius-md); background: var(--bg-subtle); color: var(--text-secondary); white-space: pre-wrap; line-height: 1.5; max-height: 160px; overflow-y: auto; }
+.ws-subhead { margin: 0 0 8px; font-size: var(--text-md); font-weight: 600; color: var(--text-secondary); }
+.ws-project__none { margin: 0 0 20px; }
+.ws-name__extra { flex: 0 1 auto; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.ws-rows { display: grid; gap: 2px; }
+.ws-row { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 8px; border-radius: var(--radius-sm); }
+.ws-row:hover { background: var(--ws-row-hover); }
+.ws-row__main { flex: 1; min-width: 0; white-space: nowrap; color: var(--text-primary); }
+.ws-segments { margin-bottom: 14px; }
+
+/* ── Dialogs: project editor, pickers, folder access ── */
+.ws-form { display: grid; gap: 16px; }
+.ws-field { display: grid; gap: 6px; }
+.ws-field__label { font-weight: 500; }
+.ws-field__hint { color: var(--text-tertiary); font-size: var(--text-sm); }
+.ws-field input[type='text'], .ws-field textarea { width: 100%; padding: 8px 10px; border: var(--hairline) solid var(--border-default); border-radius: var(--radius-control); background: var(--bg-raised); color: var(--text-primary); font: inherit; }
+.ws-field textarea { min-height: 96px; resize: vertical; line-height: 1.45; }
+.ws-field input:focus-visible, .ws-field textarea:focus-visible { outline: 2px solid var(--focus-ring-chrome); outline-offset: 1px; }
+.ws-field__error { color: var(--status-error); font-size: var(--text-sm); }
+.ws-swatches { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; border: 0; }
+.ws-swatch { display: inline-grid; place-items: center; width: 28px; height: 28px; border: 2px solid transparent; border-radius: 50%; background: none; cursor: pointer; }
+.ws-swatch .ws-dot { width: 18px; height: 18px; }
+.ws-swatch[aria-checked='true'] { border-color: var(--text-primary); }
+.ws-swatch:focus-visible { outline: 2px solid var(--focus-ring-chrome); outline-offset: 1px; }
+.ws-choice { display: grid; gap: 8px; margin: 0; padding: 0; border: 0; }
+.ws-choice legend { margin-bottom: 8px; padding: 0; font-weight: 500; }
+.ws-option { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; align-items: start; padding: 10px 12px; border: var(--hairline) solid var(--border-default); border-radius: var(--radius-md); cursor: pointer; }
+.ws-option:has(input:checked) { border-color: var(--border-strong); background: var(--bg-subtle); }
+.ws-option:has(input:focus-visible) { outline: 2px solid var(--focus-ring-chrome); outline-offset: 1px; }
+.ws-option input { margin: 3px 0 0; accent-color: var(--text-primary); }
+.ws-option__title { font-weight: 500; }
+.ws-option__text { grid-column: 2; color: var(--text-secondary); font-size: var(--text-sm); }
+.ws-path { padding: 8px 10px; border-radius: var(--radius-sm); background: var(--bg-subtle); color: var(--text-secondary); font-family: var(--font-mono); font-size: var(--text-sm); overflow-wrap: anywhere; }
+.ws-pick { display: grid; gap: 2px; max-height: 320px; overflow-y: auto; margin-top: 10px; }
+.ws-pick label { display: flex; align-items: center; gap: 10px; min-height: 36px; padding: 0 8px; border-radius: var(--radius-sm); cursor: pointer; }
+.ws-pick label:hover { background: var(--bg-hover); }
+.ws-pick input { accent-color: var(--text-primary); }
+.ws-pick__label { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.ws-pick label svg { width: 16px; height: 16px; flex: none; color: var(--text-tertiary); }
+.ws-pick__detail { margin-left: auto; color: var(--text-tertiary); font-size: var(--text-sm); white-space: nowrap; }
+
+/* ── Version history (inside the file viewer) ── */
+.ws-versions { display: flex; flex-direction: column; width: 300px; height: 100%; min-height: 0; border-left: var(--hairline) solid var(--border-default); background: var(--bg-raised); }
+.ws-versions__head { display: flex; align-items: center; gap: 8px; padding: 12px 12px 10px 16px; border-bottom: var(--hairline) solid var(--border-subtle); }
+.ws-versions__head h2 { flex: 1; margin: 0; font-size: var(--text-lg); font-weight: 600; }
+.ws-versions__list { flex: none; max-height: 45%; overflow-y: auto; margin: 0; padding: 6px; list-style: none; }
+.ws-version { display: flex; align-items: center; gap: 8px; width: 100%; padding: 8px 10px; border: 0; border-radius: var(--radius-sm); background: none; color: var(--text-primary); font: inherit; text-align: left; cursor: pointer; }
+.ws-version:hover { background: var(--bg-hover); }
+.ws-version[aria-selected='true'] { background: var(--ws-row-selected); }
+.ws-version:focus-visible { outline: 2px solid var(--focus-ring-chrome); outline-offset: -2px; }
+.ws-version__when { flex: 1; min-width: 0; }
+.ws-version__time { display: block; font-weight: 500; }
+.ws-version__label { display: block; color: var(--text-tertiary); font-size: var(--text-sm); }
+.ws-versions__preview { flex: 1; min-height: 0; display: flex; flex-direction: column; border-top: var(--hairline) solid var(--border-subtle); }
+.ws-versions__preview pre { flex: 1; min-height: 0; margin: 0; padding: 12px 16px; overflow: auto; color: var(--text-secondary); font-family: var(--font-mono); font-size: var(--text-sm); line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
+.ws-versions__loading { flex: 1; padding: 16px; }
+.ws-versions__actions { padding: 10px 12px; border-top: var(--hairline) solid var(--border-subtle); }
+
+/* ── The Space row (top of the sidebar) ── */
+.space-row { display: flex; align-items: center; gap: 8px; width: 100%; height: var(--row-height); margin-bottom: 4px; padding: 0 10px; border: 0; border-radius: var(--radius-row); background: transparent; color: var(--chrome-strong); font: inherit; font-size: var(--text-lg); text-align: left; cursor: pointer; }
+.space-row:hover, .space-row[data-menu-open] { background: var(--bg-hover); }
+.space-row:focus-visible { outline: 2px solid var(--focus-ring-chrome); outline-offset: -2px; }
+.space-row__name { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.space-row__chevron { width: 14px; height: 14px; flex: none; color: var(--chrome-muted); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .ws-round, .ws-tile, .space-row { transition: background-color var(--motion-quick) ease, border-color var(--motion-quick) ease; }
+}
+:root[data-reduced-motion] .ws-round, :root[data-reduced-motion] .ws-tile, :root[data-reduced-motion] .space-row { transition: none; }

@@ -1,0 +1,227 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* Guide preview scenes (scenes.tsx). Fills come from the page tokens in
+   first-week.css, so both modes follow the theme. Every loop rests on its
+   complete frame: the 0% and 100% keyframes match the drawn state, and the
+   loop plays only on hover, focus or .fw-scene--play. */
+
+.fw-scene {
+  display: block;
+  font-family: var(--font);
+}
+
+.fw-scene * {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation-play-state: paused;
+  animation-fill-mode: both;
+}
+
+.fw-tut:hover .fw-scene *,
+.fw-tut:focus-visible .fw-scene *,
+.fw-scene--play * {
+  animation-play-state: running;
+}
+
+.fw-s-win { fill: var(--fw-scene-surface); stroke: var(--fw-scene-line); stroke-width: 1; }
+.fw-s-rule { stroke: var(--fw-scene-line); stroke-width: 1; }
+.fw-s-bar { fill: var(--fw-scene-bar); }
+.fw-s-ink { fill: var(--fw-scene-ink); }
+.fw-s-ink-strong { fill: var(--fw-scene-ink-strong); }
+.fw-s-tint { fill: var(--fw-scene-tint); }
+.fw-s-tint-soft { fill: var(--fw-scene-tint-soft); }
+.fw-s-face { fill: var(--fw-scene-face); }
+.fw-s-eye { fill: var(--fw-scene-eye); }
+.fw-s-mouth { fill: none; stroke: var(--fw-scene-eye); stroke-width: 1.3; stroke-linecap: round; }
+.fw-s-shadow { fill: color-mix(in srgb, var(--fw-scene-tint) 26%, transparent); }
+.fw-s-bubble { fill: var(--fw-scene-surface); stroke: var(--fw-scene-line); stroke-width: 1; }
+.fw-s-dot { fill: var(--fw-scene-tint); }
+.fw-s-sparkle { fill: var(--fw-scene-tint); }
+.fw-s-composer,
+.fw-s-menu,
+.fw-s-paper { fill: var(--fw-scene-surface); stroke: var(--fw-scene-line); stroke-width: 1; }
+.fw-s-slash { fill: var(--fw-scene-ink-strong); font-size: 14px; font-weight: 700; }
+.fw-s-clock { fill: var(--fw-scene-surface); stroke: var(--fw-scene-ink-strong); stroke-width: 2; }
+.fw-s-hand { stroke: var(--fw-scene-ink-strong); stroke-width: 2.6; stroke-linecap: round; }
+.fw-s-day { fill: var(--fw-scene-tint-soft); }
+.fw-s-cord { fill: none; stroke: var(--fw-scene-tint); stroke-width: 3; stroke-linecap: round; }
+.fw-s-glow { fill: none; stroke: color-mix(in srgb, var(--fw-scene-tint) 40%, transparent); stroke-width: 2; opacity: 0; }
+.fw-s-check-bg { fill: var(--status-success); }
+.fw-s-check { fill: none; stroke: var(--on-status); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---- companion life ---- */
+
+.fw-s-bob { animation: fw-a-bob 2.6s ease-in-out infinite; }
+.fw-s-blink { animation: fw-a-blink 3.2s ease-in-out infinite; }
+.fw-s-wave { transform-origin: 30% 90%; animation: fw-a-wave 2.6s ease-in-out infinite; }
+.fw-s-bubble-pop { transform-origin: 70% 100%; animation: fw-a-pop 4.2s var(--ease-out) infinite; }
+.fw-s-dot { animation: fw-a-dot 1.2s ease-in-out infinite; }
+.fw-s-dot--2 { animation-delay: 160ms; }
+.fw-s-dot--3 { animation-delay: 320ms; }
+.fw-s-sparkle { animation: fw-a-twinkle 2.4s ease-in-out infinite; }
+
+/* ---- chats ---- */
+
+.fw-s-hop { animation: fw-a-hop 6s var(--ease-out) infinite; transform-origin: 0 0; }
+.fw-s-slide-in { animation: fw-a-slide 6s var(--ease-out) infinite; }
+.fw-s-appear { animation: fw-a-appear 6s var(--ease-out) infinite; }
+.fw-s-appear--2 { animation-name: fw-a-appear-2; }
+.fw-s-appear--3 { animation-name: fw-a-appear-3; }
+.fw-s-appear--4 { animation-name: fw-a-appear-4; }
+
+/* ---- skills and routines ---- */
+
+.fw-s-pick { animation: fw-a-pick 5s var(--ease-out) infinite; transform-origin: 0 0; }
+.fw-s-grow { transform-origin: 0% 50%; animation: fw-a-grow 5s var(--ease-out) infinite; }
+.fw-s-hand--long { transform-box: view-box; transform-origin: 238px 78px; animation: fw-a-spin 5s linear infinite; }
+.fw-s-hand--short { transform-box: view-box; transform-origin: 238px 78px; animation: fw-a-spin 30s linear infinite; }
+.fw-s-day { animation: fw-a-day 5s ease-in-out infinite; }
+.fw-s-day--1 { animation-delay: 1s; }
+.fw-s-day--2 { animation-delay: 2s; }
+.fw-s-day--3 { animation-delay: 3s; }
+.fw-s-day--4 { animation-delay: 4s; }
+
+/* ---- memory and connectors ---- */
+
+.fw-s-note { animation: fw-a-note 5.4s var(--ease-out) infinite; }
+.fw-s-note--0 { --fw-from: translate(-18px, 22px) rotate(-8deg); }
+.fw-s-note--1 { --fw-from: translate(26px, 30px) rotate(7deg); }
+.fw-s-note--2 { --fw-from: translate(6px, 46px) rotate(-3deg); }
+.fw-s-plug { animation: fw-a-plug 5.4s var(--ease-out) infinite; }
+.fw-s-glow { animation: fw-a-glow 5.4s ease-out infinite; }
+.fw-s-checked { animation: fw-a-checked 5.4s var(--ease-spring) infinite; }
+
+@keyframes fw-a-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2.5px); }
+}
+
+@keyframes fw-a-blink {
+  0%, 44%, 50%, 100% { transform: scaleY(1); }
+  47% { transform: scaleY(0.1); }
+}
+
+@keyframes fw-a-wave {
+  0%, 40%, 100% { transform: rotate(0); }
+  50% { transform: rotate(-38deg); }
+  60% { transform: rotate(-12deg); }
+  70% { transform: rotate(-38deg); }
+  80% { transform: rotate(0); }
+}
+
+@keyframes fw-a-pop {
+  0%, 70% { opacity: 1; transform: scale(1); }
+  78%, 84% { opacity: 0; transform: scale(0.6); }
+  94% { opacity: 1; transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fw-a-dot {
+  0%, 60%, 100% { transform: translateY(0); opacity: 1; }
+  30% { transform: translateY(-2.5px); opacity: 0.6; }
+}
+
+@keyframes fw-a-twinkle {
+  0%, 100% { transform: scale(1) rotate(0); opacity: 1; }
+  50% { transform: scale(0.45) rotate(45deg); opacity: 0.5; }
+}
+
+@keyframes fw-a-hop {
+  0%, 18%, 100% { transform: translateY(0); }
+  26%, 44% { transform: translateY(16px); }
+  52%, 70% { transform: translateY(32px); }
+  78%, 92% { transform: translateY(80px); }
+}
+
+@keyframes fw-a-slide {
+  0%, 74%, 100% { transform: translateX(0); opacity: 1; }
+  80% { transform: translateX(-60px); opacity: 0; }
+  88% { transform: translateX(-60px); opacity: 0; }
+  96% { transform: translateX(3px); opacity: 1; }
+}
+
+@keyframes fw-a-appear {
+  0%, 100% { opacity: 1; transform: translateY(0); }
+  6%, 14% { opacity: 0; transform: translateY(5px); }
+  22% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fw-a-appear-2 {
+  0%, 100% { opacity: 1; transform: translateY(0); }
+  6%, 26% { opacity: 0; transform: translateY(5px); }
+  34% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fw-a-appear-3 {
+  0%, 100% { opacity: 1; transform: translateY(0); }
+  6%, 34% { opacity: 0; transform: translateY(5px); }
+  42% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fw-a-appear-4 {
+  0%, 100% { opacity: 1; transform: translateY(0); }
+  6%, 42% { opacity: 0; transform: translateY(5px); }
+  50% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fw-a-pick {
+  0%, 20%, 100% { transform: translateY(0); }
+  30%, 50% { transform: translateY(16px); }
+  60%, 86% { transform: translateY(32px); }
+}
+
+@keyframes fw-a-grow {
+  0%, 100% { transform: scaleX(1); opacity: 1; }
+  8%, 30% { transform: scaleX(0); opacity: 0; }
+  42% { transform: scaleX(1.06); opacity: 1; }
+  48% { transform: scaleX(1); }
+}
+
+@keyframes fw-a-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fw-a-day {
+  0%, 30%, 100% { fill: var(--fw-scene-tint-soft); }
+  10%, 20% { fill: var(--fw-scene-tint); }
+}
+
+@keyframes fw-a-note {
+  0%, 100% { transform: none; opacity: 1; }
+  10%, 18% { transform: var(--fw-from); opacity: 0; }
+  40% { transform: none; opacity: 1; }
+}
+
+@keyframes fw-a-plug {
+  0%, 100% { transform: translateX(0); }
+  14%, 40% { transform: translateX(-34px); }
+  56% { transform: translateX(2px); }
+  62% { transform: translateX(0); }
+}
+
+@keyframes fw-a-glow {
+  0%, 56% { opacity: 0; transform: scale(0.6); }
+  66% { opacity: 1; transform: scale(1); }
+  86%, 100% { opacity: 0; transform: scale(1.2); }
+}
+
+@keyframes fw-a-checked {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  10%, 58% { transform: scale(0); opacity: 0; }
+  68% { transform: scale(1.15); opacity: 1; }
+  74% { transform: scale(1); }
+}
+
+:root[data-motion='reduced'] .fw-scene *,
+.fw-scene--still * {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fw-scene * {
+    animation: none !important;
+  }
+}

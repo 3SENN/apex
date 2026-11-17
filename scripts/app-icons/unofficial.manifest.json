@@ -1,0 +1,807 @@
+{
+  "about": "The unofficial branding's icons, drawn from branding/unofficial/icon.svg by scripts/app-icons/unofficial.mjs. sha256 is the file; content is the decoded pixels (or text).",
+  "files": {
+    "branding/unofficial/apexcompanion.icns": {
+      "kind": "icns",
+      "bytes": 43788,
+      "sha256": "0324b451e9fe3c805752ecf23d4d56195197350a5bd45a1511aedffe3ccd434c",
+      "content": "39aef71b65b4520500c15a026af332a4c7772f08711d41fa211706b6d19e42de",
+      "sizes": [
+        [
+          16,
+          16
+        ],
+        [
+          32,
+          32
+        ],
+        [
+          32,
+          32
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          128,
+          128
+        ],
+        [
+          256,
+          256
+        ],
+        [
+          256,
+          256
+        ],
+        [
+          512,
+          512
+        ],
+        [
+          512,
+          512
+        ],
+        [
+          1024,
+          1024
+        ]
+      ]
+    },
+    "branding/unofficial/apexcompanion.ico": {
+      "kind": "ico",
+      "bytes": 84252,
+      "sha256": "0694e2bef2e5199b6ad56409fe36658b294b5bc2f97d2afa2b3121abceaffeb2",
+      "content": "41c653584e8207b0959e660ca814002970a944d052245249ce2db781134cdae0",
+      "sizes": [
+        [
+          16,
+          16
+        ],
+        [
+          20,
+          20
+        ],
+        [
+          24,
+          24
+        ],
+        [
+          32,
+          32
+        ],
+        [
+          40,
+          40
+        ],
+        [
+          48,
+          48
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          96,
+          96
+        ],
+        [
+          256,
+          256
+        ]
+      ]
+    },
+    "branding/unofficial/apexcompanion.png": {
+      "kind": "png",
+      "bytes": 6773,
+      "sha256": "6e627f6b8761aece90bc70901fb77bdb1102c7ff3be742b48f572d6d2e4457c2",
+      "content": "1572f3085d1fcdaf912aff3b927bc1068723d831f3035bd860532b1dc5e6b77a",
+      "sizes": [
+        [
+          512,
+          512
+        ]
+      ]
+    },
+    "branding/unofficial/apexpack.icns": {
+      "kind": "icns",
+      "bytes": 43788,
+      "sha256": "0324b451e9fe3c805752ecf23d4d56195197350a5bd45a1511aedffe3ccd434c",
+      "content": "39aef71b65b4520500c15a026af332a4c7772f08711d41fa211706b6d19e42de",
+      "sizes": [
+        [
+          16,
+          16
+        ],
+        [
+          32,
+          32
+        ],
+        [
+          32,
+          32
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          128,
+          128
+        ],
+        [
+          256,
+          256
+        ],
+        [
+          256,
+          256
+        ],
+        [
+          512,
+          512
+        ],
+        [
+          512,
+          512
+        ],
+        [
+          1024,
+          1024
+        ]
+      ]
+    },
+    "branding/unofficial/apexpack.ico": {
+      "kind": "ico",
+      "bytes": 84252,
+      "sha256": "0694e2bef2e5199b6ad56409fe36658b294b5bc2f97d2afa2b3121abceaffeb2",
+      "content": "41c653584e8207b0959e660ca814002970a944d052245249ce2db781134cdae0",
+      "sizes": [
+        [
+          16,
+          16
+        ],
+        [
+          20,
+          20
+        ],
+        [
+          24,
+          24
+        ],
+        [
+          32,
+          32
+        ],
+        [
+          40,
+          40
+        ],
+        [
+          48,
+          48
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          96,
+          96
+        ],
+        [
+          256,
+          256
+        ]
+      ]
+    },
+    "branding/unofficial/apexpack.png": {
+      "kind": "png",
+      "bytes": 6773,
+      "sha256": "6e627f6b8761aece90bc70901fb77bdb1102c7ff3be742b48f572d6d2e4457c2",
+      "content": "1572f3085d1fcdaf912aff3b927bc1068723d831f3035bd860532b1dc5e6b77a",
+      "sizes": [
+        [
+          512,
+          512
+        ]
+      ]
+    },
+    "branding/unofficial/dmg-background.png": {
+      "kind": "png",
+      "bytes": 2363,
+      "sha256": "e3ab61b16e86cfa4f0eef552c66a780dae13a341aa204b914383118da2c536af",
+      "content": "70f4451bc8c16f8e70bd4a29d2116b30fab126c5750c1caaa12cede13698c704",
+      "sizes": [
+        [
+          540,
+          380
+        ]
+      ]
+    },
+    "branding/unofficial/dmg-background@2x.png": {
+      "kind": "png",
+      "bytes": 6938,
+      "sha256": "c118c55cdccb176d3a5c8d8c47e861f72905f166d47658857684e9b9b7549480",
+      "content": "ae5d35cfb32d042f7ca8bc04133d79defeba6768607694f078d4985026c33f71",
+      "sizes": [
+        [
+          1080,
+          760
+        ]
+      ]
+    },
+    "branding/unofficial/html-document.icns": {
+      "kind": "icns",
+      "bytes": 49379,
+      "sha256": "7f57695cf8fcd424c62e6e047d309eed34d818928e29d73672e2237696f4b6d8",
+      "content": "e2decf79fd9495b3336a424eaf79712be8200ec1544f14fa39f7e9892b5f8f42",
+      "sizes": [
+        [
+          16,
+          16
+        ],
+        [
+          32,
+          32
+        ],
+        [
+          32,
+          32
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          128,
+          128
+        ],
+        [
+          256,
+          256
+        ],
+        [
+          256,
+          256
+        ],
+        [
+          512,
+          512
+        ],
+        [
+          512,
+          512
+        ],
+        [
+          1024,
+          1024
+        ]
+      ]
+    },
+    "branding/unofficial/html-document.ico": {
+      "kind": "ico",
+      "bytes": 84811,
+      "sha256": "9213a98e5771f416b713a4542e58605031f83156ebf6e7388b5e84ba88561f64",
+      "content": "323d34492965d24407fc902b9a10a47b2df6d49fa8c5d15e5f5fedb3d286b586",
+      "sizes": [
+        [
+          16,
+          16
+        ],
+        [
+          20,
+          20
+        ],
+        [
+          24,
+          24
+        ],
+        [
+          32,
+          32
+        ],
+        [
+          40,
+          40
+        ],
+        [
+          48,
+          48
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          96,
+          96
+        ],
+        [
+          256,
+          256
+        ]
+      ]
+    },
+    "branding/unofficial/icon.icns": {
+      "kind": "icns",
+      "bytes": 78562,
+      "sha256": "716b202e05b853668b081e8902ca2e500615435a13b9f1db70cca4054c98b7eb",
+      "content": "0ad4eb97f9082e92a3b7fdf9b89a9cb87ccf4a82b972c167c9c6c7cea0ec6eaa",
+      "sizes": [
+        [
+          16,
+          16
+        ],
+        [
+          32,
+          32
+        ],
+        [
+          32,
+          32
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          128,
+          128
+        ],
+        [
+          256,
+          256
+        ],
+        [
+          256,
+          256
+        ],
+        [
+          512,
+          512
+        ],
+        [
+          512,
+          512
+        ],
+        [
+          1024,
+          1024
+        ]
+      ]
+    },
+    "branding/unofficial/icon.ico": {
+      "kind": "ico",
+      "bytes": 86063,
+      "sha256": "7fc17dae15924fdb56d5873b5dd21fd354a7a2ce153fd20fe45268250b3f81fc",
+      "content": "32e4a913bb6fdee3cc9f8a79f17f0d9dbc3d4932d7ddb48896086821124edcfc",
+      "sizes": [
+        [
+          16,
+          16
+        ],
+        [
+          20,
+          20
+        ],
+        [
+          24,
+          24
+        ],
+        [
+          32,
+          32
+        ],
+        [
+          40,
+          40
+        ],
+        [
+          48,
+          48
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          96,
+          96
+        ],
+        [
+          256,
+          256
+        ]
+      ]
+    },
+    "branding/unofficial/icon.png": {
+      "kind": "png",
+      "bytes": 23228,
+      "sha256": "ddbef2cf79265e888c2d41f4979f0afae45d073bbe718886891ebb6b1e8ccc26",
+      "content": "a0f83ef6411af067cae205efabacacf1a5010283612439edd04229628c5f8b17",
+      "sizes": [
+        [
+          1024,
+          1024
+        ]
+      ]
+    },
+    "branding/unofficial/icons/128x128.png": {
+      "kind": "png",
+      "bytes": 2450,
+      "sha256": "94a83b111ac8a8a910eae0aee5614a203d5ce3c2b9066e1998bcd5ccb495582f",
+      "content": "a9b8772da2cb41d376a83e2725b60136d2f8addcb41107d55cbecd7a333b4ccc",
+      "sizes": [
+        [
+          128,
+          128
+        ]
+      ]
+    },
+    "branding/unofficial/icons/16x16.png": {
+      "kind": "png",
+      "bytes": 358,
+      "sha256": "d33adfe9505eb465b9f014dcdfa69dd88ecc672982d42568117278a4ebf928cf",
+      "content": "67db1a397da7a4bd060290218a990656eafd29fb4b4212fbb61107d31479c237",
+      "sizes": [
+        [
+          16,
+          16
+        ]
+      ]
+    },
+    "branding/unofficial/icons/22x22.png": {
+      "kind": "png",
+      "bytes": 531,
+      "sha256": "b1d8178e0c070b4cc370c9a718cb0a83c67a1625eff25a6dcf3edd3bd6d6ce8f",
+      "content": "c51fe105011b3a95b5c0096ffbae5f3f9f4ef8177c2b32d0f357aad9810091ab",
+      "sizes": [
+        [
+          22,
+          22
+        ]
+      ]
+    },
+    "branding/unofficial/icons/24x24.png": {
+      "kind": "png",
+      "bytes": 540,
+      "sha256": "8af614e5df773a9287ebe41913dad212dc2de5970ea6cf588ed19bff709e9db8",
+      "content": "7e4c045e3997649eebc570b4446577a0d30100a72c98b64ae5e18a805c872a63",
+      "sizes": [
+        [
+          24,
+          24
+        ]
+      ]
+    },
+    "branding/unofficial/icons/256x256.png": {
+      "kind": "png",
+      "bytes": 4969,
+      "sha256": "7ce17def474f661acf05df4cec15e44bbfff0a82415dca071878c5c23308da5f",
+      "content": "294b5fe699070e9a7df839a14593bbc30a5d05b32d54e95dd1e8a019c9440165",
+      "sizes": [
+        [
+          256,
+          256
+        ]
+      ]
+    },
+    "branding/unofficial/icons/32x32.png": {
+      "kind": "png",
+      "bytes": 706,
+      "sha256": "ca99858b8489e043c8edbf9659398928b3ca516516462d4464335e974fc04407",
+      "content": "1439e8d471442179e5e37fa804967d6d0b771473b4f42a9ea1e47432a87cea45",
+      "sizes": [
+        [
+          32,
+          32
+        ]
+      ]
+    },
+    "branding/unofficial/icons/48x48.png": {
+      "kind": "png",
+      "bytes": 882,
+      "sha256": "814766d79afd3eba8561c9e81f8980f86f2ae195894a8a601844a0942b15d9c2",
+      "content": "6ae2d0115fd228527644c6b2999398771f7f6a4efeab2c4fca837fd89e4f9ac5",
+      "sizes": [
+        [
+          48,
+          48
+        ]
+      ]
+    },
+    "branding/unofficial/icons/512x512.png": {
+      "kind": "png",
+      "bytes": 10655,
+      "sha256": "8c9755573c0ae0d52b45d9bc12955e1e101ae12c47774301de9df8aeec5b4b2d",
+      "content": "2db0acffb588db1669d485885dfd761506b01736b628588cf6169f2f72f024e1",
+      "sizes": [
+        [
+          512,
+          512
+        ]
+      ]
+    },
+    "branding/unofficial/icons/64x64.png": {
+      "kind": "png",
+      "bytes": 1140,
+      "sha256": "f717bffe9ec3683c93b8c184596a494978aee319ec0bb3f5aa12aa42e07d64d8",
+      "content": "03c306ad48253cf2c26d81b5c0e1a27b8b18261748c0425bc719fa0e4cbd5958",
+      "sizes": [
+        [
+          64,
+          64
+        ]
+      ]
+    },
+    "branding/unofficial/icons/96x96.png": {
+      "kind": "png",
+      "bytes": 1860,
+      "sha256": "655ac9acc1ae310152df423ff7292173c643cf8fe48b80bbbda0646c570dc36c",
+      "content": "14e5330e488317517099b720a83bea0f87e4f19419ad6310815f78abaff0a37f",
+      "sizes": [
+        [
+          96,
+          96
+        ]
+      ]
+    },
+    "branding/unofficial/installerSidebar.bmp": {
+      "kind": "bmp",
+      "bytes": 154542,
+      "sha256": "c74bb434138f1577408d1fc386dce619eb7a23bf9b46b47eb566321fd587a6bc",
+      "content": "d77765208f2215e39a81a756c5dafda553cac8cad8307b7041909eba88ba0305",
+      "sizes": [
+        [
+          164,
+          314
+        ]
+      ]
+    },
+    "branding/unofficial/renderer/app-icon-128.png": {
+      "kind": "png",
+      "bytes": 2989,
+      "sha256": "9e0093d585695cc7504d71f66d677848a3486aa62ad9ee1babcee1213b0c81ab",
+      "content": "ad3f2515add6d30f1986c818611106c9a4934e7ae82a38fbe7d15041fa7bbc71",
+      "sizes": [
+        [
+          128,
+          128
+        ]
+      ]
+    },
+    "branding/unofficial/renderer/mark-128.png": {
+      "kind": "png",
+      "bytes": 2450,
+      "sha256": "94a83b111ac8a8a910eae0aee5614a203d5ce3c2b9066e1998bcd5ccb495582f",
+      "content": "a9b8772da2cb41d376a83e2725b60136d2f8addcb41107d55cbecd7a333b4ccc",
+      "sizes": [
+        [
+          128,
+          128
+        ]
+      ]
+    },
+    "branding/unofficial/renderer/mark-32.png": {
+      "kind": "png",
+      "bytes": 706,
+      "sha256": "ca99858b8489e043c8edbf9659398928b3ca516516462d4464335e974fc04407",
+      "content": "1439e8d471442179e5e37fa804967d6d0b771473b4f42a9ea1e47432a87cea45",
+      "sizes": [
+        [
+          32,
+          32
+        ]
+      ]
+    },
+    "branding/unofficial/renderer/mark-64.png": {
+      "kind": "png",
+      "bytes": 1140,
+      "sha256": "f717bffe9ec3683c93b8c184596a494978aee319ec0bb3f5aa12aa42e07d64d8",
+      "content": "03c306ad48253cf2c26d81b5c0e1a27b8b18261748c0425bc719fa0e4cbd5958",
+      "sizes": [
+        [
+          64,
+          64
+        ]
+      ]
+    },
+    "branding/unofficial/resources/icons/app-128.png": {
+      "kind": "png",
+      "bytes": 2989,
+      "sha256": "9e0093d585695cc7504d71f66d677848a3486aa62ad9ee1babcee1213b0c81ab",
+      "content": "ad3f2515add6d30f1986c818611106c9a4934e7ae82a38fbe7d15041fa7bbc71",
+      "sizes": [
+        [
+          128,
+          128
+        ]
+      ]
+    },
+    "branding/unofficial/resources/icons/app-256.png": {
+      "kind": "png",
+      "bytes": 6201,
+      "sha256": "2f824658afcd2a69122416a2740adbf2c3c2306b779766ff38a698edb096d2f6",
+      "content": "aa54ead1bdd1cf184087a5eca63a3d0cf5d044d431a3ba8d188365c95eeba24c",
+      "sizes": [
+        [
+          256,
+          256
+        ]
+      ]
+    },
+    "branding/unofficial/resources/icons/app-32.png": {
+      "kind": "png",
+      "bytes": 632,
+      "sha256": "cb764e0fde4eb7c410f22101da1e143615b02b0cb4b6aebe79e20af7ff3c2a2f",
+      "content": "727d664881c005501eaa3129e85b9277bc9fc9deb775561af705ac3e4f2c4102",
+      "sizes": [
+        [
+          32,
+          32
+        ]
+      ]
+    },
+    "branding/unofficial/resources/icons/app-512.png": {
+      "kind": "png",
+      "bytes": 13898,
+      "sha256": "71320067184352ae967b39602e4849014e10cedfb4b56b908baa12df62c7d65f",
+      "content": "ddd054e84eef292d0597c34c592547c6fcd219d688fca5334b2186e83000c747",
+      "sizes": [
+        [
+          512,
+          512
+        ]
+      ]
+    },
+    "branding/unofficial/resources/icons/app-64.png": {
+      "kind": "png",
+      "bytes": 1327,
+      "sha256": "e6c851052ebb74344fe4eb07667ee1e7f6377b2d2e6bb77b3d21cb3350c6433f",
+      "content": "f9ffabf0880fd0d95e1489096754424c0fd02d93966eb5792c46247ff7c30627",
+      "sizes": [
+        [
+          64,
+          64
+        ]
+      ]
+    },
+    "branding/unofficial/resources/tray/tray-dark.ico": {
+      "kind": "ico",
+      "bytes": 43006,
+      "sha256": "a91b8a8cff1a3f81c972194f164d3d2c0f0df294257718d4ae823ec379404577",
+      "content": "136c7cbfe9906d3d9ac3465a335899ccb685c6dfd7604a2840279cf13c19a6e2",
+      "sizes": [
+        [
+          16,
+          16
+        ],
+        [
+          20,
+          20
+        ],
+        [
+          24,
+          24
+        ],
+        [
+          32,
+          32
+        ],
+        [
+          40,
+          40
+        ],
+        [
+          48,
+          48
+        ],
+        [
+          64,
+          64
+        ]
+      ]
+    },
+    "branding/unofficial/resources/tray/tray-light.ico": {
+      "kind": "ico",
+      "bytes": 43006,
+      "sha256": "0cdb6b277dd96e70fcd8883b980ca592948983b66de10cb0ac5d3cdff7c7b716",
+      "content": "fd6ae802b6c6096e1f28b814dea9c0ee112ebc4a2710436a2bf4b876b21ea9c9",
+      "sizes": [
+        [
+          16,
+          16
+        ],
+        [
+          20,
+          20
+        ],
+        [
+          24,
+          24
+        ],
+        [
+          32,
+          32
+        ],
+        [
+          40,
+          40
+        ],
+        [
+          48,
+          48
+        ],
+        [
+          64,
+          64
+        ]
+      ]
+    },
+    "branding/unofficial/resources/tray/tray.png": {
+      "kind": "png",
+      "bytes": 540,
+      "sha256": "8af614e5df773a9287ebe41913dad212dc2de5970ea6cf588ed19bff709e9db8",
+      "content": "7e4c045e3997649eebc570b4446577a0d30100a72c98b64ae5e18a805c872a63",
+      "sizes": [
+        [
+          24,
+          24
+        ]
+      ]
+    },
+    "branding/unofficial/resources/tray/tray@2x.png": {
+      "kind": "png",
+      "bytes": 882,
+      "sha256": "814766d79afd3eba8561c9e81f8980f86f2ae195894a8a601844a0942b15d9c2",
+      "content": "6ae2d0115fd228527644c6b2999398771f7f6a4efeab2c4fca837fd89e4f9ac5",
+      "sizes": [
+        [
+          48,
+          48
+        ]
+      ]
+    },
+    "branding/unofficial/resources/tray/trayTemplate.png": {
+      "kind": "png",
+      "bytes": 274,
+      "sha256": "a2c3f64dc65849833dc14cd0b4f3be60aedaf444d3ef95503bc0a0ffca4faff7",
+      "content": "9572f3e4fee572193fc83d14b55c6513d955f371ea8626d38a1aa838bcb79ff1",
+      "sizes": [
+        [
+          18,
+          18
+        ]
+      ]
+    },
+    "branding/unofficial/resources/tray/trayTemplate@2x.png": {
+      "kind": "png",
+      "bytes": 470,
+      "sha256": "bbc6e6e6e1edf765d7f18f121133fcbfdbe3a724b228b69faae56be92720c8f3",
+      "content": "fe586d8c3b468d19c0b9ca20e7f13feed5cbec801591e85a1b8d70cb0c5ed089",
+      "sizes": [
+        [
+          36,
+          36
+        ]
+      ]
+    },
+    "branding/unofficial/svg/icon-mac.svg": {
+      "kind": "svg",
+      "bytes": 1293,
+      "sha256": "2416f1c4529e48fe3296477760f85f08560a7cda5c182c839dd41b8d5f1f0701",
+      "content": "2416f1c4529e48fe3296477760f85f08560a7cda5c182c839dd41b8d5f1f0701",
+      "sizes": []
+    },
+    "branding/unofficial/svg/tray-template.svg": {
+      "kind": "svg",
+      "bytes": 657,
+      "sha256": "548bc98a075762d6d1602e719ff8a7d5079e6881524798c0f526f90c8c69b35f",
+      "content": "548bc98a075762d6d1602e719ff8a7d5079e6881524798c0f526f90c8c69b35f",
+      "sizes": []
+    }
+  }
+}

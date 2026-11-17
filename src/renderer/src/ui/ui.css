@@ -1,0 +1,1778 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* Apex renderer kit. Every colour comes from the tokens at the top of
+   styles.css, so both modes work without overrides here. */
+
+.ui-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+html.ui-resizing-x,
+html.ui-resizing-x * {
+  cursor: col-resize !important;
+  user-select: none !important;
+}
+
+html.ui-resizing-y,
+html.ui-resizing-y * {
+  cursor: row-resize !important;
+  user-select: none !important;
+}
+
+:where(.ui-btn, .ui-icon-btn, .ui-seam, .ui-segmented__option, .ui-switch, .ui-tabs__tab, .ui-rename--interactive, .ui-save-status__retry, .ui-tab-panel):focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* ---- buttons ---- */
+
+.ui-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1-5);
+  height: var(--control-md);
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  font-size: var(--text-md);
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--text-primary);
+  background: transparent;
+  transition:
+    background var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
+    box-shadow var(--dur-fast) var(--ease-standard),
+    transform var(--dur-instant) var(--ease-standard);
+}
+
+.ui-btn svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+
+.ui-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.ui-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.ui-btn[aria-busy='true'] {
+  opacity: 0.85;
+}
+
+.ui-btn--sm {
+  height: var(--control-sm);
+  padding: 0 10px;
+  font-size: var(--text-sm);
+  border-radius: 7px;
+}
+
+.ui-btn--sm svg {
+  width: 13px;
+  height: 13px;
+}
+
+.ui-btn--lg {
+  height: var(--control-lg);
+  padding: 0 18px;
+  font-size: 14px;
+  border-radius: 10px;
+}
+
+.ui-btn--full {
+  width: 100%;
+}
+
+/* DS-138: the primary button is a neutral ink pill with a paper label,
+   inverted in dark mode. Companion colour is kept for companion actions
+   (send, mic, the card's share pill), which have their own styles. */
+.ui-btn--primary {
+  background: var(--text-primary);
+  color: var(--bg-raised);
+}
+
+.ui-btn--primary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--text-primary) 86%, var(--bg-raised));
+}
+
+.ui-btn--primary:active:not(:disabled) {
+  background: color-mix(in srgb, var(--text-primary) 76%, var(--bg-raised));
+}
+
+.ui-btn--secondary {
+  background: var(--bg-card);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-xs);
+}
+
+.ui-btn--secondary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--text-primary) 4%, var(--bg-card));
+}
+
+.ui-btn--ghost {
+  color: var(--text-secondary);
+}
+
+.ui-btn--ghost:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.ui-btn--ghost:active:not(:disabled) {
+  background: var(--bg-active);
+}
+
+.ui-btn--danger {
+  background: var(--status-error);
+  color: var(--on-status);
+}
+
+.ui-btn--danger:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--status-error) 88%, var(--text-primary));
+}
+
+.ui-btn--brand {
+  background: var(--gradient);
+  color: var(--accent-text);
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+.ui-icon-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--text-secondary);
+  transition:
+    background var(--dur-fast) var(--ease-standard),
+    color var(--dur-fast) var(--ease-standard);
+}
+
+.ui-icon-btn svg {
+  width: 17px;
+  height: 17px;
+}
+
+.ui-icon-btn--sm {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-xs);
+}
+
+.ui-icon-btn--sm svg {
+  width: 15px;
+  height: 15px;
+}
+
+.ui-icon-btn--lg {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-control);
+}
+
+.ui-icon-btn--lg svg {
+  width: 19px;
+  height: 19px;
+}
+
+.ui-icon-btn--subtle {
+  background: var(--bg-muted);
+}
+
+.ui-icon-btn:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.ui-icon-btn:active:not(:disabled),
+.ui-icon-btn[data-menu-open] {
+  background: var(--bg-active);
+  color: var(--text-primary);
+}
+
+/* DS-138: pressed is neutral (ink glyph on a grey fill), never the companion colour. */
+.ui-icon-btn--on,
+.ui-icon-btn--on:hover:not(:disabled) {
+  color: var(--text-primary);
+  background: var(--bg-pressed, var(--bg-active));
+}
+
+.ui-icon-btn--danger:hover:not(:disabled) {
+  color: var(--status-error);
+  background: var(--status-error-soft);
+}
+
+.ui-icon-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.ui-icon-btn__badge {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  display: flex;
+  pointer-events: none;
+}
+
+/* ---- modal layers ---- */
+
+.ui-modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: grid;
+  padding: var(--space-4);
+  /* The toolbar under the scrim is a window drag area; a click there must close the modal, not move the window. */
+  -webkit-app-region: no-drag;
+}
+
+.ui-modal--center {
+  place-items: center;
+}
+
+.ui-modal--right {
+  justify-items: end;
+  align-items: stretch;
+}
+
+.ui-modal--bottom {
+  justify-items: center;
+  align-items: end;
+}
+
+.ui-modal--none {
+  display: block;
+  padding: 0;
+}
+
+/* DS-29: scoped to the content area (Dialog.tsx sets the rect). The sidebar,
+   toolbar and bookmarks stay sharp; only the content is lifted and blurred.
+   With no alignment of its own (a centred dialog) the panel is centred there. */
+.ui-modal--content {
+  inset: auto;
+}
+
+.ui-modal--content.ui-modal--center {
+  place-items: center;
+}
+
+.ui-modal--content > .ui-modal__scrim {
+  background: var(--scrim-content);
+  backdrop-filter: blur(var(--scrim-content-blur));
+}
+
+.ui-modal__scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--scrim);
+  backdrop-filter: blur(var(--scrim-blur));
+  animation: ui-fade-in var(--motion-enter) var(--ease-out);
+}
+
+/* Closing: the layer stays mounted for a short exit, then unmounts (ui/motion.ts). */
+.ui-modal[data-state='closing'] {
+  pointer-events: none;
+}
+
+.ui-modal[data-state='closing'] > .ui-modal__scrim {
+  animation: ui-fade-out var(--motion-exit) var(--ease-exit) forwards;
+}
+
+.ui-modal[data-state='closing'] .ui-dialog {
+  animation: ui-pop-out var(--motion-exit) var(--ease-exit) forwards;
+}
+
+.ui-modal[data-state='closing'] .ui-sheet--right {
+  animation-name: ui-slide-out-right;
+}
+
+.ui-modal[data-state='closing'] .ui-sheet--bottom {
+  animation-name: ui-slide-out-down;
+}
+
+.ui-modal__panel {
+  position: relative;
+  z-index: 1;
+  outline: none;
+}
+
+.ui-modal--none > .ui-modal__panel {
+  position: absolute;
+}
+
+.ui-dialog {
+  display: flex;
+  flex-direction: column;
+  width: min(480px, 100%);
+  max-height: 100%;
+  overflow: auto;
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--bg-raised);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-overlay);
+  user-select: text;
+  animation: ui-pop-in var(--motion-enter) var(--ease-out);
+}
+
+.ui-dialog--sm {
+  width: min(380px, 100%);
+}
+
+.ui-dialog--lg {
+  width: min(640px, 100%);
+}
+
+.ui-dialog__header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.ui-dialog__title {
+  flex: 1;
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.ui-dialog__close {
+  margin: -4px -6px 0 0;
+}
+
+.ui-dialog__description {
+  margin: var(--space-2) 0 0;
+  color: var(--text-secondary);
+}
+
+.ui-dialog__body {
+  margin-top: var(--space-4);
+}
+
+.ui-dialog__footer {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+}
+
+.ui-sheet--right {
+  width: min(440px, 100%);
+  height: 100%;
+  animation-name: ui-slide-in-right;
+}
+
+.ui-sheet--right.ui-dialog--sm {
+  width: min(360px, 100%);
+}
+
+.ui-sheet--right.ui-dialog--lg {
+  width: min(560px, 100%);
+}
+
+.ui-sheet--bottom {
+  width: min(640px, 100%);
+  max-height: min(80vh, 100%);
+  animation-name: ui-slide-in-up;
+}
+
+/* ---- toasts ---- */
+
+.ui-toasts {
+  position: fixed;
+  bottom: var(--toast-inset-bottom, 12px);
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: max-content;
+  max-width: min(var(--toast-max-width, 360px), calc(100vw - 24px));
+  pointer-events: none;
+}
+
+.ui-toasts--bottom-left {
+  left: var(--toast-inset-x, 12px);
+}
+
+.ui-toasts--bottom-right {
+  right: var(--toast-inset-x, 12px);
+  align-items: flex-end;
+}
+
+.ui-toasts--bottom-center {
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+}
+
+.ui-toast {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 40px;
+  max-width: 100%;
+  padding: 6px 6px 6px 12px;
+  border-radius: var(--radius-md);
+  background: var(--bg-glass);
+  backdrop-filter: blur(var(--glass-blur));
+  color: var(--text-primary);
+  box-shadow: var(--shadow-overlay);
+  font-size: var(--text-sm);
+  pointer-events: auto;
+  animation: ui-slide-in-up var(--motion-enter) var(--ease-out);
+}
+
+.ui-toast[data-phase='exit'] {
+  pointer-events: none;
+  animation: ui-toast-out var(--motion-exit) var(--ease-exit) forwards;
+}
+
+.ui-toast__icon {
+  display: flex;
+  flex: none;
+}
+
+.ui-toast__icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.ui-toast--success .ui-toast__icon {
+  color: var(--status-success);
+}
+
+.ui-toast--error .ui-toast__icon {
+  color: var(--status-error);
+}
+
+.ui-toast--info .ui-toast__icon {
+  color: var(--status-working);
+}
+
+.ui-toast__message {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.ui-toast__action {
+  color: var(--accent);
+}
+
+.ui-toast__close {
+  color: var(--text-tertiary);
+}
+
+/* ---- seam ---- */
+
+.ui-seam {
+  position: relative;
+  flex: none;
+  touch-action: none;
+  outline-offset: -2px;
+}
+
+.ui-seam--vertical {
+  width: 9px;
+  cursor: col-resize;
+}
+
+.ui-seam--horizontal {
+  height: 9px;
+  cursor: row-resize;
+}
+
+.ui-seam::after {
+  content: '';
+  position: absolute;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+
+.ui-seam--vertical::after {
+  top: 0;
+  bottom: 0;
+  left: 3px;
+  width: 3px;
+}
+
+.ui-seam--horizontal::after {
+  left: 0;
+  right: 0;
+  top: 3px;
+  height: 3px;
+}
+
+/* The line shows after a short hover, so passing over the edge doesn't flash it. */
+.ui-seam:hover::after {
+  background: var(--border-strong);
+  transition-delay: 120ms;
+}
+
+.ui-seam:focus-visible::after,
+.ui-seam[data-dragging]::after {
+  background: var(--focus-ring-color);
+  transition-delay: 0ms;
+}
+
+/* Edges that show only the resize cursor (the sidebar, the companion card):
+   no line on hover or drag; keyboard focus still shows one. */
+.ui-seam--bare:hover::after,
+.ui-seam--bare[data-dragging]::after {
+  background: transparent;
+}
+
+.ui-seam--disabled {
+  cursor: default;
+}
+
+.ui-seam--disabled::after {
+  display: none;
+}
+
+/* ---- loading, empty and error states ---- */
+
+.ui-skeleton {
+  display: inline-block;
+  width: 100%;
+  border-radius: var(--radius-xs);
+  background: linear-gradient(90deg, var(--bg-muted) 25%, var(--bg-subtle) 50%, var(--bg-muted) 75%);
+  background-size: 300% 100%;
+  animation: ui-shimmer 1.6s linear infinite;
+}
+
+.ui-skeleton-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.ui-skeleton-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* DS-106: invisible (but holding the space) for the first ~100 ms of a load. */
+.ui-skeleton-rows[data-grace] {
+  visibility: hidden;
+}
+
+.ui-skeleton-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-2-5);
+}
+
+.ui-skeleton-row__lines {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-1-5);
+}
+
+.ui-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1-5);
+  padding: var(--space-10) var(--space-5);
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.ui-state--compact {
+  padding: var(--space-5) var(--space-3);
+}
+
+.ui-state__icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: var(--space-1-5);
+  border-radius: 50%;
+  background: var(--bg-muted);
+  color: var(--text-tertiary);
+}
+
+.ui-state__icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.ui-state--compact .ui-state__icon {
+  width: 32px;
+  height: 32px;
+  margin-bottom: var(--space-1);
+}
+
+.ui-state--compact .ui-state__icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.ui-state--error .ui-state__icon {
+  background: var(--status-error-soft);
+  color: var(--status-error);
+}
+
+.ui-state__title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.ui-state--compact .ui-state__title {
+  font-size: var(--text-md);
+}
+
+.ui-state__description {
+  max-width: 360px;
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+.ui-state__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.ui-save-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 18px;
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+}
+
+.ui-save-status svg {
+  width: 13px;
+  height: 13px;
+}
+
+.ui-save-status--saved svg {
+  color: var(--status-success);
+}
+
+.ui-save-status--error {
+  color: var(--status-error);
+}
+
+.ui-save-status__retry {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ---- inline rename ---- */
+
+.ui-rename {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ui-rename--interactive {
+  margin: -1px -4px;
+  padding: 1px 4px;
+  border-radius: var(--radius-xs);
+  cursor: text;
+}
+
+.ui-rename--interactive:hover {
+  background: var(--bg-hover);
+}
+
+.ui-rename--empty {
+  color: var(--text-tertiary);
+}
+
+.ui-rename__input {
+  width: 100%;
+  min-width: 0;
+  margin: -2px -5px;
+  padding: 1px 4px;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-xs);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font: inherit;
+  box-shadow: var(--focus-halo);
+  outline: none;
+}
+
+.ui-rename__input[aria-invalid='true'] {
+  border-color: var(--status-error);
+  box-shadow: 0 0 0 3px var(--status-error-soft);
+}
+
+/* ---- segmented control, switch, select ---- */
+
+.ui-segmented {
+  position: relative;
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 10px;
+  background: var(--bg-muted);
+}
+
+.ui-segmented--full {
+  display: flex;
+}
+
+.ui-segmented--full .ui-segmented__option {
+  flex: 1;
+}
+
+.ui-segmented__thumb {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 0;
+  border-radius: var(--radius-sm);
+  background: var(--bg-thumb);
+  /* Light: a soft shadow. Dark: the surface's own tone with a hairline, never white (DS-133). */
+  box-shadow: light-dark(var(--shadow-sm), 0 0 0 var(--hairline) var(--border-strong));
+  /* About 180 ms, decelerating: the only motion during a theme change (DS-88). */
+  transition:
+    transform 180ms var(--ease-out),
+    width 180ms var(--ease-out);
+}
+
+:root[data-motion='reduced'] .ui-segmented__thumb {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-segmented__thumb {
+    transition: none;
+  }
+}
+
+.ui-segmented__option {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1-5);
+  height: 28px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+
+.ui-segmented--sm .ui-segmented__option {
+  height: 24px;
+  padding: 0 9px;
+  font-size: var(--text-xs);
+}
+
+.ui-segmented__option svg {
+  width: 14px;
+  height: 14px;
+}
+
+.ui-segmented__option:hover:not(:disabled) {
+  color: var(--text-primary);
+}
+
+.ui-segmented__option[aria-checked='true'] {
+  color: var(--text-primary);
+}
+
+.ui-segmented__option:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.ui-switch {
+  position: relative;
+  flex: none;
+  width: 40px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--border-strong);
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+
+/* One fixed positive colour, never the profile or companion hue (DS-132). */
+.ui-switch[aria-checked='true'] {
+  background: var(--positive);
+}
+
+.ui-switch__thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--switch-thumb);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur-fast) var(--ease-standard);
+}
+
+.ui-switch[aria-checked='true'] .ui-switch__thumb {
+  transform: translateX(20px);
+}
+
+.ui-switch--sm {
+  width: 30px;
+  height: 18px;
+}
+
+.ui-switch--sm .ui-switch__thumb {
+  width: 12px;
+  height: 12px;
+}
+
+.ui-switch--sm[aria-checked='true'] .ui-switch__thumb {
+  transform: translateX(12px);
+}
+
+.ui-switch:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.ui-switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-2-5) 0;
+}
+
+.ui-switch-row__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ui-switch-row__label {
+  color: var(--text-primary);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.ui-switch-row__description {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.ui-switch-row--disabled .ui-switch-row__label {
+  color: var(--text-disabled);
+  cursor: default;
+}
+
+.ui-select {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.ui-select--full {
+  display: flex;
+}
+
+.ui-select select {
+  width: 100%;
+  height: var(--control-md);
+  padding: 0 30px 0 11px;
+  appearance: none;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-control);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: var(--text-md);
+  outline: none;
+  cursor: pointer;
+}
+
+.ui-select--sm select {
+  height: var(--control-sm);
+  padding: 0 26px 0 9px;
+  font-size: var(--text-sm);
+  border-radius: 7px;
+}
+
+.ui-select select:focus-visible {
+  border-color: var(--accent);
+  box-shadow: var(--focus-halo);
+}
+
+.ui-select select:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.ui-select__chevron {
+  position: absolute;
+  right: 9px;
+  width: 14px;
+  height: 14px;
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+
+/* ---- tabs ---- */
+
+.ui-tabs {
+  display: flex;
+  gap: 2px;
+}
+
+.ui-tabs--vertical {
+  flex-direction: column;
+}
+
+.ui-tabs__tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  height: 34px;
+  padding: 0 12px;
+  border: 0;
+  background: none;
+  color: var(--text-secondary);
+  font-size: var(--text-md);
+  font-weight: 600;
+  white-space: nowrap;
+  transition:
+    color var(--dur-fast) var(--ease-standard),
+    background var(--dur-fast) var(--ease-standard);
+}
+
+.ui-tabs__tab svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+
+.ui-tabs__tab:hover:not(:disabled) {
+  color: var(--text-primary);
+}
+
+.ui-tabs__tab[aria-selected='true'] {
+  color: var(--text-primary);
+}
+
+.ui-tabs__tab:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.ui-tabs--line {
+  border-bottom: 1px solid var(--border-default);
+}
+
+.ui-tabs--line .ui-tabs__tab::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: -1px;
+  height: 2px;
+  border-radius: 2px;
+  background: transparent;
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+
+.ui-tabs--line .ui-tabs__tab[aria-selected='true']::after {
+  background: var(--accent);
+}
+
+.ui-tabs--pill {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 10px;
+  background: var(--bg-muted);
+}
+
+.ui-tabs--pill .ui-tabs__tab {
+  height: 28px;
+  border-radius: var(--radius-sm);
+}
+
+.ui-tabs--pill .ui-tabs__tab[aria-selected='true'] {
+  background: var(--bg-thumb);
+  box-shadow: var(--shadow-sm);
+}
+
+.ui-tabs--nav .ui-tabs__tab {
+  justify-content: flex-start;
+  width: 100%;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+}
+
+.ui-tabs--nav .ui-tabs__tab:hover:not(:disabled) {
+  background: var(--bg-hover);
+}
+
+.ui-tabs--nav .ui-tabs__tab[aria-selected='true'] {
+  background: var(--bg-selected);
+  font-weight: 600;
+}
+
+.ui-tabs--nav .ui-tabs__tab[aria-selected='true'] svg {
+  color: var(--accent);
+}
+
+.ui-tabs__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ui-tab-panel {
+  outline-offset: 4px;
+}
+
+/* ---- badges and indicators ---- */
+
+.ui-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.ui-badge--count {
+  min-width: 18px;
+  padding: 0 5px;
+}
+
+.ui-badge--soft.ui-badge--neutral {
+  background: var(--bg-muted);
+  color: var(--text-secondary);
+}
+
+.ui-badge--soft.ui-badge--accent {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.ui-badge--soft.ui-badge--success {
+  background: var(--status-success-soft);
+  color: var(--status-success);
+}
+
+.ui-badge--soft.ui-badge--warning {
+  background: var(--status-needs-input-soft);
+  color: var(--status-needs-input);
+}
+
+.ui-badge--soft.ui-badge--danger {
+  background: var(--status-error-soft);
+  color: var(--status-error);
+}
+
+.ui-badge--soft.ui-badge--info {
+  background: var(--status-working-soft);
+  color: var(--status-working);
+}
+
+.ui-badge--solid {
+  color: var(--on-status);
+}
+
+.ui-badge--solid.ui-badge--neutral {
+  background: var(--text-secondary);
+  color: var(--bg-card);
+}
+
+.ui-badge--solid.ui-badge--accent {
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+.ui-badge--solid.ui-badge--success {
+  background: var(--status-success);
+}
+
+.ui-badge--solid.ui-badge--warning {
+  background: var(--status-needs-input);
+}
+
+.ui-badge--solid.ui-badge--danger {
+  background: var(--status-error);
+}
+
+.ui-badge--solid.ui-badge--info {
+  background: var(--status-working);
+}
+
+.ui-status-dot {
+  display: inline-block;
+  flex: none;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.ui-status-dot--working {
+  color: var(--status-working);
+}
+
+.ui-status-dot--needs-input {
+  color: var(--status-needs-input);
+}
+
+.ui-status-dot--error {
+  color: var(--status-error);
+}
+
+.ui-status-dot--success {
+  color: var(--status-success);
+}
+
+.ui-status-dot--unread {
+  color: var(--status-unread);
+}
+
+.ui-status-dot--idle {
+  color: var(--text-disabled);
+}
+
+.ui-status-dot--pulse {
+  animation: ui-ping 1.6s var(--ease-out) infinite;
+}
+
+.ui-spinner {
+  display: inline-block;
+  flex: none;
+  border: 2px solid var(--border-strong);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: ui-spin 0.8s linear infinite;
+}
+
+.ui-ring {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+}
+
+.ui-ring svg {
+  display: block;
+}
+
+.ui-ring__track {
+  stroke: var(--bg-muted);
+}
+
+.ui-ring__value {
+  stroke: var(--accent);
+  transition: stroke-dashoffset var(--dur-slow) var(--ease-standard);
+}
+
+.ui-ring--indeterminate svg {
+  animation: ui-spin 1s linear infinite;
+}
+
+.ui-ring__center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--text-secondary);
+}
+
+.ui-ring__center svg {
+  width: 55%;
+  height: 55%;
+}
+
+.ui-kbd {
+  display: inline-flex;
+  gap: 2px;
+  font: inherit;
+}
+
+.ui-kbd__key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border: 1px solid var(--border-default);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  font-family: var(--font);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.ui-time {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---- motion ---- */
+
+@keyframes ui-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes ui-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+}
+
+@keyframes ui-slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}
+
+@keyframes ui-slide-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@keyframes ui-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes ui-pop-out {
+  to {
+    opacity: 0;
+    transform: translateY(4px) scale(0.985);
+  }
+}
+
+@keyframes ui-slide-out-right {
+  to {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}
+
+@keyframes ui-slide-out-down {
+  to {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+/* A toast folds away so the ones above glide down into its place. */
+@keyframes ui-toast-out {
+  to {
+    opacity: 0;
+    transform: scale(0.97);
+    margin-top: -40px;
+  }
+}
+
+/* Menus and popovers appear at once (DS-83): an opacity fade of one frame at
+   most, with no zoom or slide, and they close with no exit. */
+@keyframes ui-menu-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes ui-menu-out {
+  to {
+    opacity: 0;
+  }
+}
+
+.ui-popover {
+  transform-origin: var(--menu-origin, top center);
+  animation: ui-menu-in var(--motion-menu-in) var(--ease-out);
+}
+
+.ui-popover[data-state='closing'] {
+  pointer-events: none;
+  animation: ui-menu-out var(--motion-menu-out) var(--ease-exit) forwards;
+}
+
+/* ---- round check rows (DS-91) ---- */
+
+.ui-check-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  width: 100%;
+  height: 36px;
+  padding: 0 var(--space-2-5);
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--text-secondary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ui-check-row:hover:not(:disabled) {
+  background: var(--bg-hover);
+}
+
+.ui-check-row:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.ui-check-row__mark {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--border-strong);
+}
+
+.ui-check-row--on .ui-check-row__mark {
+  background: var(--text-primary);
+  box-shadow: none;
+  color: var(--bg-raised);
+}
+
+.ui-check-row__mark svg {
+  width: 12px;
+  height: 12px;
+  stroke-width: 3;
+}
+
+.ui-check-row__icon {
+  display: inline-flex;
+  flex: none;
+  color: var(--text-secondary);
+}
+
+.ui-check-row__icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.ui-check-row__label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- in-window popover menus (DS-94) ----
+   Neutral surfaces: a raised card with a hairline and a soft shadow, rows of
+   --pop-row (36 px) with a 16 px glyph 12 px in and the label at +36. */
+
+.ui-pop {
+  position: fixed;
+  z-index: var(--z-popover);
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+  max-width: calc(100vw - 16px);
+  overflow: hidden;
+  border: var(--hairline) solid var(--border-default);
+  border-radius: 12px;
+  background: var(--bg-raised);
+  color: var(--text-primary);
+  box-shadow: light-dark(0 8px 28px rgba(46, 36, 24, 0.13), 0 10px 30px rgba(0, 0, 0, 0.45)), 0 1px 3px light-dark(rgba(46, 36, 24, 0.08), rgba(0, 0, 0, 0.3));
+  font-size: var(--text-md);
+  -webkit-app-region: no-drag;
+}
+
+.ui-pop[data-placed] {
+  animation: ui-menu-in var(--motion-pop, 60ms) linear;
+}
+
+.ui-pop__body {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.ui-pop__list {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 5px;
+  outline: none;
+}
+
+.ui-pop__search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 40px;
+  margin: 5px 5px 0;
+  padding: 0 var(--space-3);
+  border-radius: 9px;
+  background: var(--bg-muted);
+  color: var(--text-tertiary);
+}
+
+.ui-pop__search svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+
+.ui-pop__search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  color: var(--text-primary);
+  font: inherit;
+  outline: none;
+}
+
+.ui-pop__search input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.ui-pop__header {
+  padding: var(--space-2) var(--space-3) var(--space-1);
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.ui-pop__sep {
+  height: 0;
+  margin: 4px 6px;
+  border-top: var(--hairline) solid var(--border-default);
+}
+
+.ui-pop__empty {
+  padding: var(--space-3);
+  color: var(--text-tertiary);
+}
+
+.ui-pop__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  min-height: var(--pop-row, 36px);
+  padding: 0 var(--space-2-5) 0 var(--space-3);
+  border-radius: 8px;
+  color: var(--text-primary);
+  cursor: default;
+  user-select: none;
+}
+
+.ui-pop--muted .ui-pop__item {
+  color: var(--text-secondary);
+}
+
+.ui-pop__item--active {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.ui-pop__item--strong .ui-pop__label {
+  font-weight: 600;
+}
+
+.ui-pop__item--danger,
+.ui-pop__item--danger.ui-pop__item--active {
+  color: var(--status-error);
+}
+
+.ui-pop__item--disabled {
+  opacity: 0.5;
+}
+
+.ui-pop__icon {
+  display: inline-flex;
+  flex: none;
+  color: var(--text-secondary);
+}
+
+.ui-pop__icon > svg {
+  width: 16px;
+  height: 16px;
+}
+
+.ui-pop__item--danger .ui-pop__icon {
+  color: inherit;
+}
+
+/* The create row's grey rounded-square tile, the same size as a face. */
+.ui-pop__tile {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--bg-muted);
+  color: var(--text-secondary);
+}
+
+.ui-pop__tile svg {
+  width: 16px;
+  height: 16px;
+}
+
+.ui-pop__item--create .ui-pop__label {
+  color: var(--text-secondary);
+}
+
+.ui-pop__label {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ui-pop__desc {
+  overflow: hidden;
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+  text-overflow: ellipsis;
+}
+
+.ui-pop__keys {
+  flex: none;
+  color: var(--text-tertiary);
+  font: inherit;
+  font-size: var(--text-sm);
+  letter-spacing: 0.02em;
+}
+
+.ui-pop__trail {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  color: var(--text-tertiary);
+}
+
+/* The current row's ink check circle (paper tick on ink, inverted in dark mode). */
+.ui-pop__check {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--text-primary);
+  color: var(--bg-raised);
+}
+
+.ui-pop__check svg {
+  width: 12px;
+  height: 12px;
+  stroke-width: 3;
+}
+
+.ui-pop__switch {
+  position: relative;
+  flex: none;
+  width: 32px;
+  height: 18px;
+  border-radius: var(--radius-pill);
+  background: var(--border-strong);
+}
+
+.ui-pop__switch--on {
+  background: var(--positive);
+}
+
+.ui-pop__switch-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--switch-thumb);
+  box-shadow: var(--shadow-sm);
+}
+
+.ui-pop__switch--on .ui-pop__switch-thumb {
+  transform: translateX(14px);
+}
+
+/* The ambient field fills its positioned parent and ignores the pointer. */
+.ui-ambient {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+@keyframes ui-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+@keyframes ui-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ui-ping {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, currentColor 45%, transparent);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 5px transparent;
+  }
+}
+
+/* Entrance animations already collapse through the duration tokens; looping
+   ones stop, and spinners slow down but keep showing activity. */
+@media (prefers-reduced-motion: reduce) {
+  .ui-skeleton,
+  .ui-status-dot--pulse {
+    animation: none;
+  }
+
+  .ui-spinner,
+  .ui-ring--indeterminate svg {
+    animation-duration: 2s;
+  }
+}
+
+/* Apex's own Reduce Motion (ui/motion.ts) does the same. */
+:root[data-motion='reduced'] :is(.ui-skeleton, .ui-status-dot--pulse) {
+  animation: none;
+}
+
+:root[data-motion='reduced'] :is(.ui-spinner, .ui-ring--indeterminate svg) {
+  animation-duration: 2s;
+}
+
+/* DS-100: the destination pages' segments, a 40 px pill track with a 32 px pill and a 4 px inset. */
+.ui-segmented--lg {
+  padding: 4px;
+  border-radius: 20px;
+}
+
+.ui-segmented--lg .ui-segmented__thumb {
+  top: 4px;
+  bottom: 4px;
+  border-radius: 16px;
+}
+
+.ui-segmented--lg .ui-segmented__option {
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 16px;
+  font-size: var(--text-md);
+}
+
+/* ── whole-window dialog veil ── A whole-window dialog in the overlay blurs everything below it, chrome
+   included: the chrome blurs itself, and the overlay's scrim washes it.
+   Web pages are swapped for stills (main hides their views) so they blur too. */
+#root {
+  transition: filter var(--motion-enter, 200ms) var(--ease-out, ease-out);
+}
+
+:root[data-window-veil='on'] #root {
+  filter: blur(var(--scrim-blur)) saturate(0.92);
+}
+
+.ui-veil-stills {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-popover, 50);
+  pointer-events: none;
+}
+
+.ui-veil-stills__page {
+  position: absolute;
+  object-fit: cover;
+  user-select: none;
+}
+
+:root[data-motion='reduced'] #root {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #root {
+    transition: none;
+  }
+}

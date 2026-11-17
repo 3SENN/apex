@@ -1,0 +1,371 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* The Skills page cards, the skill editor, steps, supporting files and
+   Save as skill. Colours come from the theme tokens, so light and dark both
+   follow; nothing here animates on arrival. */
+
+.sk-count {
+  margin-left: var(--space-2);
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.sk-muted {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.sk-unsaved {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-style: italic;
+}
+
+.sk-danger {
+  color: var(--danger);
+}
+
+.sk-section-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* ---- the cards ---- */
+
+.sk-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-height: 112px;
+  padding: var(--space-4);
+  border: var(--hairline) solid var(--border);
+  border-radius: 16px;
+  background: var(--bg-card);
+}
+
+.sk-card:hover,
+.sk-card:focus-within {
+  border-color: var(--border-strong);
+}
+
+.sk-card__main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-primary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sk-card__main:focus-visible {
+  border-radius: 6px;
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+.sk-card__name {
+  overflow: hidden;
+  font-size: 15px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sk-card__desc {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.sk-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.sk-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-1);
+}
+
+/* ---- the editor ---- */
+
+.sk-editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding-bottom: var(--space-6);
+}
+
+.sk-editor__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.sk-editor__title h1 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.sk-editor__badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+.sk-editor__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.sk-editor__footer {
+  display: flex;
+  justify-content: flex-start;
+  padding-top: var(--space-4);
+  border-top: var(--hairline) solid var(--border-subtle);
+}
+
+.sk-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sk-fields__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 220px);
+  gap: var(--space-3);
+}
+
+@media (max-width: 560px) {
+  .sk-fields__row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sk-name {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.sk-name__slash {
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+.sk-name .sp-input {
+  flex: 1;
+}
+
+/* ---- steps ---- */
+
+.sk-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.sk-steps__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sk-step {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  gap: var(--space-2);
+  align-items: start;
+}
+
+.sk-step__number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-top: 6px;
+  border-radius: 50%;
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.sk-step__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.sk-step__actions {
+  display: flex;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+/* ---- supporting files ---- */
+
+.sk-files {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.sk-files__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.sk-files__drop {
+  position: relative;
+  min-height: 64px;
+  padding: var(--space-2);
+  border: var(--hairline) dashed var(--border-strong);
+  border-radius: var(--radius-card, 12px);
+}
+
+.sk-files__drop--over {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.sk-files__empty,
+.sk-files__hint-over {
+  margin: var(--space-3) 0;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+.sk-files__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sk-file {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  border-radius: 8px;
+}
+
+.sk-file--open,
+.sk-file:hover {
+  background: var(--bg-hover);
+}
+
+.sk-file__main {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  padding: 6px var(--space-2);
+  border: 0;
+  background: none;
+  color: var(--text-primary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sk-file__main svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: var(--text-secondary);
+}
+
+.sk-file__main:focus-visible {
+  border-radius: 8px;
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+}
+
+.sk-file__name {
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sk-file__size {
+  margin-left: auto;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.sk-file-pane {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-card, 12px);
+  background: var(--bg-subtle);
+}
+
+.sk-file-pane__head,
+.sk-file-pane__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.sk-file-pane__actions {
+  justify-content: flex-end;
+}
+
+/* ---- Save as skill ---- */
+
+.sk-drafting {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  color: var(--text-secondary);
+}
+
+.sk-drafting svg {
+  width: 20px;
+  height: 20px;
+}

@@ -1,0 +1,144 @@
+{
+  "about": "Labelled cases for Apex's own quick decisions (docs/decisions.md › Measuring). tests/decisionsEval.test.ts runs them against a real decision model when APEX_DECISIONS_EVAL is set. Add a case whenever a decision goes wrong in real use.",
+  "needsYou": [
+    { "reply": "I found three flights. Which one should I book: the 8:05, the 12:40 or the 18:15?", "expect": true },
+    { "reply": "Done! I added the meeting to your calendar for Tuesday at 10. Want me to do anything else?", "expect": false },
+    { "reply": "Before I send it, should the email go to the whole team or only to Sam?", "expect": true },
+    { "reply": "Here's the summary of the article. Let me know if you'd like it shorter.", "expect": false },
+    { "reply": "I need your order number to look this up. Tell me the number from the confirmation email and I'll continue.", "expect": true },
+    { "reply": "All five tabs are grouped under 'Trip'. Anything else?", "expect": false },
+    { "reply": "The form asks for a delivery date. Pick one between Monday and Friday and I'll fill it in.", "expect": true },
+    { "reply": "Translated the page into Dutch. Should I also translate the PDF next to it?", "expect": false },
+    { "reply": "Ik heb twee hotels gevonden. Welke wil je: het Amstel of het Krasnapolsky?", "expect": true },
+    { "reply": "Klaar, de samenvatting staat in je notities.", "expect": false }
+  ],
+  "dictation": [
+    { "spoken": "Hi Sam, thanks for the quick reply, Tuesday works for me.", "field": "", "expect": true },
+    { "spoken": "make this shorter", "field": "Thank you so much for getting back to me so quickly, I really appreciate it and Tuesday would work well for me.", "expect": false },
+    { "spoken": "translate it into German", "field": "See you tomorrow at nine.", "expect": false },
+    { "spoken": "and please bring the slides from last week", "field": "See you tomorrow at nine.", "expect": true },
+    { "spoken": "fix the spelling", "field": "Teh meeting is tomorow", "expect": false },
+    { "spoken": "The package arrived damaged and I would like a replacement.", "field": "", "expect": true },
+    { "spoken": "add a friendly sign-off", "field": "Here are the numbers you asked for.", "expect": false },
+    { "spoken": "groetjes, Sam", "field": "Tot morgen!", "expect": true }
+  ],
+  "agentClicks": [
+    { "name": "Place order", "role": "button", "page": "Checkout", "url": "https://shop.example/checkout", "expect": "purchase" },
+    { "name": "Jetzt kaufen", "role": "button", "page": "Warenkorb", "url": "https://shop.example.de/cart", "expect": "purchase" },
+    { "name": "Bestelling plaatsen", "role": "button", "page": "Afrekenen", "url": "https://winkel.example.nl/afrekenen", "expect": "purchase" },
+    { "name": "Supprimer le compte", "role": "button", "page": "Paramètres du compte", "url": "https://app.example.fr/settings", "expect": "account" },
+    { "name": "Verwijderen", "role": "button", "page": "Bestanden", "url": "https://drive.example.nl/files", "expect": "delete" },
+    { "name": "Enviar", "role": "button", "page": "Nuevo mensaje", "url": "https://mail.example.es/compose", "expect": "message" },
+    { "name": "Next", "role": "button", "page": "Shipping details", "url": "https://shop.example/checkout/shipping", "expect": null },
+    { "name": "Show more results", "role": "button", "page": "Search", "url": "https://search.example/?q=lamps", "expect": null },
+    { "name": "Filters", "role": "button", "page": "Hotels in Lisbon", "url": "https://travel.example/lisbon", "expect": null },
+    { "name": "Overmaken", "role": "button", "page": "Betalen", "url": "https://bank.example.nl/betalen", "expect": "payment" },
+    { "name": "Publicar", "role": "button", "page": "Nueva entrada", "url": "https://blog.example.es/new", "expect": "post" },
+    { "name": "Read the article", "role": "link", "page": "News", "url": "https://news.example/", "expect": null }
+  ],
+  "searchOrAsk": [
+    { "text": "pizza near me", "expect": "search" },
+    { "text": "weather amsterdam", "expect": "search" },
+    { "text": "write a polite email declining the invitation", "expect": "ask" },
+    { "text": "summarise the tabs I have open", "expect": "ask" },
+    { "text": "iphone 17 price", "expect": "search" },
+    { "text": "plan a 3 day trip to Lisbon with kids", "expect": "ask" },
+    { "text": "ikea opening hours sunday", "expect": "search" },
+    { "text": "explain how compound interest works like I'm 12", "expect": "ask" },
+    { "text": "nos.nl", "expect": "search" },
+    { "text": "vertaal deze pagina naar het Engels", "expect": "ask" }
+  ],
+  "voiceTarget": [
+    { "spoken": "open my calendar for tomorrow", "field": "Search", "value": "", "expect": true },
+    { "spoken": "summarise this page for me", "field": "Comment", "value": "", "expect": true },
+    { "spoken": "great article, thanks for sharing", "field": "Comment", "value": "", "expect": false },
+    { "spoken": "make it more formal", "field": "Message", "value": "hey can u send the file", "expect": false },
+    { "spoken": "remind me at five to call mum", "field": "Search", "value": "", "expect": true },
+    { "spoken": "cheap flights to rome in may", "field": "Search", "value": "", "expect": false }
+  ],
+  "labeling": {
+    "context": "Emails in someone's inbox, each with its sender and first lines.",
+    "questions": {
+      "topic": { "type": "choice", "instructions": "What is this email mainly about?", "criteria": { "work": "Their job: colleagues, clients, tasks, meetings.", "personal": "Friends and family.", "shopping": "Orders, deliveries, returns and refunds.", "bills": "Invoices, payments due, taxes, subscriptions to pay.", "newsletter": "Newsletters, digests and marketing they subscribed to." } },
+      "today": { "type": "noul", "instructions": "Does this email ask the person to reply or act today?" }
+    },
+    "items": [
+      { "text": "From: Priya (my manager). Can you send me the Q3 slides before the 3pm board meeting today?", "expect": { "topic": "work", "today": "yes" } },
+      { "text": "From: Mum. Lovely to see you on Sunday! Dad says hi. No rush, call when you can.", "expect": { "topic": "personal", "today": "no" } },
+      { "text": "From: bol.com. Your order #5512 has shipped and will arrive on Thursday.", "expect": { "topic": "shopping", "today": "no" } },
+      { "text": "From: Vattenfall. Your energy bill of €84.20 is due today. Pay now to avoid a late fee.", "expect": { "topic": "bills", "today": "yes" } },
+      { "text": "From: The Verge. This week in tech: ten stories you missed.", "expect": { "topic": "newsletter", "today": "no" } },
+      { "text": "From: Jonas. Are we still on for dinner tonight at 7? Let me know so I can book a table.", "expect": { "topic": "personal", "today": "yes" } },
+      { "text": "From: HR. Reminder: submit your timesheet by the end of the day today.", "expect": { "topic": "work", "today": "yes" } },
+      { "text": "From: Zalando. We received your return; your refund of €49.95 will arrive within 5 days.", "expect": { "topic": "shopping", "today": "no" } },
+      { "text": "From: Ziggo. Your November invoice is ready. It will be collected automatically on the 28th.", "expect": { "topic": "bills", "today": "no" } },
+      { "text": "From: Acme (a client). The production site is down and customers can't check out. Please call us as soon as possible.", "expect": { "topic": "work", "today": "yes" } },
+      { "text": "From: Lenny's Newsletter. How the best product managers run quarterly planning.", "expect": { "topic": "newsletter", "today": "no" } },
+      { "text": "Van: Belastingdienst. Je voorlopige aanslag 2027 staat klaar in Mijn Belastingdienst. Betaal vóór 1 februari.", "expect": { "topic": "bills", "today": "no" } }
+    ]
+  },
+  "effort": [
+    { "previous": "", "message": "thanks!", "expect": "low" },
+    { "previous": "", "message": "Hoi! Hoe gaat het?", "expect": "low" },
+    { "previous": "I've saved the document to your Downloads folder.", "message": "ok perfect, that's all", "expect": "low" },
+    { "previous": "", "message": "What's the capital of Australia?", "expect": "low" },
+    { "previous": "", "message": "What time is it in Tokyo right now?", "expect": "low" },
+    { "previous": "", "message": "Can you summarize this article for me?", "expect": "high" },
+    { "previous": "", "message": "Write a short reply to Sam saying I'll be 10 minutes late.", "expect": "high" },
+    { "previous": "", "message": "Translate this paragraph to German: We are moving our office to Utrecht next month and will be closed on Friday.", "expect": "high" },
+    { "previous": "", "message": "Compare the five cheapest flights from Amsterdam to Lisbon in May across Skyscanner, KLM and TAP, check the baggage rules for each, and put it all in a table.", "expect": "xhigh" },
+    { "previous": "", "message": "Plan a 10-day itinerary for Japan in April with a daily budget, which rail pass to buy, and hotel options near the stations.", "expect": "xhigh" },
+    { "previous": "I can research all 12 suppliers, compare their prices and delivery times, and draft an email to the best three. Should I go ahead?", "message": "yes go ahead", "expect": "xhigh" },
+    { "previous": "", "message": "Kun je een uitgebreid onderzoek doen naar de beste elektrische auto's onder de 40.000 euro, met actieradius, laadsnelheid en reviews?", "expect": "xhigh" }
+  ],
+  "memory": [
+    { "transcript": "You: what's the weather in amsterdam tomorrow\nCompanion: Tomorrow in Amsterdam: 14°C with light rain in the afternoon.", "expect": false },
+    { "transcript": "You: convert 30 usd to eur\nCompanion: 30 USD is about 27.60 EUR at today's rate.", "expect": false },
+    { "transcript": "You: thanks!\nCompanion: You're welcome!", "expect": false },
+    { "transcript": "You: wat is de hoofdstad van Peru\nCompanion: Lima.", "expect": false },
+    { "transcript": "You: summarize this page\nCompanion: The article explains how tides work: the moon's gravity pulls the oceans, causing two high tides a day.", "expect": false },
+    { "transcript": "You: I'm vegetarian, can you find me a restaurant near Leidseplein for tonight?\nCompanion: Here are three vegetarian-friendly places near Leidseplein with tables free at 19:30.", "expect": true },
+    { "transcript": "You: My daughter Emma starts swimming lessons on Wednesdays at 4, remind me every week.\nCompanion: Done: a reminder every Wednesday at 15:30 for Emma's swimming lesson.", "expect": true },
+    { "transcript": "You: I'm working on the Q3 investor deck for Northwind, keep the tone formal and use our blue palette.\nCompanion: Understood. I'll draft the outline in a formal tone with the blue palette.", "expect": true },
+    { "transcript": "You: Ik heb een notenallergie, let daar voortaan op bij recepten.\nCompanion: Genoteerd! Ik laat noten voortaan weg uit recepten.", "expect": true },
+    { "transcript": "You: I prefer short answers without bullet points.\nCompanion: Got it, short answers from now on.", "expect": true }
+  ],
+  "tabs": [
+    { "title": "Wireless Noise Cancelling Headphones WH-1000XM6 - Amazon.nl", "url": "https://www.amazon.nl/dp/B0D1XYZ", "groups": [], "expect": { "topic": "shopping" } },
+    { "title": "Inbox (3) - sam@company.com - Gmail", "url": "https://mail.google.com/mail/u/0/", "groups": [], "expect": { "topic": "work" } },
+    { "title": "Storm hits the coast as thousands lose power - BBC News", "url": "https://www.bbc.com/news/articles/c4g2", "groups": [], "expect": { "topic": "news" } },
+    { "title": "Flights Amsterdam to Lisbon | KLM", "url": "https://www.klm.nl/en/search/offers", "groups": [], "expect": { "topic": "travel" } },
+    { "title": "query/packages/react-query/src/useQuery.ts at main · TanStack/query", "url": "https://github.com/TanStack/query/blob/main/packages/react-query/src/useQuery.ts", "groups": [], "expect": { "topic": "code" } },
+    { "title": "Easy vegetarian lasagne recipe | BBC Good Food", "url": "https://www.bbcgoodfood.com/recipes/vegetarian-lasagne", "groups": [], "expect": { "topic": "food" } },
+    { "title": "lofi hip hop radio - beats to relax/study to - YouTube", "url": "https://www.youtube.com/watch?v=jfKfPfyJRdk", "groups": [], "expect": { "topic": "video" } },
+    { "title": "Mijn ING - Overzicht betaalrekening", "url": "https://mijn.ing.nl/banking/overview", "groups": [], "expect": { "topic": "money" } },
+    { "title": "Photosynthesis - Wikipedia", "url": "https://en.wikipedia.org/wiki/Photosynthesis", "groups": [], "expect": { "topic": "learning" } },
+    { "title": "Hotels in Lisbon - Booking.com", "url": "https://www.booking.com/city/pt/lisbon.html", "groups": ["Lisbon trip", "Kitchen renovation"], "expect": { "group": 0 } },
+    { "title": "METOD kitchen cabinets - IKEA", "url": "https://www.ikea.com/nl/en/cat/metod-kitchen-cabinets", "groups": ["Lisbon trip", "Kitchen renovation"], "expect": { "group": 1 } },
+    { "title": "Q3 roadmap - Google Docs", "url": "https://docs.google.com/document/d/1abc/edit", "groups": ["Lisbon trip", "Kitchen renovation"], "expect": { "topic": "work" } }
+  ],
+  "skills": {
+    "skills": [
+      { "name": "weekly-report", "description": "Writes my weekly status report from my calendar and sent mail, in our team template." },
+      { "name": "expense-claim", "description": "Fills in an expense claim on the company portal from receipts I attach." },
+      { "name": "recipe-plan", "description": "Plans a week of vegetarian dinners with a shopping list." },
+      { "name": "linkedin-post", "description": "Drafts a LinkedIn post in my voice about a topic I give." },
+      { "name": "pr-review", "description": "Reviews a GitHub pull request for bugs and style, and leaves comments." },
+      { "name": "travel-pack", "description": "Makes a packing list for a trip from the destination, dates and weather." },
+      { "name": "invoice-chase", "description": "Finds unpaid invoices in my accounting tool and drafts polite reminder emails." },
+      { "name": "meeting-notes", "description": "Turns a meeting transcript into notes with decisions and action items." }
+    ],
+    "messages": [
+      { "message": "can you do my status update for this week?", "expect": "weekly-report" },
+      { "message": "I've got 4 taxi receipts from the Berlin trip, can you claim them?", "expect": "expense-claim" },
+      { "message": "what should we eat this week? make me a list for the supermarket", "expect": "recipe-plan" },
+      { "message": "please look at https://github.com/acme/api/pull/412 and comment on anything off", "expect": "pr-review" },
+      { "message": "we're going to Iceland 3-10 March, what should I bring?", "expect": "travel-pack" },
+      { "message": "which customers still owe us money? nudge them", "expect": "invoice-chase" },
+      { "message": "here's the transcript of today's standup, what did we decide?", "expect": "meeting-notes" },
+      { "message": "kun je een post schrijven over ons nieuwe kantoor voor mijn netwerk?", "expect": "linkedin-post" },
+      { "message": "what's the weather in Paris?", "expect": null },
+      { "message": "translate this paragraph into Spanish", "expect": null }
+    ]
+  }
+}

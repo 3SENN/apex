@@ -1,0 +1,53 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* Onboarding illustrations, drawn as code. Every colour
+   is a token, so light and dark both work; data-static stops all motion. */
+.il {
+  --il-paper: light-dark(color-mix(in srgb, var(--il-tint, var(--accent)) 7%, var(--bg-card)), color-mix(in srgb, var(--il-tint, var(--accent)) 10%, var(--bg-sunken)));
+  --il-panel: var(--bg-card);
+  --il-line: var(--border-subtle);
+  --il-ink: var(--text-secondary);
+  --il-faint: color-mix(in srgb, var(--text-primary) 12%, transparent);
+  --il-accent: var(--il-tint, var(--accent));
+  --il-soft: color-mix(in srgb, var(--il-tint, var(--accent)) 28%, transparent);
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+}
+.il .paper { fill: var(--il-paper); }
+.il .panel { fill: var(--il-panel); stroke: var(--il-line); stroke-width: 1; }
+.il .line { fill: var(--il-faint); }
+.il .ink { fill: var(--il-ink); }
+.il .accent { fill: var(--il-accent); }
+.il .soft { fill: var(--il-soft); }
+.il .stroke { fill: none; stroke: var(--il-accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.il .stroke-ink { fill: none; stroke: var(--il-ink); stroke-width: 1.5; stroke-linecap: round; }
+
+.il .pulse { animation: il-pulse 2.4s var(--ease-standard, ease) infinite; transform-box: fill-box; transform-origin: center; }
+.il .drift { animation: il-drift 3.2s var(--ease-standard, ease) infinite alternate; }
+.il .type { animation: il-type 2.8s steps(6) infinite; transform-box: fill-box; transform-origin: left center; }
+.il .bars rect { animation: il-bar 1.4s var(--ease-standard, ease) infinite alternate; transform-box: fill-box; transform-origin: bottom; }
+.il .bars rect:nth-child(2) { animation-delay: -0.3s; }
+.il .bars rect:nth-child(3) { animation-delay: -0.6s; }
+.il .bars rect:nth-child(4) { animation-delay: -0.9s; }
+.il .bars rect:nth-child(5) { animation-delay: -1.2s; }
+.il .spin { animation: il-spin 8s linear infinite; transform-box: fill-box; transform-origin: center; }
+.il .draw { stroke-dasharray: 120; animation: il-draw 3s var(--ease-out, ease-out) infinite; }
+
+.il[data-static] *,
+.il[data-static] { animation: none !important; }
+
+@keyframes il-pulse { 0%, 100% { transform: scale(1); opacity: 0.9; } 50% { transform: scale(1.12); opacity: 1; } }
+@keyframes il-drift { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+@keyframes il-type { from { transform: scaleX(0.15); } to { transform: scaleX(1); } }
+@keyframes il-bar { from { transform: scaleY(0.35); } to { transform: scaleY(1); } }
+@keyframes il-spin { to { transform: rotate(360deg); } }
+@keyframes il-draw { from { stroke-dashoffset: 120; } 60%, to { stroke-dashoffset: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .il * { animation: none !important; }
+}

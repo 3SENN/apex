@@ -1,0 +1,184 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* Settings › Model and key: the engine choice and outside access.
+   Tokens only, so light and dark come from the token block. */
+
+.mk-choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-3);
+}
+
+.mk-choice {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 1fr auto;
+  gap: var(--space-2) var(--space-3);
+  min-height: 112px;
+  padding: var(--space-4);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-card);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-xs);
+  color: var(--text-primary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color var(--dur-fast) var(--ease-standard),
+    background-color var(--dur-fast) var(--ease-standard),
+    box-shadow var(--dur-fast) var(--ease-standard);
+}
+
+.mk-choice:hover {
+  background: color-mix(in srgb, var(--bg-hover) 100%, var(--bg-card));
+  border-color: var(--border-strong);
+}
+
+.mk-choice--selected,
+.mk-choice--selected:hover {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 6%, var(--bg-card));
+  box-shadow: 0 0 0 1px var(--accent) inset, var(--shadow-xs);
+}
+
+.mk-choice:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+.mk-choice__icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: var(--bg-muted);
+  color: var(--text-secondary);
+}
+
+.mk-choice--selected .mk-choice__icon {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.mk-choice__icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.mk-choice__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.mk-choice__title {
+  font-size: var(--text-md);
+  font-weight: 600;
+}
+
+.mk-choice__description {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.4;
+}
+
+.mk-choice__status {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.mk-choice__check {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-strong);
+  color: transparent;
+  transition:
+    background-color var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
+    transform var(--dur-base) var(--ease-spring);
+}
+
+.mk-choice__check svg {
+  width: 12px;
+  height: 12px;
+  stroke-width: 3;
+}
+
+.mk-choice__check--on {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-text);
+  transform: scale(1.06);
+}
+
+/* The card draws dividers between its children; notices belong to the row above. */
+.sp-card > .mk-pad {
+  border-top: 0;
+}
+
+.mk-pad {
+  padding: 0 var(--space-4) var(--space-3);
+}
+
+.mk-foot {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+  line-height: 1.45;
+}
+
+.mk-foot svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  margin-top: 1px;
+}
+
+.mk-command {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.mk-command__text {
+  display: block;
+  overflow-x: auto;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-sunken);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  white-space: pre;
+  user-select: all;
+}
+
+/* One selector covers the system setting and Apex's own Reduce Motion (see ui/motion.ts). */
+:root[data-motion='reduced'] .mk-choice,
+:root[data-motion='reduced'] .mk-choice__check {
+  transition: none;
+}
+
+:root[data-motion='reduced'] .mk-choice__check--on {
+  transform: none;
+}

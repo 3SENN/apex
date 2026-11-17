@@ -1,0 +1,4 @@
+# Build output from build.mjs (dotnet publish)
+build/
+bin/
+obj/

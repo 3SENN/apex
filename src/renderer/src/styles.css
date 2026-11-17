@@ -1,0 +1,2883 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* Apex design system. Original styling: Inter (OFL), Lucide icons (ISC). */
+
+/* ---- design tokens ----
+   One set of names serves both modes: every colour is light-dark(light, dark)
+   and the mode is just `color-scheme`. main.tsx sets <html data-theme> to the
+   resolved mode before React renders; until then (or if it is missing) the
+   system preference decides. Colour roles (docs/design-spec.md):
+   - neutral: Apex ink, warm greys and paper. The toolbar, pill, bookmarks
+     bar, labels and icons, and every surface by default.
+   - profile hue: the person's own colour (--profile-*, from
+     src/shared/profile.ts via ui/profile.ts). The sidebar ground, the footer
+     ring and capsule. Never the companion.
+   - companion colours: --companion-accent-* from accentVariables() in
+     src/shared/accent.ts (--accent and friends). Companion-owned surfaces
+     only; they never tint the chrome. */
+
+:root {
+  color-scheme: light;
+
+  /* The ground: the sidebar column, one flat tint in the profile hue. */
+  --profile-ground: light-dark(var(--profile-ground-light, #eeece8), var(--profile-ground-dark, #302d2a));
+  --profile-hue: light-dark(var(--profile-hue-light, #6f675e), var(--profile-hue-dark, #6f675e));
+  --profile-hue-hover: color-mix(in srgb, var(--profile-hue) 88%, white);
+  --profile-hue-text: #ffffff;
+  /* The hue as text and rings on cards (links, focus, the selected settings
+     row): profile.ts lifts or deepens it to 4.5:1 per mode. */
+  --profile-text: light-dark(var(--profile-text-light, #787067), var(--profile-text-dark, #9c958b));
+  /* The footer's account badge: ink with paper text. */
+  --profile-badge-bg: light-dark(#2b2824, #45413c);
+  --profile-badge-fg: #ffffff;
+  --bg-base: var(--profile-ground);
+  --bg-sidebar: var(--profile-ground);
+  /* Older names: the wash is flat now, and the tint is the profile hue. */
+  --sidebar-wash: var(--profile-ground);
+  --tint-color: var(--profile-hue);
+  /* For a window with macOS vibrancy behind the sidebar. */
+  --bg-sidebar-vibrant: color-mix(in srgb, var(--bg-sidebar) 74%, transparent);
+  --bg-window: var(--bg-sidebar);
+  --bg-window-2: color-mix(in srgb, var(--text-primary) 6%, var(--bg-window));
+
+  /* The sheet: toolbar, bookmarks bar and page on one paper surface. Only its
+     top-left corner is rounded; it casts a short shadow onto the ground. The
+     dark sheet is one step lighter than the dark ground. */
+  --bg-sheet: var(--bg-card);
+  --sheet-radius: 10px;
+  --sheet-shadow: -1px 0 4px light-dark(rgba(46, 36, 24, 0.09), rgba(0, 0, 0, 0.16));
+  --sheet-rule: light-dark(#e9e6e1, #2f2d2a);
+  /* The page as an inset card beside a chat. */
+  --page-inset: 8px;
+  --page-inset-radius: 10px;
+
+  /* accent.ts SURFACES assumes card colours close to these two. */
+  --bg-card: light-dark(#fdfcfa, #222120);
+  --bg-raised: light-dark(#ffffff, #2b2a28);
+  --bg-subtle: light-dark(#f8f7f4, #262523);
+  --bg-muted: light-dark(#efede9, #302e2c);
+  --bg-sunken: light-dark(#f3f1ed, #1c1b1a);
+  /* The ideas card: recessed in light mode, a step above the composer in dark (DS-137). */
+  --bg-ideas: light-dark(var(--bg-sunken), var(--bg-muted));
+  /* The moving part of segmented controls and switches. */
+  --bg-thumb: light-dark(#ffffff, #2b2a28);
+  --switch-thumb: light-dark(#ffffff, #f4f2ef);
+  --bg-hover: color-mix(in srgb, var(--text-primary) 5%, transparent);
+  --bg-active: color-mix(in srgb, var(--text-primary) 9%, transparent);
+  --bg-selected: color-mix(in srgb, var(--accent) 13%, transparent);
+  /* DS-138: a pressed toggle is a neutral grey fill; the companion colour is for companion actions only. */
+  --bg-pressed: var(--bg-active);
+  --bg-glass: light-dark(rgba(255, 255, 255, 0.84), rgba(43, 42, 40, 0.86));
+  --glass-blur: 18px;
+  --scrim: light-dark(rgba(34, 28, 22, 0.24), rgba(6, 5, 4, 0.56));
+  --scrim-blur: 6px;
+  /* DS-29: a content-scoped overlay (the companion card's backdrop and the
+     dialogs opened from it) blurs only the content area, about 10 px. Light
+     mode lifts it about 3% toward the page ground; dark is blur only. */
+  --scrim-content: light-dark(color-mix(in srgb, var(--bg-base) 7%, transparent), transparent);
+  --scrim-content-blur: 10px;
+
+  /* Chrome, neutral only. The pill is a flat grey field; hover deepens it. */
+  --pill-bg: light-dark(#f1efeb, #2f2d2b);
+  --pill-bg-hover: light-dark(#e9e6e1, #363431);
+  --pill-insecure: color-mix(in srgb, var(--status-error) 12%, var(--pill-bg));
+  /* The raised chip (active row, active tab): a near-white fill, a hairline
+     bright edge and a two-layer soft shadow, mostly below. In dark mode the
+     edge is a faint light hairline and the shadow deeper. The dark fill is the
+     ground lifted about 42 levels, four hover steps, so it follows the
+     profile hue (DS-10). */
+  --chip-bg: light-dark(#fcfbf9, color-mix(in srgb, var(--profile-ground) 79%, #ffffff));
+  --chip-shadow:
+    inset 0 0 0 0.5px light-dark(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.11)),
+    0 0 0 0.5px light-dark(rgba(46, 36, 24, 0.07), rgba(0, 0, 0, 0.5)),
+    0 1px 2px light-dark(rgba(46, 36, 24, 0.07), rgba(0, 0, 0, 0.32)),
+    0 3px 9px light-dark(rgba(46, 36, 24, 0.06), rgba(0, 0, 0, 0.28));
+  /* Rows in a multi-selection keep this tint; hover deepens it. */
+  --row-selected: color-mix(in srgb, var(--text-primary) 7%, transparent);
+  --row-selected-hover: color-mix(in srgb, var(--text-primary) 11%, transparent);
+  /* Chrome tones: strong for titles and New Tab, muted for destinations,
+     labels and account text, faint for stamps and the pill's trailing crumb. */
+  --chrome-strong: var(--text-primary);
+  /* Muted reads at 4.5:1 on the ground; faint (stamps that carry meaning,
+     like a routine's next run) stays above 3.9:1 at 11 px. */
+  --chrome-muted: light-dark(#6c675f, #9f9992);
+  --chrome-faint: light-dark(#77716a, #8f8981);
+  /* Keyboard focus in the chrome is neutral too. */
+  --focus-ring-chrome: light-dark(rgba(28, 26, 23, 0.5), rgba(241, 239, 236, 0.55));
+
+  /* Text: warm ink and greys. */
+  --text-primary: light-dark(#1c1a17, #f1efec);
+  --text-secondary: light-dark(#66615a, #aaa49d);
+  --text-tertiary: light-dark(#8d877f, #7f7972);
+  --text-disabled: light-dark(#bab4ac, #57524c);
+  --text-on-accent: var(--accent-text);
+  /* Links follow the profile hue, never the companion (DS-03). */
+  --text-link: var(--profile-text);
+
+  /* Borders */
+  --border-subtle: light-dark(#ece9e4, #2b2927);
+  --border-default: light-dark(#e3dfd9, #34322f);
+  --border-strong: light-dark(#cfc9c1, #4a4641);
+  --border-card: light-dark(rgba(46, 36, 24, 0.07), rgba(255, 255, 255, 0.06));
+  /* One device pixel (DS-140): 0.5 px on 2x screens, 1 px on 1x. */
+  --hairline: 1px;
+  /* DS-140: cards and settings borders are one CSS pixel on every screen. */
+  --line: 1px;
+  /* A fixed "on" colour for switches, independent of profile and companion (DS-132). */
+  --positive: light-dark(#1e9467, #2fb57b);
+
+  /* Accent: the companion's colour, for companion-owned surfaces. */
+  --accent: light-dark(var(--companion-accent-light, #6a4bff), var(--companion-accent-dark, #8c72ff));
+  --accent-2: light-dark(var(--companion-accent-2-light, #9b6bff), var(--companion-accent-2-dark, #b48cff));
+  --accent-3: light-dark(var(--companion-accent-3-light, #ff7eb6), var(--companion-accent-3-dark, #ff7eb6));
+  --accent-soft: light-dark(var(--companion-accent-soft-light, #eeeaff), var(--companion-accent-soft-dark, #2c2550));
+  --accent-text: light-dark(var(--companion-accent-text-light, #ffffff), var(--companion-accent-text-dark, #ffffff));
+  --accent-hover: color-mix(in srgb, var(--accent) 88%, light-dark(black, white));
+  --accent-pressed: color-mix(in srgb, var(--accent) 78%, light-dark(black, white));
+  --accent-ring: color-mix(in srgb, var(--accent) 34%, transparent);
+  --gradient: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 60%, var(--accent-3) 120%);
+
+  /* Status. Unread follows the accent; the rest keep their meaning in any accent. */
+  --status-working: light-dark(#2f74d9, #5f9eff);
+  --status-working-soft: light-dark(#e7f0fd, #172a45);
+  --status-needs-input: light-dark(#b8740a, #f2b33d);
+  --status-needs-input-soft: light-dark(#fdf2df, #3a2d14);
+  --status-error: light-dark(#d93c51, #ff6b7d);
+  --status-error-soft: light-dark(#fdecef, #3a2029);
+  --status-success: light-dark(#1e9467, #3fcf8e);
+  --status-success-soft: light-dark(#e4f6ee, #173327);
+  --status-unread: var(--accent);
+  --status-unread-soft: var(--accent-soft);
+  /* The chrome's unread dot is neutral ink; needs-input keeps its amber. */
+  --status-unread-chrome: light-dark(#4d4842, #d6d1ca);
+  --on-status: light-dark(#ffffff, #14120f);
+
+  /* Shadows: soft and low in light mode, deeper in dark mode. */
+  --shadow-xs: 0 1px 1px light-dark(rgba(46, 36, 24, 0.05), rgba(0, 0, 0, 0.24));
+  --shadow-sm: 0 1px 2px light-dark(rgba(46, 36, 24, 0.07), rgba(0, 0, 0, 0.3));
+  --shadow-md:
+    0 6px 18px light-dark(rgba(46, 36, 24, 0.09), rgba(0, 0, 0, 0.36)),
+    0 1px 3px light-dark(rgba(46, 36, 24, 0.06), rgba(0, 0, 0, 0.26));
+  --shadow-lg:
+    0 24px 60px light-dark(rgba(46, 36, 24, 0.18), rgba(0, 0, 0, 0.54)),
+    0 4px 14px light-dark(rgba(46, 36, 24, 0.07), rgba(0, 0, 0, 0.3));
+  --shadow-card:
+    0 0 0 1px var(--border-card),
+    0 1px 3px light-dark(rgba(46, 36, 24, 0.05), rgba(0, 0, 0, 0.3)),
+    0 8px 28px light-dark(rgba(46, 36, 24, 0.06), rgba(0, 0, 0, 0.24));
+  --shadow-overlay: 0 0 0 1px var(--border-card), var(--shadow-lg);
+
+  /* Radii */
+  --radius-xs: 6px;
+  --radius-row: 7px;
+  --radius-sm: 8px;
+  --radius-control: 9px;
+  --radius-md: 12px;
+  --radius-card: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* Spacing, on a 4 px grid. */
+  --space-0-5: 2px;
+  --space-1: 4px;
+  --space-1-5: 6px;
+  --space-2: 8px;
+  --space-2-5: 10px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* Type and control sizes */
+  --font: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --text-xs: 11px;
+  --text-sm: 12px;
+  --text-md: 13px;
+  --text-lg: 15px;
+  --text-xl: 18px;
+  --text-2xl: 24px;
+  /* DS-51: the chat type scale. Replies, bubbles and the composer field at 16 on a 25 px line;
+     UI labels at 14, meta lines at 13, captions at 12. */
+  --text-chat: 16px;
+  --leading-chat: 25px;
+  --text-ui: 14px;
+  --text-meta: 13px;
+  --text-caption: 12px;
+  --control-sm: 26px;
+  --control-md: 32px;
+  --control-lg: 38px;
+  /* Shell geometry (design spec): one 40 px bar height for the toolbar
+     and the sidebar header, a 34 px row pitch. */
+  --bar-height: 40px;
+  --bookmarks-height: 37px;
+  --row-height: 32px;
+  --row-gap: 2px;
+
+  /* Motion. ui/logic/motion.ts holds the same numbers for code; every one
+     collapses to zero under either Reduce Motion (data-motion='reduced'). */
+  /* DS-81: the older --dur-* names are aliases of the one --motion-* set. */
+  --dur-instant: var(--motion-pop);
+  --dur-fast: var(--motion-quick);
+  --dur-base: var(--motion-exit);
+  --dur-slow: var(--motion-medium);
+  --dur-slower: var(--motion-page);
+  /* Apex's own numbers (DS-81): menus pop in one frame and close at once; the
+     card enters a beat faster than it leaves; layout is one short timeline. */
+  --motion-pop: 60ms;
+  --motion-quick: 90ms;
+  --motion-enter: 140ms;
+  --motion-exit: 180ms;
+  --motion-glide: 150ms;
+  /* A drop or a hop coming to rest: the floor spring's settling time (about 600 ms). */
+  --motion-settle: 600ms;
+  --motion-medium: 250ms;
+  --motion-page: 450ms;
+  --motion-menu-in: var(--motion-pop);
+  --motion-menu-out: 0ms;
+  --motion-layout: 150ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  /* Leaving things accelerate away. */
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  /* A symmetric ease with no overshoot: the sidebar showing (DS-19). */
+  --ease-in-out: cubic-bezier(0.45, 0, 0.25, 1);
+  /* DS-81: one strong decelerate curve for nearly everything. --ease-spring is
+     kept for older callers and no longer overshoots; the spring itself
+     (--ease-floor, SPRING in ui/logic/motion.ts as a CSS curve over
+     --motion-settle) is for the floor's hops and perching only. */
+  --ease-spring: var(--ease-out);
+  --ease-floor: linear(0, 0.072, 0.238, 0.438, 0.632, 0.797, 0.922, 1.008, 1.058, 1.08, 1.083, 1.073, 1.058, 1.041, 1.026, 1.013, 1.004, 0.998, 0.994, 0.993, 0.993, 0.994, 0.996, 0.997, 1);
+
+  /* Focus rings take the profile hue, like links and selection (DS-03). */
+  --focus-ring-color: var(--profile-text);
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  /* For fields, which show focus as a soft halo instead of an outline. */
+  --focus-halo: 0 0 0 3px color-mix(in srgb, var(--profile-text) 30%, transparent);
+  --focus-halo-neutral: 0 0 0 3px light-dark(rgba(28, 26, 23, 0.1), rgba(241, 239, 236, 0.12));
+
+  /* Stacking, for anything portalled to <body>. */
+  --z-popover: 900;
+  --z-modal: 1000;
+  --z-toast: 1100;
+
+  /* Older names, kept so existing styles keep working. */
+  --chrome: var(--bg-window);
+  --chrome-2: var(--bg-window-2);
+  --surface: var(--bg-card);
+  --surface-2: var(--bg-subtle);
+  --surface-3: var(--bg-muted);
+  --border: var(--border-default);
+  --text: var(--text-primary);
+  --text-2: var(--text-secondary);
+  --text-3: var(--text-tertiary);
+  --danger: var(--status-error);
+  --danger-soft: var(--status-error-soft);
+  --warning: var(--status-needs-input);
+  --warning-soft: var(--status-needs-input-soft);
+  --ok: var(--status-success);
+  --ok-soft: var(--status-success-soft);
+  --radius: var(--radius-md);
+  --shadow: var(--shadow-md);
+
+  /* Width and height animate to and from auto (the side panel, collapsing sections). */
+  interpolate-size: allow-keywords;
+}
+
+/* Text selection takes the profile hue (DS-03). */
+::selection {
+  background: color-mix(in srgb, var(--profile-text) 28%, transparent);
+}
+
+@media (min-resolution: 2dppx) {
+  :root {
+    --hairline: 0.5px;
+  }
+}
+
+/* Registered so the page's corner radius can glide with the layout timeline. */
+@property --page-radius {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+/* A theme or colour change repaints at once (DS-88): theme.ts sets this for
+   two frames. The segmented thumb is the one thing that still moves. */
+:root[data-theme-switching] *:not(.ui-segmented__thumb),
+:root[data-theme-switching] *::before,
+:root[data-theme-switching] *::after {
+  transition: none !important;
+}
+
+/* Without data-theme, light-dark() follows the system preference. */
+:root:not([data-theme]) {
+  color-scheme: light dark;
+}
+
+/* Reduce Motion: the system setting, or Apex's own (ui/motion.ts sets
+   data-motion). Every duration collapses; looping animations stop where
+   their own rules say so. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-instant: 0ms;
+    --dur-fast: 0ms;
+    --dur-base: 0ms;
+    --dur-slow: 0ms;
+    --dur-slower: 0ms;
+    --motion-pop: 0ms;
+    --motion-quick: 0ms;
+    --motion-enter: 0ms;
+    --motion-exit: 0ms;
+    --motion-glide: 0ms;
+    --motion-settle: 0ms;
+    --motion-medium: 0ms;
+    --motion-page: 0ms;
+    --motion-menu-in: 0ms;
+    --motion-menu-out: 0ms;
+    --motion-layout: 0ms;
+  }
+}
+
+:root[data-motion='reduced'] {
+  --dur-instant: 0ms;
+  --dur-fast: 0ms;
+  --dur-base: 0ms;
+  --dur-slow: 0ms;
+  --dur-slower: 0ms;
+  --motion-pop: 0ms;
+  --motion-quick: 0ms;
+  --motion-enter: 0ms;
+  --motion-exit: 0ms;
+  --motion-glide: 0ms;
+  --motion-settle: 0ms;
+  --motion-medium: 0ms;
+  --motion-page: 0ms;
+  --motion-menu-in: 0ms;
+  --motion-menu-out: 0ms;
+  --motion-layout: 0ms;
+}
+
+/* Reduce Transparency: every translucent surface gets an opaque stand-in. */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --bg-sidebar-vibrant: var(--bg-sidebar);
+    --bg-glass: var(--bg-raised);
+    --glass-blur: 0px;
+    --scrim: light-dark(rgba(34, 28, 22, 0.5), rgba(6, 5, 4, 0.78));
+    --scrim-blur: 0px;
+    --scrim-content: color-mix(in srgb, var(--bg-sheet) 92%, transparent);
+    --scrim-content-blur: 0px;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --border-subtle: var(--border-strong);
+    --border-default: var(--border-strong);
+    --text-tertiary: var(--text-secondary);
+    --chrome-muted: var(--text-secondary);
+    --chrome-faint: var(--text-secondary);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font: 13px/1.45 var(--font);
+  font-feature-settings: 'cv11', 'ss01';
+  color: var(--text-primary);
+  background: var(--bg-window);
+  overflow: hidden;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+
+input,
+textarea,
+select {
+  user-select: text;
+}
+
+:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* The chrome never carries the companion's colour, focus and toggles included. */
+.sidebar,
+.sheet__bars,
+.tabstrip {
+  --focus-ring-color: var(--focus-ring-chrome);
+}
+
+:is(.sidebar, .sheet__bars, .tabstrip) .ui-icon-btn--on,
+:is(.sidebar, .sheet__bars, .tabstrip) .ui-icon-btn--on:hover:not(:disabled) {
+  color: var(--chrome-strong);
+  background: var(--bg-active);
+}
+
+/* ---- shell layout ----
+   Two planes. The ground is the sidebar column: one flat profile-hue tint.
+   The sheet holds the toolbar, the bookmarks bar and the page on one paper
+   surface; in the sidebar layout it touches the window's top, right and
+   bottom edges, rounds only its top-left corner and casts a short shadow
+   onto the ground, with no line at the seam. A hairline separates the bars
+   from the page. The page is flush (no card, radius or gutter) except beside
+   a chat or in split view, where it becomes an inset rounded card. Page views
+   are native and drawn over .pane__view, so nothing in the chrome may sit
+   over a pane unless it hides them (see ui/overlay.ts). */
+
+.app {
+  display: flex;
+  height: 100%;
+  background: var(--bg-window);
+}
+
+.app--horizontal {
+  flex-direction: column;
+}
+
+.main {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sheet {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-sheet);
+}
+
+/* Above the ground, so its shadow falls on the sidebar. */
+.app--sidebar .sheet {
+  z-index: 1;
+  border-top-left-radius: var(--sheet-radius);
+  box-shadow: var(--sheet-shadow);
+  transition:
+    border-radius var(--motion-layout) var(--ease-standard),
+    box-shadow var(--motion-layout) var(--ease-standard);
+}
+
+/* With the sidebar away the sheet is the whole window. */
+.app--sidebar:not(.app--sidebar-shown) .sheet,
+.app--page-fullscreen .sheet {
+  border-top-left-radius: 0;
+  box-shadow: none;
+}
+
+.app--horizontal .sheet {
+  border-radius: var(--sheet-radius) var(--sheet-radius) 0 0;
+  box-shadow: 0 -1px 4px light-dark(rgba(46, 36, 24, 0.06), rgba(0, 0, 0, 0.4));
+}
+
+/* The bars above the page, ending in the one hairline: one device pixel
+   (--hairline) at the bottom of a 1 px band, so the page still starts on a
+   whole CSS pixel (DS-01). */
+.sheet__bars {
+  position: relative;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1px;
+}
+
+.sheet__bars::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--hairline);
+  background: var(--sheet-rule);
+  pointer-events: none;
+}
+
+.sheet__bars:empty {
+  display: none;
+}
+
+/* Where the macOS window controls sit; main moves them to this box. */
+.traffic-slot {
+  flex: none;
+  width: 72px;
+  align-self: stretch;
+  -webkit-app-region: drag;
+}
+
+.spinner {
+  width: 13px;
+  height: 13px;
+  border: 2px solid var(--border-strong);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.shell-input {
+  width: 100%;
+  height: var(--control-lg);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-control);
+  background: var(--bg-subtle);
+  outline: none;
+  font-size: var(--text-lg);
+}
+
+.shell-input:focus {
+  border-color: var(--accent);
+  box-shadow: var(--focus-halo);
+}
+
+/* ---- companion avatars ---- */
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  overflow: hidden;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--avatar-tint, var(--accent)) 24%, var(--bg-card));
+  color: var(--text-secondary);
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar__initial {
+  font-weight: 700;
+  line-height: 1;
+}
+
+.avatar--neutral {
+  background: var(--bg-muted);
+  color: var(--text-tertiary);
+}
+
+/* ---- horizontal tab strip ---- */
+
+.tabstrip {
+  display: flex;
+  align-items: flex-end;
+  height: 42px;
+  padding: 6px var(--space-2) 0;
+  flex: none;
+  -webkit-app-region: drag;
+}
+
+.tabstrip--inset {
+  padding-left: 4px;
+}
+
+/* Not a drag region: empty strip space takes the background menu and tab drops.
+   The window still drags from the strip's top edge and the toolbar. */
+.tabstrip__tabs {
+  -webkit-app-region: no-drag;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+  height: 34px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.tabstrip__tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  -webkit-app-region: no-drag;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 32px;
+  /* Tabs shrink to this floor, then the strip scrolls instead of running off the edge. */
+  min-width: 96px;
+  max-width: 220px;
+  flex: 1 1 200px;
+  padding: 0 7px 0 11px;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  cursor: default;
+  outline-offset: -2px;
+  transition:
+    background var(--dur-fast),
+    margin var(--dur-fast) var(--ease-standard);
+}
+
+.tab:hover {
+  background: var(--bg-hover);
+}
+
+.tab--active,
+.tab--active:hover {
+  background: var(--chip-bg);
+  color: var(--chrome-strong);
+  box-shadow: var(--chip-shadow);
+}
+
+.tab--pinned {
+  flex: none;
+  min-width: 0;
+  width: 40px;
+  padding: 0;
+  justify-content: center;
+}
+
+.tab--gap-before {
+  margin-left: 40px;
+}
+
+.tab--split::after {
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 2px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--chrome-muted);
+  opacity: 0.6;
+}
+
+.tab--attention {
+  box-shadow: inset 0 -2px 0 var(--status-needs-input);
+}
+
+/* SH-21: the unread mark is the sidebar's neutral-ink dot, after the title.
+   A pinned tab has no title, so the dot sits at its trailing edge, clear of
+   the favicon instead of on it. */
+.tabstrip .ui-status-dot--unread {
+  color: var(--status-unread-chrome);
+}
+.tab--pinned > .ui-status-dot {
+  position: absolute;
+  top: calc(50% - 3.5px);
+  right: 4px;
+}
+
+/* A companion at work: a soft halo in its colour, still (no loop in the chrome). */
+.tab--agent .tab__icon {
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--agent-color, var(--accent)) 26%, transparent), 0 0 10px 2px color-mix(in srgb, var(--agent-color, var(--accent)) 30%, transparent);
+  transition: box-shadow var(--motion-enter) var(--ease-standard);
+}
+
+.tab__icon {
+  display: flex;
+  width: 16px;
+  height: 16px;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  color: var(--text-tertiary);
+}
+
+.tab__icon img {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.tab__title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+.tab__close,
+.tab__audio {
+  display: flex;
+  border: 0;
+  background: none;
+  padding: 3px;
+  border-radius: var(--radius-xs);
+  flex: none;
+  color: var(--text-secondary);
+}
+
+.tab__close {
+  opacity: 0;
+}
+
+.tab:hover .tab__close,
+.tab--active .tab__close {
+  opacity: 0.75;
+}
+
+.tab__close:hover,
+.tab__audio:hover {
+  background: var(--bg-active);
+  opacity: 1;
+}
+
+.tabstrip__new {
+  -webkit-app-region: no-drag;
+  position: sticky;
+  right: 0;
+  display: flex;
+  flex: none;
+  padding: 7px;
+  margin-left: 2px;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: var(--bg-window);
+  color: var(--text-secondary);
+}
+
+.tabstrip__new:hover {
+  background: var(--bg-window-2);
+}
+
+/* ---- toolbar ----
+   40 px, on the sheet. 32 px boxes: the toggle at sheet + 8, then back,
+   forward and reload at + 48, + 82 and + 116 (2 px apart); the right
+   utility button ends 8 px in. The pill is centred on the sheet's midline,
+   not between the clusters; it shrinks (never shifts) to clear them:
+   --toolbar-side is the wider cluster, measured by the toolbar (DS-20, DS-24). */
+
+.toolbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  height: var(--bar-height);
+  padding: 0 var(--space-2);
+  flex: none;
+  -webkit-app-region: drag;
+}
+
+.toolbar__group {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex: none;
+  -webkit-app-region: no-drag;
+}
+
+/* The navigation cluster: 2 px between back, forward and reload, 8 px after the toggle. */
+.toolbar__group--nav {
+  gap: 2px;
+}
+
+.toolbar__group--nav .sidebar-toggle {
+  margin-right: 6px;
+}
+
+.toolbar__group:empty {
+  visibility: hidden;
+}
+
+.toolbar__group .ui-icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  color: var(--chrome-muted);
+}
+
+.toolbar__group .ui-icon-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Back and forward: 18 px thin chevrons (the stroke is set on the glyph). */
+.toolbar__group .history-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.toolbar__group .ui-icon-btn:not(:disabled):hover {
+  color: var(--chrome-strong);
+}
+
+/* The sidebar toggle is the one toolbar glyph in the strong tone. */
+.toolbar .sidebar-toggle {
+  color: var(--chrome-strong);
+}
+
+.toolbar__group .ui-icon-btn:disabled {
+  opacity: 0.32;
+}
+
+.toolbar__center {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 50%;
+  width: min(45%, calc(100% - 2 * var(--toolbar-side, 140px) - 2 * var(--space-2)));
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  transform: translateX(-50%);
+  -webkit-app-region: no-drag;
+}
+
+.toolbar__divider {
+  width: 1px;
+  height: 16px;
+  background: var(--sheet-rule);
+}
+
+.toggle-dot {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--status-unread-chrome);
+  box-shadow: 0 0 0 2px var(--bg-sheet);
+}
+
+.toggle-dot--needs {
+  background: var(--status-needs-input);
+}
+
+/* Reload: the glyph turns while the page loads (a state, not a resting loop). */
+.reload-btn--loading svg {
+  animation: spin 1s linear infinite;
+}
+
+/* Chat about this page: toggles the side panel and carries its state. */
+.page-chat-btn {
+  position: relative;
+}
+
+.page-chat-btn__state {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--bg-sheet);
+}
+
+/* A status token, never the companion accent: the chrome stays neutral (DS-03, DS-26). */
+.page-chat-btn__state--working {
+  background: var(--status-working);
+}
+
+.page-chat-btn__state--approval {
+  background: var(--status-needs-input);
+}
+
+.split-btn {
+  position: relative;
+}
+
+.split-btn--left::after,
+.split-btn--right::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  width: 5px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.split-btn--left::after {
+  left: 8px;
+}
+
+.split-btn--right::after {
+  right: 8px;
+}
+
+/* ---- address pill ----
+   A flat neutral field (no border, shadow or companion colour), radius 8,
+   32 px tall. Text is centred and two-tone: the section or host muted, the
+   slash and title lighter. Editing turns it, in place, into a solid field
+   with a neutral outline; with suggestions it grows down into a card. */
+
+.pill {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 32px;
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-sm);
+  background: var(--pill-bg);
+  -webkit-app-region: no-drag;
+  transition:
+    background var(--dur-fast) var(--ease-standard),
+    box-shadow var(--dur-fast) var(--ease-standard);
+}
+
+.pill:hover {
+  background: var(--pill-bg-hover);
+}
+
+.pill--insecure,
+.pill--insecure:hover {
+  background: var(--pill-insecure);
+}
+
+.pill--editing,
+.pill--editing:hover {
+  background: var(--bg-raised);
+  box-shadow: 0 0 0 1px var(--border-strong), var(--focus-halo-neutral);
+}
+
+/* Suggestions: the field and its list read as one card with a shadow. */
+.pill--open,
+.pill--open:hover {
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  box-shadow: 0 0 0 1px var(--border-default), var(--shadow-md);
+}
+
+.pill__lead {
+  margin: 0 var(--space-2) 0 var(--space-2);
+  color: var(--chrome-muted);
+  flex: none;
+}
+
+.pill__input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: 0;
+  background: none;
+  /* DS-21: 14 px at rest and while editing, so entering edit never resizes the text. */
+  font-size: 14px;
+}
+
+.pill__input::placeholder,
+.pill__placeholder {
+  color: var(--chrome-faint);
+}
+
+.pill__text {
+  flex: 1;
+  min-width: 0;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--space-2);
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: none;
+  color: var(--chrome-muted);
+  font-size: 14px;
+  font-weight: 400;
+  cursor: text;
+}
+
+.pill__text:focus-visible {
+  outline-offset: -2px;
+}
+
+.pill__compact,
+.pill__crumbs,
+.pill__full {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.pill__compact {
+  max-width: 100%;
+}
+
+/* The title gives way long before the host does. */
+.pill__host {
+  flex: 0 1 auto;
+  min-width: 4ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--chrome-muted);
+}
+
+.pill__detail {
+  flex: 0 1000 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--chrome-faint);
+}
+
+.pill__full {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  color: var(--chrome-muted);
+}
+
+.pill__sep {
+  color: var(--chrome-faint);
+  margin-right: var(--space-1);
+}
+
+/* Crumbs never spill out of the pill, whatever their count. */
+.pill__crumbs {
+  overflow: hidden;
+}
+
+/* Leading crumbs (File, Settings) keep their full word; only the trailing
+   one (a long file name, a chat title) gives way, with an ellipsis. */
+.pill__crumb {
+  flex: none;
+  color: var(--chrome-muted);
+}
+
+.pill__crumb--last {
+  display: block;
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* The trailing crumb (a chat's title, a settings page) is the lighter tone. */
+.pill__crumb--last:not(:first-child) {
+  color: var(--chrome-faint);
+}
+
+.pill__insecure {
+  flex: none;
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  background: var(--status-error-soft);
+  color: var(--status-error);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.pill__info,
+.pill__star {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex: none;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: none;
+  color: var(--chrome-muted);
+}
+
+.pill__info:hover,
+.pill__star:hover,
+.pill__info[data-menu-open] {
+  background: var(--bg-hover);
+  color: var(--chrome-strong);
+}
+
+.pill--insecure .pill__info {
+  color: var(--status-error);
+}
+
+/* A neutral star: the companion's colour never reaches the pill. */
+.pill__star--on,
+.pill__star--on:hover {
+  color: var(--chrome-strong);
+}
+
+.pill__star--on svg {
+  fill: currentColor;
+}
+
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 4px 6px 6px;
+  list-style: none;
+  background: var(--bg-raised);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  box-shadow: 0 0 0 1px var(--border-default), var(--shadow-md);
+  /* The card continues the field: no shadow or edge where the two meet. */
+  clip-path: inset(0 -40px -40px -40px);
+  z-index: var(--z-popover);
+  transform-origin: top center;
+  animation: ui-menu-in var(--motion-menu-in) var(--ease-out);
+}
+
+.suggestion {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+  cursor: default;
+}
+
+.suggestion--selected {
+  background: var(--bg-active);
+}
+
+.suggestion__icon {
+  display: flex;
+  color: var(--chrome-muted);
+}
+
+.suggestion__title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.suggestion__url {
+  margin-left: auto;
+  color: var(--chrome-faint);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 45%;
+}
+
+/* ---- bars under the toolbar ---- */
+
+/* 37 px; items start 20 px in with no chip at rest; long titles shrink with
+   the bar before any item goes behind the overflow button, and a cut title fades. */
+.bookmarks-bar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: var(--bookmarks-height);
+  padding: 0 var(--space-2) 2px var(--space-3);
+  overflow: hidden;
+  flex: none;
+  -webkit-app-region: drag;
+}
+
+.bookmark-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 180px;
+  /* DS-25: 29 px items in the 37 px bar. */
+  height: 29px;
+  padding: 0 8px;
+  border: 0;
+  /* DS-25: the hover and press tint is radius 8. */
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--chrome-strong);
+  font-size: var(--text-sm);
+  /* The bar narrows long items with an inline max-width as it shrinks. */
+  flex: none;
+  -webkit-app-region: no-drag;
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+
+.bookmark-chip:hover {
+  background: var(--bg-hover);
+}
+
+.bookmark-chip:active {
+  background: var(--bg-active);
+}
+
+.bookmark-chip__icon {
+  display: flex;
+  flex: none;
+  color: var(--chrome-muted);
+}
+
+.bookmark-chip__icon img {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+}
+
+.bookmark-chip__title {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Only a title that's cut short fades at the end. */
+.bookmark-chip[data-clipped] .bookmark-chip__title {
+  mask-image: linear-gradient(to right, #000 calc(100% - 18px), transparent);
+}
+
+.strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 var(--space-2) var(--space-2);
+  padding: 6px 8px 6px 14px;
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-card);
+  flex: none;
+}
+
+.strip--permission {
+  background: var(--accent-soft);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.strip__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.find-bar input {
+  width: 260px;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--bg-subtle);
+  outline: none;
+}
+
+.find-bar input:focus {
+  border-color: var(--accent);
+  box-shadow: var(--focus-halo);
+}
+
+.find-bar__count {
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+  min-width: 70px;
+}
+
+/* ---- workspace: the page and the side panel ----
+   Flush by default: the page fills the sheet below the hairline with square
+   corners. Beside a chat, or in split view, it becomes an inset rounded
+   card; the change runs on the layout timeline (padding, radius and the
+   native view's bounds and radius move together). */
+
+.workspace {
+  --page-radius: 0px;
+  flex: 1;
+  display: flex;
+  gap: 0;
+  min-height: 0;
+  padding: 0;
+  transition:
+    padding var(--motion-layout) var(--ease-standard),
+    gap var(--motion-layout) var(--ease-standard),
+    --page-radius var(--motion-layout) var(--ease-standard);
+}
+
+.workspace--inset {
+  --page-radius: var(--page-inset-radius);
+  gap: var(--page-inset);
+  padding: var(--page-inset);
+}
+
+/* The panel sits on the sheet and reaches its edges; only the page is inset. */
+.workspace--inset:has(> .panel-frame:not([data-state='closing'])) {
+  padding-right: 0;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  display: flex;
+  gap: var(--page-inset);
+}
+
+.pane {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  /* Matches the native view's corner radius (reported to tabs.ts). */
+  border-radius: var(--page-radius);
+  background: var(--bg-card);
+  overflow: hidden;
+  container-type: inline-size;
+  container-name: pane;
+  transition: box-shadow var(--motion-layout) var(--ease-standard);
+}
+
+.workspace--inset .pane {
+  box-shadow: var(--shadow-card);
+}
+
+/* DS-99: a destination covers the content area on its own surface; the tab
+   behind it stays mounted (scroll and drafts kept) but out of sight. */
+.pane.pane--rail {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.pane--behind-rail {
+  visibility: hidden;
+}
+
+/* The focused page of a split: a neutral ring in the gap around it. */
+.workspace--inset .pane--focused-split {
+  box-shadow: 0 0 0 2px var(--border-strong), var(--shadow-card);
+}
+
+.pane__view {
+  position: absolute;
+  inset: 0;
+}
+
+/* The side panel's frame: it opens and closes on the layout timeline. */
+.panel-frame {
+  position: relative;
+  flex: none;
+  display: flex;
+  /* Anchored right, so the panel slides in from the window's edge as the frame widens. */
+  justify-content: flex-end;
+  overflow: hidden;
+  animation: panel-open var(--motion-layout) var(--ease-standard);
+}
+
+.panel-frame[data-state='closing'] {
+  width: 0;
+  transition: width var(--motion-layout) var(--ease-standard);
+}
+
+.panel-frame > * {
+  flex: none;
+}
+
+@keyframes panel-open {
+  from {
+    width: 0;
+  }
+}
+
+.page--center {
+  align-items: center;
+  justify-content: center;
+}
+
+.page--backdrop {
+  background: var(--bg-subtle);
+}
+
+/* Pages with their own left nav fold it to an icon rail in a narrow card. */
+@container pane (max-width: 960px) {
+  .page__nav {
+    width: 60px;
+    padding-left: 8px;
+    padding-right: 8px;
+    align-items: center;
+  }
+
+  .page__nav h1 {
+    display: none;
+  }
+
+  .page__nav .nav-item {
+    width: 40px;
+    justify-content: center;
+    padding: 0;
+    font-size: 0;
+    gap: 0;
+  }
+}
+
+.chrome-error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  background: var(--bg-card);
+  z-index: 1;
+}
+
+.chrome-error--compact {
+  position: static;
+  padding: var(--space-2);
+  background: none;
+}
+
+/* A page in HTML full screen: no chrome; main sizes the page view to the window. */
+.app--page-fullscreen .workspace {
+  --page-radius: 0px;
+  padding: 0;
+}
+
+.app--page-fullscreen .pane {
+  box-shadow: none;
+}
+
+/* ---- peek ---- */
+
+.peek-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 26px 48px 32px;
+  border-radius: var(--page-radius);
+  background: var(--scrim);
+  backdrop-filter: blur(var(--scrim-blur));
+}
+
+.peek-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 1100px;
+  margin-bottom: 8px;
+  padding: 6px 6px 6px 12px;
+  border-radius: var(--radius-md);
+  background: var(--bg-glass);
+  backdrop-filter: blur(var(--glass-blur));
+  color: var(--text-primary);
+}
+
+.peek-header__insecure {
+  color: var(--status-error);
+}
+
+.peek-header__title {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-weight: 600;
+}
+
+.peek-header__host {
+  color: var(--text-tertiary);
+  font-weight: 500;
+  font-size: var(--text-sm);
+}
+
+.peek-frame {
+  flex: 1;
+  width: 100%;
+  max-width: 1100px;
+  border-radius: 14px;
+  background: var(--bg-card);
+  box-shadow: var(--shadow-lg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reload-btn--loading svg {
+    animation: none;
+  }
+}
+
+:root[data-motion='reduced'] .reload-btn--loading svg {
+  animation: none;
+}
+
+/* ---- new tab ---- */
+
+.newtab {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+  overflow: auto;
+  background:
+    radial-gradient(60% 50% at 50% 30%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%),
+    var(--surface);
+}
+
+.newtab__greeting {
+  margin: 4px 0 0;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.newtab__lead {
+  margin: 0;
+  font-size: 15px;
+  color: var(--text-2);
+}
+
+.newtab__ask {
+  display: flex;
+  gap: 8px;
+  width: min(560px, 100%);
+  margin-top: 10px;
+  padding: 6px 6px 6px 16px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.newtab__ask input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  font-size: 14px;
+}
+
+.newtab__shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  max-width: 640px;
+  margin-top: 8px;
+}
+
+.shortcut {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 92px;
+  padding: 10px 6px;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  color: var(--text-2);
+  font-size: 12px;
+}
+
+.shortcut:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.shortcut span:last-child {
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.newtab__hint {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+/* ---- companion ---- */
+
+.companion {
+  position: relative;
+  flex: none;
+}
+
+.companion canvas {
+  display: block;
+}
+
+.companion--clickable {
+  cursor: pointer;
+}
+
+/* ---- agent panel ---- */
+
+.agent {
+  width: 390px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.thinking summary {
+  color: var(--text-3);
+  font-size: 12px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.thinking summary::before {
+  content: '› ';
+}
+
+.thinking[open] summary::before {
+  content: '⌄ ';
+}
+
+.thinking p {
+  margin: 4px 0 0;
+  padding-left: 10px;
+  border-left: 2px solid var(--border);
+  color: var(--text-2);
+  font-size: 12px;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-2);
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: var(--surface-2);
+  align-self: flex-start;
+  max-width: 100%;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.approval {
+  padding: 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+}
+
+.notice {
+  font-size: 12px;
+  padding: 8px 11px;
+  border-radius: 9px;
+}
+
+.composer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 10px 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface-2);
+  transition: border-color 0.12s, box-shadow 0.12s;
+}
+
+.composer:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft);
+  background: var(--surface);
+}
+
+.composer textarea {
+  resize: none;
+  border: 0;
+  outline: 0;
+  background: none;
+  min-height: 42px;
+  max-height: 160px;
+  line-height: 1.5;
+}
+
+/* ---- internal pages ---- */
+
+.page {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  overflow: hidden;
+  background: var(--surface);
+  user-select: text;
+}
+
+.page__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.page__header h2 {
+  margin: 0;
+  flex: 1;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 8px 10px 8px 14px;
+  border-top: 1px solid var(--border);
+}
+
+.list > .row:first-child,
+.list__group + .row {
+  border-top: 0;
+}
+
+.row:hover {
+  background: var(--surface-2);
+}
+
+.progress {
+  height: 4px;
+  border-radius: 4px;
+  background: var(--surface-3);
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.progress > i {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 48px 20px;
+  color: var(--text-3);
+  text-align: center;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+}
+
+.empty svg {
+  width: 26px;
+  height: 26px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--surface-3);
+  color: var(--text-2);
+  flex: none;
+}
+
+/* ---- forms ---- */
+
+.card {
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  margin-bottom: 14px;
+}
+
+.card h3 {
+  margin: 0 0 4px;
+  font-size: 15px;
+}
+
+.card > p {
+  margin: 0 0 14px;
+  color: var(--text-2);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.field > label,
+.field__label {
+  font-weight: 600;
+  font-size: 12.5px;
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  min-height: 34px;
+  padding: 0 11px;
+  border: 1px solid var(--border-strong);
+  border-radius: 9px;
+  background: var(--surface);
+  outline: none;
+}
+
+.textarea {
+  padding: 9px 11px;
+  resize: vertical;
+  line-height: 1.5;
+  min-height: 110px;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  border-color: var(--profile-text);
+  box-shadow: var(--focus-halo);
+}
+
+.segmented {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 10px;
+  background: var(--surface-3);
+  gap: 2px;
+}
+
+.segmented button {
+  height: 28px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--text-2);
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.segmented button[aria-pressed='true'] {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+}
+
+@keyframes placeholder-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preset-card,
+  .preset-card__placeholder {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* ---- welcome ---- */
+
+/* Once the ambient field draws the welcome's life, the old blobs step aside (DS-86). */
+.welcome:has(.ui-ambient) {
+  background: var(--surface);
+}
+
+.welcome {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  overflow: auto;
+  background:
+    radial-gradient(50% 45% at 30% 20%, color-mix(in srgb, var(--accent) 20%, transparent), transparent 70%),
+    radial-gradient(40% 40% at 80% 80%, color-mix(in srgb, var(--accent-3) 16%, transparent), transparent 70%),
+    var(--surface);
+  user-select: text;
+}
+
+.welcome__card {
+  width: min(640px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.welcome__card h1 {
+  margin: 0;
+  font-size: 34px;
+  letter-spacing: -0.03em;
+}
+
+.welcome__card > p {
+  margin: 0;
+  color: var(--text-2);
+  font-size: 15px;
+  max-width: 480px;
+}
+
+.welcome__panel {
+  width: 100%;
+  margin-top: 10px;
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  text-align: left;
+}
+
+.welcome__steps {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.welcome__steps i {
+  width: 22px;
+  height: 5px;
+  border-radius: 5px;
+  background: var(--border-strong);
+}
+
+.welcome__steps i[data-active='true'] {
+  background: var(--accent);
+}
+
+.welcome__actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 6px;
+}
+
+:root {
+  /* DS-95: the tooltip is near-black in both modes, with a thin lighter edge. */
+  --tooltip-bg: light-dark(#1d1c1b, #0f0e0d);
+  --tooltip-fg: #f7f6f4;
+  --tooltip-edge: light-dark(rgb(255 255 255 / 0.08), rgb(255 255 255 / 0.16));
+  --keycap-bg: light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1));
+  --keycap-fg: var(--text-secondary);
+  --keycap-edge: light-dark(rgb(0 0 0 / 0.08), rgb(0 0 0 / 0.3));
+  --keycap-inverse-bg: rgb(255 255 255 / 0.14);
+  --keycap-inverse-fg: rgb(255 255 255 / 0.82);
+  /* The private-window label (SH-32). */
+  --private-fill: light-dark(#e9e4f2, #3a3446);
+  --private-text: light-dark(#4d4166, #d9cff0);
+}
+
+/* Lifts the chrome's drag regions under interactive overlay surfaces. */
+.overlay-drag-guard {
+  position: fixed;
+  z-index: 2147483000;
+  -webkit-app-region: no-drag;
+  pointer-events: none;
+}
+
+.private-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: var(--radius-pill);
+  background: var(--private-fill);
+  color: var(--private-text);
+  font-size: var(--text-xs, 11px);
+  font-weight: 600;
+  white-space: nowrap;
+  -webkit-app-region: no-drag;
+}
+:root {
+  --pill-zoom-bg: color-mix(in srgb, var(--text-primary) 7%, transparent);
+  --pill-drop-ring: color-mix(in srgb, var(--profile-hue) 40%, transparent);
+  --bookmark-drop: light-dark(color-mix(in srgb, var(--profile-hue) 70%, black), color-mix(in srgb, var(--profile-hue) 60%, white));
+}
+
+/* DS-110: the empty new tab's placeholder sits centred at rest. */
+.pill--blank .pill__text {
+  justify-content: center;
+}
+
+/* While the command bar covers it, the pill keeps still underneath. */
+.pill--covered,
+.pill--covered:hover {
+  background: var(--bg-raised);
+}
+
+.pill--drop {
+  box-shadow: 0 0 0 2px var(--pill-drop-ring);
+}
+
+.pill__host--warn {
+  color: var(--status-error);
+}
+
+.pill__slow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  margin: 0 4px;
+  color: var(--chrome-muted);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
+.pill__stop {
+  height: 22px;
+  padding: 0 8px;
+  border: var(--hairline) solid var(--border-default);
+  border-radius: var(--radius-xs);
+  background: none;
+  color: var(--chrome-strong);
+  font-size: var(--text-sm);
+}
+
+.pill__stop:hover {
+  background: var(--bg-hover);
+}
+
+/* SH-45: the zoom chip; its number rolls in vertically when it changes. */
+.pill__zoom {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  flex: none;
+  margin: 0 2px;
+  padding: 0 7px;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: var(--pill-zoom-bg);
+  color: var(--chrome-strong);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.pill__zoom:hover,
+.pill__zoom[aria-expanded='true'] {
+  background: var(--bg-active);
+}
+
+.pill__zoom-value {
+  display: inline-block;
+  animation: pill-zoom-roll var(--dur-base) var(--ease-out);
+}
+
+@keyframes pill-zoom-roll {
+  from {
+    opacity: 0;
+    transform: translateY(70%);
+  }
+}
+
+/* SH-47: the bar's hidden measuring row, folders, drop lines and overflow. */
+.bookmarks-bar {
+  position: relative;
+}
+
+.bookmarks-bar--empty {
+  height: var(--bookmarks-height);
+}
+
+.bookmarks-bar__measure {
+  position: absolute;
+  visibility: hidden;
+  display: flex;
+  gap: 2px;
+  pointer-events: none;
+}
+
+.bookmark-chip[data-menu-open] {
+  background: var(--bg-active);
+}
+
+.bookmark-chip--drop-before {
+  box-shadow: inset 2px 0 0 var(--bookmark-drop);
+}
+
+.bookmark-chip--drop-after {
+  box-shadow: inset -2px 0 0 var(--bookmark-drop);
+}
+
+.bookmark-chip--drop-inside {
+  background: color-mix(in srgb, var(--bookmark-drop) 16%, transparent);
+}
+
+.bookmark-chip--overflow {
+  margin-left: auto;
+  padding: 0 6px;
+  color: var(--chrome-muted);
+}
+
+.bookmark-chip .ui-inline-rename,
+.bookmark-chip input {
+  width: 140px;
+  font-size: var(--text-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill__zoom-value {
+    animation: none;
+  }
+}
+
+:root[data-motion='reduced'] .pill__zoom-value {
+  animation: none;
+}
+
+/* apex://bookmarks: roots, breadcrumbs and drop marks. */
+.bm-crumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0 0 12px;
+  color: var(--text-secondary);
+  font-size: var(--text-md);
+}
+
+.bm-crumbs button {
+  height: 26px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: none;
+  color: inherit;
+  font: inherit;
+}
+
+.bm-crumbs button:hover {
+  background: var(--bg-hover);
+}
+
+.bm-crumbs button[aria-current='page'],
+.bm-root--on {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.bm-root--on {
+  background: var(--bg-active) !important;
+}
+
+.bm-crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bm-drop--before {
+  box-shadow: inset 0 2px 0 var(--bookmark-drop);
+}
+
+.bm-drop--after {
+  box-shadow: inset 0 -2px 0 var(--bookmark-drop);
+}
+
+.bm-drop--inside {
+  background: color-mix(in srgb, var(--bookmark-drop) 12%, transparent);
+}
+
+.bm-dragging {
+  opacity: 0.5;
+}
+
+/* Settings › Search (ST-31). */
+.se-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.se-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 14px;
+}
+
+.se-row + .se-row {
+  border-top: var(--hairline) solid var(--border-subtle);
+}
+
+.se-row__icon {
+  display: flex;
+  width: 16px;
+  justify-content: center;
+  color: var(--text-secondary);
+}
+
+.se-icon {
+  border-radius: 3px;
+}
+
+/* A search engine's mark, drawn: its initial on a soft tile (no favicon fetch). */
+.se-icon--initial {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background: var(--bg-active);
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.se-row__name {
+  flex: 1;
+  min-width: 0;
+  color: var(--text-primary);
+  font-size: var(--text-md);
+}
+
+.se-row__current {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.se-none {
+  margin: 12px 14px 0;
+  color: var(--text-tertiary);
+  font-size: var(--text-md);
+}
+
+.se-add {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px 14px;
+}
+
+.se-add__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+/* Apex's own group palette: a soft fill for the header chip, readable text on
+   it, and a ring for focus and the strip's underline. Dark mode lifts the
+   text and deepens the fill so each hue still reads on the dark ground. */
+:root {
+  --group-graphite-fill: light-dark(#e6e4e1, #3a3836);
+  --group-graphite-text: light-dark(#45423e, #dad6d1);
+  --group-graphite-ring: light-dark(#8a857f, #9c968f);
+  --group-berry-fill: light-dark(#f6dce8, #4a2536);
+  --group-berry-text: light-dark(#8a2357, #f3b8d3);
+  --group-berry-ring: light-dark(#c2427f, #e07aa9);
+  --group-honey-fill: light-dark(#f8ead0, #45361b);
+  --group-honey-text: light-dark(#7d5510, #f1cf8c);
+  --group-honey-ring: light-dark(#c48b22, #e0ae4e);
+  --group-fern-fill: light-dark(#dcefdc, #233a26);
+  --group-fern-text: light-dark(#2d6534, #a9dcae);
+  --group-fern-ring: light-dark(#4a9853, #79c282);
+  --group-lagoon-fill: light-dark(#d6ecf0, #1e3a41);
+  --group-lagoon-text: light-dark(#1d6372, #9fd6e2);
+  --group-lagoon-ring: light-dark(#2f8ea2, #62b8cb);
+  --group-iris-fill: light-dark(#e3e0f8, #2f2a4d);
+  --group-iris-text: light-dark(#4b3fa0, #c6bff3);
+  --group-iris-ring: light-dark(#6d5fd0, #9d92ec);
+  --group-coral-fill: light-dark(#fbe0d8, #4a2a22);
+  --group-coral-text: light-dark(#97402a, #f6bba9);
+  --group-coral-ring: light-dark(#d4664a, #ec9177);
+  --group-sage-fill: light-dark(#e3ebdf, #2f382b);
+  --group-sage-text: light-dark(#4b5e43, #c5d4bc);
+  --group-sage-ring: light-dark(#7a9070, #a3b898);
+  /* The split seam's grip and the focused-side mark. */
+  --split-grip: light-dark(rgb(0 0 0 / 0.18), rgb(255 255 255 / 0.22));
+  --split-grip-active: var(--accent);
+}
+
+/* [data-group-color] sets the three group tokens for whatever sits inside. */
+[data-group-color='graphite'] { --group-fill: var(--group-graphite-fill); --group-text: var(--group-graphite-text); --group-ring: var(--group-graphite-ring); }
+[data-group-color='berry'] { --group-fill: var(--group-berry-fill); --group-text: var(--group-berry-text); --group-ring: var(--group-berry-ring); }
+[data-group-color='honey'] { --group-fill: var(--group-honey-fill); --group-text: var(--group-honey-text); --group-ring: var(--group-honey-ring); }
+[data-group-color='fern'] { --group-fill: var(--group-fern-fill); --group-text: var(--group-fern-text); --group-ring: var(--group-fern-ring); }
+[data-group-color='lagoon'] { --group-fill: var(--group-lagoon-fill); --group-text: var(--group-lagoon-text); --group-ring: var(--group-lagoon-ring); }
+[data-group-color='iris'] { --group-fill: var(--group-iris-fill); --group-text: var(--group-iris-text); --group-ring: var(--group-iris-ring); }
+[data-group-color='coral'] { --group-fill: var(--group-coral-fill); --group-text: var(--group-coral-text); --group-ring: var(--group-coral-ring); }
+[data-group-color='sage'] { --group-fill: var(--group-sage-fill); --group-text: var(--group-sage-text); --group-ring: var(--group-sage-ring); }
+
+/* Split view: the left pane takes --split-ratio of the width (SH-41); the
+   seam sits in the gap between the panes. */
+.content--split > .pane--split-left {
+  flex: var(--split-left, 1) 1 0;
+}
+.content--split > .pane--split-right {
+  flex: var(--split-right, 1) 1 0;
+}
+/* DS-84: a saved ratio change and a new pane ease on the layout timeline; a live drag follows the pointer. */
+.content--split > .pane {
+  transition: flex-grow var(--motion-layout) var(--ease-out);
+}
+.content--split > .pane--split-right {
+  animation: pane-split-in var(--motion-layout) var(--ease-out) both;
+}
+.content--resizing > .pane {
+  transition: none;
+}
+@keyframes pane-split-in {
+  from {
+    flex-grow: 0;
+  }
+}
+/* DS-84b: the closed split's pane wipes away (its gap with it) while the other pane widens. */
+.content--split > .pane--split-leaving {
+  pointer-events: none;
+  animation: pane-split-out var(--motion-layout) var(--ease-exit) forwards;
+}
+@keyframes pane-split-out {
+  to {
+    flex-grow: 0;
+    margin-left: calc(-1 * var(--page-inset));
+    opacity: 0;
+  }
+}
+/* The seam lives in the gap between the panes, over no page view. */
+.split-seam-slot {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc((100% - var(--page-inset)) * var(--split-left, 0.5));
+  width: var(--page-inset);
+  z-index: 2;
+}
+.split-seam {
+  width: 100%;
+  height: 100%;
+  cursor: col-resize;
+}
+.split-seam::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 3px;
+  height: 36px;
+  border-radius: 2px;
+  background: var(--split-grip);
+  transform: translate(-50%, -50%);
+  transition: background var(--motion-quick) var(--ease-out), height var(--motion-quick) var(--ease-out);
+}
+.split-seam:hover::after,
+.split-seam:focus-visible::after,
+.content--resizing .split-seam::after {
+  height: 56px;
+  background: var(--split-grip-active);
+}
+/* The toolbar's split button marks the focused side (SH-32). */
+.split-btn__side {
+  position: absolute;
+  bottom: 5px;
+  width: 6px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--accent);
+}
+.split-btn__side--left {
+  left: 9px;
+}
+.split-btn__side--right {
+  right: 9px;
+}
+/* The empty pane's chooser (SH-42). */
+.split-chooser {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(420px, calc(100% - 32px));
+  max-height: calc(100% - 48px);
+  margin: 48px auto 0;
+  color: var(--text-primary);
+}
+.split-chooser__title {
+  margin: 0 8px 4px;
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+.split-chooser__empty {
+  margin: 0 8px;
+  color: var(--text-secondary);
+}
+.split-chooser__list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+}
+.split-chooser__row,
+.split-chooser__close {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 36px;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: var(--radius-row, 8px);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+.split-chooser__row:hover,
+.split-chooser__close:hover {
+  background: var(--bg-hover);
+}
+.split-chooser__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 16px;
+}
+.split-chooser__name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.split-chooser__host {
+  flex: none;
+  max-width: 40%;
+  overflow: hidden;
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.split-chooser__close {
+  color: var(--text-secondary);
+}
+:root[data-motion='reduced'] .content--split > .pane {
+  transition: none;
+  animation: none;
+}
+/* The horizontal strip (SH-21): tabs share --strip-tab-w (about 200 down to
+   about 20 px), then the strip scrolls; narrow tabs drop the title, then the close. */
+.tabstrip .tab:not(.tab--pinned) {
+  flex: none;
+  width: var(--strip-tab-w, 200px);
+  min-width: 0;
+  max-width: none;
+}
+.tabstrip--compact .tab:not(.tab--pinned) {
+  padding: 0 4px 0 8px;
+}
+.tabstrip--compact .tab:not(.tab--active, :hover) .tab__close {
+  display: none;
+}
+.tabstrip--icon .tab:not(.tab--pinned) {
+  justify-content: center;
+  padding: 0;
+}
+.tabstrip--icon .tab__title,
+.tabstrip--icon .tab:not(.tab--active) .tab__close,
+.tabstrip--icon .tab__capture,
+.tabstrip--icon .tab .ui-status-dot {
+  display: none;
+}
+.tab--selected {
+  background: var(--row-selected);
+}
+.tab--selected:hover {
+  background: var(--row-selected-hover);
+}
+.tab--drop-target {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+.tab--sleeping :is(.tab__icon, .tab__title) {
+  opacity: 0.62;
+}
+/* A grouped tab carries its group's colour along the bottom edge. */
+.tab--grouped::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 0;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--group-ring);
+}
+.tab__capture {
+  display: inline-flex;
+  flex: none;
+  gap: 2px;
+  color: var(--status-error);
+}
+.strip-group {
+  -webkit-app-region: no-drag;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: none;
+  max-width: 160px;
+  height: 26px;
+  padding: 0 4px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-sm);
+  font-weight: 560;
+  cursor: default;
+  outline-offset: -2px;
+}
+.strip-group:hover {
+  background: var(--bg-hover);
+}
+.strip-group .group-row__chevron {
+  display: none;
+}
+/* Site info, prompts, pickers and the sharing bar. Tones for the connection line, the live
+   capture dot and the scrim behind the tab-modal pickers (the tones themselves are the --site-tone-* tokens). */
+:root {
+  --site-live: light-dark(#d93a2b, #ff6a5c);
+  --site-live-halo: color-mix(in srgb, var(--site-live) 28%, transparent);
+  --site-scrim: light-dark(rgb(28 27 26 / 0.28), rgb(0 0 0 / 0.5));
+  --site-thumb-bg: light-dark(#ecebe8, #232220);
+  --site-host-sub: var(--text-tertiary);
+}
+/* The secure, warning and danger tones of site state, error pages and interstitials (both themes via the status tokens). */
+:root {
+  --site-tone-secure: var(--status-success);
+  --site-tone-secure-soft: var(--status-success-soft);
+  --site-tone-warning: var(--status-needs-input);
+  --site-tone-warning-soft: var(--status-needs-input-soft);
+  --site-tone-danger: var(--status-error);
+  --site-tone-danger-soft: var(--status-error-soft);
+  --site-danger-wash: color-mix(in srgb, var(--status-error) 7%, var(--bg-card));
+}
+/* Dialogs, toasts, the QR card, the task manager and view source. Both themes come from light-dark. */
+:root {
+  --dlg-width: 400px;
+  --dlg-radius: var(--radius-card);
+  --dlg-bg: var(--bg-raised);
+  --dlg-shadow: var(--shadow-overlay);
+  --dlg-icon-bg: var(--bg-muted);
+  --dlg-callout-bg: var(--bg-subtle);
+  --dlg-field-bg: light-dark(#ffffff, #232220);
+  --dlg-scrim: var(--scrim);
+  --dlg-scrim-blur: var(--scrim-blur);
+  --dlg-scrim-opaque: light-dark(rgba(34, 28, 22, 0.42), rgba(6, 5, 4, 0.72));
+  --toast-bg: light-dark(#2b2926, #f1efeb);
+  --toast-fg: light-dark(#f7f5f2, #1d1c1a);
+  --toast-fg-muted: light-dark(rgba(247, 245, 242, 0.72), rgba(29, 28, 26, 0.66));
+  --toast-action: light-dark(#ffffff, #14120f);
+  --toast-action-hover: light-dark(rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.08));
+  --toast-error-bg: light-dark(#a3283f, #f2b8c3);
+  --toast-error-fg: light-dark(#ffffff, #3a1019);
+  --toast-shadow: 0 8px 24px light-dark(rgba(46, 36, 24, 0.22), rgba(0, 0, 0, 0.5));
+  --toast-radius: 12px;
+  --qr-ink: #14120f;
+  --qr-paper: #ffffff;
+  --src-gutter: var(--text-tertiary);
+  --src-tag: light-dark(#8a3f9e, #d6a4e6);
+  --src-attr: light-dark(#9a5a12, #e7b77a);
+  --src-value: light-dark(#1f6f9a, #8cc8ec);
+  --src-comment: light-dark(#7d786f, #8a847b);
+  --src-doctype: light-dark(#5f5a52, #a9a39a);
+}
+/* The chrome's fallback dialog and toast detail line (when the overlay can't draw them). */
+.dlg-layer--chrome {
+  position: fixed;
+  z-index: var(--z-modal);
+}
+
+.ui-toast__detail {
+  display: block;
+  margin-top: 2px;
+  color: inherit;
+  font-size: var(--text-xs);
+  opacity: 0.75;
+  overflow-wrap: anywhere;
+}
+
+/* Apex://view-source. */
+.vs {
+  flex-direction: column;
+  background: var(--bg-base);
+}
+
+.vs__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  padding: 14px 20px 10px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.vs__heading {
+  display: flex;
+  flex: 1 1 280px;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.vs__title {
+  margin: 0;
+  overflow: hidden;
+  font-size: var(--text-md);
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vs__meta {
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+}
+
+.vs__tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+}
+
+.vs__notice {
+  margin: 0;
+  padding: 6px 20px;
+  background: var(--status-needs-input-soft);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+}
+
+.vs__state {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--text-secondary);
+}
+
+.vs__scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  outline: none;
+}
+
+.vs__scroll:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--focus-ring-color);
+}
+
+.vs__source {
+  margin: 0;
+  padding: 8px 0 24px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+  tab-size: 2;
+  counter-reset: none;
+}
+
+.vs__line {
+  display: flex;
+  min-width: max-content;
+}
+
+.vs[data-wrap='on'] .vs__line {
+  min-width: 0;
+}
+
+.vs__gutter {
+  position: sticky;
+  left: 0;
+  flex: none;
+  width: calc(var(--vs-gutter-ch, 4) * 1ch + 20px);
+  padding-right: 12px;
+  background: var(--bg-base);
+  color: var(--src-gutter);
+  text-align: right;
+  user-select: none;
+}
+
+.vs__code {
+  flex: 1;
+  padding-right: 20px;
+  white-space: pre;
+}
+
+.vs[data-wrap='on'] .vs__code {
+  min-width: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.vs__tok--tag {
+  color: var(--src-tag);
+}
+
+.vs__tok--attr {
+  color: var(--src-attr);
+}
+
+.vs__tok--value {
+  color: var(--src-value);
+}
+
+.vs__tok--comment {
+  color: var(--src-comment);
+  font-style: italic;
+}
+
+.vs__tok--doctype {
+  color: var(--src-doctype);
+}
+
+.vs__more {
+  display: flex;
+  justify-content: center;
+  padding: 0 0 24px;
+}
+
+@media (forced-colors: active) {
+  .vs__tok {
+    color: CanvasText;
+  }
+}
+/* The agent at work (OV-21, OV-22) and the selection chip (OV-20). The companion's
+   colour comes in per surface as --at-accent (contrast-adjusted for the mode) and --at-glow (raw). */
+:root {
+  --at-glow-inner: 120px;
+  --at-glow-strength: light-dark(20%, 26%);
+  --at-glow-edge: light-dark(26%, 34%);
+  --at-surface: var(--bg-raised);
+  --at-surface-text: var(--text-primary);
+  --at-surface-muted: var(--text-secondary);
+  --at-surface-border: light-dark(var(--border-default), var(--border-strong));
+  --at-shadow: 0 10px 28px light-dark(rgba(30, 24, 16, 0.16), rgba(0, 0, 0, 0.5)), 0 1px 3px light-dark(rgba(30, 24, 16, 0.1), rgba(0, 0, 0, 0.4));
+  --at-cursor-fill: light-dark(#ffffff, #1c1a17);
+  --at-chip-bg: light-dark(rgba(255, 255, 255, 0.96), rgba(43, 42, 40, 0.96));
+}
+/* ST-27: compact density tightens rows and controls; ui/appearance.ts sets
+   data-density, and the type ramp (--text-*) as inline variables. */
+:root[data-density='compact'] {
+  --row-height: 28px;
+  --row-gap: 1px;
+  --control-md: 28px;
+  --control-lg: 34px;
+  --bar-height: 36px;
+  --bookmarks-height: 33px;
+}
+
+/* ST-26: the tint switch off gives a plain neutral ground, one step off the sheet. */
+:root[data-sidebar-tint='off'] {
+  --profile-ground: light-dark(#f1f0ee, #1f1e1c);
+}
+
+/* ST-27: chat text zoom scales the reply column on chat pages only. */
+.chat-view--page .chat-log__content {
+  zoom: var(--chat-zoom, 1);
+}
+
+/* If Inter failed to load, the system stack takes over cleanly. */
+:root[data-ui-font='fallback'] {
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+/* Every interactive element shows the ring from the keyboard, even
+   where a component forgot one. Mouse focus stays quiet. */
+:where(button, a[href], [role='button'], [role='tab'], [role='radio'], [role='checkbox'], [role='switch'], [role='option'], [role='menuitem'], summary, [tabindex]:not([tabindex='-1'])):focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* ST-05: a row arriving from ?highlight= washes in the profile hue for about 2 s. */
+@keyframes sp-highlight {
+  0%,
+  60% {
+    background: color-mix(in srgb, var(--profile-text) 14%, transparent);
+  }
+  100% {
+    background: transparent;
+  }
+}
+
+.sp-highlight {
+  animation: sp-highlight 2s var(--ease-standard);
+}
+
+:root[data-motion='reduced'] .sp-highlight {
+  animation: none;
+  outline: 2px solid color-mix(in srgb, var(--profile-text) 45%, transparent);
+  outline-offset: -2px;
+}

@@ -1,0 +1,26 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* Settings › Voice: the few pieces the settings kit doesn't draw. */
+.voice-settings__voice,
+.voice-settings__test {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2, 8px);
+}
+
+.voice-settings__ok {
+  color: var(--status-success);
+}
+
+.voice-settings__warn {
+  color: var(--warning);
+}
+
+.voice-settings__state {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}

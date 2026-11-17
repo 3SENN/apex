@@ -1,0 +1,5 @@
+folder,favorite,type,name,notes,fields,reprompt,login_uri,login_username,login_password,login_totp
+,,login,Example,,,0,"https://example.com/login,https://alt.example.com",sam@example.invalid,fixture-pass-7,
+,,note,A secure note,just text,,0,,,,
+,,login,Android app,,,0,androidapp://com.example.app,sam,fixture-pass-8,
+Work,1,login,Wiki,,,0,wiki.example.com,sam,fixture-pass-10,

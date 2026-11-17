@@ -1,0 +1,8 @@
+{"locale": "en-US", "type": "final", "confidence": 0.44, "source": "mic", "text": "Who demortion Alimal, let's start with the Budget 4 discorder, Danabispreken with the planning for Volchen the Wig.", "endMs": 6480, "startMs": 0, "fit": 0.99}
+{"type": "final", "endMs": 13560, "confidence": 0.368, "text": "The muten-de-presentatzi for freder hofmachen, so let's focus on the Schlieders first, and Danaka and Venada Scheipers.", "fit": 0.993, "startMs": 6540, "locale": "en-US", "source": "mic"}
+{"type": "final", "confidence": 0.379, "source": "mic", "text": "I think the soupsheet gig next week, my ist muten wer alles hood testing.", "endMs": 18051, "locale": "en-US", "fit": 0.561, "startMs": 13620}
+{"endMs": 1200, "confidence": 0.6, "locale": "nl-NL", "startMs": 0, "type": "final", "text": "Goedemorgen allemaal", "fit": 0.833, "source": "mic"}
+{"endMs": 6900, "confidence": 0.771, "locale": "nl-NL", "startMs": 2070, "type": "final", "text": "de budget voor Disorder. Daarna bespreken we de planning voor volgende week.", "fit": 1, "source": "mic"}
+{"endMs": 14100, "confidence": 0.698, "locale": "nl-NL", "startMs": 6900, "type": "final", "text": "We moeten de presentatie voor vrijdag afmaken. Sol let 's focus on the slee First en daarna kijken we naar de cijfers.", "fit": 1, "source": "mic"}
+{"endMs": 18180, "confidence": 0.559, "locale": "nl-NL", "startMs": 14190, "type": "final", "text": "Ik denk shit next week maar eerst moeten we alles goed testen", "fit": 1, "source": "mic"}
+{"type": "stopped", "durationMs": 0, "audio": null}

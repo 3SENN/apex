@@ -1,0 +1,580 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* Companion presence: live figures, breathing stills, small faces with
+   state marks, and speech bubbles. Colours come from the companion's look
+   (--companion-*, --face-*, --bubble-tint) mixed with Apex's neutral tokens,
+   so every surface works in light and dark mode. Under either Reduce Motion
+   switch (the system's, or Apex's own via <html data-motion>) nothing here
+   travels. */
+
+/* ---- live figure ---- */
+
+.companion {
+  position: relative;
+  flex: none;
+  outline: none;
+}
+
+.companion--fill {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.companion--clickable:focus-visible .companion__box {
+  border-radius: var(--radius-lg);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+}
+
+.companion__box {
+  position: relative;
+  flex: none;
+}
+
+.companion__live {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--motion-enter, var(--dur-slow)) var(--ease-out);
+}
+
+.companion__live[data-ready] {
+  opacity: 1;
+}
+
+/* A soft contact shadow under the feet, faintly tinted with the companion's colour; softer in dark mode. */
+.companion__floor {
+  position: absolute;
+  left: 22%;
+  right: 22%;
+  bottom: 2%;
+  height: 9%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    light-dark(color-mix(in srgb, var(--companion-skin) 22%, rgba(26, 20, 60, 0.2)), color-mix(in srgb, var(--companion-skin) 16%, rgba(0, 0, 0, 0.42))),
+    light-dark(color-mix(in srgb, var(--companion-skin) 10%, rgba(26, 20, 60, 0.06)), color-mix(in srgb, var(--companion-skin) 8%, rgba(0, 0, 0, 0.16))) 60%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* Asking for approval or a question: the same bare speech-bubble glyph as the small faces, popping in once. */
+.companion__ask {
+  position: absolute;
+  top: 4%;
+  right: 10%;
+  width: clamp(14px, 15%, 26px);
+  aspect-ratio: 1;
+  color: var(--status-needs-input);
+  filter: drop-shadow(0 0 1.5px var(--bg-card));
+  animation: companion-ask-in var(--motion-medium) var(--ease-out) both;
+  pointer-events: none;
+}
+
+.companion__ask svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Napping: a small crescent moon that bobs. */
+.companion__moon {
+  position: absolute;
+  top: 2%;
+  right: 10%;
+  width: clamp(12px, 18%, 26px);
+  aspect-ratio: 1;
+  color: var(--text-tertiary);
+  animation: companion-moon 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.companion__moon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+@keyframes companion-ask-in {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+}
+
+@keyframes companion-moon {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-8deg);
+    opacity: 0.75;
+  }
+  50% {
+    transform: translateY(-14%) rotate(6deg);
+    opacity: 1;
+  }
+}
+
+/* ---- stills ---- */
+
+.companion-still {
+  position: absolute;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+}
+
+/* Hiding fades (the live figure fading in over it); showing again is instant, so a revoked live view never flashes. */
+.companion-still--hidden {
+  opacity: 0;
+  transition: opacity var(--motion-enter, var(--dur-slow)) var(--ease-out);
+}
+
+.companion-still img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.companion-still--alive img {
+  transform-origin: 50% 90%;
+  animation: companion-breathe-bust 4.2s ease-in-out infinite;
+}
+
+.companion-still--alive.companion-still--full img {
+  animation-name: companion-breathe;
+}
+
+.companion-still--hidden img {
+  animation-play-state: paused;
+}
+
+@keyframes companion-breathe {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.006, 1.018);
+  }
+}
+
+@keyframes companion-breathe-bust {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-0.8%);
+  }
+}
+
+/* Reactions of a figure shown as a still. */
+.companion--poke .companion-still img {
+  animation: companion-hop 0.5s var(--ease-out) both;
+}
+
+.companion--pat .companion-still img {
+  animation: companion-wiggle 0.6s ease-in-out both;
+}
+
+.companion--cheer .companion-still img {
+  animation: companion-hop 0.8s var(--ease-out) both;
+}
+
+@keyframes companion-hop {
+  0% {
+    transform: translateY(0) scale(1, 1);
+  }
+  20% {
+    transform: translateY(0) scale(1.06, 0.92);
+  }
+  50% {
+    transform: translateY(-9%) scale(0.97, 1.04);
+  }
+  80% {
+    transform: translateY(0) scale(1.04, 0.96);
+  }
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+}
+
+@keyframes companion-wiggle {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(-3.5deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+  75% {
+    transform: rotate(-2deg);
+  }
+}
+
+/* ---- small faces (CO-18) with state marks beside them (DS-67) ----
+   The head floats free: no disc, ring, mask or badge on it. A chat's state
+   is its own mark to the right of the head, in the row's flow. */
+
+.face-avatar {
+  --mark: clamp(7px, calc(var(--face-size, 24px) * 0.42), 14px);
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: clamp(3px, calc(var(--face-size, 24px) * 0.16), 6px);
+  vertical-align: middle;
+  line-height: 0;
+}
+
+.face-avatar__head {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--face-size, 24px);
+  height: var(--face-size, 24px);
+}
+
+.face-avatar__head img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* An optional soft contact shadow under the chin, never a frame. */
+.face-avatar--shadow .face-avatar__head::before {
+  content: '';
+  position: absolute;
+  left: 22%;
+  right: 22%;
+  bottom: 2%;
+  height: 12%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, light-dark(rgb(0 0 0 / 0.16), rgb(0 0 0 / 0.38)), transparent);
+}
+
+.face-avatar__initial {
+  color: light-dark(color-mix(in srgb, var(--face-tint) 60%, var(--text-primary)), color-mix(in srgb, var(--face-tint) 70%, var(--text-primary)));
+  font-size: calc(var(--face-size, 24px) * 0.62);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.face-avatar--dimmed .face-avatar__head {
+  opacity: 0.5;
+  filter: grayscale(0.6);
+}
+
+.face-avatar__mark {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--mark);
+  height: var(--mark);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Working: two small dots circling in the companion's colour. */
+.face-avatar--working .face-avatar__mark {
+  animation: face-orbit 1.1s linear infinite;
+}
+
+.face-avatar--working .face-avatar__mark i {
+  position: absolute;
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  background: light-dark(color-mix(in srgb, var(--face-tint) 72%, var(--text-primary)), color-mix(in srgb, var(--face-tint) 60%, var(--text-primary)));
+}
+
+.face-avatar--working .face-avatar__mark i:first-child {
+  top: 0;
+  left: 0;
+}
+
+.face-avatar--working .face-avatar__mark i:last-child {
+  right: 0;
+  bottom: 0;
+  opacity: 0.55;
+}
+
+/* Unread: an accent dot. */
+.face-avatar--unread .face-avatar__mark {
+  width: calc(var(--mark) * 0.7);
+  height: calc(var(--mark) * 0.7);
+  background: var(--status-unread);
+}
+
+/* Needs you (approval, a question): an attention glyph. */
+.face-avatar--approval .face-avatar__mark {
+  width: calc(var(--mark) * 1.05);
+  height: calc(var(--mark) * 1.05);
+  color: var(--status-needs-input);
+  animation: face-pop var(--motion-medium) var(--ease-out) both;
+}
+
+.face-avatar--approval .face-avatar__mark svg,
+.face-avatar--routine .face-avatar__mark svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* A routine run: a small routine glyph in the muted text colour. */
+.face-avatar--routine .face-avatar__mark {
+  color: var(--text-secondary);
+}
+
+/* Done: a green check that pops once. */
+.face-avatar--done .face-avatar__mark {
+  background: var(--status-success);
+  color: var(--on-status);
+  animation: face-pop var(--motion-medium) var(--ease-out) both;
+}
+
+.face-avatar--done .face-avatar__mark svg {
+  width: 72%;
+  height: 72%;
+}
+
+/* Error: a short red bar. */
+.face-avatar--error .face-avatar__mark {
+  height: calc(var(--mark) * 0.46);
+  border-radius: var(--radius-pill);
+  background: var(--status-error);
+}
+
+/* Reduce Motion: the marks hold still. */
+@media (prefers-reduced-motion: reduce) {
+  .face-avatar__mark {
+    animation: none !important;
+  }
+}
+
+:root[data-motion='reduced'] .face-avatar__mark {
+  animation: none !important;
+}
+
+@keyframes face-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes face-pop {
+  0% {
+    transform: scale(0);
+  }
+  70% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ---- speech bubbles (DS-80) ---- */
+
+.companion-bubble {
+  --bubble-tint: var(--accent);
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  max-width: 260px;
+  transform-origin: 16px 100%;
+  animation: bubble-rise var(--motion-enter, 240ms) var(--ease-out) both;
+  pointer-events: none;
+}
+
+.companion-bubble--right {
+  align-items: flex-end;
+  transform-origin: calc(100% - 16px) 100%;
+}
+
+.companion-bubble--center {
+  align-items: center;
+  transform-origin: 50% 100%;
+}
+
+.companion-bubble__body {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 4px;
+  padding: 7px 11px;
+  border-radius: 14px;
+  background: var(--bg-raised);
+  color: var(--text-primary);
+  font-size: var(--text-md);
+  line-height: 1.35;
+  text-align: left;
+  white-space: pre-wrap;
+  box-shadow:
+    0 0 0 1px var(--border-card),
+    var(--shadow-md);
+}
+
+.companion-bubble__word {
+  /* The space after each word stays for screen readers but collapses at the item's end; the gap spaces words. */
+  white-space: normal;
+  animation: bubble-word var(--dur-base, 180ms) var(--ease-out) both;
+}
+
+.companion-bubble__icon {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  color: light-dark(color-mix(in srgb, var(--bubble-tint) 70%, var(--text-primary)), color-mix(in srgb, var(--bubble-tint) 70%, var(--text-primary)));
+  animation: bubble-icon var(--motion-medium) var(--ease-out) both;
+}
+
+.companion-bubble__icon svg,
+.companion-bubble__icon img {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+/* A two-dot thought tail on the companion's side. */
+.companion-bubble__tail {
+  position: relative;
+  height: 12px;
+  width: 22px;
+  margin: 0 12px;
+}
+
+.companion-bubble__tail i {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--bg-raised);
+  box-shadow: 0 0 0 1px var(--border-card);
+}
+
+.companion-bubble__tail i:first-child {
+  top: 2px;
+  left: 6px;
+  width: 7px;
+  height: 7px;
+}
+
+.companion-bubble__tail i:last-child {
+  top: 9px;
+  left: 2px;
+  width: 4px;
+  height: 4px;
+  background: color-mix(in srgb, var(--bubble-tint) 55%, var(--bg-raised));
+}
+
+.companion-bubble--right .companion-bubble__tail {
+  transform: scaleX(-1);
+}
+
+@keyframes bubble-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.9);
+  }
+}
+
+@keyframes bubble-word {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes bubble-icon {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+}
+
+/* ---- 2D face while the parts load, and an engine that can't run ---- */
+
+.companion-standin {
+  position: absolute;
+  display: block;
+  opacity: 1;
+  transition: opacity var(--motion-enter, var(--dur-slow)) var(--ease-out);
+}
+
+.companion-standin[data-leaving] {
+  opacity: 0;
+}
+
+/* The picture fades in over the 2D face rather than cutting to it. */
+.companion-still img[data-arrived] {
+  animation: companion-arrive var(--motion-enter, var(--dur-slow)) var(--ease-out) both;
+}
+
+@keyframes companion-arrive {
+  from {
+    opacity: 0;
+  }
+}
+
+/* No key, or its engine signed out: the figure greys out until it can work again. */
+.companion--unavailable .companion__box {
+  filter: grayscale(0.9) opacity(0.72);
+  transition: filter var(--dur-slow) var(--ease-out);
+}
+
+/* ---- Reduce Motion ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  .companion__moon,
+  .companion__ask,
+  .companion-still img,
+  .face-avatar__mark,
+  .companion-bubble,
+  .companion-bubble__word,
+  .companion-bubble__icon {
+    animation: none !important;
+  }
+
+  .companion__live,
+  .companion-still--hidden,
+  .companion-standin,
+  .companion--unavailable .companion__box {
+    transition: none;
+  }
+
+  .companion-still img[data-arrived] {
+    animation: none !important;
+  }
+}
+
+:root[data-motion='reduced'] .companion__moon,
+:root[data-motion='reduced'] .companion__ask,
+:root[data-motion='reduced'] .companion-still img,
+:root[data-motion='reduced'] .face-avatar__mark,
+:root[data-motion='reduced'] .companion-bubble,
+:root[data-motion='reduced'] .companion-bubble__word,
+:root[data-motion='reduced'] .companion-bubble__icon {
+  animation: none !important;
+}
+
+:root[data-motion='reduced'] .companion__live,
+:root[data-motion='reduced'] .companion-still--hidden,
+:root[data-motion='reduced'] .companion-standin,
+:root[data-motion='reduced'] .companion--unavailable .companion__box {
+  transition: none;
+}
+
+:root[data-motion='reduced'] .companion-still img[data-arrived] {
+  animation: none !important;
+}

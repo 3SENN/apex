@@ -1,0 +1,42 @@
+{
+  "eyes-round": {
+    "rangeX": 0.0234,
+    "rangeY": 0.0469,
+    "scale": 1
+  },
+  "eyes-oval": {
+    "rangeX": 0.0215,
+    "rangeY": 0.0547,
+    "scale": 1
+  },
+  "eyes-sparkle": {
+    "rangeX": 0.0215,
+    "rangeY": 0.043,
+    "scale": 1
+  },
+  "eyes-sleepy": {
+    "rangeX": 0.0156,
+    "rangeY": 0.0117,
+    "scale": 1
+  },
+  "eyes-dot": {
+    "rangeX": 0.0137,
+    "rangeY": 0.0273,
+    "scale": 1
+  },
+  "eyes-wide": {
+    "rangeX": 0.0273,
+    "rangeY": 0.0469,
+    "scale": 1
+  },
+  "eyes-cat": {
+    "rangeX": 0.0195,
+    "rangeY": 0.0117,
+    "scale": 1
+  },
+  "eyes-lash": {
+    "rangeX": 0.0234,
+    "rangeY": 0.0469,
+    "scale": 1
+  }
+}

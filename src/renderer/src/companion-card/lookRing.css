@@ -1,0 +1,456 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* The look editor's stage (DS-118, DS-119): eight bubbles on a ring around
+   the enlarged figure, and the floating option card a bubble opens at the
+   hero's edge on its side. Colours come from tokens, so both themes work;
+   the look's own colours arrive as --ring-* on the ring. */
+
+.co-ring {
+  /* The figure's centre once it has grown (see .co-hero--looking). */
+  --ring-k: 1;
+  position: absolute;
+  top: calc(var(--fig-top, 0px) + var(--look-drop, 58px) + var(--fig-size, 300px) * 0.5);
+  left: 50%;
+  width: 0;
+  height: 0;
+}
+
+.co-ring__bubble {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--bg-card, var(--bg-raised));
+  color: var(--text-primary);
+  box-shadow:
+    0 0 0 1px light-dark(var(--border-subtle), var(--border-default)),
+    0 2px 8px rgb(0 0 0 / 0.1),
+    0 1px 2px rgb(0 0 0 / 0.06);
+  transform: translate(calc(var(--dx) * var(--ring-k) - 50%), calc(var(--dy) * var(--ring-k) - 50%));
+  cursor: default;
+  animation: co-ring-in 350ms var(--ease-out) calc(100ms + var(--i, 0) * 12ms) both;
+  transition: box-shadow 120ms var(--ease-out);
+}
+
+.co-ring__bubble:hover {
+  box-shadow:
+    0 0 0 1px light-dark(var(--border-default), var(--border-strong)),
+    0 3px 10px rgb(0 0 0 / 0.13),
+    0 1px 2px rgb(0 0 0 / 0.06);
+}
+
+/* The selected bubble: a darker ring. */
+.co-ring__bubble--selected,
+.co-ring__bubble--selected:hover {
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--text-primary) 72%, transparent),
+    0 2px 8px rgb(0 0 0 / 0.12);
+}
+
+.co-ring__bubble:focus-visible {
+  outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color, var(--accent));
+  outline-offset: 3px;
+}
+
+.co-ring__art {
+  width: 26px;
+  height: 26px;
+  color: color-mix(in srgb, #1d1a2b 82%, transparent);
+  pointer-events: none;
+}
+
+.co-ring__art--face {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.co-ring__art--face .co-face-swatch {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+}
+
+/* The hover label: a small chip just above the bubble. */
+.co-ring__chip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill, 999px);
+  background: var(--tooltip-bg);
+  color: var(--tooltip-fg);
+  box-shadow: 0 0 0 1px var(--tooltip-edge, transparent);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 14px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-50%, 2px);
+  transition:
+    opacity 120ms var(--ease-out),
+    transform 120ms var(--ease-out);
+  pointer-events: none;
+}
+
+.co-ring__bubble:hover .co-ring__chip,
+.co-ring__bubble:focus-visible .co-ring__chip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@keyframes co-ring-in {
+  from {
+    opacity: 0;
+    scale: 0.82;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+/* ---- the option card (DS-119) ---- */
+
+.co-ring-panel {
+  position: absolute;
+  top: 59px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 184px;
+  max-height: calc(100% - 59px - 12px);
+  animation: co-ring-panel-in 150ms var(--ease-out) both;
+}
+
+.co-ring-panel--left {
+  left: 12px;
+}
+
+.co-ring-panel--right {
+  right: 12px;
+}
+
+.co-ring-card,
+.co-ring-sliders {
+  border: 1px solid light-dark(var(--border-subtle), var(--border-default));
+  border-radius: 16px;
+  background: var(--bg-card, var(--bg-raised));
+  box-shadow:
+    0 6px 20px rgb(0 0 0 / 0.12),
+    0 1px 3px rgb(0 0 0 / 0.06);
+}
+
+.co-ring-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 12px;
+}
+
+.co-ring-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.co-ring-card__head h4 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.co-ring-card .co-ring-card__close {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  border-radius: 50%;
+}
+
+.co-ring-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+  max-height: 390px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  /* Room for the current tile's ring at the edges. */
+  margin: -3px;
+  padding: 3px;
+}
+
+.co-ring-section h5 {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.co-ring-grid,
+.co-ring-palettes {
+  display: grid;
+  grid-template-columns: repeat(4, 37px);
+  gap: 4px;
+}
+
+.co-ring-palettes {
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: 37px;
+  overflow-x: auto;
+  padding: 3px;
+  margin: -3px;
+}
+
+.co-ring-tile {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 37px;
+  height: 37px;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 50%;
+  background: var(--bg-muted, var(--bg-subtle));
+  color: var(--text-secondary);
+  box-shadow: inset 0 0 0 1px light-dark(var(--border-subtle), var(--border-default));
+  cursor: default;
+}
+
+.co-ring-tile:hover:not(:disabled) {
+  box-shadow: inset 0 0 0 1px light-dark(var(--border-default), var(--border-strong));
+}
+
+.co-ring-tile:focus-visible,
+.co-ring-tile--custom:focus-within {
+  outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color, var(--accent));
+  outline-offset: 2px;
+}
+
+.co-ring-tile:disabled {
+  opacity: 0.38;
+}
+
+/* The current tile: a thick ink ring and a check badge. */
+.co-ring-tile--current,
+.co-ring-tile--current:hover:not(:disabled) {
+  box-shadow: 0 0 0 2.5px var(--text-primary);
+}
+
+.co-ring-tile__check {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  display: grid;
+  place-items: center;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--text-primary);
+  color: var(--bg-card, var(--bg-raised));
+  box-shadow: 0 0 0 1.5px var(--bg-card, var(--bg-raised));
+}
+
+.co-ring-tile__check svg {
+  width: 10px;
+  height: 10px;
+  stroke-width: 3;
+}
+
+.co-ring-tile__none {
+  width: 16px;
+  height: 16px;
+}
+
+.co-ring-tile__initial {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.co-ring-tile__still {
+  width: 37px;
+  height: 37px;
+  overflow: hidden;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.co-ring-tile__face {
+  width: 37px;
+  height: 37px;
+  overflow: hidden;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.co-ring-tile__face .co-face-swatch {
+  width: 37px;
+  height: 37px;
+  border-radius: 50%;
+  box-shadow: none;
+}
+
+.co-ring-tile--swatch {
+  background: var(--swatch);
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.12);
+}
+
+.co-ring-tile--palette {
+  background: var(--palette);
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.12);
+}
+
+.co-ring-tile--custom {
+  background: var(--swatch, conic-gradient(#f66, #fc5, #6d8, #5bf, #a7f, #f66));
+}
+
+.co-ring-tile--custom input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  opacity: 0;
+  cursor: default;
+}
+
+.co-ring-tile--custom > svg {
+  width: 15px;
+  height: 15px;
+  color: #fff;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.35));
+  pointer-events: none;
+}
+
+.co-ring-tints {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.co-ring-tints__tint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--radius-pill, 999px);
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: default;
+}
+
+.co-ring-tints__tint i {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--dot);
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.14);
+}
+
+.co-ring-tints__tint:hover {
+  background: color-mix(in srgb, var(--text-primary) 6%, transparent);
+}
+
+.co-ring-tints__tint[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--text-primary) 10%, transparent);
+  color: var(--text-primary);
+}
+
+.co-ring-tints__tint:focus-visible {
+  outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color, var(--accent));
+  outline-offset: 1px;
+}
+
+/* The optional slider card, 6 px below (DS-120). */
+.co-ring-sliders {
+  flex: none;
+  padding: 10px 12px;
+}
+
+@keyframes co-ring-panel-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* A hero a little too narrow for the full ring: the ring draws in. */
+@container (max-width: 860px) {
+  .co-ring {
+    --ring-k: 0.84;
+  }
+}
+
+/* Too narrow for side by side (matches card.css): the bubbles wrap in a row
+   under the figure and the card sits below them, full width. */
+@container (max-width: 700px) {
+  .co-ring {
+    top: calc(64px + var(--fig-size, 300px) * 0.9);
+    left: 16px;
+    right: 16px;
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .co-ring__bubble {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    transform: none;
+  }
+
+  .co-ring-panel,
+  .co-ring-panel--left,
+  .co-ring-panel--right {
+    top: calc(64px + var(--fig-size, 300px) * 0.9 + 54px);
+    left: 16px;
+    right: 16px;
+    width: auto;
+    max-height: none;
+    bottom: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .co-ring__bubble,
+  .co-ring-panel {
+    animation: none;
+  }
+
+  .co-ring__chip {
+    transition: none;
+  }
+}

@@ -1,0 +1,14 @@
+{"type":"ready","version":2}
+{"type":"started","session":"m1","mode":"meeting","onDevice":false,"systemAudio":true,"deviceId":"{0.0.1.00000000}.{6a1b2c3d-0000-4e5f-8a9b-0c1d2e3f4a5b}","locale":"en-US","fallbackDevice":false}
+{"type":"level","session":"m1","source":"mic","rms":0.0815,"peak":0.4127}
+{"type":"partial","session":"m1","source":"mic","text":"Morning","startMs":0,"endMs":640}
+{"type":"final","session":"m1","source":"mic","text":"Morning, shall we start with the roadmap?","startMs":0,"endMs":1820}
+{"type":"partial","session":"m1","source":"system","text":"Sure","startMs":2100,"endMs":2480}
+{"type":"final","session":"m1","source":"system","text":"Sure, the beta ships on Friday.","startMs":2100,"endMs":3960}
+{"type":"paused","session":"m1"}
+{"type":"resumed","session":"m1"}
+{"type":"interrupted","session":"m1","source":"system"}
+{"type":"restored","session":"m1","source":"system"}
+{"type":"error","session":"m1","source":"mic","code":"device-missing","message":"The microphone went away (The audio endpoint was removed.).","fatal":false}
+{"type":"final","session":"m1","source":"mic","text":"Great, thanks everyone.","startMs":4800,"endMs":6200}
+{"type":"stopped","session":"m1","durationMs":6420,"audio":{"path":"C:\\Users\\someone\\AppData\\Roaming\\Apex\\meetings\\m1.m4a","bytes":482113}}

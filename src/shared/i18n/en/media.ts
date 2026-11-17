@@ -1,0 +1,48 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+// The media hub's English strings (MD-01 to MD-04): the now-playing button
+// and popover, the sidebar card's controls, the page menu on video and audio,
+// and the setting that shows the button.
+export const media = {
+  'media.button.label': 'What’s playing',
+  'media.button.count': '{count, plural, one {# tab playing} other {# tabs playing}}',
+  'media.hub.title': 'Now playing',
+  'media.hub.empty': 'Nothing is playing right now.',
+  'media.hub.mediaKeys': 'Media keys control this one',
+  'media.source.playing': 'Playing',
+  'media.source.paused': 'Paused',
+  'media.source.thisTab': 'This tab',
+  'media.source.elsewhere': 'In another window',
+  'media.source.goTo': 'Go to tab',
+  'media.source.goToNamed': 'Go to {title}',
+  'media.source.play': 'Play',
+  'media.source.pause': 'Pause',
+  'media.source.previous': 'Previous',
+  'media.source.next': 'Next',
+  'media.source.mute': 'Mute tab',
+  'media.source.unmute': 'Unmute tab',
+  'media.source.pip': 'Picture in picture',
+  'media.source.pipLeave': 'Leave picture in picture',
+  'media.source.dismiss': 'Dismiss',
+  'media.source.speed': 'Playback speed',
+  'media.source.speedNow': 'Playback speed, {rate}',
+  'media.source.more': 'Show all that’s playing',
+  'media.source.artwork': 'Artwork for {title}',
+  'media.error': 'Couldn’t control what’s playing.',
+  'media.speed.normal': 'Normal',
+  'media.menu.speed': 'Playback speed',
+  'media.menu.loop': 'Loop',
+  'media.menu.controls': 'Show controls',
+  'media.menu.pip': 'Picture in picture',
+  'media.menu.openVideo': 'Open video in new tab',
+  'media.menu.openAudio': 'Open audio in new tab',
+  'media.menu.saveVideo': 'Save video as…',
+  'media.menu.saveAudio': 'Save audio as…',
+  'media.menu.copyVideo': 'Copy video address',
+  'media.menu.copyAudio': 'Copy audio address',
+  'media.settings.button': 'Show what’s playing in the toolbar',
+  'media.settings.button.description': 'A button appears while a tab plays sound or video, with play, pause, next, speed and picture in picture for each one.',
+} as const

@@ -1,0 +1,37 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* ShapeField: the frame around Apex's ambient field on companion surfaces.
+   The glyphs and their light and dark colours come from ui/AmbientField;
+   this adds the box and the fades. Owners position it (it fills its nearest
+   positioned ancestor by default) and can change the fades with
+   --field-fade-top and --field-fade-bottom. */
+
+.co-shape-field {
+  --field-fade-top: 22%;
+  --field-fade-bottom: 34%;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, black var(--field-fade-top), black calc(100% - var(--field-fade-bottom)), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, black var(--field-fade-top), black calc(100% - var(--field-fade-bottom)), transparent 100%);
+}
+
+.co-shape-field--banner {
+  --field-fade-top: 0%;
+  --field-fade-bottom: 28%;
+}
+
+/* The new tab's ground (density floor): the box is the ellipse, and the
+   canvas fades the glyphs out toward its rim and dims them behind text, so
+   the linear fades are off. A faint wash of the colour glows under the
+   middle and is gone well before the rim: no outline, no disc. */
+.co-shape-field--floor {
+  --field-wash: light-dark(color-mix(in srgb, var(--field-tint) 9%, transparent), color-mix(in srgb, var(--field-tint) 7%, transparent));
+  -webkit-mask-image: none;
+  mask-image: none;
+  background: radial-gradient(closest-side, var(--field-wash), color-mix(in srgb, var(--field-wash) 40%, transparent) 55%, transparent 92%);
+}

@@ -1,0 +1,8 @@
+[
+  { "type": "user-message", "id": "aaaaaaaa-1111-4222-8333-444444444444", "text": "Compare two prices" },
+  { "type": "tool", "id": "toolu_a0", "label": "Read the page", "state": "done" },
+  { "type": "tool", "id": "toolu_a1", "label": "Search the web", "state": "done", "kind": "web-search", "startedAt": 1795000001000, "endedAt": 1795000002000, "input": "price of a kettle", "result": "3 results" },
+  { "type": "step-limit", "turnId": "bbbbbbbb-1111-4222-8333-444444444444", "steps": 60 },
+  { "type": "interrupting" },
+  { "type": "stopped", "turnId": "bbbbbbbb-1111-4222-8333-444444444444", "reason": "interrupt" }
+]

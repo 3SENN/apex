@@ -1,0 +1,20 @@
+{
+  "formatVersion": 4,
+  "id": "45454545-1111-4222-8333-444444444444",
+  "title": "C shape",
+  "companionId": "companion-1",
+  "actWithoutAsking": false,
+  "muted": false,
+  "parentChatId": 12,
+  "projectId": "p1",
+  "capabilities": { "model": "claude-opus-5-5", "browser": false, "webTools": true, "memory": false, "connectorIds": [], "engine": "api-key", "documents": true, "compaction": false, "containerId": null, "localTools": [], "toolPolicies": {}, "clientTools": ["update_plan", 3] },
+  "system": "s",
+  "messages": [{ "role": "user", "content": "Plan" }],
+  "log": [
+    { "type": "user-message", "id": "aaaaaaaa-4545-4222-8333-444444444444", "text": "Plan", "skill": { "id": "s1", "name": "travel", "builtin": true } },
+    { "type": "user-message", "id": "aaaaaaaa-4546-4222-8333-444444444444", "text": "/oops", "skill": "travel" }
+  ],
+  "grants": [{ "origin": "https://shop.example", "action": "purchase", "at": 1780000000000 }, { "origin": "x" }],
+  "details": {},
+  "feedback": {}
+}

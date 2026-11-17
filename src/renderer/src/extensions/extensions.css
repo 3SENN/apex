@@ -1,0 +1,653 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* The extension surfaces: the toolbar cluster and badges (SH-32, SH-65),
+   the extensions popover, the install and native-messaging prompts (OV-16) and Settings › Extensions (ST-40). Colours are theme tokens (the
+   light-dark pairs in styles.css); the badge keeps an extension's own
+   colour only when its text can be made readable on it. Motion is a short
+   fade that goes away under Reduce Motion. */
+
+:root {
+  --ext-badge-bg: light-dark(#4a4844, #d8d4cd);
+  --ext-badge-ink: light-dark(#ffffff, #1c1b19);
+  --ext-badge-ring: var(--bg-sheet, var(--bg-base));
+  --ext-popover-width: 340px;
+  --ext-row-height: 40px;
+}
+
+/* ---- toolbar cluster ---- */
+
+.ext-cluster {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.ext-cluster:empty {
+  display: none;
+}
+
+.ext-btn {
+  position: relative;
+}
+
+.ext-btn--open {
+  background: var(--bg-active);
+}
+
+/* An unpinned extension shown only while its popup is open: same button, a quieter edge. */
+.ext-btn--temporary {
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+}
+
+/* Utility pages keep one 32 px Extensions button, 8 px from the right edge (DS-24). */
+.toolbar__group .ext-cluster--internal .ext-menu-btn {
+  width: 32px;
+  height: 32px;
+}
+
+.ext-icon {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  color: var(--chrome-muted, var(--text-secondary));
+}
+
+.ext-icon img {
+  display: block;
+  object-fit: contain;
+}
+
+.ext-icon--dimmed {
+  opacity: 0.45;
+  filter: grayscale(1);
+}
+
+.ext-badge {
+  min-width: 14px;
+  height: 14px;
+  padding: 0 3px;
+  border-radius: var(--radius-pill, 999px);
+  background: var(--ext-badge-bg);
+  color: var(--ext-badge-ink);
+  box-shadow: 0 0 0 1.5px var(--ext-badge-ring);
+  font-size: 9.5px;
+  font-weight: 650;
+  line-height: 14px;
+  text-align: center;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.ui-icon-btn__badge .ext-badge {
+  transform: translate(35%, -25%);
+}
+
+/* ---- popover ---- */
+
+.ext-popover {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: var(--ext-popover-width);
+  overflow: auto;
+  padding: 6px;
+  border-radius: var(--radius-card);
+  background: var(--bg-raised);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-overlay);
+  font-size: var(--text-md);
+  outline: none;
+  animation: ext-in var(--motion-menu-in, 120ms) var(--ease-out, ease-out);
+}
+
+.ext-popover__title {
+  margin: 4px 8px 6px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.ext-popover__body {
+  padding: 4px 8px;
+}
+
+.ext-popover__empty {
+  margin: 4px 8px 10px;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.ext-popover__list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ext-popover__failure {
+  margin: 6px 8px;
+  color: var(--status-error);
+  font-size: var(--text-sm);
+}
+
+.ext-popover__footer {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.ext-popover__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 32px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--radius-row);
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  cursor: default;
+}
+
+.ext-popover__link svg {
+  width: 15px;
+  height: 15px;
+  color: var(--text-tertiary);
+}
+
+.ext-popover__link:hover,
+.ext-row__run:hover,
+.ext-row__action:hover {
+  background: var(--bg-hover);
+}
+
+.ext-popover__link:focus-visible,
+.ext-row__run:focus-visible,
+.ext-row__action:focus-visible {
+  outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color, var(--accent));
+  outline-offset: -2px;
+}
+
+.ext-row__main {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-height: var(--ext-row-height);
+}
+
+.ext-row__run {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  height: var(--ext-row-height);
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--radius-row);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: default;
+}
+
+.ext-row__icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+
+.ext-row__icon .ext-badge {
+  position: absolute;
+  right: -7px;
+  bottom: -5px;
+}
+
+.ext-row__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ext-row__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ext-row__note {
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+}
+
+.ext-row--off .ext-row__name {
+  color: var(--text-secondary);
+}
+
+.ext-row__pin[aria-pressed='true'] {
+  color: var(--accent-text, var(--accent));
+}
+
+.ext-row__more {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 4px 38px;
+  padding: 2px;
+  border-left: 1px solid var(--border-subtle);
+}
+
+.ext-row__action {
+  height: 28px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--radius-row);
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  text-align: start;
+  cursor: default;
+}
+
+.ext-row__action--danger {
+  color: var(--status-error);
+}
+
+/* ---- prompts ---- */
+
+.ext-prompt-scrim {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--scrim);
+  animation: ext-fade var(--motion-enter, 140ms) var(--ease-out, ease-out);
+}
+
+.ext-prompt-scrim--exiting {
+  opacity: 0;
+  transition: opacity var(--motion-exit, 100ms) var(--ease-exit, ease-in);
+}
+
+.ext-prompt {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(400px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+  padding: 20px 20px 16px;
+  border-radius: var(--radius-card);
+  background: var(--bg-raised);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-overlay);
+  font-size: var(--text-md);
+  line-height: 1.45;
+  outline: none;
+  animation: ext-in var(--motion-enter, 140ms) var(--ease-out, ease-out);
+}
+
+.ext-prompt__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ext-prompt__glyph {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-muted);
+  color: var(--text-secondary);
+}
+
+.ext-prompt__glyph svg {
+  width: 17px;
+  height: 17px;
+}
+
+.ext-prompt__glyph--warning {
+  background: var(--status-needs-input-soft);
+  color: var(--status-needs-input);
+}
+
+.ext-prompt__title {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 650;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.ext-prompt__name {
+  margin: 0;
+  font-weight: 600;
+}
+
+.ext-prompt__text {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.ext-prompt__text--muted {
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+}
+
+.ext-prompt__list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--bg-subtle);
+  list-style: none;
+}
+
+.ext-prompt__list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.ext-prompt__list svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  margin-top: 3px;
+  color: var(--text-tertiary);
+}
+
+.ext-prompt__buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.ext-prompt__buttons--three {
+  flex-wrap: wrap;
+}
+
+/* ---- Settings › Extensions ---- */
+
+.ext-set {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.ext-set:last-child {
+  border-bottom: 0;
+}
+
+.ext-set__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 8px 14px;
+}
+
+.ext-set__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-subtle);
+}
+
+.ext-set__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ext-set__name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  font-weight: 560;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ext-set__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+}
+
+.ext-set__note {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-secondary);
+}
+
+.ext-set__note--warn {
+  color: var(--status-needs-input);
+}
+
+.ext-set__note svg,
+.ext-set__clash svg,
+.ext-set__unsupported svg {
+  flex: none;
+  width: 13px;
+  height: 13px;
+}
+
+.ext-set__controls {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 4px;
+}
+
+.ext-set__chevron {
+  width: 14px;
+  height: 14px;
+  transition: transform var(--motion-quick, 120ms) var(--ease-standard, ease);
+}
+
+.ext-set--open .ext-set__chevron {
+  transform: rotate(180deg);
+}
+
+.ext-set--off .ext-set__name {
+  color: var(--text-secondary);
+}
+
+.ext-set__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 2px 14px 14px 58px;
+  animation: ext-fade var(--motion-enter, 140ms) var(--ease-out, ease-out);
+}
+
+.ext-set__description {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.ext-set__unsupported {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  background: var(--status-needs-input-soft);
+  color: var(--text-primary);
+  line-height: 1.45;
+}
+
+.ext-set__unsupported svg {
+  margin-top: 3px;
+  color: var(--status-needs-input);
+}
+
+.ext-set__groups {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ext-set__group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ext-set__heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.ext-set__heading {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.ext-set__list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0 0 0 16px;
+  line-height: 1.45;
+}
+
+.ext-set__list--optional,
+.ext-set__list--commands {
+  padding: 0;
+  list-style: none;
+}
+
+.ext-set__optional,
+.ext-set__command {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  min-height: 28px;
+}
+
+.ext-set__optional-label,
+.ext-set__command-name {
+  flex: 1;
+  min-width: 160px;
+}
+
+.ext-set__state {
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+}
+
+.ext-set__state--on {
+  color: var(--status-success);
+}
+
+.ext-set__clash {
+  display: inline-flex;
+  flex-basis: 100%;
+  align-items: center;
+  gap: 4px;
+  color: var(--status-needs-input);
+  font-size: var(--text-sm);
+}
+
+.ext-set__value {
+  margin: 0;
+}
+
+.ext-set__quiet {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+}
+
+.ext-set__links {
+  display: flex;
+  gap: 8px;
+}
+
+@media (max-width: 560px) {
+  .ext-set__row {
+    flex-wrap: wrap;
+  }
+
+  .ext-set__controls {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .ext-set__panel {
+    padding-left: 14px;
+  }
+}
+
+@keyframes ext-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes ext-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+:root[data-motion='reduced'] .ext-popover,
+:root[data-motion='reduced'] .ext-prompt,
+:root[data-motion='reduced'] .ext-prompt-scrim,
+:root[data-motion='reduced'] .ext-set__panel,
+:root[data-motion='reduced'] .ext-set__chevron {
+  animation: none;
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ext-popover,
+  .ext-prompt,
+  .ext-prompt-scrim,
+  .ext-set__panel,
+  .ext-set__chevron {
+    animation: none;
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .ext-badge {
+    border: 1px solid CanvasText;
+  }
+}

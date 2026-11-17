@@ -1,0 +1,2662 @@
+{
+  "hat-beanie": {
+    "head-round": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1
+    },
+    "head-oval": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1
+    },
+    "head-soft-square": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1
+    },
+    "head-drop": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1
+    },
+    "head-bean": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1
+    },
+    "head-cloud": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1
+    }
+  },
+  "hat-cap": {
+    "head-round": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.04
+        }
+      }
+    },
+    "head-oval": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.04
+        }
+      }
+    },
+    "head-soft-square": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.04
+        }
+      }
+    },
+    "head-drop": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.04
+        }
+      }
+    },
+    "head-bean": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.04
+        }
+      }
+    },
+    "head-cloud": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.04
+        }
+      }
+    }
+  },
+  "hat-crown": {
+    "head-round": {
+      "offset": [
+        0,
+        0.001,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.17,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-spiky": {
+          "offset": [
+            0,
+            0.118,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-curls": {
+          "offset": [
+            0,
+            0.267,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0.121,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.135,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.118,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    },
+    "head-oval": {
+      "offset": [
+        0,
+        -0.044,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.17,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-spiky": {
+          "offset": [
+            0,
+            0.118,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-curls": {
+          "offset": [
+            0,
+            0.267,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0.121,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.135,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.118,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    },
+    "head-soft-square": {
+      "offset": [
+        0,
+        0.076,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.17,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-spiky": {
+          "offset": [
+            0,
+            0.118,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-curls": {
+          "offset": [
+            0,
+            0.267,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0.121,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.135,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.118,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    },
+    "head-drop": {
+      "offset": [
+        0,
+        -0.236,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.17,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-spiky": {
+          "offset": [
+            0,
+            0.118,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-curls": {
+          "offset": [
+            0,
+            0.267,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0.121,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.135,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.118,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    },
+    "head-bean": {
+      "offset": [
+        0,
+        0.051,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.17,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-spiky": {
+          "offset": [
+            0,
+            0.118,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-curls": {
+          "offset": [
+            0,
+            0.267,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0.121,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.135,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.118,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    },
+    "head-cloud": {
+      "offset": [
+        0,
+        -0.069,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.17,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-spiky": {
+          "offset": [
+            0,
+            0.118,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-curls": {
+          "offset": [
+            0,
+            0.267,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0.121,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.135,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.118,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    }
+  },
+  "hat-wizard": {
+    "head-round": {
+      "offset": [
+        0,
+        0.001,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.237,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.23,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.184,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    },
+    "head-oval": {
+      "offset": [
+        0,
+        -0.077,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.237,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.23,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.184,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    },
+    "head-soft-square": {
+      "offset": [
+        0,
+        0.125,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.237,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.23,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.184,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    },
+    "head-drop": {
+      "offset": [
+        0,
+        -0.202,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.237,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.23,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.184,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    },
+    "head-bean": {
+      "offset": [
+        0,
+        0.079,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.237,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.23,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.184,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    },
+    "head-cloud": {
+      "offset": [
+        0,
+        -0.125,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.237,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.23,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.184,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    }
+  },
+  "hat-beret": {
+    "head-round": {
+      "offset": [
+        0,
+        0.001,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.181,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0.134,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.155,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.131,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    },
+    "head-oval": {
+      "offset": [
+        0,
+        -0.055,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.181,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0.134,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.155,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.131,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    },
+    "head-soft-square": {
+      "offset": [
+        0,
+        0.099,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.181,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0.134,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.155,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.131,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    },
+    "head-drop": {
+      "offset": [
+        0,
+        -0.227,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.181,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0.134,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.155,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.131,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    },
+    "head-bean": {
+      "offset": [
+        0,
+        0.059,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.181,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0.134,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.155,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.131,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    },
+    "head-cloud": {
+      "offset": [
+        0,
+        -0.094,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.181,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0.134,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.155,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.131,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    }
+  },
+  "hat-flower-crown": {
+    "head-round": {
+      "offset": [
+        0,
+        0.001,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.196,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-spiky": {
+          "offset": [
+            0,
+            0.147,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-curls": {
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0.149,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.18,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.147,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    },
+    "head-oval": {
+      "offset": [
+        0,
+        -0.065,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.196,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-spiky": {
+          "offset": [
+            0,
+            0.147,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-curls": {
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0.149,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.18,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.147,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    },
+    "head-soft-square": {
+      "offset": [
+        0,
+        0.116,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.196,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-spiky": {
+          "offset": [
+            0,
+            0.147,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-curls": {
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0.149,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.18,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.147,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    },
+    "head-drop": {
+      "offset": [
+        0,
+        -0.218,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.196,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-spiky": {
+          "offset": [
+            0,
+            0.147,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-curls": {
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0.149,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.18,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.147,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    },
+    "head-bean": {
+      "offset": [
+        0,
+        0.066,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.196,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-spiky": {
+          "offset": [
+            0,
+            0.147,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-curls": {
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0.149,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.18,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.147,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    },
+    "head-cloud": {
+      "offset": [
+        0,
+        -0.147,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0.196,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-spiky": {
+          "offset": [
+            0,
+            0.147,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-curls": {
+          "offset": [
+            0,
+            0.32,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0.149,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0.18,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0.147,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1
+        }
+      }
+    }
+  },
+  "headphones": {
+    "head-round": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.097
+        },
+        "hair-spiky": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.045
+        },
+        "hair-curls": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.158
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.041
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.045
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.045
+        }
+      }
+    },
+    "head-oval": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.097
+        },
+        "hair-spiky": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.045
+        },
+        "hair-curls": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.158
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.041
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.045
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.045
+        }
+      }
+    },
+    "head-soft-square": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1.024,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.097
+        },
+        "hair-spiky": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.045
+        },
+        "hair-curls": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.158
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.041
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.045
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.045
+        }
+      }
+    },
+    "head-drop": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.097
+        },
+        "hair-spiky": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.045
+        },
+        "hair-curls": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.158
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.041
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.045
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.045
+        }
+      }
+    },
+    "head-bean": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1.011,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.097
+        },
+        "hair-spiky": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.045
+        },
+        "hair-curls": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.158
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.041
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.045
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.045
+        }
+      }
+    },
+    "head-cloud": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1,
+      "hair": {
+        "hair-bob": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.097
+        },
+        "hair-spiky": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.045
+        },
+        "hair-curls": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.158
+        },
+        "hair-bun": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.041
+        },
+        "hair-sideswept": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.045
+        },
+        "hair-pigtails": {
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": 1.045
+        }
+      }
+    }
+  }
+}

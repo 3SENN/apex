@@ -1,0 +1,32 @@
+{
+  "id": "0a0a0a0a-1111-4222-8333-444444444444",
+  "title": "Old trip",
+  "createdAt": 1780000000000,
+  "updatedAt": 1780000060000,
+  "lastActiveAt": 1780000060000,
+  "routineId": null,
+  "companionId": "companion-1",
+  "model": "claude-opus-5-5",
+  "status": "finished",
+  "unread": false,
+  "pinned": true,
+  "archived": false,
+  "needsInput": false,
+  "capabilities": { "model": "claude-opus-5-5", "effort": "turbo", "browser": true, "webTools": true, "memory": true, "connectorIds": ["c1", 7] },
+  "system": "You are Pip.",
+  "messages": [
+    { "role": "user", "content": "Plan a trip" },
+    { "role": "assistant", "content": [{ "type": "text", "text": "Sure." }] }
+  ],
+  "log": [
+    { "type": "user-message", "id": "aaaaaaaa-0000-4222-8333-444444444444", "text": "Plan a trip" },
+    { "type": "tool", "id": "toolu_1", "label": "Read the page", "state": "done" },
+    { "type": "tool", "id": "toolu_2", "label": "Search", "state": "weird", "kind": "nope", "startedAt": "soon", "input": 42 },
+    { "type": "text-delta", "turnId": "bbbbbbbb-0000-4222-8333-444444444444", "text": "Sure." },
+    { "type": "text-delta", "turnId": "bbbbbbbb-0000-4222-8333-444444444444" },
+    "garbage",
+    { "no": "type" }
+  ],
+  "details": [],
+  "engineSession": { "id": "session-12345678" }
+}

@@ -1,0 +1,43 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+// English strings for migrations: the chat notice and About › Data updates.
+export const migrations = {
+  'migrations.notice.failed': "This chat couldn't be brought up to date.",
+  'migrations.notice.newer': 'This chat was saved by a newer version of {brand}. Update {brand} to continue it.',
+  'migrations.notice.failedTitle': 'This chat needs a repair',
+  'migrations.notice.newerTitle': 'Saved by a newer {brand}',
+  'migrations.notice.readOnly': 'You can read it here, but not continue it, until this is sorted out. Nothing in the file has been changed.',
+  'migrations.notice.newerReadOnly': 'It opens read-only here, so nothing it saved is lost.',
+  'migrations.notice.stillFailing': "This chat still can't be brought up to date.",
+  'migrations.notice.fixed': 'The chat is up to date again.',
+  'migrations.notice.restored': 'The original chat is back.',
+  'migrations.notice.restoreTitle': 'Restore the original chat?',
+  'migrations.notice.restoreMessage': 'The chat goes back to how it was before this update. The current file is kept in the backup folder.',
+  'migrations.notice.damaged': "This chat's file is damaged.",
+  'migrations.notice.unknownFormat': "This chat's file has a format this version of {brand} doesn't know.",
+  'migrations.notice.noBackup': 'There is no original copy of this chat to restore.',
+  'migrations.notice.notNeeded': 'This chat is already up to date.',
+  'migrations.composer.locked': "This chat can't be continued right now",
+  'migrations.action.retry': 'Try again',
+  'migrations.action.reload': 'Reload',
+  'migrations.action.restore': 'Restore original',
+  'migrations.action.reveal': 'Show file',
+  'migrations.action.open': 'Open',
+  'migrations.about.title': 'Data updates',
+  'migrations.about.upToDate': 'All your chats are up to date',
+  'migrations.about.summary': '{count, plural, one {# chat updated} other {# chats updated}} on {date}',
+  'migrations.about.description': 'When an update changes how chats are saved, {brand} updates them in place and keeps the originals in a backup folder.',
+  'migrations.about.retryAll': 'Retry all',
+  'migrations.about.failedTitle': "{count, plural, one {# chat couldn't be updated} other {# chats couldn't be updated}}",
+  'migrations.about.newerTitle': 'Saved by a newer {brand}',
+  'migrations.about.newerChat': 'Opens read-only until you update {brand}.',
+  'migrations.about.newerFile': 'A copy was kept, so nothing it saved is lost.',
+  'migrations.about.untitled': 'Untitled chat',
+  'migrations.about.loadError': "Couldn't load the data update results.",
+  'migrations.about.retryAllDone': '{count, plural, =0 {Every chat is up to date now.} one {# chat still needs a repair.} other {# chats still need a repair.}}',
+  'migrations.file.settings': 'Settings',
+  'migrations.file.companions': 'Companions',
+} as const

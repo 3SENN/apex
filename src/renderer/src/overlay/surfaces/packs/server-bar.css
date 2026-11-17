@@ -1,0 +1,92 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* Apex's bar over an app whose web server runs (apex.server): the sharing
+   bar's shape, in the accent rather than the camera's red. */
+
+/* Room for the shadow inside the frame (the overlay view is cut to it, so a
+   shadow past the frame would end in a hard edge): the gap to the pane's top
+   is this padding's top. */
+.sv-room {
+  padding: 8px 20px 26px;
+}
+
+.sv-bar {
+  --sv-live: var(--accent);
+  --sv-live-halo: color-mix(in srgb, var(--sv-live) 28%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-sizing: border-box;
+  width: max-content;
+  max-width: min(520px, calc(var(--ov-vw, 100vw) - 72px));
+  padding: 6px 6px 6px 12px;
+  border-radius: 18px;
+  background: var(--bg-raised);
+  color: var(--text-primary);
+  box-shadow: 0 0 0 1px var(--border-card), var(--shadow-md);
+  font: 13px/18px var(--font);
+  -webkit-app-region: no-drag;
+}
+
+.sv-bar__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.sv-bar__dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--sv-live);
+  box-shadow: 0 0 0 3px var(--sv-live-halo);
+  animation: sv-live-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes sv-live-pulse {
+  50% {
+    box-shadow: 0 0 0 1px var(--sv-live-halo);
+  }
+}
+
+.sv-bar__icon {
+  flex: none;
+  color: var(--sv-live);
+}
+
+.sv-bar__text {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sv-bar__count {
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.sv-bar__hint {
+  max-width: 100%;
+  margin: 0 6px 4px 24px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sv-bar__dot {
+    animation: none;
+  }
+}
+
+:root[data-motion='reduced'] .sv-bar__dot {
+  animation: none;
+}

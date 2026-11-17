@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "Fixture Password Manager",
+  "version": "1.0.0",
+  "description": "A fixture shaped like a password manager: native helper, browser settings, page rules, frames and menus.",
+  "action": { "default_popup": "popup.html" },
+  "background": { "service_worker": "background.js" },
+  "permissions": ["privacy", "declarativeContent", "nativeMessaging", "webNavigation", "storage", "contextMenus", "scripting"],
+  "host_permissions": ["*://*/*"],
+  "content_scripts": [{ "js": ["content.js"], "matches": ["*://*/*"], "run_at": "document_idle", "all_frames": true }]
+}

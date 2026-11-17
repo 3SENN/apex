@@ -1,0 +1,18 @@
+<!doctype html>
+<!-- Copyright (c) 2026 The Apex Authors. All rights reserved.
+   - This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at https://mozilla.org/MPL/2.0/. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Apex's hidden preprocessing renderer: offscreen, sandboxed, no
+         preload, in the locked-down in-memory partition apex-preprocess. It
+         only re-encodes the bytes main hands it; it never fetches anything. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; img-src blob: data:; worker-src 'self'" />
+    <title>%BRAND_NAME% preprocess</title>
+  </head>
+  <body>
+    <script type="module" src="/preprocess/main.ts"></script>
+  </body>
+</html>

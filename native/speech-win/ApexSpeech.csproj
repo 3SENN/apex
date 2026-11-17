@@ -1,0 +1,43 @@
+<!-- Copyright (c) 2026 The Apex Authors. All rights reserved.
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this file,
+     You can obtain one at https://mozilla.org/MPL/2.0/. -->
+<!--
+  apex-speech.exe: Apex's Windows speech helper.
+  It speaks the same JSON-lines protocol v2 as the macOS helper (native/speech).
+  Build with `node scripts/build-speech-helper.mjs` on Windows (see README.md).
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- 19041 (Windows 10 2004): WinRT speech, AppCapability and the CsWinRT projection. -->
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+    <AssemblyName>apex-speech</AssemblyName>
+    <RootNamespace>Apex.Speech</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>12</LangVersion>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <!-- One self-contained file: Apex ships no .NET runtime beside it. -->
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <!-- System.Speech, COM interop and WinRT activation don't survive trimming. -->
+    <PublishTrimmed>false</PublishTrimmed>
+    <InvariantGlobalization>false</InvariantGlobalization>
+    <DebugType>embedded</DebugType>
+    <!-- Shown in the file's properties; neutral, since the same helper ships in every branding. -->
+    <Product>Speech helper</Product>
+    <Description>Speech recognition and audio capture on Windows.</Description>
+    <Version>2.0.0</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- WASAPI microphone and loopback capture, Media Foundation AAC; MIT. -->
+    <PackageReference Include="NAudio.Wasapi" Version="2.2.1" />
+    <!-- SAPI desktop recognition for system audio and files, on this PC; MIT. -->
+    <PackageReference Include="System.Speech" Version="8.0.0" />
+  </ItemGroup>
+</Project>

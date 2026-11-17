@@ -1,0 +1,157 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* MV-14: meeting and screenshot chips, the waiting chip, sent chips; tokens only, both themes */
+
+.chat-attach {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1-5);
+  margin: 0 0 var(--space-1-5);
+}
+
+.chat-attach__chips,
+.chat-sent-attach {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chat-sent-attach {
+  justify-content: flex-end;
+  margin: 0 0 var(--space-1-5);
+}
+
+.chat-attach__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  max-width: 280px;
+  height: 32px;
+  padding: 0 var(--space-1) 0 var(--space-1);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--bg-raised);
+  box-shadow: inset 0 0 0 1px var(--border-default);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--text-sm);
+}
+
+.chat-attach__chip--link {
+  padding-right: var(--space-2-5);
+  cursor: pointer;
+}
+
+.chat-attach__chip--link:hover {
+  background: var(--bg-hover);
+}
+
+.chat-attach__chip--link:focus-visible,
+.chat-attach__remove:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.chat-attach__chip--pending {
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+}
+
+.chat-attach__icon {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: var(--bg-muted);
+  color: var(--text-secondary);
+}
+
+.chat-attach__icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.chat-attach__icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.chat-attach__name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-attach__sub {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+}
+
+.chat-attach__remove {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+}
+
+.chat-attach__remove:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.chat-attach__remove svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* MV-14: the held message, with Cancel. */
+.chat-attach__waiting {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--bg-muted);
+  color: var(--text-primary);
+}
+
+.chat-attach__waiting-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.chat-attach__waiting-title {
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.chat-attach__waiting-message {
+  margin: 2px 0 0;
+  overflow: hidden;
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

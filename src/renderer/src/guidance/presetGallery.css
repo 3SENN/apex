@@ -1,0 +1,757 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* The preset gallery (apex://presets) and a preset's profile
+   (apex://presets/<id>). Each card and the profile take the preset's own
+   colour as --ps-tint; everything else is theme tokens. */
+
+.ps-content {
+  container: ps-page / inline-size;
+  max-width: 1010px;
+  margin: 0 auto;
+  padding-bottom: var(--space-10, 40px);
+}
+
+.ps-head {
+  margin: 0 0 22px;
+}
+
+.ps-head h1 {
+  margin: 0 0 6px;
+  color: var(--text-primary);
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.ps-head p {
+  max-width: 620px;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+/* ---- the gallery grid ---- */
+
+.ps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 19px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@container ps-page (max-width: 900px) {
+  .ps-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container ps-page (max-width: 560px) {
+  .ps-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.ps-card {
+  --ps-tint: var(--accent);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: var(--line) solid var(--border-subtle);
+  border-radius: 20px;
+  background: var(--bg-raised);
+  box-shadow: var(--shadow-sm);
+  animation: ps-card-in 240ms var(--ease-out, ease-out) both;
+  animation-delay: calc(var(--ps-order, 0) * 40ms);
+  transition: box-shadow var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard);
+}
+
+.ps-card:hover,
+.ps-card:focus-within {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+@keyframes ps-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* The wash: the preset's colour at the top, fading into the card. */
+.ps-card__wash {
+  display: grid;
+  place-items: end center;
+  height: 161px;
+  padding-top: 12px;
+  background: linear-gradient(to bottom, light-dark(color-mix(in srgb, var(--ps-tint) 26%, var(--bg-raised)), color-mix(in srgb, var(--ps-tint) 34%, var(--bg-raised))) 0%, color-mix(in srgb, var(--ps-tint) 10%, var(--bg-raised)) 62%, var(--bg-raised) 100%);
+}
+
+.ps-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 20px 18px;
+}
+
+.ps-card__name {
+  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ps-card__name:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ps-card__name:focus-visible,
+.ps-link:focus-visible {
+  border-radius: 6px;
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+.ps-card__desc {
+  display: -webkit-box;
+  flex: 1;
+  margin: 0;
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+}
+
+.ps-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.ps-pill.ui-btn,
+.ps-side__pill.ui-btn {
+  height: 37px;
+  padding: 0 18px;
+  border-radius: var(--radius-pill);
+}
+
+.ps-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ps-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ps-note {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.ps-note--error {
+  color: var(--status-error);
+}
+
+/* ---- the profile ---- */
+
+.ps-back {
+  margin: 0 0 14px -8px;
+}
+
+.ps-profile {
+  --ps-tint: var(--accent);
+  display: grid;
+  grid-template-columns: 290px minmax(0, 1fr);
+  align-items: start;
+  gap: 22px;
+}
+
+@container ps-page (max-width: 660px) {
+  .ps-profile {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* The left card stays put while the right column scrolls. */
+.ps-side {
+  position: sticky;
+  top: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  padding: 0 20px 20px;
+  border: var(--line) solid var(--border-subtle);
+  border-radius: 20px;
+  background: var(--bg-raised);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+
+@container ps-page (max-width: 660px) {
+  .ps-side {
+    position: static;
+  }
+}
+
+.ps-side__wash {
+  position: relative;
+  display: grid;
+  place-items: end center;
+  align-self: stretch;
+  height: 190px;
+  margin: 0 -20px 6px;
+  background: linear-gradient(to bottom, light-dark(color-mix(in srgb, var(--ps-tint) 24%, var(--bg-raised)), color-mix(in srgb, var(--ps-tint) 32%, var(--bg-raised))) 0%, var(--bg-raised) 100%);
+}
+
+.ps-side__field {
+  position: absolute;
+  inset: 0;
+  opacity: 0.7;
+}
+
+.ps-side__by {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+}
+
+.ps-side__name {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.ps-side__desc {
+  margin: 0 0 6px;
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.ps-side__pill.ui-btn {
+  align-self: stretch;
+  height: 41px;
+}
+
+.ps-side__rule {
+  align-self: stretch;
+  margin: 10px 0 4px;
+  border: 0;
+  border-top: var(--line) solid var(--border-subtle);
+}
+
+.ps-side__label {
+  align-self: flex-start;
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  font-weight: 650;
+}
+
+.ps-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-self: stretch;
+  gap: 6px;
+  margin: 2px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ps-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px 0 8px;
+  border: var(--line) solid var(--border-default);
+  border-radius: var(--radius-pill);
+  background: var(--bg-raised);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.ps-chip svg {
+  width: 15px;
+  height: 15px;
+  color: var(--text-secondary);
+}
+
+.ps-chip--action {
+  cursor: pointer;
+}
+
+.ps-chip--action:hover {
+  background: color-mix(in srgb, var(--text-primary) 5%, var(--bg-raised));
+}
+
+.ps-chip--action:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+.ps-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.ps-panel {
+  padding: 26px 30px;
+  border: var(--line) solid var(--border-subtle);
+  border-radius: 20px;
+  background: var(--bg-raised);
+  animation: ps-card-in 240ms var(--ease-out, ease-out) both;
+}
+
+.ps-panel__title {
+  margin: 0 0 4px;
+  color: var(--text-primary);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.ps-panel__note,
+.ps-panel__empty {
+  margin: 0 0 14px;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.ps-panel__text {
+  margin: 8px 0 10px;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.ps-panel__text--muted {
+  color: var(--text-secondary);
+}
+
+/* Four stat tiles, each with its own pale tint (Apex's own: sky, sand, lilac, sage). */
+.ps-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@container ps-page (max-width: 820px) {
+  .ps-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.ps-stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  min-height: 80px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--ps-stat-bg);
+}
+
+.ps-stat--skills { --ps-stat-bg: light-dark(#e9f0fa, #1f2a38); }
+.ps-stat--routines { --ps-stat-bg: light-dark(#f7f1e3, #332c1f); }
+.ps-stat--yours { --ps-stat-bg: light-dark(#efeaf8, #2b2537); }
+.ps-stat--version { --ps-stat-bg: light-dark(#e8f4ec, #1f3127); }
+
+.ps-stat__value {
+  color: var(--text-primary);
+  font-size: 28px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.ps-stat__label {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.ps-skills {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@container ps-page (max-width: 820px) {
+  .ps-skills {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.ps-skill {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+  border: var(--line) solid var(--border-subtle);
+  border-radius: 16px;
+  background: var(--bg-subtle);
+}
+
+/* A small book: a coloured tile with a darker spine, its colour stepping per skill. */
+.ps-skill__tile {
+  --ps-skill: light-dark(#5b7fc4, #86a5e0);
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--ps-skill);
+  color: light-dark(#ffffff, #14120f);
+}
+
+.ps-skill:nth-child(4n + 2) .ps-skill__tile { --ps-skill: light-dark(#d08a3e, #e9ac68); }
+.ps-skill:nth-child(4n + 3) .ps-skill__tile { --ps-skill: light-dark(#8a6ac0, #b39ae0); }
+.ps-skill:nth-child(4n + 4) .ps-skill__tile { --ps-skill: light-dark(#4f9a6c, #7cc497); }
+
+.ps-skill__tile::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 7px;
+  background: color-mix(in srgb, var(--ps-skill) 70%, #000);
+}
+
+.ps-skill__tile svg {
+  position: relative;
+  width: 20px;
+  height: 20px;
+}
+
+.ps-skill__text,
+.ps-routine__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ps-skill__name,
+.ps-routine__name {
+  color: var(--text-primary);
+  font-weight: 650;
+}
+
+.ps-skill__desc {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.ps-routines {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ps-routine {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.ps-routine__tile {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: light-dark(#fbe9d7, #3a2a1b);
+  color: light-dark(#b8692a, #f0a865);
+}
+
+.ps-routine__tile svg {
+  width: 17px;
+  height: 17px;
+}
+
+.ps-routine__text {
+  flex: 1;
+}
+
+.ps-routine__when {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.ps-routine__skill {
+  flex: none;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-muted);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+:root[data-motion='reduced'] .ps-card,
+:root[data-motion='reduced'] .ps-panel {
+  animation: none;
+  transition: none;
+}
+
+:root[data-motion='reduced'] .ps-card:hover,
+:root[data-motion='reduced'] .ps-card:focus-within {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ps-card,
+  .ps-panel {
+    animation: none;
+    transition: none;
+  }
+
+  .ps-card:hover,
+  .ps-card:focus-within {
+    transform: none;
+  }
+}
+
+/* ---- The detail views ----
+   Each skill and routine row is one button (laid under the row's content,
+   which lets the pointer through), opening a sheet with the whole starter. */
+
+.ps-item-row {
+  position: relative;
+  isolation: isolate;
+}
+
+.ps-routine.ps-item-row {
+  margin-inline: -8px;
+  padding-inline: 8px;
+  border-radius: 12px;
+}
+
+.ps-item-row > :not(.ps-item-row__open) {
+  position: relative;
+  pointer-events: none;
+}
+
+.ps-item-row__open {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+
+.ps-item-row__open:hover {
+  background: var(--bg-hover);
+}
+
+.ps-item-row__open:focus-visible {
+  outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color, var(--accent-ring));
+  outline-offset: -2px;
+}
+
+.ps-item__kind {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 4px;
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.ps-item__kind svg {
+  width: 13px;
+  height: 13px;
+}
+
+.ps-item__section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 18px;
+}
+
+.ps-item__label {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.ps-item__prose {
+  margin: 0;
+  color: var(--text-primary);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.ps-item__muted,
+.ps-item__note {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.ps-item__note {
+  margin-top: 22px;
+}
+
+.ps-item__quote {
+  padding: 10px 12px;
+  border: var(--line) solid var(--border-subtle);
+  border-radius: 12px;
+  background: var(--bg-subtle);
+}
+
+.ps-item__steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ps-item__step {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.ps-item__step-n {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-muted);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.ps-item__step-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ps-item__step-title {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.ps-item__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ps-item__link {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  border: var(--line) solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  background: var(--bg-raised);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.ps-item__link:hover {
+  background: var(--bg-hover);
+}
+
+.ps-item__link:focus-visible {
+  outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color, var(--accent-ring));
+  outline-offset: 1px;
+}
+
+.ps-item__link svg {
+  width: 14px;
+  height: 14px;
+}
+
+.ps-item__footer {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 6px;
+}
+
+.ps-item__position {
+  margin-inline: auto;
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.ps-item__footer > :last-child {
+  margin-left: 6px;
+}

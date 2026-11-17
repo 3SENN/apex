@@ -1,0 +1,40 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* Settings › Languages › Translation (TR-12): the always and never lists as removable chips. */
+.trs__none {
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+}
+
+.trs__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trs__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-0-5);
+  min-width: 0;
+  max-width: 100%;
+  padding: var(--space-0-5) var(--space-0-5) var(--space-0-5) var(--space-2-5);
+  border: 1px solid var(--border-default);
+  border-radius: 999px;
+  background: var(--bg-raised);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+}
+
+.trs__chip-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

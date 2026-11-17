@@ -1,0 +1,873 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* Getting started (apex://first-week). One centred column: a hero banner in
+   the companion's colour, the plan as a two-column grid of cards, and short
+   animated guides. Colours are the design tokens plus a few page tokens
+   defined below with light-dark(), so both modes are designed here. The
+   companion colour arrives as --fw-tint on .fw. */
+
+.fw {
+  --fw-tint: var(--accent);
+  --fw-column: 896px;
+  /* Neutral surfaces: cards and pills are greys derived from the ink, never the tint. */
+  --fw-card-bg: color-mix(in srgb, var(--text-primary) 3.5%, var(--bg-card));
+  --fw-card-bg-hover: color-mix(in srgb, var(--text-primary) 6.5%, var(--bg-card));
+  --fw-card-bg-press: color-mix(in srgb, var(--text-primary) 9%, var(--bg-card));
+  --fw-card-border: light-dark(color-mix(in srgb, var(--text-primary) 7%, transparent), color-mix(in srgb, var(--text-primary) 8%, transparent));
+  /* The hero: a wash of the companion colour, strongest at the top right where the companion stands. */
+  --fw-hero-base: light-dark(color-mix(in srgb, var(--fw-tint) 9%, var(--bg-card)), color-mix(in srgb, var(--fw-tint) 13%, var(--bg-card)));
+  --fw-hero-glow: light-dark(color-mix(in srgb, var(--fw-tint) 24%, var(--bg-card)), color-mix(in srgb, var(--fw-tint) 26%, var(--bg-card)));
+  --fw-hero-border: light-dark(color-mix(in srgb, var(--fw-tint) 16%, var(--border-subtle)), color-mix(in srgb, var(--fw-tint) 20%, var(--border-subtle)));
+  /* Guide previews. */
+  --fw-scene-bg: light-dark(color-mix(in srgb, var(--fw-tint) 8%, var(--bg-subtle)), color-mix(in srgb, var(--fw-tint) 12%, var(--bg-sunken)));
+  --fw-scene-surface: var(--bg-card);
+  --fw-scene-bar: color-mix(in srgb, var(--text-primary) 6%, var(--bg-card));
+  --fw-scene-line: color-mix(in srgb, var(--text-primary) 10%, transparent);
+  --fw-scene-ink: color-mix(in srgb, var(--text-primary) 16%, transparent);
+  --fw-scene-ink-strong: color-mix(in srgb, var(--text-primary) 34%, transparent);
+  --fw-scene-tint: var(--fw-tint);
+  --fw-scene-tint-soft: color-mix(in srgb, var(--fw-tint) 22%, var(--bg-card));
+  /* The little companion in the previews keeps dark eyes on its coloured face in both modes. */
+  --fw-scene-eye: light-dark(#1b1729, #17131f);
+  --fw-scene-face: color-mix(in srgb, var(--fw-tint) 30%, #ffffff);
+  --fw-badge-bg: light-dark(rgba(22, 18, 38, 0.72), rgba(6, 5, 12, 0.72));
+  --fw-badge-text: #ffffff;
+  --fw-play-bg: light-dark(rgba(255, 255, 255, 0.92), rgba(44, 40, 58, 0.9));
+  --fw-play-ink: var(--text-primary);
+
+  /* Apex's card hues, one per item. */
+  --fw-hue-teal: light-dark(#0c8b82, #3cc8b9);
+  --fw-hue-green: light-dark(#2a9448, #5ccf7c);
+  --fw-hue-amber: light-dark(#bf760a, #f0b443);
+  --fw-hue-blue: light-dark(#2d6ad9, #6e9eff);
+  --fw-hue-violet: light-dark(#7449db, #a98cff);
+  --fw-hue-rose: light-dark(#cf3f76, #ff80a9);
+  --fw-hue-coral: light-dark(#d9532f, #ff8b6a);
+  --fw-hue-sky: light-dark(#1586bd, #5bc1ef);
+  --fw-hue-lime: light-dark(#5f8f0c, #a6d548);
+  --fw-hue-indigo: light-dark(#4650cf, #8a91ff);
+
+  --fw-enter: var(--motion-enter, 240ms);
+  --fw-glide: var(--motion-glide, 200ms);
+  background: var(--bg-card);
+}
+
+.fw__scroll {
+  position: absolute;
+  inset: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.fw__column {
+  width: min(var(--fw-column), calc(100% - 64px));
+  margin: 0 auto;
+  padding: 84px 0 72px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- notice (a reset file) ---- */
+
+.fw-notice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  padding: 10px 10px 10px 14px;
+  border-radius: var(--radius-md);
+  background: var(--status-needs-input-soft);
+  color: var(--text-primary);
+  font-size: var(--text-md);
+}
+
+.fw-notice > svg {
+  flex: none;
+  color: var(--status-needs-input);
+}
+
+.fw-notice > p {
+  flex: 1;
+  margin: 0;
+}
+
+/* ---- hero ---- */
+
+.fw-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 206px;
+  padding: 28px 32px 36px;
+  border: 1px solid var(--fw-hero-border);
+  border-radius: 28px;
+  background:
+    radial-gradient(120% 150% at 92% -10%, var(--fw-hero-glow) 0%, transparent 58%),
+    linear-gradient(180deg, var(--fw-hero-base), color-mix(in srgb, var(--fw-hero-base) 70%, var(--bg-card)));
+}
+
+.fw-hero .fw-hero__field {
+  z-index: -1;
+  --field-fade-top: 0%;
+  --field-fade-bottom: 18%;
+}
+
+/* The field clears behind the text column, so the copy stays legible. */
+.fw-hero__text::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: -20px -72px -24px -40px;
+  border-radius: 40%;
+  background: radial-gradient(closest-side, var(--fw-hero-base) 58%, color-mix(in srgb, var(--fw-hero-base) 0%, transparent));
+  pointer-events: none;
+}
+
+.fw-hero__text {
+  position: relative;
+  max-width: min(654px, calc(100% - 220px));
+}
+
+.fw-hero__title {
+  margin: 22px 0 0;
+  font-size: 32px;
+  line-height: 36px;
+  font-weight: 750;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  text-wrap: balance;
+}
+
+.fw-hero__intro {
+  margin: 12px 0 0;
+  max-width: 576px;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--text-secondary);
+  text-wrap: pretty;
+}
+
+.fw-hero__figure {
+  position: absolute;
+  top: 6px;
+  right: 56px;
+  bottom: 0;
+  width: 220px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+
+.fw-hero__menu {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 1;
+}
+
+.fw-hero__menu .ui-icon-btn {
+  background: light-dark(color-mix(in srgb, var(--bg-card) 62%, transparent), color-mix(in srgb, var(--bg-card) 40%, transparent));
+  backdrop-filter: blur(10px);
+}
+
+/* ---- plan ---- */
+
+.fw-plan {
+  margin-top: 32px;
+}
+
+.fw-plan__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fw-card {
+  position: relative;
+  min-height: 76px;
+  border: 1px solid var(--fw-card-border);
+  border-radius: 16px;
+  background: var(--fw-card-bg);
+  transition:
+    background-color var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
+    transform var(--dur-fast) var(--ease-standard);
+}
+
+.fw-card:hover {
+  background: var(--fw-card-bg-hover);
+}
+
+.fw-card:has(.fw-card__main:active) {
+  background: var(--fw-card-bg-press);
+  transform: scale(0.992);
+}
+
+.fw-card__main {
+  appearance: none;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 16px;
+  width: 100%;
+  min-height: 74px;
+  margin: 0;
+  padding: 0 44px 0 18px;
+  border: 0;
+  border-radius: 15px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.fw-card__main:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+.fw-card__glyph {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  color: var(--fw-hue, var(--text-secondary));
+  transition: transform var(--dur-base) var(--ease-spring);
+}
+
+.fw-card:hover .fw-card__glyph {
+  transform: scale(1.08);
+}
+
+.fw-card__check {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--status-success);
+  color: var(--on-status);
+  animation: fw-pop var(--fw-enter) var(--ease-spring) both;
+}
+
+.fw-card__text {
+  min-width: 0;
+}
+
+.fw-card__title {
+  display: block;
+  overflow: hidden;
+  font-size: 15px;
+  line-height: 19px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--text-primary);
+}
+
+.fw-card__desc {
+  display: block;
+  overflow: hidden;
+  margin-top: 5px;
+  font-size: 13px;
+  line-height: 17px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--text-secondary);
+}
+
+.fw-card--done .fw-card__title {
+  color: var(--text-tertiary);
+}
+
+.fw-card--done .fw-card__desc {
+  color: var(--text-tertiary);
+}
+
+.fw-card__dismiss {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  opacity: 0;
+  transform: translateY(-50%);
+  transition: opacity var(--dur-fast) var(--ease-standard);
+}
+
+.fw-card:hover .fw-card__dismiss,
+.fw-card:focus-within .fw-card__dismiss {
+  opacity: 1;
+}
+
+.fw-plan__more {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.fw-pill {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px 0 16px;
+  border: 1px solid var(--fw-card-border);
+  border-radius: var(--radius-pill);
+  background: var(--fw-card-bg);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--text-md);
+  font-weight: 560;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-standard);
+}
+
+.fw-pill:hover {
+  background: var(--fw-card-bg-hover);
+}
+
+.fw-pill:active {
+  background: var(--fw-card-bg-press);
+}
+
+.fw-pill:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+.fw-pill > svg {
+  color: var(--text-secondary);
+}
+
+/* A quiet panel in place of the grid: snoozed, all done, hidden, not set up yet. */
+.fw-rest {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: 76px;
+  padding: 16px 16px 16px 20px;
+  border: 1px dashed var(--fw-card-border);
+  border-radius: 16px;
+  background: var(--fw-card-bg);
+}
+
+.fw-rest__icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--fw-tint) 14%, var(--bg-card));
+  color: var(--fw-tint);
+}
+
+.fw-rest__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.fw-rest__title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 650;
+  color: var(--text-primary);
+}
+
+.fw-rest__desc {
+  margin: 3px 0 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ---- tutorials ---- */
+
+.fw-section {
+  margin-top: 48px;
+}
+
+.fw-section__title {
+  margin: 0;
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.fw-section__subtitle {
+  margin: 4px 0 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--text-secondary);
+}
+
+.fw-tutorials {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px 16px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fw-tut {
+  appearance: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.fw-tut:focus-visible {
+  outline: none;
+}
+
+.fw-tut__preview {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--fw-card-border);
+  border-radius: 16px;
+  background: var(--fw-scene-bg);
+  transition: box-shadow var(--dur-base) var(--ease-standard);
+}
+
+.fw-tut:hover .fw-tut__preview {
+  box-shadow: var(--shadow-md);
+}
+
+.fw-tut:focus-visible .fw-tut__preview {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+.fw-tut__preview > .fw-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.fw-tut__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin: -26px 0 0 -26px;
+  border-radius: 50%;
+  background: var(--fw-play-bg);
+  color: var(--fw-play-ink);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(8px);
+  transition:
+    transform var(--dur-base) var(--ease-spring),
+    opacity var(--dur-base) var(--ease-standard);
+}
+
+.fw-tut__play > svg {
+  margin-left: 3px;
+}
+
+.fw-tut:hover .fw-tut__play,
+.fw-tut:focus-visible .fw-tut__play {
+  transform: scale(1.08);
+}
+
+.fw-tut__badge {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--fw-badge-bg);
+  color: var(--fw-badge-text);
+  font-size: var(--text-xs);
+  line-height: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.fw-tut__title {
+  display: block;
+  margin: 0;
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 650;
+  color: var(--text-primary);
+}
+
+.fw-tut__desc {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 2px 0 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--text-secondary);
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* ---- guide page ---- */
+
+.fw-guide {
+  width: min(720px, calc(100% - 64px));
+  margin: 0 auto;
+  padding: 56px 0 80px;
+}
+
+.fw-guide__back {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 18px -6px;
+  padding: 4px 8px 4px 6px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: var(--text-md);
+  cursor: pointer;
+}
+
+.fw-guide__back:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.fw-guide__back:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+}
+
+.fw-guide__stage {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--fw-card-border);
+  border-radius: 20px;
+  background: var(--fw-scene-bg);
+}
+
+.fw-guide__stage > .fw-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.fw-guide__meta {
+  margin: 20px 0 0;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.fw-doc {
+  color: var(--text-primary);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.fw-doc h1 {
+  margin: 6px 0 12px;
+  font-size: 30px;
+  line-height: 1.2;
+  font-weight: 750;
+  letter-spacing: -0.025em;
+}
+
+.fw-doc h2 {
+  margin: 28px 0 8px;
+  font-size: 19px;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.fw-doc h3 {
+  margin: 22px 0 6px;
+  font-size: 16px;
+  font-weight: 650;
+}
+
+.fw-doc p {
+  margin: 0 0 12px;
+  color: var(--text-secondary);
+}
+
+.fw-doc ul,
+.fw-doc ol {
+  margin: 0 0 14px;
+  padding-left: 22px;
+  color: var(--text-secondary);
+}
+
+.fw-doc li {
+  margin: 4px 0;
+  padding-left: 2px;
+}
+
+.fw-doc strong {
+  color: var(--text-primary);
+  font-weight: 650;
+}
+
+.fw-doc code {
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: var(--bg-muted);
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: 0.92em;
+  font-weight: 600;
+}
+
+.fw-doc a {
+  color: var(--text-link);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.fw-doc a:hover {
+  text-decoration: underline;
+}
+
+.fw-doc a:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  border-radius: 3px;
+}
+
+.fw-doc__tip {
+  display: flex;
+  gap: 10px;
+  margin: 18px 0;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--fw-tint) 10%, var(--bg-card));
+  color: var(--text-primary);
+}
+
+.fw-doc__tip > svg {
+  flex: none;
+  margin-top: 4px;
+  color: var(--fw-tint);
+}
+
+.fw-doc__tip p {
+  margin: 0;
+  color: inherit;
+}
+
+.fw-guide__next {
+  margin-top: 36px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.fw-guide__next-label {
+  margin: 0 0 10px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-tertiary);
+}
+
+.fw-guide__next .fw-tut {
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+
+.fw-guide__next .fw-tut__preview {
+  flex: none;
+  width: 176px;
+}
+
+.fw-guide__next .fw-tut__play {
+  width: 36px;
+  height: 36px;
+  margin: -18px 0 0 -18px;
+}
+
+/* ---- hide dialog (portalled, so only the global tokens apply) ---- */
+
+.fw-hide {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.fw-hide__legend {
+  margin-bottom: 6px;
+  padding: 0;
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.fw-hide__option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  margin: 0 -8px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-md);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.fw-hide__option:hover {
+  background: var(--bg-hover);
+}
+
+.fw-hide__option input {
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.fw-hide__note-label {
+  margin-top: 10px;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.fw-hide__note {
+  margin-top: 6px;
+  padding: 8px 10px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-control);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--text-md);
+  resize: vertical;
+}
+
+.fw-hide__note:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--focus-halo);
+}
+
+/* ---- motion ---- */
+
+@keyframes fw-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes fw-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fw-pop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+}
+
+.fw-hero {
+  animation: fw-rise var(--fw-enter) var(--ease-out) both;
+}
+
+.fw-plan__grid > li {
+  animation: fw-rise var(--fw-enter) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 28ms + 60ms);
+}
+
+/* Once the page has come in, reordered cards only glide; cards revealed by
+   Show more rise in right away, still staggered. */
+.fw-plan__grid--entered > li {
+  animation: none;
+}
+
+.fw-plan__grid > li[data-revealed] {
+  animation: fw-rise var(--fw-enter) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 24ms);
+}
+
+.fw-section {
+  animation: fw-fade var(--fw-enter) var(--ease-out) both;
+  animation-delay: 180ms;
+}
+
+/* Narrow panes: one column, and the companion steps out of the hero. */
+@container pane (max-width: 760px) {
+  .fw__column {
+    width: calc(100% - 32px);
+    padding-top: 40px;
+  }
+
+  .fw-plan__grid,
+  .fw-tutorials {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@container pane (max-width: 600px) {
+  .fw-hero__figure {
+    display: none;
+  }
+
+  .fw-hero__text {
+    max-width: 100%;
+  }
+
+  .fw-hero {
+    padding: 24px 22px 28px;
+  }
+
+  .fw-hero__title {
+    font-size: 26px;
+    line-height: 30px;
+  }
+}
+
+:root[data-motion='reduced'] .fw *,
+:root[data-motion='reduced'] .fw *::before,
+:root[data-motion='reduced'] .fw {
+  animation: none !important;
+  transition: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fw *,
+  .fw *::before,
+  .fw {
+    animation: none !important;
+    transition: none !important;
+  }
+}

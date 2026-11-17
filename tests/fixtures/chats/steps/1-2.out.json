@@ -1,0 +1,59 @@
+{
+  "formatVersion": 2,
+  "id": "12121212-1111-4222-8333-444444444444",
+  "title": "A0 shape",
+  "companionId": "companion-1",
+  "capabilities": {
+    "model": "claude-opus-5-5",
+    "browser": true,
+    "webTools": true,
+    "memory": true,
+    "connectorIds": [],
+    "engine": "claude-code"
+  },
+  "system": "s",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Find it"
+    }
+  ],
+  "log": [
+    {
+      "type": "user-message",
+      "id": "aaaaaaaa-1212-4222-8333-444444444444",
+      "text": "Find it"
+    },
+    {
+      "type": "tool",
+      "id": "toolu_1",
+      "label": "Find",
+      "state": "done",
+      "kind": "other"
+    },
+    {
+      "type": "tool",
+      "id": "toolu_2",
+      "label": "Notion",
+      "state": "done",
+      "kind": "connector",
+      "startedAt": 1780000001000,
+      "result": "ok"
+    },
+    {
+      "type": "tool",
+      "id": "toolu_3",
+      "label": "Search",
+      "state": "error",
+      "kind": "web-search",
+      "connector": {
+        "id": "c1",
+        "name": "Docs"
+      }
+    }
+  ],
+  "details": {},
+  "feedback": {},
+  "actWithoutAsking": false,
+  "muted": false
+}

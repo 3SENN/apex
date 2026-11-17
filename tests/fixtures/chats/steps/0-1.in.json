@@ -1,0 +1,20 @@
+{
+  "id": "01010101-1111-4222-8333-444444444444",
+  "title": "Before formatVersion",
+  "createdAt": 1780000000000,
+  "updatedAt": 1780000000000,
+  "lastActiveAt": 1780000000000,
+  "routineId": null,
+  "companionId": "companion-1",
+  "status": "idle",
+  "capabilities": { "model": "claude-sonnet-5-5", "effort": "max", "memoryScope": "everything", "browser": true, "webTools": false, "memory": true, "connectorIds": ["c1", null] },
+  "messages": [{ "role": "user", "content": "Hi" }],
+  "log": [
+    { "type": "user-message", "id": "aaaaaaaa-0101-4222-8333-444444444444", "text": "Hi" },
+    { "type": "approval", "approvalId": "x" },
+    { "type": "status", "status": "idle" },
+    17
+  ],
+  "details": { "t1": { "turnId": "t1" }, "t2": "junk" },
+  "feedback": null
+}

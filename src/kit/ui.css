@@ -1,0 +1,934 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* Apex UI for apps (apex-kit/ui.css, APP-UI): the browser's own tokens,
+   base type and a small set of components, so an app a companion builds
+   looks like the rest of Apex. Apex puts it first in every build_app app as
+   it's served (with the owning companion's accent); pack apps link
+   /__apex/kit/1/apex-kit/ui.css. Everything sits in cascade layers, so the
+   app's own CSS always wins without !important.
+
+   Token values match src/renderer/src/styles.css (tests/appUi.test.ts keeps
+   them in step); the font face is added by scripts/kit/build.mjs. */
+
+@layer apex.tokens, apex.base, apex.components;
+
+@layer apex.tokens {
+  :root {
+    color-scheme: light dark;
+
+    /* Surfaces. An app's page is paper; sections sit on it, raised things above it. */
+    --bg-page: var(--bg-card);
+    --bg-card: light-dark(#fdfcfa, #222120);
+    --bg-raised: light-dark(#ffffff, #2b2a28);
+    --bg-subtle: light-dark(#f8f7f4, #262523);
+    --bg-muted: light-dark(#efede9, #302e2c);
+    --bg-sunken: light-dark(#f3f1ed, #1c1b1a);
+    --bg-thumb: light-dark(#ffffff, #2b2a28);
+    --bg-hover: color-mix(in srgb, var(--text-primary) 5%, transparent);
+    --bg-active: color-mix(in srgb, var(--text-primary) 9%, transparent);
+    --bg-selected: color-mix(in srgb, var(--accent) 13%, transparent);
+
+    /* Text. */
+    --text-primary: light-dark(#1c1a17, #f1efec);
+    --text-secondary: light-dark(#66615a, #aaa49d);
+    --text-tertiary: light-dark(#8d877f, #7f7972);
+    --text-disabled: light-dark(#bab4ac, #57524c);
+    --text-on-accent: var(--accent-text);
+    --text-link: light-dark(#787067, #9c958b);
+
+    /* Lines. */
+    --hairline: 1px;
+    --border-subtle: light-dark(#ece9e4, #2b2927);
+    --border-default: light-dark(#e3dfd9, #34322f);
+    --border-strong: light-dark(#cfc9c1, #4a4641);
+    --border-card: light-dark(rgba(46, 36, 24, 0.07), rgba(255, 255, 255, 0.06));
+
+    /* The companion's colour: for selection and the companion's own actions, never decoration. */
+    --accent: light-dark(var(--companion-accent-light, #6a4bff), var(--companion-accent-dark, #8c72ff));
+    --accent-2: light-dark(var(--companion-accent-2-light, #9b6bff), var(--companion-accent-2-dark, #b48cff));
+    --accent-soft: light-dark(var(--companion-accent-soft-light, #eeeaff), var(--companion-accent-soft-dark, #2c2550));
+    --accent-text: light-dark(var(--companion-accent-text-light, #ffffff), var(--companion-accent-text-dark, #ffffff));
+    --accent-hover: color-mix(in srgb, var(--accent) 88%, light-dark(black, white));
+    --accent-pressed: color-mix(in srgb, var(--accent) 78%, light-dark(black, white));
+    --accent-ring: color-mix(in srgb, var(--accent) 34%, transparent);
+
+    /* State. */
+    --status-working: light-dark(#2f74d9, #5f9eff);
+    --status-working-soft: light-dark(#e7f0fd, #172a45);
+    --status-needs-input: light-dark(#b8740a, #f2b33d);
+    --status-needs-input-soft: light-dark(#fdf2df, #3a2d14);
+    --status-error: light-dark(#d93c51, #ff6b7d);
+    --status-error-soft: light-dark(#fdecef, #3a2029);
+    --status-success: light-dark(#1e9467, #3fcf8e);
+    --status-success-soft: light-dark(#e4f6ee, #173327);
+    --on-status: light-dark(#ffffff, #14120f);
+    --positive: light-dark(#1e9467, #2fb57b);
+    --switch-thumb: light-dark(#ffffff, #f4f2ef);
+
+    /* Depth: soft and low. */
+    --shadow-xs: 0 1px 1px light-dark(rgba(46, 36, 24, 0.05), rgba(0, 0, 0, 0.24));
+    --shadow-sm: 0 1px 2px light-dark(rgba(46, 36, 24, 0.07), rgba(0, 0, 0, 0.3));
+    --shadow-md:
+      0 6px 18px light-dark(rgba(46, 36, 24, 0.09), rgba(0, 0, 0, 0.36)),
+      0 1px 3px light-dark(rgba(46, 36, 24, 0.06), rgba(0, 0, 0, 0.26));
+    --shadow-lg:
+      0 24px 60px light-dark(rgba(46, 36, 24, 0.18), rgba(0, 0, 0, 0.54)),
+      0 4px 14px light-dark(rgba(46, 36, 24, 0.07), rgba(0, 0, 0, 0.3));
+
+    /* Shape. */
+    --radius-xs: 6px;
+    --radius-row: 7px;
+    --radius-sm: 8px;
+    --radius-control: 9px;
+    --radius-md: 12px;
+    --radius-card: 14px;
+    --radius-lg: 18px;
+    --radius-pill: 999px;
+
+    /* Space: a 4 px scale. */
+    --space-0-5: 2px;
+    --space-1: 4px;
+    --space-1-5: 6px;
+    --space-2: 8px;
+    --space-2-5: 10px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+
+    /* Type: one family, a small scale. */
+    --font: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    --text-xs: 11px;
+    --text-sm: 12px;
+    --text-md: 13px;
+    --text-lg: 15px;
+    --text-xl: 18px;
+    --text-2xl: 24px;
+    --text-ui: 14px;
+
+    --control-sm: 26px;
+    --control-md: 32px;
+    --control-lg: 38px;
+
+    /* Motion: quick and quiet; none at all with reduced motion. */
+    --motion-pop: 60ms;
+    --motion-quick: 90ms;
+    --motion-exit: 180ms;
+    --motion-medium: 250ms;
+    --dur-instant: var(--motion-pop);
+    --dur-fast: var(--motion-quick);
+    --dur-base: var(--motion-exit);
+    --dur-slow: var(--motion-medium);
+    --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+
+    --focus-ring-color: light-dark(#787067, #9c958b);
+    --focus-ring-width: 2px;
+    --focus-ring-offset: 2px;
+    --focus-halo: 0 0 0 3px color-mix(in srgb, var(--focus-ring-color) 30%, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --motion-pop: 0ms;
+      --motion-quick: 0ms;
+      --motion-exit: 0ms;
+      --motion-medium: 0ms;
+    }
+  }
+}
+
+@layer apex.base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg-page);
+    color: var(--text-primary);
+    font-family: var(--font);
+    font-size: var(--text-ui);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 0;
+    font-weight: 600;
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+    letter-spacing: -0.015em;
+  }
+
+  h2 {
+    font-size: var(--text-xl);
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-size: var(--text-lg);
+  }
+
+  h4 {
+    font-size: var(--text-md);
+  }
+
+  p {
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  a {
+    color: inherit;
+    text-decoration-color: var(--border-strong);
+    text-underline-offset: 3px;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+
+  button {
+    cursor: default;
+  }
+
+  input[type='checkbox'],
+  input[type='radio'],
+  input[type='range'],
+  progress {
+    accent-color: var(--accent);
+  }
+
+  :focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  ::selection {
+    background: var(--bg-selected);
+  }
+
+  ::placeholder {
+    color: var(--text-tertiary);
+  }
+
+  table {
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Motion is a courtesy: with reduced motion, nothing moves. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer apex.components {
+  /* ---- the page ---- */
+
+  .ax-app {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: var(--space-10) var(--space-6) var(--space-12);
+  }
+
+  .ax-app--wide {
+    max-width: 1040px;
+  }
+
+  /* Canvases and games: the whole window, no frame. */
+  .ax-app--full {
+    max-width: none;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  .ax-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+  }
+
+  .ax-title {
+    font-size: var(--text-2xl);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+  }
+
+  .ax-subtitle {
+    margin-top: var(--space-1);
+    color: var(--text-secondary);
+    font-size: var(--text-ui);
+  }
+
+  .ax-section + .ax-section {
+    margin-top: var(--space-8);
+  }
+
+  .ax-section__title {
+    margin-bottom: var(--space-2);
+    color: var(--text-secondary);
+    font-size: var(--text-md);
+    font-weight: 600;
+  }
+
+  .ax-section__hint {
+    margin: calc(var(--space-1) * -1) 0 var(--space-3);
+    color: var(--text-tertiary);
+    font-size: var(--text-sm);
+  }
+
+  /* One quiet surface for a group that belongs together. Use it for a group, not for every item. */
+  .ax-card {
+    padding: var(--space-4);
+    border-radius: var(--radius-card);
+    background: var(--bg-raised);
+    box-shadow:
+      0 0 0 var(--hairline) var(--border-card),
+      var(--shadow-xs);
+  }
+
+  .ax-divider {
+    height: 0;
+    margin: var(--space-4) 0;
+    border: 0;
+    border-top: var(--hairline) solid var(--border-subtle);
+  }
+
+  /* ---- layout ---- */
+
+  .ax-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap, var(--space-3));
+  }
+
+  .ax-cluster {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--gap, var(--space-2));
+  }
+
+  .ax-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--min, 200px), 1fr));
+    gap: var(--gap, var(--space-3));
+  }
+
+  .ax-spacer {
+    flex: 1;
+  }
+
+  /* ---- text ---- */
+
+  .ax-muted {
+    color: var(--text-secondary);
+  }
+
+  .ax-small {
+    font-size: var(--text-sm);
+  }
+
+  .ax-num {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ax-kbd {
+    display: inline-block;
+    min-width: 18px;
+    padding: 0 5px;
+    border-radius: 5px;
+    background: var(--bg-muted);
+    color: var(--text-secondary);
+    font-family: var(--font);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    line-height: 18px;
+    text-align: center;
+  }
+
+  .ax-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* Inline SVG icons: 16 px, one stroke weight, the text's colour. */
+  .ax-icon {
+    width: 16px;
+    height: 16px;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ---- buttons ---- */
+
+  .ax-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1-5);
+    height: var(--control-md);
+    padding: 0 14px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-control);
+    background: var(--bg-card);
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-xs);
+    color: var(--text-primary);
+    font-size: var(--text-md);
+    font-weight: 600;
+    white-space: nowrap;
+    transition:
+      background var(--dur-fast) var(--ease-standard),
+      border-color var(--dur-fast) var(--ease-standard),
+      transform var(--dur-instant) var(--ease-standard);
+  }
+
+  .ax-btn:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--text-primary) 4%, var(--bg-card));
+  }
+
+  .ax-btn:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  .ax-btn:disabled {
+    opacity: 0.45;
+  }
+
+  .ax-btn .ax-icon {
+    width: 15px;
+    height: 15px;
+  }
+
+  /* The one main action on a screen: an ink button, inverted in dark mode. */
+  .ax-btn--primary {
+    border-color: transparent;
+    background: var(--text-primary);
+    box-shadow: none;
+    color: var(--bg-raised);
+  }
+
+  .ax-btn--primary:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--text-primary) 86%, var(--bg-raised));
+  }
+
+  /* The companion doing something for you (ask, generate, play). */
+  .ax-btn--accent {
+    border-color: transparent;
+    background: var(--accent);
+    box-shadow: none;
+    color: var(--accent-text);
+  }
+
+  .ax-btn--accent:hover:not(:disabled) {
+    background: var(--accent-hover);
+  }
+
+  .ax-btn--ghost {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+    color: var(--text-secondary);
+  }
+
+  .ax-btn--ghost:hover:not(:disabled) {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+  }
+
+  .ax-btn--danger {
+    border-color: transparent;
+    background: var(--status-error);
+    box-shadow: none;
+    color: var(--on-status);
+  }
+
+  .ax-btn--danger:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--status-error) 88%, var(--text-primary));
+  }
+
+  .ax-btn--sm {
+    height: var(--control-sm);
+    padding: 0 10px;
+    border-radius: 7px;
+    font-size: var(--text-sm);
+  }
+
+  .ax-btn--lg {
+    height: var(--control-lg);
+    padding: 0 18px;
+    border-radius: 10px;
+    font-size: var(--text-ui);
+  }
+
+  .ax-btn--icon {
+    width: var(--control-md);
+    padding: 0;
+  }
+
+  .ax-btn--icon.ax-btn--sm {
+    width: var(--control-sm);
+  }
+
+  .ax-btn--full {
+    width: 100%;
+  }
+
+  /* ---- fields ---- */
+
+  .ax-field {
+    display: grid;
+    gap: var(--space-1-5);
+  }
+
+  .ax-label {
+    color: var(--text-primary);
+    font-size: var(--text-md);
+    font-weight: 600;
+  }
+
+  .ax-hint {
+    color: var(--text-tertiary);
+    font-size: var(--text-sm);
+  }
+
+  .ax-error {
+    color: var(--status-error);
+    font-size: var(--text-sm);
+  }
+
+  .ax-input,
+  .ax-select,
+  .ax-textarea {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-control);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: var(--text-md);
+    transition:
+      border-color var(--dur-fast) var(--ease-standard),
+      box-shadow var(--dur-fast) var(--ease-standard);
+  }
+
+  .ax-input,
+  .ax-select {
+    height: var(--control-md);
+    padding: 0 11px;
+  }
+
+  .ax-textarea {
+    min-height: 96px;
+    padding: 9px 11px;
+    line-height: 1.5;
+    resize: vertical;
+  }
+
+  .ax-select {
+    padding-right: 30px;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238d877f' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-position: right 10px center;
+    background-repeat: no-repeat;
+  }
+
+  .ax-input:focus-visible,
+  .ax-select:focus-visible,
+  .ax-textarea:focus-visible {
+    border-color: var(--accent);
+    outline: none;
+    box-shadow: var(--focus-halo);
+  }
+
+  .ax-input[aria-invalid='true'],
+  .ax-select[aria-invalid='true'],
+  .ax-textarea[aria-invalid='true'] {
+    border-color: var(--status-error);
+  }
+
+  .ax-input--num {
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  /* A checkbox drawn as a switch: <input type="checkbox" role="switch" class="ax-switch">. */
+  .ax-switch {
+    position: relative;
+    flex: none;
+    width: 40px;
+    height: 20px;
+    margin: 0;
+    border-radius: var(--radius-pill);
+    background: var(--border-strong);
+    appearance: none;
+    transition: background var(--dur-fast) var(--ease-standard);
+  }
+
+  .ax-switch::after {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--switch-thumb);
+    box-shadow: var(--shadow-sm);
+    content: '';
+    transition: transform var(--dur-fast) var(--ease-standard);
+  }
+
+  .ax-switch:checked {
+    background: var(--positive);
+  }
+
+  .ax-switch:checked::after {
+    transform: translateX(20px);
+  }
+
+  .ax-check {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-md);
+  }
+
+  /* A few choices side by side: role="radiogroup" with buttons role="radio" aria-checked. */
+  .ax-segmented {
+    display: inline-flex;
+    width: fit-content;
+    max-width: 100%;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 10px;
+    background: var(--bg-muted);
+  }
+
+  .ax-segmented > button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1-5);
+    height: 28px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: none;
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    transition:
+      color var(--dur-fast) var(--ease-standard),
+      background var(--dur-fast) var(--ease-standard);
+  }
+
+  .ax-segmented > button:hover {
+    color: var(--text-primary);
+  }
+
+  .ax-segmented > button[aria-checked='true'],
+  .ax-segmented > button[aria-pressed='true'] {
+    background: var(--bg-thumb);
+    box-shadow: light-dark(var(--shadow-sm), 0 0 0 var(--hairline) var(--border-strong));
+    color: var(--text-primary);
+  }
+
+  .ax-segmented--full {
+    display: flex;
+    width: auto;
+  }
+
+  .ax-segmented--full > button {
+    flex: 1;
+  }
+
+  /* ---- lists ---- */
+
+  .ax-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ax-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-height: 40px;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-row);
+  }
+
+  .ax-row:hover {
+    background: var(--bg-hover);
+  }
+
+  .ax-row[aria-selected='true'],
+  .ax-row[aria-current='true'] {
+    background: var(--bg-selected);
+  }
+
+  .ax-list--divided > .ax-row + .ax-row {
+    border-top: var(--hairline) solid var(--border-subtle);
+    border-radius: 0;
+  }
+
+  .ax-row__main {
+    display: grid;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ax-row__title {
+    overflow: hidden;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ax-row__meta {
+    overflow: hidden;
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ax-row__end {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--space-1);
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Label and value pairs, e.g. a result: <dl class="ax-pairs"><div><dt>…</dt><dd>…</dd></div></dl>. */
+  .ax-pairs {
+    display: grid;
+    margin: 0;
+  }
+
+  .ax-pairs > div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-2) 0;
+  }
+
+  .ax-pairs > div + div {
+    border-top: var(--hairline) solid var(--border-subtle);
+  }
+
+  .ax-pairs dt {
+    color: var(--text-secondary);
+  }
+
+  .ax-pairs dd {
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    text-align: right;
+  }
+
+  .ax-pairs--total > div:last-child dd {
+    font-size: var(--text-xl);
+  }
+
+  .ax-table {
+    width: 100%;
+    font-size: var(--text-md);
+  }
+
+  .ax-table th {
+    padding: var(--space-2) var(--space-3);
+    border-bottom: var(--hairline) solid var(--border-default);
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-align: left;
+  }
+
+  .ax-table td {
+    padding: var(--space-2) var(--space-3);
+    border-bottom: var(--hairline) solid var(--border-subtle);
+  }
+
+  /* ---- states ---- */
+
+  .ax-empty {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-2);
+    padding: var(--space-12) var(--space-4);
+    color: var(--text-secondary);
+    text-align: center;
+  }
+
+  .ax-empty .ax-icon {
+    width: 28px;
+    height: 28px;
+    margin-bottom: var(--space-1);
+    color: var(--text-tertiary);
+  }
+
+  .ax-empty__title {
+    color: var(--text-primary);
+    font-size: var(--text-lg);
+    font-weight: 600;
+  }
+
+  .ax-empty p {
+    max-width: 40ch;
+  }
+
+  .ax-empty .ax-btn {
+    margin-top: var(--space-2);
+  }
+
+  .ax-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    height: 20px;
+    padding: 0 8px;
+    border-radius: var(--radius-pill);
+    background: var(--bg-muted);
+    color: var(--text-secondary);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .ax-badge--success {
+    background: var(--status-success-soft);
+    color: var(--status-success);
+  }
+
+  .ax-badge--warning {
+    background: var(--status-needs-input-soft);
+    color: var(--status-needs-input);
+  }
+
+  .ax-badge--danger {
+    background: var(--status-error-soft);
+    color: var(--status-error);
+  }
+
+  .ax-badge--accent {
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+
+  /* A message in the flow of the page (saved, couldn't read the file…). */
+  .ax-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    padding: var(--space-2-5) var(--space-3);
+    border-radius: var(--radius-md);
+    background: var(--bg-muted);
+    color: var(--text-primary);
+    font-size: var(--text-md);
+  }
+
+  .ax-notice--success {
+    background: var(--status-success-soft);
+  }
+
+  .ax-notice--warning {
+    background: var(--status-needs-input-soft);
+  }
+
+  .ax-notice--danger {
+    background: var(--status-error-soft);
+  }
+
+  .ax-progress {
+    width: 100%;
+    height: 6px;
+    overflow: hidden;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: var(--bg-muted);
+    appearance: none;
+  }
+
+  .ax-progress::-webkit-progress-bar {
+    background: var(--bg-muted);
+  }
+
+  .ax-progress::-webkit-progress-value {
+    border-radius: var(--radius-pill);
+    background: var(--accent);
+  }
+
+  /* <dialog class="ax-dialog"> with showModal(): confirmations and small forms. */
+  .ax-dialog {
+    width: min(420px, calc(100vw - 32px));
+    padding: var(--space-5);
+    border: 0;
+    border-radius: var(--radius-lg);
+    background: var(--bg-raised);
+    box-shadow:
+      0 0 0 var(--hairline) var(--border-card),
+      var(--shadow-lg);
+    color: var(--text-primary);
+  }
+
+  .ax-dialog::backdrop {
+    background: light-dark(rgba(28, 26, 23, 0.22), rgba(0, 0, 0, 0.5));
+  }
+
+  .ax-dialog__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-2);
+    margin-top: var(--space-5);
+  }
+}

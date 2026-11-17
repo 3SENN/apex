@@ -1,0 +1,1654 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* The sidebar layout's left column: the ground. Colours come from the token
+   block in styles.css only, so light and dark both follow data-theme, and
+   the companion's colour never reaches it (except its avatars, drag
+   highlights and the glow on a row it controls).
+
+   Geometry (design spec): a 40 px header on the toolbar's line; rows on
+   a 34 px pitch (32 px chips, 2 px apart) inset 10 px from both edges; a
+   20 px icon column at x 18 and text from x 44; section labels on the icon
+   column's left edge. Still at rest: nothing here loops. */
+
+/* The frame shows or hides the sidebar on the layout timeline: its width
+   eases while the sidebar, anchored to its right edge, slides away. */
+.sidebar-frame {
+  position: relative;
+  flex: none;
+  height: 100%;
+  overflow: hidden;
+  /* DS-19, DS-84: one short slide with no overshoot, on the layout timeline.
+     Showing eases in and out (this rule); hiding decelerates (--hidden below).
+     The destination state's rule picks the curve, so no direction class is needed. */
+  transition: width var(--motion-layout) var(--ease-in-out);
+}
+
+.sidebar-frame--hidden {
+  transition-timing-function: var(--ease-out);
+}
+
+.sidebar-frame--resizing {
+  transition: none;
+}
+
+.sidebar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--bg-sidebar);
+  color: var(--chrome-strong);
+}
+
+/* Inside the frame: the sheet's shadow falls over the last few pixels. */
+/* DS-04: 8 px wide on the edge, from 8 px below the top to 8 px above the bottom. */
+.sidebar > .sidebar__seam {
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  right: 0;
+  z-index: 5;
+  width: 8px;
+}
+
+.sidebar .ui-icon-btn {
+  color: var(--chrome-muted);
+}
+
+.sidebar .ui-icon-btn:hover:not(:disabled) {
+  color: var(--chrome-strong);
+}
+
+/* Status in the chrome is a dot: unread in neutral ink, waiting in amber. */
+.sidebar .ui-status-dot--unread {
+  color: var(--status-unread-chrome);
+}
+
+/* ---- header ---- */
+
+/* DS-05: 32 px boxes (options at x 226, search at 262), 4 px apart and 6 px
+   from the right edge, with 16 px glyphs and a radius-8 hover fill that
+   stays while their popover is open. */
+.side-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: var(--bar-height);
+  padding: 0 6px 0 0;
+  flex: none;
+  -webkit-app-region: drag;
+}
+
+.side-header .ui-icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+}
+
+.side-header .ui-icon-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.side-header > :not(.side-header__drag):not(.traffic-slot) {
+  -webkit-app-region: no-drag;
+}
+
+.side-header__drag {
+  flex: 1;
+  align-self: stretch;
+}
+
+/* Downloads: a brief highlight for a new one, a thin bar for progress. */
+.downloads-btn {
+  position: relative;
+  display: inline-flex;
+}
+
+.downloads-btn__pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-xs);
+  background: color-mix(in srgb, var(--text-primary) 14%, transparent);
+  pointer-events: none;
+  animation: downloads-pulse 900ms var(--ease-out) both;
+}
+
+@keyframes downloads-pulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+.downloads-btn__bar {
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  bottom: 1px;
+  height: 2px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--text-primary) 12%, transparent);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.downloads-btn__bar > i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--chrome-strong);
+  transition: width var(--dur-slow) var(--ease-standard);
+}
+
+.downloads-btn__bar--unknown > i {
+  width: 30%;
+}
+
+/* ---- options popover (inside the sidebar until the overlay view) ---- */
+
+/* DS-91: about 270 wide, 5 px under the options button, radius 16, a hairline and a shadow. */
+.side-options {
+  position: absolute;
+  top: 45px;
+  left: 15px;
+  z-index: 20;
+  width: min(270px, calc(100% - 30px));
+  max-height: calc(100% - 110px);
+  overflow-y: auto;
+  padding: 6px;
+  border: var(--hairline) solid var(--border-default);
+  border-radius: 16px;
+  background: var(--bg-raised);
+  box-shadow: light-dark(0 8px 28px rgba(46, 36, 24, 0.13), 0 10px 30px rgba(0, 0, 0, 0.45));
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.side-options__group {
+  display: flex;
+  flex-direction: column;
+}
+
+.side-options__label {
+  padding: var(--space-1-5) var(--space-2-5) var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+}
+
+.side-options__hint {
+  padding: 0 var(--space-2-5) var(--space-1-5);
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+  line-height: 1.4;
+}
+
+.side-options__rule {
+  margin: 4px -6px;
+  border-top: var(--hairline) solid var(--border-default);
+}
+
+/* Label-plus-segmented rows: the control is 164×32. */
+.side-options__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-height: 40px;
+  padding-right: 2px;
+}
+
+.side-options__row .side-options__label {
+  padding: 0 var(--space-2-5);
+  color: var(--text-secondary);
+}
+
+.side-options__row .ui-segmented {
+  width: 164px;
+  height: 32px;
+}
+
+/* ---- body: the fixed block, then one scrolling list ---- */
+
+.side-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* The pinned grid, New Tab and the destinations never scroll. */
+.side-fixed {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--row-gap);
+  flex: none;
+  padding: 9px 10px 0;
+}
+
+.destinations {
+  display: flex;
+  flex-direction: column;
+  gap: var(--row-gap);
+  flex: none;
+}
+
+/* Chats and tabs scroll together: no visible scrollbar, faded edges, and a
+   hairline under the fixed block only while content is beneath it. */
+.side-scroll {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.side-scroll__list {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0 10px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.side-scroll__list::-webkit-scrollbar {
+  display: none;
+}
+
+/* An edge pill (Current page, Waiting for you) gets a clear band at its edge:
+   the rows under it fade out fully, so it never sits on a title or a heading.
+   The band is the pill's inset plus its height. */
+.side-scroll {
+  --cue-top-clear: 0px;
+  --cue-bottom-clear: 0px;
+}
+
+.side-scroll:has(> .edge-badge--top) {
+  --cue-top-clear: calc(var(--space-1) + 24px);
+}
+
+.side-scroll:has(> .edge-badge--bottom) {
+  --cue-bottom-clear: calc(var(--space-1) + 24px);
+}
+
+.side-scroll--fade-top .side-scroll__list {
+  mask-image: linear-gradient(to bottom, transparent var(--cue-top-clear), #000 calc(var(--cue-top-clear) + 22px));
+}
+
+.side-scroll--fade-bottom .side-scroll__list {
+  mask-image: linear-gradient(to top, transparent var(--cue-bottom-clear), #000 calc(var(--cue-bottom-clear) + 22px));
+}
+
+.side-scroll--fade-top.side-scroll--fade-bottom .side-scroll__list {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent var(--cue-top-clear),
+    #000 calc(var(--cue-top-clear) + 22px),
+    #000 calc(100% - var(--cue-bottom-clear) - 22px),
+    transparent calc(100% - var(--cue-bottom-clear))
+  );
+}
+
+.side-scroll__rule {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  /* One device pixel (DS-07). */
+  height: var(--hairline);
+  background: color-mix(in srgb, var(--text-primary) 9%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-fast) var(--ease-standard);
+}
+
+.side-scroll__rule--shown {
+  opacity: 1;
+}
+
+/* Tabs only (no chats section, so no labels): keep the gap under the fixed block. */
+.side-scroll__list > .tabs-section:first-child {
+  padding-top: 8px;
+}
+
+/* Empty space under the list drags the window, except while an entry is
+   dragged. Only while the list doesn't scroll: Electron places drag regions
+   by layout and doesn't move them on scroll, so a scrolled row could land
+   under one. */
+.side-scroll__drag {
+  flex: 1 0 24px;
+}
+
+.side-scroll--still .side-scroll__drag {
+  -webkit-app-region: drag;
+}
+
+:root.is-dragging-entry .side-scroll__drag {
+  -webkit-app-region: no-drag;
+}
+
+/* ---- rows ---- */
+
+.side-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  height: var(--row-height);
+  flex: none;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--radius-row);
+  background: none;
+  color: var(--chrome-strong);
+  font-size: var(--text-md);
+  font-weight: 400;
+  text-align: left;
+  cursor: default;
+  outline-offset: -2px;
+  transition:
+    background var(--dur-fast) var(--ease-standard),
+    color var(--dur-fast) var(--ease-standard),
+    box-shadow var(--motion-enter) var(--ease-standard),
+    margin var(--motion-glide) var(--ease-out),
+    opacity var(--dur-fast);
+  /* The chip layer below paints under the row's content. */
+  isolation: isolate;
+}
+
+.side-row:hover {
+  background: var(--bg-hover);
+}
+
+/* The raised chip: active row, selected destination. It is its own layer
+   that exists only on the active row, so it jumps between rows at once on
+   activation or close and never fades or glides (DS-15), while hover keeps
+   its quick fade. */
+.side-row--active,
+.side-row--active:hover {
+  background: none;
+}
+
+.side-row--active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--chip-bg);
+  box-shadow: var(--chip-shadow);
+  pointer-events: none;
+}
+
+/* Multi-select keeps a neutral tint that deepens on hover. */
+.side-row--selected {
+  background: var(--row-selected);
+}
+
+.side-row--selected:hover {
+  background: var(--row-selected-hover);
+}
+
+.side-row:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+}
+
+.side-row--gap-before {
+  margin-top: calc(var(--row-height) + var(--row-gap));
+}
+
+.side-row--dragging {
+  opacity: 0.35;
+}
+
+.side-list__end-gap {
+  height: var(--row-height);
+  flex: none;
+}
+
+/* Rows open up and fade in where they belong, and fade and fold away; the
+   rows around them glide (ui/motion.ts adds FLIP glides for reorders). */
+.side-row[data-phase='enter'] {
+  overflow: hidden;
+  animation: side-row-enter var(--motion-enter) var(--ease-out) both;
+}
+
+.side-row[data-phase='exit'] {
+  overflow: hidden;
+  pointer-events: none;
+  /* Closing rows fold quickly (DS-15). */
+  animation: side-row-exit var(--motion-quick) var(--ease-exit) both;
+}
+
+@keyframes side-row-enter {
+  from {
+    height: 0;
+    opacity: 0;
+    margin-bottom: calc(-1 * var(--row-gap));
+  }
+}
+
+@keyframes side-row-exit {
+  to {
+    height: 0;
+    opacity: 0;
+    margin-bottom: calc(-1 * var(--row-gap));
+  }
+}
+
+.side-row__icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex: none;
+  color: var(--chrome-muted);
+  transition: box-shadow var(--motion-enter) var(--ease-standard);
+}
+
+/* Favicons only: a face avatar's own image fills its disc. */
+.side-row__icon > img {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+/* Titles fade out at the right edge instead of ending in an ellipsis. */
+.side-row__title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  /* DS-08: tab and chat titles fade over their last 42 px, fully gone about
+     10 px before the row edge (the row's 8 px padding plus 2), never an ellipsis. */
+  mask-image: linear-gradient(to right, #000 calc(100% - 44px), transparent calc(100% - 2px));
+}
+
+.side-row__title:has(input) {
+  mask-image: none;
+}
+
+.side-row__title .ui-rename {
+  display: block;
+  overflow: hidden;
+  /* The row fades the title instead. */
+  text-overflow: clip;
+}
+
+.side-row__title .ui-rename__input {
+  width: 100%;
+}
+
+.side-row__time {
+  flex: none;
+  font-size: var(--text-xs);
+  color: var(--chrome-faint);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.side-row__badges {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex: none;
+}
+
+.side-row__badges:empty {
+  display: none;
+}
+
+/* The trailing slot: no width at rest; the stamp while the pointer is in
+   the sidebar; close instead while the row is hovered or focused. */
+.side-row__trail {
+  display: grid;
+  align-items: center;
+  justify-items: end;
+  flex: none;
+  max-width: 0;
+  margin-left: -6px;
+  overflow: hidden;
+  transition:
+    max-width var(--dur-fast) var(--ease-standard),
+    margin var(--dur-fast) var(--ease-standard);
+}
+
+.side-row__trail > * {
+  grid-area: 1 / 1;
+}
+
+.sidebar[data-pointer-in] .side-row__trail:has(.side-row__time),
+.side-row:is(:hover, :focus-visible, :focus-within) .side-row__trail {
+  max-width: 52px;
+  margin-left: 0;
+}
+
+/* The stamp shares close's grid cell and, faded out on hover, its opacity
+   makes it a layer painted above close: it must never take close's press. */
+.side-row__trail .side-row__time {
+  transition: opacity var(--dur-fast) var(--ease-standard);
+  pointer-events: none;
+}
+
+.side-row:is(:hover, :focus-visible, :focus-within) .side-row__trail .side-row__time {
+  opacity: 0;
+}
+
+.side-row__close,
+.side-row__audio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex: none;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: none;
+  color: var(--chrome-muted);
+}
+
+.side-row__close {
+  /* Above anything else in the trailing slot (the row isolates it). */
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-standard);
+}
+
+.side-row:is(:hover, :focus-visible, :focus-within) .side-row__close {
+  opacity: 1;
+}
+
+.side-row__close:hover,
+.side-row__audio:hover {
+  background: var(--bg-active);
+  color: var(--chrome-strong);
+}
+
+.side-row__audio--muted {
+  color: var(--text-disabled);
+}
+
+/* A companion at work in a tab: its avatar sits still in the row. */
+.side-row__agent {
+  display: flex;
+  border-radius: 50%;
+}
+
+/* The row it controls glows softly in its colour; the glow fades in and out. */
+.tab-row--agent {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--agent-color, var(--accent)) 20%, transparent),
+    0 0 16px -3px color-mix(in srgb, var(--agent-color, var(--accent)) 42%, transparent);
+}
+
+.tab-row--agent.side-row--active {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--agent-color, var(--accent)) 24%, transparent),
+    0 0 16px -3px color-mix(in srgb, var(--agent-color, var(--accent)) 42%, transparent);
+}
+
+.tab-row--agent .side-row__icon {
+  border-radius: 50%;
+  box-shadow: 0 0 9px 1px color-mix(in srgb, var(--agent-color, var(--accent)) 38%, transparent);
+}
+
+.chat-row__done {
+  display: flex;
+  color: var(--chrome-muted);
+}
+
+.chat-row--unread .side-row__title {
+  font-weight: 500;
+}
+
+/* DS-67: the head is drawn whole; its state mark sits beside it in the row's flow (FaceAvatar), so the icon slot grows with it. */
+.chat-row__avatar {
+  width: auto;
+  min-width: 20px;
+}
+
+/* A removed companion: a frameless outline head, not a filled disc. */
+.avatar.avatar--neutral {
+  background: transparent;
+}
+
+/* Waiting for you: one small bounce when it starts, then still. */
+.chat-row__avatar--attention :is(.face-avatar, .avatar) {
+  animation: side-avatar-bounce 560ms var(--ease-spring) 1;
+}
+
+@keyframes side-avatar-bounce {
+  0% {
+    transform: translateY(0);
+  }
+  35% {
+    transform: translateY(-4px) scale(1.04, 0.97);
+  }
+  65% {
+    transform: translateY(0) scale(1.06, 0.92);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+/* Destinations and More: one muted tone for icon and label, full strength on hover. */
+.dest-row {
+  color: var(--chrome-muted);
+}
+
+.dest-row:hover {
+  color: var(--chrome-strong);
+}
+
+.dest-row:hover .side-row__icon {
+  color: var(--chrome-strong);
+}
+
+/* The selected destination is the raised chip, its icon still neutral. */
+.dest-row.side-row--active,
+.dest-row.side-row--active .side-row__icon {
+  color: var(--chrome-strong);
+}
+
+.side-row__time--rest {
+  color: var(--chrome-faint);
+}
+
+/* The All chats arrival: the icon shrinks away, the companion's face drops
+   in with a small squash and settles, holds, and the icon springs back. */
+.dest-row__glyph {
+  transform-origin: center;
+}
+
+.dest-row__icon--arrival .dest-row__glyph {
+  animation: dest-glyph-away 1500ms var(--ease-standard) both;
+}
+
+.dest-row__arrival {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  transform-origin: 50% 90%;
+  animation: dest-face-drop 1500ms var(--ease-out) both;
+}
+
+@keyframes dest-glyph-away {
+  0% {
+    transform: scale(1);
+  }
+  12%,
+  80% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  92% {
+    transform: scale(1.14);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes dest-face-drop {
+  0%,
+  10% {
+    transform: translateY(-12px);
+    opacity: 0;
+  }
+  26% {
+    transform: translateY(0) scale(1.14, 0.82);
+    opacity: 1;
+  }
+  36% {
+    transform: translateY(-2px) scale(0.95, 1.06);
+  }
+  46%,
+  72% {
+    transform: none;
+    opacity: 1;
+  }
+  82%,
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+.new-tab-row .side-row__icon {
+  color: var(--chrome-strong);
+}
+
+.side-link {
+  border: 0;
+  padding: 0;
+  background: none;
+  color: var(--chrome-muted);
+  font-size: var(--text-sm);
+}
+
+.side-link:hover {
+  color: var(--chrome-strong);
+  text-decoration: underline;
+}
+
+.side-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  padding: var(--space-1) 8px var(--space-2);
+  color: var(--chrome-muted);
+  font-size: var(--text-sm);
+}
+
+/* ---- sections ---- */
+
+.side-section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  border-radius: 9px;
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+
+/* A section under a drag tints faintly in the companion's colour. */
+.side-section--drop {
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+.side-section__header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 28px;
+  margin: 8px 0 3px;
+  padding: 0 4px 0 8px;
+  flex: none;
+}
+
+/* DS-06, DS-12: the chats header is 24 px, 10 px below the block above and 5 px above its rows. */
+.chats-section > .side-section__header {
+  height: 24px;
+  margin: 10px 0 5px;
+}
+
+.side-section__spacer {
+  flex: 1;
+}
+
+/* Section labels: sentence case, regular weight, the row's size, muted. */
+.side-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--chrome-muted);
+  font-size: var(--text-md);
+  font-weight: 400;
+}
+
+.side-label--toggle:hover {
+  color: var(--chrome-strong);
+}
+
+.side-section__chevron {
+  transition: transform var(--dur-fast) var(--ease-standard);
+}
+
+.side-section--collapsed .side-section__chevron {
+  transform: rotate(-90deg);
+}
+
+/* At rest the dots; on hover or focus the actions fade in over them. */
+.side-section__dots {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-right: 6px;
+  transition: opacity var(--dur-fast) var(--ease-standard);
+}
+
+/* Two 20 px actions, 4 px apart, ending 8 px inside the column (x 238 and 262). */
+.side-section__actions {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition: opacity var(--dur-fast) var(--ease-standard);
+}
+
+.side-section__actions .side-section__action {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-xs);
+  color: var(--chrome-muted);
+}
+
+.side-section__actions .side-section__action svg {
+  width: 14px;
+  height: 14px;
+}
+
+.chats-section:is(:hover, :focus-within) .side-section__actions,
+.tabs-section:is(:hover, :focus-within) .side-section__actions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Clear, in the Chats and Your tabs headers: a small text button beside the actions. */
+.side-clear {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 20px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: none;
+  color: var(--chrome-muted);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
+.side-clear:hover {
+  background: var(--bg-hover);
+  color: var(--chrome-strong);
+}
+
+.side-clear:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.chats-section:is(:hover, :focus-within) .side-section__dots {
+  opacity: 0;
+}
+
+/* Collapsing: the height eases shut while the rows fade at once; opening,
+   the rows fade back a beat after the height starts. */
+.side-collapse {
+  display: grid;
+  /* minmax(0, …): a long nowrap title must not widen the track past the sidebar. */
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: 1fr;
+  transition: grid-template-rows var(--dur-fast) var(--ease-standard);
+}
+
+.side-section--collapsed .side-collapse {
+  grid-template-rows: 0fr;
+}
+
+.side-collapse__inner {
+  min-width: 0;
+  min-height: 0;
+  overflow: clip;
+  /* Room for the active chip's shadow and focus rings. */
+  overflow-clip-margin: 8px;
+  opacity: 1;
+  transition: opacity var(--dur-fast) var(--ease-standard) var(--dur-instant);
+}
+
+.side-section--collapsed .side-collapse__inner {
+  opacity: 0;
+  transition-duration: var(--dur-instant);
+  transition-delay: 0s;
+}
+
+.side-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--row-gap);
+}
+
+.chats-more {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  padding: var(--space-1) 8px;
+  font-size: var(--text-sm);
+  flex: none;
+}
+
+.chats-more .side-section__dots {
+  padding-right: 0;
+}
+
+.chats-more__spacer {
+  flex: 1;
+}
+
+/* The row-limit seam overlays the gap below the rows, so it takes no height at rest. */
+.chats-section .chats-divider {
+  flex: none;
+  margin: -4px 8px -5px;
+  z-index: 1;
+}
+
+/* No resting line: the sidebar has no dividers (DS-04); the seam shows on hover, focus and drag. */
+.chats-section .chats-divider:not(:hover):not(:focus-visible):not([data-dragging])::after {
+  background: transparent;
+}
+
+/* ---- pinned grid ---- */
+
+.pin-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pin-columns, 4), minmax(0, 1fr));
+  gap: var(--space-1-5);
+  padding: 0 0 var(--space-1-5);
+  flex: none;
+}
+
+/* With nothing pinned, the drop target floats over the top rows while a tab
+   is dragged, so nothing under the pointer moves when it appears. */
+.pin-grid--empty {
+  grid-template-columns: 1fr;
+  position: absolute;
+  top: 9px;
+  left: 10px;
+  right: 10px;
+  z-index: 3;
+  padding: 0;
+}
+
+.pin-grid--empty .pin-grid__hint {
+  background: var(--bg-sidebar);
+  box-shadow: var(--shadow-sm);
+}
+
+.pin-grid__hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  color: var(--chrome-muted);
+  font-size: var(--text-sm);
+}
+
+.pin-grid--over .pin-grid__hint {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 7%, var(--bg-sidebar));
+}
+
+.pin-tile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--chip-bg) 55%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--text-primary) 6%, transparent);
+  color: var(--chrome-muted);
+  outline-offset: -2px;
+  transition:
+    background var(--dur-fast) var(--ease-standard),
+    box-shadow var(--motion-enter) var(--ease-standard),
+    margin var(--motion-glide) var(--ease-out);
+}
+
+.pin-tile img {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+}
+
+.pin-tile:hover {
+  background: var(--chip-bg);
+}
+
+.pin-tile--active,
+.pin-tile--active:hover {
+  background: var(--chip-bg);
+  box-shadow: var(--chip-shadow);
+  color: var(--chrome-strong);
+}
+
+.pin-tile--agent {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--agent-color, var(--accent)) 24%, transparent),
+    0 0 14px -3px color-mix(in srgb, var(--agent-color, var(--accent)) 42%, transparent);
+}
+
+/* A tile that needs you pulses a warning tint a few times, then keeps the mark. */
+.pin-tile--attention {
+  box-shadow: 0 0 0 1.5px var(--status-needs-input);
+  animation: pin-attention 1.1s var(--ease-standard) 3;
+}
+
+@keyframes pin-attention {
+  50% {
+    background: var(--status-needs-input-soft);
+  }
+}
+
+.pin-tile--gap-before {
+  margin-left: 12px;
+}
+
+.pin-tile--dragging {
+  opacity: 0.35;
+}
+
+.pin-tile:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+}
+
+.pin-tile__audio {
+  position: absolute;
+  left: 4px;
+  bottom: 3px;
+  display: flex;
+  color: var(--chrome-muted);
+}
+
+.pin-tile__dot {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+}
+
+.pin-tile__close {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--bg-raised);
+  box-shadow: var(--shadow-sm), 0 0 0 1px var(--border-default);
+  color: var(--chrome-muted);
+  opacity: 0;
+  transition: opacity var(--dur-fast);
+}
+
+.pin-tile:hover .pin-tile__close,
+.pin-tile:focus-within .pin-tile__close {
+  opacity: 1;
+}
+
+/* ---- split rows ---- */
+
+.tab-row--split {
+  padding-left: var(--space-1);
+  gap: 0;
+}
+
+.tab-row__half {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  flex: 1;
+  min-width: 0;
+  height: 26px;
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-xs);
+}
+
+.tab-row__half:hover {
+  background: var(--bg-hover);
+}
+
+.tab-row__half--focused {
+  background: var(--bg-active);
+}
+
+.tab-row__divider {
+  width: 1px;
+  height: 16px;
+  margin-right: var(--space-1);
+  background: color-mix(in srgb, var(--text-primary) 12%, transparent);
+}
+
+.side-row__close--split {
+  opacity: 1;
+  margin-left: var(--space-0-5);
+}
+
+/* ---- edge badges: jump to an active or waiting row out of view ---- */
+
+.edge-badge {
+  position: absolute;
+  left: 50%;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: 22px;
+  padding: 0 var(--space-2-5) 0 var(--space-2);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--chip-bg);
+  box-shadow: var(--chip-shadow);
+  color: var(--chrome-strong);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  animation: ui-menu-in var(--motion-menu-in) var(--ease-out);
+}
+
+.edge-badge--top {
+  top: var(--space-1);
+}
+
+.edge-badge--bottom {
+  --menu-from-y: 4px;
+  bottom: var(--space-1);
+}
+
+.edge-badge--needs {
+  color: var(--status-needs-input);
+}
+
+/* ---- footer: no divider; your avatar and name, and the capsule ---- */
+
+/* DS-18: a 44 px strip from x 10 to 290, 6 px off the bottom. The profile
+   button (36 px, from x 20) ends 10 px above the bottom; the capsule ends
+   14 px from the sidebar's right edge. The profile button's hover layer
+   covers the whole strip, so the strip fills (and is pressable) anywhere
+   outside the capsule, and stays pressed while the main menu is open. */
+.side-footer {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 44px;
+  margin: 0 10px 6px;
+  padding: 0 4px 0 10px;
+  flex: none;
+}
+
+.profile-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  flex: 1;
+  height: 36px;
+  padding: 0 6px 0 2px;
+  border: 0;
+  background: none;
+  color: var(--chrome-muted);
+  font-size: var(--text-md);
+  font-weight: 400;
+  text-align: left;
+  outline: none;
+}
+
+.profile-row::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: var(--radius-row);
+  background: transparent;
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+
+.profile-row:hover::before {
+  background: var(--bg-hover);
+}
+
+.profile-row:active::before,
+.profile-row[data-menu-open]::before {
+  background: var(--bg-active);
+}
+
+.profile-row:focus-visible {
+  outline: none;
+}
+
+.profile-row:focus-visible::before {
+  outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color, var(--accent-ring));
+  outline-offset: -2px;
+}
+
+.rail--collapsed .side-footer {
+  justify-content: center;
+  margin-inline: 6px;
+  padding: 0;
+}
+
+.profile-row__name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* DS-18: a thin ring in your profile hue that works as a gauge of this
+   month's spend on your key (--gauge, 0 to 1; full without a budget), with
+   a hairline of ground between it and the avatar. */
+.profile-row__ring {
+  --gauge: 1;
+  display: grid;
+  place-items: center;
+  flex: none;
+  padding: 2.5px;
+  border-radius: 50%;
+  background: conic-gradient(var(--profile-hue) calc(var(--gauge) * 1turn), color-mix(in srgb, var(--profile-hue) 22%, transparent) 0);
+}
+
+.profile-row__ring > .profile-badge {
+  box-shadow: 0 0 0 1.5px var(--bg-sidebar);
+}
+
+/* ---- the main menu card (DS-93) ---- */
+
+.main-menu__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-3) var(--space-2-5);
+  border-bottom: var(--hairline) solid var(--border-default);
+}
+
+.main-menu__profile {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  min-width: 0;
+}
+
+.main-menu__name {
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.main-menu__meter {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.main-menu__meter-label {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.main-menu__meter-bar {
+  height: 4px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--bg-muted);
+}
+
+.main-menu__meter-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--profile-hue);
+}
+
+/* The one hue-filled button. */
+.main-menu__primary {
+  height: 32px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--profile-hue);
+  color: var(--profile-hue-text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.main-menu__primary:hover {
+  background: var(--profile-hue-hover);
+}
+
+.main-menu__primary:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+/* 30 px rows: 15 px glyphs, labels 40 px in. */
+.main-menu .ui-pop__item {
+  padding-left: var(--space-3);
+}
+
+.profile-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--profile-badge-bg);
+  color: var(--profile-badge-fg);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.profile-badge img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The capsule: solid profile hue, white semibold text. It grows in from the
+   footer's right edge and brightens on hover. */
+.footer-capsule {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex: none;
+  height: 28px;
+  padding: 0 12px 0 10px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--profile-hue);
+  color: var(--profile-hue-text);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  animation: footer-capsule-in var(--motion-enter) var(--ease-out) both;
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+
+.footer-capsule:hover {
+  background: var(--profile-hue-hover);
+}
+
+.footer-capsule:active {
+  filter: brightness(0.93);
+}
+
+@keyframes footer-capsule-in {
+  from {
+    clip-path: inset(0 0 0 100% round 999px);
+    opacity: 0.4;
+  }
+  to {
+    clip-path: inset(0 0 0 0 round 999px);
+  }
+}
+
+/* Reduce Motion keeps every mark and drops the movement. */
+@media (prefers-reduced-motion: reduce) {
+  .chat-row__avatar--attention :is(.face-avatar, .avatar),
+  .pin-tile--attention,
+  .downloads-btn__pulse {
+    animation: none;
+  }
+}
+
+:root[data-motion='reduced'] :is(.chat-row__avatar--attention .face-avatar, .chat-row__avatar--attention .avatar, .pin-tile--attention, .downloads-btn__pulse) {
+  animation: none;
+}
+
+
+/* Group header rows (SH-23): a coloured name chip, no icon. */
+.group-row {
+  gap: 4px;
+  font-size: var(--text-sm);
+  font-weight: 560;
+}
+
+.group-row__chevron {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 16px;
+  color: var(--group-text);
+  transform: rotate(90deg);
+  transition: transform var(--motion-quick) var(--ease-out);
+}
+
+.group-row--collapsed .group-row__chevron {
+  transform: none;
+}
+
+.group-row__chip {
+  min-width: 0;
+  max-width: 100%;
+  padding: 2px 8px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--group-fill);
+  color: var(--group-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.group-row__input {
+  flex: 1;
+  min-width: 0;
+  height: 22px;
+  padding: 0 8px;
+  border: 1px solid var(--group-ring);
+  border-radius: var(--radius-pill);
+  background: var(--bg-raised);
+  color: var(--text-primary);
+  font: inherit;
+  outline: none;
+}
+
+.group-row__count {
+  margin-left: auto;
+  color: var(--chrome-muted);
+  font-size: var(--text-xs);
+  font-weight: 400;
+}
+
+/* A grouped tab carries its group's colour as a thin bar on the leading edge. */
+.tab-row--grouped {
+  padding-left: 14px;
+}
+
+.tab-row--grouped::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 7px;
+  bottom: 7px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--group-ring);
+}
+
+/* DS-10: several selected tabs share a neutral tint. */
+.pin-tile--selected {
+  box-shadow: 0 0 0 2px var(--row-selected-hover);
+  background: var(--row-selected);
+}
+
+/* Text dragged over a tab would load there. */
+.side-row--drop-target {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+/* A sleeping tab (SS-07) reads a little quieter until it wakes. */
+.tab-row--sleeping .side-row__icon,
+.tab-row--sleeping .side-row__title {
+  opacity: 0.62;
+}
+
+.side-row__title--restoring {
+  display: flex;
+  align-items: center;
+}
+
+/* The media card (SH-17): over the footer while a background tab plays. */
+.media-card {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 4px 8px;
+  padding: 4px;
+  border-radius: var(--radius-md);
+  background: var(--chip-bg);
+  box-shadow: var(--chip-shadow, 0 0 0 1px var(--border-subtle));
+}
+
+.media-card__page {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  padding: 4px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
+.media-card__page:hover {
+  background: var(--bg-hover);
+}
+
+.media-card__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.media-card__title,
+.media-card__host {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.media-card__title {
+  color: var(--chrome-strong);
+  font-size: var(--text-sm);
+}
+
+.media-card__host {
+  color: var(--chrome-muted);
+  font-size: var(--text-xs);
+}
+
+.media-card__controls {
+  display: flex;
+  flex: none;
+  gap: 2px;
+}
+
+/* ⌘ held (SH-22): 1–8 badges on the targets in the order shown. */
+.number-hints {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 30;
+}
+
+.number-hint {
+  position: fixed;
+  display: grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 5px;
+  background: var(--text-primary);
+  color: var(--bg-base);
+  box-shadow: var(--shadow-sm);
+  font-size: 11px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  transform: translateY(-50%);
+  animation: number-hint-in var(--motion-quick) var(--ease-out) both;
+}
+
+@keyframes number-hint-in {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) scale(0.8);
+  }
+}
+
+:root[data-motion='reduced'] :is(.number-hint, .group-row__chevron) {
+  animation: none;
+  transition: none;
+}
+
+/* An app's status on its sidebar row (apps/SidebarApps.tsx, apex.status.set). */
+.side-pack-status {
+  min-width: 0;
+}
+.side-pack-status__text {
+  font-size: var(--text-xs);
+  color: var(--chrome-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 9em;
+}
+.side-pack-status__badge {
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+  min-width: 1.4em;
+  padding: 0 5px;
+  border-radius: 999px;
+  text-align: center;
+  background: var(--accent);
+  color: var(--accent-contrast, #fff);
+}
+.side-pack-status__progress {
+  width: 32px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--chrome-faint);
+  opacity: 0.6;
+  overflow: hidden;
+}
+.side-pack-status__progress > span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}

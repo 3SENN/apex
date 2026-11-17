@@ -1,0 +1,6 @@
+{
+  "manifest_version": 3,
+  "name": "Fixture Theme",
+  "version": "1.0",
+  "theme": { "colors": { "frame": [40, 60, 80] } }
+}

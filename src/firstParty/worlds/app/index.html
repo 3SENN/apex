@@ -1,0 +1,44 @@
+<!doctype html>
+<!-- Copyright (c) 2026 The Apex Authors. All rights reserved.
+   - This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at https://mozilla.org/MPL/2.0/. -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Worlds</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script type="module" src="./main.js"></script>
+  </head>
+  <body>
+    <main id="home" class="home" hidden>
+      <header class="home__head">
+        <div>
+          <h1 data-t>Worlds</h1>
+          <p class="home__lead" data-t>Walk around with your companions, step into places, and build a world of your own to share.</p>
+        </div>
+        <button id="new-world" class="btn btn--primary" type="button" data-t>New world</button>
+      </header>
+      <ul id="world-list" class="cards" aria-label="Worlds" data-t-label></ul>
+      <p id="home-note" class="note" role="status"></p>
+    </main>
+
+    <section id="stage" class="stage" hidden>
+      <canvas id="view" aria-label="The world" data-t-label></canvas>
+      <div id="bubbles" class="bubbles" aria-live="polite"></div>
+      <header class="bar">
+        <button id="back" class="btn btn--ghost" type="button" data-t>← Worlds</button>
+        <strong id="world-name" class="bar__name"></strong>
+        <span class="bar__spacer"></span>
+        <button id="edit" class="btn" type="button" data-t>Edit</button>
+        <button id="share" class="btn" type="button" data-t>Share…</button>
+        <button id="done" class="btn btn--primary" type="button" hidden data-t>Save</button>
+      </header>
+      <div id="hint" class="hint" hidden></div>
+      <p id="stage-note" class="note note--stage" role="status"></p>
+      <aside id="tools" class="tools" hidden aria-label="Editor" data-t-label></aside>
+      <p class="keys" id="keys" data-t>WASD or arrows to walk · click to walk there · E to talk · Enter to step in</p>
+    </section>
+  </body>
+</html>

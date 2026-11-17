@@ -1,0 +1,94 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* Chat holdings: the toolbar's pages-in-this-chat control (CH-34) and
+   the chat header's files button (CH-28). Tokens only, so both themes hold. */
+
+.ch-pages {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 8px 0 6px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill, 999px);
+  background: transparent;
+  color: var(--chrome-muted, var(--text-secondary));
+  font: inherit;
+  cursor: pointer;
+  transition: background-color var(--dur-fast, 120ms) var(--ease-standard, ease);
+}
+
+.ch-pages:hover,
+.ch-pages--open,
+.ch-pages[data-menu-open] {
+  background: var(--bg-hover);
+}
+
+.ch-pages:focus-visible {
+  outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color, var(--accent));
+  outline-offset: 1px;
+}
+
+.ch-pages__stack {
+  display: inline-flex;
+  align-items: center;
+}
+
+.ch-pages__icon {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  overflow: hidden;
+  border: 1.5px solid var(--bg-window, var(--bg-base));
+  border-radius: 50%;
+  background: var(--bg-card);
+  color: var(--text-tertiary);
+}
+
+.ch-pages__icon + .ch-pages__icon {
+  margin-left: -6px;
+}
+
+.ch-pages__icon img,
+.ch-pages__icon svg {
+  width: 12px;
+  height: 12px;
+}
+
+.ch-pages__count {
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The agent is driving one of the pages: the stack takes the companion's colour. */
+.ch-pages--driving .ch-pages__icon:first-child {
+  box-shadow: 0 0 0 1.5px var(--ch-glow, var(--accent));
+}
+
+.ch-files {
+  position: relative;
+  display: inline-flex;
+}
+
+.ch-files__count {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  background: var(--bg-muted, var(--bg-subtle));
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 15px;
+  text-align: center;
+  pointer-events: none;
+}

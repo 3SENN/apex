@@ -1,0 +1,79 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* Settings › General's background rows, the login-item approval dialog,
+   and room for the Windows and Linux window controls. Tokens only. */
+
+/* ---- Settings › General ---- */
+
+.sys-row > .ui-switch-row {
+  min-height: 54px;
+  padding: var(--space-2) var(--space-6);
+}
+
+.sys-note {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin: calc(-1 * var(--space-1)) var(--space-6) var(--space-3);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.sys-note--warning {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--status-needs-input-soft);
+  color: var(--text-primary);
+}
+
+.sys-note--error {
+  color: var(--status-error);
+}
+
+/* ---- the approval dialog ---- */
+
+.sys-approval__live:empty {
+  display: none;
+}
+
+.sys-approval__status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: var(--space-4) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.sys-approval__status--done {
+  color: var(--status-success);
+}
+
+.sys-approval__status--error {
+  color: var(--status-error);
+}
+
+/* ---- window controls (titleBarOverlay) ----
+   Electron reports the free strip through the Window Controls Overlay
+   variables; whatever reaches the window's top-right corner leaves room for
+   minimise, maximise and close. Without the overlay the width is 0. */
+
+:root[data-window-controls='overlay'] {
+  --window-controls-width: max(0px, calc(100vw - env(titlebar-area-x, 0px) - env(titlebar-area-width, 100vw)));
+}
+
+:root[data-window-controls='overlay'] .toolbar {
+  padding-right: calc(var(--space-2-5) + var(--window-controls-width));
+}
+
+:root[data-window-controls='overlay'] .tabstrip {
+  padding-right: calc(var(--space-2) + var(--window-controls-width));
+}
+
+:root[data-window-controls='overlay'] .chat-panel__header {
+  padding-right: calc(var(--space-2) + var(--window-controls-width));
+}

@@ -1,0 +1,873 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* The setup flow on top of the step template (welcome.css): the progress
+   bar, the scenes' tiles around the companion, chips, cards, the layout
+   tiles, connectors, the import, the showcase and the watchdog notice.
+   Tokens only, so light and dark both hold. */
+
+.wlx__loading {
+  display: grid;
+  place-items: center;
+  min-height: 60vh;
+}
+
+.wlx__loading {
+  flex: 1;
+}
+
+/* The progress dots, centred, and the menu at the end: the template's first row (BAR_H in stage.ts). */
+.wlx__bar {
+  position: relative;
+  z-index: 3;
+  flex: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  height: 52px;
+  padding: 12px 16px 0;
+  box-sizing: border-box;
+}
+
+.wlx__dots {
+  grid-column: 2;
+}
+
+.wlx__menu {
+  grid-column: 3;
+  justify-self: end;
+}
+
+.wlx__dots {
+  display: flex;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wlx__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--text-primary) 14%, transparent);
+  transition: width var(--dur-base) var(--ease-out), background var(--dur-fast) var(--ease-standard);
+}
+
+.wlx__dot[data-visited] {
+  background: color-mix(in srgb, var(--hero-tint, var(--accent)) 45%, transparent);
+  cursor: pointer;
+}
+
+.wlx__dot[data-active] {
+  width: 22px;
+  background: var(--hero-tint, var(--accent));
+}
+
+.wlx__dot:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+.wlx__hint {
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+}
+
+.wlx__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.wlx__slow {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid color-mix(in srgb, var(--warning, #c98a00) 40%, var(--border-subtle));
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--warning, #c98a00) 8%, var(--bg-card));
+  color: var(--text-primary);
+  text-align: left;
+}
+
+.wlx__slow p {
+  margin: 0;
+}
+
+.wlx__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.wlx__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 4px 12px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard);
+}
+
+.wlx__chip svg {
+  width: 14px;
+  height: 14px;
+}
+
+.wlx__chip:hover {
+  background: color-mix(in srgb, var(--hero-tint, var(--accent)) 8%, var(--bg-card));
+}
+
+.wlx__chip[aria-pressed='true'],
+.wlx__chip[aria-checked='true'] {
+  border-color: var(--hero-tint, var(--accent));
+  background: color-mix(in srgb, var(--hero-tint, var(--accent)) 14%, var(--bg-card));
+}
+
+.wlx__chip:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+.wlx__count {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+}
+
+.wlx__question {
+  font-size: 24px;
+}
+
+.wlx__card {
+  display: grid;
+  align-content: center;
+  min-height: 96px;
+}
+
+.wlx__confirm-value {
+  margin: 0 0 8px;
+  font-size: var(--text-md);
+  font-weight: 600;
+}
+
+.wlx__thinking {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  color: var(--text-secondary);
+}
+
+.wlx__dots-think {
+  display: inline-flex;
+  gap: 5px;
+}
+
+.wlx__dots-think i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--hero-tint, var(--accent));
+  animation: wlx-think 1s var(--ease-standard) infinite;
+}
+
+.wlx__dots-think i:nth-child(2) { animation-delay: 0.15s; }
+.wlx__dots-think i:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes wlx-think {
+  0%, 100% { opacity: 0.35; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-3px); }
+}
+
+/* ---- The scenes (StepScene): Apex's tiles around the companion ---- */
+
+.wls {
+  position: absolute;
+  inset: 0;
+}
+
+.wls__lines {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+
+.wls__lines path {
+  fill: none;
+  stroke: light-dark(color-mix(in srgb, var(--hero-tint) 55%, var(--text-tertiary)), color-mix(in srgb, var(--hero-tint) 50%, var(--text-tertiary)));
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: 2 6;
+  opacity: 0.55;
+  animation: wls-line 700ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 70ms + 220ms);
+}
+
+.wls__lines path[data-on] {
+  stroke: var(--hero-tint);
+  stroke-dasharray: none;
+  opacity: 0.9;
+}
+
+/* An import: dashes drift along the lines toward the companion. */
+.wls[data-lines='in'] .wls__lines path {
+  animation:
+    wls-line 700ms var(--ease-out) both,
+    wls-flow 1.6s linear infinite;
+  animation-delay: calc(var(--i, 0) * 70ms + 220ms), 0s;
+}
+
+.wls__tile {
+  --wls-ink: light-dark(color-mix(in srgb, var(--hero-tint) 50%, var(--text-primary)), color-mix(in srgb, var(--hero-tint) 72%, var(--text-primary)));
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: var(--wlt-tile);
+  height: var(--wlt-tile);
+  translate: -50% -50%;
+  border: 1px solid var(--border-subtle);
+  border-radius: calc(var(--wlt-tile) * 0.3);
+  background: var(--bg-raised, var(--bg-card));
+  box-shadow:
+    0 8px 22px -12px light-dark(color-mix(in srgb, var(--hero-tint) 70%, transparent), rgb(0 0 0 / 0.6)),
+    0 1px 2px light-dark(rgb(0 0 0 / 0.06), rgb(0 0 0 / 0.3));
+  color: var(--wls-ink);
+  animation: wls-pop 520ms var(--ease-spring) both;
+  animation-delay: calc(var(--i, 0) * 70ms + 140ms);
+  transition:
+    left 420ms var(--ease-out),
+    top 420ms var(--ease-out),
+    background var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out);
+}
+
+.wls__float {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+  max-width: 100%;
+  animation: wls-bob 4.2s var(--ease-standard) infinite alternate;
+  animation-delay: calc(var(--i, 0) * -0.7s);
+}
+
+.wls__tile svg {
+  width: calc(var(--wlt-tile) * 0.44);
+  height: calc(var(--wlt-tile) * 0.44);
+  stroke-width: 1.8;
+}
+
+.wls__tile img {
+  width: calc(var(--wlt-tile) * 0.5);
+  height: calc(var(--wlt-tile) * 0.5);
+  border-radius: 6px;
+}
+
+.wls__mark {
+  font-size: calc(var(--wlt-tile) * 0.4);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.wls__tile[data-on] {
+  border-color: color-mix(in srgb, var(--hero-tint) 70%, var(--border-subtle));
+  background: light-dark(color-mix(in srgb, var(--hero-tint) 16%, var(--bg-card)), color-mix(in srgb, var(--hero-tint) 20%, var(--bg-raised, var(--bg-card))));
+}
+
+/* The one being asked about or shown now: a soft ring that breathes. */
+.wls__tile[data-current]::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border: 1.5px solid color-mix(in srgb, var(--hero-tint) 60%, transparent);
+  border-radius: calc(var(--wlt-tile) * 0.3 + 5px);
+  animation: wls-ring 2.4s var(--ease-standard) infinite;
+}
+
+/* A name tag: as wide as its text, never past its room. */
+.wls__tile--tag {
+  /* max-content, not auto: a positioned box near the scene's edge would otherwise shrink to the space left of its anchor. */
+  width: max-content;
+  /* A tag reads as a tag: lower than a tile and never narrower than tall. */
+  min-width: min(calc(var(--wlt-tile) * 1.2), var(--room));
+  max-width: var(--room);
+  height: max(30px, calc(var(--wlt-tile) * 0.7));
+  padding: 0 14px;
+  border-radius: var(--radius-pill);
+}
+
+.wls__text {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wls__tile--swatch {
+  border-radius: 50%;
+}
+
+.wls__swatch {
+  display: block;
+  width: calc(var(--wlt-tile) * 0.56);
+  height: calc(var(--wlt-tile) * 0.56);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.14));
+  transition: background var(--dur-base) var(--ease-out);
+}
+
+.wls__badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  display: grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: var(--hero-tint);
+  color: light-dark(color-mix(in srgb, var(--hero-tint) 25%, black), color-mix(in srgb, var(--hero-tint) 20%, black));
+  box-shadow: 0 0 0 2px var(--bg-card);
+}
+
+.wls__tile .wls__badge svg {
+  width: 11px;
+  height: 11px;
+  stroke-width: 2.6;
+}
+
+@keyframes wls-pop {
+  from {
+    opacity: 0;
+    scale: 0.55;
+  }
+}
+
+@keyframes wls-line {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes wls-flow {
+  to {
+    stroke-dashoffset: 16;
+  }
+}
+
+@keyframes wls-bob {
+  from {
+    translate: 0 2px;
+  }
+  to {
+    translate: 0 -3px;
+  }
+}
+
+@keyframes wls-ring {
+  0%, 100% {
+    opacity: 0.35;
+    scale: 0.96;
+  }
+  50% {
+    opacity: 1;
+    scale: 1.04;
+  }
+}
+
+/* Layout tiles (ON-07). */
+.wlx__layouts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+
+.wlx__layout {
+  display: grid;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.wlx__layout[aria-checked='true'] {
+  border-color: var(--hero-tint, var(--accent));
+  box-shadow: 0 0 0 1px var(--hero-tint, var(--accent));
+}
+
+.wlx__layout:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+/* The previews shrink on short pages, so both choices and the search engine fit the card. */
+.wlx__layout .il {
+  max-height: clamp(72px, calc(var(--wlt-card-room, 400px) * 0.36), 190px);
+}
+
+.wlx__layout-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.wlx__layout-check {
+  width: 16px;
+  height: 16px;
+  margin-left: auto;
+  color: var(--hero-tint, var(--accent));
+}
+
+.wlx__layout-desc {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+/* NT-01: the search engine, offered once under the layouts. */
+.wlx__search {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+}
+
+.wlx__search-label {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+/* Connectors (ON-08). */
+.wlx__assure {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.wlx__assure svg {
+  width: 16px;
+  height: 16px;
+  color: var(--hero-tint, var(--accent));
+}
+
+.wlx__connectors {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wlx__connector {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  text-align: left;
+}
+
+.wlx__connector[data-state='failed'] .wlx__connector-desc {
+  color: var(--danger, var(--text-secondary));
+}
+
+.wlx__connector-icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--text-primary) 5%, transparent);
+  color: var(--text-secondary);
+}
+
+.wlx__connector-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.wlx__connector-text {
+  display: grid;
+  min-width: 0;
+}
+
+.wlx__connector-name {
+  font-weight: 600;
+}
+
+.wlx__connector-desc {
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wlx__connector-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.wlx__connector-status--ok {
+  color: var(--success, var(--hero-tint, var(--accent)));
+}
+
+.wlx__connector-status svg {
+  width: 14px;
+  height: 14px;
+}
+
+.wlx__url {
+  width: 100%;
+  text-align: left;
+}
+
+.wlx__nudge {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--hero-tint, var(--accent)) 10%, var(--bg-card));
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  animation: wlx-nudge 420ms var(--ease-out);
+}
+
+.wlx__nudge[data-reduced] {
+  animation: none;
+}
+
+@keyframes wlx-nudge {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-2px); }
+  100% { transform: translateX(0); }
+}
+
+/* Import (ON-10). */
+.wlx__howto {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding-left: 18px;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  text-align: left;
+}
+
+.wlx__preview {
+  margin: 0;
+}
+
+.wlx__progress {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.wlx__progress progress {
+  width: 100%;
+  accent-color: var(--hero-tint, var(--accent));
+}
+
+/* Favourites. */
+.wlx__sites {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wlx__site {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  cursor: pointer;
+}
+
+/* The showcase (ON-09). */
+.wlx__showcase {
+  display: grid;
+  gap: 10px;
+  width: min(480px, 100%);
+  margin-inline: auto;
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.wlx__showcase:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 4px;
+}
+
+.wlx__slide {
+  display: grid;
+  gap: 6px;
+  animation: wl-in-next var(--motion-enter, 240ms) var(--ease-out) both;
+}
+
+/* The scene keeps the slide's words and dots in the card on short pages. */
+.wlx__slide .il {
+  max-height: clamp(110px, calc(var(--wlt-card-room, 420px) - 128px), 300px);
+}
+
+.wlx__slide h2 {
+  margin: 6px 0 0;
+  font-size: var(--text-md);
+}
+
+.wlx__slide p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.wlx__showcase-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.wlx__progress-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.wlx__progress-dot {
+  position: relative;
+  overflow: hidden;
+  width: 22px;
+  height: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--text-primary) 14%, transparent);
+  cursor: pointer;
+}
+
+.wlx__progress-dot[aria-selected='true'] {
+  background: color-mix(in srgb, var(--hero-tint, var(--accent)) 35%, transparent);
+}
+
+.wlx__progress-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--hero-tint, var(--accent));
+  transform-origin: left center;
+  transition: transform 200ms linear;
+}
+
+.wlx__progress-dot:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wlx__slide,
+  .wlx__nudge,
+  .wlx__dots-think i,
+  .wls__tile,
+  .wls__float,
+  .wls__tile[data-current]::after,
+  .wls__lines path,
+  .wls[data-lines='in'] .wls__lines path {
+    animation: none;
+  }
+
+  .wls__tile,
+  .wls__swatch {
+    transition: none;
+  }
+}
+
+:root[data-motion='reduced'] .wlx__slide,
+:root[data-motion='reduced'] .wlx__dots-think i,
+:root[data-motion='reduced'] .wls__tile,
+:root[data-motion='reduced'] .wls__float,
+:root[data-motion='reduced'] .wls__tile[data-current]::after,
+:root[data-motion='reduced'] .wls__lines path,
+:root[data-motion='reduced'] .wls[data-lines='in'] .wls__lines path {
+  animation: none;
+}
+
+:root[data-motion='reduced'] .wls__tile,
+:root[data-motion='reduced'] .wls__swatch {
+  transition: none;
+}
+
+/* ON-18: the workspace step's card: your card, then the board (src/renderer/src/about/about.css). */
+.wlx__workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ON-18: the setup conversation — progress dots, your last answer as a bubble, big tappable replies, a small row for your own words. */
+.iv-dots {
+  display: inline-flex;
+  gap: 5px;
+}
+
+.iv-dots i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--border-default);
+  transition: background var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard);
+}
+
+.iv-dots i[data-on] {
+  background: var(--hero-tint, var(--accent));
+  transform: scale(1.15);
+}
+
+.iv {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.iv-you {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0;
+}
+
+.iv-you span {
+  max-width: 80%;
+  padding: 6px 12px;
+  border-radius: 14px 14px 4px 14px;
+  background: color-mix(in srgb, var(--hero-tint, var(--accent)) 16%, var(--bg-card));
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+}
+
+.iv-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.iv-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 8px 16px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--text-md);
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+  transition: transform var(--dur-fast) var(--ease-standard), background var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard);
+}
+
+.iv-chip:hover {
+  border-color: color-mix(in srgb, var(--hero-tint, var(--accent)) 45%, var(--border-subtle));
+  background: color-mix(in srgb, var(--hero-tint, var(--accent)) 8%, var(--bg-card));
+  transform: translateY(-1px);
+}
+
+.iv-chip:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.iv-chip[aria-pressed='true'] {
+  border-color: var(--hero-tint, var(--accent));
+  background: color-mix(in srgb, var(--hero-tint, var(--accent)) 16%, var(--bg-card));
+}
+
+.iv-chip svg {
+  width: 15px;
+  height: 15px;
+  color: var(--hero-tint, var(--accent));
+}
+
+.iv-chip:focus-visible,
+.iv-own__input:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+.iv-own {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 4px 3px 12px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  background: var(--bg-card);
+}
+
+.iv-own__input {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+  border: 0;
+  outline: none;
+  background: none;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--text-sm);
+}
+
+.iv-note {
+  margin: 0;
+  color: var(--text-tertiary, var(--text-secondary));
+  font-size: var(--text-xs, 11px);
+}
+
+:root[data-motion='reduced'] .iv-chip {
+  transition: none;
+}
+
+:root[data-motion='reduced'] .iv-chip:hover {
+  transform: none;
+}

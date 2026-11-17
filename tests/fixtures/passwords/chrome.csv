@@ -1,0 +1,6 @@
+name,url,username,password,note
+example.com,https://example.com/login,sam@example.invalid,fixture-pass-1,
+mail.example.org,https://mail.example.org/,sam,"pa,ss""2","multi
+line note"
+old site,http://insecure.example.net/,sam,fixture-pass-3,
+no password,https://empty.example.com/,sam,,

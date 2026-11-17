@@ -1,0 +1,13 @@
+{
+  "events": [
+    { "id": "evt-standup", "title": "Team stand-up", "startsInMin": 1, "endsInMin": 16, "calendar": "Work", "location": "https://example.zoom.us/j/123456789?pwd=abc", "url": null },
+    { "id": "evt-lunch", "title": "Lunch with Ana", "startsInMin": 180, "endsInMin": 240, "calendar": "Home", "location": "Café Botanique", "url": null },
+    { "id": "evt-review", "title": "Design review", "startsInMin": 1500, "endsInMin": 1560, "calendar": "Work", "location": null, "url": "https://meet.google.com/abc-defg-hij" },
+    { "id": "evt-holiday", "title": "", "allDay": true, "calendar": "Holidays", "location": null, "url": null }
+  ],
+  "reminders": [
+    { "id": "rem-1", "title": "Send the invoice", "dueInMin": 120, "list": "Work", "completed": false },
+    { "id": "rem-2", "title": "Water the plants", "dueInMin": null, "list": "Home", "completed": false },
+    { "id": "rem-3", "title": "Book flights", "dueInMin": -600, "list": "Travel", "completed": true }
+  ]
+}

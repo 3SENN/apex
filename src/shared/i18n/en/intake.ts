@@ -1,0 +1,62 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+// English strings for the intake: attachment preparation and its reasons,
+// the pages in a chat and the chat's files.
+export const intake = {
+  'intake.storage.chatAttachments': 'Chat attachments',
+  'intake.storage.pruneImages': 'Remove chat images older than 30 days',
+  'intake.error.notReady': 'Wait for attachments to finish preparing',
+  'intake.error.tooMany': 'A message can hold up to {count} attachments',
+  'intake.error.controlled': "This page can't be removed while the agent is using it",
+  'intake.error.closeControlled': "This page can't be closed while the agent is using it",
+  'intake.error.pageGone': 'This page is no longer in the chat',
+  // Reasons a chip shows when an attachment fails (CH-22, CH-23).
+  'intake.reason.unsupported': "{brand} can't read this kind of file",
+  'intake.reason.empty': 'This file is empty',
+  'intake.reason.officeOff': 'Turn on Files and documents in Settings › Model and key to attach this',
+  'intake.reason.imageTooLarge': 'This image is over 30 MB',
+  'intake.reason.imageBroken': "This image couldn't be read",
+  'intake.reason.heicUnsupported': 'HEIC images can only be attached on macOS',
+  'intake.reason.pdfTooLarge': 'This PDF is over 32 MB',
+  'intake.reason.pdfTooManyPages': 'This PDF has {pages} pages. {brand} can attach up to {max} with this model',
+  'intake.reason.pdfEncrypted': 'This PDF is password-protected',
+  'intake.reason.pdfBroken': 'This PDF looks damaged and can’t be read',
+  'intake.reason.pdfTimeout': 'This PDF took too long to read',
+  'intake.reason.textTooLarge': 'This text is over 2 MB',
+  'intake.reason.officeTooLarge': 'This document is over 30 MB',
+  'intake.reason.requestTooLarge': 'These attachments are over 32 MB together. Remove some to send',
+  'intake.reason.prepareFailed': "{brand} couldn't prepare this attachment",
+  'intake.reason.tabInternal': "{brand} pages can't be attached",
+  'intake.reason.tabGone': 'This tab is closed',
+  'intake.reason.tabUnreadable': "{brand} couldn't read this page. Wait for it to load, then try again",
+  'intake.reason.pageFetchFailed': "{brand} couldn't download this from the page",
+  'intake.reason.pageTooLarge': 'This is over 25 MB',
+  'intake.reason.chatSelf': "A chat can't be attached to itself",
+  'intake.reason.chatMissing': 'This chat no longer exists',
+  'intake.reason.skillMissing': 'This skill no longer exists',
+  'intake.reason.meetingMissing': 'This meeting no longer exists',
+  'intake.reason.recordFailed': "{brand} couldn't read this record from the connector",
+  'intake.error.gone': 'This attachment is gone',
+  'intake.error.alreadySent': 'This attachment was already sent',
+  'intake.error.notText': 'Only pasted text and text files can be edited',
+  // Names Apex gives attachments that have none of their own.
+  'intake.name.paste': 'Pasted text',
+  'intake.name.screenshot': 'Screenshot',
+  'intake.name.chat': 'Chat: {title}',
+  'intake.name.selection': 'Selection from {title}',
+  'intake.name.untitled': 'Untitled',
+  // Text Apex adds around attached content.
+  'intake.text.source': 'Source: {title} ({url})',
+  'intake.text.links': 'Links in the selection:',
+  'intake.text.truncated': '[Cut here: the rest was too long to attach.]',
+  'intake.text.pruned': '[An image that was removed to free up space: {name}]',
+  // The chat files browser (CH-28).
+  'intake.files.you': 'You',
+  'intake.files.reply': 'Reply',
+  'intake.files.generatedRead': 'Open this file from Library › Files',
+  'intake.files.notPhysical': 'Only saved files can be shown in their folder',
+  'intake.files.missing': 'This file is no longer in the chat',
+} as const

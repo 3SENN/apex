@@ -1,0 +1,406 @@
+{
+  "rig": [
+    {
+      "id": "A",
+      "weight": 4
+    },
+    {
+      "id": "B",
+      "weight": 3
+    },
+    {
+      "id": "C",
+      "weight": 3
+    }
+  ],
+  "slots": {
+    "head": [
+      {
+        "id": "head-round",
+        "weight": 3
+      },
+      {
+        "id": "head-oval",
+        "weight": 2
+      },
+      {
+        "id": "head-soft-square",
+        "weight": 2
+      },
+      {
+        "id": "head-drop",
+        "weight": 2
+      },
+      {
+        "id": "head-bean",
+        "weight": 2
+      },
+      {
+        "id": "head-cloud",
+        "weight": 2
+      }
+    ],
+    "ears": [
+      {
+        "id": null,
+        "weight": 6
+      },
+      {
+        "id": "ears-cat",
+        "weight": 1
+      },
+      {
+        "id": "ears-bear",
+        "weight": 1
+      },
+      {
+        "id": "ears-bunny",
+        "weight": 1
+      },
+      {
+        "id": "ears-elf",
+        "weight": 1
+      }
+    ],
+    "hair": [
+      {
+        "id": null,
+        "weight": 1
+      },
+      {
+        "id": "hair-tuft",
+        "weight": 3
+      },
+      {
+        "id": "hair-bob",
+        "weight": 2
+      },
+      {
+        "id": "hair-spiky",
+        "weight": 2
+      },
+      {
+        "id": "hair-curls",
+        "weight": 2
+      },
+      {
+        "id": "hair-bun",
+        "weight": 2
+      },
+      {
+        "id": "hair-sideswept",
+        "weight": 2
+      },
+      {
+        "id": "hair-pigtails",
+        "weight": 2
+      },
+      {
+        "id": "hair-mohawk",
+        "weight": 2
+      }
+    ],
+    "hat": [
+      {
+        "id": null,
+        "weight": 6
+      },
+      {
+        "id": "hat-beanie",
+        "weight": 1
+      },
+      {
+        "id": "hat-cap",
+        "weight": 1
+      },
+      {
+        "id": "hat-crown",
+        "weight": 1
+      },
+      {
+        "id": "hat-wizard",
+        "weight": 1
+      },
+      {
+        "id": "hat-beret",
+        "weight": 1
+      },
+      {
+        "id": "hat-flower-crown",
+        "weight": 1
+      }
+    ],
+    "eyeAccessory": [
+      {
+        "id": null,
+        "weight": 8
+      },
+      {
+        "id": "glasses-round",
+        "weight": 1
+      },
+      {
+        "id": "glasses-square",
+        "weight": 1
+      },
+      {
+        "id": "monocle",
+        "weight": 1
+      },
+      {
+        "id": "visor",
+        "weight": 1
+      }
+    ],
+    "earAccessory": [
+      {
+        "id": null,
+        "weight": 8
+      },
+      {
+        "id": "headphones",
+        "weight": 1
+      },
+      {
+        "id": "earring-hoop",
+        "weight": 1
+      },
+      {
+        "id": "earring-star",
+        "weight": 1
+      }
+    ],
+    "prop": [
+      {
+        "id": null,
+        "weight": 6
+      },
+      {
+        "id": "prop-coffee",
+        "weight": 1
+      },
+      {
+        "id": "prop-book",
+        "weight": 1
+      },
+      {
+        "id": "prop-laptop",
+        "weight": 1
+      },
+      {
+        "id": "prop-wand",
+        "weight": 1
+      },
+      {
+        "id": "prop-magnifier",
+        "weight": 1
+      },
+      {
+        "id": "prop-balloon",
+        "weight": 1
+      },
+      {
+        "id": "prop-keypad",
+        "weight": 1
+      }
+    ]
+  },
+  "face": {
+    "eyes": [
+      {
+        "id": "eyes-round",
+        "weight": 3
+      },
+      {
+        "id": "eyes-oval",
+        "weight": 2
+      },
+      {
+        "id": "eyes-sparkle",
+        "weight": 2
+      },
+      {
+        "id": "eyes-sleepy",
+        "weight": 1
+      },
+      {
+        "id": "eyes-dot",
+        "weight": 2
+      },
+      {
+        "id": "eyes-wide",
+        "weight": 1
+      },
+      {
+        "id": "eyes-cat",
+        "weight": 1
+      },
+      {
+        "id": "eyes-lash",
+        "weight": 2
+      }
+    ],
+    "brows": [
+      {
+        "id": "brows-soft",
+        "weight": 3
+      },
+      {
+        "id": "brows-bold",
+        "weight": 2
+      },
+      {
+        "id": "brows-thin",
+        "weight": 2
+      },
+      {
+        "id": "brows-none",
+        "weight": 1
+      }
+    ],
+    "mouth": [
+      {
+        "id": "mouth-smile",
+        "weight": 3
+      },
+      {
+        "id": "mouth-cat",
+        "weight": 2
+      },
+      {
+        "id": "mouth-grin",
+        "weight": 2
+      },
+      {
+        "id": "mouth-small",
+        "weight": 2
+      },
+      {
+        "id": "mouth-fang",
+        "weight": 1
+      }
+    ]
+  },
+  "palettes": [
+    {
+      "name": "Lavender",
+      "weight": 3,
+      "colors": {
+        "skin": "#8f74f8",
+        "hair": "#4b3aa8",
+        "accent": "#c9bbff",
+        "outfit": "#6a4bff"
+      }
+    },
+    {
+      "name": "Peach Fizz",
+      "weight": 2,
+      "colors": {
+        "skin": "#ffb38a",
+        "hair": "#7a3b2e",
+        "accent": "#2ec4b6",
+        "outfit": "#ff6b6b"
+      }
+    },
+    {
+      "name": "Mint Drop",
+      "weight": 2,
+      "colors": {
+        "skin": "#7fe0c0",
+        "hair": "#1f6f5c",
+        "accent": "#ffe08a",
+        "outfit": "#3fa7d6"
+      }
+    },
+    {
+      "name": "Sky Pop",
+      "weight": 2,
+      "colors": {
+        "skin": "#8ec9ff",
+        "hair": "#2d4e9e",
+        "accent": "#ffd166",
+        "outfit": "#ef476f"
+      }
+    },
+    {
+      "name": "Sunbeam",
+      "weight": 2,
+      "colors": {
+        "skin": "#ffd36e",
+        "hair": "#a0522d",
+        "accent": "#ff8fab",
+        "outfit": "#4cc9f0"
+      }
+    },
+    {
+      "name": "Berry Jam",
+      "weight": 2,
+      "colors": {
+        "skin": "#ff8fb8",
+        "hair": "#6b2148",
+        "accent": "#ffe3ef",
+        "outfit": "#8338ec"
+      }
+    },
+    {
+      "name": "Cocoa",
+      "weight": 2,
+      "colors": {
+        "skin": "#c68b62",
+        "hair": "#3b2318",
+        "accent": "#f6c177",
+        "outfit": "#5b8e7d"
+      }
+    },
+    {
+      "name": "Midnight",
+      "weight": 1,
+      "colors": {
+        "skin": "#8d9ae0",
+        "hair": "#1b1f3b",
+        "accent": "#ffd447",
+        "outfit": "#2b2d63"
+      }
+    },
+    {
+      "name": "Bubblegum",
+      "weight": 2,
+      "colors": {
+        "skin": "#ffc2e2",
+        "hair": "#ff5fa2",
+        "accent": "#9be7ff",
+        "outfit": "#b388eb"
+      }
+    },
+    {
+      "name": "Moss",
+      "weight": 1,
+      "colors": {
+        "skin": "#a7c957",
+        "hair": "#386641",
+        "accent": "#f2e8cf",
+        "outfit": "#bc4749"
+      }
+    },
+    {
+      "name": "Marshmallow",
+      "weight": 1,
+      "colors": {
+        "skin": "#f4efe6",
+        "hair": "#9a8c98",
+        "accent": "#f4a261",
+        "outfit": "#6d6875"
+      }
+    },
+    {
+      "name": "Coral Reef",
+      "weight": 2,
+      "colors": {
+        "skin": "#ff9f80",
+        "hair": "#264653",
+        "accent": "#e9c46a",
+        "outfit": "#2a9d8f"
+      }
+    }
+  ]
+}

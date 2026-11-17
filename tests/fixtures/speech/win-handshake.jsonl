@@ -1,0 +1,6 @@
+{"type":"ready","version":2}
+{"type":"permissions","microphone":"granted","speech":"not-determined","screen":"granted"}
+{"type":"locales","system":"nl-NL","items":[{"id":"nl-NL","name":"Nederlands (Nederland)","onDevice":false},{"id":"en-US","name":"English (United States)","onDevice":false},{"id":"de-DE","name":"Deutsch (Deutschland)","onDevice":false}]}
+{"type":"frontmost","pid":9120,"bundleId":"explorer"}
+{"type":"error","code":"invalid","message":"Nothing is recording.","fatal":false}
+{"type":"error","code":"invalid","message":"Unknown command nope.","fatal":false}

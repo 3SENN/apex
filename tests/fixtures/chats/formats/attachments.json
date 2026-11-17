@@ -1,0 +1,32 @@
+{
+  "id": "11111111-2222-4333-8444-555555555555",
+  "title": "Notes from the call",
+  "createdAt": 1790000000000,
+  "updatedAt": 1790000060000,
+  "lastActiveAt": 1790000060000,
+  "routineId": null,
+  "companionId": "pip",
+  "model": "claude-opus-5-5",
+  "status": "finished",
+  "unread": false,
+  "pinned": false,
+  "archived": false,
+  "needsInput": false,
+  "capabilities": { "model": "claude-opus-5-5", "effort": "high", "browser": true, "webTools": true, "memory": true, "connectorIds": [], "memoryScope": "companion", "engine": "api-key" },
+  "system": "s",
+  "messages": [{ "role": "user", "content": "Summarize this" }],
+  "log": [
+    {
+      "type": "user-message",
+      "id": "aaaaaaaa-1111-4222-8333-444444444444",
+      "text": "Summarize this",
+      "attachments": [
+        { "kind": "image", "thumbnail": "data:image/jpeg;base64,/9j/AA==", "label": "Screen" },
+        { "kind": "meeting", "meetingId": "m-1", "title": "Weekly sync" }
+      ]
+    },
+    { "type": "text-delta", "turnId": "bbbbbbbb-1111-4222-8333-444444444444", "text": "Here you go." }
+  ],
+  "details": {},
+  "feedback": {}
+}

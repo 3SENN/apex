@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <title>Summit</title>
+  <!--
+    The unofficial branding's one icon source. scripts/app-icons/unofficial.mjs
+    draws every icon in this folder from it: the tile (a neutral rounded square
+    on Apple's 824-unit grid) and the mark (two peaks; the one behind is
+    lighter). Only what is here is read: the rect with id "tile" and the paths
+    in the group with id "mark", with their fill and fill-opacity.
+  -->
+  <rect id="tile" x="100" y="100" width="824" height="824" rx="185" fill="#3b424c"/>
+  <g id="mark" fill="#ffffff">
+    <path fill-opacity="0.55" d="M377.8 507.3C384 500 393.2 496 402.7 496.6C412.2 497.2 420.9 502.3 426.1 510.3L534.1 678.3C537.7 683.8 538 690.8 534.8 696.6C531.7 702.4 525.6 706 519 706L250.5 706C243.5 706 237.1 702 234.2 695.6C231.2 689.3 232.2 681.8 236.7 676.5Z"/>
+    <path d="M553.2 377.2C560.4 364.9 573.6 357.4 587.8 357.5C602.1 357.5 615.2 365.1 622.3 377.5L792.9 673C796.9 679.8 796.9 688.2 792.9 695C789 701.8 781.8 706 773.9 706L398.4 706C390.6 706 383.3 701.8 379.4 694.9C375.4 688.1 375.5 679.7 379.5 672.9Z"/>
+  </g>
+</svg>

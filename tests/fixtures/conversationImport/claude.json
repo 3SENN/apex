@@ -1,0 +1,11 @@
+[
+  {
+    "uuid": "c-1",
+    "name": "Trip to Lisbon",
+    "created_at": "2024-05-01T10:00:00.000Z",
+    "chat_messages": [
+      { "uuid": "m1", "sender": "human", "text": "Plan three days in Lisbon.", "created_at": "2024-05-01T10:00:01.000Z", "attachments": [{ "file_name": "flights.txt", "extracted_content": "Arrive Friday 09:10" }], "files": [{ "file_name": "map.png" }] },
+      { "uuid": "m2", "sender": "assistant", "content": [{ "type": "text", "text": "Day one: Alfama." }, { "type": "tool_use", "name": "x" }], "text": "ignored", "created_at": "2024-05-01T10:00:05.000Z" }
+    ]
+  }
+]

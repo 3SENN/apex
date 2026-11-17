@@ -1,0 +1,4 @@
+{
+  "appName": { "message": "Localized Fixture" },
+  "appDesc": { "message": "Says its name through _locales." }
+}

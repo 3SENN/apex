@@ -1,0 +1,55 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+import type { translate as en } from '../en/translate'
+import type { Dutch } from './types'
+
+// Dutch for the translate.* strings: every English key, in English order.
+export const translate = {
+  'translate.button.offer': 'Deze pagina vertalen',
+  'translate.button.translating': 'Deze pagina wordt vertaald',
+  'translate.button.translated': 'Vertaald uit het {language}',
+  'translate.button.error': 'Deze pagina kon niet worden vertaald',
+  'translate.popover.label': 'Pagina vertalen',
+  'translate.popover.pageIn': 'Deze pagina is in het {language}',
+  'translate.popover.translatedFrom': 'Vertaald uit het {language}',
+  'translate.popover.to': 'Vertalen naar',
+  'translate.popover.translate': 'Vertalen',
+  'translate.popover.showOriginal': 'Origineel tonen',
+  'translate.popover.translating': 'Bezig met vertalen…',
+  'translate.popover.progress': 'Bezig met vertalen… {done} van {total}',
+  'translate.popover.always': '{language} altijd vertalen',
+  'translate.popover.neverLanguage': '{language} nooit vertalen',
+  'translate.popover.neverSite': 'Deze site nooit vertalen',
+  'translate.popover.settings': 'Vertaalinstellingen',
+  'translate.engine.apple': 'Vertaald op deze Mac',
+  'translate.engine.companion': 'Vertaald door {name}',
+  'translate.error.notInstalled': 'Download {language} en {target} in Systeeminstellingen › Algemeen › Taal en regio › Vertaaltalen om op deze Mac te vertalen.',
+  'translate.error.unsupported': 'Deze Mac kan {language} niet naar {target} vertalen.',
+  'translate.error.unavailable': 'Vertalen op deze computer vraagt macOS 26 of nieuwer.',
+  'translate.error.companionHint': 'Je kunt ook Vertalen met je companion aanzetten in Instellingen › Talen.',
+  'translate.error.companionUnavailable': '{name} heeft een engine nodig, zoals je API-sleutel, om te vertalen. Stel er een in via Instellingen › Companion-engine.',
+  'translate.error.unknownLanguage': '{brand} kan niet zien in welke taal deze pagina is.',
+  'translate.error.failed': 'Er ging iets mis bij het vertalen van deze pagina.',
+  'translate.action.openDownloads': 'Taal en regio openen',
+  'translate.action.retry': 'Opnieuw proberen',
+  'translate.menu.translate': 'Vertalen naar het {language}',
+  'translate.menu.showOriginal': 'Origineel tonen',
+  'translate.settings.section': 'Vertalen',
+  'translate.settings.offer': 'Aanbieden om pagina’s te vertalen',
+  'translate.settings.offer.description': 'Toont een vertaalknop in de adresbalk op pagina’s die niet in een van je talen zijn.',
+  'translate.settings.target': 'Vertalen naar',
+  'translate.settings.target.description': 'De taal waarin {brand} pagina’s vertaalt.',
+  'translate.settings.target.auto': 'Je eerste taal ({language})',
+  'translate.settings.companion': 'Vertalen met je companion',
+  'translate.settings.companion.description': 'Als deze Mac een pagina niet kan vertalen, vertaalt je companion hem met zijn engine (bijvoorbeeld je API-sleutel). De tekst van de pagina gaat dan naar het model.',
+  'translate.settings.onDevice': 'Vertalen op deze Mac',
+  'translate.settings.onDevice.description': 'De vertaling van Apple op het apparaat gaat voor; er verlaat niets je Mac. Download talen in Systeeminstellingen › Algemeen › Taal en regio › Vertaaltalen.',
+  'translate.settings.always': 'Altijd vertalen',
+  'translate.settings.never': 'Nooit vertalen',
+  'translate.settings.neverSites': 'Deze sites nooit vertalen',
+  'translate.settings.none': 'Nog geen',
+  'translate.settings.remove': '{name} verwijderen',
+} as const satisfies Dutch<typeof en>

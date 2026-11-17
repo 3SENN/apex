@@ -1,0 +1,217 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* The core overlay surfaces: tooltip, full-screen notice, shortcuts sheet. Tokens live in styles.css. */
+
+/* ---- tooltip (DS-95) ---- */
+.ov-tooltip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 280px;
+  padding: 5px 9px;
+  border-radius: 8px;
+  background: var(--tooltip-bg);
+  color: var(--tooltip-fg);
+  box-shadow: 0 0 0 1px var(--tooltip-edge), var(--shadow-sm);
+  font-size: 13px;
+  line-height: 18px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.ov-tooltip__label {
+  min-width: 0;
+}
+
+/* ---- key caps ---- */
+.ui-keycaps {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  flex: none;
+}
+
+.ui-keycap {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 4px;
+  background: var(--keycap-bg);
+  color: var(--keycap-fg);
+  box-shadow: inset 0 -1px 0 var(--keycap-edge);
+  font: 500 11px/1 var(--font);
+  letter-spacing: 0;
+}
+
+.ui-keycaps--inverse .ui-keycap {
+  background: var(--keycap-inverse-bg);
+  color: var(--keycap-inverse-fg);
+  box-shadow: none;
+}
+
+/* ---- full-screen notice (OV-13) ---- */
+.ov-fs-notice {
+  max-width: 520px;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  background: var(--tooltip-bg);
+  color: var(--tooltip-fg);
+  box-shadow: 0 0 0 1px var(--tooltip-edge), var(--shadow-md);
+  font-size: 13px;
+  line-height: 18px;
+  text-align: center;
+}
+
+/* ---- shortcuts sheet (SH-67) ---- */
+.ov-sheet-scrim {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--scrim);
+  animation: ov-sheet-scrim var(--motion-enter, 140ms) var(--ease-out, ease-out);
+}
+
+.ov-sheet {
+  display: flex;
+  flex-direction: column;
+  width: min(680px, 100%);
+  max-height: min(720px, calc(var(--ov-vh, 100vh) - 48px));
+  border-radius: var(--sheet-radius, 16px);
+  background: var(--bg-sheet);
+  color: var(--text-primary);
+  box-shadow: var(--sheet-shadow, var(--shadow-overlay));
+  animation: ov-sheet-in var(--motion-enter, 140ms) var(--ease-out, ease-out);
+  overflow: hidden;
+}
+
+.ov-frame[data-exiting] .ov-sheet,
+.ov-frame[data-exiting] .ov-sheet-scrim {
+  opacity: 0;
+  transition: opacity var(--ov-exit-ms, 0ms) var(--ease-exit, ease-in);
+}
+
+.ov-sheet__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 18px 14px 24px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.ov-sheet__head h2 {
+  margin: 0;
+  flex: 1;
+  font-size: var(--text-lg, 15px);
+  font-weight: 600;
+}
+
+.ov-sheet__search {
+  width: 220px;
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-control, 8px);
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font: inherit;
+  outline: none;
+}
+
+.ov-sheet__search:focus-visible {
+  box-shadow: 0 0 0 var(--focus-ring-width, 2px) var(--focus-ring-color);
+}
+
+.ov-sheet__close {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: default;
+}
+
+.ov-sheet__close:hover {
+  background: var(--bg-hover);
+}
+
+.ov-sheet__close:focus-visible {
+  outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color);
+}
+
+.ov-sheet__body {
+  overflow: auto;
+  padding: 8px 24px 24px;
+  columns: 2 280px;
+  column-gap: 32px;
+}
+
+.ov-sheet__group {
+  break-inside: avoid;
+  padding-top: 14px;
+}
+
+.ov-sheet__group h3 {
+  margin: 0 0 6px;
+  font-size: var(--text-xs, 11px);
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ov-sheet__group dl {
+  margin: 0;
+}
+
+.ov-sheet__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 28px;
+}
+
+.ov-sheet__row dt {
+  min-width: 0;
+  color: var(--text-primary);
+}
+
+.ov-sheet__row dd {
+  display: inline-flex;
+  gap: 6px;
+  margin: 0;
+  flex: none;
+}
+
+.ov-sheet__empty {
+  color: var(--text-secondary);
+}
+
+@keyframes ov-sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.99);
+  }
+}
+
+@keyframes ov-sheet-scrim {
+  from {
+    opacity: 0;
+  }
+}
+
+:root[data-motion='reduced'] .ov-sheet,
+:root[data-motion='reduced'] .ov-sheet-scrim {
+  animation: none;
+  transition: none;
+}

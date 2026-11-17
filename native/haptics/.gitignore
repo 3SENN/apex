@@ -1,0 +1,6 @@
+# Build output from scripts/build-native.mjs
+build/
+# Electron headers node-gyp downloads at build time
+.electron-gyp/
+# Build-only tools (node-gyp, node-addon-api), installed here, not in the repo root
+node_modules/

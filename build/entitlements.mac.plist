@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Copyright (c) 2026 The Apex Authors. All rights reserved.
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this file,
+     You can obtain one at https://mozilla.org/MPL/2.0/. -->
+<!--
+  Apex's hardened-runtime entitlements, for the app itself.
+  - allow-jit: V8, and the meshopt decoder the companion compiles as wasm.
+  - audio-input, camera: dictation, meetings, and calls on sites you allow.
+  - location: sites you allow to see your approximate location.
+  - calendars: the calendar helper (native/calendar) asks in Apex's name, and macOS checks
+    the responsible app, so Apex carries it too. Read-only, and only after you
+    turn calendars or reminders on.
+  Without these the hardened runtime refuses the request before macOS asks.
+-->
+<plist version="1.0">
+<dict>
+	<key>com.apple.security.cs.allow-jit</key>
+	<true/>
+	<key>com.apple.security.device.audio-input</key>
+	<true/>
+	<key>com.apple.security.device.camera</key>
+	<true/>
+	<key>com.apple.security.personal-information.location</key>
+	<true/>
+	<key>com.apple.security.personal-information.calendars</key>
+	<true/>
+</dict>
+</plist>

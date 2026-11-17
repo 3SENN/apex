@@ -1,0 +1,121 @@
+{
+  "format": "apex-world",
+  "version": 1,
+  "id": "harbour-town",
+  "name": "Harbour town",
+  "description": "A small seaside town: a café, a plaza with a fountain, a sports hall and a dock. Two of your companions live here too.",
+  "palette": "seaside",
+  "sky": "late-afternoon",
+  "size": [40, 28],
+  "ground": {
+    "base": "grass",
+    "paint": [
+      { "type": "path", "area": [0, 12, 39, 13] },
+      { "type": "path", "area": [19, 0, 20, 18] },
+      { "type": "floor", "area": [4, 8, 13, 11] },
+      { "type": "floor", "area": [26, 4, 35, 11] },
+      { "type": "stone", "area": [16, 14, 23, 17] },
+      { "type": "sand", "area": [0, 19, 39, 21] },
+      { "type": "water", "area": [0, 22, 39, 27] },
+      { "type": "boards", "area": [28, 19, 33, 25] }
+    ]
+  },
+  "props": [
+    { "kit": "shop", "at": [8.5, 0, 5.5] },
+    { "kit": "table", "at": [6.5, 0, 10] },
+    { "kit": "umbrella", "at": [6.5, 0, 10], "tint": { "accent": "#ff6f61" } },
+    { "kit": "chair", "at": [5.7, 0, 10], "turn": 90 },
+    { "kit": "chair", "at": [7.3, 0, 10], "turn": 270 },
+    { "kit": "table", "at": [10, 0, 10] },
+    { "kit": "umbrella", "at": [10, 0, 10], "tint": { "accent": "#ffd166" } },
+    { "kit": "chair", "at": [9.2, 0, 10], "turn": 90 },
+    { "kit": "chair", "at": [10.8, 0, 10], "turn": 270 },
+    { "kit": "flowers", "at": [4.5, 0, 8.5] },
+    { "kit": "flowers", "at": [12.5, 0, 8.5] },
+    { "kit": "sign", "at": [13, 0, 11.3] },
+
+    { "kit": "house", "at": [32.5, 0, 6] },
+    { "kit": "table-tennis-table", "at": [28.5, 0, 9.5] },
+    { "kit": "bench", "at": [29, 0, 11.2], "turn": 180 },
+
+    { "kit": "fountain", "at": [20, 0, 15.5] },
+    { "kit": "bench", "at": [17.5, 0, 17.4] },
+    { "kit": "bench", "at": [22.5, 0, 17.4] },
+    { "kit": "lamp", "at": [16.4, 0, 14.4] },
+    { "kit": "lamp", "at": [23.6, 0, 14.4] },
+    { "kit": "flowers", "at": [17.5, 0, 14.5] },
+    { "kit": "flowers", "at": [22.5, 0, 14.5] },
+    { "kit": "stall", "at": [14, 0, 15.5], "turn": 90 },
+    { "kit": "stall", "at": [26, 0, 15.5], "turn": 270, "tint": { "accent": "#3fb6e0" } },
+
+    { "kit": "tree", "at": [2, 0, 2.5] },
+    { "kit": "tree", "at": [15, 0, 3] },
+    { "kit": "tree", "at": [23.5, 0, 2.5] },
+    { "kit": "tree", "at": [1.5, 0, 16.5] },
+    { "kit": "tree", "at": [11.5, 0, 17.5] },
+    { "kit": "tree", "at": [37.5, 0, 16] },
+    { "kit": "pine", "at": [37.5, 0, 3] },
+    { "kit": "pine", "at": [2, 0, 9] },
+    { "kit": "pine", "at": [24.5, 0, 8] },
+    { "kit": "bush", "at": [15.5, 0, 9] },
+    { "kit": "bush", "at": [24, 0, 11] },
+    { "kit": "bush", "at": [36, 0, 12] },
+    { "kit": "rock", "at": [3, 0, 20.5] },
+    { "kit": "rock", "at": [36.5, 0, 19] },
+
+    { "kit": "crate", "at": [30, 0, 20.5] },
+    { "kit": "crate", "at": [30.6, 0, 21.2] },
+    { "kit": "barrel", "at": [32.2, 0, 20.4] },
+    { "kit": "barrel", "at": [31.6, 0, 23] },
+    { "kit": "lamp", "at": [33.4, 0, 24.6] },
+    { "kit": "sign", "at": [27.6, 0, 19.4], "tint": { "accent": "#3fb6e0" } },
+    { "kit": "umbrella", "at": [8, 0, 20.2], "tint": { "accent": "#ff6f61" } },
+    { "kit": "umbrella", "at": [14, 0, 20.4], "tint": { "accent": "#ffffff" } },
+    { "kit": "fence", "at": [5, 0, 18.4] },
+    { "kit": "fence", "at": [7, 0, 18.4] }
+  ],
+  "places": [
+    { "id": "cafe", "name": "Harbour café", "area": [4, 4, 13, 11] },
+    { "id": "hall", "name": "Sports hall", "area": [26, 4, 35, 11] },
+    { "id": "plaza", "name": "The plaza", "area": [16, 14, 23, 17] },
+    { "id": "dock", "name": "The dock", "area": [28, 19, 33, 25] }
+  ],
+  "residents": [
+    {
+      "id": "tilly",
+      "home": "cafe",
+      "at": [8.5, 9],
+      "role": "Runs the café",
+      "guest": {
+        "name": "Tilly",
+        "look": {
+          "rig": "B",
+          "parts": { "head": "head-oval", "ears": null, "hair": "hair-bun", "hat": null, "eyeAccessory": "glasses-round", "earAccessory": null, "prop": null },
+          "face": { "eyes": "eyes-oval", "brows": "brows-thin", "mouth": "mouth-small" },
+          "colors": { "skin": "#ffd2a8", "hair": "#c0583c", "accent": "#fff3c4", "outfit": "#e0705a" }
+        },
+        "personality": "Warm, quick and a little nosy. Remembers everyone's order, loves a regular, and always has a new cake to talk about."
+      }
+    },
+    {
+      "id": "rook",
+      "home": "dock",
+      "at": [31, 22],
+      "role": "Looks after the harbour",
+      "guest": {
+        "name": "Rook",
+        "look": {
+          "rig": "A",
+          "parts": { "head": "head-bean", "ears": null, "hair": "hair-sideswept", "hat": "hat-beret", "eyeAccessory": null, "earAccessory": null, "prop": null },
+          "face": { "eyes": "eyes-cat", "brows": "brows-bold", "mouth": "mouth-smile" },
+          "colors": { "skin": "#9fd8c8", "hair": "#24414f", "accent": "#ffe08a", "outfit": "#3a78b0" }
+        },
+        "personality": "Calm and dry-humoured. Knows the tides, the boats and every gull by name, and thinks most problems look smaller from the end of the pier."
+      }
+    },
+    { "id": "walker", "home": "plaza", "at": [19, 17], "role": "Takes a walk around the plaza", "companion": "local" },
+    { "id": "player", "home": "hall", "at": [30, 9.5], "role": "Warms up in the sports hall", "companion": "local" }
+  ],
+  "spawn": [20, 19],
+  "camera": { "at": [20, 26, 46], "lookAt": [20, 0, 14] }
+}

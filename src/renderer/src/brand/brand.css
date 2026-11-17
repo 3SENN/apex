@@ -1,0 +1,48 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* The branding's logo and mark (BrandLogo.tsx). The official wordmark's word
+   takes the text colour; its sprout is the brand violet, a shade lighter on
+   dark grounds, as on apexbrowser.eu. The unofficial logo is the plain mark
+   with the name in the UI font. */
+.apex-logo {
+  flex: none;
+  display: block;
+  color: var(--text-primary);
+  overflow: visible;
+}
+
+.apex-logo__word {
+  fill: currentColor;
+}
+
+.apex-logo__sprout {
+  fill: none;
+  stroke: light-dark(#6a4bff, #8f74f8);
+  stroke-width: 185;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The unofficial logo: the mark and the name, set in the UI font. */
+.apex-logo--name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32em;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* The mark: Pip's lavender head under a violet sprout (official) or the plain
+   tile (unofficial), which read on light and dark grounds alike. */
+.apex-pip-mark {
+  flex: none;
+  display: block;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}

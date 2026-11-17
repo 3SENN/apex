@@ -1,0 +1,336 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* NT-01: the new tab's web search. The ask-or-search switch sits at the left
+   of the composer's action row; the actions and local suggestions drop down
+   from the card over the tray, on the composer's own surface and motion. */
+
+/* ---- the switch ---- */
+
+.nt-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  max-width: calc(100% - 52px);
+  height: 32px;
+  margin-right: auto;
+  padding: 2px;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--text-primary) 5%, transparent);
+}
+
+.nt-mode__option {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  height: 28px;
+  padding: 0 11px 0 9px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: var(--text-md);
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    background var(--dur-fast) var(--ease-standard),
+    color var(--dur-fast) var(--ease-standard),
+    box-shadow var(--dur-fast) var(--ease-standard);
+}
+
+.nt-mode__option > svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+}
+
+.nt-mode__option:hover {
+  color: var(--text-primary);
+}
+
+.nt-mode__option[aria-checked='true'] {
+  background: light-dark(var(--bg-raised), color-mix(in srgb, var(--text-primary) 12%, var(--bg-raised)));
+  color: var(--text-primary);
+  box-shadow:
+    0 0 0 1px var(--border-default),
+    var(--shadow-xs);
+}
+
+.nt-mode__option:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 1px;
+}
+
+.nt-mode__text {
+  overflow: hidden;
+  max-width: 132px;
+  text-overflow: ellipsis;
+}
+
+/* An engine's drawn initial (no favicon is fetched). */
+.nt-engine-mark {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: var(--mark-size, 18px);
+  height: var(--mark-size, 18px);
+  border-radius: 50%;
+  background: var(--bg-active);
+  color: var(--text-primary);
+  font-size: calc(var(--mark-size, 18px) * 0.58);
+  font-weight: 650;
+  line-height: 1;
+}
+
+/* ---- the list under the card ---- */
+
+.nt-suggest {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 6;
+  overflow-y: auto;
+  max-height: min(372px, 46vh);
+  padding: 6px;
+  border-radius: 20px;
+  background: var(--bg-raised);
+  box-shadow:
+    0 0 0 1px var(--border-default),
+    0 12px 28px light-dark(rgba(26, 20, 60, 0.1), rgba(0, 0, 0, 0.44));
+  animation: nt-suggest-in 160ms var(--ease-out) both;
+}
+
+@keyframes nt-suggest-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.nt-suggest__list,
+.nt-suggest__list ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nt-suggest__group {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.nt-suggest__label {
+  padding: 6px 12px 4px;
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.nt-suggest__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 38px;
+  padding: 4px 12px;
+  border-radius: 14px;
+  color: var(--text-primary);
+  cursor: default;
+}
+
+.nt-suggest__row--selected {
+  background: color-mix(in srgb, var(--text-primary) 7%, transparent);
+}
+
+.nt-suggest__icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  color: var(--text-secondary);
+}
+
+.nt-suggest__icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.nt-suggest__icon img {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  object-fit: contain;
+}
+
+.nt-suggest__text {
+  display: flex;
+  flex: 1;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.nt-suggest__title {
+  overflow: hidden;
+  flex: none;
+  max-width: 70%;
+  font-size: var(--text-md);
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nt-suggest__title mark {
+  background: none;
+  color: inherit;
+  font-weight: 650;
+}
+
+.nt-suggest__sub {
+  overflow: hidden;
+  flex: 1;
+  min-width: 0;
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nt-suggest__key {
+  flex: none;
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--text-primary) 6%, transparent);
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: var(--text-xs);
+  line-height: 18px;
+}
+
+/* ---- the one-time engine choice ---- */
+
+.nt-choose {
+  display: grid;
+  gap: 10px;
+  padding: 14px 14px 12px;
+}
+
+.nt-choose__title {
+  margin: 0;
+  padding: 0 2px;
+  color: var(--text-primary);
+  font-size: var(--text-md);
+  font-weight: 600;
+}
+
+.nt-choose__foot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.nt-choose__hint {
+  overflow: hidden;
+  flex: 1;
+  min-width: 0;
+  padding: 0 2px;
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nt-choose__keep {
+  flex: none;
+  height: 28px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--text-primary) 6%, transparent);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--text-md);
+  font-weight: 500;
+}
+
+.nt-choose__keep:hover {
+  background: color-mix(in srgb, var(--text-primary) 10%, transparent);
+}
+
+.nt-choose__keep:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 1px;
+}
+
+/* Engine chips: setup's layout step and the new tab's choice. */
+.nt-engines {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.nt-engines__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  height: 34px;
+  padding: 0 12px 0 8px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-pill);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--text-md);
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    border-color var(--dur-fast) var(--ease-standard),
+    background var(--dur-fast) var(--ease-standard);
+}
+
+.nt-engines__chip:hover {
+  border-color: var(--border-strong);
+}
+
+.nt-engines__chip[aria-checked='true'] {
+  border-color: var(--focus-ring-color);
+  background: color-mix(in srgb, var(--focus-ring-color) 8%, var(--bg-card));
+}
+
+.nt-engines__chip:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+.nt-engines__name {
+  overflow: hidden;
+  max-width: 160px;
+  text-overflow: ellipsis;
+}
+
+.nt-engines__check {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  color: var(--focus-ring-color);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nt-suggest {
+    animation: none;
+  }
+}
+
+:root[data-motion='reduced'] .nt-suggest {
+  animation: none;
+}

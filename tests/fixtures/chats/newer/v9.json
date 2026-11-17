@@ -1,0 +1,26 @@
+{
+  "formatVersion": 9,
+  "id": "99999999-1111-4222-8333-444444444444",
+  "title": "From the future",
+  "createdAt": 1800000000000,
+  "updatedAt": 1800000060000,
+  "lastActiveAt": 1800000060000,
+  "routineId": null,
+  "companionId": "companion-1",
+  "model": "claude-opus-6",
+  "status": "finished",
+  "unread": false,
+  "pinned": false,
+  "archived": false,
+  "needsInput": false,
+  "capabilities": { "model": "claude-opus-6", "browser": true, "webTools": true, "memory": true, "connectorIds": [], "engine": "api-key", "hologram": true },
+  "system": "s",
+  "messages": [{ "role": "user", "content": "Hello" }],
+  "log": [
+    { "type": "user-message", "id": "aaaaaaaa-9999-4222-8333-444444444444", "text": "Hello" },
+    { "type": "text-delta", "turnId": "bbbbbbbb-9999-4222-8333-444444444444", "text": "Hi from v9." },
+    { "type": "teleport", "where": "moon" }
+  ],
+  "details": {},
+  "feedback": {}
+}

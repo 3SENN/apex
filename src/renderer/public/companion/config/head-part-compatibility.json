@@ -1,0 +1,104 @@
+{
+  "head-round": {
+    "ears": "all",
+    "hair": "all",
+    "hat": "all",
+    "eyeAccessory": "all",
+    "earAccessory": "all"
+  },
+  "head-oval": {
+    "ears": "all",
+    "hair": "all",
+    "hat": "all",
+    "eyeAccessory": "all",
+    "earAccessory": "all"
+  },
+  "head-soft-square": {
+    "ears": "all",
+    "hair": "all",
+    "hat": "all",
+    "eyeAccessory": "all",
+    "earAccessory": "all"
+  },
+  "head-drop": {
+    "ears": "all",
+    "hair": "all",
+    "hat": "all",
+    "eyeAccessory": "all",
+    "earAccessory": "all"
+  },
+  "head-bean": {
+    "ears": "all",
+    "hair": "all",
+    "hat": "all",
+    "eyeAccessory": "all",
+    "earAccessory": "all"
+  },
+  "head-cloud": {
+    "ears": "all",
+    "hair": "all",
+    "hat": "all",
+    "eyeAccessory": "all",
+    "earAccessory": "all"
+  },
+  "hat-beanie": {
+    "ears": [
+      "ears-cat",
+      "ears-bunny",
+      "ears-elf"
+    ],
+    "hair": [
+      "hair-tuft",
+      "hair-bob",
+      "hair-pigtails"
+    ],
+    "hat": "all",
+    "eyeAccessory": "all",
+    "earAccessory": "all"
+  },
+  "hat-cap": {
+    "ears": [
+      "ears-cat",
+      "ears-bunny",
+      "ears-elf"
+    ],
+    "hair": [
+      "hair-bob",
+      "hair-bun",
+      "hair-pigtails"
+    ],
+    "hat": "all",
+    "eyeAccessory": "all",
+    "earAccessory": "all"
+  },
+  "hat-wizard": {
+    "ears": [
+      "ears-elf"
+    ],
+    "hair": [
+      "hair-tuft",
+      "hair-bob",
+      "hair-sideswept",
+      "hair-pigtails"
+    ],
+    "hat": "all",
+    "eyeAccessory": "all",
+    "earAccessory": "all"
+  },
+  "hat-beret": {
+    "ears": [
+      "ears-cat",
+      "ears-bunny",
+      "ears-elf"
+    ],
+    "hair": [
+      "hair-bob",
+      "hair-bun",
+      "hair-sideswept",
+      "hair-pigtails"
+    ],
+    "hat": "all",
+    "eyeAccessory": "all",
+    "earAccessory": "all"
+  }
+}

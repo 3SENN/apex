@@ -1,0 +1,522 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* The tab overlay surfaces: hover cards, the recent-tab switcher, the
+   split menu and zones, the floating sidebar and its options. Colours come
+   from the shared tokens (light and dark); group colours from
+   styles.css. Reduce Motion drops every slide and glide. */
+
+/* ---- hover cards (SH-28, DS-92) ---- */
+.tab-card {
+  box-sizing: border-box;
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 8px 10px;
+  border: var(--hairline) solid var(--border-default);
+  border-radius: 12px;
+  background: var(--bg-raised);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-overlay, var(--shadow-md));
+  font-size: var(--text-sm);
+  line-height: 1.35;
+  animation: tab-card-in var(--motion-menu-in, 120ms) var(--ease-out) both;
+  -webkit-app-region: no-drag;
+}
+
+@keyframes tab-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+}
+
+.tab-card__thumb {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--bg-thumb, var(--bg-muted));
+  box-shadow: inset 0 0 0 var(--hairline) var(--border-subtle);
+}
+
+.tab-card__thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.tab-card__thumb-skeleton {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+/* A media tab's frame refreshes while hovered: a small live mark in the corner. */
+.tab-card__thumb--live::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 2px var(--bg-raised);
+}
+
+.tab-card__title {
+  padding: 0 2px;
+  overflow: hidden;
+  font-weight: 560;
+  color: var(--text-primary);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.tab-card__title--small {
+  font-size: var(--text-xs);
+  -webkit-line-clamp: 1;
+}
+
+.tab-card__title--chat {
+  font-size: var(--text-md);
+}
+
+.tab-card__host {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 0 2px;
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+}
+
+.tab-card__host span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tab-card__favicon {
+  flex: none;
+  border-radius: 3px;
+  color: var(--text-tertiary);
+}
+
+.tab-card__eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 2px 2px 0;
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+  font-weight: 560;
+}
+
+.tab-card__progress {
+  color: var(--text-secondary);
+}
+
+.tab-card__progress--working {
+  color: var(--accent-text);
+}
+
+.tab-card__progress--needs-you {
+  color: var(--status-needs-input);
+}
+
+.tab-card__progress--error {
+  color: var(--status-error);
+}
+
+.tab-card__pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.tab-card__half {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.tab-card__half .tab-card__thumb {
+  aspect-ratio: 4 / 5;
+}
+
+.tab-card__bubble {
+  align-self: flex-end;
+  max-width: 88%;
+  padding: 6px 9px;
+  border-radius: 12px 12px 4px 12px;
+  background: var(--bg-muted);
+  color: var(--text-primary);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.tab-card__bubble-source {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--text-tertiary);
+  font-size: 11px;
+}
+
+.tab-card__reply {
+  padding: 0 2px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+}
+
+.tab-card__reply--empty {
+  color: var(--text-tertiary);
+}
+
+.tab-card__pending,
+.tab-card__runs,
+.tab-card__list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tab-card__pending-item {
+  position: relative;
+  padding: 3px 4px 3px 16px;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tab-card__pending-item::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 50%;
+  background: var(--status-needs-input);
+}
+
+.tab-card__pending-item--handoff::before {
+  background: var(--accent);
+}
+
+.tab-card__more {
+  padding: 2px 4px;
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+}
+
+.tab-card__next {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 2px;
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+}
+
+.tab-card__run,
+.tab-card__list-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 28px;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  text-align: left;
+  cursor: default;
+}
+
+.tab-card__run:hover,
+.tab-card__list-row:hover {
+  background: var(--bg-hover);
+}
+
+.tab-card__run:focus-visible,
+.tab-card__list-row:focus-visible {
+  outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color, var(--accent-ring));
+  outline-offset: -2px;
+}
+
+.tab-card__run-name,
+.tab-card__list-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tab-card__run-time,
+.tab-card__list-host {
+  flex: none;
+  max-width: 40%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+}
+
+.tab-card__group-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 4px;
+}
+
+.tab-card__count {
+  margin-left: auto;
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+}
+
+.group-swatch {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--group-ring);
+}
+
+.tab-card--group {
+  border-color: color-mix(in srgb, var(--group-ring) 35%, var(--border-default));
+}
+
+/* ---- the recent-tab switcher (SH-29) ---- */
+.recent-tabs {
+  display: grid;
+  grid-template-columns: repeat(var(--recent-cols, 4), 168px);
+  gap: 10px;
+  padding: 12px;
+  border: var(--hairline) solid var(--border-default);
+  border-radius: 16px;
+  background: var(--bg-raised);
+  box-shadow: var(--shadow-overlay, var(--shadow-lg));
+  animation: tab-card-in var(--motion-menu-in, 120ms) var(--ease-out) both;
+}
+
+.recent-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 10px;
+  color: var(--text-primary);
+  cursor: default;
+}
+
+.recent-card--selected {
+  background: var(--bg-selected, var(--bg-active));
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.recent-card__thumbs {
+  position: relative;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 3px;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 7px;
+  background: var(--bg-thumb, var(--bg-muted));
+}
+
+.recent-card__thumbs .tab-card__thumb {
+  aspect-ratio: auto;
+  height: 100%;
+  border-radius: 0;
+}
+
+.recent-card__chat {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--text-secondary);
+  background: var(--bg-muted);
+}
+
+.recent-card__title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font-size: var(--text-xs);
+}
+
+.recent-card__title span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- split menu (SH-40) ---- */
+.ui-pop.split-menu {
+  min-width: 240px;
+  max-width: 320px;
+}
+
+/* ---- split zones while a tab is dragged (SH-30) ---- */
+/* Drawn where a drop splits: the outer 40% on each side (splitSideAt). The
+   middle fifth splits nothing (on another window it moves the tab there).
+   They fill their frame, the content card, and take the drop there. */
+.split-zones {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr;
+  gap: 12px;
+  padding: 12px;
+  /* The zones pull toward the cursor as it nears an edge. */
+  --zone-grow: calc(var(--zone-reach, 0) * 24px);
+}
+
+.split-zone {
+  display: grid;
+  place-items: center;
+  border: 2px dashed color-mix(in srgb, var(--accent) 45%, transparent);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  color: var(--accent-text);
+  font-size: var(--text-md);
+  font-weight: 560;
+  opacity: 0.85;
+  transition:
+    background var(--motion-quick) var(--ease-out),
+    transform var(--motion-quick) var(--ease-out),
+    opacity var(--motion-quick) var(--ease-out);
+}
+
+.split-zone--left {
+  transform-origin: left center;
+}
+
+.split-zone--right {
+  grid-column: 3;
+  transform-origin: right center;
+}
+
+.split-zone--active {
+  border-style: solid;
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  opacity: 1;
+  transform: scale(calc(1 + var(--zone-reach, 0) * 0.02));
+}
+
+.split-zone__label {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--bg-raised);
+  box-shadow: var(--shadow-sm);
+}
+
+.split-zones--blocked .split-zone {
+  border-color: var(--border-strong);
+  background: color-mix(in srgb, var(--text-primary) 4%, transparent);
+  color: var(--text-tertiary);
+}
+
+.split-zones__reason {
+  position: absolute;
+  left: 50%;
+  top: 24px;
+  transform: translateX(-50%);
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--bg-raised);
+  color: var(--text-secondary);
+  box-shadow: var(--shadow-sm);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
+/* ---- the floating sidebar (SH-04) and its options (SH-09) ---- */
+/* The pointer's area: the sidebar plus the gap to the window's edge, which doesn't slide. */
+.sidebar-reveal-zone {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  padding: 6px 0 6px 6px;
+}
+
+.sidebar-reveal {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  border: var(--hairline) solid var(--border-default);
+  border-radius: 12px;
+  background: var(--bg-sidebar);
+  box-shadow: var(--shadow-overlay, var(--shadow-lg));
+  animation: sidebar-reveal-in var(--motion-layout, 150ms) var(--ease-out) both;
+}
+
+.sidebar-reveal .sidebar-frame,
+.sidebar-reveal .sidebar {
+  position: relative;
+  height: 100%;
+}
+
+@keyframes sidebar-reveal-in {
+  from {
+    transform: translateX(-16px);
+    opacity: 0;
+  }
+}
+
+.side-options--surface {
+  position: static;
+  width: 260px;
+  max-height: min(560px, calc(var(--ov-vh, 100vh) - 24px));
+}
+
+:root[data-motion='reduced'] :is(.tab-card, .recent-tabs, .sidebar-reveal) {
+  animation: none;
+}
+
+:root[data-motion='reduced'] .split-zone {
+  transition: none;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(.tab-card, .recent-tabs, .sidebar-reveal) {
+    animation: none;
+  }
+  .split-zone {
+    transition: none;
+  }
+}

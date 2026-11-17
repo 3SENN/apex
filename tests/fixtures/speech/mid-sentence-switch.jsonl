@@ -1,0 +1,5 @@
+{"fit": 0.998, "source": "mic", "type": "final", "startMs": 1740, "text": "So let's focus on the slides first.", "endMs": 4500, "confidence": 0.905, "locale": "en-US"}
+{"text": "In Danaka, con Vinardo Schaffers.", "endMs": 6644, "startMs": 4560, "type": "final", "source": "mic", "confidence": 0.271, "fit": 0.143, "locale": "en-US"}
+{"text": "We moeten de presentatie voor vrijdag afmaken", "endMs": 2490, "startMs": 0, "type": "final", "source": "mic", "confidence": 0.97, "fit": 1, "locale": "nl-NL"}
+{"text": "En daarna kijken we naar de cijfers", "endMs": 6630, "startMs": 4800, "type": "final", "source": "mic", "confidence": 0.967, "fit": 1, "locale": "nl-NL"}
+{"type": "stopped", "durationMs": 0, "audio": null}

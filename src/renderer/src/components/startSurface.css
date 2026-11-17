@@ -1,0 +1,71 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* DS-107: the start surface's shared corners (StartSurface.tsx) reuse the new
+   tab's .nt__corner and .nt__round rules (newtab.css), so every start
+   surface measures the same. Colours are tokens, so light and dark follow. */
+
+/* In an empty chat the keep-awake corner sits above the floor and arrives with the corner's last button. */
+.chat-view--empty > .ss-corner--bottom {
+  z-index: 3;
+  animation: ss-fade 220ms var(--ease-out) 850ms both;
+}
+
+/* The side panel's empty chat, scaled down. */
+.ss-corner--compact {
+  right: 12px;
+  bottom: 12px;
+}
+
+.ss-corner--compact .nt__round {
+  width: 32px;
+  height: 32px;
+}
+
+@keyframes ss-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-view--empty > .ss-corner--bottom {
+    animation: none;
+  }
+}
+
+:root[data-motion='reduced'] .chat-view--empty > .ss-corner--bottom {
+  animation: none;
+}
+
+/* ---- the tray tucked under the composer card (DS-108) ---- */
+
+/* The composer drops its bottom room so the tray's band slides under the card's rounded foot. */
+.chat-view--empty > .chat-composer {
+  padding-bottom: 0;
+}
+
+/* Outside the scrolling ideas, so the band is never clipped at the card's corners. It sits above
+   the floor (z-index 0, earlier in the tree) and under the composer card (z-index 1). */
+.chat-view--empty > .chat-start__tray {
+  position: relative;
+  z-index: 0;
+  flex: none;
+  animation: ss-fade 220ms var(--ease-out) 850ms both;
+}
+
+.chat-view--empty > .chat-start__below {
+  padding-top: var(--space-4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-view--empty > .chat-start__tray {
+    animation: none;
+  }
+}
+
+:root[data-motion='reduced'] .chat-view--empty > .chat-start__tray {
+  animation: none;
+}

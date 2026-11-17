@@ -1,0 +1,71 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* Tweaks (TWK-04, TWK-05): apex://tweaks and the Tweaks section of site info. Tokens only, so light and dark follow the theme. */
+
+/* ── page ── */
+.twk-scroll { flex: 1 1 auto; min-width: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; }
+.twk-page { max-width: 820px; margin: 0 auto; padding: 40px 24px 64px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; }
+.twk-card { display: grid; gap: 12px; min-width: 0; padding: 16px 18px; border: var(--hairline) solid var(--border-card); border-radius: var(--radius-lg); background: var(--bg-card); }
+.twk-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-width: 0; }
+.twk-muted { margin: 0; color: var(--text-secondary); font-size: var(--text-md); overflow-wrap: anywhere; }
+.twk-small { font-size: var(--text-sm); }
+.twk-error { margin: 0; color: var(--status-error); overflow-wrap: anywhere; }
+.twk-faint { flex: none; color: var(--text-tertiary); }
+
+.twk-add { gap: 8px; }
+.twk-add__row { display: flex; flex-wrap: wrap; gap: 8px; min-width: 0; }
+.twk-add__input { flex: 1 1 240px; min-width: 0; }
+
+/* ── list ── */
+.twk-list { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; border: var(--hairline) solid var(--border-card); border-radius: var(--radius-lg); background: var(--bg-card); overflow: hidden; }
+.twk-item { border-bottom: var(--hairline) solid var(--border-subtle); min-width: 0; }
+.twk-item:last-child { border-bottom: 0; }
+.twk-item__row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 6px 16px 6px 6px; }
+.twk-item__toggle { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 8px 10px; border: 0; border-radius: var(--radius-md); background: transparent; color: var(--text-secondary); text-align: start; font: inherit; cursor: pointer; }
+.twk-item__toggle:hover { background: var(--bg-hover); }
+.twk-item__toggle:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: 1px; }
+.twk-item__text { display: grid; gap: 2px; min-width: 0; }
+.twk-item__host { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-width: 0; color: var(--text-primary); font-size: var(--text-md); font-weight: 600; overflow-wrap: anywhere; }
+.twk-item__summary { min-width: 0; color: var(--text-secondary); font-size: var(--text-sm); overflow-wrap: anywhere; }
+.twk-item--off .twk-item__host { color: var(--text-secondary); }
+
+/* ── editor ── */
+.twk-editor { display: grid; gap: 20px; min-width: 0; padding: 4px 18px 18px 40px; }
+.twk-block { display: grid; gap: 10px; min-width: 0; }
+.twk-block__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; min-width: 0; }
+.twk-block__title { margin: 0; color: var(--text-primary); font-size: var(--text-md); font-weight: 600; }
+.twk-field { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; min-width: 0; }
+.twk-field--stack { display: grid; justify-content: stretch; gap: 8px; }
+.twk-field__label { margin: 0; color: var(--text-primary); font-size: var(--text-md); font-weight: 550; }
+.twk-hides { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; border: var(--hairline) solid var(--border-subtle); border-radius: var(--radius-md); }
+.twk-hide { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 6px 6px 6px 12px; border-bottom: var(--hairline) solid var(--border-subtle); min-width: 0; }
+.twk-hide:last-child { border-bottom: 0; }
+.twk-hide__text { display: grid; gap: 1px; min-width: 0; }
+.twk-hide__label { min-width: 0; color: var(--text-primary); font-size: var(--text-sm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.twk-hide__selector { min-width: 0; color: var(--text-tertiary); font-family: var(--font-mono); font-size: var(--text-xs); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.twk-editor__foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding-top: 4px; border-top: var(--hairline) solid var(--border-subtle); }
+.twk-editor__foot > * { margin-top: 12px; }
+
+/* ── colour choices ── */
+.twk-swatches { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-width: 0; }
+.twk-swatch { position: relative; display: grid; place-items: center; flex: none; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 50%; background: light-dark(var(--twk-swatch-light), var(--twk-swatch-dark)); box-shadow: inset 0 0 0 1px var(--border-card); color: light-dark(var(--twk-on-light), var(--twk-on-dark)); cursor: pointer; }
+.twk-swatch svg { width: 14px; height: 14px; }
+.twk-swatch[aria-checked='true'] { box-shadow: 0 0 0 2px var(--bg-card), 0 0 0 4px light-dark(var(--twk-swatch-light), var(--twk-swatch-dark)); }
+.twk-swatch--text { width: auto; height: 28px; padding: 0 12px; border-radius: var(--radius-pill); background: var(--bg-muted); color: var(--text-primary); font-size: var(--text-sm); font-weight: 550; white-space: nowrap; }
+.twk-swatch--text:hover { background: var(--bg-active); }
+.twk-swatch--text[aria-checked='true'] { box-shadow: 0 0 0 2px var(--accent); }
+.twk-swatch:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: 5px; }
+.twk-accent { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; min-width: 0; }
+.twk-color { flex: none; width: 36px; height: 28px; padding: 2px; border: var(--hairline) solid var(--border-card); border-radius: var(--radius-md); background: var(--bg-muted); cursor: pointer; }
+.twk-color:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: 2px; }
+@media (prefers-reduced-motion: no-preference) {
+  .twk-swatch { transition: transform var(--dur-fast) var(--ease-standard); }
+  .twk-swatch:not(.twk-swatch--text):hover { transform: scale(1.08); }
+}
+
+/* ── site info section ── */
+.twk-site { display: grid; gap: 8px; }
+.twk-site__actions { display: flex; flex-wrap: wrap; gap: 8px; }

@@ -1,0 +1,16 @@
+{"version":2,"type":"ready"}
+{"onDevice":true,"type":"started","mode":"meeting","locale":"en-US","systemAudio":true,"session":"m1","deviceId":"BuiltInMicrophoneDevice","fallbackDevice":false}
+{"source":"mic","type":"level","peak":0.4127,"session":"m1","rms":0.0815}
+{"startMs":0,"text":"Morning","session":"m1","type":"partial","endMs":640,"source":"mic"}
+{"endMs":1820,"source":"mic","type":"final","session":"m1","text":"Morning, shall we start with the roadmap?","startMs":0}
+{"text":"Sure","type":"partial","session":"m1","startMs":2100,"source":"system","endMs":2480}
+{"startMs":2100,"session":"m1","type":"final","source":"system","text":"Sure, the beta ships on Friday.","endMs":3960}
+{"closed":true,"type":"lid"}
+{"type":"paused","session":"m1"}
+{"type":"lid","closed":false}
+{"session":"m1","type":"resumed"}
+{"source":"system","type":"interrupted","session":"m1"}
+{"session":"m1","source":"system","type":"restored"}
+{"fatal":false,"type":"error","session":"m1","source":"mic","message":"The microphone was disconnected.","code":"device-missing"}
+{"text":"Great, thanks everyone.","source":"mic","session":"m1","endMs":6200,"startMs":4800,"type":"final"}
+{"audio":{"bytes":482113,"path":"/Users/someone/Library/Application Support/Apex/meetings/m1.m4a"},"durationMs":6420,"type":"stopped","session":"m1"}

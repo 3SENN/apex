@@ -1,0 +1,6 @@
+{"type":"ready","version":2}
+{"screen":"granted","microphone":"granted","type":"permissions","speech":"not-determined"}
+{"system":"en-NL","type":"locales","items":[{"name":"Dutch (Netherlands)","id":"nl-NL","onDevice":true},{"id":"en-US","name":"English (United States)","onDevice":true},{"name":"German (Germany)","onDevice":false,"id":"de-DE"}]}
+{"bundleId":"com.apple.loginwindow","pid":601,"type":"frontmost"}
+{"fatal":false,"message":"Nothing is recording.","code":"invalid","type":"error"}
+{"fatal":false,"message":"Unknown command nope.","code":"invalid","type":"error"}

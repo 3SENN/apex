@@ -1,0 +1,5 @@
+# Auto detect text files and perform LF normalization. Checkouts use LF on
+# every platform too, so a Windows clone (where Git defaults core.autocrlf to
+# true) has the same bytes as the committed icon and companion manifests, and
+# the same source the tests read.
+* text=auto eol=lf

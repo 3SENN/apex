@@ -1,0 +1,205 @@
+# Copyright (c) 2026 The Apex Authors. All rights reserved.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this file,
+# You can obtain one at https://mozilla.org/MPL/2.0/.
+#
+# Apex releases. Pushing a tag v<version> builds, signs,
+# notarizes, verifies and uploads every platform to a draft GitHub release; the
+# person reviews the draft and publishes it. docs/release.md is the runbook,
+# including the secrets and variables below. Nothing here tags or pushes.
+#
+# The macOS job builds arm64 and x64 together, so electron-builder writes one
+# latest-mac.yml that lists both (two jobs would each upload their own and
+# overwrite the other's). Windows builds x64 and arm64 into one installer.
+#
+# Every job runs only in 3SENN/apex, the official repository: a fork that pushes a
+# tag gets no release, and never one with the official branding (TRADEMARKS.md).
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  # A tag like v1.2.0-beta.1 is a beta; everything else is stable.
+  APEX_CHANNEL: ${{ contains(github.ref_name, '-beta.') && 'beta' || 'stable' }}
+  # Public builds offer only the API key engine unless the
+  # repository variable APEX_PUBLIC_RELEASE is set to 0 (scripts/internal.mjs).
+  APEX_PUBLIC_RELEASE: ${{ vars.APEX_PUBLIC_RELEASE || '1' }}
+  # Releases published from 3SENN/apex are official Apex builds: the name, logo and
+  # icons in branding/official (TRADEMARKS.md). Anywhere else (a fork) this is 0, and
+  # release.mjs refuses to publish an unofficial build; builds from source default to
+  # the unofficial branding.
+  APEX_OFFICIAL_BRANDING: ${{ github.repository == '3SENN/apex' && '1' || '0' }}
+  APEX_RELEASE_OWNER: ${{ github.repository_owner }}
+  APEX_RELEASE_REPO: ${{ github.event.repository.name }}
+  APEX_SUPPORT_EMAIL: ${{ vars.APEX_SUPPORT_EMAIL }}
+  APEX_WEBSITE: ${{ vars.APEX_WEBSITE }}
+
+jobs:
+  draft:
+    name: Open the draft release
+    if: github.repository == '3SENN/apex'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # One draft up front, so the parallel builds all upload to it.
+      - name: Check the tag and create the draft
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          version=$(node -p "require('./package.json').version")
+          if [ "v$version" != "$TAG" ]; then
+            echo "::error::The tag $TAG doesn't match package.json's version $version"
+            exit 1
+          fi
+          if ! gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            prerelease=""
+            case "$version" in *-*) prerelease="--prerelease" ;; esac
+            gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --draft $prerelease \
+              --title "Apex $version" --notes "Apex $version. The highlights are in src/shared/whatsNew.ts."
+          fi
+
+  build:
+    name: Build (${{ matrix.name }})
+    if: github.repository == '3SENN/apex'
+    needs: draft
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macOS
+            os: macos-latest
+            flag: --mac
+          - name: Windows
+            os: windows-latest
+            flag: --win
+          - name: Linux
+            os: ubuntu-latest
+            flag: --linux
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node 22
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
+          cache: npm
+
+      # windows-latest ships the .NET 8 SDK the Windows speech helper builds with.
+      - name: Show the .NET SDKs
+        if: runner.os == 'Windows'
+        run: dotnet --list-sdks
+
+      - name: Prepare a display and the sandbox
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends xvfb
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Fetch the Electron binary
+        run: node node_modules/electron/install.js
+
+      # notarytool reads the App Store Connect key from a file. With
+      # MAC_PROVISIONING_PROFILE the app is built in the browser passkeys mode
+      # (docs/release.md, "Browser passkeys and iCloud Passwords").
+      - name: Write the notarization key and the provisioning profile
+        if: runner.os == 'macOS'
+        shell: bash
+        env:
+          APPLE_API_KEY_P8: ${{ secrets.APPLE_API_KEY_P8 }}
+          MAC_PROVISIONING_PROFILE: ${{ secrets.MAC_PROVISIONING_PROFILE }}
+        run: |
+          if [ -n "$MAC_PROVISIONING_PROFILE" ]; then
+            profile="$RUNNER_TEMP/apex.provisionprofile"
+            printf '%s' "$MAC_PROVISIONING_PROFILE" | base64 --decode > "$profile"
+            echo "APEX_PROVISIONING_PROFILE=$profile" >> "$GITHUB_ENV"
+          fi
+          if [ -n "$APPLE_API_KEY_P8" ]; then
+            key="$RUNNER_TEMP/notary-key.p8"
+            printf '%s' "$APPLE_API_KEY_P8" > "$key"
+            chmod 600 "$key"
+            echo "APPLE_API_KEY=$key" >> "$GITHUB_ENV"
+          fi
+
+      - name: Build, sign, verify and upload
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # macOS: Developer ID Application certificate (base64 .p12) and notarization.
+          CSC_LINK: ${{ runner.os == 'macOS' && secrets.MAC_CSC_LINK || '' }}
+          CSC_KEY_PASSWORD: ${{ runner.os == 'macOS' && secrets.MAC_CSC_KEY_PASSWORD || '' }}
+          CSC_NAME: ${{ runner.os == 'macOS' && secrets.MAC_CSC_NAME || '' }}
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          # The app id and Apple team; empty means the defaults in scripts/release/bundle.mjs.
+          APEX_TEAM_ID: ${{ vars.APEX_TEAM_ID }}
+          APEX_BUNDLE_ID: ${{ vars.APEX_BUNDLE_ID }}
+          # Windows: a code-signing certificate, or Azure Trusted Signing.
+          WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
+          WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          APEX_AZURE_ENDPOINT: ${{ vars.APEX_AZURE_ENDPOINT }}
+          APEX_AZURE_ACCOUNT: ${{ vars.APEX_AZURE_ACCOUNT }}
+          APEX_AZURE_CERT_PROFILE: ${{ vars.APEX_AZURE_CERT_PROFILE }}
+          APEX_AZURE_PUBLISHER: ${{ vars.APEX_AZURE_PUBLISHER }}
+        run: |
+          unset ELECTRON_RUN_AS_NODE
+          node scripts/release/release.mjs ${{ matrix.flag }} --publish
+
+  finish:
+    name: Add SHA256SUMS and apex-support.json
+    if: github.repository == '3SENN/apex'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node 22
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
+
+      - name: Hash the installers and write the support feed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/assets"
+          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir "$RUNNER_TEMP/assets" \
+            --pattern '*.dmg' --pattern '*.zip' --pattern '*.exe' --pattern '*.AppImage' --pattern '*.deb'
+          node scripts/release/checksums.mjs "$RUNNER_TEMP/assets"
+          node scripts/release/support-feed.mjs --out "$RUNNER_TEMP/assets/apex-support.json"
+          gh release upload "$TAG" --repo "$GITHUB_REPOSITORY" --clobber \
+            "$RUNNER_TEMP/assets/SHA256SUMS" "$RUNNER_TEMP/assets/apex-support.json"

@@ -1,0 +1,1484 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* Settings and destination pages (Skills, Routines, Connectors, History,
+   Bookmarks, Downloads). Every colour is a token from styles.css, so light
+   and dark both work without overrides here. */
+
+/* ---- page frame ---- */
+
+.sp-page {
+  /* Settings and destination pages never take the companion's colour
+     (DS-129): every accent here is the profile hue, so switching companion
+     changes nothing on these pages. The derived names are restated because
+     custom properties resolve where they are declared. */
+  --accent: var(--profile-text);
+  --accent-soft: color-mix(in srgb, var(--profile-text) 12%, var(--bg-card));
+  --accent-text: light-dark(#ffffff, #1c1a17);
+  --accent-hover: color-mix(in srgb, var(--profile-text) 88%, light-dark(black, white));
+  --accent-pressed: color-mix(in srgb, var(--profile-text) 78%, light-dark(black, white));
+  --accent-ring: color-mix(in srgb, var(--profile-text) 30%, transparent);
+  --bg-selected: var(--bg-active);
+  --status-unread: var(--status-unread-chrome);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  overflow: hidden;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  user-select: text;
+}
+
+.sp-main {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  /* DS-130: the title sits 64 px below the content top. */
+  --sp-main-top: 64px;
+  padding: var(--sp-main-top) var(--space-10) var(--space-12);
+  scrollbar-gutter: stable;
+  /* Headers and rows respond to the column's own width (a settings page sits
+     in a pane beside the sidebar and chat, so the window width says little). */
+  container: sp-main / inline-size;
+}
+
+/* DS-100: on a destination page the header and row 2 both stay put. The
+   scroller drops its top padding and the sticky header carries it instead, so
+   nothing scrolls visibly above the title. */
+.sp-main:has(> .sp-content--wide > .sp-header:first-child + .sp-dest-toolbar) {
+  padding-top: 0;
+}
+
+.sp-content--wide > .sp-header:first-child:has(+ .sp-dest-toolbar) {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  margin-bottom: 0;
+  padding: var(--sp-main-top) 0 var(--space-6);
+  background: var(--bg-card);
+}
+
+.sp-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.sp-content--wide {
+  /* DS-100: min(838, sheet − 64) for destination pages. */
+  max-width: 838px;
+}
+
+/* DS-105: the wide, left-aligned template (Library) with 32 px gutters. */
+.sp-main--fluid {
+  padding-right: 32px;
+  padding-left: 32px;
+}
+
+.sp-content--fluid {
+  max-width: none;
+  margin: 0;
+}
+
+/* History's Timeline view: wider than the list (a calendar beside the day), centred. */
+.hist-timeline {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+@media (max-width: 760px) {
+  .sp-main {
+    --sp-main-top: var(--space-6);
+    padding: var(--sp-main-top) var(--space-5) var(--space-10);
+  }
+}
+
+/* ---- settings nav ---- */
+
+/* DS-128: 288 px, the page's own colour, a hairline on the right. */
+.sp-nav {
+  position: relative;
+  flex: none;
+  width: var(--sp-nav-width, 288px);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 var(--space-3) var(--space-5);
+  overflow-y: auto;
+  border-right: var(--line) solid var(--border-default);
+  background: var(--bg-card);
+}
+
+.sp-nav--rail {
+  width: 60px;
+  padding-inline: var(--space-2);
+}
+
+/* Narrow card: the rail stays in place and the opened nav floats over the page. */
+.sp-nav-float {
+  position: absolute;
+  inset: 0 auto 0 0;
+  z-index: 5;
+  width: 288px;
+  border-right: 1px solid var(--border-default);
+  background: var(--bg-raised);
+  box-shadow: var(--shadow-overlay);
+  animation: sp-slide-in var(--dur-base) var(--ease-out);
+}
+
+@keyframes sp-slide-in {
+  from {
+    transform: translateX(-12px);
+    opacity: 0;
+  }
+}
+
+.sp-nav__head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: 56px;
+  margin: 0 calc(-1 * var(--space-3)) var(--space-1);
+  padding: 0 var(--space-2) 0 var(--space-3);
+  background: var(--bg-card);
+}
+
+.sp-nav--rail .sp-nav__head {
+  justify-content: center;
+}
+
+.sp-nav__title {
+  flex: 1;
+  margin: 0;
+  padding-left: var(--space-3);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.sp-nav__group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sp-nav__group + .sp-nav__group {
+  margin-top: var(--space-4);
+}
+
+.sp-nav__group-label {
+  margin: 0;
+  padding: var(--space-1-5) var(--space-2-5);
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sp-nav--rail .sp-nav__group + .sp-nav__group {
+  margin-top: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* 36 px rows on a 38 px pitch; a 14 px regular label, muted at rest. */
+.sp-nav__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  width: 100%;
+  height: 36px;
+  padding: 0 var(--space-2-5);
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sp-nav__item svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.sp-nav__item:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+/* DS-129: the hover fill, with the label and glyph in the profile hue (never the companion's). */
+.sp-nav__item[aria-current='page'] {
+  background: light-dark(var(--bg-hover), var(--bg-muted));
+  color: var(--profile-text);
+}
+
+.sp-nav__item:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: -2px;
+}
+
+.sp-nav__label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sp-nav__item .sp-nav__external {
+  width: 13px;
+  height: 13px;
+  color: var(--text-tertiary);
+}
+
+.sp-nav--rail .sp-nav__item {
+  justify-content: center;
+  padding: 0;
+}
+
+/* ---- headers, sections, cards ---- */
+
+.sp-back {
+  margin: 0 0 var(--space-3) calc(-1 * var(--space-2));
+}
+
+.sp-header {
+  display: flex;
+  /* The actions drop under the title before the text column gets too narrow. */
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.sp-header__text {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+/* DS-105: the title with a selector pill beside it. */
+.sp-header__title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* DS-130: an 18 px semibold title in a 28 px line, a 14 px muted subtitle. */
+.sp-header__title {
+  margin: 0;
+  font-size: var(--text-xl);
+  font-weight: 600;
+  line-height: 28px;
+  letter-spacing: -0.01em;
+  overflow-wrap: break-word;
+}
+
+.sp-header__description {
+  margin: var(--space-1) 0 0;
+  max-width: 62ch;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+
+.sp-header__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--space-2);
+  flex: none;
+  max-width: 100%;
+}
+
+@container sp-main (max-width: 640px) {
+  .sp-header__actions {
+    justify-content: flex-start;
+  }
+}
+
+.sp-section {
+  margin-bottom: var(--space-12);
+}
+
+.sp-section__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-2);
+  padding: 0 var(--space-1);
+}
+
+.sp-section__title {
+  flex: 1;
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+.sp-section__note {
+  margin: var(--space-2) var(--space-1) 0;
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+  line-height: 1.45;
+}
+
+/* DS-131: radius 16, raised (white, a step up in dark), a hairline and a very soft shadow. */
+.sp-card {
+  border: var(--line) solid var(--border-default);
+  border-radius: 16px;
+  background: var(--bg-raised);
+  box-shadow: light-dark(0 1px 2px rgba(46, 36, 24, 0.04), none);
+}
+
+.sp-card > * + * {
+  border-top: var(--line) solid var(--border-default);
+}
+
+.sp-card > .ui-switch-row {
+  min-height: 54px;
+  padding: var(--space-2) var(--space-6);
+}
+
+/* 54 px for a title, 68 for a title and description; 24 px sides. */
+.sp-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: 54px;
+  padding: var(--space-2) var(--space-6);
+}
+
+.sp-row:has(.sp-row__description) {
+  min-height: 68px;
+}
+
+.sp-row--stack {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-3);
+}
+
+.sp-row__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.sp-row__title {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  overflow-wrap: break-word;
+}
+
+/* `anywhere` so a long path or address wraps instead of running under the control. */
+.sp-row__description {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-md);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.sp-row__control {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--space-2);
+  flex: none;
+  max-width: 60%;
+}
+
+.sp-row--stack .sp-row__control {
+  justify-content: flex-start;
+  max-width: none;
+}
+
+/* DS-132: settings segments are icon-plus-label, about 124×32 each, on a
+   grey 40 px track. They shrink toward their content in a narrow row. */
+.sp-row__control > .ui-segmented--md {
+  max-width: 100%;
+  padding: 4px;
+  border-radius: 12px;
+}
+
+.sp-row__control > .ui-segmented--md .ui-segmented__thumb {
+  top: 4px;
+  bottom: 4px;
+  border-radius: 8px;
+}
+
+.sp-row__control > .ui-segmented--md .ui-segmented__option {
+  flex: 0 1 124px;
+  min-width: max-content;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 8px;
+  font-size: var(--text-md);
+  white-space: nowrap;
+}
+
+.sp-row__control > .ui-segmented--md .ui-segmented__option svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+/* A narrow column: a control that can't sit beside its text (a wide
+   segmented control, several buttons) drops below it, full width. */
+@container sp-main (max-width: 640px) {
+  .sp-row {
+    flex-wrap: wrap;
+  }
+  .sp-row:not(.sp-row--stack) > .sp-row__text {
+    flex-basis: 200px;
+  }
+  .sp-row__control {
+    max-width: 100%;
+  }
+}
+
+/* ---- fields ---- */
+
+.sp-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1-5);
+}
+
+.sp-field + .sp-field {
+  margin-top: var(--space-4);
+}
+
+.sp-field__label {
+  color: var(--text-primary);
+  font-size: var(--text-md);
+  font-weight: 550;
+}
+
+.sp-field__hint {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+  line-height: 1.45;
+}
+
+.sp-field__error {
+  margin: 0;
+  color: var(--status-error);
+  font-size: var(--text-sm);
+}
+
+.sp-field__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.sp-input,
+.sp-textarea {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-control);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--text-md);
+  outline: none;
+  transition: border-color var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard);
+}
+
+.sp-input {
+  height: var(--control-md);
+  padding: 0 11px;
+}
+
+.sp-input--inline {
+  flex: 1;
+  width: auto;
+  min-width: 160px;
+}
+
+.sp-input--short {
+  width: 96px;
+}
+
+.sp-textarea {
+  min-height: 120px;
+  padding: 9px 11px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.sp-textarea--code {
+  min-height: 280px;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+.sp-input::placeholder,
+.sp-textarea::placeholder {
+  color: var(--text-tertiary);
+}
+
+.sp-input:focus-visible,
+.sp-textarea:focus-visible {
+  border-color: var(--accent);
+  box-shadow: var(--focus-halo);
+}
+
+.sp-input[aria-invalid='true'],
+.sp-textarea[aria-invalid='true'] {
+  border-color: var(--status-error);
+}
+
+.sp-input:disabled,
+.sp-textarea:disabled {
+  opacity: 0.55;
+}
+
+/* ---- notices ---- */
+
+.sp-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2-5);
+  margin-bottom: var(--space-4);
+  padding: var(--space-2-5) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--bg-muted);
+  color: var(--text-primary);
+  font-size: var(--text-md);
+  line-height: 1.45;
+}
+
+.sp-notice > svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+}
+
+.sp-notice__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.sp-notice--error {
+  background: var(--status-error-soft);
+}
+
+.sp-notice--error > svg {
+  color: var(--status-error);
+}
+
+.sp-notice--warning {
+  background: var(--status-needs-input-soft);
+}
+
+.sp-notice--warning > svg {
+  color: var(--status-needs-input);
+}
+
+.sp-notice--info {
+  background: var(--accent-soft);
+}
+
+.sp-notice--info > svg {
+  color: var(--accent);
+}
+
+/* ---- toolbar: search and filters ---- */
+
+.sp-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.sp-search {
+  position: relative;
+  flex: 1 1 200px;
+  min-width: 180px;
+}
+
+.sp-search > svg {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  width: 15px;
+  height: 15px;
+  color: var(--text-tertiary);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.sp-search .sp-input {
+  padding-left: 32px;
+  padding-right: 32px;
+  background: var(--bg-subtle);
+  border-color: var(--border-default);
+}
+
+.sp-search .sp-input:focus-visible {
+  background: var(--bg-card);
+}
+
+.sp-search__clear {
+  position: absolute;
+  top: 50%;
+  right: 4px;
+  transform: translateY(-50%);
+}
+
+.sp-toolbar__count {
+  margin-left: auto;
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
+/* ---- lists ---- */
+
+.sp-list {
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-card);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-xs);
+  overflow: hidden;
+}
+
+.sp-list + .sp-list,
+.sp-group + .sp-group {
+  margin-top: var(--space-5);
+}
+
+.sp-group__label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-2);
+  padding: 0 var(--space-1);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.sp-group__count {
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+
+.sp-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 56px;
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+
+.sp-item + .sp-item,
+.sp-item + .sp-item-detail,
+.sp-item-detail + .sp-item {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.sp-item:hover,
+.sp-item:focus-within {
+  background: var(--bg-hover);
+}
+
+.sp-item--muted .sp-item__title {
+  color: var(--text-secondary);
+}
+
+.sp-item__lead {
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+
+.sp-item__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-muted);
+  color: var(--text-secondary);
+}
+
+.sp-item__icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.sp-item__main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-1) 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
+button.sp-item__main {
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+
+button.sp-item__main:disabled {
+  cursor: default;
+}
+
+button.sp-item__main:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+.sp-item__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  color: var(--text-primary);
+  font-weight: 550;
+}
+
+.sp-item__title-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* With no badge after it, the title's box takes the row's free width (a short
+   title like "Site" otherwise gets a box exactly its own size); with badges it
+   stays content-sized, so they sit right after the text. */
+.sp-item__title-text:last-child {
+  flex: 1 1 0;
+}
+
+.sp-item__sub {
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sp-item__sub--wrap {
+  display: -webkit-box;
+  white-space: normal;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.sp-item__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: none;
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
+.sp-item__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-0-5);
+  flex: none;
+}
+
+/* Secondary row actions appear on hover or focus; keyboard users reach them by Tab. */
+.sp-item__actions--reveal {
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-standard);
+}
+
+.sp-item:hover .sp-item__actions--reveal,
+.sp-item:focus-within .sp-item__actions--reveal,
+.sp-item__actions--reveal:has([data-menu-open]) {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .sp-item__actions--reveal {
+    opacity: 1;
+  }
+}
+
+.sp-item-detail {
+  padding: var(--space-2) var(--space-4) var(--space-3) calc(var(--space-4) + 44px);
+  background: var(--bg-subtle);
+}
+
+.sp-mono {
+  font-family: var(--font-mono);
+  font-size: 0.95em;
+}
+
+.sp-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-link);
+  font: inherit;
+  font-weight: 550;
+  cursor: pointer;
+}
+
+.sp-link:hover {
+  text-decoration: underline;
+}
+
+.sp-link:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* ---- avatars ---- */
+
+.sp-avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--avatar-size, 40px);
+  height: var(--avatar-size, 40px);
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: calc(var(--avatar-size, 40px) * 0.42);
+  font-weight: 650;
+  user-select: none;
+}
+
+.sp-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sp-avatar--companion {
+  border-radius: var(--radius-md);
+  background: var(--bg-muted);
+}
+
+.sp-avatar--companion img {
+  object-fit: contain;
+}
+
+.sp-avatar--dimmed {
+  opacity: 0.55;
+}
+
+/* ---- accent swatches ---- */
+
+.sp-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.sp-swatch {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: light-dark(var(--swatch-light), var(--swatch-dark));
+  box-shadow: inset 0 0 0 1px var(--border-card);
+  color: light-dark(var(--swatch-on-light), var(--swatch-on-dark));
+  cursor: pointer;
+  transition: transform var(--dur-fast) var(--ease-spring);
+}
+
+.sp-swatch:hover {
+  transform: scale(1.08);
+}
+
+.sp-swatch svg {
+  width: 15px;
+  height: 15px;
+}
+
+.sp-swatch[aria-checked='true'] {
+  box-shadow:
+    0 0 0 2px var(--bg-card),
+    0 0 0 4px light-dark(var(--swatch-light), var(--swatch-dark));
+}
+
+.sp-swatch:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 5px;
+}
+
+.sp-swatch--companion {
+  width: auto;
+  padding: 0 var(--space-3) 0 4px;
+  gap: var(--space-1-5);
+  display: inline-flex;
+  border-radius: var(--radius-pill);
+  background: var(--bg-muted);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  font-weight: 550;
+}
+
+.sp-swatch--companion:hover {
+  transform: none;
+  background: var(--bg-active);
+}
+
+.sp-swatch--companion[aria-checked='true'] {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.sp-swatch__dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: light-dark(var(--swatch-light), var(--swatch-dark));
+  box-shadow: inset 0 0 0 1px var(--border-card);
+}
+
+/* ---- day picker ---- */
+
+.sp-days {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.sp-day {
+  width: 34px;
+  height: var(--control-md);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-control);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sp-day[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--text-on-accent);
+}
+
+.sp-day:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+/* ---- memory editor ---- */
+
+.sp-editor {
+  margin-bottom: var(--space-4);
+  padding: var(--space-4);
+}
+
+.sp-editor__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.sp-editor__title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  font-size: var(--text-md);
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- history, downloads ---- */
+
+.sp-favicon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-muted);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 650;
+}
+
+.sp-progress {
+  display: block;
+  height: 4px;
+  margin-top: var(--space-1-5);
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--bg-muted);
+}
+
+.sp-progress > i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+  transition: width var(--dur-base) var(--ease-standard);
+}
+
+.sp-more {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-4);
+}
+
+/* Loading lists sit in the same frame as loaded ones. */
+.sp-list .ui-skeleton-rows {
+  padding: var(--space-3) var(--space-4);
+}
+
+.sp-list > .ui-state {
+  padding-block: var(--space-10);
+}
+
+/* ---- routine runs ---- */
+
+.sp-run {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 44px;
+  padding: var(--space-1) var(--space-2) var(--space-1) 0;
+}
+
+.sp-list > .sp-run {
+  padding-left: var(--space-4);
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+
+.sp-list > .sp-run + .sp-run {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.sp-list > .sp-run:hover,
+.sp-list > .sp-run:focus-within {
+  background: var(--bg-hover);
+}
+
+.sp-item-detail .sp-link {
+  margin-top: var(--space-1);
+  font-size: var(--text-sm);
+}
+
+/* ---- destination template (DS-100 to DS-104) ---- */
+
+/* DS-100: row 2, segments left; the pill search and round filter right. It
+   sticks under the header with a 20 px fade into the page. */
+.sp-dest-toolbar {
+  position: sticky;
+  /* Right under a sticky header (kit's PageHeader publishes its height). */
+  top: var(--sp-dest-head-h, calc(-1 * var(--space-2)));
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0 0 36px;
+  padding: var(--space-2) 0;
+  background: var(--bg-card);
+}
+
+.sp-dest-toolbar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 20px;
+  background: linear-gradient(var(--bg-card), transparent);
+  pointer-events: none;
+}
+
+.sp-dest-toolbar__end {
+  display: flex;
+  flex: 1 1 280px;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.sp-search--pill {
+  flex: 0 1 280px;
+}
+
+/* DS-103: a full-width search followed by the filter button. */
+.sp-dest-toolbar--full .sp-dest-toolbar__end {
+  flex: 1 1 100%;
+  justify-content: stretch;
+}
+
+.sp-dest-toolbar--full .sp-search--pill {
+  flex: 1 1 auto;
+}
+
+.sp-search--pill .sp-input {
+  height: 36px;
+  border-radius: 18px;
+  background: var(--bg-raised);
+  border: var(--line) solid var(--border-default);
+}
+
+.sp-filter-btn {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: var(--line) solid var(--border-default);
+  border-radius: 50%;
+  background: var(--bg-raised);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.sp-filter-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.sp-filter-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.sp-filter-btn--active {
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+
+.sp-filter-btn__dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--profile-text);
+}
+
+/* DS-102 / DS-103: two- and three-column tile grids. */
+.sp-tile-grid {
+  display: grid;
+  gap: 14px 32px;
+}
+
+.sp-tile-grid--3 {
+  grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
+}
+
+/* DS-103: a grid item may shrink below its content, so a long description ellipsises inside its cell. */
+.sp-tile-grid > * {
+  min-width: 0;
+}
+
+.sp-tile-grid--2 {
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 14px;
+}
+
+/* A connector tile: 44 px logo, a 15 px semibold name, one muted line, a trailing glyph. */
+.sp-conn-tile {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 84px;
+  padding: var(--space-2);
+  border: 0;
+  border-radius: 14px;
+  background: none;
+  color: var(--text-primary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sp-conn-tile:hover {
+  background: var(--bg-hover);
+}
+
+.sp-conn-tile__logo {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: var(--line) solid var(--border-default);
+  border-radius: 10px;
+  background: var(--bg-raised);
+}
+
+.sp-conn-tile__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.sp-conn-tile__name {
+  overflow: hidden;
+  font-size: 15px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sp-conn-tile__desc {
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* DS-102: a dashed suggestion card, a 32 px Apex glyph tile, a title, two muted lines, dismiss on hover. */
+.sp-suggest-card {
+  position: relative;
+  display: flex;
+  gap: var(--space-3);
+  min-height: 112px;
+  padding: var(--space-4);
+  border: var(--line) dashed var(--border-strong);
+  border-radius: 16px;
+  background: none;
+  color: var(--text-primary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sp-suggest-card:hover {
+  background: var(--bg-hover);
+}
+
+.sp-suggest-card__glyph {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+}
+
+.sp-suggest-card__title {
+  font-weight: 600;
+}
+
+.sp-suggest-card__desc {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.sp-suggest-card__dismiss {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  opacity: 0;
+}
+
+.sp-suggest-card:hover .sp-suggest-card__dismiss,
+.sp-suggest-card:focus-within .sp-suggest-card__dismiss {
+  opacity: 1;
+}
+
+.sp-guide-pill {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-6);
+}
+
+/* DS-101: 28 px chips; toggles fill, dropdowns carry a chevron. */
+.sp-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.sp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  padding: 0 12px;
+  border: var(--line) solid var(--border-default);
+  border-radius: 14px;
+  background: var(--bg-raised);
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.sp-chip:hover {
+  color: var(--text-primary);
+}
+
+.sp-chip--on {
+  border-color: var(--text-primary);
+  background: var(--text-primary);
+  color: var(--bg-raised);
+}
+
+.sp-chip--menu::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 2px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+}
+
+/* DS-100: a centred empty state: a 30 px line glyph, a medium caption, an ink and an outlined pill. */
+.sp-dest-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-12) var(--space-4);
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.sp-dest-empty > svg {
+  width: 30px;
+  height: 30px;
+  stroke-width: 1.5;
+}
+
+.sp-dest-empty__actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+:root[data-motion='reduced'] .sp-suggest-card__dismiss {
+  transition: none;
+}
+
+/* ON-18: About you — your rhythms as a short list, your apps as removable chips. */
+.sp-about-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sp-about-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sp-about-item > span:first-child {
+  flex: 1;
+}
+
+.sp-about-when {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.sp-about-app {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding-right: 2px;
+}
+
+/* ON-18: About you at a glance — your card, then your week and apps as small tags. */
+.about-glance {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.about-glance__more {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.about-glance__item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  box-shadow: 0 0 0 1px var(--border-subtle);
+}
+
+.about-glance__item strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.about-glance__app {
+  color: var(--text-primary);
+}

@@ -1,0 +1,18 @@
+node_modules/
+out/
+out-dev/
+dist/
+*.log
+.DS_Store
+.vite/
+*.tsbuildinfo
+native/speech/build/
+# What the internal folder's packaging steps stage (scripts/internal.mjs prepackage)
+vendor/
+# The native helpers' build folders; installers and SHA256SUMS go to dist/
+native/*/build/
+# The passkeys entitlements and profiles scripts/release/entitlements.mjs and asc.mjs write.
+build/generated/
+
+# The private internal/ folder (scripts/internal.mjs): a separate, private repo, never part of this one.
+/internal/

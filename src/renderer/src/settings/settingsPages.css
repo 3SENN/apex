@@ -1,0 +1,675 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* The settings pages and framework pieces: the nav's list, foot and
+   splitter, page states, selection tiles, Languages, Appearance's layout
+   drawings, Privacy, Storage, Reset, Import and the Dock icon. Every colour
+   is a token (light-dark() where a value differs), so both themes follow. */
+
+/* ---- nav: a scrolling list between a sticky head and a fixed foot ---- */
+
+.sp-nav {
+  overflow: hidden;
+}
+
+.sp-nav__list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  margin: 0 calc(-1 * var(--space-3));
+  padding: 0 var(--space-3);
+}
+
+.sp-nav__head--scrolled {
+  box-shadow: 0 var(--line) 0 var(--border-default);
+}
+
+.sp-nav__foot {
+  flex: none;
+  padding-top: var(--space-2);
+  border-top: var(--line) solid var(--border-default);
+}
+
+/* The drag handle: 8 px wide, centred on the hairline; ←/→ step it when focused. */
+.sp-nav__splitter {
+  position: absolute;
+  top: 0;
+  right: -4px;
+  bottom: 0;
+  width: 8px;
+  cursor: col-resize;
+  touch-action: none;
+  z-index: 2;
+}
+
+.sp-nav__splitter::after {
+  content: '';
+  position: absolute;
+  inset: 0 3px;
+  border-radius: 1px;
+  background: transparent;
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+
+.sp-nav__splitter:hover::after,
+.sp-nav--dragging .sp-nav__splitter::after,
+.sp-nav__splitter:focus-visible::after {
+  background: color-mix(in srgb, var(--profile-text) 55%, transparent);
+}
+
+.sp-nav__splitter:focus-visible {
+  outline: none;
+}
+
+.sp-nav--dragging {
+  user-select: none;
+}
+
+/* ST-01: the nav never animates under reduced motion. */
+:root[data-motion='reduced'] .sp-nav-float,
+:root[data-motion='reduced'] .sp-nav__splitter::after {
+  animation: none;
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sp-nav-float {
+    animation: none;
+  }
+}
+
+/* ---- page header help link (ST-04) ---- */
+
+.sp-header__help {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: var(--text-md);
+}
+
+.sp-header__help svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ---- rows ---- */
+
+.sp-row__icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: var(--text-secondary);
+}
+
+.sp-row__icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.sp-row--end {
+  justify-content: flex-end;
+}
+
+.sp-card > .sp-switch-anchor > .ui-switch-row {
+  min-height: 54px;
+  padding: var(--space-2) var(--space-6);
+}
+
+/* The topic glyph sits inline, left of the row title (not on its own line). */
+.sp-switch-anchor--icon {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-left: var(--space-6);
+}
+
+.sp-switch-anchor--icon > .ui-switch-row,
+.sp-card > .sp-switch-anchor--icon > .ui-switch-row {
+  flex: 1;
+  min-width: 0;
+  padding-left: 0;
+}
+
+.sp-icon--positive {
+  color: var(--positive);
+}
+
+.sp-warn-text {
+  color: light-dark(#9a5b00, #f0b45c);
+}
+
+/* ---- page states (SS-01, ST-04) ---- */
+
+.sp-page-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.sp-page-skeleton .sp-card {
+  margin-top: var(--space-6);
+  padding: var(--space-2) var(--space-6);
+}
+
+.sp-card--state {
+  padding: var(--space-6);
+}
+
+.sp-card--danger {
+  border-color: color-mix(in srgb, var(--danger) 40%, var(--border-default));
+}
+
+/* ---- selection tiles (DS-132) ---- */
+
+.sp-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.sp-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border: var(--line) solid var(--border-default);
+  border-radius: 12px;
+  background: var(--bg-raised);
+  color: var(--text-primary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sp-tile:hover {
+  background: var(--bg-hover);
+}
+
+.sp-tile[aria-checked='true'] {
+  border: 2px solid var(--text-primary);
+  padding: calc(var(--space-3) - 1px);
+}
+
+.sp-tile__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* A longer title (Dutch, a narrow window) wraps rather than losing its end. */
+.sp-tile__title {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--text-md);
+  font-weight: 600;
+  overflow-wrap: break-word;
+}
+
+.sp-tile__radio {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 50%;
+}
+
+.sp-tile[aria-checked='true'] .sp-tile__radio {
+  border: 5px solid var(--profile-text);
+}
+
+.sp-tile__description {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.sp-tile__art {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 92px;
+  margin-top: var(--space-2);
+  border-radius: 8px;
+  background: var(--bg-subtle);
+}
+
+/* ---- Appearance: Apex's own drawings of the two layouts (ST-25) ---- */
+
+.sp-layout-art {
+  display: flex;
+  flex-direction: column;
+  width: 132px;
+  height: 80px;
+  overflow: hidden;
+  border: var(--line) solid var(--border-strong);
+  border-radius: 6px;
+  background: var(--bg-card);
+}
+
+.sp-layout-art__bar {
+  flex: none;
+  height: 12px;
+  background: var(--profile-ground);
+}
+
+.sp-layout-art--top .sp-layout-art__bar {
+  height: 18px;
+  background: repeating-linear-gradient(90deg, var(--profile-ground) 0 26px, color-mix(in srgb, var(--profile-text) 18%, var(--profile-ground)) 26px 28px);
+}
+
+.sp-layout-art__body {
+  display: flex;
+  flex: 1;
+}
+
+.sp-layout-art__side {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 4px;
+  width: 34px;
+  padding: 6px 5px;
+  background: var(--profile-ground);
+}
+
+.sp-layout-art__side i {
+  height: 4px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--profile-text) 30%, transparent);
+}
+
+.sp-layout-art__page {
+  flex: 1;
+  margin: 6px;
+  border-radius: 3px;
+  background: var(--bg-raised);
+  box-shadow: inset 0 0 0 var(--line) var(--border-default);
+}
+
+/* ---- Languages (ST-32) ---- */
+
+.sp-lang-list {
+  margin: 0;
+  padding: var(--space-2) var(--space-6);
+  list-style: none;
+}
+
+.sp-lang {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 44px;
+}
+
+.sp-lang + .sp-lang {
+  border-top: var(--line) solid var(--border-default);
+}
+
+.sp-lang__index {
+  width: 20px;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.sp-lang__name {
+  display: flex;
+  flex: 1;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.sp-lang__tag {
+  color: var(--text-tertiary);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: var(--text-sm);
+}
+
+.sp-lang__first {
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--profile-text) 12%, transparent);
+  color: var(--profile-text);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.sp-lang__actions {
+  display: flex;
+  gap: 2px;
+}
+
+.sp-lang-add {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-6);
+}
+
+.sp-lang-add__field {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.sp-lang-add__field > :first-child {
+  flex: 1;
+}
+
+.sp-lang-suggest {
+  position: absolute;
+  top: calc(100% - var(--space-3));
+  left: var(--space-6);
+  right: var(--space-6);
+  z-index: 3;
+  max-height: 240px;
+  margin: 0;
+  padding: var(--space-1);
+  overflow-y: auto;
+  list-style: none;
+  border: var(--line) solid var(--border-default);
+  border-radius: 10px;
+  background: var(--bg-raised);
+  box-shadow: var(--shadow-overlay);
+}
+
+.sp-lang-suggest__item {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-1-5) var(--space-2);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.sp-lang-suggest__item:hover,
+.sp-lang-suggest__item[aria-selected='true'] {
+  background: var(--bg-hover);
+}
+
+.sp-lang-save {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-6);
+}
+
+/* ---- clear browsing data (ST-36) ---- */
+
+.sp-clear {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sp-clear__range {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-weight: 600;
+}
+
+.sp-clear__kinds {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.sp-clear__confirm {
+  margin: 0;
+  padding: var(--space-3);
+  border-radius: 10px;
+  background: var(--danger-soft);
+  color: var(--text-primary);
+}
+
+/* ---- Storage (ST-53, ST-54) ---- */
+
+/* Eight slots in Apex's own palette; each holds its contrast on both grounds. */
+.sp-page {
+  --storage-1: light-dark(#5b6ee1, #8b9bff);
+  --storage-2: light-dark(#d9822b, #f2a65a);
+  --storage-3: light-dark(#2f9e77, #5ccfa4);
+  --storage-4: light-dark(#b0499b, #e07fcd);
+  --storage-5: light-dark(#3a8fc4, #6cc0f2);
+  --storage-6: light-dark(#8a7a2e, #cdb85a);
+  --storage-7: light-dark(#c4473a, #f07f72);
+  --storage-8: light-dark(#6b6460, #a8a09a);
+}
+
+.sp-usage [data-tone='1'] { --tone: var(--storage-1); }
+.sp-usage [data-tone='2'] { --tone: var(--storage-2); }
+.sp-usage [data-tone='3'] { --tone: var(--storage-3); }
+.sp-usage [data-tone='4'] { --tone: var(--storage-4); }
+.sp-usage [data-tone='5'] { --tone: var(--storage-5); }
+.sp-usage [data-tone='6'] { --tone: var(--storage-6); }
+.sp-usage [data-tone='7'] { --tone: var(--storage-7); }
+.sp-usage [data-tone='8'] { --tone: var(--storage-8); }
+
+.sp-usage__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-6);
+}
+
+.sp-usage__total {
+  margin: 0;
+  font-size: var(--text-xl);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.sp-usage__bar {
+  display: flex;
+  gap: 2px;
+  height: 14px;
+  overflow: hidden;
+  border-radius: 7px;
+  background: var(--bg-subtle);
+}
+
+.sp-usage__bar-skeleton {
+  border-radius: 7px;
+}
+
+.sp-usage__seg {
+  flex-basis: 0;
+  min-width: 3px;
+  background: var(--tone);
+}
+
+.sp-usage__measuring {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.sp-usage__legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-1-5) var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sp-usage__key {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-md);
+}
+
+.sp-usage__swatch {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  background: var(--tone);
+}
+
+.sp-usage__label {
+  flex: 1;
+  min-width: 0;
+  color: var(--text-secondary);
+}
+
+.sp-usage__size {
+  font-variant-numeric: tabular-nums;
+}
+
+.sp-chat-sizes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sp-chat-sizes > li + li {
+  border-top: var(--line) solid var(--border-default);
+}
+
+.sp-chat-size .sp-row__title {
+  overflow: hidden;
+  font-size: var(--text-md);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- Reset Apex (ST-55) ---- */
+
+.sp-reset {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sp-reset__steps {
+  margin: 0;
+  padding: var(--space-3) var(--space-4) var(--space-3) var(--space-8);
+  border-radius: 10px;
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.sp-reset__step--secret {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.sp-reset__secrets .sp-field__hint {
+  margin: var(--space-1) 0 0 var(--space-6);
+}
+
+.sp-reset__phrase {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* ---- Import (ST-46, ON-03) ---- */
+
+.sp-import {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sp-import__explainer {
+  margin: 0 var(--space-1) var(--space-3);
+  color: var(--text-secondary);
+}
+
+.sp-import__types {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: var(--space-4) var(--space-6);
+  border: var(--line) solid var(--border-default);
+  border-radius: 16px;
+  background: var(--bg-raised);
+}
+
+.sp-import__types legend {
+  float: left;
+  width: 100%;
+  margin-bottom: var(--space-2);
+}
+
+.sp-import__cookies-note {
+  margin: calc(-1 * var(--space-1)) var(--space-2) var(--space-1) var(--space-8);
+}
+
+.sp-import__actions,
+.sp-import__access {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.sp-import__status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text-secondary);
+}
+
+.sp-import__status--done {
+  color: var(--text-primary);
+}
+
+.sp-import__status svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+.sp-import__failures {
+  margin: var(--space-1) 0 0;
+  padding-left: var(--space-5);
+}
+
+.sp-import--compact {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Dock icon (ST-09) ---- */
+
+/* The standard icon: Pip on the violet tile, as the Dock shows it. */
+.sp-dock-art__icon {
+  display: block;
+  width: 72px;
+  height: 72px;
+}
+
+.sp-dock__status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 20px;
+  margin: var(--space-2) var(--space-1) 0;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+@media (max-width: 640px) {
+  .sp-tiles {
+    grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  }
+  .sp-clear__range {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

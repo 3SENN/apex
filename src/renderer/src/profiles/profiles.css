@@ -1,0 +1,183 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* Profiles (ST-37 to ST-39, DS-03): hue swatches, profile badges and
+   the profile rows. Swatch colours come from @shared/profile per mode and
+   are picked with light-dark, so both themes read; everything else uses
+   the shared tokens. */
+
+.pf-hues {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 2px;
+}
+
+.pf-hue {
+  --pf-fill: light-dark(var(--pf-hue-light), var(--pf-hue-dark));
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 0;
+  padding: 0;
+  background: var(--pf-fill);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-primary, #000) 12%, transparent);
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.pf-hue:hover:not(:disabled) {
+  transform: scale(1.06);
+}
+
+.pf-hue--on {
+  box-shadow:
+    0 0 0 2px var(--bg-raised, Canvas),
+    0 0 0 4px var(--pf-fill);
+}
+
+.pf-hue:focus-visible {
+  outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color);
+  outline-offset: 4px;
+}
+
+.pf-hue:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.pf-badge {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--pf-size, 32px);
+  height: var(--pf-size, 32px);
+  border-radius: 50%;
+  background: light-dark(var(--pf-hue-light), var(--pf-hue-dark));
+  color: #ffffff;
+  font-weight: 600;
+  font-size: calc(var(--pf-size, 32px) * 0.44);
+  line-height: 1;
+  user-select: none;
+}
+
+.pf-rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.pf-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  min-height: 52px;
+}
+
+.pf-row + .pf-row {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.pf-row__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.pf-row__name {
+  color: var(--text-primary);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pf-row__meta {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.pf-row__actions {
+  display: flex;
+  gap: 8px;
+  flex: none;
+}
+
+.pf-rename {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.pf-rename > :first-child {
+  flex: 1;
+  min-width: 180px;
+}
+
+.pf-current {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+}
+
+.pf-current--flush {
+  padding: 0;
+}
+
+.pf-tag {
+  font-size: 11px;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+
+.pf-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pf-dialog__list {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pf-dialog__note,
+.pf-dialog__reason {
+  color: var(--text-secondary);
+  font-size: 12px;
+  margin: 0;
+}
+
+.pf-dialog__error {
+  color: var(--danger);
+  font-size: 12px;
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-hue {
+    transition: none;
+  }
+  .pf-hue:hover:not(:disabled) {
+    transform: none;
+  }
+}
+
+:root[data-motion='reduced'] .pf-hue {
+  transition: none;
+}
+
+:root[data-motion='reduced'] .pf-hue:hover:not(:disabled) {
+  transform: none;
+}

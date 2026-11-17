@@ -1,0 +1,30 @@
+[
+  {
+    "id": "a0-skill-1",
+    "name": "weekly-report",
+    "description": "Turns my notes into a short weekly report",
+    "instructions": "Read the notes I give you and write a weekly report with wins, blockers and next steps.",
+    "updatedAt": 1700000000000,
+    "owner": "shared",
+    "lastUsedAt": 1700000500000
+  },
+  {
+    "id": "a0-skill-2",
+    "name": "tone-check",
+    "description": "",
+    "instructions": "Check the tone of the draft.\nPoint out anything that reads as curt.",
+    "updatedAt": 1700000100000,
+    "owner": "companion-ava",
+    "lastUsedAt": null
+  },
+  {
+    "id": "a0-skill-3",
+    "name": "Not A Valid Name",
+    "description": "Odd name from an old build",
+    "instructions": "Do the thing.",
+    "updatedAt": 1700000200000,
+    "owner": "shared",
+    "lastUsedAt": null
+  },
+  { "id": "broken" }
+]

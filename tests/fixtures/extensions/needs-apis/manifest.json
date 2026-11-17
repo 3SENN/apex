@@ -1,0 +1,8 @@
+{
+  "manifest_version": 3,
+  "name": "Fixture Needs APIs",
+  "version": "2.0",
+  "permissions": ["storage", "history", "cookies"],
+  "optional_permissions": ["downloads"],
+  "side_panel": { "default_path": "panel.html" }
+}

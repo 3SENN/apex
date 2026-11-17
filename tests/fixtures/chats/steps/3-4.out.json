@@ -1,0 +1,61 @@
+{
+  "formatVersion": 4,
+  "id": "34343434-1111-4222-8333-444444444444",
+  "title": "B shape",
+  "companionId": "companion-1",
+  "actWithoutAsking": false,
+  "muted": true,
+  "capabilities": {
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "browser": true,
+    "webTools": true,
+    "memory": true,
+    "connectorIds": [],
+    "engine": "api-key",
+    "documents": false,
+    "compaction": false,
+    "containerId": null,
+    "localTools": [],
+    "toolPolicies": {}
+  },
+  "system": "s",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Summarize this"
+    }
+  ],
+  "log": [
+    {
+      "type": "user-message",
+      "id": "aaaaaaaa-3434-4222-8333-444444444444",
+      "text": "Summarize this",
+      "attachments": [
+        {
+          "id": "legacy-aaaaaaaa-3434-4222-8333-444444444444-0",
+          "kind": "image",
+          "name": "Screen",
+          "state": "ready",
+          "error": null,
+          "size": 0,
+          "mediaType": "image/jpeg",
+          "thumbnail": "data:image/jpeg;base64,/9j/AA=="
+        },
+        {
+          "id": "legacy-aaaaaaaa-3434-4222-8333-444444444444-1",
+          "kind": "meeting",
+          "name": "Weekly sync",
+          "state": "ready",
+          "error": null,
+          "size": 0,
+          "mediaType": "text/plain",
+          "thumbnail": null,
+          "sourceId": "m-1"
+        }
+      ]
+    }
+  ],
+  "details": {},
+  "feedback": {}
+}

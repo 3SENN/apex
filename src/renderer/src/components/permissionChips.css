@@ -1,0 +1,56 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* The address pill's permission chips: the same 26 px square as the pill's
+   other buttons, so a narrow pill shrinks its text, never the chips. */
+.pill__perms {
+  display: flex;
+  align-items: center;
+  flex: none;
+}
+
+.pill__perm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex: none;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: none;
+  color: var(--chrome-muted);
+}
+
+.pill__perm:hover,
+.pill__perm[aria-expanded='true'] {
+  background: var(--bg-hover);
+  color: var(--chrome-strong);
+}
+
+.pill__perm:focus-visible {
+  outline: 2px solid var(--accent-ring);
+  outline-offset: -1px;
+}
+
+/* A held-back request waits for an answer, so it reads stronger than a refusal. */
+.pill__perm--quiet {
+  color: var(--chrome-strong);
+  background: var(--bg-active);
+}
+
+/* macOS turned it off: there is a fix, so it carries the warning tone. */
+.pill__perm--macos,
+.pill__perm--macos:hover {
+  color: var(--status-needs-input);
+}
+
+/* A narrow pill keeps only the first chip (the most pressing); site info still lists the rest. */
+@container apex-address (max-width: 300px) {
+  .pill__perm + .pill__perm {
+    display: none;
+  }
+}

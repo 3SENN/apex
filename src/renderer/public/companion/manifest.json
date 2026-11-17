@@ -1,0 +1,573 @@
+{
+  "version": 1,
+  "rigs": {
+    "A": {
+      "label": "Bean",
+      "file": "rigs/A.glb"
+    },
+    "B": {
+      "label": "Sprout",
+      "file": "rigs/B.glb"
+    },
+    "C": {
+      "label": "Pebble",
+      "file": "rigs/C.glb"
+    }
+  },
+  "parts": {
+    "head-round": {
+      "slot": "head",
+      "label": "Round",
+      "file": "parts/head-round.glb",
+      "tints": [
+        "skin"
+      ]
+    },
+    "head-oval": {
+      "slot": "head",
+      "label": "Oval",
+      "file": "parts/head-oval.glb",
+      "tints": [
+        "skin"
+      ]
+    },
+    "head-soft-square": {
+      "slot": "head",
+      "label": "Soft square",
+      "file": "parts/head-soft-square.glb",
+      "tints": [
+        "skin"
+      ]
+    },
+    "head-drop": {
+      "slot": "head",
+      "label": "Drop",
+      "file": "parts/head-drop.glb",
+      "tints": [
+        "skin"
+      ]
+    },
+    "head-bean": {
+      "slot": "head",
+      "label": "Bean",
+      "file": "parts/head-bean.glb",
+      "tints": [
+        "skin"
+      ]
+    },
+    "head-cloud": {
+      "slot": "head",
+      "label": "Cloud",
+      "file": "parts/head-cloud.glb",
+      "tints": [
+        "skin"
+      ]
+    },
+    "ears-cat": {
+      "slot": "ears",
+      "label": "Cat",
+      "file": "parts/ears-cat.glb",
+      "tints": [
+        "skin"
+      ]
+    },
+    "ears-bear": {
+      "slot": "ears",
+      "label": "Bear",
+      "file": "parts/ears-bear.glb",
+      "tints": [
+        "skin"
+      ]
+    },
+    "ears-bunny": {
+      "slot": "ears",
+      "label": "Bunny",
+      "file": "parts/ears-bunny.glb",
+      "tints": [
+        "skin"
+      ]
+    },
+    "ears-elf": {
+      "slot": "ears",
+      "label": "Elf",
+      "file": "parts/ears-elf.glb",
+      "tints": [
+        "skin"
+      ]
+    },
+    "hair-tuft": {
+      "slot": "hair",
+      "label": "Tuft",
+      "file": "parts/hair-tuft.glb",
+      "tints": [
+        "hair"
+      ]
+    },
+    "hair-bob": {
+      "slot": "hair",
+      "label": "Bob",
+      "file": "parts/hair-bob.glb",
+      "tints": [
+        "hair"
+      ]
+    },
+    "hair-spiky": {
+      "slot": "hair",
+      "label": "Spiky",
+      "file": "parts/hair-spiky.glb",
+      "tints": [
+        "hair"
+      ]
+    },
+    "hair-curls": {
+      "slot": "hair",
+      "label": "Curls",
+      "file": "parts/hair-curls.glb",
+      "tints": [
+        "hair"
+      ]
+    },
+    "hair-bun": {
+      "slot": "hair",
+      "label": "Bun",
+      "file": "parts/hair-bun.glb",
+      "tints": [
+        "hair",
+        "accent"
+      ]
+    },
+    "hair-sideswept": {
+      "slot": "hair",
+      "label": "Side swept",
+      "file": "parts/hair-sideswept.glb",
+      "tints": [
+        "hair"
+      ]
+    },
+    "hair-pigtails": {
+      "slot": "hair",
+      "label": "Pigtails",
+      "file": "parts/hair-pigtails.glb",
+      "tints": [
+        "hair",
+        "accent"
+      ]
+    },
+    "hair-mohawk": {
+      "slot": "hair",
+      "label": "Mohawk",
+      "file": "parts/hair-mohawk.glb",
+      "tints": [
+        "hair"
+      ]
+    },
+    "hat-beanie": {
+      "slot": "hat",
+      "label": "Beanie",
+      "file": "parts/hat-beanie.glb",
+      "tints": [
+        "accent",
+        "outfit"
+      ]
+    },
+    "hat-cap": {
+      "slot": "hat",
+      "label": "Cap",
+      "file": "parts/hat-cap.glb",
+      "tints": [
+        "accent",
+        "outfit"
+      ]
+    },
+    "hat-crown": {
+      "slot": "hat",
+      "label": "Crown",
+      "file": "parts/hat-crown.glb",
+      "tints": []
+    },
+    "hat-wizard": {
+      "slot": "hat",
+      "label": "Wizard",
+      "file": "parts/hat-wizard.glb",
+      "tints": [
+        "accent",
+        "outfit"
+      ]
+    },
+    "hat-beret": {
+      "slot": "hat",
+      "label": "Beret",
+      "file": "parts/hat-beret.glb",
+      "tints": [
+        "accent",
+        "outfit"
+      ]
+    },
+    "hat-flower-crown": {
+      "slot": "hat",
+      "label": "Flower crown",
+      "file": "parts/hat-flower-crown.glb",
+      "tints": []
+    },
+    "glasses-round": {
+      "slot": "eyeAccessory",
+      "label": "Round glasses",
+      "file": "parts/glasses-round.glb",
+      "tints": []
+    },
+    "glasses-square": {
+      "slot": "eyeAccessory",
+      "label": "Square glasses",
+      "file": "parts/glasses-square.glb",
+      "tints": [
+        "accent"
+      ]
+    },
+    "monocle": {
+      "slot": "eyeAccessory",
+      "label": "Monocle",
+      "file": "parts/monocle.glb",
+      "tints": []
+    },
+    "visor": {
+      "slot": "eyeAccessory",
+      "label": "Visor",
+      "file": "parts/visor.glb",
+      "tints": [
+        "accent"
+      ]
+    },
+    "headphones": {
+      "slot": "earAccessory",
+      "label": "Headphones",
+      "file": "parts/headphones.glb",
+      "tints": [
+        "accent"
+      ]
+    },
+    "earring-hoop": {
+      "slot": "earAccessory",
+      "label": "Hoop earrings",
+      "file": "parts/earring-hoop.glb",
+      "tints": []
+    },
+    "earring-star": {
+      "slot": "earAccessory",
+      "label": "Star earrings",
+      "file": "parts/earring-star.glb",
+      "tints": []
+    },
+    "prop-coffee": {
+      "slot": "prop",
+      "label": "Coffee",
+      "file": "parts/prop-coffee.glb",
+      "tints": [
+        "accent"
+      ]
+    },
+    "prop-book": {
+      "slot": "prop",
+      "label": "Book",
+      "file": "parts/prop-book.glb",
+      "tints": [
+        "accent"
+      ]
+    },
+    "prop-laptop": {
+      "slot": "prop",
+      "label": "Laptop",
+      "file": "parts/prop-laptop.glb",
+      "tints": []
+    },
+    "prop-wand": {
+      "slot": "prop",
+      "label": "Wand",
+      "file": "parts/prop-wand.glb",
+      "tints": []
+    },
+    "prop-magnifier": {
+      "slot": "prop",
+      "label": "Magnifier",
+      "file": "parts/prop-magnifier.glb",
+      "tints": []
+    },
+    "prop-balloon": {
+      "slot": "prop",
+      "label": "Balloon",
+      "file": "parts/prop-balloon.glb",
+      "tints": []
+    },
+    "prop-keypad": {
+      "slot": "prop",
+      "label": "Typing pad",
+      "file": "parts/prop-keypad.glb",
+      "tints": [
+        "accent"
+      ]
+    }
+  },
+  "face": {
+    "eyes": {
+      "eyes-round": {
+        "label": "Round",
+        "variants": {
+          "neutral": "face/eyes-round/neutral.svg",
+          "blink": "face/eyes-round/blink.svg",
+          "happy": "face/eyes-round/happy.svg",
+          "focused": "face/eyes-round/focused.svg",
+          "wide": "face/eyes-round/wide.svg",
+          "sad": "face/eyes-round/sad.svg",
+          "sleepy": "face/eyes-round/sleepy.svg"
+        },
+        "pupils": "face/eyes-round/pupils.svg",
+        "pupilVariants": [
+          "neutral",
+          "focused",
+          "wide",
+          "sad"
+        ]
+      },
+      "eyes-oval": {
+        "label": "Oval",
+        "variants": {
+          "neutral": "face/eyes-oval/neutral.svg",
+          "blink": "face/eyes-oval/blink.svg",
+          "happy": "face/eyes-oval/happy.svg",
+          "focused": "face/eyes-oval/focused.svg",
+          "wide": "face/eyes-oval/wide.svg",
+          "sad": "face/eyes-oval/sad.svg",
+          "sleepy": "face/eyes-oval/sleepy.svg"
+        },
+        "pupils": "face/eyes-oval/pupils.svg",
+        "pupilVariants": [
+          "neutral",
+          "focused",
+          "wide",
+          "sad"
+        ]
+      },
+      "eyes-sparkle": {
+        "label": "Sparkle",
+        "variants": {
+          "neutral": "face/eyes-sparkle/neutral.svg",
+          "blink": "face/eyes-sparkle/blink.svg",
+          "happy": "face/eyes-sparkle/happy.svg",
+          "focused": "face/eyes-sparkle/focused.svg",
+          "wide": "face/eyes-sparkle/wide.svg",
+          "sad": "face/eyes-sparkle/sad.svg",
+          "sleepy": "face/eyes-sparkle/sleepy.svg"
+        },
+        "pupils": "face/eyes-sparkle/pupils.svg",
+        "pupilVariants": [
+          "neutral",
+          "focused",
+          "wide",
+          "sad"
+        ]
+      },
+      "eyes-sleepy": {
+        "label": "Sleepy",
+        "variants": {
+          "neutral": "face/eyes-sleepy/neutral.svg",
+          "blink": "face/eyes-sleepy/blink.svg",
+          "happy": "face/eyes-sleepy/happy.svg",
+          "focused": "face/eyes-sleepy/focused.svg",
+          "wide": "face/eyes-sleepy/wide.svg",
+          "sad": "face/eyes-sleepy/sad.svg",
+          "sleepy": "face/eyes-sleepy/sleepy.svg"
+        },
+        "pupils": "face/eyes-sleepy/pupils.svg",
+        "pupilVariants": [
+          "neutral",
+          "focused",
+          "wide",
+          "sad"
+        ]
+      },
+      "eyes-dot": {
+        "label": "Dot",
+        "variants": {
+          "neutral": "face/eyes-dot/neutral.svg",
+          "blink": "face/eyes-dot/blink.svg",
+          "happy": "face/eyes-dot/happy.svg",
+          "focused": "face/eyes-dot/focused.svg",
+          "wide": "face/eyes-dot/wide.svg",
+          "sad": "face/eyes-dot/sad.svg",
+          "sleepy": "face/eyes-dot/sleepy.svg"
+        },
+        "pupils": "face/eyes-dot/pupils.svg",
+        "pupilVariants": [
+          "neutral",
+          "focused",
+          "wide",
+          "sad"
+        ]
+      },
+      "eyes-wide": {
+        "label": "Wide",
+        "variants": {
+          "neutral": "face/eyes-wide/neutral.svg",
+          "blink": "face/eyes-wide/blink.svg",
+          "happy": "face/eyes-wide/happy.svg",
+          "focused": "face/eyes-wide/focused.svg",
+          "wide": "face/eyes-wide/wide.svg",
+          "sad": "face/eyes-wide/sad.svg",
+          "sleepy": "face/eyes-wide/sleepy.svg"
+        },
+        "pupils": "face/eyes-wide/pupils.svg",
+        "pupilVariants": [
+          "neutral",
+          "focused",
+          "wide",
+          "sad"
+        ]
+      },
+      "eyes-cat": {
+        "label": "Cat",
+        "variants": {
+          "neutral": "face/eyes-cat/neutral.svg",
+          "blink": "face/eyes-cat/blink.svg",
+          "happy": "face/eyes-cat/happy.svg",
+          "focused": "face/eyes-cat/focused.svg",
+          "wide": "face/eyes-cat/wide.svg",
+          "sad": "face/eyes-cat/sad.svg",
+          "sleepy": "face/eyes-cat/sleepy.svg"
+        },
+        "pupils": "face/eyes-cat/pupils.svg",
+        "pupilVariants": [
+          "neutral",
+          "focused",
+          "wide",
+          "sad"
+        ]
+      },
+      "eyes-lash": {
+        "label": "Lashes",
+        "variants": {
+          "neutral": "face/eyes-lash/neutral.svg",
+          "blink": "face/eyes-lash/blink.svg",
+          "happy": "face/eyes-lash/happy.svg",
+          "focused": "face/eyes-lash/focused.svg",
+          "wide": "face/eyes-lash/wide.svg",
+          "sad": "face/eyes-lash/sad.svg",
+          "sleepy": "face/eyes-lash/sleepy.svg"
+        },
+        "pupils": "face/eyes-lash/pupils.svg",
+        "pupilVariants": [
+          "neutral",
+          "focused",
+          "wide",
+          "sad"
+        ]
+      }
+    },
+    "brows": {
+      "brows-soft": {
+        "label": "Soft",
+        "variants": {
+          "neutral": "face/brows-soft/neutral.svg",
+          "raised": "face/brows-soft/raised.svg",
+          "furrowed": "face/brows-soft/furrowed.svg",
+          "sad": "face/brows-soft/sad.svg"
+        }
+      },
+      "brows-bold": {
+        "label": "Bold",
+        "variants": {
+          "neutral": "face/brows-bold/neutral.svg",
+          "raised": "face/brows-bold/raised.svg",
+          "furrowed": "face/brows-bold/furrowed.svg",
+          "sad": "face/brows-bold/sad.svg"
+        }
+      },
+      "brows-thin": {
+        "label": "Thin",
+        "variants": {
+          "neutral": "face/brows-thin/neutral.svg",
+          "raised": "face/brows-thin/raised.svg",
+          "furrowed": "face/brows-thin/furrowed.svg",
+          "sad": "face/brows-thin/sad.svg"
+        }
+      },
+      "brows-none": {
+        "label": "None",
+        "variants": {
+          "neutral": "face/brows-none/neutral.svg",
+          "raised": "face/brows-none/raised.svg",
+          "furrowed": "face/brows-none/furrowed.svg",
+          "sad": "face/brows-none/sad.svg"
+        }
+      }
+    },
+    "mouth": {
+      "mouth-smile": {
+        "label": "Smile",
+        "variants": {
+          "neutral": "face/mouth-smile/neutral.svg",
+          "happy": "face/mouth-smile/happy.svg",
+          "talk-small": "face/mouth-smile/talk-small.svg",
+          "talk-wide": "face/mouth-smile/talk-wide.svg",
+          "o": "face/mouth-smile/o.svg",
+          "sad": "face/mouth-smile/sad.svg",
+          "flat": "face/mouth-smile/flat.svg"
+        }
+      },
+      "mouth-cat": {
+        "label": "Cat",
+        "variants": {
+          "neutral": "face/mouth-cat/neutral.svg",
+          "happy": "face/mouth-cat/happy.svg",
+          "talk-small": "face/mouth-cat/talk-small.svg",
+          "talk-wide": "face/mouth-cat/talk-wide.svg",
+          "o": "face/mouth-cat/o.svg",
+          "sad": "face/mouth-cat/sad.svg",
+          "flat": "face/mouth-cat/flat.svg"
+        }
+      },
+      "mouth-grin": {
+        "label": "Grin",
+        "variants": {
+          "neutral": "face/mouth-grin/neutral.svg",
+          "happy": "face/mouth-grin/happy.svg",
+          "talk-small": "face/mouth-grin/talk-small.svg",
+          "talk-wide": "face/mouth-grin/talk-wide.svg",
+          "o": "face/mouth-grin/o.svg",
+          "sad": "face/mouth-grin/sad.svg",
+          "flat": "face/mouth-grin/flat.svg"
+        }
+      },
+      "mouth-small": {
+        "label": "Small",
+        "variants": {
+          "neutral": "face/mouth-small/neutral.svg",
+          "happy": "face/mouth-small/happy.svg",
+          "talk-small": "face/mouth-small/talk-small.svg",
+          "talk-wide": "face/mouth-small/talk-wide.svg",
+          "o": "face/mouth-small/o.svg",
+          "sad": "face/mouth-small/sad.svg",
+          "flat": "face/mouth-small/flat.svg"
+        }
+      },
+      "mouth-fang": {
+        "label": "Fang",
+        "variants": {
+          "neutral": "face/mouth-fang/neutral.svg",
+          "happy": "face/mouth-fang/happy.svg",
+          "talk-small": "face/mouth-fang/talk-small.svg",
+          "talk-wide": "face/mouth-fang/talk-wide.svg",
+          "o": "face/mouth-fang/o.svg",
+          "sad": "face/mouth-fang/sad.svg",
+          "flat": "face/mouth-fang/flat.svg"
+        }
+      }
+    }
+  },
+  "config": {
+    "compatibility": "config/head-part-compatibility.json",
+    "hats": "config/hat-config.json",
+    "pupils": "config/eye-pupil-config.json",
+    "randomization": "config/randomization-config.json",
+    "animationEvents": "config/animation-events.json",
+    "presets": "config/presets.json"
+  }
+}

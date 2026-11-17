@@ -1,0 +1,245 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+import { existsSync } from 'node:fs'
+import { join } from 'node:path'
+import { net, safeStorage, shell } from 'electron'
+import { PROVIDER_DEFAULTS, type DecisionQuestion, type DecisionsServices } from '@shared/decisions'
+import { looksLikeAddress } from '@shared/url'
+import type { Feature } from '../features/types'
+import { mainT } from '../i18n/mainT'
+import { registerResetStep } from '../reset'
+import { registerStorageCategory } from '../storage'
+import type { FetchLike } from './client'
+import { DecisionKeys, KEYS_FILE } from './keys'
+import { COMPARISONS_FILE, Decisions, setDecider } from './service'
+import { registerLabelItems } from './tool'
+import { searchOrAsk } from './uses'
+
+// Quick decisions, main side (DC-01 to DC-12, docs/decisions.md): builds the
+// decider from Settings › Quick decisions and the saved keys, makes it the
+// app's decider, and answers the settings page. Smoke never reaches the
+// network: a stand-in model answers there, sure of its first option.
+
+/** Smoke's stand-in model: yes at 0.9, the first option at 0.9, the lowest level at 0.9. */
+export const smokeFetch: FetchLike = async (_url, init) => {
+  if (init.method === 'GET') {
+    const list = {
+      data: [{ id: 'kev-latest' }, { id: 'kev-0.8b' }, { id: 'a-chat-model' }],
+    }
+    return {
+      status: 200,
+      ok: true,
+      json: async () => list,
+      text: async () => JSON.stringify(list),
+    }
+  }
+  const body = JSON.parse(init.body ?? '{}') as {
+    questions:
+      | Record<string, DecisionQuestion>
+      | Array<{
+          type: string
+          name: string
+          choices?: Array<{ value: string }>
+          levels?: unknown[]
+        }>
+    model: string
+  }
+  const { model } = body
+  // OpenAI's Decisions request (DC-19): the same sure first option, in its shape.
+  if (Array.isArray(body.questions)) {
+    const list = body.questions.map((q) => {
+      if (q.type === 'predicate') return { type: 'predicate', name: q.name, probability: 0.9 }
+      const values = q.type === 'choice' ? (q.choices ?? []).map((c) => c.value) : (q.levels ?? []).map((_, i) => i)
+      const probabilities = values.map((value, i) => ({
+        value,
+        probability: i === 0 ? 0.9 : 0.1 / (values.length - 1),
+      }))
+      return q.type === 'choice'
+        ? {
+            type: 'choice',
+            name: q.name,
+            choice: values[0],
+            confidence: 0.9,
+            probabilities,
+          }
+        : {
+            type: 'score',
+            name: q.name,
+            score: 0.1,
+            confidence: 0.9,
+            probabilities,
+          }
+    })
+    const reply = {
+      model: model || 'smoke-model',
+      answers: list,
+      usage: { input_tokens: 10, output_tokens: 0 },
+    }
+    return {
+      status: 200,
+      ok: true,
+      json: async () => reply,
+      text: async () => JSON.stringify(reply),
+    }
+  }
+  const { questions } = body
+  const answers = Object.fromEntries(
+    Object.entries(questions).map(([key, q]) => {
+      if (q.type === 'noul') return [key, { type: 'noul', noul: 0.9 }]
+      const options = q.type === 'choice' ? Object.keys(q.criteria) : q.criteria.map((_, i) => String(i))
+      const probabilities = Object.fromEntries(options.map((o, i) => [o, i === 0 ? 0.9 : 0.1 / (options.length - 1)]))
+      return [
+        key,
+        q.type === 'choice'
+          ? {
+              type: 'choice',
+              choice: options[0],
+              confidence: 0.9,
+              probabilities,
+            }
+          : {
+              type: 'score',
+              score: 0.1,
+              confidence: 0.9,
+              probabilities,
+              legend: {},
+            },
+      ]
+    }),
+  )
+  const reply = {
+    model: model || 'smoke-model',
+    answers,
+    usage: { input_tokens: 10, output_tokens: 0 },
+  }
+  return {
+    status: 200,
+    ok: true,
+    json: async () => reply,
+    text: async () => JSON.stringify(reply),
+  }
+}
+
+const electronFetch: FetchLike = async (url, init) => {
+  const res = await net.fetch(url, {
+    method: init.method,
+    headers: init.headers,
+    ...(init.body !== undefined ? { body: init.body } : {}),
+    signal: init.signal,
+  })
+  return {
+    status: res.status,
+    ok: res.ok,
+    headers: res.headers,
+    json: () => res.json(),
+    text: () => res.text(),
+  }
+}
+
+export function createDecisionsFeature(): Feature {
+  const stops: (() => void)[] = []
+  let decider: Decisions | null = null
+
+  /** The new tab's search-or-ask question; addresses never ask (the decider reuses an answer for a minute per text). */
+  const searchOrAskOnce = (text: string, current: 'search' | 'ask'): Promise<'search' | 'ask'> => {
+    const query = text.trim()
+    if (!decider?.active('searchOrAsk') || looksLikeAddress(query)) return Promise.resolve(current)
+    return searchOrAsk(query, current)
+  }
+
+  return {
+    name: 'decisions',
+    app(app) {
+      const keys = new DecisionKeys(app.dataDir, {
+        available: () => (app.smoke ? true : safeStorage.isEncryptionAvailable()),
+        seal: (text) => (app.smoke ? Buffer.from(text, 'utf8') : safeStorage.encryptString(text)),
+        open: (data) => (app.smoke ? data.toString('utf8') : safeStorage.decryptString(data)),
+      })
+      const d = new Decisions({
+        dataDir: app.dataDir,
+        settings: () => app.settings.get().decisions,
+        keys,
+        fetch: app.smoke ? smokeFetch : electronFetch,
+        quick: () => app.quick ?? null,
+      })
+      decider = d
+      setDecider(d)
+      registerLabelItems()
+      // A key never outlives its server: one left by a server removed while a save failed goes now.
+      try {
+        keys.retainServers(new Set(app.settings.get().decisions.servers.map((s) => s.id)))
+      } catch {
+        // Secure storage unavailable: nothing to tidy.
+      }
+      stops.push(
+        // Reset Apex: the comparisons go with the settings, the keys with the other secrets.
+        registerResetStep({
+          id: 'decision-comparisons',
+          order: 91,
+          label: mainT('decisions.storage'),
+          run: async ({ dryRun }) => {
+            const had = d.comparisonsBytes() > 0
+            if (!dryRun) d.clearComparisons()
+            return { removed: had ? [COMPARISONS_FILE] : [] }
+          },
+        }),
+        registerResetStep({
+          id: 'decision-keys',
+          order: 96,
+          label: mainT('decisions.reset.keys'),
+          secrets: true,
+          run: async ({ dryRun }) => {
+            const had = existsSync(join(app.dataDir, KEYS_FILE))
+            if (!dryRun) keys.clear()
+            return { removed: had ? [KEYS_FILE] : [] }
+          },
+        }),
+      )
+      stops.push(
+        registerStorageCategory({
+          id: 'decision-comparisons',
+          label: mainT('decisions.storage'),
+          order: 95,
+          measure: async () => d.comparisonsBytes(),
+          clear: {
+            label: mainT('decisions.storage.clear'),
+            run: async () => d.clearComparisons(),
+          },
+        }),
+      )
+
+      const services: DecisionsServices['decisions'] = {
+        status: async () => d.status(),
+        setKey: async (provider, key) => {
+          keys.set(provider, key)
+          return d.status()
+        },
+        test: (model) => d.test(model),
+        catalog: () => d.catalog(),
+        comparisons: async () => d.comparisons(),
+        clearComparisons: async () => d.clearComparisons(),
+        searchOrAsk: searchOrAskOnce,
+        openKeyPage: (provider) => {
+          if (!app.smoke) void shell.openExternal(PROVIDER_DEFAULTS[provider].keyUrl).catch(() => undefined)
+        },
+      }
+      return { decisions: services }
+    },
+    // DC-04: what is typed in a private window's composer never leaves the computer.
+    window(win) {
+      return {
+        decisions: {
+          searchOrAsk: (text: string, current: 'search' | 'ask') => (win.kind === 'private' ? Promise.resolve(current) : searchOrAskOnce(text, current)),
+        },
+      }
+    },
+    dispose() {
+      for (const stop of stops.splice(0)) stop()
+      setDecider(null)
+      decider = null
+    },
+  }
+}

@@ -1,0 +1,133 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* DS-65 (CH-03): a chat expanded from the side panel, in the tab it sat
+   beside. The chat page takes the left of the tab; the tab's own web page is
+   an inset card on the right, its native view placed in .chat-in-tab__page
+   (App measures it and reports the bounds and corner radius to main). Opening
+   and closing run on the layout timeline, and the native view follows. */
+
+.chat-in-tab {
+  --chat-in-tab-page: 0.5;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  background: var(--bg-card);
+}
+
+.chat-in-tab__chat {
+  position: relative;
+  flex-grow: calc(1 - var(--chat-in-tab-page));
+  flex-shrink: 1;
+  flex-basis: 0;
+  min-width: 0;
+  overflow: hidden;
+  transition:
+    flex-grow var(--motion-layout) var(--ease-standard),
+    opacity var(--motion-layout) var(--ease-standard);
+}
+
+/* The seam sits in the gap between the chat and the page, over no page view. */
+.chat-in-tab__seam {
+  position: relative;
+  z-index: 2;
+  flex: none;
+  width: var(--page-inset);
+  transition: width var(--motion-layout) var(--ease-standard);
+}
+
+.chat-in-tab__seam > .ui-seam {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  translate: -50% 0;
+}
+
+.chat-in-tab__page {
+  position: relative;
+  flex-grow: var(--chat-in-tab-page);
+  flex-shrink: 1;
+  flex-basis: 0;
+  min-width: 0;
+  margin: var(--page-inset) var(--page-inset) var(--page-inset) 0;
+  border-radius: var(--page-inset-radius);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition:
+    flex-grow var(--motion-layout) var(--ease-standard),
+    margin var(--motion-layout) var(--ease-standard),
+    border-radius var(--motion-layout) var(--ease-standard),
+    box-shadow var(--motion-layout) var(--ease-standard);
+}
+
+/* A live drag follows the pointer. */
+.chat-in-tab--resizing > * {
+  transition: none;
+}
+
+/* Expanding: the page narrows into its card while the chat comes in beside it. */
+.chat-in-tab[data-enter] > .chat-in-tab__chat {
+  animation: chat-in-tab-chat-in var(--motion-layout) var(--ease-standard) both;
+}
+
+.chat-in-tab[data-enter] > .chat-in-tab__seam {
+  animation: chat-in-tab-seam-in var(--motion-layout) var(--ease-standard) both;
+}
+
+.chat-in-tab[data-enter] > .chat-in-tab__page {
+  animation: chat-in-tab-page-in var(--motion-layout) var(--ease-standard) both;
+}
+
+@keyframes chat-in-tab-chat-in {
+  from {
+    flex-grow: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes chat-in-tab-seam-in {
+  from {
+    width: 0;
+  }
+}
+
+@keyframes chat-in-tab-page-in {
+  from {
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+/* Collapsing: the chat folds away and the page takes the whole tab again. */
+.chat-in-tab[data-state='closing'] > .chat-in-tab__chat {
+  flex-grow: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chat-in-tab[data-state='closing'] > .chat-in-tab__seam {
+  width: 0;
+}
+
+.chat-in-tab[data-state='closing'] > .chat-in-tab__page {
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+:root[data-motion='reduced'] .chat-in-tab > * {
+  animation: none;
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-in-tab > * {
+    animation: none;
+    transition: none;
+  }
+}

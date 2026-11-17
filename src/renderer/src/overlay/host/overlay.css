@@ -1,0 +1,74 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* Overlay tier renderers: transparent, nothing drawn but the frames. */
+:root[data-ui-role^='overlay'],
+:root[data-ui-role^='overlay'] body,
+:root[data-ui-role^='overlay'] #root {
+  background: transparent;
+  overflow: hidden;
+}
+
+.ov-root {
+  position: fixed;
+  inset: 0;
+  /* Frames are placed in window CSS px; the root is shifted by the view's origin. */
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+.ov-frame {
+  position: absolute;
+  pointer-events: auto;
+  outline: none;
+  /* Natural size for fixed surfaces; fill surfaces get an explicit width and height. */
+  width: max-content;
+  max-width: calc(var(--ov-vw, 100vw) - 16px);
+}
+
+.ov-frame[data-size='fill-window'],
+.ov-frame[data-size='fill-tab'] {
+  max-width: none;
+}
+
+/* Unplaced frames are measured, never seen. */
+.ov-frame:not([data-placed]) {
+  visibility: hidden;
+}
+
+.ov-root[data-tier='passive'] .ov-frame {
+  pointer-events: none;
+}
+
+/* DS-83: menus, popovers and hints reach full opacity within one frame, at most a short fade. */
+.ov-frame[data-placed] {
+  animation: ov-enter var(--motion-pop, 60ms) linear;
+}
+
+.ov-frame[data-layer='modal'][data-placed] {
+  animation: none;
+}
+
+/* DS-82: the exit plays for --ov-exit-ms, then the host unmounts the frame. */
+.ov-frame[data-exiting] {
+  animation: ov-exit var(--ov-exit-ms, 0ms) var(--ease-exit, ease-in) forwards;
+  pointer-events: none;
+}
+
+@keyframes ov-enter {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes ov-exit {
+  to {
+    opacity: 0;
+  }
+}
+
+:root[data-motion='reduced'] .ov-frame {
+  animation: none !important;
+}

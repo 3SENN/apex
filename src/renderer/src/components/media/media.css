@@ -1,0 +1,276 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* The media hub (MD-01): the toolbar button, the sidebar card and the
+   now-playing popover's rows. Tokens only, so light and dark both read; the
+   artwork keeps its own colours inside a rounded tile. */
+
+/* ---- toolbar button ---- */
+
+.np-button {
+  position: relative;
+  display: inline-flex;
+}
+
+.np-button__count {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  min-width: 14px;
+  height: 14px;
+  padding: 0 3px;
+  border-radius: 7px;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 14px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.np-button--playing svg path {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: np-sway 1.1s ease-in-out infinite alternate;
+}
+
+.np-button--playing svg path:nth-child(2n) {
+  animation-delay: -0.45s;
+}
+
+.np-button--playing svg path:nth-child(3n) {
+  animation-delay: -0.8s;
+}
+
+@keyframes np-sway {
+  from {
+    transform: scaleY(0.55);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .np-button--playing svg path {
+    animation: none;
+  }
+}
+
+:root[data-motion='reduced'] .np-button--playing svg path {
+  animation: none;
+}
+
+/* ---- a source ---- */
+
+.np-source {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-1) var(--space-1-5);
+}
+
+.np-source__page {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  min-width: 0;
+  padding: var(--space-1);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.np-source__page:hover {
+  background: var(--bg-hover);
+}
+
+.np-source__page:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.np-art {
+  display: grid;
+  place-items: center;
+  flex: none;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: var(--bg-muted);
+  color: var(--text-secondary);
+}
+
+.np-art img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.np-art--cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.np-art svg {
+  width: 16px;
+  height: 16px;
+}
+
+.np-source__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 1px;
+}
+
+.np-source__title,
+.np-source__meta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.np-source__title {
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.np-source__meta {
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+}
+
+.np-source__state {
+  color: var(--text-secondary);
+}
+
+.np-source__transport {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.np-source__extras {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding-inline-start: calc(44px + var(--space-2-5) + var(--space-1));
+}
+
+.np-source__spacer {
+  flex: 1;
+}
+
+.np-source__speed select {
+  min-width: 84px;
+}
+
+/* ---- sidebar card ---- */
+
+.np-card {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: 4px 8px;
+  padding: 2px;
+  border-radius: var(--radius-md);
+  background: var(--chip-bg);
+}
+
+.np-card .np-source {
+  flex: 1;
+  min-width: 0;
+}
+
+.np-card .np-source__title {
+  color: var(--chrome-strong);
+}
+
+.np-card .np-source__meta {
+  color: var(--chrome-muted);
+}
+
+.np-card__more {
+  position: relative;
+  flex: none;
+}
+
+/* ---- popover ---- */
+
+/* Placed by the overlay frame (below its anchor, above when there's no room); it scrolls inside the window's height. */
+.np-pop {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 340px;
+  max-width: calc(var(--ov-vw, 100vw) - 16px);
+  max-height: calc(var(--ov-vh, 100vh) - 96px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: var(--hairline) solid var(--border-default);
+  border-radius: 12px;
+  background: var(--bg-raised);
+  color: var(--text-primary);
+  box-shadow: 0 1px 3px light-dark(rgba(46, 36, 24, 0.08), rgba(0, 0, 0, 0.3));
+  font-size: var(--text-md);
+}
+
+.np-pop__head {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  padding: var(--space-1-5) var(--space-4);
+  border-bottom: var(--hairline) solid var(--border-subtle);
+}
+
+.np-pop__title {
+  margin: 0;
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.np-pop__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: var(--space-1-5);
+  list-style: none;
+}
+
+.np-pop__item {
+  padding: var(--space-1);
+  border-radius: var(--radius-md);
+}
+
+.np-pop__item + .np-pop__item {
+  border-top: var(--hairline) solid var(--border-subtle);
+  border-radius: 0;
+}
+
+.np-pop__item--active {
+  background: var(--accent-soft);
+  border-radius: var(--radius-md);
+}
+
+.np-pop__item--active + .np-pop__item {
+  border-top-color: transparent;
+}
+
+.np-pop__keys {
+  margin: 2px 0 0;
+  padding-inline-start: calc(44px + var(--space-2-5) + var(--space-1) + var(--space-1));
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+}

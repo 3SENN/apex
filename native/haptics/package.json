@@ -1,0 +1,17 @@
+{
+  "name": "apex-haptics",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Apex's trackpad haptics addon (macOS), with a no-op stub elsewhere.",
+  "license": "MPL-2.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "node ../../scripts/build-native.mjs",
+    "test": "node --test test/loader.test.js test/build-native.test.js"
+  },
+  "devDependencies": {
+    "node-addon-api": "8.9.2",
+    "node-gyp": "13.1.0"
+  }
+}

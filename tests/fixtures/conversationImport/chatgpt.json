@@ -1,0 +1,19 @@
+[
+  {
+    "title": "Sourdough help",
+    "create_time": 1700000000.5,
+    "current_node": "a2b",
+    "mapping": {
+      "root": { "id": "root", "message": null, "parent": null, "children": ["sys"] },
+      "sys": { "id": "sys", "message": { "author": { "role": "system" }, "content": { "content_type": "text", "parts": [""] }, "metadata": { "is_visually_hidden_from_conversation": true } }, "parent": "root", "children": ["u1"] },
+      "u1": { "id": "u1", "message": { "author": { "role": "user" }, "create_time": 1700000001, "content": { "content_type": "text", "parts": ["My starter smells like nail polish."] } }, "parent": "sys", "children": ["a1"] },
+      "a1": { "id": "a1", "message": { "author": { "role": "assistant" }, "create_time": 1700000002, "content": { "content_type": "text", "parts": ["That is hungry starter. Feed it more often."] } }, "parent": "u1", "children": ["u2a", "u2b"] },
+      "u2a": { "id": "u2a", "message": { "author": { "role": "user" }, "content": { "content_type": "text", "parts": ["An abandoned branch question"] } }, "parent": "a1", "children": ["a2a"] },
+      "a2a": { "id": "a2a", "message": { "author": { "role": "assistant" }, "content": { "content_type": "text", "parts": ["An abandoned branch answer"] } }, "parent": "u2a", "children": [] },
+      "u2b": { "id": "u2b", "message": { "author": { "role": "user" }, "content": { "content_type": "multimodal_text", "parts": [{ "content_type": "image_asset_pointer" }, "How often exactly?"] } }, "parent": "a1", "children": ["t1"] },
+      "t1": { "id": "t1", "message": { "author": { "role": "tool" }, "content": { "content_type": "text", "parts": ["tool output"] } }, "parent": "u2b", "children": ["a2b"] },
+      "a2b": { "id": "a2b", "message": { "author": { "role": "assistant" }, "content": { "content_type": "text", "parts": ["Twice a day at room temperature."] } }, "parent": "t1", "children": [] }
+    }
+  },
+  { "title": "Empty", "create_time": 1700000100, "mapping": { "r": { "id": "r", "message": null, "parent": null, "children": [] } } }
+]

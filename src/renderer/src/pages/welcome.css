@@ -1,0 +1,439 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* Welcome (DS-78): one step template on every step. The progress bar,
+   then the companion's own slot (its bubble on a row of its own, the figure
+   on a sparkle circle with the step's illustration around it), then the
+   title, subtitle, content card and actions. On wide pages the slot is a
+   column beside the step. Every part is a box in the page's flow, so the
+   companion and its bubble never cover the words. WelcomeFlow measures
+   the page (stage.ts) and sets --wlt-scene-w/-h, --wlt-figure, --wlt-tile
+   and --wlt-say-h. Colours: the companion's tint for the wash, the circle
+   and the tiles, the neutral tokens for everything else, so light and dark
+   both hold. */
+
+.welcome.wl {
+  /* The padding and gap mirror stage.ts (PAD_TOP, PAD_BOTTOM, PAD_X, GAP). */
+  --wlt-pad-top: 8px;
+  --wlt-pad-bottom: 28px;
+  --wlt-pad-x: 24px;
+  --wlt-gap: 18px;
+  --wlt-body-w: 600px;
+  isolation: isolate;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 0;
+  overflow: hidden auto;
+  background: var(--bg-card);
+}
+
+.wl__backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* A soft wash in the companion's colour where it stands, fading into the page. */
+.wl__wash {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(60% 48% at 50% 26%, light-dark(color-mix(in srgb, var(--hero-tint) 20%, transparent), color-mix(in srgb, var(--hero-tint) 11%, transparent)), transparent 74%);
+  transition: opacity 900ms var(--ease-standard);
+}
+
+.wl[data-slot='side'] .wl__wash {
+  background: radial-gradient(42% 60% at 30% 50%, light-dark(color-mix(in srgb, var(--hero-tint) 20%, transparent), color-mix(in srgb, var(--hero-tint) 11%, transparent)), transparent 74%);
+}
+
+.wl[data-intro='mark'] .wl__wash {
+  opacity: 0.4;
+}
+
+/* A horizon glow rising from below. */
+.wl__horizon {
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  bottom: -34%;
+  height: 56%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, light-dark(color-mix(in srgb, var(--hero-tint) 26%, transparent), color-mix(in srgb, var(--hero-tint) 14%, transparent)), transparent);
+  transition: transform 1400ms var(--ease-out), opacity 1400ms var(--ease-out);
+}
+
+.wl[data-intro='mark'] .wl__horizon {
+  transform: translateY(40%);
+  opacity: 0.4;
+}
+
+/* ---- The template ---- */
+
+.wlt {
+  flex: 1 1 0;
+  /* A page shorter than this scrolls as a whole instead of crushing the card. */
+  min-height: 460px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: safe center;
+  gap: var(--wlt-gap);
+  padding: var(--wlt-pad-top) var(--wlt-pad-x) var(--wlt-pad-bottom);
+}
+
+.wl[data-slot='side'] .wlt {
+  flex-direction: row;
+  justify-content: center;
+  gap: 56px;
+}
+
+/* The companion's slot: the bubble's row, then the scene. */
+.wlt__stage {
+  flex: none;
+  display: grid;
+  grid-template-rows: minmax(var(--wlt-say-h, 66px), auto) var(--wlt-scene-h);
+  justify-items: center;
+  width: var(--wlt-scene-w);
+  max-width: 100%;
+}
+
+.wlt__say {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-width: 0;
+  max-width: 100%;
+  padding-bottom: 2px;
+}
+
+.wlt__say .companion-bubble {
+  max-width: min(340px, 100%);
+}
+
+/* Beside the step the figure stands tall in its scene: the bubble tucks into the scene's empty top, closer to the head (above the highest tile). */
+.wl[data-slot='side'] .wlt__say {
+  margin-bottom: calc(var(--wlt-scene-h) * -0.08);
+}
+
+.wlt__scene {
+  position: relative;
+  width: var(--wlt-scene-w);
+  height: var(--wlt-scene-h);
+  max-width: 100%;
+}
+
+/* The sparkle circle behind the figure: Apex's field in its colour, fading out to the edge. */
+.wlt__halo {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  /* Inside the scene's own box: never behind the bubble's row. */
+  width: min(calc(var(--wlt-figure) * 1.12), var(--wlt-scene-h));
+  aspect-ratio: 1;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, light-dark(color-mix(in srgb, var(--hero-tint) 30%, transparent), color-mix(in srgb, var(--hero-tint) 17%, transparent)) 30%, transparent 100%);
+  opacity: 0;
+  transition: opacity 700ms var(--ease-out);
+  pointer-events: none;
+}
+
+.wlt__halo[data-in] {
+  opacity: 1;
+}
+
+.wlt__halo .wlt__sparkle {
+  inset: 0;
+  -webkit-mask-image: radial-gradient(closest-side, black 34%, transparent 96%);
+  mask-image: radial-gradient(closest-side, black 34%, transparent 96%);
+}
+
+/* The step's illustration tiles (portalled in by StepScene), under the figure. */
+.wlt__deco {
+  position: absolute;
+  inset: 0;
+}
+
+.wl__figure.wlt__figure {
+  position: absolute;
+  left: 50%;
+  bottom: 2%;
+  z-index: 1;
+  width: var(--wlt-figure);
+  height: var(--wlt-figure);
+  translate: -50% 0;
+  transform-origin: 50% 100%;
+  opacity: 0;
+  transition: opacity 360ms var(--ease-out);
+}
+
+.wl__figure[data-in] {
+  opacity: 1;
+}
+
+.wl[data-intro='rise'] .wl__figure {
+  animation: wl-rise 760ms var(--ease-spring) both;
+}
+
+/* The ring the companion pops up through. */
+.wl__ring {
+  position: absolute;
+  left: 22%;
+  right: 22%;
+  bottom: 0;
+  height: 14%;
+  border-radius: 50%;
+  border: 2px solid light-dark(color-mix(in srgb, var(--hero-tint) 80%, black), color-mix(in srgb, var(--hero-tint) 80%, white));
+  opacity: 0;
+  pointer-events: none;
+}
+
+.wl__ring[data-on] {
+  animation: wl-ring 900ms var(--ease-out) both;
+}
+
+/* The step column: words, card, actions. */
+.wlt__body {
+  position: relative;
+  flex: 0 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--wlt-gap);
+  width: min(100%, var(--wlt-body-w));
+  opacity: 0;
+}
+
+.wl[data-slot='side'] .wlt__body {
+  flex: 0 1 var(--wlt-body-w);
+  width: auto;
+  min-width: 0;
+  max-height: 100%;
+}
+
+.wlt__body[data-in] {
+  opacity: 1;
+  animation: wl-in-next var(--motion-enter, 240ms) var(--ease-out) both;
+}
+
+.wlt__body[data-in][data-dir='back'] {
+  animation-name: wl-in-back;
+}
+
+.wlt__head {
+  flex: none;
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  text-align: center;
+}
+
+.wl[data-slot='side'] .wlt__head {
+  justify-items: start;
+  text-align: start;
+}
+
+.wlt__title {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.wlt__subtitle {
+  margin: 0;
+  max-width: 520px;
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* The content card scrolls inside the page when it is tall; the actions stay in view. */
+.wlt__card {
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  text-align: start;
+}
+
+.wlt__card.welcome__panel {
+  margin: 0;
+  padding: 18px 20px;
+}
+
+.wlt__card > * + * {
+  margin-top: 14px;
+}
+
+/* Cards made of cards (the layouts, the showcase): no frame, room for focus rings. */
+.wlt__card--bare {
+  padding: 4px;
+}
+
+.wlt__divider {
+  height: 0;
+  margin-block: 16px;
+  border: 0;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.wlt__actions.welcome__actions {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0;
+}
+
+.wlt__actions-end {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-inline-start: auto;
+}
+
+/* A step with no Back (the intro): its action sits with the words. */
+.wlt__actions[data-solo] {
+  justify-content: center;
+}
+
+.wlt__actions[data-solo] .wlt__actions-end {
+  margin-inline-start: 0;
+}
+
+.wl[data-slot='side'] .wlt__actions[data-solo] {
+  justify-content: flex-start;
+}
+
+/* The opening: the Apex logo (Pip's head) pops in over the rising glow, where the companion will stand, and a spark lands beside it. */
+.wl-dawn {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.wl-dawn__mark {
+  position: relative;
+  width: 88px;
+  height: 88px;
+}
+
+.wl-dawn__pip {
+  animation: wl-pip-pop 700ms var(--ease-spring) both;
+}
+
+.wl-dawn__spark {
+  position: absolute;
+  top: -4px;
+  right: -14px;
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+  color: light-dark(color-mix(in srgb, var(--hero-tint) 85%, black), color-mix(in srgb, var(--hero-tint) 85%, white));
+  animation: wl-spark 700ms var(--ease-spring) 500ms both !important;
+}
+
+.wl[data-intro='rise'] .wl-dawn {
+  opacity: 0;
+  transition: opacity 400ms var(--ease-in);
+}
+
+@keyframes wl-pip-pop {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes wl-spark {
+  from {
+    transform: scale(0) rotate(-40deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+@keyframes wl-rise {
+  from {
+    opacity: 0;
+    transform: translateY(70px) scale(0.7);
+  }
+}
+
+@keyframes wl-ring {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+@keyframes wl-in-next {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+}
+
+@keyframes wl-in-back {
+  from {
+    opacity: 0;
+    transform: translateX(-28px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wl__figure,
+  .wlt__halo,
+  .wl__wash,
+  .wl__horizon {
+    transition: none;
+  }
+
+  .wlt__body[data-in],
+  .wl[data-intro='rise'] .wl__figure,
+  .wl__ring[data-on] {
+    animation: none;
+  }
+}
+
+:root[data-motion='reduced'] .wl__figure,
+:root[data-motion='reduced'] .wlt__halo,
+:root[data-motion='reduced'] .wl__wash,
+:root[data-motion='reduced'] .wl__horizon {
+  transition: none;
+}
+
+:root[data-motion='reduced'] .wlt__body[data-in],
+:root[data-motion='reduced'] .wl[data-intro='rise'] .wl__figure,
+:root[data-motion='reduced'] .wl__ring[data-on] {
+  animation: none;
+}

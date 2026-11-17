@@ -1,0 +1,2996 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* Companion surfaces: the profile card, the create and import sheets, the
+   look editor, the new tab's picker and the welcome step. Colours come from
+   the design tokens only; --hero-tint is a companion's own accent, set
+   inline, and every mix with it is defined for light and dark. */
+
+/* ---- shared form bits ---- */
+
+.co-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1-5);
+  min-width: 0;
+}
+
+/* A segmented control keeps its own width; the column would stretch its track. */
+.co-field > .ui-segmented {
+  align-self: flex-start;
+}
+
+.co-field__label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.co-field__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.co-field__row > .co-input {
+  flex: 1;
+}
+
+.co-field__error {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--status-error);
+}
+
+.co-hint {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.45;
+  color: var(--text-tertiary);
+}
+
+.co-flush {
+  margin: 0;
+}
+
+.co-indent {
+  padding-left: var(--space-6);
+}
+
+.co-input,
+.co-textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-control);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--text-md);
+  transition: border-color var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard);
+}
+
+.co-input {
+  height: var(--control-md);
+}
+
+.co-input--time {
+  width: 120px;
+}
+
+.co-input--number {
+  width: 84px;
+}
+
+.co-textarea {
+  padding: var(--space-2) var(--space-3);
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.co-textarea--code {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+.co-input::placeholder,
+.co-textarea::placeholder {
+  color: var(--text-tertiary);
+}
+
+.co-input:focus,
+.co-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--focus-halo);
+}
+
+.co-input[aria-invalid='true'] {
+  border-color: var(--status-error);
+}
+
+.co-prefixed {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-mono);
+  color: var(--text-tertiary);
+}
+
+.co-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text-secondary);
+}
+
+.co-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.co-section {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.co-counter {
+  margin: 0;
+  align-self: flex-end;
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.co-counter--low {
+  color: var(--status-needs-input);
+}
+
+.co-path {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+  word-break: break-all;
+}
+
+.co-footer-start {
+  margin-right: auto;
+}
+
+/* ---- the soft patterned stage behind a companion ---- */
+
+.co-quick__stage,
+.co-preset__thumb {
+  --co-glow: light-dark(color-mix(in srgb, var(--hero-tint, var(--accent)) 28%, transparent), color-mix(in srgb, var(--hero-tint, var(--accent)) 22%, transparent));
+  --co-ground: light-dark(color-mix(in srgb, var(--text-primary) 10%, transparent), color-mix(in srgb, var(--bg-sunken) 80%, transparent));
+  --co-base: light-dark(color-mix(in srgb, var(--hero-tint, var(--accent)) 7%, var(--bg-card)), color-mix(in srgb, var(--hero-tint, var(--accent)) 9%, var(--bg-sunken)));
+  background:
+    radial-gradient(var(--co-glow-w, 60%) 55% at var(--co-figure-x, 50%) 42%, var(--co-glow), transparent 70%),
+    radial-gradient(var(--co-ground-w, 48%) 9% at var(--co-figure-x, 50%) 90%, var(--co-ground), transparent 75%),
+    var(--co-base);
+}
+
+/* DS-86: Apex's ambient field (ShapeField) lies under the figure instead of a
+   dot grid; each preset thumbnail shows one still frame of it. */
+.co-preset__thumb {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.co-preset__thumb > :not(.co-shape-field) {
+  position: relative;
+  z-index: 1;
+}
+
+.co-preset__field {
+  --field-fade-top: 0%;
+  --field-fade-bottom: 0%;
+}
+
+/* ---- the profile card ----
+   It covers only the content area (or fills the chat column it came from):
+   the page there is washed toward the page background and blurred, while
+   the sidebar and toolbar stay sharp. Inside, everything is neutral except
+   the hero wash, the primary pill and the companion itself. */
+
+.co-layer {
+  --co-enter: var(--motion-enter, 240ms);
+  --co-exit: var(--motion-exit, 160ms);
+  --co-glide: var(--motion-glide, 220ms);
+  --co-settle: var(--motion-settle, 320ms);
+  --co-ease-exit: var(--ease-exit, var(--ease-in));
+  /* The look editor (DS-43). Opening: the card widens and the hero grows
+     over 250 ms, ease-out, while the figure's scale settles until 650 ms.
+     Closing: the card narrows over 300 ms on an accelerating curve and the
+     figure settles about 450 ms more. The name row and the toolbar fade
+     within 100 ms. Every one collapses under Reduce Motion (below). */
+  --co-look-grow: 250ms;
+  --co-look-shrink: 300ms;
+  --co-look-scale-in: 650ms;
+  --co-look-scale-out: 750ms;
+  --co-look-fade: 100ms;
+  --co-ease-accel: var(--ease-in, cubic-bezier(0.4, 0, 1, 1));
+  --co-text-body: 14px;
+  --co-text-name: 28px;
+  position: fixed;
+  z-index: calc(var(--z-modal) - 1);
+  overflow: hidden;
+  -webkit-app-region: no-drag;
+}
+
+.co-stills {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.co-stills img {
+  position: absolute;
+  object-fit: cover;
+}
+
+.co-wash {
+  position: absolute;
+  inset: 0;
+  /* DS-29: about a 10 px blur. Light mode also lifts the page roughly 3% in
+     luminance toward the page ground, with no tint; dark mode is blur only. */
+  background: var(--scrim-content);
+  backdrop-filter: blur(var(--scrim-content-blur));
+  animation: co-fade-in var(--co-enter) var(--ease-out);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .co-wash {
+    background: color-mix(in srgb, var(--bg-sheet) 92%, transparent);
+    backdrop-filter: none;
+  }
+}
+
+.co-card {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid light-dark(var(--border-subtle), var(--border-default));
+  border-radius: var(--radius-xl);
+  /* DS-47: in dark mode the card is the page's own grey, not raised. Every
+     part that fades into or sits flush on the card uses this one surface. */
+  --co-surface: light-dark(var(--bg-raised), var(--bg-sheet));
+  background: var(--co-surface);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-md);
+  outline: none;
+  user-select: text;
+  container-type: inline-size;
+  animation: co-fade-in var(--co-enter) var(--ease-out);
+  transition: width var(--co-look-grow) var(--ease-out);
+}
+
+/* Closing the look editor narrows the card on an accelerating curve. */
+.co-card--look-closing {
+  transition: width var(--co-look-shrink) var(--co-ease-accel);
+}
+
+.co-card--resizing {
+  transition: none;
+}
+
+/* DS-47: no shadow in dark mode; the hairline carries the edge. */
+:root[data-theme='dark'] .co-card {
+  box-shadow: none;
+}
+
+.co-card--column {
+  inset: 0;
+  border-radius: var(--co-column-radius, 0);
+  box-shadow: none;
+}
+
+/* DS-121: an apex://companion tab is the same card as a page: no border, radius or backdrop. */
+.co-card--page {
+  inset: 0;
+  border: 0;
+  border-radius: 0;
+  --co-surface: var(--bg-sheet);
+  background: var(--co-surface);
+  box-shadow: none;
+}
+
+.co-layer--leaving .co-wash,
+.co-layer--leaving .co-card {
+  opacity: 0;
+  animation: none;
+  transition: opacity var(--co-exit) var(--co-ease-exit);
+}
+
+@keyframes co-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* The left-edge grab strip: only the resize cursor shows (DS-32). */
+.co-card > .co-card__seam {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 4;
+  width: 8px;
+}
+
+.co-card > .co-card__seam::after {
+  left: 0;
+  width: 1px;
+  border-radius: 0;
+}
+
+.co-card > .co-card__seam:focus-visible::after,
+.co-card > .co-card__seam[data-dragging]::after {
+  background: var(--text-tertiary);
+}
+
+.co-card__inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.co-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  flex: none;
+  height: 52px;
+  padding: 0 12px 0 17px;
+}
+
+.co-card__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: none;
+}
+
+.co-card__actions--alone {
+  margin-left: auto;
+}
+
+.co-card__loading {
+  padding: var(--space-5) var(--space-6);
+}
+
+/* The switcher: one ghost pill with the face, the name and a chevron. */
+.co-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  max-width: 100%;
+  height: 36px;
+  padding: 0 var(--space-2-5) 0 8px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--co-text-body);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+
+.co-switcher:hover,
+.co-switcher[data-menu-open] {
+  background: var(--bg-hover);
+}
+
+.co-switcher:active {
+  background: var(--bg-active);
+}
+
+.co-switcher:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 0;
+}
+
+.co-switcher__face {
+  flex: none;
+}
+
+.co-switcher__name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.co-switcher__note {
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+}
+
+.co-switcher__chevron {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  color: var(--text-tertiary);
+}
+
+/* Round outlined buttons: More and Close in the header, undo and redo in the
+   look editor. A hairline ring and a tiny shadow in light mode; the card fill
+   and the hairline alone in dark mode (DS-33, DS-47). */
+.co-card .co-round {
+  width: 32px;
+  height: 32px;
+  border: 1px solid light-dark(var(--border-default), var(--border-strong));
+  border-radius: 50%;
+  background: var(--co-surface);
+  color: var(--text-secondary);
+  box-shadow: light-dark(0 1px 2px rgba(46, 36, 24, 0.08), none);
+}
+
+.co-card .co-round:hover:not(:disabled),
+.co-card .co-round[data-menu-open] {
+  background: color-mix(in srgb, var(--text-primary) 5%, var(--co-surface));
+  color: var(--text-primary);
+}
+
+.co-card .co-round:active:not(:disabled) {
+  background: color-mix(in srgb, var(--text-primary) 9%, var(--co-surface));
+}
+
+.co-card .co-round svg {
+  width: 16px;
+  height: 16px;
+}
+
+.co-card .co-round--glass {
+  background: color-mix(in srgb, var(--bg-raised) 64%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+/* The floating save pill, centred under the header. */
+.co-save-pill {
+  position: absolute;
+  top: 58px;
+  left: 50%;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  height: 26px;
+  padding: 0 var(--space-2-5);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  background: var(--bg-raised);
+  box-shadow: var(--shadow-sm);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -4px);
+  transition:
+    opacity var(--co-exit) var(--co-ease-exit),
+    transform var(--co-exit) var(--co-ease-exit);
+}
+
+.co-save-pill--shown {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+  transition:
+    opacity var(--co-enter) var(--ease-out),
+    transform var(--co-enter) var(--ease-out);
+}
+
+.co-save-pill svg {
+  width: 13px;
+  height: 13px;
+}
+
+.co-save-pill--saved svg {
+  color: var(--status-success);
+}
+
+.co-save-pill--error {
+  color: var(--status-error);
+}
+
+.co-save-pill__retry {
+  padding: 0 var(--space-1);
+  border: 0;
+  background: none;
+  color: var(--text-primary);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* The tab row: neutral labels, one gliding full-ink underline. */
+.co-tabs {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 10px;
+  height: 51px;
+  /* DS-36: the first 36 px button starts at x 17 (cardLayout TAB_ROW). */
+  padding: 0 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+.co-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+/* DS-37: General clips hard at the tab hairline; no shadow or fade. */
+.co-card__inner--scrolled .co-tabs {
+  z-index: 2;
+}
+
+.co-tabs__tab {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: var(--co-text-body);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+
+.co-tabs__tab:hover {
+  color: color-mix(in srgb, var(--text-primary) 70%, var(--text-secondary));
+}
+
+.co-tabs__tab[aria-selected='true'] {
+  color: var(--text-primary);
+}
+
+.co-tabs__tab:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: -2px;
+}
+
+.co-tabs__icon {
+  display: inline-flex;
+  flex: none;
+  width: 0;
+  margin-right: 0;
+  overflow: hidden;
+  opacity: 0;
+  filter: blur(2px);
+  transition:
+    width var(--co-glide) var(--ease-out),
+    margin var(--co-glide) var(--ease-out),
+    opacity var(--co-glide) var(--ease-out),
+    filter var(--co-glide) var(--ease-out);
+}
+
+.co-tabs__tab[aria-selected='true'] .co-tabs__icon {
+  width: 16px;
+  margin-right: 6px;
+  opacity: 1;
+  filter: none;
+}
+
+.co-tabs__icon svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+/* The label keeps its medium-weight width in both states, so nothing shifts. */
+.co-tabs__label {
+  display: inline-grid;
+}
+
+.co-tabs__label > span,
+.co-tabs__label::after {
+  grid-area: 1 / 1;
+}
+
+.co-tabs__label::after {
+  content: attr(data-text);
+  font-weight: 500;
+  visibility: hidden;
+}
+
+.co-tabs__label > span {
+  font-weight: 400;
+  transition: font-weight var(--co-glide) var(--ease-out);
+}
+
+.co-tabs__tab[aria-selected='true'] .co-tabs__label > span {
+  font-weight: 500;
+}
+
+.co-tabs__line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  /* Square ends (DS-36). */
+  border-radius: 0;
+  background: var(--text-primary);
+  pointer-events: none;
+}
+
+.co-tabs__line[data-glide] {
+  transition:
+    transform var(--co-glide) var(--ease-out),
+    width var(--co-glide) var(--ease-out);
+}
+
+.co-card__body {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  /* The top padding lives on the tab (.co-tab), so a sticky group header
+     (top: 0) meets the tab hairline exactly. */
+  padding: 0 var(--space-6) var(--space-5);
+}
+
+/* General scrolls as one: the hero touches both card edges. */
+.co-card__body--flush {
+  padding: 0;
+}
+
+.co-card__body > .ui-tab-panel {
+  outline: none;
+}
+
+/* ---- General ---- */
+
+.co-general {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: var(--space-10);
+}
+
+/* DS-43: while the look is edited, the summary and instructions stay below
+   the taller hero and scroll with it; they are only inert (GeneralTab). */
+
+/* The hero (DS-38): edge to edge, a nearly flat wash of the head colour that
+   deepens a touch mid-hero and fades into the card over its last ~130 px.
+   No glow behind the figure. In dark mode the wash is a few levels above the
+   card surface it fades into, so there is no seam (DS-47). */
+.co-hero {
+  --co-hero-card: var(--co-surface, var(--bg-raised));
+  --co-wash-top: light-dark(color-mix(in srgb, var(--hero-tint) 20%, var(--co-hero-card)), color-mix(in srgb, var(--hero-tint) 7%, color-mix(in srgb, white 5%, var(--co-hero-card))));
+  --co-wash-mid: light-dark(color-mix(in srgb, var(--hero-tint) 23%, var(--co-hero-card)), color-mix(in srgb, var(--hero-tint) 8%, color-mix(in srgb, white 5%, var(--co-hero-card))));
+  /* A flat, solid floor a step darker than the wash (DS-40). */
+  --co-floor: light-dark(color-mix(in srgb, var(--text-primary) 9%, var(--co-wash-mid)), color-mix(in srgb, black 22%, var(--co-hero-card)));
+  position: relative;
+  height: var(--hero-h);
+  overflow: hidden;
+  container-type: inline-size;
+  background: linear-gradient(
+    to bottom,
+    var(--co-wash-top) 0%,
+    var(--co-wash-mid) calc(50% - 65px),
+    var(--co-wash-top) calc(100% - 130px),
+    var(--co-hero-card) 100%
+  );
+  /* The editor's taller hero: the content box goes from 265 to 460 px. */
+  --look-hero-h: calc(var(--hero-h) + 195px);
+  transition: height var(--co-look-grow) var(--ease-out);
+}
+
+/* Closing the editor: the hero shrinks with the card's accelerating narrow. */
+.co-hero--unlooking {
+  transition: height var(--co-look-shrink) var(--co-ease-accel);
+}
+
+/* DS-39: the band stands on its own: invisible at the top, strongest
+   through the middle, gone about 40 px above the name row. */
+.co-hero .co-hero__field {
+  --field-fade-top: 28%;
+  --field-fade-bottom: 35%;
+  inset: auto;
+  top: var(--field-top);
+  left: -11px;
+  right: -11px;
+  height: var(--field-h);
+}
+
+/* In the editor the band moves into the lower ~45% of the taller hero,
+   behind the legs (DS-39). */
+.co-hero--looking .co-hero__field {
+  --field-fade-top: 30%;
+  --field-fade-bottom: 24%;
+  top: calc(var(--look-hero-h) * 0.46);
+  height: calc(var(--look-hero-h) * 0.5);
+}
+
+/* The one floor: a flat, solid ellipse that stays put while the figure hops
+   (the stage's own blob is off for the hero). */
+.co-hero__floor {
+  position: absolute;
+  top: var(--feet-y);
+  left: 50%;
+  width: calc(123px * var(--hero-scale));
+  height: calc(21px * var(--hero-scale));
+  border-radius: 50%;
+  background: var(--co-floor);
+  transform: translate(-50%, -50%);
+  transition:
+    left var(--co-settle) var(--ease-out),
+    top var(--co-settle) var(--ease-out),
+    width var(--co-settle) var(--ease-out);
+}
+
+.co-hero__figure {
+  position: absolute;
+  top: var(--fig-top);
+  left: 50%;
+  z-index: 1;
+  width: var(--fig-size);
+  height: var(--fig-size);
+  transform: translateX(-50%);
+  transition:
+    left var(--co-settle) var(--ease-out),
+    top var(--co-settle) var(--ease-out),
+    transform var(--co-settle) var(--ease-out);
+}
+
+/* The figure appears in one step, with no fade (DS-31). */
+.co-hero__companion {
+  animation: none;
+}
+
+.co-hero__look {
+  position: absolute;
+  top: 26px;
+  right: 34px;
+  z-index: 3;
+}
+
+.co-hero__name-row {
+  position: absolute;
+  top: calc(var(--name-y) - 22px);
+  left: 40px;
+  right: 34px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  height: 44px;
+  pointer-events: none;
+  /* It returns within about 100 ms when the editor closes (DS-43). */
+  transition: opacity var(--co-look-fade) var(--ease-out);
+}
+
+.co-hero__name-row > * {
+  pointer-events: auto;
+}
+
+.co-hero--looking .co-hero__name-row {
+  opacity: 0;
+  transition: opacity var(--co-look-fade) var(--co-ease-exit);
+}
+
+/* The big name reads as text; hover shows a faint field, focus a real one. */
+.co-bigname {
+  display: inline-grid;
+  min-width: 0;
+  max-width: calc(50cqw - 40px - 76px * var(--hero-scale));
+  margin-left: -9px;
+}
+
+.co-bigname::after,
+.co-bigname__input {
+  grid-area: 1 / 1;
+  padding: 2px 8px;
+  border: 1px solid transparent;
+  font: inherit;
+  font-size: var(--co-text-name);
+  /* DS-42: about 28 px at regular weight; the size alone carries it. */
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+.co-bigname::after {
+  content: attr(data-value);
+  visibility: hidden;
+  white-space: pre;
+  overflow: hidden;
+}
+
+.co-bigname__input {
+  width: 100%;
+  min-width: 2ch;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-primary);
+  text-overflow: ellipsis;
+  transition:
+    border-color var(--dur-fast) var(--ease-standard),
+    background var(--dur-fast) var(--ease-standard);
+}
+
+.co-bigname__input:hover {
+  border-color: var(--border-subtle);
+  background: color-mix(in srgb, var(--bg-raised) 55%, transparent);
+}
+
+.co-bigname__input:focus {
+  outline: none;
+  border-color: var(--border-strong);
+  background: var(--bg-raised);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--text-primary) 8%, transparent);
+}
+
+/* Pills: the glass outline (look) and the companion-filled primary (Export…). */
+.co-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  flex: none;
+  height: 34px;
+  padding: 0 var(--space-4);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  font: inherit;
+  font-size: var(--co-text-body);
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard);
+}
+
+.co-pill svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+.co-pill:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.co-pill:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+/* DS-41: the look pill is opaque, card-coloured, 36 tall and regular weight; hover changes only the border. */
+.co-pill--solid {
+  height: 36px;
+  border-color: light-dark(var(--border-default), var(--border-strong));
+  background: var(--co-surface, var(--bg-raised));
+  color: var(--text-primary);
+  font-weight: 400;
+}
+
+.co-pill--solid:hover:not(:disabled),
+.co-pill--solid[aria-expanded='true'] {
+  border-color: var(--border-strong);
+}
+
+.co-pill--solid:active:not(:disabled) {
+  border-color: var(--text-tertiary);
+}
+
+.co-pill--glass {
+  border-color: var(--border-default);
+  background: color-mix(in srgb, var(--bg-raised) 62%, transparent);
+  backdrop-filter: blur(10px);
+  color: var(--text-primary);
+}
+
+.co-pill--glass:hover:not(:disabled),
+.co-pill--glass[data-menu-open] {
+  border-color: var(--border-strong);
+  background: color-mix(in srgb, var(--bg-raised) 84%, transparent);
+}
+
+.co-pill--glass:active:not(:disabled) {
+  background: color-mix(in srgb, var(--text-primary) 6%, var(--bg-raised));
+}
+
+.co-pill--primary {
+  height: 36px;
+  background: var(--co-pill);
+  color: var(--co-pill-text);
+}
+
+.co-pill--primary:hover {
+  background: var(--co-pill-hover);
+}
+
+.co-pill--primary:active {
+  background: var(--co-pill-press);
+}
+
+.co-pill--sm {
+  height: 30px;
+  padding: 0 var(--space-3);
+  font-size: var(--text-md);
+}
+
+.co-pill--icon {
+  padding: 0 var(--space-2);
+}
+
+.co-pill--sm svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Narrow cards: the primary pill keeps its icon and drops its label. */
+@container (max-width: 520px) {
+  .co-hero__export {
+    width: 36px;
+    padding: 0;
+  }
+
+  .co-hero__export .co-pill__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+}
+
+/* Look editing in place (DS-43): the hero grows from 265 to 460 px and the
+   figure scales ×1.34 while staying centred, its feet moving down with the
+   taller hero. The room around it is left for the category ring (DS-118). */
+.co-hero--looking {
+  --look-scale: 1.34;
+  --look-drop: 58px;
+  /* The content box grows from 265 to a fixed 460 px (DS-38), whatever the
+     card's height; the rest of General sits below it. */
+  height: var(--look-hero-h);
+}
+
+.co-hero--looking .co-hero__figure {
+  top: calc(var(--fig-top) + var(--look-drop));
+  left: 50%;
+  transform: translateX(-50%) scale(var(--look-scale));
+  transition:
+    left var(--co-look-grow) var(--ease-out),
+    top var(--co-look-grow) var(--ease-out),
+    transform var(--co-look-scale-in) var(--ease-out);
+}
+
+/* Closing: the feet rise with the shrinking hero; the scale settles about
+   450 ms longer. */
+.co-hero--unlooking .co-hero__figure {
+  transition:
+    left var(--co-look-shrink) var(--co-ease-accel),
+    top var(--co-look-shrink) var(--co-ease-accel),
+    transform var(--co-look-scale-out) var(--ease-out);
+}
+
+.co-hero--looking .co-hero__floor {
+  transition:
+    left var(--co-look-grow) var(--ease-out),
+    top var(--co-look-scale-in) var(--ease-out),
+    width var(--co-look-scale-in) var(--ease-out);
+}
+
+.co-hero--unlooking .co-hero__floor {
+  transition:
+    left var(--co-look-shrink) var(--co-ease-accel),
+    top var(--co-look-scale-out) var(--ease-out),
+    width var(--co-look-scale-out) var(--ease-out);
+}
+
+.co-hero--looking .co-hero__floor {
+  top: calc(var(--fig-top) + var(--look-drop) + var(--fig-size) * 0.5 + (var(--feet-y) - var(--fig-top) - var(--fig-size) * 0.5) * var(--look-scale));
+  left: 50%;
+  width: calc(123px * var(--hero-scale) * var(--look-scale));
+}
+
+.co-look {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  /* The toolbar starts fading in at t0, with the pill swap (DS-43). */
+  animation: co-fade-in var(--co-enter) var(--ease-out) both;
+}
+
+.co-look > * {
+  pointer-events: auto;
+}
+
+.co-look--leaving {
+  opacity: 0;
+  animation: none;
+  transition: opacity var(--co-look-fade) var(--co-ease-exit);
+}
+
+/* One 40 px hairline pill 10 px inside the hero's top-left: undo, redo, a
+   divider, then the four one-shot shuffle styles. */
+.co-look__tools {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 40px;
+  padding: 0 4px;
+  border: 1px solid light-dark(var(--border-subtle), var(--border-default));
+  border-radius: var(--radius-pill);
+  background: light-dark(#fff, var(--bg-raised));
+  box-shadow: var(--shadow-xs, 0 1px 2px rgb(0 0 0 / 0.06));
+}
+
+.co-look__tools .co-look__tool {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-pill);
+}
+
+.co-look__divider {
+  width: 1px;
+  height: 18px;
+  margin: 0 4px;
+  background: light-dark(var(--border-subtle), var(--border-default));
+}
+
+.co-look__style {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 32px;
+  padding: 0 11px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: default;
+}
+
+.co-look__style svg {
+  width: 14px;
+  height: 14px;
+}
+
+.co-look__style:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--text-primary) 7%, transparent);
+}
+
+.co-look__style:active:not(:disabled) {
+  background: color-mix(in srgb, var(--text-primary) 11%, transparent);
+}
+
+.co-look__style:focus-visible {
+  outline: 2px solid var(--focus-ring, var(--accent));
+  outline-offset: 1px;
+}
+
+.co-look__style:disabled {
+  color: var(--text-tertiary, var(--text-secondary));
+}
+
+.co-look__panel {
+  position: absolute;
+  top: 64px;
+  right: 16px;
+  bottom: 24px;
+  width: min(280px, calc(50% - 200px));
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--bg-raised) 86%, transparent);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Too narrow for side by side: the figure stays on top, the panel below. */
+@container (max-width: 700px) {
+  /* A column too narrow to widen stacks the option card under the figure,
+     so its hero keeps room for it below the 460 px box. */
+  .co-hero--looking {
+    height: calc(var(--look-hero-h) + 220px);
+  }
+
+  .co-hero--looking .co-hero__figure {
+    top: 64px;
+    left: 50%;
+    transform: translateX(-50%) scale(0.8);
+  }
+
+  .co-hero--looking .co-hero__floor {
+    top: calc(64px + var(--fig-size) * 0.5 + (var(--feet-y) - var(--fig-top) - var(--fig-size) * 0.5) * 0.8);
+    left: 50%;
+    width: calc(98px * var(--hero-scale));
+  }
+
+  .co-look__panel {
+    top: calc(64px + var(--fig-size) * 0.9);
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    width: auto;
+  }
+}
+
+/* The summary group (DS-44): two rows in one soft box. In dark mode it takes
+   the card fill and a hairline that is a visible step lighter (DS-47). */
+.co-summary {
+  margin: var(--space-4) var(--space-6) 0;
+  padding: 0;
+  overflow: hidden;
+  list-style: none;
+  border: 1px solid light-dark(var(--border-subtle), var(--border-default));
+  border-bottom-color: light-dark(var(--border-default), var(--border-default));
+  border-radius: 16px;
+  background: light-dark(var(--bg-raised), var(--co-surface, var(--bg-sheet)));
+  box-shadow: light-dark(0 1px 4px rgba(46, 36, 24, 0.05), none);
+}
+
+.co-summary > li + li {
+  border-top: 1px solid light-dark(var(--border-subtle), var(--border-default));
+}
+
+.co-summary__row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  height: 53px;
+  padding: 0 var(--space-4) 0 21px;
+  border: 0;
+  background: none;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--co-text-body);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+
+.co-summary__row:hover,
+.co-summary__row[data-menu-open] {
+  background: color-mix(in srgb, var(--text-primary) 3%, transparent);
+}
+
+.co-summary__row:active {
+  background: var(--bg-hover);
+}
+
+.co-summary__row:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: calc(-1 * var(--focus-ring-width));
+}
+
+.co-summary__icon {
+  display: inline-flex;
+  color: var(--text-tertiary);
+}
+
+.co-summary__icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* A 14 px semibold label at +46 (21 in, 16 px icon, 9 px gap). */
+.co-summary__label {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+}
+
+.co-summary__value {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-secondary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.co-summary__chevron {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: var(--text-tertiary);
+}
+
+/* Standing instructions: a muted label, then the text as prose. The section
+   reaches the prose's hover bleed into its own box, so nothing spills past it;
+   the head and counter step back in to stay on the 40 px text line. */
+.co-instructions {
+  --co-prose-bleed: 11px;
+  min-width: 0;
+  margin: var(--space-10) calc(40px - var(--co-prose-bleed)) 0;
+}
+
+/* The head row keeps the label's own line height; the pill overflows it (DS-45). */
+.co-instructions__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  height: 20px;
+  padding-inline: var(--co-prose-bleed);
+}
+
+.co-instructions__label {
+  min-width: 0;
+  overflow: hidden;
+  margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--co-text-body);
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+/* DS-46: a ghost select at the end of the label row; neutral, like every card control. */
+.co-persona-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  margin-block: -4px;
+  margin-left: auto;
+  padding: 0 8px 0 10px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color var(--motion-enter, 150ms) var(--ease-standard, ease);
+}
+
+.co-persona-pill:hover,
+.co-persona-pill[aria-expanded='true'] {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.co-persona-pill:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 1px;
+}
+
+.co-persona-pill svg {
+  width: 14px;
+  height: 14px;
+}
+
+.co-info {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--text-tertiary);
+  cursor: help;
+}
+
+.co-info:hover {
+  color: var(--text-secondary);
+}
+
+.co-info:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+}
+
+.co-info svg {
+  width: 14px;
+  height: 14px;
+}
+
+.co-prose {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  /* The text starts 24 px under the label: 16 + 8 of padding. The 10 px side
+     padding and 1 px border line it up with the label (--co-prose-bleed). */
+  margin: var(--space-4) 0 0;
+  padding: var(--space-2) 10px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--co-text-body);
+  line-height: 23px;
+  cursor: text;
+  transition:
+    background var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard);
+}
+
+.co-prose p {
+  margin: 0 0 12px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.co-prose p:last-child {
+  margin-bottom: 0;
+}
+
+.co-prose:hover {
+  background: color-mix(in srgb, var(--text-primary) 3%, transparent);
+}
+
+.co-prose:focus-visible {
+  outline: none;
+  border-color: var(--border-strong);
+}
+
+.co-prose--empty {
+  color: var(--text-tertiary);
+}
+
+.co-prose--editing {
+  overflow: hidden;
+  resize: none;
+  border-color: var(--border-strong);
+  background: var(--bg-raised);
+  outline: none;
+}
+
+.co-prose--editing::placeholder {
+  color: var(--text-tertiary);
+}
+
+.co-instructions .co-counter {
+  margin-top: var(--space-1-5);
+  padding-inline: var(--co-prose-bleed);
+  text-align: right;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .co-layer {
+    --co-enter: 0ms;
+    --co-exit: 0ms;
+    --co-glide: 0ms;
+    --co-settle: 0ms;
+    --co-look-grow: 0ms;
+    --co-look-shrink: 0ms;
+    --co-look-scale-in: 0ms;
+    --co-look-scale-out: 0ms;
+    --co-look-fade: 0ms;
+  }
+}
+
+/* Apex's own Reduce Motion (Appearance) zeroes the --motion-* tokens the
+   others follow; the look editor's own durations need it spelled out. */
+:root[data-motion='reduced'] .co-layer {
+  --co-look-grow: 0ms;
+  --co-look-shrink: 0ms;
+  --co-look-scale-in: 0ms;
+  --co-look-scale-out: 0ms;
+  --co-look-fade: 0ms;
+}
+
+/* Lists in the tabs */
+
+.co-tab {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-5);
+}
+
+.co-tab__bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  justify-content: space-between;
+}
+
+.co-tab__lead {
+  flex: 1;
+  min-width: 200px;
+}
+
+.co-search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 1;
+  min-width: 180px;
+  height: var(--control-md);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-control);
+  background: var(--bg-card);
+  color: var(--text-tertiary);
+}
+
+.co-search:focus-within {
+  border-color: var(--accent);
+  box-shadow: var(--focus-halo);
+}
+
+.co-search svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+
+.co-search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--text-md);
+}
+
+/* A group disclosure (DS-114, DS-37): a 28 px row that sticks just under
+   the tab row while the list scrolls. It spans the body's side padding so
+   rows never show beside it, on the card's own surface. */
+.co-group {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  margin: 0 calc(-1 * var(--space-6));
+  padding: 0 var(--space-6);
+  background: var(--co-surface, var(--bg-raised));
+  font: inherit;
+}
+
+.co-group-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  height: 28px;
+  margin-left: 4px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.co-group-toggle:hover {
+  background: var(--bg-hover);
+}
+
+.co-group-toggle:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: -2px;
+}
+
+.co-group-toggle svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+}
+
+.co-group-toggle__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.co-group-toggle__count {
+  color: var(--text-tertiary);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+.co-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.co-item {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  transition: border-color var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard);
+}
+
+.co-item:hover {
+  border-color: var(--border-default);
+}
+
+.co-item--linked {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-ring);
+}
+
+.co-item__main {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1-5) var(--space-2) var(--space-1-5) var(--space-1);
+}
+
+.co-item__toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-1) var(--space-2);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--text-primary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.co-item__toggle:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+}
+
+.co-item__toggle > svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  color: var(--text-tertiary);
+}
+
+.co-item__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.co-item__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 600;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.co-item__title code {
+  font-family: var(--font-mono);
+  font-size: var(--text-md);
+}
+
+.co-item__meta {
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.co-item__body {
+  margin: 0 var(--space-3) var(--space-3) var(--space-8);
+  padding: var(--space-3);
+  max-height: 220px;
+  overflow: auto;
+  border-radius: var(--radius-sm);
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  white-space: pre-wrap;
+}
+
+.co-crumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.co-crumbs__part {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.co-crumbs__part svg {
+  width: 12px;
+  height: 12px;
+  color: var(--text-tertiary);
+}
+
+.co-crumbs button {
+  padding: 2px var(--space-1);
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: none;
+  color: var(--text-link);
+  font: inherit;
+  cursor: pointer;
+}
+
+.co-crumbs [aria-current='page'] {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.co-files {
+  min-height: 260px;
+  border-radius: var(--radius-md);
+  transition: box-shadow var(--dur-fast) var(--ease-standard), background var(--dur-fast) var(--ease-standard);
+}
+
+.co-files--dragging {
+  background: var(--bg-selected);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+/* Routines */
+
+.co-schedule {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.co-days {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.co-day {
+  min-width: 44px;
+  height: var(--control-sm);
+  padding: 0 var(--space-2);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-pill);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.co-day[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Models */
+
+/* DS-117/DS-121: the rows, pickers and header run to the right inset in
+   every card width and in the full tab. */
+.co-models {
+  gap: var(--space-4);
+}
+
+.co-models__summary {
+  margin: 0;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+}
+
+.co-models__summary strong {
+  color: var(--text-primary);
+}
+
+.co-precedence {
+  margin: var(--space-2) 0;
+  padding-left: var(--space-5);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.co-section > .ui-btn {
+  margin-top: var(--space-3);
+}
+
+/* Export */
+
+.co-export {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* The face drawn on the skin colour. In dark mode the skin is mixed into
+   the card colour, so a pale skin reads as a soft face instead of a bright
+   box, and the ring uses a border token rather than a dark-only shadow. */
+.co-face-swatch {
+  width: 44px;
+  height: 24px;
+  flex: none;
+  border-radius: var(--radius-pill);
+  background-color: light-dark(var(--swatch-skin), color-mix(in srgb, var(--swatch-skin) 72%, var(--bg-card)));
+  background-repeat: no-repeat;
+  box-shadow: inset 0 0 0 1px light-dark(var(--border-card), var(--border-strong));
+}
+
+/* Each swatch zooms in on its layer of the 512×256 face canvas. */
+.co-face-swatch--eyes {
+  background-size: 140% auto;
+  background-position: 50% 42%;
+}
+
+.co-face-swatch--brows {
+  background-size: 140% auto;
+  background-position: 50% 14%;
+}
+
+.co-face-swatch--mouth {
+  background-size: 200% auto;
+  background-position: 50% 88%;
+}
+
+/* ---- presets ---- */
+
+.co-presets {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(124px, 1fr));
+  gap: var(--space-2-5);
+}
+
+.co-presets--row {
+  display: flex;
+  overflow-x: auto;
+  padding: 2px 2px var(--space-1);
+  scrollbar-width: thin;
+}
+
+.co-presets--row .co-preset {
+  flex: 0 0 104px;
+  padding: var(--space-2) var(--space-1-5) var(--space-2-5);
+}
+
+.co-preset {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-2-5) var(--space-2-5) var(--space-3);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard);
+}
+
+.co-preset:hover {
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--border-default));
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.co-preset:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.co-preset[aria-pressed='true'] {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+  background: var(--accent-soft);
+}
+
+.co-preset__thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 88px;
+  margin-bottom: var(--space-1);
+  border-radius: 50%;
+}
+
+.co-preset__thumb img {
+  display: block;
+  width: 88px;
+  height: 88px;
+}
+
+.co-preset__placeholder {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--bg-muted);
+  animation: co-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes co-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.co-preset__name {
+  font-weight: 700;
+}
+
+.co-preset__tagline {
+  font-size: var(--text-xs);
+  line-height: 1.35;
+  color: var(--text-tertiary);
+}
+
+/* ---- the create and import sheets ---- */
+
+.co-create,
+.co-review {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* The create and review stages carry the ambient field over a soft wash. */
+.co-create__stage,
+.co-review__hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 60% 70% at 50% 40%, light-dark(color-mix(in srgb, var(--hero-tint) 20%, transparent), color-mix(in srgb, var(--hero-tint) 7%, transparent)), transparent 72%),
+    light-dark(color-mix(in srgb, var(--hero-tint) 9%, var(--bg-card)), color-mix(in srgb, var(--hero-tint) 5%, var(--bg-sunken)));
+}
+
+.co-create__stage > :not(.co-stage-field),
+.co-review__hero > :not(.co-stage-field) {
+  position: relative;
+  z-index: 1;
+}
+
+.co-stage-field {
+  --field-fade-top: 10%;
+  --field-fade-bottom: 22%;
+}
+
+/* ---- DS-79: the welcome in the sheet once a companion is added ----
+   The newcomer waves on its stage while a soft ring spreads under its feet
+   and a few sparkles rise in its colour, one time. Reduce Motion leaves the
+   happy figure standing still (the burst isn't drawn at all). */
+.co-welcome {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  min-height: 240px;
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(ellipse 60% 70% at 50% 40%, light-dark(color-mix(in srgb, var(--hero-tint) 20%, transparent), color-mix(in srgb, var(--hero-tint) 7%, transparent)), transparent 72%),
+    light-dark(color-mix(in srgb, var(--hero-tint) 9%, var(--bg-card)), color-mix(in srgb, var(--hero-tint) 5%, var(--bg-sunken)));
+  animation: co-welcome-in var(--motion-settle) var(--ease-standard) both;
+}
+
+.co-welcome > :not(.co-stage-field, .co-welcome__burst) {
+  position: relative;
+  z-index: 1;
+}
+
+.co-welcome__burst {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  z-index: 2;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.co-welcome__ring {
+  position: absolute;
+  left: -70px;
+  top: -18px;
+  width: 140px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--welcome-tint) 70%, transparent);
+  opacity: 0;
+  animation: co-welcome-ring 900ms var(--ease-out) 180ms forwards;
+}
+
+.co-welcome__spark {
+  position: absolute;
+  left: calc((var(--i) - 2.5) * 26px - 6px);
+  top: -12px;
+  width: 12px;
+  height: 12px;
+  fill: var(--welcome-tint);
+  opacity: 0;
+  animation: co-welcome-spark 1100ms var(--ease-out) calc(220ms + var(--i) * 70ms) forwards;
+}
+
+@keyframes co-welcome-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@keyframes co-welcome-ring {
+  0% {
+    opacity: 0.9;
+    transform: scale(0.4);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+@keyframes co-welcome-spark {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.4);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(calc(-120px - var(--i) * 8px)) scale(1) rotate(90deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .co-welcome,
+  .co-welcome__ring,
+  .co-welcome__spark {
+    animation: none;
+  }
+}
+
+:root[data-motion='reduced'] :is(.co-welcome, .co-welcome__ring, .co-welcome__spark) {
+  animation: none;
+}
+
+.co-create__stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-3) var(--space-3);
+  border-radius: var(--radius-lg);
+  box-shadow: inset 0 0 0 1px var(--border-card);
+}
+
+.co-create__shuffle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.co-create__customize {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.co-create__customize .co-hint {
+  margin: 0;
+}
+
+.co-review__hero {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  box-shadow: inset 0 0 0 1px var(--border-card);
+}
+
+.co-review__name {
+  margin: 0 0 var(--space-1);
+  font-size: var(--text-xl);
+}
+
+.co-review__note {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--bg-subtle);
+}
+
+.co-review__note figcaption {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-tertiary);
+}
+
+.co-review__note blockquote {
+  margin: var(--space-1) 0 0;
+  white-space: pre-wrap;
+}
+
+.co-review__section h4 {
+  margin: 0 0 var(--space-1-5);
+  font-size: var(--text-sm);
+}
+
+.co-review__text {
+  margin: 0;
+  max-height: 160px;
+  overflow: auto;
+  padding: var(--space-2-5) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+}
+
+.co-review__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding-left: var(--space-5);
+  color: var(--text-secondary);
+}
+
+.co-review__list code {
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+}
+
+.co-review__list strong {
+  color: var(--text-primary);
+}
+
+/* ---- the new tab's picker ---- */
+
+.co-picker {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.co-picker__stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 160px;
+  height: 160px;
+}
+
+.co-picker__add {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 132px;
+  height: 132px;
+  border: 2px dashed var(--border-strong);
+  border-radius: 50%;
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.co-picker__add:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.co-picker__add:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.co-picker__add svg {
+  width: 28px;
+  height: 28px;
+}
+
+.co-picker__dots {
+  display: flex;
+  gap: var(--space-1-5);
+}
+
+.co-picker__dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border-strong);
+  transition: background var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard);
+}
+
+.co-picker__dots i[data-add] {
+  border-radius: 2px;
+}
+
+.co-picker__dots i[data-active='true'] {
+  background: var(--accent);
+  transform: scale(1.3);
+}
+
+/* ---- the welcome step ---- */
+
+.co-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  align-items: center;
+}
+
+.co-quick__stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  flex: none;
+  padding: var(--space-2-5) var(--space-2-5) var(--space-3);
+  border-radius: var(--radius-lg);
+  box-shadow: inset 0 0 0 1px var(--border-card);
+}
+
+.co-quick__controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex: 1;
+  min-width: 240px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .co-preset,
+  .co-preset__placeholder {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* Nested dialogs render through a portal; the wrapper adds no box. */
+.co-nested {
+  display: contents;
+}
+
+/* ---- part adjustments (DS-120): labelled sliders with an ink track left of
+   the round thumb and a light track to its right ---- */
+.co-adjust {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid light-dark(var(--border-subtle), var(--border-default));
+  border-radius: var(--radius-md);
+  background: var(--co-surface, var(--bg-raised));
+}
+
+.co-adjust__group {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.co-adjust__group + .co-adjust__group {
+  padding-top: var(--space-3);
+  border-top: 1px solid light-dark(var(--border-subtle), var(--border-default));
+}
+
+.co-adjust__row {
+  display: grid;
+  grid-template-columns: minmax(96px, 38%) 1fr;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.co-adjust__label {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.co-adjust__slider {
+  --track: light-dark(color-mix(in srgb, var(--text-primary) 12%, transparent), color-mix(in srgb, var(--text-primary) 18%, transparent));
+  --ink: var(--text-primary);
+  width: 100%;
+  height: 20px;
+  margin: 0;
+  background: transparent;
+  appearance: none;
+  cursor: default;
+}
+
+.co-adjust__slider::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(to right, var(--ink) 0 var(--fill, 50%), var(--track) var(--fill, 50%) 100%);
+}
+
+.co-adjust__slider::-webkit-slider-thumb {
+  width: 16px;
+  height: 16px;
+  margin-top: -6px;
+  border: 1px solid light-dark(var(--border-default), transparent);
+  border-radius: 50%;
+  background: light-dark(#fff, var(--text-primary));
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.2);
+  appearance: none;
+  transition: transform var(--motion-quick, 120ms) var(--ease-out);
+}
+
+.co-adjust__slider:active::-webkit-slider-thumb {
+  transform: scale(1.12);
+}
+
+.co-adjust__slider:focus-visible {
+  outline: none;
+}
+
+.co-adjust__slider:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--focus-ring, var(--accent));
+  outline-offset: 2px;
+}
+
+.co-adjust__reset {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid light-dark(var(--border-subtle), var(--border-default));
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 12px;
+}
+
+.co-adjust__reset svg {
+  width: 13px;
+  height: 13px;
+}
+
+.co-adjust__reset:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--text-primary) 6%, transparent);
+}
+
+.co-adjust__reset:disabled {
+  color: var(--text-tertiary, var(--text-secondary));
+}
+
+/* ---- list-tab template (DS-113 to DS-117) ---- */
+
+.co-listhead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 36px;
+  padding-left: 12px;
+}
+
+.co-listhead__title {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 18.5px;
+  font-weight: 600;
+}
+
+.co-listhead__crumb {
+  padding: 2px 8px;
+  margin-left: -8px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: inherit;
+  font: inherit;
+}
+
+.co-listhead__crumb:hover {
+  background: color-mix(in srgb, var(--text-primary) 6%, transparent);
+}
+
+.co-listhead__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.co-listhead__help {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid light-dark(var(--border-subtle), var(--border-default));
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.co-listhead__help svg {
+  width: 17px;
+  height: 17px;
+}
+
+.co-listhead__help:hover,
+.co-listhead__help[aria-expanded='true'] {
+  background: color-mix(in srgb, var(--text-primary) 6%, transparent);
+  color: var(--text-primary);
+}
+
+.co-listhead__about {
+  margin: -4px 0 0;
+  padding: 0 12px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Ink fill with a white label in light mode, inverted in dark mode (DS-138). */
+.co-ink-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: light-dark(#1f1e1d, #f4f2ee);
+  color: light-dark(#fff, #1f1e1d);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.co-ink-pill svg {
+  width: 15px;
+  height: 15px;
+}
+
+.co-ink-pill:hover:not(:disabled) {
+  background: light-dark(#3a3836, #ffffff);
+}
+
+.co-ink-pill:active:not(:disabled) {
+  background: light-dark(#000, #dcd9d3);
+}
+
+.co-ink-pill:disabled {
+  opacity: 0.45;
+}
+
+.co-ink-pill--sm {
+  height: 28px;
+  padding: 0 12px;
+  font-size: 12.5px;
+}
+
+:is(.co-ink-pill, .co-listhead__help, .co-listhead__crumb, .co-listsearch__button, .co-timeline__content, .co-memory__dismiss, .co-link):focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+.co-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-primary);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.co-link svg {
+  width: 13px;
+  height: 13px;
+}
+
+.co-listsearch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 8px;
+}
+
+.co-listsearch__field {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid light-dark(var(--border-subtle), var(--border-default));
+  border-radius: var(--radius-pill);
+  background: light-dark(var(--bg-card), var(--bg-raised));
+  color: var(--text-tertiary, var(--text-secondary));
+}
+
+/* The field takes focus on every tab switch, so focus stays a hairline: the
+   border only darkens. A keyboard arrival (Tab) adds the halo (ListTab). */
+.co-listsearch__field:focus-within {
+  border-color: light-dark(color-mix(in srgb, var(--text-primary) 22%, transparent), color-mix(in srgb, var(--text-primary) 26%, transparent));
+}
+
+.co-listsearch__field[data-keyed]:focus-within {
+  border-color: var(--border-strong, var(--text-secondary));
+  box-shadow: var(--focus-halo);
+}
+
+.co-listsearch__field svg {
+  flex: none;
+  width: 15px;
+  height: 15px;
+}
+
+.co-listsearch__field input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: none;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 13.5px;
+}
+
+.co-listsearch__button {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid light-dark(var(--border-subtle), var(--border-default));
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.co-listsearch__button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.co-listsearch__button:hover {
+  background: color-mix(in srgb, var(--text-primary) 6%, transparent);
+  color: var(--text-primary);
+}
+
+/* Rows: 54 px, 20 px in, hairline dividers and a light rounded fill on hover. */
+.co-list {
+  gap: 0;
+}
+
+.co-list > .co-item {
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  box-shadow: none;
+}
+
+.co-list > .co-item + .co-item {
+  box-shadow: 0 -1px 0 light-dark(var(--border-subtle), var(--border-default));
+}
+
+.co-list > .co-item:hover,
+.co-list > .co-item:hover + .co-item {
+  box-shadow: none;
+}
+
+.co-list > .co-item:hover {
+  background: color-mix(in srgb, var(--text-primary) 4.5%, transparent);
+}
+
+.co-list > .co-item > .co-item__main {
+  min-height: 54px;
+  padding-left: 8px;
+}
+
+.co-list > .co-item--linked {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.co-empty-line {
+  margin: 4px 0 0;
+  padding: 0 20px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* Skills rows (DS-114): one line, 54 px. A 16 px glyph at +20, the name at
+   +56 with an ellipsis, a muted last-used column at about 56% of the row, a
+   74×28 hairline Use pill and a 26 px round ⋯ button. The row is the
+   container its columns are measured against. */
+.co-skillrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 8px;
+  padding-right: 10px;
+  container: co-row / inline-size;
+}
+
+.co-skillrow__open {
+  display: grid;
+  flex: 1;
+  grid-template-columns: 36px minmax(0, calc(56cqw - 68px)) minmax(0, 1fr);
+  align-items: center;
+  column-gap: 12px;
+  min-width: 0;
+  height: 54px;
+  padding: 0 4px 0 20px;
+  border: 0;
+  border-radius: inherit;
+  background: none;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.co-skillrow__open:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: -2px;
+}
+
+.co-skillrow__open > svg {
+  width: 16px;
+  height: 16px;
+  color: var(--text-secondary);
+}
+
+.co-skillrow__name,
+.co-skillrow__used {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.co-skillrow__used {
+  color: var(--text-secondary);
+  font-size: 12.5px;
+}
+
+.co-skillrow__use {
+  flex: none;
+  width: 74px;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid light-dark(var(--border-subtle), var(--border-default));
+  border-radius: var(--radius-pill);
+  background: light-dark(var(--bg-card), var(--co-surface, var(--bg-sheet)));
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.co-skillrow__use:hover {
+  border-color: light-dark(var(--border-default), var(--border-strong));
+}
+
+.co-skillrow__use:active {
+  background: var(--bg-active);
+}
+
+.co-skillrow__use:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+.co-skillrow__more {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+}
+
+/* The opened row shows the description and instructions under it. */
+.co-skillrow__details {
+  flex: 1 0 100%;
+  min-width: 0;
+  padding: 0 20px 14px 56px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.co-skillrow__details p {
+  margin: 0 0 8px;
+}
+
+.co-skillrow__details .co-item__body {
+  margin: 0;
+}
+
+@container co-row (max-width: 420px) {
+  .co-skillrow__open {
+    grid-template-columns: 36px minmax(0, 1fr);
+  }
+
+  .co-skillrow__used {
+    display: none;
+  }
+}
+
+/* Loading (DS-113): four rows shaped like the list, on the same columns. */
+.co-skel {
+  display: flex;
+  flex-direction: column;
+  container-type: inline-size;
+}
+
+.co-skel__row {
+  display: grid;
+  grid-template-columns: 36px minmax(0, calc(56cqw - 68px)) minmax(0, 1fr) 26px;
+  align-items: center;
+  column-gap: 12px;
+  height: 54px;
+  padding: 0 10px 0 20px;
+}
+
+.co-skel__row + .co-skel__row {
+  box-shadow: 0 -1px 0 light-dark(var(--border-subtle), var(--border-default));
+}
+
+.co-skel__right {
+  justify-self: start;
+}
+
+/* Files rows (DS-115): icon, name, type, time and size, then ⋯. */
+.co-filerow {
+  display: flex;
+  align-items: center;
+  min-height: 54px;
+  padding-right: 6px;
+}
+
+.co-filerow__open {
+  display: grid;
+  flex: 1;
+  grid-template-columns: 20px minmax(0, 1fr) minmax(64px, 18%) minmax(64px, 18%) 64px;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  height: 54px;
+  padding: 0 8px 0 20px;
+  border: 0;
+  border-radius: inherit;
+  background: none;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+}
+
+.co-filerow__open > svg {
+  width: 18px;
+  height: 18px;
+  color: var(--text-secondary);
+}
+
+.co-filerow__name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.co-filerow__muted {
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.co-filerow__size {
+  text-align: right;
+}
+
+.co-filerow__more {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+@container (max-width: 520px) {
+  .co-filerow__open {
+    grid-template-columns: 20px minmax(0, 1fr) 64px;
+  }
+
+  .co-filerow__open > .co-filerow__muted:nth-of-type(2),
+  .co-filerow__open > .co-filerow__muted:nth-of-type(3) {
+    display: none;
+  }
+}
+
+/* Models rows (DS-117). */
+.co-setting-rows {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.co-setting-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 60px;
+  padding: 0 8px 0 20px;
+}
+
+.co-setting-row + .co-setting-row {
+  border-top: 1px solid light-dark(var(--border-subtle), var(--border-default));
+}
+
+.co-setting-row__tile {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--text-primary) 7%, transparent);
+  color: var(--text-secondary);
+}
+
+.co-setting-row__tile svg {
+  width: 16px;
+  height: 16px;
+}
+
+.co-setting-row__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.co-setting-row__title {
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.co-setting-row__description {
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.co-setting-row__picker {
+  flex: none;
+  width: 200px;
+}
+
+.co-pill-select,
+.co-setting-row__picker select {
+  width: 200px;
+  height: 32px;
+  border-radius: var(--radius-pill);
+}
+
+/* A long choice ("Your default (…)") ends in an ellipsis inside the pill. */
+.co-setting-row__picker select {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.co-models__footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+  padding: 12px 8px 0 20px;
+  border-top: 1px solid light-dark(var(--border-subtle), var(--border-default));
+}
+
+.co-models__note {
+  flex: 1;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 12.5px;
+}
+
+/* Memory (DS-116): explainer strip, two views and a day timeline. */
+.co-memory__explainer {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  max-width: 542px;
+  min-height: 72px;
+  margin-left: 8px;
+  padding: 14px 40px 14px 16px;
+  border-radius: 14px;
+  background: light-dark(color-mix(in srgb, var(--text-primary) 3.5%, var(--bg-card)), var(--bg-sunken));
+}
+
+.co-memory__point {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.co-memory__point svg {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  margin-top: 1px;
+  color: var(--text-primary);
+}
+
+.co-memory__dismiss {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--text-secondary);
+}
+
+.co-memory__dismiss svg {
+  width: 14px;
+  height: 14px;
+}
+
+.co-memory__dismiss:hover {
+  background: color-mix(in srgb, var(--text-primary) 7%, transparent);
+}
+
+.co-memory__views {
+  width: 160px;
+  height: 40px;
+  margin-left: 8px;
+}
+
+.co-timeline {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.co-timeline__entry {
+  display: grid;
+  grid-template-columns: 88px 24px minmax(0, 1fr);
+  column-gap: 8px;
+}
+
+.co-timeline__date {
+  padding-top: 10px;
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  text-align: right;
+}
+
+.co-timeline__rail {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+/* A dashed connector runs through every node down to the next entry. */
+.co-timeline__rail::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  border-left: 1.5px dashed light-dark(var(--border-default), var(--border-strong, #4a4744));
+  transform: translateX(-50%);
+}
+
+.co-timeline__entry:first-child .co-timeline__rail::before {
+  top: 14px;
+}
+
+.co-timeline__entry:last-child .co-timeline__rail::before {
+  bottom: calc(100% - 14px);
+}
+
+.co-timeline__node {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  margin-top: 8px;
+  border: 2px solid light-dark(var(--text-secondary), var(--text-secondary));
+  border-radius: 50%;
+  background: var(--co-surface, var(--bg-raised));
+}
+
+.co-timeline__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 6px;
+  padding: 6px 10px 8px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--text-primary);
+  font: inherit;
+  text-align: left;
+}
+
+.co-timeline__content:hover {
+  background: color-mix(in srgb, var(--text-primary) 4.5%, transparent);
+}
+
+.co-timeline__title {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.co-timeline__text {
+  color: var(--text-secondary);
+  font-size: 12.5px;
+}

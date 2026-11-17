@@ -1,0 +1,449 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* The agent at work (OV-21, OV-22) and the selection chip (OV-20).
+   Tokens are in styles.css's companion-at-work section; the companion's colour arrives per surface as
+   --companion-accent-{light,dark} (accentVariables) and --at-glow. */
+
+.at-notice,
+.at-pill,
+.at-chip {
+  --at-accent: light-dark(var(--companion-accent-light, var(--accent)), var(--companion-accent-dark, var(--accent)));
+  --at-accent-text: light-dark(var(--companion-accent-text-light, var(--accent-text)), var(--companion-accent-text-dark, var(--accent-text)));
+  font: 500 var(--text-md) / 1.3 var(--font);
+  color: var(--at-surface-text);
+}
+
+/* ---- the shield ---- */
+
+.at-shield {
+  position: absolute;
+  inset: 0;
+  cursor: not-allowed;
+  /* Catches every press; nothing below sees it. */
+  pointer-events: auto;
+  animation: at-fade-in var(--motion-medium) var(--ease-out) both;
+}
+
+.at-shield[data-exiting] {
+  animation: at-fade-out var(--motion-exit) var(--ease-in, ease-in) both;
+}
+
+.at-shield__glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--at-glow) var(--at-glow-edge), transparent),
+    inset 0 0 var(--at-glow-inner) 6px color-mix(in srgb, var(--at-glow) var(--at-glow-strength), transparent);
+}
+
+.at-shield__cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  fill: var(--at-glow);
+  stroke: var(--at-cursor-fill);
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 1px 2px light-dark(rgba(30, 24, 16, 0.28), rgba(0, 0, 0, 0.6)));
+  transition: transform var(--motion-glide) var(--ease-out);
+}
+
+/* ---- the notice ---- */
+
+.at-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: max-content;
+  max-width: min(560px, calc(var(--ov-vw, 100vw) - 24px));
+  min-height: 44px;
+  padding: 6px 6px 6px 2px;
+  border-radius: var(--radius-card);
+  background: var(--at-surface);
+  box-shadow: 0 0 0 1px var(--at-surface-border), var(--at-shadow);
+  animation: at-drop-in var(--motion-medium) var(--ease-out) both;
+}
+
+.at-notice[data-exiting] {
+  animation: at-fade-out var(--motion-exit) ease-in both;
+}
+
+.at-notice[data-dragging] {
+  cursor: grabbing;
+  box-shadow: 0 0 0 1px var(--at-surface-border), var(--shadow-lg);
+}
+
+.at-notice[data-nudged] {
+  box-shadow: 0 0 0 2px var(--at-accent), var(--at-shadow);
+  animation: at-nudge 360ms var(--ease-out) both;
+}
+
+.at-notice__grip {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: none;
+  color: var(--text-tertiary);
+  cursor: grab;
+  touch-action: none;
+}
+
+.at-notice__grip svg {
+  width: 14px;
+  height: 14px;
+}
+
+.at-notice__grip:hover {
+  color: var(--text-secondary);
+  background: var(--bg-hover);
+}
+
+.at-notice__mark {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  color: var(--at-accent);
+}
+
+.at-notice__mark i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--at-accent);
+}
+
+.at-notice__mark svg {
+  width: 16px;
+  height: 16px;
+}
+
+.at-notice[data-tone='paused'] .at-notice__mark i {
+  background: var(--text-tertiary);
+}
+
+.at-notice[data-tone='yours'] .at-notice__mark i {
+  background: var(--status-success);
+}
+
+.at-notice[data-tone='challenge'] .at-notice__mark {
+  color: var(--status-needs-input);
+}
+
+.at-notice[data-tone='solved'] .at-notice__mark {
+  color: var(--status-success);
+}
+
+.at-notice__text {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 1px;
+  padding-right: 4px;
+}
+
+.at-notice__title {
+  overflow: hidden;
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.at-notice__detail {
+  overflow: hidden;
+  color: var(--at-surface-muted);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.at-notice__actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.at-notice__primary,
+.at-notice__secondary {
+  height: 30px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.at-notice__primary {
+  margin-right: 2px;
+  background: var(--at-accent);
+  color: var(--at-accent-text);
+}
+
+.at-notice__primary:hover {
+  background: color-mix(in srgb, var(--at-accent) 88%, var(--text-primary));
+}
+
+.at-notice__secondary {
+  background: var(--bg-muted);
+  color: var(--at-surface-text);
+}
+
+.at-notice__secondary:hover {
+  background: color-mix(in srgb, var(--text-primary) 10%, var(--bg-muted));
+}
+
+.at-notice__icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.at-notice__icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.at-notice__icon:hover,
+.at-notice__icon[aria-pressed='true'] {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.at-notice__icon--stop svg {
+  width: 13px;
+  height: 13px;
+  fill: currentColor;
+}
+
+.at-notice__icon--stop:hover {
+  color: var(--status-error);
+}
+
+.at-notice button:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.at-notice button:focus-visible,
+.at-pill:focus-visible,
+.at-chip__btn:focus-visible {
+  outline: 2px solid var(--focus-ring, var(--at-accent));
+  outline-offset: 1px;
+}
+
+/* ---- the status pill ---- */
+
+.at-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 320px;
+  height: 32px;
+  padding: 0 12px 0 10px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--at-surface);
+  box-shadow: 0 0 0 1px var(--at-surface-border), var(--at-shadow);
+  cursor: pointer;
+  animation: at-drop-in var(--motion-enter) var(--ease-out) both;
+}
+
+.at-pill[data-exiting] {
+  animation: at-fade-out var(--motion-exit) ease-in both;
+}
+
+.at-pill:hover {
+  background: color-mix(in srgb, var(--text-primary) 4%, var(--at-surface));
+}
+
+.at-pill__mark {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 14px;
+  height: 14px;
+}
+
+.at-pill__mark i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--at-accent);
+}
+
+.at-pill__mark svg {
+  width: 14px;
+  height: 14px;
+  color: var(--status-needs-input);
+}
+
+.at-pill__title {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.at-pill__detail {
+  overflow: hidden;
+  color: var(--at-surface-muted);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* ---- the selection chip ---- */
+
+.at-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 36px;
+  padding: 3px;
+  border-radius: var(--radius-pill);
+  background: var(--at-chip-bg);
+  box-shadow: 0 0 0 1px var(--at-surface-border), var(--at-shadow);
+  backdrop-filter: blur(12px);
+  animation: at-pop var(--motion-enter) var(--ease-out) both;
+}
+
+.at-chip[data-exiting] {
+  animation: none;
+  opacity: 0;
+}
+
+.at-chip__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  min-width: 30px;
+  justify-content: center;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: none;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.at-chip__btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.at-chip__btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.at-chip__btn--ask {
+  padding: 0 12px 0 10px;
+  background: var(--bg-muted);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.at-chip__btn--ask:hover {
+  background: color-mix(in srgb, var(--text-primary) 10%, var(--bg-muted));
+}
+
+.at-chip__hint {
+  padding: 0 10px 0 6px;
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+
+/* ---- motion ---- */
+
+@keyframes at-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes at-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes at-drop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes at-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+/* One small shake when the shield is clicked; never a loop. */
+@keyframes at-nudge {
+  30% {
+    transform: translateX(-3px);
+  }
+  60% {
+    transform: translateX(3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .at-shield,
+  .at-shield[data-exiting],
+  .at-notice,
+  .at-notice[data-exiting],
+  .at-notice[data-nudged],
+  .at-pill,
+  .at-pill[data-exiting],
+  .at-chip {
+    animation: none;
+  }
+  .at-shield__cursor {
+    transition: none;
+  }
+}
+
+:root[data-motion='reduced'] :is(.at-shield, .at-notice, .at-pill, .at-chip),
+:root[data-motion='reduced'] :is(.at-shield, .at-notice, .at-pill)[data-exiting] {
+  animation: none;
+}
+
+:root[data-motion='reduced'] .at-shield__cursor {
+  transition: none;
+}
+
+/* The shield sits under every other surface in the interactive tier (the notice, menus, dialogs). */
+.ov-frame[data-surface='agent-shield'] {
+  z-index: -1;
+}

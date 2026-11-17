@@ -1,0 +1,250 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* Apex's error, crash and safety pages in the pane. Colours come from
+   the site tone tokens, so light and dark follow the theme. */
+
+.perr {
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+  display: grid;
+  place-items: center;
+  padding: 48px 24px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+.perr--danger {
+  background: var(--site-danger-wash);
+}
+
+.perr__body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: min(520px, 100%);
+  animation: perr-in 220ms var(--ease-out, cubic-bezier(0.2, 0.8, 0.2, 1)) both;
+}
+
+.perr__figure {
+  display: block;
+  width: 120px;
+  height: 120px;
+  margin: 0 0 8px -12px;
+}
+
+.perr__figure img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* A FaceAvatar stand-in sits in the same box. */
+.perr__figure > :not(img) {
+  margin: 24px 0 0 24px;
+}
+
+.perr__figure--empty {
+  height: 0;
+  margin: 0;
+}
+
+.perr__badge {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-bottom: 12px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-muted);
+  color: var(--text-secondary);
+}
+
+.perr--warning .perr__badge {
+  background: var(--site-tone-warning-soft);
+  color: var(--site-tone-warning);
+}
+
+.perr--danger .perr__badge {
+  background: var(--site-tone-danger-soft);
+  color: var(--site-tone-danger);
+}
+
+.perr__title {
+  margin: 0 0 8px;
+  font-size: var(--text-2xl);
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+
+.perr__text {
+  margin: 0;
+  font-size: var(--text-lg);
+  line-height: 1.5;
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.perr__url {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  max-width: 100%;
+  margin: 10px 0 0;
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+
+.perr__url-code {
+  color: var(--text-secondary);
+}
+
+.perr__status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 20px;
+  margin: 12px 0 0;
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+}
+
+.perr__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.perr__more {
+  margin-top: 24px;
+  width: 100%;
+}
+
+.perr__toggle,
+.perr__bypass {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: var(--text-md);
+  color: var(--text-secondary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  border-radius: var(--radius-xs);
+}
+
+.perr__toggle:focus-visible,
+.perr__bypass:focus-visible {
+  outline: 2px solid var(--accent-ring);
+  outline-offset: 2px;
+}
+
+.perr__bypass {
+  color: var(--site-tone-danger);
+}
+
+.perr__bypass:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.perr__details {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--bg-subtle);
+  font-size: var(--text-md);
+  color: var(--text-secondary);
+}
+
+.perr__code {
+  margin: 0 0 8px;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: var(--text-sm);
+}
+
+.perr__note {
+  margin: 8px 0;
+  line-height: 1.45;
+}
+
+.perr__cert {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 12px;
+  margin: 8px 0;
+  font-size: var(--text-sm);
+}
+
+.perr__cert dt {
+  color: var(--text-tertiary);
+}
+
+.perr__cert dd {
+  margin: 0;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.perr__mono {
+  font-family: var(--font-mono, ui-monospace, monospace);
+}
+
+/* The connection banner (SS-06): reconnecting with a countdown. */
+.conn-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  background: var(--site-tone-warning-soft);
+  color: var(--text-primary);
+  font-size: var(--text-md);
+}
+
+.conn-banner__icon {
+  flex: none;
+  color: var(--site-tone-warning);
+}
+
+.conn-banner__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.conn-banner--back {
+  background: var(--site-tone-secure-soft);
+}
+
+.conn-banner--back .conn-banner__icon {
+  color: var(--site-tone-secure);
+}
+
+@keyframes perr-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .perr__body {
+    animation: none;
+  }
+}
+
+:root[data-motion='reduced'] .perr__body {
+  animation: none;
+}

@@ -1,0 +1,9 @@
+{
+  "formatVersion": 5,
+  "id": "dddddddd-1111-4222-8333-444444444444",
+  "title": "Broken",
+  "capabilities": { "model": "claude-opus-5-5", "browser": true, "webTools": true, "memory": true, "connectorIds": [] },
+  "system": "s",
+  "messages": "not a list",
+  "log": []
+}

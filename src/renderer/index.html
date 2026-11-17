@@ -1,0 +1,134 @@
+<!doctype html>
+<!-- Copyright (c) 2026 The Apex Authors. All rights reserved.
+   - This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at https://mozilla.org/MPL/2.0/. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>%BRAND_NAME%</title>
+    <!--
+      SS-01: the placeholder shell. It paints with the first frame (the window
+      shows on ready-to-show, so never blank), in the theme's colours, and
+      React's first commit replaces it. If the layout never loads, it turns
+      into a failure state with a way to try again. No script: the CSP allows
+      none inline, so the failure state appears on a timer in CSS.
+    -->
+    <style>
+      .boot-shell {
+        --boot-bg: #eeece8;
+        --boot-card: #fcfbf9;
+        --boot-bar: rgb(0 0 0 / 0.06);
+        --boot-text: #2b2926;
+        --boot-muted: #66615a;
+        --boot-accent: #2b2926;
+        --boot-on-accent: #fcfbf9;
+        position: fixed;
+        inset: 0;
+        display: grid;
+        grid-template-columns: 236px 1fr;
+        gap: 6px;
+        padding: 6px;
+        background: var(--boot-bg);
+        font: 13px/1.4 system-ui, -apple-system, 'Segoe UI', sans-serif;
+        color: var(--boot-text);
+        -webkit-app-region: drag;
+        user-select: none;
+      }
+      @media (prefers-color-scheme: dark) {
+        .boot-shell {
+          --boot-bg: #302d2a;
+          --boot-card: #3a3734;
+          --boot-bar: rgb(255 255 255 / 0.08);
+          --boot-text: #f2efeb;
+          --boot-muted: #aaa49d;
+          --boot-accent: #f2efeb;
+          --boot-on-accent: #302d2a;
+        }
+      }
+      .boot-shell__side {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 46px 10px 10px;
+      }
+      .boot-shell__bar {
+        height: 12px;
+        border-radius: 6px;
+        background: var(--boot-bar);
+      }
+      .boot-shell__bar--short {
+        width: 60%;
+      }
+      .boot-shell__card {
+        position: relative;
+        border-radius: 10px;
+        background: var(--boot-card);
+        box-shadow: 0 0 0 1px var(--boot-bar);
+      }
+      .boot-shell__failed {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        opacity: 0;
+        visibility: hidden;
+        animation: boot-failed 0s linear 15s forwards;
+        -webkit-app-region: no-drag;
+      }
+      .boot-shell__failed p {
+        margin: 0;
+        color: var(--boot-muted);
+      }
+      .boot-shell__failed a {
+        display: inline-flex;
+        align-items: center;
+        height: 30px;
+        padding: 0 14px;
+        border-radius: 8px;
+        background: var(--boot-accent);
+        color: var(--boot-on-accent);
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .boot-shell__failed a:focus-visible {
+        outline: 2px solid var(--boot-accent);
+        outline-offset: 2px;
+      }
+      @keyframes boot-failed {
+        to {
+          opacity: 1;
+          visibility: visible;
+        }
+      }
+      /* The overlay tiers, popup strips and drag ghosts load this page too; they draw nothing until React runs. */
+      html[data-ui-role^='overlay'] .boot-shell,
+      html[data-ui-role='ghost'] .boot-shell {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <div class="boot-shell" aria-busy="true">
+        <div class="boot-shell__side" aria-hidden="true">
+          <div class="boot-shell__bar"></div>
+          <div class="boot-shell__bar boot-shell__bar--short"></div>
+          <div class="boot-shell__bar"></div>
+          <div class="boot-shell__bar boot-shell__bar--short"></div>
+        </div>
+        <div class="boot-shell__card">
+          <div class="boot-shell__failed" role="alert">
+            <p>%BRAND_NAME% couldn’t draw this window.</p>
+            <a href="">Try again</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

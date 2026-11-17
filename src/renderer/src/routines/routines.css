@@ -1,0 +1,349 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* The routine editor sheet, timing, the time-zone picker, run history,
+   the detail page and suggestion cards. Theme tokens only, so light and dark
+   both follow; pages arrive without entrance motion. */
+
+/* ---- the editor ---- */
+
+.rt-editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.rt-editor__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 240px);
+  gap: var(--space-3);
+}
+
+@media (max-width: 560px) {
+  .rt-editor__row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.rt-editor__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.rt-editor__prompt {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.rt-editor__prompt .sp-textarea {
+  flex: 1;
+}
+
+/* ---- timing ---- */
+
+.rt-timing,
+.rt-timing__body,
+.rt-timing__days {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.rt-timing__days {
+  gap: var(--space-2);
+}
+
+.rt-ok {
+  margin: 0;
+  color: var(--ok, var(--text-secondary));
+  font-size: var(--text-sm);
+}
+
+.rt-preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.rt-preview__list {
+  margin: 0;
+  padding-left: var(--space-5);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- the time-zone picker ---- */
+
+.rt-zone {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.rt-zone__icon {
+  position: absolute;
+  left: 10px;
+  width: 16px;
+  height: 16px;
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+.rt-zone__input {
+  width: 100%;
+  padding-left: 32px;
+}
+
+.rt-zone__list {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 4px);
+  right: 0;
+  left: 0;
+  max-height: 240px;
+  margin: 0;
+  padding: var(--space-1);
+  overflow-y: auto;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-md, 10px);
+  background: var(--bg-raised);
+  box-shadow: var(--shadow-md, 0 8px 24px rgb(0 0 0 / 0.12));
+  list-style: none;
+}
+
+.rt-zone__option,
+.rt-zone__none {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: 6px var(--space-2);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  cursor: default;
+}
+
+.rt-zone__none {
+  color: var(--text-secondary);
+}
+
+.rt-zone__option--active,
+.rt-zone__option[aria-selected='true'] {
+  background: var(--bg-hover);
+}
+
+.rt-zone__raw {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+/* ---- run history ---- */
+
+.rt-runs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.rt-runs__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.rt-runs__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rt-run__main {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 48px;
+  padding: 6px var(--space-2);
+  border: 0;
+  border-radius: var(--radius-row, 8px);
+  background: none;
+  color: var(--text-primary);
+  font: inherit;
+  text-align: left;
+}
+
+button.rt-run__main {
+  cursor: pointer;
+}
+
+button.rt-run__main:hover {
+  background: var(--bg-hover);
+}
+
+button.rt-run__main:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+}
+
+.rt-run__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.rt-run__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rt-run__title--unread {
+  font-weight: 600;
+}
+
+.rt-run__new {
+  color: var(--accent-text, var(--accent));
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.rt-run__sub,
+.rt-run__time {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.rt-unread {
+  margin-left: var(--space-2);
+}
+
+/* ---- the detail page ---- */
+
+.rt-detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding-bottom: var(--space-6);
+}
+
+.rt-detail__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.rt-detail__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.rt-detail__badges,
+.rt-detail__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.rt-detail__badges {
+  margin-top: var(--space-1);
+}
+
+.rt-detail__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.rt-detail__prompt {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.rt-detail__skill {
+  margin: 0 0 var(--space-2);
+}
+
+.rt-facts {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--space-2) var(--space-5);
+  margin: 0;
+}
+
+.rt-facts dt {
+  color: var(--text-secondary);
+}
+
+.rt-facts dd {
+  margin: 0;
+}
+
+.rt-warning {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md, 10px);
+  background: var(--warning-soft, var(--bg-subtle));
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+}
+
+/* ---- suggestions ---- */
+
+.rt-suggest {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.rt-suggest__card {
+  padding: 0;
+}
+
+.rt-suggest__main {
+  display: flex;
+  flex: 1;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  padding-right: 40px;
+  border: 0;
+  border-radius: 16px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.rt-suggest__main:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+}
+
+.rt-suggest__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.rt-suggest__tag {
+  color: var(--text-tertiary);
+  font-size: 12px;
+}

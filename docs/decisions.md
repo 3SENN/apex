@@ -1,0 +1,369 @@
+# Quick decisions
+
+Apex makes many small judgment calls: is a reply waiting on you, does this
+click buy or delete something, is this a search or a question. Today each one
+is a rule (a keyword list, a closing "?", a fixed mode). Quick decisions adds
+an optional **decision model** next to those rules: a non-generative model
+that answers typed questions about a piece of text with probabilities, in
+about a tenth of a second, and writes no text.
+
+Off is the default and changes nothing. Turned on in Settings › Quick
+decisions, the model takes over a decision only when it is sure and answers
+in time; otherwise the rule decides, so nothing ever waits on it.
+
+## Settings (DC-03)
+
+Nothing is fixed to one provider or one model. Settings › Quick decisions,
+in the Agent group next to Model and key:
+
+1. **Use a decision model**: one switch, off by default. Off, Apex's own
+   rules decide and nothing is sent; your providers and models stay set up.
+   Beside it, one status (Off, Not set up, Working, Not answering, Paused,
+   Ready) and a line saying what to do next ("Connect a provider below to
+   start") or how it is doing ("Working: clef-flash at Experiential Labs
+   answers").
+2. **Providers**: every provider in the table, each connected with its own
+   key (Connect, Change key, Disconnect, Get a key), any number at once, and
+   your own servers (a name, an address, a key only if it asks), as many as
+   eight. Connecting the first one adds its suggested model to your list,
+   switches it on and checks it.
+3. **Your models**: the ones you chose, in order: the first answers; when it
+   fails, is busy or reaches its rate limit, the next one does while there is
+   time, then Apex's rules. Each says how it is doing (Working in 480 ms, Not
+   answering with the provider's own words, Paused, Not asked yet), and has
+   Test, up, down and remove. Up to six. **Add a model** lists what each
+   connected provider offers, read live from its model list, with its price
+   per million tokens read, Free, and "no data kept" where the provider says;
+   a search narrows a long list (OpenRouter's has dozens); any model id it
+   doesn't list can be typed. A model added is checked by itself.
+4. **How it's used**: Use it / Compare first.
+5. **What it decides**, in three groups: when you type and talk (search or
+   ask, voice into a field, who voice is for), your companion (waiting on
+   you, clicks, labeling, effort, skills, setup picks), and tabs and memory.
+   Each switch says what it sends; "Effort per message" says when your model
+   can't change effort per message, and "What's worth remembering" where it
+   applies.
+6. **Where it differed.**
+
+Until a provider is connected the page shows the switch and the providers;
+after that your models come first. Model and key keeps one row, "Quick
+decisions", that says whether it is on (and with which model, how many in
+order, or that it isn't answering) and opens the page. Settings search finds
+it by "decision model", "jev", "openrouter key", "backup model", "group tabs",
+"effort per message" and the like.
+
+## Decision models
+
+A decision model takes a `state` (text or JSON) and a map of questions, and
+returns an answer per question:
+
+| Type | Asks | Answer |
+|---|---|---|
+| `noul` | Does this hold? | `noul`: the probability of yes |
+| `choice` | Which of these 2 to 64 options? | `choice`, `probabilities` per option, `confidence` |
+| `score` | Where on a 2 to 10 level scale? | `score` (may be fractional), `probabilities` per level, `confidence` |
+
+Questions share the state but not each other. Output is free and input is
+cheap ($0.042 per million tokens for TypeSafe's Jev 1.14, November 2026).
+
+Providers speak one of two requests: TypeSafe's System One
+(`POST …/v1/systemone`, `Authorization: Bearer <key>`), which Jev, Kev and
+Clef take, or OpenAI's Decisions (`POST …/v1/decisions`), which GPT-6 Luna
+takes. One client speaks both (DC-02, DC-19): Apex's questions and readers
+are written once in System One's shape, and the client turns them into
+Decisions' named list (`predicate`, `choice` with `choices`, `score` with
+`levels`) and its answers back (a `refusal` reads as an even spread, so the
+rule decides). A Luna model id or a `/decisions` address picks Decisions;
+everything else is System One.
+
+| Provider | Decision address | Lists models at | Suggested to start | Notes |
+|---|---|---|---|---|
+| TypeSafe Jev | `https://api.typesafe.ai/v1/systemone` | `/v1/models` | `jev-1.14.0` | Hosted; your TypeSafe key |
+| OpenRouter | `https://openrouter.ai/api/alpha/decisions` | `/api/v1/models?output_modalities=decisions` | `typesafe/jev-1.14` | One key for 36 decision models from many makers (Jev, Clef, GPT-6 Luna, Liquid, Perplexity, Microsoft, Upstage and more, three of them free on 12 November 2026), all through System One's request; its router answers `refusal` where a model declines a question, read as unsure |
+| Experiential Labs | `https://api.experientiallabs.ai/v1/systemone` | `/v1/models` | `clef-flash` | A gateway; your `xpl_` key. It also serves `clef`, `jev-latest` and `gpt-6-luna-decisions` (sent to its `/v1/decisions`), each listed with its price and data policy. Its Clef models are listed with zero data retention and no training; `jev-latest` there is passed on to TypeSafe without those terms, and Luna to OpenAI without training |
+| OpenAI Decisions | `https://api.openai.com/v1/decisions` | `/v1/models` | `gpt-6-luna` | Your OpenAI key; $0.10 per million tokens read |
+| Your own server | any address (`/v1/systemone` or `/v1/decisions` added by model) | next to it | | Any other System One or Decisions service, or a server you run: Kev (Apache-2.0, Qwen-based, MLX on Apple Silicon) and the like; a key only if it asks |
+
+The providers are one table (`PROVIDER_DEFAULTS` in src/shared/decisions.ts):
+each entry has its decision address, the request it takes (or "auto", by
+model), where it lists models and whether that list holds decision models
+only, a model to suggest, and where to get a key. Adding a provider is an
+entry there with its name and description in the decisions strings; the
+settings page, the key store, the services and the eval follow. Anything
+that is not listed works as a server of your own.
+
+Model ids are whatever the provider calls them, pinned versions where it has
+them (an alias such as `jev-latest` moves under you); each model in your list
+shows which version answered last, and a change of version is logged. Note
+that probabilities differ between models, so a model new to Apex is worth an
+eval run (DC-06) before it decides alone; OpenRouter notes that some makers
+(ScaleDown, Respan) expect their own state shapes.
+
+**Rate limits and failures.** A 429 is retried once; if it holds, that model
+sits out for a minute (or the provider's Retry-After, at least five seconds
+and at most ten minutes) and the
+next model in your list answers; with all of them paused, Apex's rules decide
+and routines and packs use the Claude engine. A model that fails, is busy or
+can't be reached hands over to the next while there is time left (300 ms or
+more); a timeout leaves none, so the rule decides. Settings shows each model's
+state, with what the provider said (redacted and cut to 200 characters). A free Experiential Labs key allows 10 requests a
+minute per free model (`jev-latest`, `clef`); past that it answers "Enable
+Keep going on credits to continue", which is a switch in your account there,
+not something Apex can turn on. `gpt-6-luna-decisions` is paid per token
+there from the first request.
+
+**The slow tail (DC-20).** A gateway answers about one request in five in
+more than a second, at random: measured on Experiential Labs, one request
+missed the click guard's 1.2 s 8 times in 40, while the faster of two sent
+together never did. So a decision someone waits on (is a reply waiting on you, voice, the
+companion's clicks, search or ask, effort, skills; never the batch uses, which
+send many requests at once) that has no answer after 250 ms is asked again,
+and the first answer wins; the other is cancelled. In 40 live clicks that took misses from 4 to 0 and
+the 90th percentile from 1.2 s to 0.76 s. An answer within the quarter
+second (TypeSafe's own API usually takes a tenth) sends no second request;
+your own server on this computer (localhost, 127.x, 0.0.0.0, ::1) and a
+model that answered with a rate limit this session never get one; a 429
+keeps the second from going out, and with both out the one that met it stops
+without its retry. The usage ledger counts a second request's input tokens, and the
+answer time shown is from the first send.
+
+## The rule-first contract (DC-01)
+
+Every one of Apex's decisions calls `decider().decide({ use, rule, request, read })`
+(src/main/decisions/service.ts):
+
+- `rule` is what the rule decided. It comes straight back when the provider is
+  off, the use is switched off, the window or chat is private, the model
+  fails, or it does not answer within the use's time limit.
+- `request` is built only when the model is consulted.
+- `read(result, rule)` turns the answers into the rule's shape, or null when
+  the model is not sure enough (the cutoffs below). A slow rule (a Claude
+  call) can run alongside the model, and `read` may keep parts of it.
+
+**Compare mode** returns the rule every time and runs the model alongside, so
+the person can see where it would have decided otherwise before letting it.
+Either way, every disagreement is noted (DC-05).
+
+## Apex's own decisions (DC-08 to DC-12, DC-14 to DC-18)
+
+All questions live in src/main/decisions/uses.ts.
+
+| Use | Rule today | With a sure model | Time limit |
+|---|---|---|---|
+| `needsYou` (DC-08) | the reply's last line ends in "?" | waits only when the work is blocked on an answer; "Want me to…?" no longer lights the needs-you badge, "Tell me which one you'd like." does | 1.5 s, at the end of a run |
+| `dictation` (DC-09) | with "rewrite the field" on, every voice turn into a field waits on the companion | plain dictation is typed at once; edit requests still go to the companion | 0.9 s |
+| `agentClicks` (DC-10) | an English keyword list on the control's name | a second opinion in any language when the list found nothing; it can only **add** a stop, never remove one, so page text cannot talk its way past the guard. The same control on the same page is judged once every ten minutes, so a task that clicks it again doesn't wait again | 1.2 s |
+| `setup` (DC-11) | the setup extraction's picks (one Claude call) | tech level, reply style and interests settled by the model where it is sure, alongside the same call | 5 s |
+| `searchOrAsk` (DC-12, DC-14) | the new tab composer's mode; in the address bar, the typed row (search or go) first | after a 350 ms pause in typing, the new tab's top row (and Enter) becomes a search or a question, and in the address bar a sure "ask" moves the Ask row to the top so Enter asks the companion; picking a mode or a row by hand wins; addresses and private windows never ask | 0.9 s, reused a minute per text |
+| `voiceTarget` (DC-12) | a focused field takes the voice turn | in auto mode, "open my calendar" goes to the companion instead | 0.7 s |
+
+| `effort` (DC-15) | the chat's effort | a sure "no thinking needed" ("thanks", a one-line fact) runs the turn at low effort; sure "hard work" (research, planning, code, or "yes, go ahead" after a plan, since the end of the previous reply goes along) one step above; the model the person picked never changes; messages a person sent only, never routines, helpers or Continue; models with per-message effort only (not Haiku) | 0.8 s |
+| `skills` (DC-16) | the companion's own skills, by name, the first 40 | at the first message, the skills that fit are listed first and marked, the ones that sure don't fit last; 20 per request | 1.5 s |
+| `memory` (DC-17) | the nightly tidy and "Build from past chats" read every new chat | a chat the model is sure holds nothing lasting (a lookup, a one-off task) is left out; a tidy with nothing left makes no Claude call | 5 s per chat |
+| `tabs` (DC-18) | "Group tabs" groups by site (two or more tabs on one site) | each tab goes into one of the window's own groups where it belongs, or a topic group (twelve topics) with two or more tabs; the rest by site. Only each tab's title and host are sent; a run waits 4 s at most, and tabs that joined a group go to the end of its block | 2 s per tab, four at a time |
+
+Effort per message never rewrites the conversation, which would throw away
+its prompt cache: on the API key a system message carrying only
+`output_config.effort` follows the person's message (the
+`mid-conversation-output-config-2026-07-01` beta) and the next message
+switches back the same way; another engine gets the message's effort with
+the turn (`BackendTurn.effort`) and applies it its own way. The changes are kept
+with the chat (`effortMarks`), and the reply's Details say "Low, picked for
+this message".
+
+`effort` and `memory` start off even with a provider chosen: they send each
+message you type and whole chats, where the others send a line, a label or
+a title. Each use has its own switch in Settings. A verdict reused (`DecideCall.reuse`)
+is kept per provider, address and model, and never stands in compare mode.
+
+## Your companion (DC-13)
+
+`label_items` is a client tool (both engines) for the companion's own work:
+labeling, sorting, filtering or checking many items it has read, such as
+emails, products, search results, table rows or tabs. It takes up to 50 items
+(each with an id and its text), one to five questions in the System One shape,
+and an optional shared context ("emails in Sam's work inbox"). Each item is one
+request, four at a time; the answers are read with the same cutoffs as Apex's
+own (yes at 0.7, no at 0.3, a choice at 0.75, a level at 0.6) and come back as
+the verdict and its probability, or "unsure" with what the model leaned
+towards, for the companion to judge itself. A rate limit, a refused key or an
+unreachable provider stops the rest, and those items say so.
+
+It is offered to a new chat while a decision model is set up and "Labeling and
+sorting in tasks" is on, and never in a private chat; the system prompt then
+has one line on when to use it. There is no Claude
+fallback on purpose: the companion is the Claude engine, so without the model
+it simply judges the items itself. What is sent is the items' text and the
+context.
+
+## Routines and packs (DC-07)
+
+Two callers that are not Apex's own decisions use `decider().ask()`: the
+decision model when one is on, otherwise the person's Claude engine (their API
+key, or another engine, through QuickModel), so both work on every engine. A
+failing or rate-limited decision model falls back to Claude too; for a pack
+that call then counts against the model budget, not the decision budget, and
+the state is held to the same 24,000 characters on Claude. Claude's answers carry
+`source: "claude"`: its stated confidence is less calibrated, so every cutoff
+is raised for it (`stricter()`).
+
+- **Routine conditions.** A routine can have "Only tell me if…" (the editor,
+  and `notify_if` on the companion's `propose_routine`). After a run that
+  finished, the condition is asked as a `noul` about the run's closing reply.
+  Only a clear no (≤ 0.3, ≤ 0.15 on Claude) keeps it quiet: the run is still
+  recorded and marked read. A failed check, an empty reply or an unsure answer
+  notifies, since a missed result costs more than an extra one.
+- **`apex.ai.decide(state, questions)`** for packs, with `permissions.model`.
+  On a decision model it has its own budget, 600 an hour and 5,000 a day;
+  on Claude each call counts against the 60-an-hour model budget. The `sorter`
+  starter shows it: topics and urgency for a list of messages, "unsure" when
+  the model is not sure. See [apps.md](apps.md) › Apex as the AI engine.
+
+## Thresholds
+
+Following TypeSafe's confidence guidance: act when sure, keep the rule
+otherwise, and demand more where a wrong answer costs more.
+
+| Reader | Cutoff |
+|---|---|
+| `yesNo(answer, yes, no)` | yes at ≥ 0.7, no at ≤ 0.3, nothing in between (per use: needsYou 0.75/0.25, dictation 0.85, setup interests 0.75/0.25) |
+| `sureChoice(answer, min)` | the chosen option's own probability ≥ 0.75 (agentClicks 0.8, searchOrAsk 0.8, voiceTarget 0.85) |
+| `sureLevel(answer, min)` | the likeliest level holds ≥ 0.6 |
+| `stricter(result, cutoff)` | Claude's answers: halfway from the cutoff to 1, at most 0.97 |
+
+## Privacy and safety (DC-03, DC-04)
+
+- Off until you choose a provider; each use can be switched off.
+- Only the text being decided about is sent: the end of a reply, a control's
+  label with its page title and site, what you typed or said. Nothing from a
+  private window or chat. Requests are cut to 24,000 characters.
+- Keys are kept per provider (and per server of yours) in one file sealed by
+  this computer's secure storage (`decision-keys.bin`), registered for log
+  redaction, and never sent to a page. A server's id is random and never
+  reused, its key goes when it is removed (and any left over at the next
+  start), and an address with a name or password in it is refused. Reset
+  Apex clears the comparisons with the settings and the keys with the other
+  secrets.
+- Page text is only ever the state being judged; the questions say so, and
+  the click guard's model can only add stops.
+- Every call is a usage row of kind "Quick decisions" (tokens only; the cost
+  meter stays Anthropic's).
+
+## Comparisons (DC-05)
+
+Where the model's sure answer differed from the rule, Apex keeps a row on this
+computer (`decision-comparisons.json`, the newest 200): the use, both answers,
+how sure the model was, whether it was used, the version, and a redacted
+160-character excerpt. Settings shows the newest 20 with how many decisions
+were answered and how many differed; Settings › Your data can clear them.
+
+## Measuring (DC-06)
+
+tests/fixtures/decisions-eval.json holds labelled cases for each use, in
+several languages. tests/decisionsEval.test.ts runs them through the same
+questions and cutoffs against a real model:
+
+```
+APEX_DECISIONS_EVAL=typesafe APEX_DECISIONS_KEY=… npx vitest run tests/decisionsEval.test.ts --silent=false
+APEX_DECISIONS_EVAL=experiential APEX_DECISIONS_KEY=xpl_… APEX_DECISIONS_MODEL=clef npx vitest run tests/decisionsEval.test.ts --silent=false
+APEX_DECISIONS_EVAL=experiential APEX_DECISIONS_KEY=xpl_… APEX_DECISIONS_MODEL=gpt-6-luna-decisions npx vitest run tests/decisionsEval.test.ts --silent=false
+APEX_DECISIONS_EVAL=custom APEX_DECISIONS_URL=http://127.0.0.1:8009 npx vitest run tests/decisionsEval.test.ts --silent=false
+```
+
+`APEX_DECISIONS_EVAL` is any provider in the table; `APEX_DECISIONS_PACE_MS`
+spaces the requests out for a per-minute limit (6500 for 10 a minute).
+Per use it reports accuracy on the cases the model was sure of, how often it
+stayed unsure, whether a choice flips when its options are reversed, and the
+median and 90th-percentile answer time; it fails below 80% or on any flip. Run
+it before changing a question, a cutoff or the pinned version, and add a case
+whenever a decision goes wrong in real use.
+
+**First results** (10 November 2026, Experiential Labs, from this Mac).
+How often each model was right when it was sure, how often it was unsure (the
+rule decided), and answer times:
+
+| Model | Right when sure | Unsure | Order flips | Median answer | 90th percentile |
+|---|---|---|---|---|---|
+| `clef-flash` | 29 of 29 | 17 of 46 | 0 | 0.4 to 1.2 s | 0.7 to 5.6 s |
+| `clef` | 27 of 27 | 19 of 46 | 0 | 0.8 to 1.0 s | 1.0 to 3.2 s |
+| `jev-latest` | 31 of 31 | 15 of 46 | 0 | 0.5 to 0.7 s | 0.9 to 2.8 s |
+
+What the person gets, on `clef-flash`: Apex's rules alone against the rules
+with the model taking over where it is sure.
+
+| Decision | Rules alone | With the model |
+|---|---|---|
+| Is a reply waiting on you | 5 of 10 | 10 of 10 |
+| Voice into a field | 4 of 8 | 8 of 8 |
+| The companion's clicks (stops when it should) | 5 of 12 | 9 of 12 |
+| Search or ask | 5 of 10 | 8 of 10 |
+| Who voice is for | 3 of 6 | 6 of 6 |
+| Labeling 12 emails (`label_items`) | | topic 11 of 11 sure (1 unsure), "act today" 12 of 12, in 5.5 s |
+
+The cases were written to include what the rules get wrong (polite closing
+questions, other languages), so the rules-alone column is lower than in
+everyday use; the gain is real but smaller there. All three models were right
+every time they were sure; they differ in how often they are sure
+(`jev-latest` most, on clicks especially) and in speed, which also varies from
+run to run at the provider. `clef-flash` is the default there: fast, and with
+zero data retention. The slow tail and an occasional first request of 3 to 4 s
+mean some decisions fall back to the rule, as designed, and the cutoffs held
+back sure-looking mistakes (`clef-flash` leaned "ask" for "weather amsterdam"
+at 62%). The three clicks still missed are other-language controls the model
+didn't flag; the keyword list stays the first line there.
+
+**Second round** (11 November 2026, Experiential Labs; `clef-flash` was down
+at the provider that day, answering 503 "all routes failed"). The full set on
+`gpt-6-luna-decisions` through OpenAI's Decisions request, and the four new
+decisions on `jev-latest` and `clef` too (right when sure, and rules alone
+against rules with the model):
+
+| Decision | `gpt-6-luna-decisions` | `jev-latest` | `clef` |
+|---|---|---|---|
+| Is a reply waiting on you | 8 of 9 sure; 5 → 9 of 10 | | |
+| Voice into a field | 3 of 3; 4 → 7 of 8 | | |
+| The companion's clicks | 4 of 4; 5 → 8 of 12 | | |
+| Search or ask | 10 of 10; 5 → 10 of 10 | | |
+| Who voice is for | 1 of 1; 3 → 4 of 6 | | |
+| Effort per message (rule: the chat's effort) | 7 of 7; 3 → 10 of 12 | 8 of 8; 3 → 10 of 12 | 8 of 8; 3 → 9 of 12 |
+| Worth remembering (rule: read every chat) | 5 of 5; 5 → 10 of 10 | 5 of 5; 5 → 10 of 10 | 5 of 5; 5 → 10 of 10 |
+| Tab topic or own group | 12 of 12 | 11 of 11 (1 unsure) | 12 of 12 |
+| Which skill fits (rule: none marked) | 9 of 9; 2 → 10 of 10 | 9 of 9; 2 → 10 of 10 | 9 of 9; 2 → 10 of 10 |
+| Labeling 12 emails | 24 of 24, in 3.5 s | | |
+
+Medians were 0.4 to 1.0 s (`clef` slowest). Luna's one mistake was a polite
+"Should I also translate the PDF next to it?" read as waiting on you. The
+tabs question first let `jev-latest` file "Hotels in Lisbon" under travel
+instead of the person's own "Lisbon trip" group; it now says their own groups
+come first, and all three models got that case right after.
+
+In a real chat (Opus 5.5, Apex's own system prompt and tools,
+`label_items` answered by Luna), the companion sorted 10 emails
+itself and handed 25 to `label_items` on its own, which answered all 25.
+
+## Code
+
+| Where | What |
+|---|---|
+| src/shared/decisions.ts | types, settings, limits, the answer readers, the services |
+| src/main/decisions/client.ts | the System One client: timeout, one retry on 429/529, typed errors |
+| src/main/decisions/service.ts | the decider: rule first, compare mode, ask() with the Claude fallback, comparisons |
+| src/main/decisions/claude.ts | the Claude fallback through QuickModel |
+| src/main/decisions/keys.ts | the sealed keys |
+| src/main/decisions/uses.ts | Apex's own questions and cutoffs |
+| src/main/decisions/tool.ts | `label_items`, the companion's tool |
+| src/main/agent/turnDecisions.ts | effort per message and the skills' ranking at a chat's first message |
+| src/main/tabAutoGroup.ts | "Group tabs": the plan by site or by the model's answers |
+| src/renderer/src/overlay/surfaces/address/enter.ts | the address bar's Ask row first, and Enter |
+| src/main/decisions/feature.ts | wiring, the settings services, smoke's stand-in model |
+| src/renderer/src/settings/agent/QuickDecisions.tsx | the settings sections |
+| src/main/decisions/smoke.ts, smokeTabs.ts | `APEX_SMOKE_ONLY=decisions` |
+
+## Not yet
+
+- Connectors are not ranked into a chat. A chat's tools are fixed at its
+  first message (so caching and earlier thinking stay valid), and a connector
+  left out could never be used later in that chat; every enabled connector
+  stays in.
+- No local model is bundled: "Another provider or your own server" points at
+  one you run (Kev's 0.8B model runs on any Apple Silicon Mac).

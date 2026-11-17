@@ -1,0 +1,93 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* The quoted selection above the panel composer's field (OV-20). */
+.quote-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 10px 0;
+  padding: 6px 4px 6px 10px;
+  border-radius: var(--radius-control);
+  background: var(--bg-muted);
+  color: var(--text-primary);
+  animation: quote-chip-in var(--motion-enter) var(--ease-out) both;
+}
+
+.quote-chip__icon {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  color: var(--text-tertiary);
+}
+
+.quote-chip__text {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.quote-chip__source {
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.quote-chip__preview {
+  overflow: hidden;
+  font-size: var(--text-sm);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.quote-chip__remove {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.quote-chip__remove svg {
+  width: 14px;
+  height: 14px;
+}
+
+.quote-chip__remove:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.quote-chip__remove:focus-visible {
+  outline: 2px solid var(--focus-ring, var(--accent));
+  outline-offset: 1px;
+}
+
+@keyframes quote-chip-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quote-chip {
+    animation: none;
+  }
+}
+
+:root[data-motion='reduced'] .quote-chip {
+  animation: none;
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Summit",
+  "shortName": "Summit",
+  "bundleId": "dev.summit.browser",
+  "publisher": "The Apex Authors",
+  "copyright": "Copyright © 2026 The Apex Authors",
+  "trademarkInfo": "",
+  "defaultPreset": "companion",
+  "companion": "companion.json",
+  "hiddenPresets": ["pip", "juniper", "bolt", "mochi", "sage", "pepper"],
+  "icons": {
+    "mac": "icon.icns",
+    "macIconComposer": null,
+    "win": "icon.ico",
+    "png": "icon.png",
+    "linux": "icons",
+    "documents": { "html": "html-document", "companion": "apexcompanion", "pack": "apexpack" },
+    "dmgBackground": "dmg-background.png",
+    "installerSidebar": "installerSidebar.bmp",
+    "resources": "resources"
+  },
+  "logo": null
+}

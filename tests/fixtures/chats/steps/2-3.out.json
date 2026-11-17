@@ -1,0 +1,44 @@
+{
+  "formatVersion": 3,
+  "id": "23232323-1111-4222-8333-444444444444",
+  "title": "A shape",
+  "companionId": "companion-1",
+  "actWithoutAsking": true,
+  "muted": false,
+  "capabilities": {
+    "model": "claude-opus-5-5",
+    "browser": true,
+    "webTools": true,
+    "memory": true,
+    "connectorIds": [],
+    "engine": "api-key"
+  },
+  "system": "s",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Look"
+    }
+  ],
+  "log": [
+    {
+      "type": "user-message",
+      "id": "aaaaaaaa-2323-4222-8333-444444444444",
+      "text": "Look"
+    },
+    {
+      "type": "user-message",
+      "id": "aaaaaaaa-2324-4222-8333-444444444444",
+      "text": "And this",
+      "attachments": [
+        {
+          "kind": "image",
+          "thumbnail": "data:image/png;base64,iVBO",
+          "label": "Shot"
+        }
+      ]
+    }
+  ],
+  "details": {},
+  "feedback": {}
+}

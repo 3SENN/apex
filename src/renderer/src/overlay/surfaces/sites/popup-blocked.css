@@ -1,0 +1,56 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* The page notice: a compact bar at the bottom of the tab's pane. */
+.pnotice {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(560px, calc(var(--ov-vw, 100vw) - 32px));
+  padding: 10px 10px 10px 14px;
+  background: var(--bg-raised);
+  color: var(--text-primary);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-overlay);
+  font: 13px/18px var(--font);
+}
+
+.pnotice__icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  background: var(--site-tone-warning-soft);
+  color: var(--site-tone-warning);
+}
+
+.pnotice__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.pnotice__title {
+  margin: 0;
+  font-weight: 600;
+}
+
+.pnotice__detail {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pnotice__actions {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

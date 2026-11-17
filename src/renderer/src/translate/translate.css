@@ -1,0 +1,75 @@
+/* Copyright (c) 2026 The Apex Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* The pill's translate button (TR-01): the star's size and quiet colour. */
+.pill__translate {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex: none;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: none;
+  color: var(--chrome-muted);
+}
+
+.pill__translate:hover,
+.pill__translate[aria-expanded='true'] {
+  background: var(--bg-hover);
+  color: var(--chrome-strong);
+}
+
+.pill__translate:focus-visible {
+  outline: 2px solid var(--accent-ring);
+  outline-offset: -1px;
+}
+
+/* Translated: the glyph turns strong, like a starred page. */
+.pill__translate--on,
+.pill__translate--on:hover {
+  color: var(--chrome-strong);
+  background: var(--bg-hover);
+}
+
+.pill__translate--error::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--status-error);
+}
+
+/* The offer arrives with one small nod, never more. */
+.pill__translate--offer svg {
+  animation: pill-translate-in 420ms var(--ease-out) both;
+}
+
+@keyframes pill-translate-in {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill__translate--offer svg {
+    animation: none;
+  }
+}
+
+:root[data-motion='reduced'] .pill__translate--offer svg {
+  animation: none;
+}
