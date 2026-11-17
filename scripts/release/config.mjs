@@ -218,6 +218,16 @@ export function versionProblem(version, channel) {
  * branding would put Summit on the update feed official builds read. A
  * branding switch that isn't 1 or 0 is a problem too, never read as either.
  */
+/**
+ * Why a release can't be built, or null. A build that updates itself from a release repo goes to other people, so it
+ * must be a public release: engines from the private internal/ folder only ever ship in personal builds, which keep
+ * the updater off.
+ */
+export function releaseFeedProblem(settings) {
+  if (settings.repo && !settings.publicRelease) return 'a build with an update feed (APEX_RELEASE_OWNER/APEX_RELEASE_REPO) must be a public release: set APEX_PUBLIC_RELEASE=1'
+  return null
+}
+
 export function releaseBrandingProblem(env = process.env, repo = REPO) {
   let official
   try {

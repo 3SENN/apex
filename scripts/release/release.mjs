@@ -38,7 +38,7 @@ import { describeBranding, loadBranding } from '../branding.mjs'
 import { ofVersion, refreshFeed, uploadsFrom } from './checks.mjs'
 import { writeChecksums } from './checksums.mjs'
 import { builderConfig } from './builderConfig.mjs'
-import { buildEnv, loadReleaseEnv, releaseBrandingProblem, releaseSettings, versionProblem, whatsNewVersions } from './config.mjs'
+import { buildEnv, loadReleaseEnv, releaseBrandingProblem, releaseFeedProblem, releaseSettings, versionProblem, whatsNewVersions } from './config.mjs'
 import { DIST, REPO, packageJson } from './paths.mjs'
 import { writeSupportFeed } from './support-feed.mjs'
 import { verify } from './verify.mjs'
@@ -93,6 +93,8 @@ function preflight(version, settings, opts, env) {
   if (problem) fail(problem)
   const notes = readFileSync(join(REPO, 'src', 'shared', 'whatsNew.ts'), 'utf8')
   if (!whatsNewVersions(notes).includes(version)) fail(`src/shared/whatsNew.ts has no entry for ${version}; add one before releasing`)
+  const feed = releaseFeedProblem(settings)
+  if (feed) fail(feed)
   const tag = env.GITHUB_REF_TYPE === 'tag' ? env.GITHUB_REF_NAME : null
   if (tag && tag !== `v${version}`) fail(`the tag ${tag} doesn't match package.json's version ${version}`)
   if (!opts.publish) return

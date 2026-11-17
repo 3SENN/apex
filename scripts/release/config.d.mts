@@ -46,6 +46,7 @@ export function builderOverrides(settings: ReleaseSettings, env?: Env): {
 export function buildEnv(settings: ReleaseSettings, env?: Env): Env
 export function versionProblem(version: string | undefined, channel: Channel): string | null
 /** Why a release can't be made with env's branding (only official builds are released), or null. */
+export function releaseFeedProblem(settings: { repo: { owner: string; name: string } | null; publicRelease: boolean }): string | null
 export function releaseBrandingProblem(env?: Env, repo?: string): string | null
 export function whatsNewVersions(source: string): string[]
 export function compareVersions(a: string, b: string): -1 | 0 | 1

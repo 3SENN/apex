@@ -21,6 +21,17 @@ There is no default Team ID and no default certificate. Unsigned, ad hoc and pla
 
 Official builds keep their identity in the private `internal/` folder's `release.env` (gitignored): plain `KEY=VALUE` lines, with `#` comments, such as `APEX_TEAM_ID=<TEAMID>`, `APEX_SIGN_IDENTITY=<SHA-1>` and `APPLE_KEYCHAIN_PROFILE=<notary-profile>`. When the file exists, the release commands (`npm run release` and `npm run package:mac`/`:win`/`:linux` through `release.mjs`, plus `asc.mjs` and `verify.mjs`) read it first, through `loadReleaseEnv` in `scripts/release/config.mjs`, and pass it on to the build. A variable already set in the environment always wins over the file, even an empty one. A plain `npm run package` reads only the real environment, so it builds unsigned unless you set the variables yourself. Anyone else, and CI, simply sets the variables.
 
+## Builds for other people vs your own
+
+A build that updates itself from a GitHub release repo goes to other people, so it must be a **public release**
+(`APEX_PUBLIC_RELEASE=1`): it carries only the public engines, never anything from the private `internal/` folder.
+`release.mjs` refuses a build with an update feed that isn't one. A maintainer's own build sets no release repo, so its
+updater stays off. A published official release therefore looks like this:
+
+```sh
+APEX_PUBLIC_RELEASE=1 APEX_RELEASE_OWNER=3SENN APEX_RELEASE_REPO=apex npm run release -- --publish
+```
+
 ## What a release produces
 
 | Platform | Artifacts | Updates |

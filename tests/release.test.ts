@@ -19,6 +19,7 @@ import {
   builderOverrides,
   compareVersions,
   releaseBrandingProblem,
+  releaseFeedProblem,
   releaseSettings,
   versionProblem,
   viteDefines,
@@ -634,5 +635,14 @@ describe('publishing', () => {
     expect(packagedApps({ dist, platform: 'darwin', arch: 'x64' })[0]!.executable).toBe(join(dist, 'mac', `${name}.app`, 'Contents', 'MacOS', name))
     expect(packagedApps({ dist, platform: 'darwin', arch: 'x64', productName: name === 'Apex' ? 'Summit' : 'Apex' })).toEqual([])
     expect(packagedApps({ dist, platform: 'win32', arch: 'x64' })).toEqual([])
+  })
+})
+
+describe('releases with an update feed', () => {
+  it('must be public releases, so private engines never reach other people', () => {
+    const repo = { owner: 'example', name: 'browser' }
+    expect(releaseFeedProblem({ repo, publicRelease: false })).toMatch(/APEX_PUBLIC_RELEASE=1/)
+    expect(releaseFeedProblem({ repo, publicRelease: true })).toBeNull()
+    expect(releaseFeedProblem({ repo: null, publicRelease: false })).toBeNull()
   })
 })
