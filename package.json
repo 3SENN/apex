@@ -43,7 +43,6 @@
     "@modelcontextprotocol/sdk": "1.32.1",
     "@mozilla/readability": "0.6.0",
     "ajv": "8.20.0",
-    "electron-chrome-web-store": "0.13.0",
     "electron-updater": "6.8.10",
     "fflate": "0.8.3",
     "lucide-react": "1.63.0",
@@ -52,7 +51,7 @@
     "qrcode-generator": "2.0.4",
     "three": "0.186.1",
     "tldts": "7.4.18",
-    "ws": "8.18.0",
+    "ws": "^8.23.0",
     "zod": "4.6.7"
   },
   "devDependencies": {
