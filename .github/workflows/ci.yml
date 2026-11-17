@@ -15,9 +15,10 @@
 name: CI
 
 on:
+  # main after every merge, and every pull request (including from forks and Dependabot) once, not twice.
+  # Version tags belong to the release workflow.
   push:
-    # Branches only. Version tags belong to the release workflow.
-    branches: ['**']
+    branches: [main]
   pull_request:
 
 permissions:
