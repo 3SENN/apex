@@ -2,6 +2,13 @@
 
 All notable changes to Atelier. Versions follow [semantic versioning](https://semver.org/); dates are release dates.
 
+## 1.5.0 (2026-11-17) — Apex is now Atelier
+
+- **Apex is now Atelier.** The same browser, the same companion and everything you made, under a new name. An atelier is where you make things your own, and that is what Atelier is for.
+- **Packs have a new file type.** Packs, apps, worlds and companions you share are now .atelierpack, .atelierapp, .atelierworld and .ateliercompanion files.
+- **Settings save while a page loads.** Changing a setting while a tab was loading a page could fail. It now always saves, and changing other settings no longer refreshes every page’s permissions.
+- **Up to date.** Atelier now runs on Electron 45.3.2, with the newest Anthropic SDK and fixes in the libraries it uses.
+
 ## 1.4.5 (2026-11-17) — Atelier is open source
 
 - **Atelier is open source.** The whole browser and its companion are now free and open source. Read the code, build it yourself or help make it better: Settings › About shows where to find it.
