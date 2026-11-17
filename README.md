@@ -102,7 +102,7 @@ Report security issues privately as described in [SECURITY.md](SECURITY.md).
 
 - **[Discord](https://discord.gg/sKUTVCYAZY):** chat with the community, get help, show what you built.
 - **[GitHub Discussions](https://github.com/3SENN/atelier/discussions):** questions, ideas and proposals.
-- **[YouTube](https://www.youtube.com/@GetApexBrowser):** demos and walkthroughs.
+- **[YouTube](https://www.youtube.com/@GetAtelierBrowser):** demos and walkthroughs.
 - **[X](https://x.com/3Senn):** news and updates.
 
 Atelier is created by [Senne Chin](https://www.linkedin.com/in/senne-chin-abb063241/), a 22-year-old enthusiast, and
