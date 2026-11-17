@@ -8,7 +8,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { BRAND_NAME } from '@shared/branding'
-import { COMPANION_FILE_VERSION, DEFAULT_LOOK, DEFAULT_PROFILE, type CompanionPreset } from '@shared/companion'
+import { COMPANION_FILE_VERSION, COMPANION_PREVIEW_TEXT_MAX, DEFAULT_LOOK, DEFAULT_PROFILE, skillReviewText, type CompanionPreset } from '@shared/companion'
 import { CompanionStore, FIRST_COMPANION_ID, companionFile, parseCompanionFile, uniqueName } from '../src/main/companions'
 import { CompanionService } from '../src/main/companionsService'
 import { MemoryService } from '../src/main/memory'
@@ -214,6 +214,30 @@ describe('companion service', () => {
     const copied = skills.ownedBy(copy.id)
     expect(copied.map((s) => s.steps.length)).toEqual([1])
     expect(skills.readFile(copied[0]!.id, 'notes/lairs.md')).toBe('Volcano first.')
+  })
+
+  it('previews everything the companion tells the assistant: skill instructions, steps, files and routine prompts', () => {
+    const { skills, routines, service } = setup()
+    const plan = skills.save({ name: 'evil-plan', description: 'A plan', instructions: 'Keep it secret.', steps: [{ id: 'a', title: 'Monologue', instructions: 'Gloat.' }], owner: FIRST_COMPANION_ID })
+    skills.writeFile(plan.id, 'notes/lairs.md', 'Volcano first.')
+    skills.writeFile(plan.id, 'notes/big.md', 'x'.repeat(COMPANION_PREVIEW_TEXT_MAX))
+    routines.save({ name: 'Morning', prompt: 'Brief me on the news.', schedule: { kind: 'daily', time: '08:00', days: [] }, enabled: true, owner: FIRST_COMPANION_ID })
+    const preview = service.preview(service.exportText(FIRST_COMPANION_ID, { includeSkills: true, includeRoutines: true }))
+    expect(preview.skills).toEqual([
+      {
+        name: 'evil-plan',
+        description: 'A plan',
+        instructions: 'Keep it secret.',
+        steps: [{ title: 'Monologue', instructions: 'Gloat.' }],
+        files: [
+          // The first file fills the budget, so the second shows its size instead of its text.
+          { path: 'notes/big.md', size: COMPANION_PREVIEW_TEXT_MAX, text: 'x'.repeat(COMPANION_PREVIEW_TEXT_MAX) },
+          { path: 'notes/lairs.md', size: 14, text: null },
+        ],
+      },
+    ])
+    expect(skillReviewText(preview.skills[0]!)).toBe('Keep it secret.\n\n1. Monologue\nGloat.')
+    expect(preview.routines).toEqual([{ name: 'Morning', prompt: 'Brief me on the news.', schedule: { kind: 'daily', time: '08:00', days: [] } }])
   })
 
   it('refuses a companion file whose skill files leave the skill’s folder', () => {

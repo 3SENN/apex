@@ -173,10 +173,11 @@ lines the install card shows, each with a level:
   connector that runs a program on this Mac.
 
 An update that adds a permission, a site, a network host, a key or a host a
-key goes to, a tool or a page script (`permissionDiff`), or changes what its skills or tools tell the
-assistant (a `prompts` line), is not applied until you approve the new lines.
-The review also shows every skill's instructions and tool's description under
-What it tells the assistant.
+key goes to, a tool or a page script (`permissionDiff`), or changes what its skills, tools or
+companions tell the assistant (a `prompts` line), is not applied until you approve the new lines.
+The review also shows every skill's instructions, every tool's description and,
+for each companion it offers, the companion's standing instructions, its skills'
+instructions and steps and its routines' prompts under What it tells the assistant.
 
 ## The sandbox and the bridge
 

@@ -16,6 +16,9 @@ import { Notice } from '../settings/kit'
 import { Badge, Button, CheckRow, Sheet, useToast } from '../ui'
 import { countParts, formatBytes, needsConfirm, sourceKey } from './logic'
 import { PermissionList } from './PermissionList'
+import { PromptDetails } from './PromptDetails'
+
+const PROMPT_KIND = { skill: 'packs.review.promptSkill', tool: 'packs.review.promptTool', companion: 'packs.review.promptCompanion' } as const satisfies Record<PackReview['prompts'][number]['kind'], string>
 
 export function ReviewSheet({ review, onClose, onInstalled }: { review: PackReview | null; onClose(): void; onInstalled?(pack: PackSummary): void }): ReactElement | null {
   const t = useT()
@@ -169,18 +172,7 @@ export function ReviewSheet({ review, onClose, onInstalled }: { review: PackRevi
               {t('packs.review.prompts')}
             </h4>
             <p className="pk-muted pk-small">{t('packs.review.promptsHint')}</p>
-            <div className="pk-code">
-              {review.prompts.map((p) => (
-                <details key={`${p.kind}:${p.name}`}>
-                  <summary>
-                    {p.name} · {p.kind === 'skill' ? t('packs.review.promptSkill') : t('packs.review.promptTool')}
-                  </summary>
-                  <pre tabIndex={0} style={{ whiteSpace: 'pre-wrap' }}>
-                    {p.text}
-                  </pre>
-                </details>
-              ))}
-            </div>
+            <PromptDetails items={review.prompts.map((p, i) => ({ key: `${p.kind}:${p.name}:${i}`, summary: `${p.name} · ${t(PROMPT_KIND[p.kind])}`, text: p.text }))} />
           </section>
         )}
 

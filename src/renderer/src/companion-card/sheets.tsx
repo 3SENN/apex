@@ -6,12 +6,13 @@
 import { useEffect, useId, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactElement } from 'react'
 import { createRoot, type Root } from 'react-dom/client'
 import { FileUp, Palette, Shuffle } from 'lucide-react'
-import { COMPANION_FILE_EXTENSION, COMPANION_NAME_MAX, DEFAULT_PROFILE, type Companion, type CompanionImportPreview, type CompanionPreset } from '@shared/companion'
+import { COMPANION_FILE_EXTENSION, COMPANION_NAME_MAX, DEFAULT_PROFILE, skillReviewText, type Companion, type CompanionImportPreview, type CompanionPreset } from '@shared/companion'
 import { chatUrl, companionLookUrl, presetUrl } from '@shared/url'
-import { apex, call, errorText } from '../api'
+import { apex, call, errorText, formatBytes } from '../api'
 import { Companion as CompanionFigure } from '../companion'
 import { useCompanionAssets, useCompanions, usePresets } from '../components/companionData'
 import { PresetGallery, shuffledLook, useDraftLook } from '../pages/CompanionEditor'
+import { PromptDetails, type PromptItem } from '../packs/PromptDetails'
 import { PresetDetailSheet } from './PresetDetailSheet'
 import { Button, Dialog, IconButton, SegmentedControl, Sheet, toast } from '../ui'
 import { effortLabel, modelLabel } from './logic/models'
@@ -431,18 +432,17 @@ function ImportReviewSheet({ preview, onClose, onCreated }: { preview: Companion
         <section className="co-review__section">
           <h4>{t('coCard.sheets.skills', { length: preview.skills.length })}</h4>
           {preview.skills.length === 0 ? <p className="co-hint">{t('coCard.sheets.noSkillsIncluded')}</p> : (
-            <ul className="co-review__list">
-              {preview.skills.map((s) => <li key={s.name}><code>/{s.name}</code>{s.description && <span> {s.description}</span>}</li>)}
-            </ul>
+            <>
+              <p className="co-hint">{t('coCard.sheets.skillsHint')}</p>
+              <PromptDetails items={skillItems(preview.skills)} />
+            </>
           )}
         </section>
         <section className="co-review__section">
           <h4>{t('coCard.sheets.routines', { length: preview.routines.length })}</h4>
           {preview.routines.length === 0 ? <p className="co-hint">{t('coCard.sheets.noRoutinesIncluded')}</p> : (
             <>
-              <ul className="co-review__list">
-                {preview.routines.map((r, i) => <li key={`${r.name}-${i}`}><strong>{r.name}</strong> <span>{describeSchedule(r.schedule)}</span></li>)}
-              </ul>
+              <PromptDetails items={preview.routines.map((r, i) => ({ key: `${r.name}-${i}`, summary: `${r.name} · ${describeSchedule(r.schedule)}`, text: r.prompt }))} />
               <p className="co-hint">{t('coCard.sheets.theyReAddedPaused')}</p>
             </>
           )}
@@ -455,6 +455,14 @@ function ImportReviewSheet({ preview, onClose, onCreated }: { preview: Companion
       </div>
     </Sheet>
   )
+}
+
+/** Each skill as the assistant gets it, then its supporting files, each collapsed under its name. */
+function skillItems(skills: CompanionImportPreview['skills']): PromptItem[] {
+  return skills.flatMap((s, i) => [
+    { key: `skill-${i}`, summary: `/${s.name}${s.description ? ` · ${s.description}` : ''}`, text: skillReviewText(s) },
+    ...s.files.map((f) => ({ key: `skill-${i}:${f.path}`, summary: `/${s.name} · ${f.path}`, text: f.text ?? t('coCard.sheets.fileTooLong', { size: formatBytes(f.size) }) })),
+  ])
 }
 
 function ImportErrorDialog({ message, onClose }: { message: string; onClose(): void }) {

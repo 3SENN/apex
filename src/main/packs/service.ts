@@ -14,6 +14,7 @@ import { randomUUID } from 'node:crypto'
 import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { isAbsolute, join } from 'node:path'
 import { generatedCss, sanitizeCss } from '@shared/tweaks'
+import { skillReviewText } from '@shared/companion'
 import {
   BUILTIN_SKILLS_PACK_ID,
   APP_PACK_LIMITS,
@@ -56,6 +57,7 @@ import { chatUrl } from '@shared/url'
 import { SKILL_MAIN_FILE } from '@shared/skills'
 import { appStoreInstance } from '../apps/feature'
 import { tweakStore } from '../tweaks/feature'
+import { parseCompanionFile } from '../companions'
 import type { AppContext } from '../features/types'
 import { mainT } from '../i18n/mainT'
 import { serializeSkillDocument } from '../skills/format'
@@ -340,8 +342,8 @@ export function createPacksService(deps: PacksServiceDeps): Omit<Ns, 'openedRevi
       if (refusal) problems.push(fingerprint ? mainT('packs.problem.otherAuthor') : mainT('packs.problem.unsignedNow'))
     }
     if (installed && manifest && !installed.firstParty && comparePackVersions(manifest.version, installed.manifest.version) < 0) problems.push(mainT('packs.problem.older', { version: installed.manifest.version }))
-    const prompts = check.ok ? promptsOf(check.pack.manifest, check.pack.skills) : []
-    const changedPrompts = Boolean(installed && !installed.firstParty && check.ok && promptsKey(promptsOf(installed.manifest, installed.skills)) !== promptsKey(prompts))
+    const prompts = check.ok ? promptsOf(check.pack.manifest, check.pack.skills, files) : []
+    const changedPrompts = Boolean(installed && !installed.firstParty && check.ok && promptsKey(promptsOf(installed.manifest, installed.skills, installed.files)) !== promptsKey(prompts))
     const token = randomUUID()
     if (manifest) reviews.set(token, { files, manifest, source, signature, keyId, fingerprint, signatureFile, expires: now() + REVIEW_TTL_MS, problems })
     return {
@@ -551,7 +553,7 @@ export function createPacksService(deps: PacksServiceDeps): Omit<Ns, 'openedRevi
       const keyId = valid?.keyId ?? null
       const fingerprint = valid ? fingerprintOf(valid) : null
       if (deps.trusted.refusal(next.id, fingerprint)) throw new PackFileError(mainT('packs.problem.otherAuthor'))
-      const added = [...permissionDiff(pack.manifest, next), ...(promptsKey(promptsOf(pack.manifest, pack.skills)) !== promptsKey(promptsOf(next, check.pack.skills)) ? [promptsChangedLine()] : [])]
+      const added = [...permissionDiff(pack.manifest, next), ...(promptsKey(promptsOf(pack.manifest, pack.skills, pack.files)) !== promptsKey(promptsOf(next, check.pack.skills, files)) ? [promptsChangedLine()] : [])]
       if (added.length === 0) {
         // Nothing new to approve: it applies on its own, as it came.
         store.install(files, { source: pack.entry.source, signature: keyId ? 'signed' : 'unsigned', keyId, enable: pack.entry.enabled, signatureFile: valid })
@@ -998,12 +1000,30 @@ export function moveInlineScripts(html: string): { html: string; scripts: Map<st
   return { html: out, scripts }
 }
 
-/** What a pack tells the assistant: each skill's instructions and steps, each tool's description. */
-export function promptsOf(m: PackManifest, skills: readonly PackSkillFile[]): PackReview['prompts'] {
+/** What a pack tells the assistant: each skill's instructions and steps, each tool's description, and each companion it offers. */
+export function promptsOf(m: PackManifest, skills: readonly PackSkillFile[], files: PackFiles): PackReview['prompts'] {
   return [
     ...skills.map((s) => ({ kind: 'skill' as const, name: `/${s.doc.name}`, text: [s.doc.description, s.doc.instructions, ...s.doc.steps.map((st) => `${st.title}\n${st.instructions}`)].filter(Boolean).join('\n\n') })),
     ...(m.contributes.tools ?? []).map((t) => ({ kind: 'tool' as const, name: t.name, text: t.description })),
+    ...(m.contributes.companions ?? []).flatMap((path) => companionPrompt(files.get(path)) ?? []),
   ]
+}
+
+/** A companion file's standing instructions, skills and routine prompts as one text: what it tells the assistant once added. */
+function companionPrompt(data: Buffer | undefined): PackReview['prompts'][number] | null {
+  if (!data) return null
+  let file: ReturnType<typeof parseCompanionFile>
+  try {
+    file = parseCompanionFile(data.toString('utf8'))
+  } catch {
+    return null
+  }
+  const sections = [
+    file.instructions.trim() ? `${mainT('packs.review.companionInstructions')}\n${file.instructions.trim()}` : '',
+    ...(file.skills ?? []).map((s) => [mainT('packs.review.companionSkill', { name: s.name }), [s.description.trim(), skillReviewText(s)].filter(Boolean).join('\n\n')].join('\n')),
+    ...(file.routines ?? []).map((r) => `${mainT('packs.review.companionRoutine', { name: r.name })}\n${r.prompt.trim()}`),
+  ]
+  return { kind: 'companion', name: file.name, text: sections.filter(Boolean).join('\n\n') }
 }
 
 const promptsKey = (prompts: PackReview['prompts']): string => JSON.stringify([...prompts].sort((a, b) => `${a.kind}${a.name}`.localeCompare(`${b.kind}${b.name}`)))

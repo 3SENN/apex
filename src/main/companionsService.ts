@@ -4,7 +4,7 @@
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { randomUUID } from 'node:crypto'
-import { COMPANION_SKILL_FILE_MAX_BYTES, type Companion, type CompanionFile, type CompanionFileSkill, type CompanionImportPreview } from '@shared/companion'
+import { COMPANION_PREVIEW_TEXT_MAX, COMPANION_SKILL_FILE_MAX_BYTES, type Companion, type CompanionFile, type CompanionFileSkill, type CompanionImportPreview, type CompanionImportSkill } from '@shared/companion'
 import type { CompanionExportOptions, NewCompanionInput } from '@shared/services'
 import { companionFile, parseCompanionFile, uniqueName, type CompanionStore } from './companions'
 import type { MemoryService } from './memory'
@@ -118,7 +118,7 @@ export class CompanionService {
     return JSON.stringify(file, null, 2)
   }
 
-  /** Checks a file's text and keeps it for confirmImport. Throws a readable error for bad files. */
+  /** Checks a file's text and keeps it for confirmImport. Throws a readable error for bad files. The preview shows everything the companion tells the assistant. */
   preview(text: string, now = Date.now()): CompanionImportPreview {
     const file = parseCompanionFile(text)
     for (const [token, entry] of this.#imports) if (entry.expires < now) this.#imports.delete(token)
@@ -135,8 +135,8 @@ export class CompanionService {
       instructions: file.instructions,
       model: file.model,
       effort: file.effort,
-      skills: (file.skills ?? []).map(({ name, description }) => ({ name, description })),
-      routines: (file.routines ?? []).map(({ name, schedule }) => ({ name, schedule })),
+      skills: previewSkills(file.skills ?? []),
+      routines: (file.routines ?? []).map(({ name, prompt, schedule }) => ({ name, prompt, schedule })),
       memoryFiles: file.memory?.length ?? 0,
     }
   }
@@ -174,4 +174,20 @@ export class CompanionService {
     }
     return companion
   }
+}
+
+/** Skills as the import review shows them: in full, with supporting files' text up to COMPANION_PREVIEW_TEXT_MAX in all. */
+function previewSkills(skills: readonly CompanionFileSkill[]): CompanionImportSkill[] {
+  let shown = 0
+  return skills.map((skill) => ({
+    name: skill.name,
+    description: skill.description,
+    instructions: skill.instructions,
+    steps: (skill.steps ?? []).map(({ title, instructions }) => ({ title, instructions })),
+    files: (skill.files ?? []).map(({ path, text }) => {
+      const fits = shown + text.length <= COMPANION_PREVIEW_TEXT_MAX
+      if (fits) shown += text.length
+      return { path, size: Buffer.byteLength(text), text: fits ? text : null }
+    }),
+  }))
 }

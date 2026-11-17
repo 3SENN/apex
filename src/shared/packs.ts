@@ -1324,7 +1324,7 @@ export function permissionDiff(before: PackGrantManifest | null, after: PackGran
   return describeGrants(added, after)
 }
 
-/** The line an update gets when it changes what its skills or tools tell the assistant. */
+/** The line an update gets when it changes what its skills, tools or companions tell the assistant. */
 export function promptsChangedLine(): PackPermissionLine {
   return { kind: 'prompts', level: 'notice', key: KEYS.prompts, vars: {} }
 }
@@ -1497,8 +1497,8 @@ export interface PackReview {
   files: PackFileInfo[]
   /** The readable text of every code file, so the card can show what runs. */
   code: Array<{ path: string; text: string }>
-  /** What it tells the assistant: each skill's instructions and each tool's description. */
-  prompts: Array<{ kind: 'skill' | 'tool'; name: string; text: string }>
+  /** What it tells the assistant: each skill's instructions, each tool's description, and each companion's standing instructions, skills and routine prompts. */
+  prompts: Array<{ kind: 'skill' | 'tool' | 'companion'; name: string; text: string }>
   /** What Share… put beside the files: a note and a PNG data URL. Not signed, so the card says who it's from only as "whoever shared it". */
   shared: { note: string | null; image: string | null }
 }

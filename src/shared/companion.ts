@@ -387,6 +387,15 @@ export interface CompanionFileSkill {
 /** A skill's supporting text file travels in a companion file up to this size; bigger ones stay behind. */
 export const COMPANION_SKILL_FILE_MAX_BYTES = 256 * 1024
 
+/** The import review shows supporting files' text up to this many characters in all; past that, a file shows its size instead. */
+export const COMPANION_PREVIEW_TEXT_MAX = 200_000
+
+/** A skill's instructions and numbered steps as one readable text, the way reviews show what a companion tells the assistant. */
+export function skillReviewText(skill: { instructions: string; steps?: ReadonlyArray<{ title: string; instructions: string }> }): string {
+  const steps = (skill.steps ?? []).map((step, i) => [`${i + 1}.${step.title.trim() ? ` ${step.title.trim()}` : ''}`, step.instructions.trim()].filter(Boolean).join('\n'))
+  return [skill.instructions.trim(), ...steps].filter(Boolean).join('\n\n')
+}
+
 /** Same shape as RoutineSchedule in services.ts. */
 /** Routine schedules, plus the old hourly interval in older exported files. */
 export type CompanionFileSchedule = import('./routines').RoutineSchedule | import('./routines').LegacyRoutineSchedule
@@ -404,8 +413,19 @@ export interface CompanionImportPreview {
   instructions: string
   model: string | null
   effort: CompanionEffort | null
-  skills: Array<{ name: string; description: string }>
-  /** Imported routines are added paused. */
-  routines: Array<{ name: string; schedule: CompanionFileSchedule }>
+  /** Each skill in full: what the assistant follows, and its supporting files. */
+  skills: CompanionImportSkill[]
+  /** Imported routines are added paused. `prompt` is what each run asks the assistant. */
+  routines: Array<{ name: string; prompt: string; schedule: CompanionFileSchedule }>
   memoryFiles: number
+}
+
+/** One skill in the import review. */
+export interface CompanionImportSkill {
+  name: string
+  description: string
+  instructions: string
+  steps: Array<{ title: string; instructions: string }>
+  /** `text` is null when it is too long to show (see COMPANION_PREVIEW_TEXT_MAX); `size` is in bytes. */
+  files: Array<{ path: string; size: number; text: string | null }>
 }
