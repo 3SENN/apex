@@ -2,6 +2,16 @@
 
 All notable changes to Apex. Versions follow [semantic versioning](https://semver.org/); dates are release dates.
 
+## 1.4.5 (2026-11-17) — Apex is open source
+
+- **Apex is open source.** The whole browser and its companion are now free and open source. Read the code, build it yourself or help make it better: Settings › About shows where to find it.
+- **Boosts are now Tweaks.** Site tweaks are what boosts used to be, and Hide element is the new name for the zapper. Everything you made keeps working.
+- **Reviews show everything a companion says.** Importing a companion or installing a pack now shows everything it tells the assistant: each skill’s instructions and steps, and each routine’s prompt.
+- **Phone controllers keep up.** A button you let go of on a phone controller always reaches the game, even after a long session.
+- **The side panel has room for its title.** On Windows and Linux, the side panel no longer squeezes its title to make room for window buttons that aren’t there.
+- **Runs on your API key.** Apex’s companion runs on Claude through your own Anthropic API key. If you used Claude Code before, add a key in Settings › Model and key.
+- **Security updates.** The libraries Apex uses for its local servers and connections now include the latest security fixes.
+
 ## 1.4.4 (2026-11-12) — Tab drags stay on your screen
 
 - **No more black screen when you drag a tab.** Dragging a tab could slide your Mac to an empty black desktop with only the tab on it. The tab now stays with you, on the screen you are working on.

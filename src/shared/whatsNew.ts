@@ -12,6 +12,41 @@ import type { WhatsNewEntry } from './updates'
 // card combines every entry since the version you last saw.
 export const WHATS_NEW: readonly WhatsNewEntry[] = [
   {
+    version: '1.4.5',
+    date: '2026-11-17',
+    title: `${BRAND_NAME} is open source`,
+    highlights: [
+      {
+        title: `${BRAND_NAME} is open source`,
+        body: 'The whole browser and its companion are now free and open source. Read the code, build it yourself or help make it better: Settings › About shows where to find it.',
+      },
+      {
+        title: 'Boosts are now Tweaks',
+        body: 'Site tweaks are what boosts used to be, and Hide element is the new name for the zapper. Everything you made keeps working.',
+      },
+      {
+        title: 'Reviews show everything a companion says',
+        body: 'Importing a companion or installing a pack now shows everything it tells the assistant: each skill’s instructions and steps, and each routine’s prompt.',
+      },
+      {
+        title: 'Phone controllers keep up',
+        body: 'A button you let go of on a phone controller always reaches the game, even after a long session.',
+      },
+      {
+        title: 'The side panel has room for its title',
+        body: 'On Windows and Linux, the side panel no longer squeezes its title to make room for window buttons that aren’t there.',
+      },
+      {
+        title: 'Runs on your API key',
+        body: `${BRAND_NAME}’s companion runs on Claude through your own Anthropic API key. If you used Claude Code before, add a key in Settings › Model and key.`,
+      },
+      {
+        title: 'Security updates',
+        body: `The libraries ${BRAND_NAME} uses for its local servers and connections now include the latest security fixes.`,
+      },
+    ],
+  },
+  {
     version: '1.4.4',
     date: '2026-11-12',
     title: 'Tab drags stay on your screen',
