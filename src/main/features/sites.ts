@@ -3,6 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+import { isDeepStrictEqual } from 'node:util'
 import { ipcMain, shell, type IpcMainEvent, type Session } from 'electron'
 import { z } from 'zod'
 import { PAGE } from '@shared/ipc'
@@ -343,7 +344,8 @@ function setupSitesRuntime(app: AppContext): SitesRuntime {
   })
   // ── permissions pass: defaults ── (pages read their permission states again when the defaults change)
   app.settings.on('changed', (next, previous) => {
-    if (next.sitePermissionDefaults !== previous.sitePermissionDefaults) permissions.refresh()
+    // `previous` is a copy, so the defaults are compared by value: any other setting leaves the pages alone.
+    if (!isDeepStrictEqual(next.sitePermissionDefaults, previous.sitePermissionDefaults)) permissions.refresh()
   })
   Object.assign(state, {
     app,

@@ -586,7 +586,14 @@ export class PermissionController {
       const wc = tab.view.webContents as WebContents | undefined
       if (!wc || wc.isDestroyed()) continue
       if (origin && siteKey(wc.getURL()) !== origin) continue
-      for (const frame of wc.mainFrame.framesInSubtree) {
+      let frames: WebFrameMain[]
+      try {
+        frames = wc.mainFrame.framesInSubtree
+      } catch {
+        // The tab's frame is being replaced (a navigation or a crash): its next document asks at start.
+        continue
+      }
+      for (const frame of frames) {
         try {
           frame.send(PAGE.permissions, this.#frameStates(wc, frame))
         } catch {

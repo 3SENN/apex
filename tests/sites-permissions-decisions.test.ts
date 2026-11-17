@@ -434,6 +434,21 @@ describe('defaults, secure contexts and new questions', () => {
     expect(await request(tab.wc, 'automatic-fullscreen')).toBe(false)
     expect(notes).toHaveLength(1)
   })
+
+  it('tells every other page about new defaults while one tab’s frame is being replaced', () => {
+    const moving = openTab('https://moving.example/')
+    Object.defineProperty(moving.wc, 'mainFrame', {
+      get() {
+        throw new Error('Render frame was disposed before WebFrameMain could be accessed')
+      },
+    })
+    const steady = openTab('https://steady.example/')
+    const sent: unknown[] = []
+    steady.wc.mainFrame.send = (...a) => sent.push(a)
+    settings.sitePermissionDefaults = { notifications: 'block' }
+    expect(() => controller.refresh()).not.toThrow()
+    expect(sent).toHaveLength(1)
+  })
 })
 
 describe('popups and views without a tab', () => {
