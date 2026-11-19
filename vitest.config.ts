@@ -15,5 +15,10 @@ export default defineConfig({
   test: {
     include: ['tests/**/*.test.ts'],
     environment: 'node',
+    // On Windows runners, file access sometimes stalls for tens of seconds while the engine
+    // tests start their stand-in programs (likely Defender scanning them), so a test that
+    // takes a second elsewhere can wait far past Vitest's defaults. Other platforms keep them.
+    testTimeout: process.platform === 'win32' ? 120_000 : 5_000,
+    hookTimeout: process.platform === 'win32' ? 120_000 : 10_000,
   },
 })
