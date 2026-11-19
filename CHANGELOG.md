@@ -2,6 +2,10 @@
 
 All notable changes to Atelier. Versions follow [semantic versioning](https://semver.org/); dates are release dates.
 
+## 1.6.1 (2026-11-19) — Updates work
+
+- **Atelier updates itself.** On Mac, Atelier couldn’t check for new versions and showed Update failed: no release could update itself so far. It now finds new versions and updates itself. If you have 1.6.0 or older, download 1.6.1 once from the website; after that, updates come by themselves. (The Windows installer isn’t code-signed yet, so it doesn’t update itself; download new versions from the website.)
+
 ## 1.6.0 (2026-11-19) — Your Claude subscription
 
 - **Use your Claude subscription.** Companions can now run on your own paid Claude plan, next to your Anthropic API key. Atelier runs Claude Code, Anthropic’s own program, on your computer, signed in with your own Claude account through Anthropic’s own sign-in; Atelier never sees it. Choose it in Settings › Model and key. If Claude Code isn’t installed yet, How to install Claude Code opens Anthropic’s guide.
