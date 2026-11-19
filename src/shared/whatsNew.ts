@@ -12,6 +12,18 @@ import type { WhatsNewEntry } from './updates'
 // card combines every entry since the version you last saw.
 export const WHATS_NEW: readonly WhatsNewEntry[] = [
   {
+    version: '1.6.1',
+    date: '2026-11-19',
+    title: 'Updates work',
+    highlights: [
+      {
+        title: `${BRAND_NAME} updates itself`,
+        body: `${BRAND_NAME} couldn’t check for new versions and showed Update failed. It now finds them and updates itself, as it was meant to.`,
+        platforms: ['darwin'],
+      },
+    ],
+  },
+  {
     version: '1.6.0',
     date: '2026-11-19',
     title: 'Your Claude subscription',
