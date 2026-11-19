@@ -27,6 +27,7 @@ export const chat = {
   'chat.stepLimit.title': '{name} took {steps} steps and paused',
   'chat.stepLimit.body': 'Continue to let {name} keep going, or type a message to change direction.',
   'chat.stepLimit.continue': 'Continue',
+  'chat.stepLimit.settings': 'Step limit settings',
   'chat.stopped.user': 'Stopped',
   'chat.stopped.interrupt': 'Interrupted by your message',
   'chat.stopped.error': 'Stopped after an error',

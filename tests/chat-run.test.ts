@@ -121,7 +121,7 @@ function fakeTabs() {
 
 const presets: CompanionPreset[] = [{ id: 'nova', name: 'Nova', tagline: '', personality: 'Curious.', look: DEFAULT_LOOK }]
 
-function setup(script: (request: Request, n: number) => Turn, options: { confirm?: boolean; focus?: ElementDescription | null; online?: { value: boolean; listeners: Array<(on: boolean) => void> }; memoryGate?: Promise<void> } = {}) {
+function setup(script: (request: Request, n: number) => Turn, options: { confirm?: boolean; focus?: ElementDescription | null; online?: { value: boolean; listeners: Array<(on: boolean) => void> }; memoryGate?: Promise<void>; unlimitedSteps?: () => boolean } = {}) {
   const dir = mkdtempSync(join(tmpdir(), 'atelier-run-'))
   const companions = new CompanionStore(dir, { presets: () => presets })
   const chats = new ChatStore(dir, FIRST_COMPANION_ID)
@@ -133,7 +133,7 @@ function setup(script: (request: Request, n: number) => Turn, options: { confirm
   const online = options.online
   const host: AgentHost = new AgentHost({
     settings: {
-      get: () => ({ model: 'claude-opus-5-5', effort: 'high', webTools: true, memory: true, confirmConsequentialActions: options.confirm ?? true }),
+      get: () => ({ model: 'claude-opus-5-5', effort: 'high', webTools: true, memory: true, confirmConsequentialActions: options.confirm ?? true, unlimitedSteps: options.unlimitedSteps?.() ?? false }),
       view: () => ({ hasApiKey: true }),
       apiKey: () => 'test-key',
     },
@@ -321,6 +321,38 @@ describe('step limit and continue (CH-14)', () => {
     expect(users(t.host.view(id).log)).toEqual(['A very long task'])
     expect(t.host.view(id).log.some((e) => e.type === 'text-delta' && e.text === 'All done.')).toBe(true)
     expect(() => t.host.continue(id)).toThrow(/nothing to continue/)
+  })
+
+  it('runs past the cap without a notice when No step limit is on', async () => {
+    let steps = 0
+    const t = setup(
+      () => {
+        steps++
+        return steps <= 90 ? { tools: [{ name: 'list_tabs', input: {} }] } : { text: 'All done.' }
+      },
+      { unlimitedSteps: () => true },
+    )
+    const id = t.host.start('A very long task')
+    await until(() => t.chats.summary(id)?.status === 'finished' && !t.host.isRunning(id), 'finished')
+    expect(t.requests).toHaveLength(91)
+    expect(t.eventsOf(id).some((e) => e.type === 'step-limit')).toBe(false)
+    expect(t.host.view(id).log.some((e) => e.type === 'text-delta' && e.text === 'All done.')).toBe(true)
+  })
+
+  it('picks the setting up mid-run, from the next step', async () => {
+    let steps = 0
+    let unlimited = true
+    const t = setup(
+      () => {
+        steps++
+        if (steps === 70) unlimited = false // Turned back on while the run is past the usual cap.
+        return { tools: [{ name: 'list_tabs', input: {} }] }
+      },
+      { unlimitedSteps: () => unlimited },
+    )
+    const id = t.host.start('A very long task')
+    await until(() => t.chats.summary(id)?.status === 'finished', 'step limit')
+    expect(t.eventsOf(id).find((e) => e.type === 'step-limit')).toMatchObject({ steps: 70 })
   })
 })
 

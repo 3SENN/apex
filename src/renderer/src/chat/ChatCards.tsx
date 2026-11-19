@@ -106,6 +106,9 @@ export function SaveErrorNotice({ chatId, error }: { chatId: string; error: stri
 // ---- step limit and stop (CH-14, CH-17) ----
 
 type StepLimitItem = Extract<LogItem, { kind: 'step-limit' }>
+
+/** Settings › Model and key, scrolled to No step limit. */
+export const STEP_LIMIT_SETTINGS_URL = 'atelier://settings/model?highlight=step-limit'
 type StoppedItem = Extract<LogItem, { kind: 'stopped' }>
 
 export interface StepLimitCardProps {
@@ -137,11 +140,11 @@ export function StepLimitCard({ chatId, item, name, canContinue, onAct }: StepLi
         <p className="chat-card__title">{t('chat.stepLimit.title', { name, steps: item.steps })}</p>
         {canContinue && <p className="chat-card__body">{t('chat.stepLimit.body', { name })}</p>}
       </div>
-      {canContinue && (
-        <div className="chat-card__actions">
-          <Button size="sm" variant="primary" className="chat-co-button" icon={<Play size={13} />} loading={busy} onClick={() => void go()}>{t('chat.stepLimit.continue')}</Button>
-        </div>
-      )}
+      <div className="chat-card__actions">
+        {canContinue && <Button size="sm" variant="primary" className="chat-co-button" icon={<Play size={13} />} loading={busy} onClick={() => void go()}>{t('chat.stepLimit.continue')}</Button>}
+        {/* The step limit's own setting, highlighted, so you can turn it off. */}
+        <Button size="sm" variant={canContinue ? 'ghost' : 'secondary'} onClick={() => void call('pages', 'open', STEP_LIMIT_SETTINGS_URL)}>{t('chat.stepLimit.settings')}</Button>
+      </div>
     </div>
   )
 }

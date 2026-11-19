@@ -25,6 +25,7 @@ export const chat = {
   'chat.stepLimit.title': '{name} heeft {steps} stappen gezet en is gepauzeerd',
   'chat.stepLimit.body': 'Kies Ga door om {name} verder te laten gaan, of typ een bericht om een andere richting te kiezen.',
   'chat.stepLimit.continue': 'Ga door',
+  'chat.stepLimit.settings': 'Instellingen stappenlimiet',
   'chat.stopped.user': 'Gestopt',
   'chat.stopped.interrupt': 'Onderbroken door je bericht',
   'chat.stopped.error': 'Gestopt na een fout',

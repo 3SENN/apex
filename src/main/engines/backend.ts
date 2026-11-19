@@ -5,7 +5,7 @@
 
 import type { BetaMessageParam } from '@anthropic-ai/sdk/resources/beta/messages/messages'
 import type { ChatErrorCode } from '@shared/chatErrors'
-import type { MessageDetails } from '@shared/chats'
+import { MAX_STEPS, type MessageDetails } from '@shared/chats'
 import type { EngineId } from '@shared/engine'
 import type { LibraryFileRef } from '@shared/files'
 import type { AgentEvent, Effort } from '@shared/ipc'
@@ -21,8 +21,12 @@ export type DocumentBlock = { type: 'document'; source: { type: 'base64'; media_
 /** One block of a message for another engine: text and images (UserBlock), or a PDF document. */
 export type TurnBlock = UserBlock | DocumentBlock
 
-/** The most model steps one run takes before it stops for Continue, on every engine (CH-14). */
-export const MAX_STEPS = 60
+export { MAX_STEPS }
+
+/** CH-14: the step cap a run keeps to: MAX_STEPS, or none with Settings › Model and key › No step limit. */
+export function stepCap(unlimited: boolean | undefined): number {
+  return unlimited === true ? Number.POSITIVE_INFINITY : MAX_STEPS
+}
 
 // The seam between a chat and whatever runs its model turns. The API-key
 // engine is the conversation loop in agent/session.ts; a build can add
@@ -59,6 +63,8 @@ export interface BackendTurn {
   connectors: readonly ResolvedConnector[]
   /** DC-15: this message's effort when a quick decision moved it from the chat's; absent: the chat's. */
   effort?: Effort
+  /** CH-14: the step cap right now, read before each new step so the setting applies mid-run; absent: MAX_STEPS. */
+  maxSteps?(): number
   /** Library › Files, for files the reply makes; undefined while the files feature isn't up. */
   library?(): LibraryFiles | undefined
   /** The reply made a file and it is in Library › Files now: the chat shows its card. */
