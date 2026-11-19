@@ -173,14 +173,33 @@ class ElectronUpdaterBackend extends EventEmitter<UpdaterBackendEvents> implemen
 }
 
 /**
+ * electron-updater's `autoUpdater` from the module `import()` returns.
+ * electron-updater is CommonJS and defines `autoUpdater` with a lazy getter,
+ * which Node's import of a CommonJS module can't see as a named export: the
+ * named one is undefined and only `default` (its module.exports) has it.
+ * A bundler that rewrites the import to require() gives the named one.
+ */
+export function pickAutoUpdater(mod: unknown): AppUpdater {
+  const named = (mod as { autoUpdater?: AppUpdater } | null)?.autoUpdater
+  const fromDefault = (mod as { default?: { autoUpdater?: AppUpdater } } | null)?.default?.autoUpdater
+  const updater = named ?? fromDefault
+  if (!updater || typeof updater.checkForUpdates !== 'function') throw new Error('electron-updater has no autoUpdater')
+  return updater
+}
+
+/** Loads electron-updater lazily, so tests and unpackaged runs never load it unless asked. */
+export async function loadAutoUpdater(): Promise<AppUpdater> {
+  return pickAutoUpdater(await import('electron-updater'))
+}
+
+/**
  * The real backend: electron-updater with GitHub Releases from the packaged
  * app-update.yml. It never downloads on its own (Atelier asks first unless
  * autoDownloadUpdates is on), installs a ready update on quit, never
  * downgrades, and logs through Atelier's redacting log.
  */
 export async function createElectronUpdaterBackend(): Promise<UpdaterBackend> {
-  // Loaded lazily so tests and unpackaged runs never load electron-updater.
-  const { autoUpdater } = await import('electron-updater')
+  const autoUpdater = await loadAutoUpdater()
   autoUpdater.autoDownload = false
   autoUpdater.autoInstallOnAppQuit = true
   autoUpdater.allowDowngrade = false
