@@ -14,6 +14,7 @@ import type { SupportFeed, UpdateStatus } from '@shared/updates'
 import { commands } from '../commands'
 import type { WindowContext } from '../features/types'
 import { isQuittingForUpdate, showWhatsNewIfDue, updatesRuntime } from '../features/updates'
+import { loadAutoUpdater } from '../updates/backend'
 import { mainT } from '../i18n/mainT'
 import { Chrome, assert, sleep, waitFor } from '../smokeKit'
 import type { SmokeContext } from '../smokeBrowser/types'
@@ -278,6 +279,16 @@ const UNSUPPORTED_FEED: SupportFeed = { schema: 1, unsupported: [{ below: '999.0
 // ── checks ──
 
 export const checks: SmokeCheck[] = [
+  {
+    // Every release up to 1.6.0 read electron-updater's named export, which is undefined when the
+    // built main process imports it, so no update check could ever run. This loads it the same way
+    // the real backend does, without checking for anything.
+    name: 'updates: the real updater loads in this build (electron-updater’s autoUpdater is there)',
+    async run() {
+      const updater = await loadAutoUpdater()
+      assert(typeof updater.checkForUpdates === 'function' && typeof updater.quitAndInstall === 'function', 'electron-updater gave no usable autoUpdater')
+    },
+  },
   {
     name: 'updates: smoke updates through FakeUpdaterBackend on a manual clock, never the network',
     async run(ctx) {
