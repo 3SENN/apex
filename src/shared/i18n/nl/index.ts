@@ -56,7 +56,7 @@ import { translate } from './translate'
 import { decisions } from './decisions'
 import { permissionsHub } from './permissionsHub'
 // The engines a build adds besides the API key (empty from the public stubs).
-import { engines } from '@internal/engines/i18n/nl'
+import { engines } from '@engines/i18n/nl'
 
 /** Every Dutch fragment, under the same area names as EN_FRAGMENTS. */
 export const NL_FRAGMENTS = {

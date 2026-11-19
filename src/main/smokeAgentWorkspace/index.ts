@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { EXTRA_SMOKE_SHOTS } from '@internal/engines/main'
+import { EXTRA_SMOKE_SHOTS } from '@engines/main'
 import type { SmokeGroup, ShotSpec, SmokeCheck } from '../smokeBrowser/types'
 import * as agent from './agent'
 import * as chat from './chat'

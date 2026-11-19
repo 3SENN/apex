@@ -7,8 +7,8 @@ import { BRAND_NAME } from '@shared/branding'
 import { EventEmitter } from 'node:events'
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import type { ExtraEngineId } from '@internal/engines/shared'
-import { createExtraEngines } from '@internal/engines/main'
+import type { ExtraEngineId } from '@engines/shared'
+import { createExtraEngines } from '@engines/main'
 import type { EngineStatus } from '@shared/engine'
 import { McpServer } from '../mcp/server'
 import { OUTSIDE_PATH, OutsideAccess, type OutsideDeps } from '../mcp/external'
@@ -36,7 +36,7 @@ const PROBE_TIMEOUT_MS = 10_000
 export interface EngineServiceDeps extends Omit<ExtraEnginesDeps, 'endpoint' | 'changed'> {
   apiKeyState(): EngineStatus['apiKey']['state']
   outside: Omit<OutsideDeps, 'dir' | 'enabled' | 'tabs' | 'onChange'>
-  /** Tests and builds without them pass their own engines; by default the build's (`@internal/engines/main`). */
+  /** Tests and builds without them pass their own engines; by default the build's (`@engines/main`). */
   extras?(deps: ExtraEnginesDeps): ExtraEngines
   /** Tests replace the process runner and the shell (Add for me). */
   run?: (path: string, args: readonly string[], options: RunOptions) => Promise<RunResult>

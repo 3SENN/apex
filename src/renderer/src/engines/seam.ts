@@ -3,9 +3,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// What the renderer takes from `@internal/engines/renderer`: the parts of the
-// interface that belong to engines a build adds besides the API key
-// (src/shared/engine.ts). Public builds add none (src/stubs/engines/renderer.ts).
+// What the renderer takes from `@engines/renderer`: the parts of the
+// interface that belong to the engines besides the API key
+// (src/shared/engine.ts): your Claude subscription (src/engines/renderer.tsx).
 import type { ComponentType, ReactNode } from 'react'
 import type { ChatErrorCode } from '@shared/chatErrors'
 import type { EngineId, EngineStatus } from '@shared/engine'

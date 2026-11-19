@@ -58,8 +58,9 @@ only in the maintainer's checkout (see [docs/architecture.md](docs/architecture.
 ## Building from source
 
 Requirements: Node.js 22.12 or later (an even-numbered release) and npm. On Windows, the .NET 8 SDK for the speech
-helper. To use the companion you need an Anthropic API key; the welcome flow asks for it and stores it encrypted in your
-system keychain.
+helper. To use the companion you need an Anthropic API key, which the welcome flow stores encrypted in your system
+keychain, or your own paid Claude plan with [Claude Code](https://code.claude.com/docs/en/setup) installed
+([how that works](docs/claude-subscription.md)).
 
 ```bash
 git clone https://github.com/3SENN/atelier.git

@@ -33,7 +33,7 @@ import type { RichRequest } from '../src/main/agent/richRequest'
 // The request half: attachments into content blocks, the Files API cache
 // with its base64 fallback, the 32 MB cap, and the request matrix
 // (attachments × engines × documents × models). Another engine's own blocks
-// are its backend's (internal/tests for the ones a build adds).
+// are its backend's (the Claude subscription engine's are in its own tests).
 // The Files API is a fake; nothing leaves the machine.
 
 const ref = (id: string, kind: AttachmentKind, name: string, extra: Partial<AttachmentRef> = {}): AttachmentRef => ({ id, kind, name, state: 'ready', error: null, size: 10, mediaType: 'application/octet-stream', thumbnail: null, ...extra })

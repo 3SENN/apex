@@ -31,7 +31,7 @@ import { atelier, call, errorText, useAppEvent } from '../api'
 import { t } from '../i18n/useT'
 import { Button, Spinner, cx, toast, useNow } from '../ui'
 import { detailsText, errorCard, PICK_MODEL_EVENT, retrySecondsLeft, shouldAutoRetry, type ErrorAction, type ErrorIcon } from './logic/errors'
-import { ENGINE_UI } from '@internal/engines/renderer'
+import { ENGINE_UI } from '@engines/renderer'
 
 // The chat cards: the step-limit card (CH-14), the stop mark (CH-17),
 // error cards by type (SS-03), the save-failure notice (SS-05), the offline

@@ -54,7 +54,7 @@ import { translate } from './translate'
 import { decisions } from './decisions'
 import { permissionsHub } from './permissionsHub'
 // The engines a build adds besides the API key (empty from the public stubs).
-import { engines } from '@internal/engines/i18n/en'
+import { engines } from '@engines/i18n/en'
 
 /** Every fragment, by area, so the key test can find duplicates across them. */
 export const EN_FRAGMENTS = {

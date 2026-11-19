@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { EXTRA_ERROR_CARDS, extraErrorBody } from '@internal/engines/cards'
+import { EXTRA_ERROR_CARDS, extraErrorBody } from '@engines/cards'
 import { modelName, type ChatErrorCode, type ChatErrorFacts } from '@shared/chatErrors'
 import type { MessageKey } from '@shared/i18n/core'
 
@@ -11,7 +11,7 @@ import type { MessageKey } from '@shared/i18n/core'
 // a line under it) and the action it offers. Older logs carry no code; their
 // text still shows, with Retry, and a key mention still opens settings.
 // The engines a build adds bring the cards for their own codes
-// (`@internal/engines/cards`).
+// (`@engines/cards`).
 
 export type ErrorTone = 'info' | 'warning' | 'error'
 

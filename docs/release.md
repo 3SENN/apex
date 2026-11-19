@@ -24,7 +24,7 @@ Official builds keep their identity in the private `internal/` folder's `release
 ## Builds for other people vs your own
 
 A build that updates itself from a GitHub release repo goes to other people, so it must be a **public release**
-(`ATELIER_PUBLIC_RELEASE=1`): it carries only the public engines, never anything from the private `internal/` folder.
+(`ATELIER_PUBLIC_RELEASE=1`): it takes updates from the public repo and never bundles anything from the private `internal/` folder.
 `release.mjs` refuses a build with an update feed that isn't one. A maintainer's own build sets no release repo, so its
 updater stays off. A published official release therefore looks like this:
 
@@ -53,7 +53,7 @@ The installers register Atelier as a browser the OS can offer. They never take a
 | Variable | Meaning | Default |
 |---|---|---|
 | `ATELIER_CHANNEL` | `dev`, `beta` or `stable`. A beta's version must look like `1.2.0-beta.1`; a stable one has no pre-release tag. | `dev` (never released) |
-| `ATELIER_PUBLIC_RELEASE` | `1` for a build anyone may download. It always offers the API key engine only (see "Public builds"). The release workflow sets it unless the repository variable is `0`. | off |
+| `ATELIER_PUBLIC_RELEASE` | `1` for a build anyone may download (see "Public builds"). The release workflow sets it unless the repository variable is `0`. | off |
 | `ATELIER_RELEASE_OWNER`, `ATELIER_RELEASE_REPO` | The GitHub repo releases go to. Without them, no update feed is written and the updater stays off. | none |
 | `ATELIER_SUPPORT_EMAIL`, `ATELIER_WEBSITE` | Used in the feedback and problem-report drafts, and in About. The website must be https. | empty |
 | `ATELIER_UPDATES` | `0` turns the updater off even when it could work. | on when possible |
@@ -196,7 +196,7 @@ The official app id moved from `com.atelier.browser` to `com.sennechin.atelier`.
 4. **Commit, tag `v<version>` and push the tag** yourself. `.github/workflows/release.yml` then:
    1. checks that the tag matches `package.json` and opens a draft release;
    2. builds macOS (both architectures in one job, so one `latest-mac.yml` lists both), Windows and Linux;
-   3. on each, runs `scripts/release/release.mjs --publish`. That script checks the branding (official only), the version, the what's-new entry and the tag. It builds with the release defines, builds the native helpers (atelier-speech, haptics, the calendar helper, and the Windows helper with .NET 8) and the licence list, then packages, signs and notarizes. Next it writes `SHA256SUMS` and `atelier-support.json`, and runs `verify.mjs`: codesign, spctl, stapler, Authenticode, the fuse check, Info.plist, the resources, and the smoke test inside the packaged app. A public build must also pass "release: a public build offers only the API key engine". Only when every check passed does it upload the installers, blockmaps and `latest*.yml` to the draft, with the GitHub CLI (`gh`);
+   3. on each, runs `scripts/release/release.mjs --publish`. That script checks the branding (official only), the version, the what's-new entry and the tag. It builds with the release defines, builds the native helpers (atelier-speech, haptics, the calendar helper, and the Windows helper with .NET 8) and the licence list, then packages, signs and notarizes. Next it writes `SHA256SUMS` and `atelier-support.json`, and runs `verify.mjs`: codesign, spctl, stapler, Authenticode, the fuse check, Info.plist, the resources, and the smoke test inside the packaged app. A public build must also pass "release: a public build offers your Claude subscription and the API key". Only when every check passed does it upload the installers, blockmaps and `latest*.yml` to the draft, with the GitHub CLI (`gh`);
    4. adds one `SHA256SUMS` and `atelier-support.json` covering every platform.
 5. **Review the draft on GitHub,** install it on a clean machine, then publish it. Until it's published, nobody's updater sees it.
 
@@ -224,9 +224,9 @@ Updates only move forward, so a bad release is replaced, not withdrawn:
 
 ## Public builds
 
-`ATELIER_PUBLIC_RELEASE=1` always builds with the API key engine only. The maintainer builds public releases with the private `internal/` folder present (for `internal/release.env`), so `scripts/internal.mjs` takes `@internal/engines` from the public stubs in that case and runs none of the folder's engine packaging steps (`internal/build.json`): engines that need a provider's approval before a public release may offer them never reach one.
+A public release offers both engines: the API key and your Claude subscription, which runs the Claude Code that people install from Anthropic ([claude-subscription.md](claude-subscription.md)). It never bundles Claude Code: the maintainer's private packaging step that can bundle it in a personal build refuses `ATELIER_PUBLIC_RELEASE=1`.
 
-The packaged smoke test fails a public release that offers any engine besides the API key.
+The packaged smoke test fails a public release that doesn't offer both engines.
 
 ## Troubleshooting
 

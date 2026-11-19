@@ -376,7 +376,7 @@ export const chat = {
   'chat.mainErrors.yourAnthropicAccountHas': 'Your Anthropic account has reached its quota or has no credit left. Check it in the Anthropic console.',
   'chat.mainErrors.yourDiskIsFull': 'Your disk is full, so {brand} couldn’t save this chat. Free up some space, then try again.',
   'chat.mainService.anAtelierExport': 'an export from {brand}',
-  'chat.mainService.atelierCanTFind': '{brand} can’t find Claude Code on this Mac, so run the command yourself.',
+  'chat.mainService.atelierCanTFind': '{brand} can’t find Claude Code on this computer, so run the command yourself.',
   'chat.mainService.atelierIsAddedTo': '{brand} is added to Claude Code. New Claude Code sessions can use its browser tools.',
   'chat.mainService.claudeCodeAlreadyHas': 'Claude Code already has a server named “atelier”. Remove it with “claude mcp remove --scope user atelier”, then try again.',
   'chat.mainService.claudeCodeDidnT': 'Claude Code didn’t add {brand}{value}',

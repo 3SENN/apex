@@ -30,8 +30,8 @@ concurrency:
 env:
   # A tag like v1.2.0-beta.1 is a beta; everything else is stable.
   ATELIER_CHANNEL: ${{ contains(github.ref_name, '-beta.') && 'beta' || 'stable' }}
-  # Public builds offer only the API key engine unless the
-  # repository variable ATELIER_PUBLIC_RELEASE is set to 0 (scripts/internal.mjs).
+  # Builds released here are public builds (updates from this repository) unless the
+  # repository variable ATELIER_PUBLIC_RELEASE is set to 0.
   ATELIER_PUBLIC_RELEASE: ${{ vars.ATELIER_PUBLIC_RELEASE || '1' }}
   # Releases published from 3SENN/atelier are official Atelier builds: the name, logo and
   # icons in branding/official (TRADEMARKS.md). Anywhere else (a fork) this is 0, and

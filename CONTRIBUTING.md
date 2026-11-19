@@ -53,7 +53,7 @@ npm run smoke        # builds the app and drives it end to end in real Electron 
 | `src/renderer/src/` | The interface (React): sidebar, toolbar, chats, the companion, settings and every built-in page |
 | `src/shared/` | Contracts shared by both sides: IPC and service types, URL rules, i18n catalogues, branding |
 | `src/kit/` | The kit that packs and apps use to build on Atelier |
-| `src/stubs/` | Public stand-ins for optional parts that official builds add |
+| `src/engines/` | The engines besides the API key: your Claude subscription, which runs Claude Code ([docs/claude-subscription.md](docs/claude-subscription.md)) |
 | `native/` | Small native helpers: speech, calendar, translation and haptics |
 | `branding/` | The official and unofficial branding (names, icons, logo, default companion) |
 | `scripts/` | Build, release, asset and smoke-test tooling |

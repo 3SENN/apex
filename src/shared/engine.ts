@@ -4,11 +4,10 @@
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // Contract for the engines that power companions (ST-58 to ST-60). Every
-// build runs chats on your Anthropic API key; a build can add engines of its
-// own through `@internal/engines/shared` (src/stubs/engines/shared.ts adds
-// none). Atelier has no plans, credits or quotas: where other apps show those,
+// build runs chats on your Anthropic API key or on your Claude subscription
+// (`@engines/shared`, src/engines). Atelier has no plans, credits or quotas: where other apps show those,
 // Atelier shows this status.
-import { EXTRA_ENGINE_IDS, EXTRA_ENGINE_LABELS, type ExtraEngineStatus } from '@internal/engines/shared'
+import { EXTRA_ENGINE_IDS, EXTRA_ENGINE_LABELS, type ExtraEngineStatus } from '@engines/shared'
 
 export const ENGINES = ['api-key', ...EXTRA_ENGINE_IDS] as const
 export type EngineId = (typeof ENGINES)[number]

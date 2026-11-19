@@ -4,18 +4,13 @@
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // The private internal/ folder (a separate, private repo checked out inside
-// this one and gitignored): the parts of official Atelier builds that can't be
-// published, such as engines that need a provider's approval before a
-// public release may offer them, and the maintainer's signing values
-// (internal/release.env). Public code imports those parts as
-// `@internal/<area>/...`; without the folder, the same import resolves to the
-// stubs in src/stubs/<area>, so a build from this repository is complete.
+// this one and gitignored): the maintainer's own files, never published: the
+// signing values (internal/release.env), private planning documents, and
+// optional packaging steps (internal/build.json). No app code lives there, so a
+// build from this repository alone is complete.
 //
 //   node scripts/internal.mjs              prints which mode a build would use
 //   node scripts/internal.mjs prepackage   runs the folder's packaging steps (npm run package)
-//
-// TypeScript resolves `@internal/*` the same way through the fallback list in
-// tsconfig.web.json and tsconfig.node.json.
 
 import { spawnSync } from 'node:child_process'
 import { existsSync, readFileSync } from 'node:fs'
@@ -44,46 +39,9 @@ export function isInternal(env = process.env, repo = REPO) {
   return env.ATELIER_INTERNAL !== '0' && internalPresent(repo)
 }
 
-/** The folder `@internal` resolves to: internal/, or the public stubs. */
-export function internalRoot(env = process.env, repo = REPO) {
-  return isInternal(env, repo) ? join(repo, 'internal') : join(repo, 'src', 'stubs')
-}
-
-/** Whether ATELIER_PUBLIC_RELEASE asks for a public release (read as scripts/release/config.mjs reads it). */
-export function publicRelease(env = process.env) {
-  const value = typeof env.ATELIER_PUBLIC_RELEASE === 'string' ? env.ATELIER_PUBLIC_RELEASE.trim() : ''
-  return value === '1' || value === 'true'
-}
-
 /**
- * Areas of internal/ that a public release leaves out. The maintainer builds
- * public releases with the folder present (for release.env), so these areas
- * come from the stubs then, and the release has none of their code.
- */
-export const PRIVATE_AREAS = ['engines']
-
-/** Whether a build takes `internal/<area>`: the folder is in use, and a public release never takes a private area. */
-export function areaIncluded(area, env = process.env, repo = REPO) {
-  return isInternal(env, repo) && !(PRIVATE_AREAS.includes(area) && publicRelease(env))
-}
-
-/**
- * The Vite alias for `@internal` (an object to spread into `resolve.alias`).
- * An area the build leaves out comes first, pointing at its stubs, so it
- * wins over the folder's own alias.
- */
-export function internalAlias(env = process.env, repo = REPO) {
-  const alias = {}
-  for (const area of PRIVATE_AREAS) {
-    if (isInternal(env, repo) && !areaIncluded(area, env, repo)) alias[`@internal/${area}`] = join(repo, 'src', 'stubs', area)
-  }
-  alias['@internal'] = internalRoot(env, repo)
-  return alias
-}
-
-/**
- * What the internal folder adds to packaging (internal/build.json), for the
- * areas this build takes: `prepackage` scripts to run before electron-builder
+ * What the internal folder adds to packaging (internal/build.json):
+ * `prepackage` scripts to run before electron-builder
  * and `extraResources` per platform key (mac, win, linux). Empty without it.
  */
 export function internalBuild(env = process.env, repo = REPO) {
@@ -95,8 +53,8 @@ export function internalBuild(env = process.env, repo = REPO) {
   } catch {
     return out
   }
-  for (const [area, part] of Object.entries(spec?.areas ?? {})) {
-    if (!areaIncluded(area, env, repo) || !part || typeof part !== 'object') continue
+  for (const part of Object.values(spec?.areas ?? {})) {
+    if (!part || typeof part !== 'object') continue
     for (const script of Array.isArray(part.prepackage) ? part.prepackage : []) if (typeof script === 'string') out.prepackage.push(script)
     for (const [platform, list] of Object.entries(part.extraResources ?? {})) {
       if (Array.isArray(list)) out.extraResources[platform] = [...(out.extraResources[platform] ?? []), ...list]
@@ -115,11 +73,6 @@ export function runPrepackage(env = process.env, repo = REPO) {
   return prepackage.length
 }
 
-/** The build-time define the app reads: whether the internal folder is built in. */
-export function internalDefines(env = process.env, repo = REPO) {
-  return { __ATELIER_INTERNAL__: JSON.stringify(isInternal(env, repo)) }
-}
-
 /** A one-line description of the mode, for scripts that print it. */
 export function describeMode(env = process.env, repo = REPO) {
   if (isInternal(env, repo)) return 'with the internal/ folder'
@@ -135,5 +88,5 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       console.error(`[internal] ${err instanceof Error ? err.message : String(err)}`)
       process.exit(1)
     }
-  } else console.log(`Atelier builds ${describeMode()}${isInternal() && !areaIncluded('engines') ? ', with the public engines only (ATELIER_PUBLIC_RELEASE)' : ''}.`)
+  } else console.log(`Atelier builds ${describeMode()}.`)
 }

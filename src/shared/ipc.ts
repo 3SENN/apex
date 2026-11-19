@@ -8,7 +8,7 @@
 // connect main to the agent bridge preload inside each tab. Nothing here is
 // ever exposed to a web page's own JavaScript world.
 import type { EngineId, ExternalTabs } from './engine'
-import type { ExtraEngineSettings } from '@internal/engines/shared'
+import type { ExtraEngineSettings } from '@engines/shared'
 import type { SidebarAppPin } from './sidebarApps'
 import type { AppLanguageSetting } from './i18n/locales'
 import type { ProfileHue } from './profile'

@@ -382,6 +382,7 @@ export const firstRun = {
   'firstRun.welcomeSteps.presetCompanions': 'Preset-companions',
   'firstRun.welcomeSteps.recommended': 'Aanbevolen',
   'firstRun.welcomeSteps.runsOnClaude': '{name} draait op Claude. Plak een Anthropic API-sleutel (versleuteld bewaard in de sleutelhanger van je systeem en alleen naar Anthropic verstuurd).',
+  'firstRun.welcomeSteps.canBeWrong': '{name} kan zich vergissen. Controleer belangrijke feiten voordat je erop vertrouwt.',
   'firstRun.welcomeSteps.save': 'Bewaar',
   'firstRun.welcomeSteps.shuffleTheLook': 'Schud het uiterlijk',
   'firstRun.welcomeSteps.sidebar': 'Zijbalk',

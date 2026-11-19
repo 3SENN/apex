@@ -3,18 +3,16 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import type { ExtraEngineId, ExtraEngineServices, ExtraEngineSettings, ExtraEngineStatus } from '@internal/engines/shared'
+import type { ExtraEngineId, ExtraEngineServices, ExtraEngineSettings, ExtraEngineStatus } from '@engines/shared'
 import type { EngineId, EngineSummary, ExternalTabs } from '@shared/engine'
 import type { Effort } from '@shared/ipc'
 import type { QuickEngine } from '../agent/quick'
 import type { McpRoute } from '../mcp/server'
 import type { AgentBackend } from './backend'
 
-// Engines besides the API key (ST-58). Public builds have none: the API key
-// is the conversation loop in agent/session.ts. A build with the private
-// internal/ folder adds engines through `@internal/engines/main`
-// (createExtraEngines; src/stubs/engines/main.ts is the empty one), and
-// everything engine-specific stays behind this interface: their backends,
+// Engines besides the API key (ST-58), which is the conversation loop in
+// agent/session.ts: your Claude subscription, through `@engines/main`
+// (createExtraEngines in src/engines/main.ts). Everything engine-specific stays behind this interface: their backends,
 // their status, their quick calls, their service methods and their settings.
 
 /** The settings the engines read. */

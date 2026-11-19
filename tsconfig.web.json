@@ -14,11 +14,11 @@
     "types": [],
     "paths": {
       "@shared/*": ["./src/shared/*"],
-      // The private internal/ folder when it is there, else the public stubs (scripts/internal.mjs).
-      "@internal/*": ["./internal/*", "./src/stubs/*"]
+      // The engines besides the API key (src/engines).
+      "@engines/*": ["./src/engines/*"]
     }
   },
-  "include": ["src/renderer/src/**/*", "src/renderer/preprocess/**/*", "src/shared/**/*", "src/kit/**/*", "src/stubs/**/*", "internal/engines/**/*"],
-  // Main-process parts of the stubs and the internal folder (tsconfig.node.json checks those).
-  "exclude": ["src/stubs/*/main.ts", "internal/*/main.ts", "internal/*/*/main/**/*"]
+  "include": ["src/renderer/src/**/*", "src/renderer/preprocess/**/*", "src/shared/**/*", "src/kit/**/*", "src/engines/**/*"],
+  // The engines' main-process parts (tsconfig.node.json checks those).
+  "exclude": ["src/engines/main.ts", "src/engines/*/main/**/*"]
 }

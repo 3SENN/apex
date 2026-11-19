@@ -350,7 +350,7 @@ export const chat = {
   'chat.mainErrors.yourAnthropicAccountHas': 'Je Anthropic-account heeft zijn quotum bereikt of heeft geen tegoed meer. Controleer het in de Anthropic-console.',
   'chat.mainErrors.yourDiskIsFull': 'Je schijf is vol, dus {brand} kon deze chat niet bewaren. Maak wat ruimte vrij en probeer het opnieuw.',
   'chat.mainService.anAtelierExport': 'een {brand}-export',
-  'chat.mainService.atelierCanTFind': '{brand} kan Claude Code niet vinden op deze Mac, dus voer de opdracht zelf uit.',
+  'chat.mainService.atelierCanTFind': '{brand} kan Claude Code niet vinden op deze computer, dus voer de opdracht zelf uit.',
   'chat.mainService.atelierIsAddedTo': '{brand} is toegevoegd aan Claude Code. Nieuwe Claude Code-sessies kunnen de browsertools gebruiken.',
   'chat.mainService.claudeCodeAlreadyHas': 'Claude Code heeft al een server met de naam “atelier”. Verwijder hem met “claude mcp remove --scope user atelier” en probeer het opnieuw.',
   'chat.mainService.claudeCodeDidnT': 'Claude Code heeft {brand} niet toegevoegd{value}',
