@@ -63,6 +63,8 @@ export const SETTINGS = defineSettings({
   model: { scope: 'app', schema: z.enum(MODELS), default: 'claude-opus-5-5' },
   effort: { scope: 'app', schema: z.enum(['low', 'medium', 'high', 'xhigh', 'max']), default: 'high' },
   confirmConsequentialActions: { scope: 'app', schema: z.boolean(), default: true },
+  /** CH-14: runs go on until they finish or you press Stop, instead of pausing for Continue after MAX_STEPS steps. */
+  unlimitedSteps: { scope: 'app', schema: z.boolean(), default: false },
   webTools: { scope: 'app', schema: z.boolean(), default: true },
   memory: { scope: 'app', schema: z.boolean(), default: true },
   onboarded: { scope: 'app', schema: z.boolean(), default: false },

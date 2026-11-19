@@ -273,6 +273,8 @@ export interface Settings extends ExtraEngineSettings {
   /** Notification requests show as a quiet address-bar chip instead of a prompt. */
   quietNotificationPrompts: boolean
   confirmConsequentialActions: boolean
+  /** CH-14: no step limit; a run goes on until it finishes or you press Stop. Applies from a run's next step. */
+  unlimitedSteps: boolean
   /** Settings › Quick decisions (docs/decisions.md). */
   decisions: import('./decisions').DecisionsSettings
   /** Server-side web search and fetch for the agent. Applies to new chats. */

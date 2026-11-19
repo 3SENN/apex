@@ -27,7 +27,7 @@ import { memoryCommandPaths } from '../memory'
 import type { PageBridge } from '../pageBridge'
 import { expandSkill, type ResolvedConnector } from '../stores'
 import type { TabManager } from '../tabs'
-import { MAX_STEPS, type AgentBackend, type BackendResult } from '../engines/backend' // One step cap for every engine
+import { stepCap, type AgentBackend, type BackendResult } from '../engines/backend' // One step cap for every engine
 import { BrowserToolExecutor, describeToolCall, errorMessage, runToolCalls, type ToolHandler } from './browserTool'
 import { systemPrompt } from './prompt'
 import type { ChatError } from '@shared/chatErrors'
@@ -223,7 +223,7 @@ function filesOf(client: Client): FilesApi | null {
 
 export interface SessionDeps {
   settings: {
-    get(): { model: string; effort: Effort; webTools: boolean; memory: boolean; confirmConsequentialActions: boolean; userName?: string; engine?: EngineId; documents?: boolean }
+    get(): { model: string; effort: Effort; webTools: boolean; memory: boolean; confirmConsequentialActions: boolean; userName?: string; engine?: EngineId; documents?: boolean; unlimitedSteps?: boolean }
     view(): { hasApiKey: boolean }
     apiKey(): string | null
   }
@@ -1279,6 +1279,11 @@ export class AgentSession {
     return wanted !== 'api-key' && isEngine(wanted) && this.#otherBackend(wanted) ? wanted : 'api-key'
   }
 
+  /** CH-14: the step cap right now: MAX_STEPS, or none with Settings › Model and key › No step limit. */
+  #maxSteps(): number {
+    return stepCap(this.#deps.settings.get().unlimitedSteps)
+  }
+
   /** The backend of an engine besides the API key, when this build has it (a saved chat may name one it doesn't). */
   #otherBackend(engine: string): AgentBackend | undefined {
     if (engine === 'api-key') return undefined
@@ -1326,6 +1331,7 @@ export class AgentSession {
       },
       connectors: this.#richChat.remoteConnectors(content.capabilities.connectorIds) ?? this.#deps.connectors.resolve(content.capabilities.connectorIds),
       ...(effort ? { effort } : {}), // DC-15
+      maxSteps: () => this.#maxSteps(), // CH-14
       tools: {
         execute: async (name, input, toolSignal) => {
           if (this.#agentTools.isClientTool(name)) return this.#agentTools.executeClient(name, input, toolSignal) // The same client tools over MCP
@@ -1361,7 +1367,9 @@ export class AgentSession {
       const found = server ? connectors.find((c) => c.name === server) : undefined
       return found ? { id: found.id, name: found.name } : undefined
     }
-    for (let step = 0; step < MAX_STEPS; step++) {
+    // CH-14: the cap is read before each step, so No step limit applies to a run that is already going.
+    let step = 0
+    for (; step < this.#maxSteps(); step++) {
       // A paused run waits here before its next model step; an interrupt ends it at this safe point.
       await this.#gate.wait(signal)
       if (interrupted.aborted) return
@@ -1491,7 +1499,7 @@ export class AgentSession {
     }
     // CH-14: a notice card with Continue, not an error.
     this.#paused = true
-    this.#emit({ type: 'step-limit', turnId: this.#turnId ?? randomUUID(), steps: MAX_STEPS })
+    this.#emit({ type: 'step-limit', turnId: this.#turnId ?? randomUUID(), steps: step })
     this.#richChat.partial({ stepLimit: true })
   }
 

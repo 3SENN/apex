@@ -282,5 +282,8 @@ export type AttachmentView =
   | { kind: 'meeting'; meetingId: string; title: string }
 
 export const MESSAGE_ATTACHMENTS_MAX = 4
+
+/** The most model steps one run takes before it stops for Continue, on every engine, unless Settings › No step limit is on (CH-14). */
+export const MAX_STEPS = 60
 /** 5 MB of base64 text. */
 export const IMAGE_ATTACHMENT_BASE64_MAX = 5 * 1024 * 1024

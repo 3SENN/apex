@@ -6,12 +6,13 @@
 // Settings › Model and key, and Settings › Agent permissions.
 import type { ReactElement } from 'react'
 import type { Effort, SettingsPatch, SettingsView } from '@shared/ipc'
+import { MAX_STEPS } from '@shared/chats'
 import { useT } from '../../i18n/useT'
 import { t as tx, type MessageKey } from '@shared/i18n/core'
 import { SegmentedControl, Select, Switch } from '../../ui'
 import { ApiKeyCard } from '../ApiKeyCard'
 import { CalendarAccessCard } from '../cards/CalendarAccessCard'
-import { Card, PageHeader, Row, Section } from '../kit'
+import { Card, PageHeader, Row, Section, SwitchRow } from '../kit'
 import { EngineSections } from './ModelAndKeyPage'
 // ST-12, ST-13
 import { ApprovalModeSection } from '../agent/ApprovalModeSection'
@@ -101,6 +102,18 @@ export function ModelPage({ settings, update, onSettings, onOpenSection }: PageP
             description={t('settings.abilities.documents.description')}
             checked={settings.documents}
             onChange={(documents) => update({ documents })}
+          />
+        </Card>
+      </Section>
+      {/* CH-14: the step limit; applies from a run's next step, so a running chat picks it up too. */}
+      <Section title={t('settings.model.longTasks')} note={t('settings.model.longTasks.note')}>
+        <Card>
+          <SwitchRow
+            anchor="step-limit"
+            label={t('settings.model.unlimitedSteps')}
+            description={t('settings.model.unlimitedSteps.description', { steps: MAX_STEPS })}
+            checked={settings.unlimitedSteps}
+            onChange={(unlimitedSteps) => update({ unlimitedSteps })}
           />
         </Card>
       </Section>

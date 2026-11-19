@@ -332,4 +332,4 @@ Extensions run on Electron's own `session.extensions` (`src/main/extensions/adap
 | Passwords, passkeys, autofill | Saved logins in a keychain-encrypted vault with autofill; passkeys still need the platform AutoFill APIs |
 | Chrome Web Store extensions | On Electron's own `session.extensions` behind an adapter (`src/main/extensions/adapter.ts`); Atelier verifies and unzips Web Store packages itself. `electron-chrome-extensions` can replace the adapter by widening its `apis` list |
 | Packs: add-ons people and companions build and share | [packs.md](packs.md): signed `.atelierpack` files, links, community indexes and updates; skills, site tweaks, accents, companions, connectors, panels, commands, page menu items and sandboxed agent tools; companions build, test and propose them, people review and install |
-| Long-session context management | 60-step cap plus server-side compaction as a per-chat capability (`src/main/agent/compaction.ts`) |
+| Long-session context management | 60-step cap (`MAX_STEPS`; off with the `unlimitedSteps` setting) plus server-side compaction as a per-chat capability (`src/main/agent/compaction.ts`) |

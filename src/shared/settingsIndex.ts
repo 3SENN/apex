@@ -40,6 +40,7 @@ export const SETTINGS_INDEX: SettingsIndexEntry[] = [
   { id: 'decisions-mode', page: 'decisions', title: 'decisions.mode', keywords: ['compare first', 'use it', 'compare decisions'], anchor: 'decisions-mode' },
   { id: 'decisions-uses', page: 'decisions', title: 'decisions.section.uses', keywords: ['group tabs by topic', 'effort per message', 'search or ask', 'labeling', 'label items', 'worth remembering', 'skills that fit', 'needs you', 'dictation', 'voice'], anchor: 'decisions-uses' },
   { id: 'decisions-summary', page: 'model', title: 'decisions.title', keywords: ['quick decisions', 'decision model'], anchor: 'decisions-summary' },
+  { id: 'step-limit', page: 'model', title: 'settings.model.unlimitedSteps', keywords: ['step limit', 'max steps', 'steps', 'no cap', 'unlimited', 'long tasks', 'continue', 'paused'], anchor: 'step-limit' },
   { id: 'warn-before-quit', page: 'general', title: 'settings.general.warnBeforeQuit', keywords: ['quit', 'warn', 'command q', 'close app'], anchor: 'warn-before-quit' },
   { id: 'confirm-close-tabs', page: 'general', title: 'settings.general.confirmCloseTabs', keywords: ['close tabs', 'confirm', 'window'], anchor: 'confirm-close-tabs' },
   { id: 'keep-awake', page: 'general', title: 'settings.general.keepAwake', keywords: ['sleep', 'awake', 'caffeinate', 'routines'], anchor: 'keep-awake' },
