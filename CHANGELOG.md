@@ -2,6 +2,13 @@
 
 All notable changes to Atelier. Versions follow [semantic versioning](https://semver.org/); dates are release dates.
 
+## 1.6.0 (2026-11-19) — Your Claude subscription
+
+- **Use your Claude subscription.** Companions can now run on your own paid Claude plan, next to your Anthropic API key. Atelier runs Claude Code, Anthropic’s own program, on your computer, signed in with your own Claude account through Anthropic’s own sign-in; Atelier never sees it. Choose it in Settings › Model and key. If Claude Code isn’t installed yet, How to install Claude Code opens Anthropic’s guide.
+- **No step limit.** A long task pauses for Continue after 60 steps. Turn on No step limit in Settings › Model and key to let it keep going until it’s done or you press Stop. The pause card has a button to the setting.
+- **Check what matters.** Companions can get things wrong. The welcome and Settings › Model and key now remind you to check important facts before you rely on them.
+- **All of it open source.** The code that runs Claude Code is now part of Atelier’s open-source code, in every build.
+
 ## 1.5.0 (2026-11-17) — Apex is now Atelier
 
 - **Apex is now Atelier.** The same browser, the same companion and everything you made, under a new name. An atelier is where you make things your own, and that is what Atelier is for.

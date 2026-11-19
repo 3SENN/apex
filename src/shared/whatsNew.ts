@@ -12,6 +12,25 @@ import type { WhatsNewEntry } from './updates'
 // card combines every entry since the version you last saw.
 export const WHATS_NEW: readonly WhatsNewEntry[] = [
   {
+    version: '1.6.0',
+    date: '2026-11-19',
+    title: 'Your Claude subscription',
+    highlights: [
+      {
+        title: 'Use your Claude subscription',
+        body: `Companions can now run on your own paid Claude plan. ${BRAND_NAME} runs Claude Code on your computer, signed in with your own Claude account. Choose it in Settings › Model and key.`,
+      },
+      {
+        title: 'No step limit',
+        body: 'A long task pauses for Continue after 60 steps. Turn on No step limit in Settings › Model and key to let it keep going until it’s done or you press Stop.',
+      },
+      {
+        title: 'Check what matters',
+        body: 'Companions can get things wrong. The welcome and Settings now remind you to check important facts before you rely on them.',
+      },
+    ],
+  },
+  {
     version: '1.5.0',
     date: '2026-11-17',
     title: BRANDING.official ? 'Apex is now Atelier' : `${BRAND_NAME} 1.5`,
