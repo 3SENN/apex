@@ -81,7 +81,7 @@ export const settings = {
   'settings.model.effort.max': 'Max',
   'settings.model.effort.max.title': 'Zo grondig als het model kan',
   'settings.model.title': 'Model en sleutel',
-  'settings.model.description': 'Wat je companions aandrijft: je Anthropic-sleutel of een andere engine, het standaardmodel en de inspanning, en wat ze mogen gebruiken.',
+  'settings.model.description': 'Wat je companions aandrijft: je Anthropic-sleutel of je Claude-abonnement, het standaardmodel en de inspanning, en wat ze mogen gebruiken. Companions kunnen zich vergissen, dus controleer belangrijke feiten voordat je erop vertrouwt.',
   'settings.model.apiKey': 'API-sleutel',
   'settings.model.defaults': 'Standaard voor nieuwe chats',
   'settings.model.defaults.note': 'Een chat houdt de instellingen waarmee hij begon. Het eigen model en de eigen inspanning van een companion, ingesteld in zijn profiel, gaan hiervoor.',

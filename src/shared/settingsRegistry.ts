@@ -12,7 +12,7 @@
 import { z } from 'zod'
 import { SIDEBAR_APPS_MAX, type SidebarAppPin } from './sidebarApps'
 import { ENGINES } from './engine'
-import { EXTRA_ENGINE_SETTINGS } from '@internal/engines/shared'
+import { EXTRA_ENGINE_SETTINGS } from '@engines/shared'
 import { DECISIONS_DEFAULTS, DECISIONS_SETTINGS_SCHEMA, type DecisionsSettings } from './decisions'
 import { AVATAR_MAX, CHAT_ROWS_DEFAULT, PANEL_WIDTH, SIDEBAR_WIDTH } from './ipc'
 import { NOTIFICATION_CATEGORIES, type NotificationCategory } from './notifications'

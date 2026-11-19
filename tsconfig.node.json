@@ -16,8 +16,8 @@
     "noEmit": true,
     "paths": {
       "@shared/*": ["./src/shared/*"],
-      // The private internal/ folder when it is there, else the public stubs (scripts/internal.mjs).
-      "@internal/*": ["./internal/*", "./src/stubs/*"]
+      // The engines besides the API key (src/engines).
+      "@engines/*": ["./src/engines/*"]
     }
   },
   "include": [
@@ -71,12 +71,10 @@
     "src/renderer/src/reader/logic/**/*",
     "src/renderer/src/brand/wordmark.ts",
     "tests/**/*",
-    "src/stubs/**/*",
-    // The internal folder's main-process, shared and test code (its renderer parts are tsconfig.web.json's).
-    "internal/**/*.ts",
+    // The engines' main-process and shared code (their renderer parts are tsconfig.web.json's).
+    "src/engines/**/*.ts",
     "electron.vite.config.ts",
     "vitest.config.ts"
   ],
-  // The renderer's seam to the engines (tsconfig.web.json checks it).
-  "exclude": ["src/stubs/*/renderer.ts"]
+  "exclude": []
 }

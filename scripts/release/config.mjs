@@ -135,8 +135,7 @@ export function releaseSettings(env = process.env, platform = process.platform) 
   const email = text(env, 'ATELIER_SUPPORT_EMAIL')
   return {
     channel,
-    // A public build offers only the API key engine: scripts/internal.mjs leaves
-    // the internal folder's engines out of it.
+    // A public build is one anyone may download: it takes updates from the public repo.
     publicRelease,
     updatesEnabled: repo !== null && channel !== 'dev' && canInstallUpdates && text(env, 'ATELIER_UPDATES') !== '0',
     supportEmail: EMAIL.test(email) ? email : '',

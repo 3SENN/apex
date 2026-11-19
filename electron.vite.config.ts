@@ -7,20 +7,16 @@ import { resolve } from 'node:path'
 import { defineConfig } from 'electron-vite'
 import react from '@vitejs/plugin-react'
 import { brandingAlias, brandingDefines, loadBranding } from './scripts/branding.mjs'
-import { internalAlias, internalDefines } from './scripts/internal.mjs'
 import { releaseSettings, viteDefines } from './scripts/release/config.mjs'
 
-// `@internal/<area>` is the private internal/ folder when it is here, else the
-// stubs in src/stubs/ (scripts/internal.mjs, docs/architecture.md).
+// `@engines` is the engines besides the API key (src/engines, docs/architecture.md › Engines).
 // `@branding` is the active branding's folder, branding/official or
 // branding/unofficial (scripts/branding.mjs; ATELIER_OFFICIAL_BRANDING).
-const shared = { '@shared': resolve('src/shared'), ...internalAlias(), ...brandingAlias() }
+const shared = { '@shared': resolve('src/shared'), '@engines': resolve('src/engines'), ...brandingAlias() }
 
-// RELEASE in src/shared/release.ts; docs/release.md. ATELIER_PUBLIC_RELEASE=1 also
-// takes `@internal/engines` from the stubs, so a public release offers only the
-// API key engine (scripts/internal.mjs, docs/architecture.md › Engines).
+// RELEASE in src/shared/release.ts; docs/release.md.
 // __ATELIER_BRANDING__ is the branding's names, bundle id and default companion (src/shared/branding.ts).
-const release = { ...viteDefines(releaseSettings(process.env, process.platform)), ...internalDefines(), ...brandingDefines() }
+const release = { ...viteDefines(releaseSettings(process.env, process.platform)), ...brandingDefines() }
 
 // The renderer's HTML pages say %BRAND_NAME% where the app's name goes (their titles before the UI sets one).
 const brandHtml = { name: 'atelier-branding-html', transformIndexHtml: (html: string): string => html.replaceAll('%BRAND_NAME%', loadBranding().name) }

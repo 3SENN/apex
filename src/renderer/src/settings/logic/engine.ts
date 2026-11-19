@@ -5,7 +5,7 @@
 
 // Words for the engine status in Settings › Model and key and the welcome
 // flow (ST-58). Pure, so the wording is tested once for every surface. The
-// engines a build adds bring their own words (`@internal/engines/renderer`).
+// engines a build adds bring their own words (`@engines/renderer`).
 import { engineHasOwnAccount, type EngineId, type EngineStatus } from '@shared/engine'
 import { t } from '@shared/i18n/core'
 

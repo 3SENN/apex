@@ -7,7 +7,7 @@
 // these codes and sends it with the 'error' agent event; the chat draws a card
 // with the code's icon, tone and action (chat/logic/errors.ts). Messages stay
 // human-readable for older logs and exports, which have no code.
-import { EXTRA_CHAT_ERROR_CODES } from '@internal/engines/shared'
+import { EXTRA_CHAT_ERROR_CODES } from '@engines/shared'
 
 export const CHAT_ERROR_CODES = [
   'offline',

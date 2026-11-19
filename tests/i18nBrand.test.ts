@@ -10,9 +10,6 @@ import { runtimeBranding } from '../scripts/branding.mjs'
 import { brandingFrom } from '../src/shared/branding'
 import { EN, type MessageKey } from '../src/shared/i18n/en'
 import { NL } from '../src/shared/i18n/nl'
-import { INTERNAL_BUILD } from '../src/shared/internal'
-import { engines as STUB_EN } from '../src/stubs/engines/i18n/en'
-import { engines as STUB_NL } from '../src/stubs/engines/i18n/nl'
 
 // The app's name in the interface, like Firefox's -brand-short-name: no
 // message writes it out; they say {brand}, which the i18n layer fills in from
@@ -29,10 +26,8 @@ afterEach(() => {
 
 describe('the catalogues', () => {
   it('never write the app\'s name (or Pip\'s): they say {brand}', () => {
-    // The engines' strings come from the private internal/ folder when it is built in; this repository's are the stubs'.
-    const fromInternal = (key: string): boolean => INTERNAL_BUILD && key.startsWith('engines.')
-    for (const [lang, catalogue] of [['en', EN], ['nl', NL], ['en stubs', STUB_EN], ['nl stubs', STUB_NL]] as const) {
-      const named = Object.entries(catalogue).filter(([key, text]) => !(catalogue === EN || catalogue === NL ? fromInternal(key) : false) && NAMES.test(text ?? '')).map(([key]) => `${lang} ${key}`)
+    for (const [lang, catalogue] of [['en', EN], ['nl', NL]] as const) {
+      const named = Object.entries(catalogue).filter(([, text]) => NAMES.test(text ?? '')).map(([key]) => `${lang} ${key}`)
       expect(named).toEqual([])
     }
     const branded = Object.values(EN).filter((text) => text.includes('{brand}'))
@@ -40,7 +35,7 @@ describe('the catalogues', () => {
   })
 
   it('say {brand} in the files that ship as text too (help notes, guides, the app-design skill)', () => {
-    for (const file of ['src/main/help/getting-started.md', 'src/main/help/troubleshooting.md', 'src/renderer/src/first-week/guides/meet-your-companion.md', 'src/renderer/src/first-week/guides/nl/meet-your-companion.md', 'src/main/skills/builtin/app-design/SKILL.md']) {
+    for (const file of ['src/main/help/getting-started.md', 'src/main/help/troubleshooting.md', 'src/renderer/src/first-week/guides/meet-your-companion.md', 'src/renderer/src/first-week/guides/nl/meet-your-companion.md', 'src/main/skills/builtin/app-design/SKILL.md', ...['docx', 'pdf', 'pptx', 'xlsx'].map((k) => `src/engines/claude-code/main/documentSkills/${k}/SKILL.md`)]) {
       const text = readFileSync(join(REPO, file), 'utf8')
       expect(text, file).toContain('{brand}')
       expect(text, file).not.toMatch(NAMES)

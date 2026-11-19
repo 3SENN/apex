@@ -19,8 +19,6 @@ declare global {
   const __ATELIER_WEBSITE__: string | undefined
   const __ATELIER_RELEASE_REPO__: string | undefined
   const __ATELIER_BUNDLE_ID__: string | undefined
-  // scripts/internal.mjs; read it through INTERNAL_BUILD in src/shared/internal.ts
-  const __ATELIER_INTERNAL__: boolean | undefined
   // scripts/branding.mjs; read it through BRANDING in src/shared/branding.ts
   const __ATELIER_BRANDING__: unknown
 }

@@ -1,0 +1,4 @@
+{
+  "note": "What Claude Code 2.1.50 wrote when the API refused the chat's model (stream-json result and error message text).",
+  "text": "API Error: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Claude Code 2.1.50 does not support this model; version 2.1.280 or newer is required. Run 'claude update' to update.\",\"details\":{\"error_code\":\"claude_code_version_too_old\"}},\"request_id\":\"req_011CVersionTooOld\"}"
+}

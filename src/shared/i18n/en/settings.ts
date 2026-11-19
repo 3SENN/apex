@@ -83,7 +83,7 @@ export const settings = {
   'settings.model.effort.max': 'Max',
   'settings.model.effort.max.title': 'As thorough as the model can be',
   'settings.model.title': 'Model and key',
-  'settings.model.description': 'What powers your companions: your Anthropic key or another engine, the default model and effort, and what they may use.',
+  'settings.model.description': 'What powers your companions: your Anthropic key or your Claude subscription, the default model and effort, and what they may use. Companions can get things wrong, so check important facts before you rely on them.',
   'settings.model.apiKey': 'API key',
   'settings.model.defaults': 'Defaults for new chats',
   'settings.model.defaults.note': 'A chat keeps the setup it started with. A companion’s own model and effort, set in its profile, come before these.',

@@ -382,6 +382,7 @@ export const firstRun = {
   'firstRun.welcomeSteps.presetCompanions': 'Preset companions',
   'firstRun.welcomeSteps.recommended': 'Recommended',
   'firstRun.welcomeSteps.runsOnClaude': '{name} runs on Claude. Paste an Anthropic API key (stored encrypted in your system keychain and only sent to Anthropic).',
+  'firstRun.welcomeSteps.canBeWrong': '{name} can get things wrong. Check important facts before you rely on them.',
   'firstRun.welcomeSteps.save': 'Save',
   'firstRun.welcomeSteps.shuffleTheLook': 'Shuffle the look',
   'firstRun.welcomeSteps.sidebar': 'Sidebar',

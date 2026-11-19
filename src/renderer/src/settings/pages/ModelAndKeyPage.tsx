@@ -5,12 +5,12 @@
 
 // Settings › Model and key: which engine powers the companions (ST-58) when
 // the build offers more than the API key, those engines' own sections
-// (`@internal/engines/renderer`), and letting Claude Code, or another MCP
+// (`@engines/renderer`), and letting Claude Code, or another MCP
 // client, outside Atelier use its browser tools (ST-60). There are no plans,
 // credits or quotas in Atelier: this status takes their place.
 import { useRef, useState, type KeyboardEvent, type ReactElement } from 'react'
 import { Check, Copy, KeyRound, ShieldCheck, SquareTerminal, Unplug } from 'lucide-react'
-import { ENGINE_UI } from '@internal/engines/renderer'
+import { ENGINE_UI } from '@engines/renderer'
 import type { Companion } from '@shared/companion'
 import { ENGINE_LABELS, hasEngineChoice, type EngineId, type EngineStatus } from '@shared/engine'
 import type { SettingsPatch, SettingsView } from '@shared/ipc'

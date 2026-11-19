@@ -74,3 +74,9 @@ The [Atelier Companion Art License](ART-LICENSE.md) sets what you may do with th
 
 To ask for permission or to report misuse, contact the maintainer at
 [contact@chinnovations.nl](mailto:contact@chinnovations.nl).
+
+## Other companies' marks
+
+Claude and Claude Code are trademarks of Anthropic, PBC. Atelier runs on Claude through your own API key or your own
+Claude subscription (which runs Claude Code, Anthropic's own program, on your computer). Atelier is an independent
+project: it isn't made, endorsed or sponsored by Anthropic.

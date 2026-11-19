@@ -21,7 +21,7 @@
 //   3. writes SHA256SUMS and atelier-support.json next to the installers;
 //   4. runs verify.mjs: signatures, fuses, Info.plist, resources, and the smoke
 //      test inside the packaged app (which must prove a public build offers
-//      only the API key engine);
+//      your Claude subscription and the API key);
 //   5. with --publish, and only once all of that passed, uploads the
 //      installers and update feeds to the draft release for the tag v<version>
 //      (gh; the draft is opened when missing, but only for a tag that is
@@ -108,7 +108,7 @@ function preflight(version, settings, opts, env) {
 
 function describe(settings) {
   const s = settings.signing
-  console.log(`  channel ${settings.channel}${settings.publicRelease ? ', public (the API key engine only)' : ''}, app id ${settings.bundleId}`)
+  console.log(`  channel ${settings.channel}${settings.publicRelease ? ', public' : ''}, app id ${settings.bundleId}`)
   console.log(`  updates ${settings.updatesEnabled ? `on, from ${settings.repo.owner}/${settings.repo.name}` : 'off'}`)
   console.log(`  signing ${s.identity ? `from ${s.identity}` : 'off (unsigned)'}${s.platform === 'darwin' ? `, notarization ${s.notarize ? `with ${s.notarize}` : 'skipped'}` : ''}`)
   if (!s.identity && s.platform !== 'linux') console.warn('  ! unsigned: fine for testing on this machine, not for anyone else')

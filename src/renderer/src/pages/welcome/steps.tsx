@@ -19,7 +19,7 @@ import { useActiveCompanion, useCompanionAssets, useCompanions, usePresets } fro
 import { cleanName } from '../../companion-card/logic/names'
 import { LayoutPreview } from '../../illustrations'
 import { WelcomePasswords } from '../../passwords/WelcomePasswords'
-import { ENGINE_UI } from '@internal/engines/renderer'
+import { ENGINE_UI } from '@engines/renderer'
 import { engineHasOwnAccount } from '@shared/engine'
 import { Badge, Button, IconButton } from '../../ui'
 import { useMotion } from '../../ui/motion'
@@ -247,6 +247,8 @@ export function EngineStep({ settings, onSettings, companion, next, back, ready 
       )}
       {error && <p className="co-field__error" role="alert">{error}</p>}
       {OtherEngine && <OtherEngine settings={settings} onSettings={onSettings} />}
+      {/* Anthropic's Commercial Terms (D.3): people are told that AI answers can be wrong. */}
+      <p className="co-hint">{t('firstRun.welcomeSteps.canBeWrong', { name: companion?.name ?? t('firstRun.welcomeSteps.yourCompanion') })}</p>
     </StepFrame>
   )
 }

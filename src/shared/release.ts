@@ -12,7 +12,7 @@
 //
 // The defines are declared for main in src/main/defines.d.ts and for the
 // renderer in src/renderer/src/env.d.ts; scripts/release/config.mjs computes
-// them (an ATELIER_PUBLIC_RELEASE build also offers only the API key engine).
+// them.
 
 import { BRANDING } from './branding'
 

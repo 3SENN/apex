@@ -200,7 +200,7 @@ export function expectedResources(platform) {
 // The packaged smoke run.
 
 /** Must match the check in src/main/smokeMaintenance/release.ts; the smoke runner prefixes its group, "MAINTENANCE: ". */
-export const PUBLIC_FLAG_CHECK = 'MAINTENANCE: release: a public build offers only the API key engine'
+export const PUBLIC_FLAG_CHECK = 'MAINTENANCE: release: a public build offers your Claude subscription and the API key'
 
 /** Parses the smoke runner's "PASS  name" / "FAIL  name" lines and its summary. */
 export function smokeSummary(output) {
@@ -224,7 +224,7 @@ export function smokeProblems(summary, { exitCode, publicRelease }) {
   if (summary.total === 0) problems.push('the packaged app printed no smoke summary')
   if (summary.failed.length) problems.push(`failed checks: ${summary.failed.join('; ')}`)
   if (exitCode !== 0 && !summary.failed.length) problems.push(`the packaged app exited with ${exitCode}`)
-  // A public build must prove it offers only the API key engine, not just not fail.
+  // A public build must prove it offers both engines, not just not fail.
   if (publicRelease && summary.results.get(PUBLIC_FLAG_CHECK) !== true) problems.push(`a public release needs "${PUBLIC_FLAG_CHECK}" to pass`)
   return problems
 }

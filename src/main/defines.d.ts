@@ -9,7 +9,7 @@
 
 /** 'dev', 'beta' or 'stable'. */
 declare const __ATELIER_CHANNEL__: string | undefined
-/** '1' for a public release (the API key is then the only engine; scripts/internal.mjs). */
+/** '1' for a public release: one anyone may download, with updates from the public repo. */
 declare const __ATELIER_PUBLIC_RELEASE__: string | undefined
 /** '1' only with a publish target and a signing identity. */
 declare const __ATELIER_UPDATES__: string | undefined
@@ -19,7 +19,5 @@ declare const __ATELIER_WEBSITE__: string | undefined
 declare const __ATELIER_RELEASE_REPO__: string | undefined
 /** The app id (ATELIER_BUNDLE_ID, else com.sennechin.atelier; scripts/release/bundle.mjs). */
 declare const __ATELIER_BUNDLE_ID__: string | undefined
-/** True when the private internal/ folder is built in (scripts/internal.mjs); read it through INTERNAL_BUILD in src/shared/internal.ts. */
-declare const __ATELIER_INTERNAL__: boolean | undefined
 /** The branding (scripts/branding.mjs); read it through BRANDING in src/shared/branding.ts. */
 declare const __ATELIER_BRANDING__: unknown
