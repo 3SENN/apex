@@ -67,6 +67,13 @@ export const ART_LICENSE_NAME = 'Atelier Companion Art License'
 /** PRIVACY.md there: what the app keeps on the computer and every service it can contact (Settings › About). */
 export const PRIVACY_URL = `${SOURCE_URL}/blob/main/PRIVACY.md`
 
+/**
+ * Where people come together to make the project: Discord, Discussions and every
+ * way to help (Settings › About and Help › Join the Community). A fork points
+ * this at its own.
+ */
+export const COMMUNITY_URL = 'https://atelierbrowser.eu/community.html'
+
 /** The default app id: the branding's (scripts/release/bundle.mjs decides it the same way). */
 export const DEFAULT_BUNDLE_ID: string = BRANDING.bundleId
 

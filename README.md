@@ -5,6 +5,10 @@
 [![CI](https://github.com/3SENN/atelier/actions/workflows/ci.yml/badge.svg)](https://github.com/3SENN/atelier/actions/workflows/ci.yml)
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](LICENSE)
 
+> Atelier is early. It's already useful every day, and it's built in the open, with the people who use it. If you see
+> where it's going, come make it with us: build tools, share packs, or work on the browser itself.
+> **[Make Atelier with us →](#make-atelier-with-us)**
+
 Atelier is a Chromium-based browser (Electron) with a companion that works in your real tabs while you watch. It reads
 pages, clicks, types, fills in forms, searches the web, remembers what matters to you, uses your connected tools and
 runs routines on a schedule. Describe a skill, a routine or a small app and it builds it with you, and anything you make
@@ -92,12 +96,23 @@ the environment; nothing personal is committed.
 - [Quick decisions](docs/decisions.md): the small models Atelier can use for fast choices
 - [Privacy](PRIVACY.md): what Atelier keeps on your computer and every service it can contact
 
-## Contributing
+## Make Atelier with us
 
-Contributions are welcome: code, translations, docs, testing on your platform, and packs, apps and companions for
-Atelier. Read [CONTRIBUTING.md](CONTRIBUTING.md) to get started and follow the [Code of Conduct](CODE_OF_CONDUCT.md).
-Where Atelier is heading is in [ROADMAP.md](ROADMAP.md), and how decisions are made is in [GOVERNANCE.md](GOVERNANCE.md).
-Report security issues privately as described in [SECURITY.md](SECURITY.md).
+Atelier is early, which makes this a good time to join:
+
+- **Shape what it becomes.** The roadmap is still taking shape. Ideas in Discussions and on Discord help decide what
+  comes next.
+- **Be among the first.** The [community index](https://github.com/3SENN/atelier-packs) is young, so what you share now
+  is what people find first.
+- **Grow with it.** Your name goes in [AUTHORS](AUTHORS) with your first contribution. Maintainers are invited from the
+  people who keep contributing.
+
+Every kind of help counts: code, translations, docs, testing on your platform, and packs, apps and companions. You
+don't need permission, and you don't need to write code. Start with a
+[good first issue](https://github.com/3SENN/atelier/labels/good%20first%20issue), say hi on
+[Discord](https://discord.gg/sKUTVCYAZY), and read [CONTRIBUTING.md](CONTRIBUTING.md) and the
+[Code of Conduct](CODE_OF_CONDUCT.md). Where Atelier is heading is in [ROADMAP.md](ROADMAP.md), and how decisions are
+made is in [GOVERNANCE.md](GOVERNANCE.md). Report security issues privately as described in [SECURITY.md](SECURITY.md).
 
 ## Community
 

@@ -116,6 +116,7 @@ export const menus = {
   'menus.help.copyDiagnostics': 'Kopieer diagnosegegevens',
   'menus.help.copiedDiagnostics': 'Diagnosegegevens gekopieerd',
   'menus.help.gettingStarted': 'Aan de slag',
+  'menus.help.community': 'Doe mee met de community',
   'menus.main.label': 'Hoofdmenu',
   'menus.main.you': 'Jij',
   'menus.main.keyReady': 'Anthropic-API-sleutel toegevoegd',

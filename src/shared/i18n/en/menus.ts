@@ -112,6 +112,7 @@ export const menus = {
   'menus.help.copyDiagnostics': 'Copy Diagnostics',
   'menus.help.copiedDiagnostics': 'Diagnostics copied',
   'menus.help.gettingStarted': 'Getting Started',
+  'menus.help.community': 'Join the Community',
   'menus.main.label': 'Main menu',
   'menus.main.you': 'You',
   'menus.main.keyReady': 'Anthropic API key added',

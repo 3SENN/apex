@@ -6,6 +6,7 @@
 import { join } from 'node:path'
 import { BrowserWindow, Menu, app, clipboard, dialog, shell, type MenuItemConstructorOptions, type NativeImage, type WebContents } from 'electron'
 import { UI, type MenuCommand } from '@shared/ipc'
+import { COMMUNITY_URL } from '@shared/release'
 import type { MenuItemSpec } from '@shared/menu'
 import { DYNAMIC_PREFIXES, MENU_ACTIONS, NATIVE_TOP, flattenMenu, mainMenuItems, nativeMenus, resolveStates, topLabel, type MainMenuModel, type MenuAction, type MenuData } from '@shared/menuBase'
 import { findFolder, type MenuBookmarks, type MenuVisit } from '@shared/menuLists'
@@ -451,6 +452,8 @@ export class AppMenu {
       }
       case 'getting-started':
         return ctx.tabs.openInternal('atelier://first-week')
+      case 'community':
+        return this.#openUrl(COMMUNITY_URL, ctx)
       case 'adblock':
         // The chrome's settings call applies the blocker; main's store only records it.
         settings.update({ adblock: !settings.get().adblock })

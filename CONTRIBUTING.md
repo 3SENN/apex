@@ -1,7 +1,9 @@
 # Contributing to Atelier
 
-Thanks for helping make Atelier better. This guide covers how to set up the project, what a good change looks like, and
-how it gets merged.
+Thanks for helping make Atelier. It's early, so what you add now shapes what it becomes. This guide covers how to set
+up the project, what a good change looks like, and how it gets merged. New here? Pick a
+[good first issue](https://github.com/3SENN/atelier/labels/good%20first%20issue) and say hi on
+[Discord](https://discord.gg/sKUTVCYAZY).
 
 ## Before you start
 

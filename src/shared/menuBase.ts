@@ -85,6 +85,7 @@ export const MENU_ACTIONS = [
   'inspect',
   'copy-diagnostics',
   'getting-started',
+  'community',
   'adblock',
   'copy-markdown',
   'screenshot',
@@ -415,6 +416,7 @@ export function baseNativeMenus(state: MenuState, data: MenuData): Record<MenuTa
     cmd('shortcuts-sheet', t('menus.help.shortcuts')),
     cmd('help', t('menus.help.topics', { name: appName })),
     { id: 'getting-started', label: t('menus.help.gettingStarted') },
+    { id: 'community', label: t('menus.help.community') },
     sep('help-1'),
     { id: 'copy-diagnostics', label: t('menus.help.copyDiagnostics') },
     ...(mac ? [] : [sep('help-2'), cmd('about', t('menus.app.about', { name: appName }))]),
@@ -492,7 +494,7 @@ export function mainMenuItems(state: MenuState, data: MenuData, owners?: Map<str
   const banner = applyContributions('main-menu', data.isDefaultBrowser ? [] : [{ id: 'default-browser', label: t('menus.main.defaultBanner', { name: appName }), icon: 'globe' }], state, owners)
   const help = applyContributions(
     'main-menu:help',
-    [cmd('shortcuts-sheet', t('menus.help.shortcuts')), cmd('help', t('menus.help.topics', { name: appName })), { id: 'getting-started', label: t('menus.help.gettingStarted') }, cmd('about', t('menus.main.about', { name: appName }))],
+    [cmd('shortcuts-sheet', t('menus.help.shortcuts')), cmd('help', t('menus.help.topics', { name: appName })), { id: 'getting-started', label: t('menus.help.gettingStarted') }, { id: 'community', label: t('menus.help.community') }, cmd('about', t('menus.main.about', { name: appName }))],
     state,
     owners,
   )

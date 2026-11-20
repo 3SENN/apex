@@ -7,7 +7,7 @@ import { useState, type ReactElement } from 'react'
 import { ExternalLink } from 'lucide-react'
 import type { SettingsPatch, SettingsView } from '@shared/ipc'
 import { BRANDING } from '@shared/branding'
-import { ART_LICENSE_NAME, PRIVACY_URL, RELEASE, SOURCE_URL } from '@shared/release'
+import { ART_LICENSE_NAME, COMMUNITY_URL, PRIVACY_URL, RELEASE, SOURCE_URL } from '@shared/release'
 import type { AboutInfo } from '@shared/services/settings'
 import { atelier, call } from '../../api'
 import { BrandLogo } from '../../brand/BrandLogo'
@@ -23,7 +23,7 @@ import { useResource } from '../data'
 import { Card, PageHeader, Row, Section } from '../kit'
 
 // Settings › About Atelier (ST-56): the version with the
-// update row and the auto-download switch, the website, the privacy notice,
+// update row and the auto-download switch, the website, the community, the privacy notice,
 // Report a problem and View logs, the data updates after a chat-store
 // migration, the source notice (the code's MPL and the companion art's
 // licence), Chromium's licences, the licences generated at build time
@@ -68,6 +68,9 @@ export function AboutPage({ settings, update }: { settings: SettingsView; update
               <IconButton label={t('updates.about.website')} icon={<ExternalLink size={16} />} onClick={() => void atelier.tabs.create(website)} />
             </Row>
           )}
+          <Row title={t('updates.about.communityTitle')} description={t('updates.about.communityBody')}>
+            <IconButton label={t('updates.about.openCommunity')} icon={<ExternalLink size={16} />} onClick={() => void atelier.tabs.create(COMMUNITY_URL)} />
+          </Row>
           <Row title={t('updates.about.privacyTitle')} description={t('updates.about.privacyBody')}>
             <IconButton label={t('updates.about.openPrivacy')} icon={<ExternalLink size={16} />} onClick={() => void atelier.tabs.create(PRIVACY_URL)} />
           </Row>
